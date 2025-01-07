@@ -17,7 +17,7 @@ void UChooseItemFromBag::Activate() {
     auto Screen = UBagScreen::AddBagScreenToStack(WorldContextObject);
     Screen->ApplyItemFilter(ItemFilter);
     Screen->GetOnItemSelected().BindUObject(this, &UChooseItemFromBag::ExecuteOnSelected);
-    Screen->GetOnScreenClosed().AddUniqueDynamic(this, &UChooseItemFromBag::ExecuteOnCanceled);
+    Screen->GetOnScreenClosed().AddUObject(this, &UChooseItemFromBag::ExecuteOnCanceled);
 }
 
 void UChooseItemFromBag::ExecuteOnSelected(const TScriptInterface<IInventoryScreen> &Screen, const FItem &Item,

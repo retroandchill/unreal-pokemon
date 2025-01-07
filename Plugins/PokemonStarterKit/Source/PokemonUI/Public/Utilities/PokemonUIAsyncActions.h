@@ -6,17 +6,15 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "UE5Coro.h"
 
-#include "PokemonUIAsyncActions.generated.h"
 
-/**
- * 
- */
-UCLASS()
-class POKEMONUI_API UPokemonUIAsyncActions : public UBlueprintFunctionLibrary {
-    GENERATED_BODY()
+namespace Pokemon::UI {
 
-public:
-    UFUNCTION(BlueprintCallable, Category = "Messages", meta = (Latent, LatentInfo = LatentInfo, WorldContext = WorldContextObject, AutoCreateRefTerm = Message))
-    static FVoidCoroutine DisplayMessage(const UObject* WorldContextObject, const FText& Message, const FLatentActionInfo& LatentInfo = FLatentActionInfo());
+    template <typename... A>
+    using TMultiCoroutine = UE5Coro::TCoroutine<TTuple<int32, FName>>;
+
+
+    POKEMONUI_API UE5Coro::TCoroutine<> DisplayMessage(const UObject* WorldContext, FText Message);
+
+    POKEMONUI_API TMultiCoroutine<int32, FName> DisplayMessageWithChoices(const UObject* WorldContext, FText Message, const TArray<FText> &Choices);
 
 };

@@ -289,6 +289,23 @@ struct TAwaitTransform<P, TFuture<T>>
 	TFutureAwaiter<T> operator()(TFuture<T>&) = delete;
 };
 
+template <typename T>
+struct TDelegateTraitsBase {
+    using CallMethodSignature = decltype(&T::Execute);
+};
+    
+template <TIsMulticastDelegate T>
+    requires (!TIsSparseDelegate<T>)
+struct TDelegateTraitsBase<T> {
+    using CallMethodSignature = decltype(&T::Broadcast);
+};
+
+template <TIsSparseDelegate T>
+struct TDelegateTraitsBase<T> {
+    using Ptr = decltype(std::declval<T>().GetShared().Get());
+    using CallMethodSignature = decltype(&std::remove_pointer_t<Ptr>::Broadcast);
+};
+
 template<typename>
 struct TDelegateAwaiterFor;
 template<typename T, typename R, typename... A>
@@ -303,19 +320,7 @@ template<typename P, TIsDelegate T>
 struct TAwaitTransform<P, T>
 {
 	static_assert(!std::is_reference_v<T>);
-	static constexpr auto ExecutePtr()
-	{
-		if constexpr (TIsSparseDelegate<T>)
-		{
-			using Ptr = decltype(std::declval<T>().GetShared().Get());
-			return &std::remove_pointer_t<Ptr>::Broadcast;
-		}
-		else if constexpr (TIsMulticastDelegate<T>)
-			return &T::Broadcast;
-		else
-			return &T::Execute;
-	}
-	using FAwaiter = typename TDelegateAwaiterFor<decltype(ExecutePtr())>::type;
+	using FAwaiter = typename TDelegateAwaiterFor<typename TDelegateTraitsBase<T>::CallMethodSignature>::type;
 
 	FAwaiter operator()(T& Delegate) { return FAwaiter(Delegate); }
 

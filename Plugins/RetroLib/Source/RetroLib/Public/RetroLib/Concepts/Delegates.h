@@ -5,6 +5,10 @@
 #ifdef __UNREAL__
 #include "RetroLib/TypeTraits.h"
 
+#if RETROLIB_WITH_UE5CORO
+#include "UE5Coro.h"
+#endif
+
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
 #endif
@@ -136,39 +140,39 @@ namespace Retro::Delegates {
     RETROLIB_EXPORT template <typename D, typename F, typename... A>
     concept CanBindStatic = NativeUnicastDelegate<D> && TDelegateBindingTraits<D>::template InvocableFree<F, A...> &&
                             requires(D &Delegate, F &&Functor, A &&...Args) {
-                                Delegate.BindStatic(std::forward<F>(Functor), std::forward<A>(Args)...);
-                                {
-                                    D::CreateStatic(std::forward<F>(Functor), std::forward<A>(Args)...)
-                                } -> std::same_as<D>;
+        Delegate.BindStatic(std::forward<F>(Functor), std::forward<A>(Args)...);
+        {
+            D::CreateStatic(std::forward<F>(Functor), std::forward<A>(Args)...)
+        } -> std::same_as<D>;
                             };
 
     RETROLIB_EXPORT template <typename D, typename F, typename... A>
     concept CanBindLambda = NativeUnicastDelegate<D> && TDelegateBindingTraits<D>::template InvocableFree<F, A...> &&
                             requires(D &Delegate, F &&Functor, A &&...Args) {
-                                Delegate.BindLambda(std::forward<F>(Functor), std::forward<A>(Args)...);
-                                {
-                                    D::CreateLambda(std::forward<F>(Functor), std::forward<A>(Args)...)
-                                } -> std::same_as<D>;
+        Delegate.BindLambda(std::forward<F>(Functor), std::forward<A>(Args)...);
+        {
+            D::CreateLambda(std::forward<F>(Functor), std::forward<A>(Args)...)
+        } -> std::same_as<D>;
                             };
 
     RETROLIB_EXPORT template <typename D, typename O, typename F, typename... A>
     concept CanBindRaw =
         NativeUnicastDelegate<D> && TDelegateBindingTraits<D>::template InvocableMember<O, F, A...> &&
         requires(D &Delegate, O &&Object, F &&Functor, A &&...Args) {
-            Delegate.BindRaw(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
-            {
-                D::CreateRaw(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
-            } -> std::same_as<D>;
+        Delegate.BindRaw(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
+        {
+            D::CreateRaw(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
+        } -> std::same_as<D>;
         };
 
     RETROLIB_EXPORT template <typename D, typename O, typename F, typename... A>
     concept CanBindSP =
         NativeUnicastDelegate<D> && TCanBindSp<std::decay_t<O>>::value &&
         requires(D &Delegate, O &&Object, F &&Functor, A &&...Args) {
-            Delegate.BindSP(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
-            {
-                D::CreateSP(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
-            } -> std::same_as<D>;
+        Delegate.BindSP(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
+        {
+            D::CreateSP(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
+        } -> std::same_as<D>;
         };
 
     RETROLIB_EXPORT template <typename D, typename O, typename F, typename... A>
@@ -176,10 +180,10 @@ namespace Retro::Delegates {
         NativeUnicastDelegate<D> && TCanBindSp<std::decay_t<O>>::value &&
         TDelegateBindingTraits<D>::template InvocableFree<F, A...> &&
         requires(D &Delegate, O &&Object, F &&Functor, A &&...Args) {
-            Delegate.BindSPLambda(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
-            {
-                D::CreateSPLambda(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
-            } -> std::same_as<D>;
+        Delegate.BindSPLambda(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
+        {
+            D::CreateSPLambda(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
+        } -> std::same_as<D>;
         };
 
     RETROLIB_EXPORT template <typename D, typename O, typename F, typename... A>
@@ -187,20 +191,20 @@ namespace Retro::Delegates {
         NativeUnicastDelegate<D> && std::convertible_to<O, const UObject *> &&
         TDelegateBindingTraits<D>::template InvocableMember<O, F, A...> &&
         requires(D &Delegate, O &&Object, F &&Functor, A &&...Args) {
-            Delegate.BindUObject(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
-            {
-                D::CreateUObject(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
-            } -> std::same_as<D>;
+        Delegate.BindUObject(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
+        {
+            D::CreateUObject(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
+        } -> std::same_as<D>;
         };
 
     RETROLIB_EXPORT template <typename D, typename O, typename F, typename... A>
     concept CanBindWeakLambda =
         NativeUnicastDelegate<D> && TDelegateBindingTraits<D>::template InvocableFree<F, A...> &&
         requires(D &Delegate, O &&Object, F &&Functor, A &&...Args) {
-            Delegate.BindWeakLambda(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
-            {
-                D::CreateWeakLambda(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
-            } -> std::same_as<D>;
+        Delegate.BindWeakLambda(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);
+        {
+            D::CreateWeakLambda(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
+        } -> std::same_as<D>;
         };
 
     RETROLIB_EXPORT template <typename D, typename F, typename... A>
@@ -214,35 +218,35 @@ namespace Retro::Delegates {
     RETROLIB_EXPORT template <typename D, typename F, typename... A>
     concept CanAddStatic = NativeMulitcastDelegate<D> && TDelegateBindingTraits<D>::template InvocableFree<F, A...> &&
                            requires(D &Delegate, F &&Functor, A &&...Args) {
-                               {
-                                   Delegate.AddStatic(std::forward<F>(Functor), std::forward<A>(Args)...)
-                               } -> std::same_as<FDelegateHandle>;
+        {
+            Delegate.AddStatic(std::forward<F>(Functor), std::forward<A>(Args)...)
+        } -> std::same_as<FDelegateHandle>;
                            };
 
     RETROLIB_EXPORT template <typename D, typename F, typename... A>
     concept CanAddLambda = NativeMulitcastDelegate<D> && TDelegateBindingTraits<D>::template InvocableFree<F, A...> &&
                            requires(D &Delegate, F &&Functor, A &&...Args) {
-                               {
-                                   Delegate.AddLambda(std::forward<F>(Functor), std::forward<A>(Args)...)
-                               } -> std::same_as<FDelegateHandle>;
+        {
+            Delegate.AddLambda(std::forward<F>(Functor), std::forward<A>(Args)...)
+        } -> std::same_as<FDelegateHandle>;
                            };
 
     RETROLIB_EXPORT template <typename D, typename O, typename F, typename... A>
     concept CanAddRaw =
         NativeMulitcastDelegate<D> && TDelegateBindingTraits<D>::template InvocableMember<O, F, A...> &&
         requires(D &Delegate, O &&Object, F &&Functor, A &&...Args) {
-            {
-                Delegate.AddRaw(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
-            } -> std::same_as<FDelegateHandle>;
+        {
+            Delegate.AddRaw(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
+        } -> std::same_as<FDelegateHandle>;
         };
 
     RETROLIB_EXPORT template <typename D, typename O, typename F, typename... A>
     concept CanAddSP =
         NativeMulitcastDelegate<D> && TCanBindSp<std::decay_t<O>>::value &&
         requires(D &Delegate, O &&Object, F &&Functor, A &&...Args) {
-            {
-                Delegate.AddSP(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
-            } -> std::same_as<FDelegateHandle>;
+        {
+            Delegate.AddSP(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
+        } -> std::same_as<FDelegateHandle>;
         };
 
     RETROLIB_EXPORT template <typename D, typename O, typename F, typename... A>
@@ -250,9 +254,9 @@ namespace Retro::Delegates {
         NativeMulitcastDelegate<D> && TCanBindSp<std::decay_t<O>>::value &&
         TDelegateBindingTraits<D>::template InvocableFree<F, A...> &&
         requires(D &Delegate, O &&Object, F &&Functor, A &&...Args) {
-            {
-                Delegate.AddSPLambda(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
-            } -> std::same_as<FDelegateHandle>;
+        {
+            Delegate.AddSPLambda(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
+        } -> std::same_as<FDelegateHandle>;
         };
 
     RETROLIB_EXPORT template <typename D, typename O, typename F, typename... A>
@@ -260,18 +264,18 @@ namespace Retro::Delegates {
         NativeMulitcastDelegate<D> && std::convertible_to<O, const UObject *> &&
         TDelegateBindingTraits<D>::template InvocableMember<O, F, A...> &&
         requires(D &Delegate, O &&Object, F &&Functor, A &&...Args) {
-            {
-                Delegate.AddUObject(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
-            } -> std::same_as<FDelegateHandle>;
+        {
+            Delegate.AddUObject(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
+        } -> std::same_as<FDelegateHandle>;
         };
 
     RETROLIB_EXPORT template <typename D, typename O, typename F, typename... A>
     concept CanAddWeakLambda =
         NativeMulitcastDelegate<D> && TDelegateBindingTraits<D>::template InvocableFree<F, A...> &&
         requires(D &Delegate, O &&Object, F &&Functor, A &&...Args) {
-            {
-                Delegate.AddWeakLambda(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
-            } -> std::same_as<FDelegateHandle>;
+        {
+            Delegate.AddWeakLambda(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...)
+        } -> std::same_as<FDelegateHandle>;
         };
 
     RETROLIB_EXPORT template <typename D, typename F, typename... A>
@@ -281,5 +285,34 @@ namespace Retro::Delegates {
     concept CanAddMember = CanAddSP<D, O, F, A...> || CanAddSPLambda<D, O, F, A...> || CanAddUObject<D, O, F, A...> ||
                            CanAddWeakLambda<D, O, F, A...> || CanAddRaw<D, O, F, A...>;
 
+    template <typename>
+    struct TDelegateTraitsBase;
+
+    template <typename D, typename R, typename... A>
+    struct TDelegateTraitsBase<R(D::*)(A...) const> {
+        using ReturnType = R;
+        using ArgsTuple = TTuple<A...>;
+    };
+
+    template <typename>
+    struct TDelegateTraits;
+
+    template <UnicastDelegate D>
+    struct TDelegateTraits<D> : TDelegateTraitsBase<decltype(&D::Execute)> {};
+
+    template <MulticastDelegate D>
+    struct TDelegateTraits<D> : TDelegateTraitsBase<decltype(&D::Broadcast)> {};
+
+
+    template <UEDelegate D>
+    using TDelegateTuple = typename TDelegateTraits<D>::ArgsTuple;
+
+#if RETROLIB_WITH_UE5CORO
+    template <UEDelegate D, UEDelegate O>
+    UE5Coro::TCoroutine<> UntilEither(D& MainDelegate, O& OtherDelegate) {
+        
+    }
+#endif
+    
 } // namespace Retro::Delegates
 #endif

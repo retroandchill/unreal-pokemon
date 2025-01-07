@@ -1,0 +1,13 @@
+﻿// "Unreal Pokémon" created by Retro & Chill.
+
+
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
+
+#if RETROLIB_WITH_UE5CORO
+void UBlueprintCoroutineActionBase::Activate() {
+    [](UE5Coro::TLatentContext<UBlueprintCoroutineActionBase> This) -> UE5Coro::TCoroutine<> {
+        co_await This->ExecuteCoroutine();
+        This->SetReadyToDestroy();
+    }(this);
+}
+#endif

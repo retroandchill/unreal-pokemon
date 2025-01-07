@@ -5,17 +5,31 @@
 #include "PrimaryGameLayout.h"
 #include "Screens/TextDisplayScreen.h"
 
-FVoidCoroutine UPokemonUIAsyncActions::DisplayMessage(const UObject *WorldContextObject, const FText &Message,
-    const FLatentActionInfo &) {
-    if (auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController(); Controller == nullptr) {
-        co_return;
+namespace Pokemon::UI {
+    UE5Coro::TCoroutine<> Pokemon::UI::DisplayMessage(const UObject *WorldContext, FText Message) {
+        if (auto Controller = WorldContext->GetWorld()->GetFirstPlayerController(); Controller == nullptr) {
+            // TODO: Remove this hack and alter how the tests run to avoid this
+            co_return;
+        }
+
+        auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContext);
+        auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
+        if (Screen == nullptr) {
+            Screen = UTextDisplayScreen::AddTextDisplayScreenToOverlay(WorldContext);
+        }
+        Screen->SetText(std::move(Message));
+        co_await Screen->NextMessage;
     }
 
-    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
-    auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
-    if (Screen == nullptr) {
-        Screen = UTextDisplayScreen::AddTextDisplayScreenToOverlay(WorldContextObject);
+    TMultiCoroutine<int32, FName> DisplayMessageWithChoices(const UObject *WorldContext, FText Message,
+        const TArray<FText> &Choices) {
+        auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContext);
+        auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
+        if (Screen == nullptr) {
+            Screen = UTextDisplayScreen::AddTextDisplayScreenToOverlay(WorldContext);
+        }
+        Screen->DisplayChoices(Message, Choices);
+        auto [ChoiceIndex, ChoiceID] = co_await Screen->ProcessChoice;
+        co_return {ChoiceIndex, ChoiceID};
     }
-    Screen->SetText(Message);
-    co_await Screen->NextMessage;
 }

@@ -31,5 +31,12 @@ public class RetroLib : ModuleRules {
         PublicDefinitions.Add(Target.bEnableCppModules ? "RETROLIB_WITH_MODULES=1" : "RETROLIB_WITH_MODULES=0");
         PublicDefinitions.Add(Target.bEnableCppCoroutinesForEvaluation ? "RETROLIB_WITH_COROUTINES=1"
                                                                        : "RETROLIB_WITH_COROUTINES=0");
+
+        if (Target.bEnableCppCoroutinesForEvaluation && !string.IsNullOrEmpty(GetModuleDirectory("UE5Coro"))) {
+            PublicDependencyModuleNames.Add("UE5Coro");
+            PublicDefinitions.Add("RETROLIB_WITH_UE5CORO=1");
+        } else {
+            PublicDefinitions.Add("RETROLIB_WITH_UE5CORO=0");
+        }
     }
 }

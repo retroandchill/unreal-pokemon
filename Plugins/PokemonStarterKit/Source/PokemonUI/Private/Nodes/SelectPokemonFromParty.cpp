@@ -16,7 +16,7 @@ USelectPokemonFromParty *USelectPokemonFromParty::SelectPokemonFromParty(const U
 void USelectPokemonFromParty::Activate() {
     auto Screen = UPokemonSelectScreen::AddPokemonSelectScreenToStack(WorldContextObject);
     Screen->GetOnPokemonSelect().BindUObject(this, &USelectPokemonFromParty::ExecuteOnSelected);
-    Screen->GetOnScreenClosed().AddUniqueDynamic(this, &USelectPokemonFromParty::ExecuteOnCanceled);
+    Screen->GetOnScreenClosed().AddUObject(this, &USelectPokemonFromParty::ExecuteOnCanceled);
 }
 
 void USelectPokemonFromParty::ExecuteOnSelected(const TScriptInterface<IPartyScreen> &Screen,

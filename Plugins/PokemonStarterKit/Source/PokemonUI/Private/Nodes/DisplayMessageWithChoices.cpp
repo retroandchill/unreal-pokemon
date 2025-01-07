@@ -2,7 +2,9 @@
 #include "Nodes/DisplayMessageWithChoices.h"
 #include "PokemonUISettings.h"
 #include "PrimaryGameLayout.h"
+#include "RetroLib/Functional/Delegates.h"
 #include "Screens/TextDisplayScreen.h"
+#include "Utilities/PokemonUIAsyncActions.h"
 
 class UPokemonUISettings;
 
@@ -16,24 +18,7 @@ UDisplayMessageWithChoices *UDisplayMessageWithChoices::DisplayMessageWithChoice
     return Node;
 }
 
-void UDisplayMessageWithChoices::Activate() {
-    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
-    auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
-    if (Screen == nullptr) {
-        Screen = UTextDisplayScreen::AddTextDisplayScreenToOverlay(WorldContextObject);
-    }
-    Screen->DisplayChoices(Message, Choices);
-    Screen->ProcessChoice.AddUniqueDynamic(this, &UDisplayMessageWithChoices::ExecuteOnChoiceSelected);
-}
-
-void UDisplayMessageWithChoices::ExecuteOnChoiceSelected(int32 ChoiceIndex, FName ChoiceID) {
+UE5Coro::TCoroutine<> UDisplayMessageWithChoices::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+    auto [ChoiceIndex, ChoiceID] = co_await Pokemon::UI::DisplayMessageWithChoices(WorldContextObject, Message, Choices);
     OnChoiceSelected.Broadcast(ChoiceIndex, ChoiceID);
-    OnChoiceSelected.Clear();
-    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
-    auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
-    if (Screen == nullptr)
-        return;
-
-    Screen->ProcessChoice.RemoveDynamic(this, &UDisplayMessageWithChoices::ExecuteOnChoiceSelected);
-    SetReadyToDestroy();
 }

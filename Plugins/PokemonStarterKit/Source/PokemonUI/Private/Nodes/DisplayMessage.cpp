@@ -3,6 +3,7 @@
 #include "PokemonUISettings.h"
 #include "PrimaryGameLayout.h"
 #include "Screens/TextDisplayScreen.h"
+#include "Utilities/PokemonUIAsyncActions.h"
 
 UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObject, FText Message) {
     auto Node = NewObject<UDisplayMessage>();
@@ -11,32 +12,7 @@ UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObje
     return Node;
 }
 
-void UDisplayMessage::Activate() {
-    auto Controller = WorldContextObject->GetWorld()->GetFirstPlayerController();
-    if (Controller == nullptr) {
-        // TODO: Remove this hack and alter how the tests run to avoid this
-        OnConfirm.Broadcast();
-        return;
-    }
-
-    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
-    auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
-    if (Screen == nullptr) {
-        Screen = UTextDisplayScreen::AddTextDisplayScreenToOverlay(WorldContextObject);
-    }
-    Screen->SetText(Message);
-    Screen->NextMessage.AddUniqueDynamic(this, &UDisplayMessage::ExecuteOnConfirm);
-}
-
-void UDisplayMessage::ExecuteOnConfirm() {
+UE5Coro::TCoroutine<> UDisplayMessage::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+    co_await Pokemon::UI::DisplayMessage(WorldContextObject, Message);
     OnConfirm.Broadcast();
-    OnConfirm.Clear();
-
-    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
-    auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
-    if (Screen == nullptr)
-        return;
-
-    Screen->NextMessage.RemoveDynamic(this, &UDisplayMessage::ExecuteOnConfirm);
-    SetReadyToDestroy();
 }
