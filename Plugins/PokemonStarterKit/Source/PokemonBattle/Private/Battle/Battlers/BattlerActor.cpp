@@ -353,12 +353,12 @@ uint8 ABattlerActor::GetActionCount() const {
     return 1;
 }
 
-Retro::Ranges::TAnyView<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
+Retro::TGenerator<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
     // clang-format off
-    return OwningSide->GetBattlers() |
+    co_yield Retro::Ranges::TElementsOf(OwningSide->GetBattlers() |
            Retro::Ranges::Views::Filter([this](const TScriptInterface<IBattler> &Battler) {
                return Battler->GetInternalId() == InternalId;
-           });
+           }));
     // clang-format on
 }
 

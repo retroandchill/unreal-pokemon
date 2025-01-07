@@ -5,6 +5,6 @@
 
 class FGridBased2DTestsModule : public IModuleInterface {
   public:
-    virtual void StartupModule() override;
-    virtual void ShutdownModule() override;
+    void StartupModule() override;
+    void ShutdownModule() override;
 };

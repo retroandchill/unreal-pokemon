@@ -86,16 +86,16 @@ namespace Retro::Ranges {
             return *this;
         }
 
-        constexpr TArrayIterator operator+(S Offset) const {
-            return TArrayIterator(Ptr + Offset, *CurrentArray);
+        constexpr friend TArrayIterator operator+(const TArrayIterator& It, S Offset) {
+            return TArrayIterator(It.Ptr + Offset, *It.CurrentArray);
         }
 
         constexpr friend TArrayIterator operator+(S Offset, const TArrayIterator &Other) {
             return Other + Offset;
         }
 
-        constexpr TArrayIterator operator-(S Offset) const {
-            return TCheckedArrayIterator(Ptr - Offset, *CurrentArray);
+        constexpr friend TArrayIterator operator-(const TArrayIterator& It, S Offset) {
+            return TArrayIterator(It.Ptr - Offset, *It.CurrentArray);
         }
 
         constexpr difference_type operator-(const TArrayIterator &Other) const {
@@ -170,7 +170,7 @@ constexpr const T *data(const TArray<T, A> &Array) {
 
 RETROLIB_EXPORT template <typename T, typename A>
 constexpr T *data(TArray<T, A> &&Array) {
-    return Array.GetData();
+    return std::move(Array).GetData();
 }
 
 RETROLIB_EXPORT constexpr auto begin(FString &String) {
@@ -214,6 +214,6 @@ RETROLIB_EXPORT inline const TCHAR *data(const FString &String) {
 }
 
 RETROLIB_EXPORT inline TCHAR *data(FString &&String) {
-    return String.GetCharArray().GetData();
+    return std::move(String).GetCharArray().GetData();
 }
 #endif

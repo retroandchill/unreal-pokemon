@@ -8,6 +8,7 @@
 #include "RetroLib/Ranges/Views/Generator.h"
 #include "RetroLib/Ranges/Views/JoinWith.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
+#include "RetroLib/Ranges/Views/Shared.h"
 
 #ifdef __UNREAL__
 #include "RetroLib/Ranges/Views/ClassView.h"

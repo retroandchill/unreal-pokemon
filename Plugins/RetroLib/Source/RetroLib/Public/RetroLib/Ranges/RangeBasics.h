@@ -26,4 +26,9 @@ namespace Retro::Ranges {
     concept SimpleView = std::same_as<std::ranges::iterator_t<R>, std::ranges::iterator_t<const R>> &&
                          std::same_as<std::ranges::sentinel_t<R>, std::ranges::sentinel_t<const R>>;
 
+    RETROLIB_EXPORT template <typename R>
+    concept RangeWithMovableReference =
+        std::ranges::input_range<R> && std::move_constructible<std::ranges::range_reference_t<R>> &&
+        std::move_constructible<std::ranges::range_reference_t<R>>;
+
 } // namespace Retro::Ranges

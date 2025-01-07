@@ -32,7 +32,7 @@ namespace Retro {
      *
      * @tparam T The base class type which all stored objects must derive from. Must satisfy the ClassType concept.
      */
-    RETROLIB_EXPORT template <Class T, size_t SmallStorageSize = DEFAULT_SMALL_STORAGE_SIZE>
+    RETROLIB_EXPORT template <Class T, bool MoveOnly = false, size_t SmallStorageSize = DEFAULT_SMALL_STORAGE_SIZE>
         requires(SmallStorageSize >= sizeof(void *))
     class TPolymorphic {
         template <typename U>
@@ -60,7 +60,7 @@ namespace Retro {
          * @throws No exceptions are thrown. The constructor is marked noexcept.
          */
         constexpr TPolymorphic() noexcept
-            requires std::is_default_constructible_v<T>
+            requires std::is_default_constructible_v<T>  && (std::copyable<T> || MoveOnly) && std::movable<T>
         {
             Storage.template Emplace<T>();
         }
@@ -84,7 +84,7 @@ namespace Retro {
          * @throws No exceptions are thrown as the constructor is marked noexcept.
          */
         template <typename U>
-            requires std::derived_from<std::decay_t<U>, T>
+            requires std::derived_from<std::decay_t<U>, T> && (!std::same_as<std::decay_t<U>, TPolymorphic>) && (std::copyable<U> || MoveOnly) && std::movable<U>
         explicit(false) constexpr TPolymorphic(U &&Value) noexcept : Vtable(GetVtable<U>()) {
             Storage.template Emplace<std::decay_t<U>>(std::forward<U>(Value));
         }
@@ -112,7 +112,7 @@ namespace Retro {
          * @throws No exceptions are thrown as the constructor is marked noexcept.
          */
         template <typename U, typename... A>
-            requires std::derived_from<U, T> && std::constructible_from<U, A...>
+            requires std::derived_from<U, T> && std::constructible_from<U, A...> && (std::copyable<U> || MoveOnly) && std::movable<U>
         explicit constexpr TPolymorphic(std::in_place_type_t<U>, A &&...Args) noexcept : Vtable(GetVtable<U>()) {
             Storage.template Emplace<U>(std::forward<A>(Args)...);
         }
@@ -137,7 +137,7 @@ namespace Retro {
          *
          * @throws No exceptions are thrown. The constructor is marked noexcept.
          */
-        constexpr TPolymorphic(const TPolymorphic &Other) noexcept : Vtable(Other.Vtable) {
+        constexpr TPolymorphic(const TPolymorphic &Other) noexcept requires (!MoveOnly) : Vtable(Other.Vtable) {
             if (Vtable != nullptr) {
                 Vtable->Copy(Other.Storage, Storage);
             }
@@ -194,7 +194,7 @@ namespace Retro {
          * @return A reference to the current object after assignment.
          * @note The operation is noexcept, implying it does not throw exceptions.
          */
-        constexpr TPolymorphic &operator=(const TPolymorphic &Other) noexcept {
+        constexpr TPolymorphic &operator=(const TPolymorphic &Other) noexcept requires (!MoveOnly)  {
             if (Vtable == nullptr) {
                 Vtable = Other.Vtable;
                 if (Vtable != nullptr) {
@@ -453,7 +453,7 @@ namespace Retro {
                 }
             }
 
-            static constexpr void Copy(const FOpaqueStorage &Src, FOpaqueStorage &Dest) {
+            static constexpr void Copy(const FOpaqueStorage &Src, FOpaqueStorage &Dest) requires (std::copyable<U>) {
                 if constexpr (FitsSmallStorage<U>) {
                     Dest.template Emplace<U>(*std::bit_cast<const U *>(Src.SmallStorage.data()));
                 } else {
@@ -461,7 +461,7 @@ namespace Retro {
                 }
             }
 
-            static constexpr void CopyAssign(const FOpaqueStorage &Src, FOpaqueStorage &Dest) {
+            static constexpr void CopyAssign(const FOpaqueStorage &Src, FOpaqueStorage &Dest) requires (std::copyable<U>) {
                 if constexpr (FitsSmallStorage<U>) {
                     *std::bit_cast<U *>(Dest.SmallStorage.data()) = *std::bit_cast<const U *>(Src.SmallStorage.data());
                 } else {
@@ -488,7 +488,7 @@ namespace Retro {
         };
 
         template <typename U>
-            requires std::derived_from<U, T>
+            requires std::derived_from<U, T> && std::copyable<U>
         static const FVTable *GetVtable() {
             using ImplType = TVTableImpl<U>;
             static constexpr FVTable Vtable = {.GetType = &ImplType::GetType,
@@ -503,8 +503,27 @@ namespace Retro {
             return &Vtable;
         }
 
+        template <typename U>
+            requires std::derived_from<U, T> && (!std::copyable<U>)
+        static const FVTable *GetVtable() {
+            using ImplType = TVTableImpl<U>;
+            static constexpr FVTable Vtable = {.GetType = &ImplType::GetType,
+                                               .GetSize = &ImplType::GetSize,
+                                               .GetValue = &ImplType::GetValue,
+                                               .GetConstValue = &ImplType::GetConstValue,
+                                               .Destroy = &ImplType::Destroy,
+                                               .Copy = nullptr,
+                                               .CopyAssign = nullptr,
+                                               .Move = &ImplType::Move,
+                                               .MoveAssign = &ImplType::MoveAssign};
+            return &Vtable;
+        }
+
         FOpaqueStorage Storage;
         const FVTable *Vtable = GetVtable<T>();
     };
+
+    template <Class T, size_t SmallStorageSize = DEFAULT_SMALL_STORAGE_SIZE>
+    using TUniquePolymorphic = TPolymorphic<T, true, SmallStorageSize>;
 
 } // namespace Retro

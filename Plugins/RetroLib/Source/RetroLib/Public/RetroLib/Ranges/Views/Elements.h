@@ -156,31 +156,6 @@ namespace Retro::Ranges {
                 return Left.It == Right.It;
             }
 
-            [[nodiscard]] friend constexpr bool operator<(const TIterator &Left,
-                                                          const TIterator &Right) noexcept(noexcept(Left.It < Right.It))
-                requires std::ranges::random_access_range<R>
-            {
-                return Left.It < Right.It;
-            }
-            [[nodiscard]] friend constexpr bool operator>(const TIterator &Left,
-                                                          const TIterator &Right) noexcept(noexcept(Left.It < Right.It))
-                requires std::ranges::random_access_range<R>
-            {
-                return Right < Left;
-            }
-            [[nodiscard]] friend constexpr bool
-            operator<=(const TIterator &Left, const TIterator &Right) noexcept(noexcept(Left.It < Right.It))
-                requires std::ranges::random_access_range<R>
-            {
-                return !(Right < Left);
-            }
-            [[nodiscard]] friend constexpr bool
-            operator>=(const TIterator &Left, const TIterator &Right) noexcept(noexcept(Left.It < Right.It))
-                requires std::ranges::random_access_range<R>
-            {
-                return !(Left < Right);
-            }
-
             [[nodiscard]] friend constexpr auto
             operator<=>(const TIterator &Left, const TIterator &Right) noexcept(noexcept(Left.It <=> Right.It))
                 requires std::ranges::random_access_range<R> && std::three_way_comparable<std::ranges::iterator_t<R>>

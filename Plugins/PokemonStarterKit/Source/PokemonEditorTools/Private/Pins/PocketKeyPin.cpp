@@ -28,12 +28,7 @@ TSharedRef<SWidget> SPocketKeyPin::GetDefaultValueWidget() {
               Retro::Ranges::Views::Transform(&UStringUtilities::NameToStringPtr) |
               Retro::Ranges::To<TArray>();
     // clang-format on
-
-    // clang-format off
-    auto Match = Options |
-                 Retro::Ranges::AnyOf(Retro::BindFront<&SPocketKeyPin::RowMatches>(this));
-    // clang-format on
-    if (!Match && !Options.IsEmpty()) {
+    if (!Retro::Ranges::AnyOf(Options, Retro::BindFront<&SPocketKeyPin::RowMatches>(this)) && !Options.IsEmpty()) {
         Handle.PocketName = **Options[0];
     }
 

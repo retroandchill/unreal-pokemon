@@ -158,6 +158,55 @@ TEST_CASE_NAMED(FPolymorphicCopyTest, "Unit Tests::RetroLib::Utils::Polymorphic:
     CHECK(Dereferenced3.GetValue() == 120);
 }
 
+
+TEST_CASE_NAMED(FPolymorphicMoveTest, "Unit Tests::RetroLib::Utils::Polymorphic::Moving", "[utils]") {
+    using namespace Retro::Testing::Polymorphic;
+
+    // We want to test that we can assign different polymorphic values into each other
+    Retro::TUniquePolymorphic<Base> Polymorphic1 = Derived1(42);
+    CHECK(Polymorphic1->GetValue() == 42);
+    CHECK(Polymorphic1.GetSize() == sizeof(Derived1));
+
+    Retro::TUniquePolymorphic<Base> Polymorphic2(std::in_place_type<Derived2>, ValueArray1);
+    CHECK(Polymorphic2->GetValue() == 120);
+    CHECK(Polymorphic2.GetSize() == sizeof(Derived2));
+
+    // Here we want to check that during reassignment the destructor for a different type gets invoked
+    auto Value = std::make_shared<int>(4);
+    std::weak_ptr<int> WeakValue = Value;
+    Polymorphic1 = Derived3(std::move(Value));
+    CHECK(Polymorphic1->GetValue() == 4);
+
+    Polymorphic1 = Retro::TUniquePolymorphic<Base>();
+    CHECK(Polymorphic1->GetValue() == 0);
+    CHECK(WeakValue.expired());
+
+    // Here we want to verify that the polymorphic values can copy into like types when using small storage
+    Polymorphic1 = Derived1(12);
+    Polymorphic2 = Derived1(64);
+    CHECK(Polymorphic1->GetValue() == 12);
+    CHECK(Polymorphic2->GetValue() == 64);
+
+    // Here we're going to do the same thing with large storage
+    Polymorphic1.Emplace<Derived2>(ValueArray1);
+    Polymorphic2.Emplace<Derived2>(ValueArray2);
+    CHECK(Polymorphic1->GetValue() == 120);
+    CHECK(Polymorphic2->GetValue() == 240);
+
+    // Check that dereferencing works correctly
+    auto &Dereferenced1 = *Polymorphic1;
+    CHECK(Dereferenced1.GetValue() == 120);
+
+    const auto Polymorphic3 = Retro::TPolymorphic<Base>(std::in_place_type<Derived1>, 150);
+    auto &Dereferenced2 = *Polymorphic3;
+    CHECK(Dereferenced2.GetValue() == 150);
+
+    Polymorphic1 = Retro::TUniquePolymorphic<Base>(std::in_place_type<Derived2>, ValueArray1);
+    const Retro::TUniquePolymorphic<Base> Polymorphic4 = std::move(Polymorphic1);
+    auto &Dereferenced3 = *Polymorphic4;
+    CHECK(Dereferenced3.GetValue() == 120);
+}
+
 #ifdef __UNREAL__
 TEST_CASE_NAMED(FPolymorphicOptionalState, "Unit Tests::RetroLib::Utils::Polymorphic::IntrusiveOptional", "[utils]") {
     using namespace Retro::Testing::Polymorphic;
