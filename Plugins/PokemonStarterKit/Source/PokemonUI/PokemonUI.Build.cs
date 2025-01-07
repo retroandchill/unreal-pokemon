@@ -9,7 +9,8 @@ public class PokemonUI : ModuleRules {
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "PokemonData", "PokemonCore", "RPGMenus",
                                                             "PokemonAssets", "CommonUI", "CommonGame", "GameplayTags",
                                                             "EnhancedInput", "DeveloperSettings", "PokemonItems",
-                                                            "PaperFlipbookWidget" });
+                                                            "PaperFlipbookWidget", "UE5Coro"
+        });
 
         PrivateDependencyModuleNames.AddRange(
             new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "UMG", "RenderCore", "UnrealInjector",

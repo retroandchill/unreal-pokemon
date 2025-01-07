@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Pokemon/PokemonDTO.h"
+#include "Pokemon/Pokemon.h"
 #include "Lookup/InjectionUtilities.h"
 
 TScriptInterface<IPokemon> FPokemonDTO::CreatePokemon(UObject *Outer) const {
