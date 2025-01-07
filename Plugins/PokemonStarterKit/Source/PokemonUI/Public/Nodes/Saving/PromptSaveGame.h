@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #include "PromptSaveGame.generated.h"
 
@@ -13,7 +14,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSaveWindowExit);
  * Prompt the player to save the game and then continue based on the result.
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API UPromptSaveGame : public UBlueprintAsyncActionBase {
+class POKEMONUI_API UPromptSaveGame : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
@@ -25,7 +26,8 @@ class POKEMONUI_API UPromptSaveGame : public UBlueprintAsyncActionBase {
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Saving, meta = (WorldContext = WorldContext))
     static UPromptSaveGame *PromptToSave(const UObject *WorldContext);
 
-    void Activate() override;
+protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
 
   private:
     /**

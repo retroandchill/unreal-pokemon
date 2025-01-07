@@ -9,9 +9,7 @@ USaveGameOnScreen *USaveGameOnScreen::SaveGame(USaveScreen *Screen) {
     return Node;
 }
 
-void USaveGameOnScreen::Activate() {
-    Screen->SaveGame(FOnSaveComplete::CreateWeakLambda(this, [this](bool bSuccess) {
-        bSuccess ? SaveSuccess.Broadcast() : SaveFailed.Broadcast();
-        SetReadyToDestroy();
-    }));
+UE5Coro::TCoroutine<> USaveGameOnScreen::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+    bool bSuccess = co_await Screen->SaveGame();
+    bSuccess ? SaveSuccess.Broadcast() : SaveFailed.Broadcast();
 }

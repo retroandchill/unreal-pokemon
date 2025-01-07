@@ -67,9 +67,11 @@ class POKEMONUI_API USaveScreen : public UScreen {
     /**
      * Attempt to save the game
      */
-    void SaveGame(FOnSaveComplete &&OnComplete);
+    UE5Coro::TCoroutine<bool> SaveGame();
 
     RETRO_MULTICAST_DELEGATE_MEMBER(FExitSaveScreen, OnExitSaveScreen)
+
+    UE5Coro::TCoroutine<bool> UntilSaveComplete();
 
   protected:
     /**
