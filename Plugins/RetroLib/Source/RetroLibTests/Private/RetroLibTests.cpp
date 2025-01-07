@@ -1,13 +1,11 @@
 ﻿#include "RetroLibTests.h"
 
-#define LOCTEXT_NAMESPACE "FRetroLibTestsModule"
-
 void FRetroLibTestsModule::StartupModule() {
+    // No special startup code
 }
 
 void FRetroLibTestsModule::ShutdownModule() {
+    // No special shutdown code
 }
-
-#undef LOCTEXT_NAMESPACE
 
 IMPLEMENT_MODULE(FRetroLibTestsModule, RetroLibTests)

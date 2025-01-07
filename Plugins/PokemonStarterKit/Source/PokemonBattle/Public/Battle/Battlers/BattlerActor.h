@@ -116,7 +116,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     void SelectActions() override;
     void RequireSwitch() override;
     uint8 GetActionCount() const override;
-    Retro::Ranges::TAnyView<TScriptInterface<IBattler>> GetAllies() const override;
+    Retro::TGenerator<TScriptInterface<IBattler>> GetAllies() const override;
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Visuals, meta = (AutoCreateRefTerm = Offset))
     void ShowSprite(const FVector &Offset) const override;

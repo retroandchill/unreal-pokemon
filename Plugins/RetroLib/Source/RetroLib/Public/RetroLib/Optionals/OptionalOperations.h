@@ -534,9 +534,7 @@ namespace Retro::Optionals {
          * @return `true` if both `OptionalIterator` instances have equal values,
          *         otherwise `false`.
          */
-        constexpr bool operator==(const TOptionalIterator &Other) const {
-            return Value == Other.Value;
-        }
+        constexpr friend bool operator==(const TOptionalIterator &Self, const TOptionalIterator &Other) = default;
 
         /**
          * @brief Equality operator for `OptionalSentinel`.
@@ -547,8 +545,8 @@ namespace Retro::Optionals {
          *
          * @return `true` if the instances are considered equal, `false` otherwise.
          */
-        constexpr bool operator==(const FOptionalSentinel &) const {
-            return Value == nullptr || !HasValue(*Value);
+        constexpr friend bool operator==(const TOptionalIterator& Self, const FOptionalSentinel &) {
+            return Self.Value == nullptr || !HasValue(*Self.Value);
         }
 
         /**

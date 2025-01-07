@@ -36,16 +36,16 @@ bool UPokemonBattleMove::IsUsable() const {
     return WrappedMove->GetCurrentPP() > 0;
 }
 
-Retro::Ranges::TAnyView<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossibleTargets() const {
+Retro::TGenerator<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossibleTargets() const {
     TArray<TScriptInterface<IBattler>> Targets;
     auto UserSide = Owner->GetOwningSide();
     auto UserId = Owner->GetInternalId();
     auto &Battle = UserSide->GetOwningBattle();
     // clang-format off
-    return Battle->GetActiveBattlers() |
+    co_yield Retro::Ranges::TElementsOf(Battle->GetActiveBattlers() |
            Retro::Ranges::Views::Filter([UserId](const TScriptInterface<IBattler> &Battler) {
                return Battler->GetInternalId() != UserId;
-           });
+           }));
     // clang-format on
 }
 

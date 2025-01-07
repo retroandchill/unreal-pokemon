@@ -8,8 +8,8 @@
 class FCommonGameModule : public IModuleInterface {
   public:
     FCommonGameModule();
-    virtual void StartupModule() override;
-    virtual void ShutdownModule() override;
+    void StartupModule() override;
+    void ShutdownModule() override;
 
   private:
 };
