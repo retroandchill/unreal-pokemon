@@ -3,7 +3,9 @@
 #include "Nodes/ChooseItemFromBag.h"
 #include "PokemonUISettings.h"
 #include "PrimaryGameLayout.h"
+#include "RetroLib/Optionals/IfPresentOrElse.h"
 #include "Screens/BagScreen.h"
+#include "Utilities/PokemonUIAsyncActions.h"
 
 UChooseItemFromBag *UChooseItemFromBag::ChooseItemFromBag(const UObject *WorldContextObject,
                                                           const FItemFilter &ItemFilter) {
@@ -13,20 +15,12 @@ UChooseItemFromBag *UChooseItemFromBag::ChooseItemFromBag(const UObject *WorldCo
     return Node;
 }
 
-void UChooseItemFromBag::Activate() {
-    auto Screen = UBagScreen::AddBagScreenToStack(WorldContextObject);
-    Screen->ApplyItemFilter(ItemFilter);
-    Screen->GetOnItemSelected().BindUObject(this, &UChooseItemFromBag::ExecuteOnSelected);
-    Screen->GetOnScreenClosed().AddUObject(this, &UChooseItemFromBag::ExecuteOnCanceled);
-}
-
-void UChooseItemFromBag::ExecuteOnSelected(const TScriptInterface<IInventoryScreen> &Screen, const FItem &Item,
-                                           int32 Quantity) {
-    OnSelected.Broadcast(Screen, Item, Quantity);
-    SetReadyToDestroy();
-}
-
-void UChooseItemFromBag::ExecuteOnCanceled() {
-    OnCanceled.Broadcast();
-    SetReadyToDestroy();
+UE5Coro::TCoroutine<> UChooseItemFromBag::ExecuteCoroutine(FForceLatentCoroutine) {
+    Retro::Optionals::IfPresentOrElse(
+        co_await Pokemon::UI::SelectItemFromBag(WorldContextObject, ItemFilter),
+        [&](const FSelectedItemHandle &Handle) {
+            OnSelected.Broadcast(Handle.GetScreen(), Handle.GetItem(), Handle.GetQuantity());
+        },
+        [this] { OnCanceled.Broadcast(); }
+    );
 }

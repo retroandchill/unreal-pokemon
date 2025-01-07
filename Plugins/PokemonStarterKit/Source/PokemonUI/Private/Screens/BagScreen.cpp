@@ -31,8 +31,9 @@ void UBagScreen::ApplyItemFilter(const FItemFilter &ItemFilter) {
     RefreshScene();
 }
 
-FOnItemSelected &UBagScreen::GetOnItemSelected() {
-    return OnItemSelected;
+UE5Coro::TCoroutine<TOptional<FSelectedItemHandle>> UBagScreen::PromptItemSelection() {
+    auto [Result] = co_await OnItemSelected;
+    co_return Result;
 }
 
 void UBagScreen::ToggleItemSelection(bool bCanSelect) {
@@ -49,7 +50,7 @@ void UBagScreen::RemoveFromStack() {
 
 void UBagScreen::CloseScreen() {
     Super::CloseScreen();
-    OnItemSelected.Unbind();
+    (void)OnItemSelected.ExecuteIfBound({});
 }
 
 void UBagScreen::RefreshScene() {
@@ -79,8 +80,7 @@ UPocketWindow *UBagScreen::GetPocketWindow() const {
 
 void UBagScreen::SelectItem(const FItem &Item, int32 Quantity) {
     if (OnItemSelected.IsBound()) {
-        OnItemSelected.Execute(this, Item, Quantity);
-        OnItemSelected.Unbind();
+        OnItemSelected.Execute(FSelectedItemHandle(this, Item, Quantity));
         return;
     }
 

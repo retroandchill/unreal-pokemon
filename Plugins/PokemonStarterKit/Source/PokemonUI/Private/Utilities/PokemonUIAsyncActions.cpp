@@ -3,6 +3,8 @@
 
 #include "Utilities/PokemonUIAsyncActions.h"
 #include "PrimaryGameLayout.h"
+#include "Screens/BagScreen.h"
+#include "Screens/PokemonSelectScreen.h"
 #include "Screens/TextDisplayScreen.h"
 
 namespace Pokemon::UI {
@@ -31,5 +33,17 @@ namespace Pokemon::UI {
         Screen->DisplayChoices(Message, Choices);
         auto [ChoiceIndex, ChoiceID] = co_await Screen->ProcessChoice;
         co_return {ChoiceIndex, ChoiceID};
+    }
+
+    UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>> SelectPokemonFromParty(const UObject *WorldContext) {
+        auto Screen = UPokemonSelectScreen::AddPokemonSelectScreenToStack(WorldContext);
+        co_return co_await Screen->PromptPokemonSelection();
+    }
+
+    UE5Coro::TCoroutine<TOptional<FSelectedItemHandle>> SelectItemFromBag(const UObject *WorldContext,
+                                                                          const FItemFilter &Filter) {
+        auto Screen = UBagScreen::AddBagScreenToStack(WorldContext);
+        Screen->ApplyItemFilter(Filter);
+        co_return co_await Screen->PromptItemSelection();
     }
 }

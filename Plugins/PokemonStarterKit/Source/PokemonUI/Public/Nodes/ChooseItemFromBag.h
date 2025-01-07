@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 #include "Screens/InventoryScreen.h"
 
 #include "ChooseItemFromBag.generated.h"
@@ -19,7 +20,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnItemCancel);
  * Choose and item from the bag and process the item accordingly
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API UChooseItemFromBag : public UBlueprintAsyncActionBase {
+class POKEMONUI_API UChooseItemFromBag : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
@@ -34,24 +35,10 @@ class POKEMONUI_API UChooseItemFromBag : public UBlueprintAsyncActionBase {
               Category = "Selection")
     static UChooseItemFromBag *ChooseItemFromBag(const UObject *WorldContextObject, const FItemFilter &ItemFilter);
 
-    void Activate() override;
+protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
 
   private:
-    /**
-     * Function called to execute the on selected pin
-     * @param Screen The screen displayed
-     * @param Item The item selected
-     * @param Quantity The quantity of items held
-     */
-    UFUNCTION()
-    void ExecuteOnSelected(const TScriptInterface<IInventoryScreen> &Screen, const FItem &Item, int32 Quantity);
-
-    /**
-     * Function called to execute the on cancelled pin
-     */
-    UFUNCTION()
-    void ExecuteOnCanceled();
-
     /**
      * Called when the player selects an item
      */

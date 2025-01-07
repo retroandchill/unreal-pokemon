@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "UE5Coro.h"
+#include "Screens/InventoryScreen.h"
+#include "Screens/PartyScreen.h"
 
 
 namespace Pokemon::UI {
@@ -17,4 +19,10 @@ namespace Pokemon::UI {
 
     POKEMONUI_API TMultiCoroutine<int32, FName> DisplayMessageWithChoices(const UObject* WorldContext, FText Message, const TArray<FText> &Choices);
 
+    POKEMONUI_API UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>> SelectPokemonFromParty(const UObject* WorldContext);
+    
+    POKEMONUI_API UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>> SelectPokemonFromParty(const UObject* WorldContext);
+    
+    POKEMONUI_API UE5Coro::TCoroutine<TOptional<FSelectedItemHandle>> SelectItemFromBag(
+        const UObject *WorldContext, const FItemFilter &Filter);
 };

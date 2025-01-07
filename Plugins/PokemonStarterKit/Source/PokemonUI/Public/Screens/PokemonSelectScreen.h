@@ -19,6 +19,12 @@ class UCommandWindow;
 class UHelpWindow;
 class UPokemonSelectionPane;
 
+
+/**
+ * Delegate for when an item is selected
+ */
+DECLARE_DELEGATE_OneParam(FOnPokemonSelected, TOptional<FSelectedPokemonHandle>);
+
 /**
  * Screen for when the player needs to select a Pokémon from the menu
  */
@@ -40,7 +46,7 @@ class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen, 
     UFUNCTION(BlueprintPure, Category = Owner)
     APlayerController *GetPlayerController() const final;
 
-    FOnPokemonSelected &GetOnPokemonSelect() override;
+    UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>> PromptPokemonSelection() override;
 
     UFUNCTION(BlueprintCallable, Category = Display)
     void RefreshScene() override;

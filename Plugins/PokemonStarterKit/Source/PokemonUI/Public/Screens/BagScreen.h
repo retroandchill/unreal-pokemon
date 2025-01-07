@@ -41,9 +41,7 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
     UFUNCTION(BlueprintCallable, Category = "Items|Selection")
     void ApplyItemFilter(const FItemFilter &ItemFilter) override;
 
-    FOnItemSelected &GetOnItemSelected() final;
-
-    UE5Coro::TCoroutine<TOptional<TTuple<const FItem &, int32>>> PromptSelectItem();
+    UE5Coro::TCoroutine<TOptional<FSelectedItemHandle>> PromptItemSelection() override;
 
     UFUNCTION(BlueprintCallable, Category = "Items|Selection")
     void ToggleItemSelection(bool bCanSelect) final;
