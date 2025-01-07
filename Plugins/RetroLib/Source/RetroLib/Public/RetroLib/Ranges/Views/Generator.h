@@ -6,6 +6,7 @@
  * https://github.com/retroandchill
  */
 #pragma once
+#include "AudioMixerBlueprintLibrary.h"
 
 #if RETROLIB_WITH_COROUTINES
 
@@ -460,15 +461,15 @@ namespace Retro {
 
         using TGeneratorPromiseBase<T>::yield_value;
 
-        template <std::ranges::range R>
-        typename TGeneratorPromiseBase<T>::template YieldSequenceAwaiter<TGenerator<T, V, A>>
-        yield_value(Ranges::TElementsOf<R> &&X) {
+        template <std::ranges::range R, typename M>
+        typename TGeneratorPromiseBase<T>::template YieldSequenceAwaiter<TGenerator<T, V, M>>
+        yield_value(Ranges::TElementsOf<R, M> &&X) {
             static_assert(!ExplicitAllocator, "This coroutine has an explicit allocator specified with "
                                               "std::allocator_arg so an allocator needs to be passed "
                                               "explicitly to std::elements_of");
-            return []<typename U>(U &&Range) -> TGenerator<T, V, A> {
-                for (auto &&E : std::forward<U>(Range))
-                    co_yield std::forward<decltype(E)>(E);
+            return [](auto &&Range) -> TGenerator<T, V, M> {
+                for (auto &&E : Range)
+                    co_yield static_cast<decltype(E)>(E);
             }(std::forward<R>(X.Get()));
         }
     };
@@ -637,7 +638,7 @@ namespace Retro {
             ~Iterator() = default;
 
             friend bool operator==(const Iterator &It, Sentinel) noexcept {
-                return It.Coroutine.done();
+                return !It.Coroutine || It.Coroutine.done();
             }
 
             Iterator &operator++() {
@@ -837,7 +838,7 @@ namespace Retro {
             ~Iterator() = default;
 
             friend bool operator==(const Iterator &It, Sentinel) noexcept {
-                return It.Coroutine.done();
+                return !It.Coroutine || It.Coroutine.done();
             }
 
             Iterator &operator++() {
@@ -878,10 +879,11 @@ namespace Retro {
          * @note The coroutine must be valid and not have started prior to this call.
          */
         Iterator begin() {
-            RETROLIB_ASSERT(Coroutine);
-            RETROLIB_ASSERT(!Started);
-            Started = true;
-            Coroutine.resume();
+            if (Coroutine) {
+                RETROLIB_ASSERT(!Started);
+                Started = true;
+                Coroutine.resume();
+            }
             return Iterator{Promise, Coroutine};
         }
 
