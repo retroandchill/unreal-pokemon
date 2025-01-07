@@ -803,9 +803,9 @@ namespace Retro {
          * @param Other The Generator instance to swap with.
          */
         void swap(TGenerator &Other) noexcept {
-            std::swap(Promise, Other.promise);
-            std::swap(Coroutine, Other.coroutine);
-            std::swap(Started, Other.started);
+            std::swap(Promise, Other.Promise);
+            std::swap(Coroutine, Other.Coroutine);
+            std::swap(Started, Other.Started);
         }
 
       private:

@@ -397,7 +397,7 @@ namespace Retro::Ranges {
      */
     RETROLIB_EXPORT template <typename T>
     class TAnyViewIterator {
-      public:
+    public:
         using difference_type = std::ptrdiff_t;
         using value_type = T;
 
@@ -410,6 +410,7 @@ namespace Retro::Ranges {
          */
         TAnyViewIterator() = default;
 
+    private:
         /**
          * @brief Constructs an AnyViewIterator from a given iterator.
          *
@@ -422,10 +423,16 @@ namespace Retro::Ranges {
          *
          * @param Iterator An iterator instance to initialize and adapt within this AnyViewIterator.
          */
-        template <typename I>
-            requires(!std::same_as<std::decay_t<I>, TAnyViewIterator>) && std::same_as<std::iter_value_t<I>, T>
-        constexpr explicit TAnyViewIterator(I &&Iterator)
-            : Delegate(std::make_unique<TAnyViewIteratorImpl<std::decay_t<I>>>(std::forward<I>(Iterator))) {
+        constexpr explicit TAnyViewIterator(TUniquePolymorphic<TAnyViewIteratorInterface<T>> &&Iterator)
+            : Delegate(std::move(Iterator)) {
+        }
+
+    public:
+        template <std::input_iterator I>
+            requires std::convertible_to<T, std::iter_value_t<I>>
+        constexpr static TAnyViewIterator Create(I&& Iterator) {
+            return TAnyViewIterator(TUniquePolymorphic<TAnyViewIteratorInterface<T>>(std::in_place_type<TAnyViewIteratorImpl<std::remove_cvref_t<I>>>,
+                std::forward<I>(Iterator)));
         }
 
         /**
@@ -481,12 +488,14 @@ namespace Retro::Ranges {
          *
          * @return A copy of the iterator's state prior to the increment.
          */
-        constexpr void operator++(int) {
+        constexpr TAnyViewIterator operator++(int) {
+            auto Temp = *this;
             ++*this;
+            return Temp;
         }
 
       private:
-        std::unique_ptr<TAnyViewIteratorInterface<T>> Delegate;
+        TUniquePolymorphic<TAnyViewIteratorInterface<T>> Delegate = TAnyViewIteratorImpl<T *>(nullptr);
     };
 
     /**
@@ -583,7 +592,7 @@ namespace Retro::Ranges {
          * @return An `AnyViewIterator` object that points to the first element of the range.
          */
         TAnyViewIterator<T> begin() override {
-            return TAnyViewIterator<T>(std::ranges::begin(Range));
+            return TAnyViewIterator<T>::Create(std::ranges::begin(Range));
         }
 
         /**
@@ -719,6 +728,6 @@ namespace Retro::Ranges {
         }
 
       private:
-        TPolymorphic<TAnyViewInterface<T>> Data = TAnyViewImpl<std::ranges::empty_view<T>>(std::views::empty<T>);
+        TUniquePolymorphic<TAnyViewInterface<T>> Data = TAnyViewImpl<std::ranges::empty_view<T>>(std::views::empty<T>);
     };
 } // namespace Retro::Ranges

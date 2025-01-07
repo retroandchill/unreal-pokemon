@@ -20,7 +20,6 @@
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Compatibility/Array.h"
 #include "RetroLib/Ranges/Views/Concat.h"
-#include "RetroLib/Ranges/Views/Shared.h"
 
 APokemonBattle::APokemonBattle() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleAbilitySystemComponent>(FName("AbilitySystemComponent"));
@@ -108,13 +107,13 @@ void APokemonBattle::Tick(float DeltaSeconds) {
 
 void APokemonBattle::StartBattle() {
     CreateBattleHUD();
-    OnBattlersEnteringBattle(Retro::Ranges::Views::Shared(GetActiveBattlers()));
+    OnBattlersEnteringBattle(GetActiveBattlers());
     ABattleSequencer::DisplayBattleMessages(this, &APokemonBattle::StartTurn);
 }
 
 void APokemonBattle::OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) {
     // clang-format off
-    auto Sorted = Battlers |
+    auto Sorted = std::move(Battlers) |
                   Retro::Ranges::Views::Filter(&IBattler::IsNotFainted) |
                   Retro::Ranges::To<TArray>();
     // clang-format on
