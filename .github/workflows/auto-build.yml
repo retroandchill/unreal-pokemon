@@ -51,7 +51,7 @@ jobs:
         with:
           path: |
             bw_output/*
-            coverage.txt
+            cpp-coverage.xml
             coverage-reports/*.xml
             TestResults/*
             Saved/Logs/*
