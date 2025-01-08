@@ -35,6 +35,12 @@ namespace Pokemon::UI {
         co_return {ChoiceIndex, ChoiceID};
     }
 
+    UE5Coro::TCoroutine<bool> DisplayConfirmPrompt(const UObject *WorldContext, FText Message, FText ConfirmOption,
+        FText CancelOption) {
+        auto [ChoiceIndex, _] = co_await DisplayMessageWithChoices(WorldContext, Message, {ConfirmOption, CancelOption});
+        co_return ChoiceIndex == 0;
+    }
+
     UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>> SelectPokemonFromParty(const UObject *WorldContext) {
         auto Screen = UPokemonSelectScreen::AddPokemonSelectScreenToStack(WorldContext);
         co_return co_await Screen->PromptPokemonSelection();

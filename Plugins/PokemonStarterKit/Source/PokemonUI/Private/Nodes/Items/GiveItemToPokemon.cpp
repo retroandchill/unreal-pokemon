@@ -3,6 +3,7 @@
 #include "Nodes/Items/GiveItemToPokemon.h"
 #include "Blueprints/UtilityNodeSubsystem.h"
 #include "Kismet/GameplayStatics.h"
+#include "Utilities/PokemonCoroutineDispatcher.h"
 #include "Utilities/Node/Utility_GiveItemToPokemon.h"
 
 UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldContextObject, FItemHandle Item,
@@ -16,19 +17,8 @@ UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldCo
     return Node;
 }
 
-void UGiveItemToPokemon::Activate() {
-    auto Subsystem = UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UUtilityNodeSubsystem>();
-    Subsystem->ExecuteUtilityFunction<UUtility_GiveItemToPokemon>(
-        Item, Pokemon, PokemonIndex, FSimpleDelegate::CreateUObject(this, &UGiveItemToPokemon::ExecuteItemGiven),
-        FSimpleDelegate::CreateUObject(this, &UGiveItemToPokemon::ExecuteItemRejected));
-}
-
-void UGiveItemToPokemon::ExecuteItemGiven() {
-    ItemGiven.Broadcast();
-    SetReadyToDestroy();
-}
-
-void UGiveItemToPokemon::ExecuteItemRejected() {
-    ItemRejected.Broadcast();
-    SetReadyToDestroy();
+UE5Coro::TCoroutine<> UGiveItemToPokemon::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(WorldContextObject);
+    auto bGiven = co_await Dispatcher.GiveItemToPokemon(WorldContextObject, Item, Pokemon, PokemonIndex);
+    bGiven ? ItemGiven.Broadcast() : ItemRejected.Broadcast();
 }

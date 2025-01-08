@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Bag/Item.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #include "GiveItemToPokemon.generated.h"
 
@@ -19,7 +20,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FItemResult);
  * Give an item to a Pokémon to hold, and take a held item from a Pokémon.
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API UGiveItemToPokemon : public UBlueprintAsyncActionBase {
+class POKEMONUI_API UGiveItemToPokemon : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
@@ -36,21 +37,10 @@ class POKEMONUI_API UGiveItemToPokemon : public UBlueprintAsyncActionBase {
     static UGiveItemToPokemon *GiveItemToPokemon(const UObject *WorldContextObject, FItemHandle Item,
                                                  const TScriptInterface<IPokemon> &Pokemon, int32 PokemonIndex = 0);
 
-    void Activate() override;
+protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
 
   private:
-    /**
-     * Function called to execute the item given pin
-     */
-    UFUNCTION()
-    void ExecuteItemGiven();
-
-    /**
-     * Function called to execute the item rejected pin
-     */
-    UFUNCTION()
-    void ExecuteItemRejected();
-
     /**
      * Called when the item is given to the Pokémon
      */

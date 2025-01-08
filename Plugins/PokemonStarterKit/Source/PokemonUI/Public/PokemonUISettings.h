@@ -7,6 +7,26 @@
 
 #include "PokemonUISettings.generated.h"
 
+USTRUCT(BlueprintType)
+struct POKEMONUI_API FItemMessages {
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, DisplayName = "Already Holding Item (Vowel)")
+    FText AlreadyHoldingItemVowel = NSLOCTEXT("PokemonUI", "HoldingItemVowel", "{Pkmn} is already holding an {Item}.");
+
+    UPROPERTY(EditAnywhere, DisplayName = "Already Holding Item (Consonant)")
+    FText AlreadyHoldingItemConsonant = NSLOCTEXT("PokemonUI", "HoldingItemConsonant", "{Pkmn} is already holding a {Item}.");
+
+    UPROPERTY(EditAnywhere)
+    FText SwitchItemPrompt = NSLOCTEXT("PokemonUI", "SwitchItemsPrompt", "Would you like to switch the two items?");
+
+    UPROPERTY(EditAnywhere)
+    FText SwappedItemsMessage = NSLOCTEXT("PokemonUI", "SwappedItemsMessage", "Took the {Original} from {Pkmn} and gave it the {New}.");
+
+    UPROPERTY(EditAnywhere)
+    FText NowHoldingMessage = NSLOCTEXT("PokemonUI", "NowHoldingMessage", "{Pkmn} is now holding the {Item}.");
+};
+
 /**
  * Settings for all the Pokémon UI related windows.
  */
@@ -44,4 +64,7 @@ class POKEMONUI_API UPokemonUISettings : public UDeveloperSettings {
      */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = UI, meta = (MetaClass = "SaveScreen"))
     FSoftClassPath SaveScreenClass;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Messages)
+    FItemMessages ItemMessages;
 };

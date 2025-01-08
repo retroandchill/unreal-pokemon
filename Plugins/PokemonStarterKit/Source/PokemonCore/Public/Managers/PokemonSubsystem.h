@@ -10,6 +10,7 @@
 
 #include "PokemonSubsystem.generated.h"
 
+class IPokemonCoroutineDispatcher;
 class IStorageSystem;
 class UPokemonSaveGame;
 class IBag;
@@ -134,6 +135,11 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem, public 
     UFUNCTION(BlueprintCallable, Category = Reset)
     void SetPlayerResetLocationAsCurrentLocation(ACharacter *PlayerCharacter);
 
+    const IPokemonCoroutineDispatcher& GetCoroutineDispatcher() const {
+        check(CoroutineDispatcher != nullptr);
+        return *CoroutineDispatcher;
+    }
+
   private:
     /**
      * The trainer that represents the player character
@@ -173,4 +179,7 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem, public 
     TOptional<FTransform> LoadTransform;
 
     TOptional<FPlayerResetLocation> PlayerResetLocation;
+
+    UPROPERTY()
+    TScriptInterface<IPokemonCoroutineDispatcher> CoroutineDispatcher;
 };
