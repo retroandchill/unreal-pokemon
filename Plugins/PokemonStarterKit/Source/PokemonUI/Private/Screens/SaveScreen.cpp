@@ -42,7 +42,6 @@ void USaveScreen::SetSaveGame(UEnhancedSaveGame *SaveGame) {
 
 UE5Coro::TCoroutine<bool> USaveScreen::SaveGame() {
     UE_LOG(LogPokemonUI, Display, TEXT("Creating the save game!"));
-    check(!SaveGameCreationFuture.IsSet())
     auto SavedGame = co_await AsyncThread([this] {
         auto SaveGame = UEnhancedSaveGameSubsystem::Get(this).CreateSaveGame();
         return SaveGame;
@@ -65,19 +64,4 @@ UE5Coro::TCoroutine<bool> USaveScreen::UntilSaveComplete() {
 void USaveScreen::ExitSaveScreen(bool bSuccess) {
     CloseScreen();
     OnExitSaveScreen.Broadcast(bSuccess);
-}
-
-void USaveScreen::CommitSaveGame(UEnhancedSaveGame *SaveGame) {
-    UE_LOG(LogPokemonUI, Display, TEXT("Saving game!"));
-    auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
-    UGameplayStatics::AsyncSaveGameToSlot(SaveGame, Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex,
-                                          FAsyncSaveGameToSlotDelegate::CreateWeakLambda(
-                                              this, [this, SaveGame](const FString &, const int32, bool bSuccess) {
-                                                  if (bSuccess) {
-                                                      SetSaveGame(SaveGame);
-                                                  }
-                                                  OnSaveCompleteDelegate.ExecuteIfBound(bSuccess);
-                                                  OnSaveCompleteDelegate.Unbind();
-                                              }));
-    SaveGameCreationFuture.Reset();
 }

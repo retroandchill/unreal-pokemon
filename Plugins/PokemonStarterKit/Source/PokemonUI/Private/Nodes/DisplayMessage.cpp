@@ -7,12 +7,12 @@
 
 UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObject, FText Message) {
     auto Node = NewObject<UDisplayMessage>();
-    Node->WorldContextObject = WorldContextObject;
+    Node->SetWorldContext(WorldContextObject);
     Node->Message = std::move(Message);
     return Node;
 }
 
 UE5Coro::TCoroutine<> UDisplayMessage::ExecuteCoroutine(FForceLatentCoroutine Coro) {
-    co_await Pokemon::UI::DisplayMessage(WorldContextObject, Message);
+    co_await Pokemon::UI::DisplayMessage(GetWorldContext(), Message);
     OnConfirm.Broadcast();
 }

@@ -10,4 +10,8 @@ void UBlueprintCoroutineActionBase::Activate() {
         This->SetReadyToDestroy();
     }(this);
 }
+
+UWorld * UBlueprintCoroutineActionBase::GetWorld() const {
+    return WorldContext->GetWorld();
+}
 #endif

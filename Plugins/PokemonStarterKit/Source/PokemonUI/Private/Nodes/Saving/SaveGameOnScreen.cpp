@@ -5,6 +5,7 @@
 
 USaveGameOnScreen *USaveGameOnScreen::SaveGame(USaveScreen *Screen) {
     auto Node = NewObject<USaveGameOnScreen>();
+    Node->SetWorldContext(Screen);
     Node->Screen = Screen;
     return Node;
 }

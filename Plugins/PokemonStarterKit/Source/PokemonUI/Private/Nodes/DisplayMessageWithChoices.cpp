@@ -12,13 +12,13 @@ UDisplayMessageWithChoices *UDisplayMessageWithChoices::DisplayMessageWithChoice
                                                                                   FText Message,
                                                                                   const TArray<FText> &Choices) {
     auto Node = NewObject<UDisplayMessageWithChoices>();
-    Node->WorldContextObject = WorldContextObject;
+    Node->SetWorldContext(WorldContextObject);
     Node->Message = std::move(Message);
     Node->Choices = Choices;
     return Node;
 }
 
 UE5Coro::TCoroutine<> UDisplayMessageWithChoices::ExecuteCoroutine(FForceLatentCoroutine Coro) {
-    auto [ChoiceIndex, ChoiceID] = co_await Pokemon::UI::DisplayMessageWithChoices(WorldContextObject, Message, Choices);
+    auto [ChoiceIndex, ChoiceID] = co_await Pokemon::UI::DisplayMessageWithChoices(GetWorldContext(), Message, Choices);
     OnChoiceSelected.Broadcast(ChoiceIndex, ChoiceID);
 }

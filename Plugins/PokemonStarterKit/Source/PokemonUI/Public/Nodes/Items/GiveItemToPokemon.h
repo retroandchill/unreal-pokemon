@@ -54,12 +54,6 @@ protected:
     FItemResult ItemRejected;
 
     /**
-     * The object used to obtain the state of the world to open the menu with
-     */
-    UPROPERTY()
-    TObjectPtr<const UObject> WorldContextObject;
-
-    /**
      * The new item to give
      */
     UPROPERTY()

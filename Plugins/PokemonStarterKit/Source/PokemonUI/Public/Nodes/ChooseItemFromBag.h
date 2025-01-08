@@ -52,12 +52,6 @@ protected:
     FOnItemCancel OnCanceled;
 
     /**
-     * The object used to obtain the state of the world to open the menu with
-     */
-    UPROPERTY()
-    TObjectPtr<const UObject> WorldContextObject;
-
-    /**
      * The filter used for the item list
      */
     UPROPERTY()

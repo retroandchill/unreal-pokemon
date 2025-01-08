@@ -5,14 +5,14 @@
 #include "PrimaryGameLayout.h"
 #include "Screens/SaveScreen.h"
 
-UPromptSaveGame *UPromptSaveGame::PromptToSave(const UObject *WorldContext) {
+UPromptSaveGame *UPromptSaveGame::PromptToSave(const UObject *WorldContextObject) {
     auto Node = NewObject<UPromptSaveGame>();
-    Node->WorldContext = WorldContext;
+    Node->SetWorldContext(WorldContextObject);
     return Node;
 }
 
 UE5Coro::TCoroutine<> UPromptSaveGame::ExecuteCoroutine(FForceLatentCoroutine Coro) {
-    auto Screen = USaveScreen::AddSaveScreenToStack(WorldContext);
+    auto Screen = USaveScreen::AddSaveScreenToStack(GetWorldContext());
     auto bSuccess = co_await Screen->UntilSaveComplete();
     bSuccess ? Saved.Broadcast() : DidNotSave.Broadcast();
 }

@@ -10,7 +10,7 @@ UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldCo
                                                           const TScriptInterface<IPokemon> &Pokemon,
                                                           int32 PokemonIndex) {
     auto Node = NewObject<UGiveItemToPokemon>();
-    Node->WorldContextObject = WorldContextObject;
+    Node->SetWorldContext(WorldContextObject);
     Node->Item = Item;
     Node->Pokemon = Pokemon;
     Node->PokemonIndex = PokemonIndex;
@@ -18,7 +18,7 @@ UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldCo
 }
 
 UE5Coro::TCoroutine<> UGiveItemToPokemon::ExecuteCoroutine(FForceLatentCoroutine Coro) {
-    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(WorldContextObject);
-    auto bGiven = co_await Dispatcher.GiveItemToPokemon(WorldContextObject, Item, Pokemon, PokemonIndex);
+    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(GetWorldContext());
+    auto bGiven = co_await Dispatcher.GiveItemToPokemon(GetWorldContext(), Item, Pokemon, PokemonIndex);
     bGiven ? ItemGiven.Broadcast() : ItemRejected.Broadcast();
 }

@@ -45,12 +45,6 @@ protected:
 
   private:
     /**
-     * The object used to obtain the state of the world to display the message with
-     */
-    UPROPERTY()
-    TObjectPtr<const UObject> WorldContextObject;
-
-    /**
      * The message to display to the player
      */
     UPROPERTY()

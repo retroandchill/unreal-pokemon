@@ -10,14 +10,14 @@
 UChooseItemFromBag *UChooseItemFromBag::ChooseItemFromBag(const UObject *WorldContextObject,
                                                           const FItemFilter &ItemFilter) {
     auto Node = NewObject<UChooseItemFromBag>();
-    Node->WorldContextObject = WorldContextObject;
+    Node->SetWorldContext(WorldContextObject);
     Node->ItemFilter = ItemFilter;
     return Node;
 }
 
 UE5Coro::TCoroutine<> UChooseItemFromBag::ExecuteCoroutine(FForceLatentCoroutine) {
     Retro::Optionals::IfPresentOrElse(
-        co_await Pokemon::UI::SelectItemFromBag(WorldContextObject, ItemFilter),
+        co_await Pokemon::UI::SelectItemFromBag(GetWorldContext(), ItemFilter),
         [&](const FSelectedItemHandle &Handle) {
             OnSelected.Broadcast(Handle.GetScreen(), Handle.GetItem(), Handle.GetQuantity());
         },

@@ -85,17 +85,11 @@ class POKEMONUI_API USaveScreen : public UScreen {
     void ExitSaveScreen(bool bSuccess);
 
   private:
-    void CommitSaveGame(UEnhancedSaveGame *SaveGame);
-
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<USaveGameCard> SaveGameCard;
 
     UPROPERTY()
     TObjectPtr<UEnhancedSaveGame> CurrentSaveGame;
-
-    FOnSaveComplete OnSaveCompleteDelegate;
-
-    TOptional<Retro::TGameThreadFutureExecutor<UEnhancedSaveGame *>> SaveGameCreationFuture;
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, USaveScreen)
