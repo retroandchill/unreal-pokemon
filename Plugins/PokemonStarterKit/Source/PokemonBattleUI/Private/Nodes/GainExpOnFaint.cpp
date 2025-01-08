@@ -61,7 +61,8 @@ void UGainExpOnFaint::Activate() {
 
 void UGainExpOnFaint::OnExpGainComplete() {
     auto Screen = UBattleScreenHelpers::FindBattleScreen(WorldContextObject);
-    check(Screen != nullptr);
+    check(Screen != nullptr)
+    ;
     Screen->FinishExpGainDisplay();
     OnComplete.Broadcast();
     Screen->RemoveFromExpGainComplete(CompleteHandle);

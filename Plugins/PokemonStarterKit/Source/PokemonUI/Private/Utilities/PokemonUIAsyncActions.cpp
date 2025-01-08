@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Utilities/PokemonUIAsyncActions.h"
 #include "PrimaryGameLayout.h"
 #include "Screens/BagScreen.h"
@@ -15,7 +14,8 @@ namespace Pokemon::UI {
         }
 
         auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContext);
-        auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
+        auto Screen =
+            Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
         if (Screen == nullptr) {
             Screen = UTextDisplayScreen::AddTextDisplayScreenToOverlay(WorldContext);
         }
@@ -24,9 +24,10 @@ namespace Pokemon::UI {
     }
 
     TMultiCoroutine<int32, FName> DisplayMessageWithChoices(const UObject *WorldContext, FText Message,
-        const TArray<FText> &Choices) {
+                                                            const TArray<FText> &Choices) {
         auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContext);
-        auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
+        auto Screen =
+            Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
         if (Screen == nullptr) {
             Screen = UTextDisplayScreen::AddTextDisplayScreenToOverlay(WorldContext);
         }
@@ -36,8 +37,9 @@ namespace Pokemon::UI {
     }
 
     UE5Coro::TCoroutine<bool> DisplayConfirmPrompt(const UObject *WorldContext, FText Message, FText ConfirmOption,
-        FText CancelOption) {
-        auto [ChoiceIndex, _] = co_await DisplayMessageWithChoices(WorldContext, Message, {ConfirmOption, CancelOption});
+                                                   FText CancelOption) {
+        auto [ChoiceIndex, _] =
+            co_await DisplayMessageWithChoices(WorldContext, Message, {ConfirmOption, CancelOption});
         co_return ChoiceIndex == 0;
     }
 
@@ -52,4 +54,4 @@ namespace Pokemon::UI {
         Screen->ApplyItemFilter(Filter);
         co_return co_await Screen->PromptItemSelection();
     }
-}
+} // namespace Pokemon::UI

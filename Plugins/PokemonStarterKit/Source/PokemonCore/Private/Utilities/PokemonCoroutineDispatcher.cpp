@@ -1,17 +1,17 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Utilities/PokemonCoroutineDispatcher.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
-
 
 DEFINE_INJECTABLE_DEPENDENCY(IPokemonCoroutineDispatcher)
 
 const IPokemonCoroutineDispatcher &IPokemonCoroutineDispatcher::Get(const UObject *WorldContext) {
     auto GameInstance = UGameplayStatics::GetGameInstance(WorldContext);
-    check(GameInstance != nullptr);
+    check(GameInstance != nullptr)
+    ;
     auto Subsystem = GameInstance->GetSubsystem<UPokemonSubsystem>();
-    check(Subsystem != nullptr);
+    check(Subsystem != nullptr)
+    ;
     return Subsystem->GetCoroutineDispatcher();
 }

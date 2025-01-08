@@ -397,7 +397,7 @@ namespace Retro::Ranges {
      */
     RETROLIB_EXPORT template <typename T>
     class TAnyViewIterator {
-    public:
+      public:
         using difference_type = std::ptrdiff_t;
         using value_type = T;
 
@@ -410,7 +410,7 @@ namespace Retro::Ranges {
          */
         TAnyViewIterator() = default;
 
-    private:
+      private:
         /**
          * @brief Constructs an AnyViewIterator from a given iterator.
          *
@@ -427,12 +427,12 @@ namespace Retro::Ranges {
             : Delegate(std::move(Iterator)) {
         }
 
-    public:
+      public:
         template <std::input_iterator I>
             requires std::convertible_to<T, std::iter_value_t<I>>
-        constexpr static TAnyViewIterator Create(I&& Iterator) {
-            return TAnyViewIterator(TUniquePolymorphic<TAnyViewIteratorInterface<T>>(std::in_place_type<TAnyViewIteratorImpl<std::remove_cvref_t<I>>>,
-                std::forward<I>(Iterator)));
+        constexpr static TAnyViewIterator Create(I &&Iterator) {
+            return TAnyViewIterator(TUniquePolymorphic<TAnyViewIteratorInterface<T>>(
+                std::in_place_type<TAnyViewIteratorImpl<std::remove_cvref_t<I>>>, std::forward<I>(Iterator)));
         }
 
         /**

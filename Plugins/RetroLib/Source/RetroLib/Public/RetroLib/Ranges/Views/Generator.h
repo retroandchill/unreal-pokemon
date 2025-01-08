@@ -224,7 +224,7 @@ namespace Retro {
 #else
             [[no_unique_address]] A Alloc; // \expos
 #endif
-            R &&Range;                     // \expos
+            R &&Range; // \expos
         };
 
         template <typename R>

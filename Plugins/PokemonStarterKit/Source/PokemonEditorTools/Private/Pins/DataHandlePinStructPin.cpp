@@ -19,8 +19,9 @@ void SDataHandlePinStructPin::ParseDefaultValueData() {
 TSharedRef<SWidget> SDataHandlePinStructPin::GetDefaultValueWidget() {
     ParseDefaultValueData();
     Options = Handle.GetStructOptions();
-    
-    if (!Retro::Ranges::AnyOf(Options, Retro::BindMethod<&SDataHandlePinStructPin::RowMatches>(this)) && !Options.IsEmpty()) {
+
+    if (!Retro::Ranges::AnyOf(Options, Retro::BindMethod<&SDataHandlePinStructPin::RowMatches>(this)) &&
+        !Options.IsEmpty()) {
         Handle.SetRowID(FName(**Options[0]));
     }
 

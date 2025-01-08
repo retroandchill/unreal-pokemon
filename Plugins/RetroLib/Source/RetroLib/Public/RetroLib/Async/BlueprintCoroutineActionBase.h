@@ -14,32 +14,31 @@
 #include "BlueprintCoroutineActionBase.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Abstract)
 class RETROLIB_API UBlueprintCoroutineActionBase : public UBlueprintAsyncActionBase {
     GENERATED_BODY()
 
 #if RETROLIB_WITH_UE5CORO
-public:
+  public:
     void Activate() final;
 
-    UWorld* GetWorld() const override;
+    UWorld *GetWorld() const override;
 
-protected:
+  protected:
     virtual UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) ABSTRACT_METHOD
 #endif
 
-    const UObject* GetWorldContext() const {
+    const UObject *GetWorldContext() const {
         return WorldContext;
     }
 
-    void SetWorldContext(const UObject* WorldContextObject) {
+    void SetWorldContext(const UObject *WorldContextObject) {
         WorldContext = WorldContextObject;
     }
 
-private:
+  private:
     UPROPERTY()
     TObjectPtr<const UObject> WorldContext;
-
 };

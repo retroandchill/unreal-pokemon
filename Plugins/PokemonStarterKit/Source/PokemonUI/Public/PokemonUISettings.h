@@ -15,13 +15,15 @@ struct POKEMONUI_API FItemMessages {
     FText AlreadyHoldingItemVowel = NSLOCTEXT("PokemonUI", "HoldingItemVowel", "{Pkmn} is already holding an {Item}.");
 
     UPROPERTY(EditAnywhere, DisplayName = "Already Holding Item (Consonant)")
-    FText AlreadyHoldingItemConsonant = NSLOCTEXT("PokemonUI", "HoldingItemConsonant", "{Pkmn} is already holding a {Item}.");
+    FText AlreadyHoldingItemConsonant =
+        NSLOCTEXT("PokemonUI", "HoldingItemConsonant", "{Pkmn} is already holding a {Item}.");
 
     UPROPERTY(EditAnywhere)
     FText SwitchItemPrompt = NSLOCTEXT("PokemonUI", "SwitchItemsPrompt", "Would you like to switch the two items?");
 
     UPROPERTY(EditAnywhere)
-    FText SwappedItemsMessage = NSLOCTEXT("PokemonUI", "SwappedItemsMessage", "Took the {Original} from {Pkmn} and gave it the {New}.");
+    FText SwappedItemsMessage =
+        NSLOCTEXT("PokemonUI", "SwappedItemsMessage", "Took the {Original} from {Pkmn} and gave it the {New}.");
 
     UPROPERTY(EditAnywhere)
     FText NowHoldingMessage = NSLOCTEXT("PokemonUI", "NowHoldingMessage", "{Pkmn} is now holding the {Item}.");

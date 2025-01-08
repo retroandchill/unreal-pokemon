@@ -21,6 +21,5 @@ UE5Coro::TCoroutine<> UChooseItemFromBag::ExecuteCoroutine(FForceLatentCoroutine
         [&](const FSelectedItemHandle &Handle) {
             OnSelected.Broadcast(Handle.GetScreen(), Handle.GetItem(), Handle.GetQuantity());
         },
-        [this] { OnCanceled.Broadcast(); }
-    );
+        [this] { OnCanceled.Broadcast(); });
 }

@@ -91,31 +91,33 @@ TEST_CASE_NAMED(FRangeFindFirstTest, "Unit Tests::RetroLib::Ranges::Algorithm::F
     static constexpr std::array Values = {1, 2, 3, 4, 5};
     constexpr auto IsMultipleOf = [](int i, int j) { return i % j == 0; };
     SECTION("Can reduce using an inferred optional value") {
-        auto ValidResult = Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 3)) | Retro::Ranges::FindFirst();
+        auto ValidResult =
+            Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 3)) | Retro::Ranges::FindFirst();
         CHECK(Retro::Optionals::Get(ValidResult) == 3);
 
-        auto InvalidResult = Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 10)) | Retro::Ranges::FindFirst();
+        auto InvalidResult =
+            Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 10)) | Retro::Ranges::FindFirst();
         CHECK_FALSE(Retro::Optionals::HasValue(InvalidResult));
     }
 
     SECTION("Can reduce using an inferred template parameter") {
-        auto ValidResult =
-            Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 3)) | Retro::Ranges::FindFirst<std::optional>();
+        auto ValidResult = Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 3)) |
+                           Retro::Ranges::FindFirst<std::optional>();
         REQUIRE(ValidResult.has_value());
         CHECK(ValidResult->get() == 3);
 
-        auto InvalidResult =
-            Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 10)) | Retro::Ranges::FindFirst<std::optional>();
+        auto InvalidResult = Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 10)) |
+                             Retro::Ranges::FindFirst<std::optional>();
         CHECK_FALSE(InvalidResult.has_value());
     }
 
     SECTION("Can reduce using an explicit template parameter") {
-        auto ValidResult =
-            Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 3)) | Retro::Ranges::FindFirst<std::optional<int>>();
+        auto ValidResult = Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 3)) |
+                           Retro::Ranges::FindFirst<std::optional<int>>();
         CHECK(ValidResult == 3);
 
-        auto InvalidResult =
-            Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 10)) | Retro::Ranges::FindFirst<std::optional<int>>();
+        auto InvalidResult = Values | Retro::Ranges::Views::Filter(Retro::BindBack(IsMultipleOf, 10)) |
+                             Retro::Ranges::FindFirst<std::optional<int>>();
         CHECK_FALSE(InvalidResult.has_value());
     }
 }

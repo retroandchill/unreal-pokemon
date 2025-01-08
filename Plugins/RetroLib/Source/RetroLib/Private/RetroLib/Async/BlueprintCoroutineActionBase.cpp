@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #if RETROLIB_WITH_UE5CORO
@@ -11,7 +10,7 @@ void UBlueprintCoroutineActionBase::Activate() {
     }(this);
 }
 
-UWorld * UBlueprintCoroutineActionBase::GetWorld() const {
+UWorld *UBlueprintCoroutineActionBase::GetWorld() const {
     return WorldContext->GetWorld();
 }
 #endif

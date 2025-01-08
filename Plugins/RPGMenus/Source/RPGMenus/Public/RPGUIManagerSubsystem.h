@@ -19,7 +19,7 @@ class RPGMENUS_API URPGUIManagerSubsystem : public UGameUIManagerSubsystem {
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
-    static URPGUIManagerSubsystem &Get(const UObject* WorldContext);
+    static URPGUIManagerSubsystem &Get(const UObject *WorldContext);
 
     UFUNCTION(BlueprintPure, Category = Screens)
     UScreen *GetTopScreenOfStack() const;

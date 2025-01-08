@@ -35,7 +35,7 @@ class POKEMONUI_API UChooseItemFromBag : public UBlueprintCoroutineActionBase {
               Category = "Selection")
     static UChooseItemFromBag *ChooseItemFromBag(const UObject *WorldContextObject, const FItemFilter &ItemFilter);
 
-protected:
+  protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
 
   private:

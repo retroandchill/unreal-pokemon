@@ -19,7 +19,6 @@ class UCommandWindow;
 class UHelpWindow;
 class UPokemonSelectionPane;
 
-
 /**
  * Delegate for when an item is selected
  */

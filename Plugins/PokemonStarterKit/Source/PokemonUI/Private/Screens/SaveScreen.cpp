@@ -48,7 +48,8 @@ UE5Coro::TCoroutine<bool> USaveScreen::SaveGame() {
     });
     UE_LOG(LogPokemonUI, Display, TEXT("Saving game!"));
     auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
-    bool bSuccess = co_await Retro::SaveGameToSlotAsync(SavedGame, Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex);
+    bool bSuccess =
+        co_await Retro::SaveGameToSlotAsync(SavedGame, Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex);
     if (bSuccess) {
         SetSaveGame(SavedGame);
     }

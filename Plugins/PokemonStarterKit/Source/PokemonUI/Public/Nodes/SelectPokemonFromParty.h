@@ -36,11 +36,10 @@ class POKEMONUI_API USelectPokemonFromParty : public UBlueprintCoroutineActionBa
               Category = "Selection")
     static USelectPokemonFromParty *SelectPokemonFromParty(const UObject *WorldContextObject, FText HelpText);
 
-protected:
+  protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
 
   private:
-
     /**
      * Called when the player selects a Pokémon
      */

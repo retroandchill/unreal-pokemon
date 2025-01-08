@@ -44,8 +44,8 @@ TEST_CASE_NAMED(FRuntimeRangeAdapterTest, "Unit Tests::RetroLib::Ranges::Views::
     }
 
     SECTION("Can use the range pipe syntax") {
-        auto Transformed =
-            Values | Retro::Ranges::Views::Filter(IsEven) | Retro::Ranges::Views::Transform(Retro::BindBack(DoubleValue, 2));
+        auto Transformed = Values | Retro::Ranges::Views::Filter(IsEven) |
+                           Retro::Ranges::Views::Transform(Retro::BindBack(DoubleValue, 2));
 
         auto It = Transformed.begin();
         CHECK(*It == 4);
@@ -62,7 +62,7 @@ TEST_CASE_NAMED(FConstexprRangeAdapterTest, "Unit Tests::RetroLib::Ranges::Views
     constexpr auto DoubleValue = [](int i, int j) { return i * j; };
 
     SECTION("Can use the regular functional operators") {
-        auto Filtered = Retro::Ranges::Views::Filter(Values,IsEven);
+        auto Filtered = Retro::Ranges::Views::Filter(Values, IsEven);
         auto Transformed = Retro::Ranges::Views::Transform(Filtered, Retro::BindBack<DoubleValue>(2));
 
         auto It = Transformed.begin();
@@ -74,8 +74,8 @@ TEST_CASE_NAMED(FConstexprRangeAdapterTest, "Unit Tests::RetroLib::Ranges::Views
     }
 
     SECTION("Can use the range pipe syntax") {
-        auto Transformed =
-            Values | Retro::Ranges::Views::Filter(IsEven) | Retro::Ranges::Views::Transform(Retro::BindBack<DoubleValue>(2));
+        auto Transformed = Values | Retro::Ranges::Views::Filter(IsEven) |
+                           Retro::Ranges::Views::Transform(Retro::BindBack<DoubleValue>(2));
 
         auto It = Transformed.begin();
         CHECK(*It == 4);

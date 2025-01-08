@@ -37,7 +37,7 @@ class POKEMONUI_API UGiveItemToPokemon : public UBlueprintCoroutineActionBase {
     static UGiveItemToPokemon *GiveItemToPokemon(const UObject *WorldContextObject, FItemHandle Item,
                                                  const TScriptInterface<IPokemon> &Pokemon, int32 PokemonIndex = 0);
 
-protected:
+  protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
 
   private:

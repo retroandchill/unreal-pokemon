@@ -130,7 +130,7 @@ UTurnBasedEffectComponent *AActiveSide::GetTurnBasedEffectComponent() const {
 Retro::TGenerator<UTurnBasedEffectComponent *> AActiveSide::GetChildEffectComponents() const {
     co_yield TurnBasedEffectComponent;
     co_yield Retro::Ranges::TElementsOf(Battlers |
-        Retro::Ranges::Views::Transform(&IBattler::GetTurnBasedEffectComponent));
+                                        Retro::Ranges::Views::Transform(&IBattler::GetTurnBasedEffectComponent));
 }
 
 uint8 AActiveSide::GetSideSize() const {

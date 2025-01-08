@@ -7,5 +7,6 @@
 class USaveGame;
 
 namespace Retro {
-    RETROLIB_API UE5Coro::TCoroutine<bool> SaveGameToSlotAsync(USaveGame* SaveGameObject, const FString& SlotName, const int32 UserIndex);
+    RETROLIB_API UE5Coro::TCoroutine<bool> SaveGameToSlotAsync(USaveGame *SaveGameObject, const FString &SlotName,
+                                                               const int32 UserIndex);
 }

@@ -14,7 +14,8 @@ class UPartyMenuHandler;
 class ITrainer;
 
 POKEMONUI_API struct FSelectedPokemonHandle {
-    FSelectedPokemonHandle(const TScriptInterface<IPartyScreen> &InScreen, const TScriptInterface<ITrainer> &InTrainer, int32 InIndex);
+    FSelectedPokemonHandle(const TScriptInterface<IPartyScreen> &InScreen, const TScriptInterface<ITrainer> &InTrainer,
+                           int32 InIndex);
 
     const TScriptInterface<IPartyScreen> &GetScreen() const {
         return Screen;
@@ -30,7 +31,7 @@ POKEMONUI_API struct FSelectedPokemonHandle {
 
     TScriptInterface<IPokemon> GetPokemon() const;
 
-private:
+  private:
     TScriptInterface<IPartyScreen> Screen;
     TScriptInterface<ITrainer> Trainer;
     int32 Index;
@@ -62,7 +63,7 @@ class POKEMONUI_API IPartyScreen {
      */
     UFUNCTION(BlueprintCallable, Category = Owner)
     virtual APlayerController *GetPlayerController() const = 0;
-    
+
     virtual UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>> PromptPokemonSelection() = 0;
 
     /**

@@ -7,7 +7,6 @@
  */
 #pragma once
 
-
 #include "RetroLib/Functional/ExtensionMethods.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
 

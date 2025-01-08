@@ -28,7 +28,7 @@ class POKEMONUI_API USaveGameOnScreen : public UBlueprintCoroutineActionBase {
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Saving, meta = (DefaultToSelf = Screen))
     static USaveGameOnScreen *SaveGame(USaveScreen *Screen);
 
-protected:
+  protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
 
   private:

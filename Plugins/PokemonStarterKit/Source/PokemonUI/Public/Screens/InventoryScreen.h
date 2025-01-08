@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Interface.h"
 #include "UE5Coro.h"
+#include "UObject/Interface.h"
 
 #include "InventoryScreen.generated.h"
 
@@ -26,8 +26,8 @@ POKEMONUI_API struct FSelectedItemHandle {
     int32 GetQuantity() const {
         return Quantity;
     }
-    
-private:
+
+  private:
     TScriptInterface<IInventoryScreen> Screen;
     const FItem &Item;
     int32 Quantity;

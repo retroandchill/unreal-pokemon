@@ -23,10 +23,11 @@ class POKEMONUI_API UPromptSaveGame : public UBlueprintCoroutineActionBase {
      * @param WorldContextObject The screen to save the game with.
      * @return The node to process on
      */
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Saving, meta = (WorldContext = WorldContextObject))
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Saving,
+              meta = (WorldContext = WorldContextObject))
     static UPromptSaveGame *PromptToSave(const UObject *WorldContextObject);
 
-protected:
+  protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
 
   private:
