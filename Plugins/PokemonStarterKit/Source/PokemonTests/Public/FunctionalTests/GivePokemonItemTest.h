@@ -17,8 +17,4 @@ public:
 protected:
     UE5Coro::TCoroutine<> RunTest(FForceLatentCoroutine Coro) override;
 
-private:
-    static UE5Coro::TCoroutine<> AdvanceMessages(const UObject* WorldContextObject, FForceLatentCoroutine Coro = {});
-    static UE5Coro::TCoroutine<> AdvanceMessagesUntilPrompt(const UObject* WorldContextObject, int32 IndexToSelect = 0, FForceLatentCoroutine Coro = {});
-
 };
