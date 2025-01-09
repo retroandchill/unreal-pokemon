@@ -7,6 +7,7 @@ public class PokemonTests : ModuleRules {
         PublicDependencyModuleNames.AddRange(new string[] {
             "Core",
             "PokemonBattle",
+            "FunctionalTesting"
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject",
@@ -45,6 +46,7 @@ public class PokemonTests : ModuleRules {
                                                              "ToolMenus",
                                                              "DynamicAssetLoaderNodes",
                                                              "AutomationTest",
-                                                             "Paper2D" });
+                                                             "Paper2D", "RetroLibTests", "RPGMenusTests", "UE5Coro"
+        });
     }
 }

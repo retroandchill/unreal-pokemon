@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Screens/Screen.h"
+#include "UE5Coro.h"
 
 #include "TextDisplayScreen.generated.h"
 
@@ -55,6 +56,8 @@ class POKEMONUI_API UTextDisplayScreen : public UScreen {
      */
     UFUNCTION(BlueprintCallable, Category = "Messages|Display")
     void ClearDisplayText();
+
+    UE5Coro::TCoroutine<UCommonActivatableWidget*> AwaitInputPrompt(FForceLatentCoroutine Coro = {}) const;
 
     /**
      * Assignable delegate for advancing to the next message

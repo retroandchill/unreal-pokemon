@@ -28,8 +28,11 @@ class RETROLIB_API UBlueprintCoroutineActionBase : public UBlueprintAsyncActionB
 
   protected:
     virtual UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) ABSTRACT_METHOD
-#endif
 
+public:
+    UE5Coro::TCoroutine<> UntilComplete(FForceLatentCoroutine Coro = {}) const;
+
+protected:
     const UObject *GetWorldContext() const {
         return WorldContext;
     }
@@ -37,6 +40,7 @@ class RETROLIB_API UBlueprintCoroutineActionBase : public UBlueprintAsyncActionB
     void SetWorldContext(const UObject *WorldContextObject) {
         WorldContext = WorldContextObject;
     }
+#endif
 
   private:
     UPROPERTY()
