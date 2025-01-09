@@ -15,13 +15,6 @@ UWorld *UBlueprintCoroutineActionBase::GetWorld() const {
 }
 
 UE5Coro::TCoroutine<> UBlueprintCoroutineActionBase::UntilComplete(FForceLatentCoroutine Coro) const {
-    co_await UE5Coro::Latent::Until([this] {
-        if (HasAnyFlags(RF_StrongRefOnFrame)) {
-            return false;
-        }
-
-        UE_LOG(LogBlueprint, Warning, TEXT("Node complete!"))
-        return true;
-    });
+    co_await UE5Coro::Latent::Until([this] { return !HasAnyFlags(RF_StrongRefOnFrame); });
 }
 #endif
