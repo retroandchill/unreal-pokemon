@@ -66,6 +66,9 @@ class POKEMONCORE_API IBag {
     UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
     virtual int32 RemoveItem(FItemHandle ItemID, int32 Amount = 1) = 0;
 
+    UFUNCTION(BlueprintCallable, Category = "Player|Inventory")
+    virtual void ClearBag() = 0;
+
     /**
      * Sort the specified pocket with the provided sorter
      * @param Pocket The pocket to sort
