@@ -18,12 +18,10 @@ class RETROLIBTESTS_API ACoroutineFunctionalTest : public AFunctionalTest {
     GENERATED_BODY()
 
 #if RETROLIB_WITH_UE5CORO
-public:
+  public:
     void StartTest() final;
 
-protected:
+  protected:
     virtual UE5Coro::TCoroutine<> RunTest(FForceLatentCoroutine Coro = {}) ABSTRACT_METHOD
 #endif
-
-
 };

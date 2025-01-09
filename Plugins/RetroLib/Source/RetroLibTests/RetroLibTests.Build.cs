@@ -9,9 +9,9 @@ public class RetroLibTests : ModuleRules {
 
         PrivateDependencyModuleNames.AddRange(
             new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "RetroLib" });
-        
+
         if (Target.bEnableCppCoroutinesForEvaluation && !string.IsNullOrEmpty(GetModuleDirectory("UE5Coro"))) {
-	        PublicDependencyModuleNames.Add("UE5Coro");
+            PublicDependencyModuleNames.Add("UE5Coro");
         }
     }
 }

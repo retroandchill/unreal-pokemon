@@ -1,27 +1,25 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "FunctionalTests/GivePokemonItemTest.h"
-#include "RPGMenusTestUtilities.h"
-#include "RPGUIManagerSubsystem.h"
 #include "Components/Bag/PocketTabWidget.h"
-#include "Player/Bag.h"
-#include "Pokemon/Pokemon.h"
-#include "Screens/BagScreen.h"
-#include "Utilities/ScopedParty.h"
-#include "Utilities/ScopedScreen.h"
-#include "Utilities/WidgetTestUtilities.h"
-#include "TestAdapter.h"
 #include "Components/CommandWindow.h"
 #include "Components/MessageWindow.h"
 #include "Kismet/GameplayStatics.h"
 #include "Nodes/Items/GiveItemToPokemon.h"
+#include "Player/Bag.h"
+#include "Pokemon/Pokemon.h"
 #include "RetroLib/Utils/ScopedTimeDilationFactor.h"
+#include "RPGMenusTestUtilities.h"
+#include "RPGUIManagerSubsystem.h"
+#include "Screens/BagScreen.h"
 #include "Screens/TextDisplayScreen.h"
+#include "TestAdapter.h"
 #include "Utilities/MessageBoxTestingUtils.h"
 #include "Utilities/ReflectionUtils.h"
 #include "Utilities/RPGMenuUtilities.h"
-
+#include "Utilities/ScopedParty.h"
+#include "Utilities/ScopedScreen.h"
+#include "Utilities/WidgetTestUtilities.h"
 
 AGivePokemonItemTest::AGivePokemonItemTest() {
     LogWarningHandling = EFunctionalTestLogHandling::OutputIgnored;
@@ -30,10 +28,7 @@ AGivePokemonItemTest::AGivePokemonItemTest() {
 
 UE5Coro::TCoroutine<> AGivePokemonItemTest::RunTest(FForceLatentCoroutine Coro) {
     Retro::FScopedTimeDilationFactor TimeDilation(this, 8);
-    FPokemonDTO DemoPokemon = {
-        .Species = "Pikachu",
-        .Level = 25
-    };
+    FPokemonDTO DemoPokemon = {.Species = "Pikachu", .Level = 25};
     Pokemon::Tests::FScopedParty Party(this, Retro::Ranges::Views::Single(std::ref(DemoPokemon)));
     auto Bag = UTrainerHelpers::GetBag(this);
     Bag->ObtainItem("LIGHTBALL", 1);
@@ -45,7 +40,7 @@ UE5Coro::TCoroutine<> AGivePokemonItemTest::RunTest(FForceLatentCoroutine Coro) 
 
     Node->Activate();
     co_await Race(Pokemon::Testing::AdvanceMessages(this), Node->UntilComplete());
-    
+
     auto HeldItem = Pokemon->GetHoldItem();
     CO_REQUIRE(HeldItem.IsSet())
     CHECK(HeldItem->ID == "LIGHTBALL")

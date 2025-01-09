@@ -57,7 +57,7 @@ class POKEMONUI_API UTextDisplayScreen : public UScreen {
     UFUNCTION(BlueprintCallable, Category = "Messages|Display")
     void ClearDisplayText();
 
-    UE5Coro::TCoroutine<UCommonActivatableWidget*> AwaitInputPrompt(FForceLatentCoroutine Coro = {}) const;
+    UE5Coro::TCoroutine<UCommonActivatableWidget *> AwaitInputPrompt(FForceLatentCoroutine Coro = {}) const;
 
     /**
      * Assignable delegate for advancing to the next message

@@ -1,8 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "FunctionalTesting/CoroutineFunctionalTest.h"
-
 
 void ACoroutineFunctionalTest::StartTest() {
     [](UE5Coro::TLatentContext<ACoroutineFunctionalTest> This) -> UE5Coro::TCoroutine<> {

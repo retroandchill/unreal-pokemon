@@ -30,6 +30,7 @@ class RPGMENUSTESTS_API URPGMenusTestUtilities : public UBlueprintFunctionLibrar
     UFUNCTION(BlueprintCallable, Category = Message)
     static void ForceClickButton(UCommonButtonBase *Button);
 
-    static UE5Coro::TCoroutine<> AdvanceMessages(const UObject* WorldContextObject, FForceLatentCoroutine Coro = {});
-    static UE5Coro::TCoroutine<> AdvanceMessagesUntilPrompt(const UObject* WorldContextObject, int32 IndexToSelect = 0, FForceLatentCoroutine Coro = {});
+    static UE5Coro::TCoroutine<> AdvanceMessages(const UObject *WorldContextObject, FForceLatentCoroutine Coro = {});
+    static UE5Coro::TCoroutine<> AdvanceMessagesUntilPrompt(const UObject *WorldContextObject, int32 IndexToSelect = 0,
+                                                            FForceLatentCoroutine Coro = {});
 };

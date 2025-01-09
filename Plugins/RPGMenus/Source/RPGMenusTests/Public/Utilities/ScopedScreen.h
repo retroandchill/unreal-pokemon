@@ -7,14 +7,14 @@
 
 namespace RPG::Menus {
     /**
-     * 
+     *
      */
     template <std::derived_from<UScreen> T>
     class TScopedScreen {
-    public:
-        explicit TScopedScreen(T* Screen) : Screen(Screen) {
+      public:
+        explicit TScopedScreen(T *Screen) : Screen(Screen) {
         }
-        
+
         ~TScopedScreen() {
             if (Screen.IsValid()) {
                 Screen->CloseScreen();
@@ -23,24 +23,24 @@ namespace RPG::Menus {
 
         UE_NONCOPYABLE(TScopedScreen)
 
-        T& Get() const {
+        T &Get() const {
             check(Screen.IsValid())
             return *Screen;
         }
 
-        T& operator*() const {
+        T &operator*() const {
             return Get();
         }
 
-        T* operator->() const {
+        T *operator->() const {
             return &Get();
         }
 
-        operator T*() const {
+        operator T *() const {
             return &Get();
         }
 
-    private:
+      private:
         TWeakObjectPtr<T> Screen;
     };
-}
+} // namespace RPG::Menus

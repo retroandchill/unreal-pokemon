@@ -4,11 +4,7 @@ public class PokemonTests : ModuleRules {
     public PokemonTests(ReadOnlyTargetRules Target) : base(Target) {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicDependencyModuleNames.AddRange(new string[] {
-            "Core",
-            "PokemonBattle",
-            "FunctionalTesting"
-        });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "PokemonBattle", "FunctionalTesting" });
 
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject",
                                                              "Engine",
@@ -46,7 +42,9 @@ public class PokemonTests : ModuleRules {
                                                              "ToolMenus",
                                                              "DynamicAssetLoaderNodes",
                                                              "AutomationTest",
-                                                             "Paper2D", "RetroLibTests", "RPGMenusTests", "UE5Coro"
-        });
+                                                             "Paper2D",
+                                                             "RetroLibTests",
+                                                             "RPGMenusTests",
+                                                             "UE5Coro" });
     }
 }

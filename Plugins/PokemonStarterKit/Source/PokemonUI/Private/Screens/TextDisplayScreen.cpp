@@ -77,6 +77,6 @@ UE5Coro::TCoroutine<UCommonActivatableWidget *> UTextDisplayScreen::AwaitInputPr
     if (CommandWindow->IsVisible()) {
         co_return CommandWindow;
     }
-    
+
     co_return MessageWindow;
 }

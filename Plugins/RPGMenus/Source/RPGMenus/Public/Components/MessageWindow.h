@@ -5,8 +5,8 @@
 #include "Blueprint/UserWidget.h"
 #include "CommonActivatableWidget.h"
 #include "Containers/Deque.h"
-#include "RetroLib/RetroLibMacros.h"
 #include "RetroLib/Functional/Delegates.h"
+#include "RetroLib/RetroLibMacros.h"
 
 #include "MessageWindow.generated.h"
 

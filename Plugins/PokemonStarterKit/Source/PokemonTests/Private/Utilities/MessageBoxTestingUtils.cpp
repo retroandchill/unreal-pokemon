@@ -1,14 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Utilities/MessageBoxTestingUtils.h"
-#include "RPGMenusTestUtilities.h"
-#include "RPGUIManagerSubsystem.h"
 #include "Components/CommandWindow.h"
 #include "Components/MessageWindow.h"
-#include "TestAdapter.h"
+#include "RPGMenusTestUtilities.h"
+#include "RPGUIManagerSubsystem.h"
 #include "Screens/TextDisplayScreen.h"
-
+#include "TestAdapter.h"
 
 UE5Coro::TCoroutine<> Pokemon::Testing::AdvanceMessages(const UObject *WorldContextObject, FForceLatentCoroutine Coro) {
     auto Screen = Cast<UTextDisplayScreen>(URPGUIManagerSubsystem::Get(WorldContextObject).GetTopScreenOfOverlay());
@@ -26,7 +24,7 @@ UE5Coro::TCoroutine<> Pokemon::Testing::AdvanceMessages(const UObject *WorldCont
 }
 
 UE5Coro::TCoroutine<> Pokemon::Testing::AdvanceMessagesUntilPrompt(const UObject *WorldContextObject,
-    int32 IndexToSelect, FForceLatentCoroutine Coro) {
+                                                                   int32 IndexToSelect, FForceLatentCoroutine Coro) {
     auto Screen = Cast<UTextDisplayScreen>(URPGUIManagerSubsystem::Get(WorldContextObject).GetTopScreenOfOverlay());
     if (Screen == nullptr) {
         co_return;
