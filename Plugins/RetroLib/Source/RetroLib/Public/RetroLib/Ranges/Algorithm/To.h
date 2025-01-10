@@ -9,11 +9,16 @@
 
 #include "RetroLib/Concepts/Tuples.h"
 #include "RetroLib/Functional/ExtensionMethods.h"
-#include "RetroLib/Ranges/Concepts.h"
+#include "RetroLib/Ranges/Concepts/Containers.h"
 #include "RetroLib/Ranges/FeatureBridge.h"
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/RetroLibMacros.h"
+
+#ifdef __UNREAL__
+#include "Containers/Map.h"
+#endif
+
 #include <map>
 #endif
 
@@ -52,6 +57,11 @@ namespace Retro::Ranges {
      */
     RETROLIB_EXPORT template <>
     struct TIsMap<std::map> : std::true_type {};
+
+#ifdef __UNREAL__
+    RETROLIB_EXPORT template <>
+    struct TIsMap<TMap> : std::true_type {};
+#endif
 
     /**
      * @brief A utility struct that defines a template alias to create a type

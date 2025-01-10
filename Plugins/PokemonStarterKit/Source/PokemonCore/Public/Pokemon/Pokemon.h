@@ -6,7 +6,7 @@
 #include "Bag/Item.h"
 #include "Breeding/PokemonGender.h"
 #include "Lookup/InjectableDependency.h"
-#include "Manipulation/CircularIterator.h"
+#include "RetroLib/Ranges/CircularIterator.h"
 #include "Trainers/Trainer.h"
 #include "UObject/Interface.h"
 
@@ -232,6 +232,6 @@ class POKEMONCORE_API IPokemon {
 /**
  * Circular iterator specifically for Pokémon in the party or a box
  */
-using FPokemonIterator = TCircularIterator<TScriptInterface<IPokemon>>;
+using FPokemonIterator = Retro::TCircularIterator<TScriptInterface<IPokemon>>;
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, IPokemon);

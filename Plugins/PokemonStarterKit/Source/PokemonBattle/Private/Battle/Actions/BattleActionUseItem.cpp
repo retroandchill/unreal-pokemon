@@ -13,6 +13,7 @@
 #include "Pokemon/Pokemon.h"
 #include "PokemonBattleSettings.h"
 #include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/MakeWeak.h"
 
 FItemTarget::FItemTarget(TWeakInterfacePtr<IBattler> &&Battler) {

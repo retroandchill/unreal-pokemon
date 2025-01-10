@@ -10,6 +10,7 @@
 #include "Memory/CursorMemorySubsystem.h"
 #include "PokemonDataSettings.h"
 #include "RetroLib/Functional/BindMethod.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 
 UPocketTabWidget::UPocketTabWidget() {
     for (auto &Pockets = GetDefault<UPokemonDataSettings>()->PocketNames; auto &[ID, Name] : Pockets) {
@@ -59,7 +60,7 @@ void UPocketTabWidget::NativeConstruct() {
     PocketRightBinding = RegisterUIActionBinding(CreateBindArgs(PocketRightAction, &UPocketTabWidget::PocketRight));
 
     auto &PocketNames = GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->GetBagPocketNames();
-    CurrentPocket = TCircularIterator<FName>(PocketNames, 0);
+    CurrentPocket = Retro::TCircularIterator<const FName>(PocketNames, 0);
     PocketButtons[CurrentPocket.GetIndex()]->SetIsSelected(true);
 }
 

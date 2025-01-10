@@ -7,6 +7,8 @@
 #include <UObject/UObjectIterator.h>
 #endif
 
+#include "RetroLib/Ranges/Concepts/Containers.h"
+
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
 #endif

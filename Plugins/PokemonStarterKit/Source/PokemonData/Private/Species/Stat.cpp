@@ -1,6 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Species/Stat.h"
 #include "DataManager.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 
 TArray<FName> UStatHelper::GetStatNames() {
     return FDataManager::GetInstance().GetDataTable<FStat>().GetTableRowNames();

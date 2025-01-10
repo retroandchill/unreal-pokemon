@@ -7,6 +7,7 @@
  */
 #pragma once
 
+#include "RetroLib/Ranges/Concepts/Containers.h"
 #include "RetroLib/Ranges/FeatureBridge.h"
 #include "RetroLib/Ranges/RangeBasics.h"
 #include "RetroLib/Utils/NonPropagatingCache.h"

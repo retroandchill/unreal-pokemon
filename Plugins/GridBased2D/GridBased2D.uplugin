@@ -32,10 +32,6 @@
 			"Enabled": true
 		},
 		{
-			"Name": "CommonMath",
-			"Enabled": true
-		},
-		{
 			"Name": "TileReplacer",
 			"Enabled": true
 		},

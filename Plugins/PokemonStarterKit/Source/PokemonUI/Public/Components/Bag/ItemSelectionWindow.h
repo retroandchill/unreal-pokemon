@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Bag/Item.h"
 #include "Components/SelectableWidget.h"
-#include "Manipulation/CircularIterator.h"
 #include "Screens/InventoryScreen.h"
 
 #include "ItemSelectionWindow.generated.h"

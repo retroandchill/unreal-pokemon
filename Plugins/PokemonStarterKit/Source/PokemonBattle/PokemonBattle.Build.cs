@@ -5,11 +5,11 @@ public class PokemonBattle : ModuleRules {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "PokemonData", "PokemonCore", "GameplayAbilities",
-                                                            "GameplayTags", "GameplayTasks", "PokemonUtilities",
-                                                            "DeveloperSettings", "DynamicAssetLoader", "PokemonAssets",
-                                                            "CommonMath" });
+                                                            "GameplayTags", "GameplayTasks", "DeveloperSettings",
+                                                            "DynamicAssetLoader", "PokemonAssets" });
 
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore",
-                                                             "UnrealInjector", "PokemonAssets", "Paper2D" });
+                                                             "UnrealInjector", "PokemonAssets", "Paper2D",
+                                                             "RetroLib" });
     }
 }

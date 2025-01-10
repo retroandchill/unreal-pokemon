@@ -11,9 +11,19 @@ public class PokemonUI : ModuleRules {
                                                             "EnhancedInput", "DeveloperSettings", "PokemonItems",
                                                             "PaperFlipbookWidget", "UE5Coro", "RetroLib" });
 
-        PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "UMG",
-                                                             "RenderCore", "UnrealInjector", "CommonInput",
-                                                             "PokemonItems", "Paper2D", "DynamicAssetLoader",
-                                                             "EnhancedSaveGame", "PokemonUtilities" });
+        PrivateDependencyModuleNames.AddRange(new string[] {
+            "CoreUObject",
+            "Engine",
+            "Slate",
+            "SlateCore",
+            "UMG",
+            "RenderCore",
+            "UnrealInjector",
+            "CommonInput",
+            "PokemonItems",
+            "Paper2D",
+            "DynamicAssetLoader",
+            "EnhancedSaveGame",
+        });
     }
 }

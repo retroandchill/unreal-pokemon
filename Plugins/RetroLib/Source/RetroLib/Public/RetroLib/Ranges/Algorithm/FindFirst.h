@@ -10,6 +10,7 @@
 #include "RetroLib/Functional/CreateBinding.h"
 #include "RetroLib/Functional/ExtensionMethods.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
+#include "RetroLib/Ranges/Concepts/Containers.h"
 #include "RetroLib/Ranges/FeatureBridge.h"
 #include "RetroLib/Utils/ForwardLike.h"
 

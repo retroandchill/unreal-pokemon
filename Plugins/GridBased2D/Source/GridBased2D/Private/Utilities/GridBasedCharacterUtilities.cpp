@@ -7,7 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GridBased2DSettings.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "MathUtilities.h"
+#include "RetroLib/Utils/BlueprintMathUtils.h"
 
 bool UGridBasedCharacterUtilities::InvalidFloor(ACharacter *Character, const FVector &TargetSquare,
                                                 const UPrimitiveComponent *HitComponent) {
@@ -52,7 +52,7 @@ bool UGridBasedCharacterUtilities::CanStepUpOnComponent(ACharacter *Character, c
 
 FVector UGridBasedCharacterUtilities::FindLocationJustOffTileEdge(ACharacter *Character, const FVector &TargetSquare) {
     auto Location = Character->GetActorLocation();
-    auto MidPoint = UMathUtilities::Midpoint(TargetSquare, Location);
+    auto MidPoint = UBlueprintMathUtils::Midpoint(TargetSquare, Location);
     auto Diff = TargetSquare - Location;
     Diff.Normalize();
     return MidPoint + Diff;
@@ -61,7 +61,7 @@ FVector UGridBasedCharacterUtilities::FindLocationJustOffTileEdge(ACharacter *Ch
 FVector UGridBasedCharacterUtilities::FindLocationJustBeforeTileEdge(ACharacter *Character,
                                                                      const FVector &TargetSquare) {
     auto Location = Character->GetActorLocation();
-    auto MidPoint = UMathUtilities::Midpoint(TargetSquare, Location);
+    auto MidPoint = UBlueprintMathUtils::Midpoint(TargetSquare, Location);
     auto Diff = TargetSquare - Location;
     Diff.Normalize();
     return MidPoint - Diff;

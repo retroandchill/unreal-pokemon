@@ -1,9 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "GridMapEditorUtilities.h"
-#include "RetroLib/Ranges/Compatibility/Array.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "RetroLib/Optionals/IfPresent.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include <array>
 
 struct FTileBasicInfo {

@@ -5,10 +5,10 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "GameplayEffect.h"
-#include "MathUtilities.h"
 #include "Misc/DataValidation.h"
 #include "RetroLib/Optionals/OrElseValue.h"
 #include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Utils/BlueprintMathUtils.h"
 
 bool UTurnBasedGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer &GEContainer,
                                                                     FActiveGameplayEffect &ActiveGE) const {
@@ -17,7 +17,7 @@ bool UTurnBasedGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGamep
     check(IsValid(TurnBasedComponent))
     // clang-format off
     int32 Duration = TurnDuration |
-                     Retro::Optionals::Transform(&UMathUtilities::RandomIntInRange) |
+                     Retro::Optionals::Transform(&UBlueprintMathUtils::RandomIntInRange) |
                      Retro::Optionals::OrElseValue(INDEX_NONE);
     // clang-format on
     TurnBasedComponent->AddTurnBasedEffect(ActiveGE.Handle, Duration);

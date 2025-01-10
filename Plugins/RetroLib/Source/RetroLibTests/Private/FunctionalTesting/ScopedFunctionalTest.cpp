@@ -6,7 +6,6 @@
 #include "RetroLib/Casting/StaticCast.h"
 #include "RetroLib/Casting/UClassCasts.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
-#include "RetroLib/Ranges/Compatibility/Array.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 
 void AScopedFunctionalTest::PrepareTest() {

@@ -5,7 +5,6 @@
 #include "DataStructHandle.h"
 #include "GameData.h"
 #include "RetroLib/Casting/ByteCast.h"
-#include "RetroLib/Ranges/Compatibility/Array.h"
 #include "RetroLib/Ranges/Views/Elements.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 

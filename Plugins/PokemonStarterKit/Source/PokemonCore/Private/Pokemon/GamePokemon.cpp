@@ -14,6 +14,7 @@
 #include "Pokemon/TrainerMemo/ObtainedBlock.h"
 #include "PokemonDataSettings.h"
 #include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include "Species/GenderRatio.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"

@@ -2,7 +2,7 @@
 #include "RetroLib/Concepts/Delegates.h"
 #include "RetroLib/Functional/CreateBinding.h"
 #include "RetroLib/Functional/Delegates.h"
-#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "TestAdapter.h"
 #include <array>

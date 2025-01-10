@@ -8,11 +8,12 @@
 #include "Kismet/GameplayStatics.h"
 #include "Map/MapSubsystem.h"
 #include "Map/TileMapGridBasedMap.h"
-#include "MathUtilities.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Casting/UClassCasts.h"
-#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
+#include "RetroLib/Utils/BlueprintMathUtils.h"
+#include "RetroLib/Utils/Math.h"
 
 UGridBasedMovementComponent::UGridBasedMovementComponent() : CurrentPosition(0, 0), DesiredPosition(0, 0) {
     PrimaryComponentTick.bCanEverTick = true;
@@ -254,8 +255,8 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
     auto GridSize = UGridUtils::GetGridSize(this);
     if (CurrentPosition.X != DesiredPosition.X) {
         int32 Distance = FMath::Abs(CurrentPosition.X - DesiredPosition.X);
-        Position.X = UMathUtilities::LinearInterpolation(CurrentPosition.X * GridSize, DesiredPosition.X * GridSize,
-                                                         MoveTime * Distance, Timer);
+        Position.X = Retro::LinearInterpolation(CurrentPosition.X * GridSize, DesiredPosition.X * GridSize,
+                                                MoveTime * Distance, Timer);
 
         if (Timer >= MoveTime * Distance) {
             CurrentPosition.X = DesiredPosition.X;
@@ -264,8 +265,8 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
 
     if (CurrentPosition.Y != DesiredPosition.Y) {
         int32 Distance = FMath::Abs(CurrentPosition.Y - DesiredPosition.Y);
-        Position.Y = UMathUtilities::LinearInterpolation(CurrentPosition.Y * GridSize, DesiredPosition.Y * GridSize,
-                                                         MoveTime * Distance, Timer);
+        Position.Y = Retro::LinearInterpolation(CurrentPosition.Y * GridSize, DesiredPosition.Y * GridSize,
+                                                MoveTime * Distance, Timer);
 
         if (Timer >= MoveTime * Distance) {
             CurrentPosition.Y = DesiredPosition.Y;

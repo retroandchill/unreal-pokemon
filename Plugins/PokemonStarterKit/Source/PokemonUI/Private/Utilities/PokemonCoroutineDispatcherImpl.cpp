@@ -6,9 +6,9 @@
 #include "Pokemon/Pokemon.h"
 #include "PokemonUISettings.h"
 #include "RetroLib/Optionals/IfPresent.h"
+#include "RetroLib/Utils/StringUtilities.h"
 #include "RPGUIManagerSubsystem.h"
 #include "Screens/Screen.h"
-#include "Strings/StringUtilities.h"
 #include "Utilities/PokemonUIAsyncActions.h"
 #include "Utilities/TrainerHelpers.h"
 

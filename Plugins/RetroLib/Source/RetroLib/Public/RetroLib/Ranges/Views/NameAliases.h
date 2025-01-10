@@ -7,6 +7,8 @@
  */
 #pragma once
 
+#include "RetroLib/Ranges/Concepts/Containers.h"
+
 #if !RETROLIB_WITH_MODULES
 #include <ranges>
 #include <span>

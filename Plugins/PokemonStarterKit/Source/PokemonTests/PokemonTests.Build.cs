@@ -20,7 +20,6 @@ public class PokemonTests : ModuleRules {
                                                              "PokemonEditorTools",
                                                              "PokemonCore",
                                                              "UnrealInjector",
-                                                             "PokemonUtilities",
                                                              "PokemonUI",
                                                              "RPGMenus",
                                                              "UMG",

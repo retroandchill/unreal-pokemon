@@ -9,6 +9,7 @@
 #include "KismetCompiler.h"
 #include "RetroLib/Optionals/OrElseValue.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include <algorithm>
 
 static const FName AssetNamePinName = "AssetName";

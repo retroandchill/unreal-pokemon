@@ -7,12 +7,11 @@
  */
 #pragma once
 
-#if !RETROLIB_WITH_MODULES
 #include "RetroLib/Concepts/Iterators.h"
 #include "RetroLib/Concepts/Tuples.h"
 #include "RetroLib/Functional/ExtensionMethods.h"
+#include "RetroLib/Ranges/Concepts/Containers.h"
 #include "RetroLib/Ranges/RangeBasics.h"
-#endif
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
