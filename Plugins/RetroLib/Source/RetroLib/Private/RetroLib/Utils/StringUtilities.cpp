@@ -2,7 +2,6 @@
 
 #include "RetroLib/Utils/StringUtilities.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
-
 #include "RetroLib/Ranges/Views/JoinWith.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 

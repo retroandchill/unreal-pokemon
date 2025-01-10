@@ -376,4 +376,4 @@ namespace Retro::Ranges {
      */
     RETROLIB_EXPORT template <typename I>
     concept CanBridgeToRange = Iterable<I> && BridgableIterator<TIteratorType<I>>;
-} // namespace Retro
+} // namespace Retro::Ranges

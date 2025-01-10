@@ -1,12 +1,11 @@
 ﻿
 
-
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Views/Elements.h"
 #include "RetroLib/Ranges/Views/Enumerate.h"
 #include "RetroLib/Ranges/Views/JoinWith.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "TestAdapter.h"
-#include "RetroLib/Ranges/Algorithm/To.h"
 #include <array>
 
 TEST_CASE_NAMED(FRangePipeTest, "Unit Tests::RetroLib::Ranges::Compatibility", "[RetroLib][Ranges]") {

@@ -1,6 +1,6 @@
 ﻿#include "RetroLib/Utils/StringUtilities.h"
-#include "TestAdapter.h"
 #include "Misc/AutomationTest.h"
+#include "TestAdapter.h"
 
 TEST_CASE_NAMED(FStringUtilsTest, "Unit Tests::RetroLib::StringUtilities", "[RetroLib][Strings]") {
 

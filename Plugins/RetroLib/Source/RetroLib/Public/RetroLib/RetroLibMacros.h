@@ -178,20 +178,20 @@
 
 #endif
 
-#define DECLARE_STATIC_REGISTRY(Export, Name, ...) \
-    class Export Name : public __VA_ARGS__ { \
-        Name() = default; \
-        ~Name() = default; \
-      public: \
-        static Name &GetInstance(); \
+#define DECLARE_STATIC_REGISTRY(Export, Name, ...)                                                                     \
+    class Export Name : public __VA_ARGS__ {                                                                           \
+        Name() = default;                                                                                              \
+        ~Name() = default;                                                                                             \
+                                                                                                                       \
+      public:                                                                                                          \
+        static Name &GetInstance();                                                                                    \
     };
 
-#define DEFINE_STATIC_REGISTRY(Name) \
-    Name& Name::GetInstance() { \
-        static Name Instance; \
-        return Instance; \
+#define DEFINE_STATIC_REGISTRY(Name)                                                                                   \
+    Name &Name::GetInstance() {                                                                                        \
+        static Name Instance;                                                                                          \
+        return Instance;                                                                                               \
     }
-    
 
 #define DECLARE_ABSTRACT_METATYPE                                                                                      \
   public:                                                                                                              \

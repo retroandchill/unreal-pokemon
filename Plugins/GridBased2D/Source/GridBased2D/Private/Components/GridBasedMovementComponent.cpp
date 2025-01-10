@@ -8,12 +8,11 @@
 #include "Kismet/GameplayStatics.h"
 #include "Map/MapSubsystem.h"
 #include "Map/TileMapGridBasedMap.h"
-#include "RetroLib/Utils/BlueprintMathUtils.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Casting/UClassCasts.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
-
 #include "RetroLib/Ranges/Views/NameAliases.h"
+#include "RetroLib/Utils/BlueprintMathUtils.h"
 #include "RetroLib/Utils/Math.h"
 
 UGridBasedMovementComponent::UGridBasedMovementComponent() : CurrentPosition(0, 0), DesiredPosition(0, 0) {
@@ -257,7 +256,7 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
     if (CurrentPosition.X != DesiredPosition.X) {
         int32 Distance = FMath::Abs(CurrentPosition.X - DesiredPosition.X);
         Position.X = Retro::LinearInterpolation(CurrentPosition.X * GridSize, DesiredPosition.X * GridSize,
-                                                         MoveTime * Distance, Timer);
+                                                MoveTime * Distance, Timer);
 
         if (Timer >= MoveTime * Distance) {
             CurrentPosition.X = DesiredPosition.X;
@@ -267,7 +266,7 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
     if (CurrentPosition.Y != DesiredPosition.Y) {
         int32 Distance = FMath::Abs(CurrentPosition.Y - DesiredPosition.Y);
         Position.Y = Retro::LinearInterpolation(CurrentPosition.Y * GridSize, DesiredPosition.Y * GridSize,
-                                                         MoveTime * Distance, Timer);
+                                                MoveTime * Distance, Timer);
 
         if (Timer >= MoveTime * Distance) {
             CurrentPosition.Y = DesiredPosition.Y;

@@ -50,8 +50,8 @@ namespace Retro::Ranges {
     template <typename T>
     concept UnrealReservable =
         std::ranges::sized_range<T> && requires(T &Container, std::ranges::range_size_t<T> Size) {
-        Container.Reserve(Size);
-        Container.Max();
+            Container.Reserve(Size);
+            Container.Max();
         };
 
     /**
@@ -62,8 +62,8 @@ namespace Retro::Ranges {
     template <typename T>
     concept UnrealStringReservable =
         std::ranges::sized_range<T> && requires(T &Container, std::ranges::range_size_t<T> Size) {
-        Container.Reserve(Size);
-        { Container.GetCharArray() } -> UnrealReservable;
+            Container.Reserve(Size);
+            { Container.GetCharArray() } -> UnrealReservable;
         };
 #endif
 
@@ -347,7 +347,8 @@ namespace Retro::Ranges {
     concept UnrealInsert = requires(C &Container, T &&Ref) { Container.Insert(std::forward<T>(Ref)); };
 
     /**
-     * Concept that defines if a container has an overloaded += operator and is not part of the STL (i.e. Adding TCHARs to FString).
+     * Concept that defines if a container has an overloaded += operator and is not part of the STL (i.e. Adding TCHARs
+     * to FString).
      *
      * @tparam C The type to check
      * @tparam T the type of element to add
@@ -572,9 +573,9 @@ namespace Retro::Ranges {
      * @tparam C The container
      */
     template <typename C>
-        concept UnrealSizedString = requires(C &Container) {
+    concept UnrealSizedString = requires(C &Container) {
         { Container.Len() } -> std::convertible_to<int32>;
-        };
+    };
 
     /**
      * A helper structure to determine the size type of a given container.
@@ -724,12 +725,14 @@ constexpr auto size(const R &Range) {
 
 RETROLIB_EXPORT template <Retro::Ranges::CanBridgeToRange I>
 constexpr auto begin(I &Range) {
-    return Retro::Ranges::TAdapterIterator<Retro::Ranges::TIteratorType<I>, Retro::Ranges::TSentinelType<I>>(Range.begin());
+    return Retro::Ranges::TAdapterIterator<Retro::Ranges::TIteratorType<I>, Retro::Ranges::TSentinelType<I>>(
+        Range.begin());
 }
 
 RETROLIB_EXPORT template <Retro::Ranges::CanBridgeToRange I>
 constexpr auto end(I &Range) {
-    return Retro::Ranges::TSentinelAdapter<Retro::Ranges::TIteratorType<I>, Retro::Ranges::TSentinelType<I>>(Range.end());
+    return Retro::Ranges::TSentinelAdapter<Retro::Ranges::TIteratorType<I>, Retro::Ranges::TSentinelType<I>>(
+        Range.end());
 }
 
 RETROLIB_EXPORT template <typename T, typename A>

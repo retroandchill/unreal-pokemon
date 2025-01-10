@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "RetroLib/Meta/Registry.h"
 #include "Player/ItemSlot.h"
+#include "RetroLib/Meta/Registry.h"
 
 /**
  * Abstract class for handing the sorting of the player's bag.

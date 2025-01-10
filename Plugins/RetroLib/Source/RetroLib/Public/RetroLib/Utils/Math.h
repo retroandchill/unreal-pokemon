@@ -32,7 +32,7 @@ namespace Retro {
                      (std::is_floating_point_v<A> || std::is_floating_point_v<B> || std::is_floating_point_v<C> ||
                       std::is_floating_point_v<D>)
     constexpr auto LinearInterpolation(A StartValue, B EndValue, C Duration,
-                                    D Delta) -> decltype(StartValue * EndValue * Duration * Delta) {
+                                       D Delta) -> decltype(StartValue * EndValue * Duration * Delta) {
         if (Duration <= 0)
             return EndValue;
 
@@ -55,4 +55,4 @@ namespace Retro {
     RETROLIB_EXPORT inline int Pow(int Base, int Exponent) {
         return static_cast<int>(std::pow(Base, Exponent));
     }
-}
+} // namespace Retro

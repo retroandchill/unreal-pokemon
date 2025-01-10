@@ -11,14 +11,14 @@
 namespace Retro {
     /**
      * Custom iterator type used to cycle through a sized contiguous range.
-     * 
+     *
      * @tparam T The type of data being stored
      */
     RETROLIB_EXPORT template <typename T>
     class TCircularIterator {
         using DifferenceType = std::ranges::range_difference_t<TSpan<T>>;
-    
-    public:
+
+      public:
         /**
          * Create an empty iterator.
          */
@@ -30,8 +30,9 @@ namespace Retro {
          * @param InitialIndex The initial index to set the iterator to
          */
         template <typename R>
-            requires std::ranges::contiguous_range<R> && std::ranges::sized_range<R> && std::common_reference_with<T&, std::ranges::range_reference_t<R>>
-        explicit TCircularIterator(R&& DataIn, int32 InitialIndex = 0)
+            requires std::ranges::contiguous_range<R> && std::ranges::sized_range<R> &&
+                         std::common_reference_with<T &, std::ranges::range_reference_t<R>>
+        explicit TCircularIterator(R &&DataIn, int32 InitialIndex = 0)
             : Data(std::forward<R>(DataIn)), CurrentIndex(InitialIndex) {
             check(Data.size() > CurrentIndex && CurrentIndex >= 0)
         }
@@ -55,7 +56,8 @@ namespace Retro {
         }
 
         /**
-         * Increment the iterator by the given number of poisitions, returning to the beginning if the end has been reached.
+         * Increment the iterator by the given number of poisitions, returning to the beginning if the end has been
+         * reached.
          * @param Amount The number of positions to increment by
          * @return A reference to the incremented iterator
          */
@@ -91,7 +93,8 @@ namespace Retro {
         }
 
         /**
-         * Increment the iterator by the given number of positions, returning to the beginning if the end has been reached.
+         * Increment the iterator by the given number of positions, returning to the beginning if the end has been
+         * reached.
          * @param Amount The number of positions to increment by
          * @return A reference to the incremented iterator
          */
@@ -149,7 +152,7 @@ namespace Retro {
             return Data.size() > 1;
         }
 
-    private:
+      private:
         /**
          * A reference to the contained data.
          */
@@ -160,4 +163,4 @@ namespace Retro {
          */
         int32 CurrentIndex = 0;
     };
-}
+} // namespace Retro

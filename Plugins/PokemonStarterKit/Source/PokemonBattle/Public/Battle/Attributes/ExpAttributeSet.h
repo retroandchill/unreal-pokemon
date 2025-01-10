@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AttributeSet.h"
 #include "AttributeMacros.h"
+#include "AttributeSet.h"
 
 #include "ExpAttributeSet.generated.h"
 

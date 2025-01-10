@@ -27,7 +27,7 @@ class RETROLIBTESTS_API ACoroutineFunctionalTest : public AFunctionalTest {
   public:
     void StartTest() final;
 
-protected:
+  protected:
     /**
      * Runs the test as an asynchronous coroutine. This method must be implemented by
      * derived classes to provide specific functionality for the test. It is designed

@@ -3,8 +3,8 @@
 #pragma once
 
 #ifdef __UNREAL__
-#include "RetroLib/Ranges/Views/Generator.h"
 #include "RetroLib/Concepts/Inheritance.h"
+#include "RetroLib/Ranges/Views/Generator.h"
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
@@ -19,7 +19,7 @@ namespace Retro::Meta {
      */
     RETROLIB_EXPORT template <Class T, bool bShared, typename... Args>
     class TRegistry {
-    public:
+      public:
         using Ptr = std::conditional_t<bShared, TSharedRef<T>, TUniquePtr<T>>;
         using FIdentifier = FName;
         /**
@@ -37,10 +37,10 @@ namespace Retro::Meta {
         }
 
         /**
-     * Register the given class for the given key using the default constructor
-     * @tparam Derived The subclass to register
-     * @param Key The key to use for the registry
-     */
+         * Register the given class for the given key using the default constructor
+         * @tparam Derived The subclass to register
+         * @param Key The key to use for the registry
+         */
         template <typename Derived>
             requires std::derived_from<Derived, T>
         void RegisterClass(FName Key) {
@@ -77,7 +77,7 @@ namespace Retro::Meta {
             }
         }
 
-    private:
+      private:
         /**
          * Construct the derived class
          * @tparam Derived The subclass to construct
@@ -93,7 +93,7 @@ namespace Retro::Meta {
                 return MakeUnique<Derived>(Arguments...);
             }
         }
-        
+
         /**
          * The set of registered constructors for the data table proxy types
          */
@@ -105,5 +105,5 @@ namespace Retro::Meta {
 
     RETROLIB_EXPORT template <Class T, typename... A>
     using TUniqueRegistry = TRegistry<T, false, A...>;
-}
+} // namespace Retro::Meta
 #endif

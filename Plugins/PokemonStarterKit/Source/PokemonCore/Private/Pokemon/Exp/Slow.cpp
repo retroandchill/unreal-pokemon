@@ -2,7 +2,6 @@
 #include "Pokemon/Exp/Slow.h"
 #include "RetroLib/Utils/Math.h"
 
-
 int32 Exp::FSlow::ExpForLevel(int32 Level) const {
     check(Level > 0)
 

@@ -2,7 +2,6 @@
 #include "Pokemon/Exp/Parabolic.h"
 #include "RetroLib/Utils/Math.h"
 
-
 int32 Exp::FParabolic::ExpForLevel(int32 Level) const {
     check(Level > 0)
 

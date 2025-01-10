@@ -19,7 +19,6 @@
 #include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
-
 #include "RetroLib/Ranges/Views/Concat.h"
 
 APokemonBattle::APokemonBattle() {

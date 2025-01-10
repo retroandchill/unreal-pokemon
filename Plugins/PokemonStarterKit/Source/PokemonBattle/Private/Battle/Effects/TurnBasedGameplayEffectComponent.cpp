@@ -5,10 +5,10 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "GameplayEffect.h"
-#include "RetroLib/Utils/BlueprintMathUtils.h"
 #include "Misc/DataValidation.h"
 #include "RetroLib/Optionals/OrElseValue.h"
 #include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Utils/BlueprintMathUtils.h"
 
 bool UTurnBasedGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer &GEContainer,
                                                                     FActiveGameplayEffect &ActiveGE) const {

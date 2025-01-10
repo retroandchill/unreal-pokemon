@@ -6,7 +6,6 @@
 #include "DetailWidgetRow.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
-
 #include "RetroLib/Ranges/Views/NameAliases.h"
 
 TSharedRef<IPropertyTypeCustomization> FDataHandleCustomization::MakeInstance() {

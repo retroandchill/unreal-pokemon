@@ -14,8 +14,8 @@
 #include <type_traits>
 #endif
 
-#include "RetroLib/Utils/Polymorphic.h"
 #include "RetroLib/Ranges/Concepts/Containers.h"
+#include "RetroLib/Utils/Polymorphic.h"
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT

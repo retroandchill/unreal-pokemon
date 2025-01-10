@@ -9,8 +9,8 @@
 
 #include "RetroLib/Functional/CreateBinding.h"
 #include "RetroLib/Functional/ExtensionMethods.h"
-#include "RetroLib/Ranges/FeatureBridge.h"
 #include "RetroLib/Ranges/Concepts/Containers.h"
+#include "RetroLib/Ranges/FeatureBridge.h"
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
