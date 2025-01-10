@@ -52,10 +52,6 @@
 			"Enabled": true
 		},
 		{
-			"Name": "CommonMath",
-			"Enabled": true
-		},
-		{
 			"Name": "RPGMenus",
 			"Enabled": true
 		},

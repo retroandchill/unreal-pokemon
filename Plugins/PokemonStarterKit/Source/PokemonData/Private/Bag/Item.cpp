@@ -3,6 +3,7 @@
 #include "DataManager.h"
 #include "Misc/OutputDeviceNull.h"
 #include "PokemonDataSettings.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 
 FItem::FItem() = default;
 

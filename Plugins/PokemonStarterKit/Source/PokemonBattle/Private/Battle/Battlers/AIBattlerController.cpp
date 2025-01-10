@@ -7,6 +7,7 @@
 #include "Battle/BattleSide.h"
 #include "Battle/Moves/BattleMove.h"
 #include "Pokemon/Pokemon.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/Construct.h"
 #include <functional>
 

@@ -1,15 +1,16 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Player/PlayerMetadata.h"
-#include "MathUtilities.h"
+#include "RetroLib/Utils/BlueprintMathUtils.h"
+#include "RetroLib/Utils/Math.h"
 
 void UPlayerMetadata::Tick(float DeltaTime) {
     TotalPlaytime += DeltaTime;
     LastUpdated += DeltaTime;
 
-    if (LastUpdated >= UMathUtilities::SECONDS_PER_MINUTE) {
+    if (LastUpdated >= Retro::SECONDS_PER_MINUTE) {
         OnTimeUpdated.Broadcast(TotalPlaytime);
-        LastUpdated = FMath::Fmod(LastUpdated, UMathUtilities::SECONDS_PER_MINUTE);
+        LastUpdated = FMath::Fmod(LastUpdated, Retro::SECONDS_PER_MINUTE);
     }
 }
 

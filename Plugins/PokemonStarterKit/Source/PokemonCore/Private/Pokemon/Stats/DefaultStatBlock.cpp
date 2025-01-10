@@ -10,6 +10,7 @@
 #include "Pokemon/Stats/DefaultMainStatEntry.h"
 #include "Pokemon/Stats/StatUtils.h"
 #include "PokemonDataSettings.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"

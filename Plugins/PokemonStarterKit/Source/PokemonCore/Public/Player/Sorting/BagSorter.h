@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Meta/GenericStaticUniqueRegistry.h"
 #include "Player/ItemSlot.h"
+#include "RetroLib/Meta/Registry.h"
 
 /**
  * Abstract class for handing the sorting of the player's bag.
@@ -30,7 +30,4 @@ class POKEMONCORE_API IBagSorter {
     virtual bool CompareItems(const FItemSlot &Item1, const FItemSlot &Item2) const = 0;
 };
 
-/**
- * Static registry for the growth rate types
- */
-using FBagSorterRegistry = TGenericStaticUniqueRegistry<IBagSorter>;
+DECLARE_STATIC_REGISTRY(POKEMONCORE_API, FBagSorterRegistry, Retro::Meta::TUniqueRegistry<IBagSorter>);

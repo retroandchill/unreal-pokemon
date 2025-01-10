@@ -5,6 +5,7 @@
 #include "Battle/BattleSide.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Pokemon/Pokemon.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 
 FWildBattleOpponentInfo::FWildBattleOpponentInfo(const TSharedRef<FPokemonDTO> &PokemonInfo)
     : OpposingPokemonInfo({PokemonInfo}) {

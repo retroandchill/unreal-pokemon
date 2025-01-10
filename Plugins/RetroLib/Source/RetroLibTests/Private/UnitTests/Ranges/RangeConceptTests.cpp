@@ -1,6 +1,6 @@
 ﻿
 
-#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Views/Elements.h"
 #include "RetroLib/Ranges/Views/Enumerate.h"
 #include "RetroLib/Ranges/Views/JoinWith.h"

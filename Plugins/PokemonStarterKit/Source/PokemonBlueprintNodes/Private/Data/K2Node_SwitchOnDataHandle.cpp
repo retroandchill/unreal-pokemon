@@ -5,6 +5,7 @@
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
 #include "DataManager.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 
 UK2Node_SwitchOnDataHandle::UK2Node_SwitchOnDataHandle(const FObjectInitializer &ObjectInitializer)
     : Super(ObjectInitializer) {

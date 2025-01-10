@@ -37,10 +37,6 @@
 			"Enabled": true
 		},
 		{
-			"Name": "CommonMath",
-			"Enabled": true
-		},
-		{
 			"Name": "CommonUI",
 			"Enabled": true
 		},

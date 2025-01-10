@@ -4,11 +4,11 @@
 #include "PokemonDataSettings.h"
 #include "RetroLib/Ranges/Algorithm/FindFirst.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
-#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Views/Elements.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
+#include "RetroLib/Utils/StringUtilities.h"
 #include "SSearchableComboBox.h"
-#include "Strings/StringUtilities.h"
 
 class UPokemonDataSettings;
 

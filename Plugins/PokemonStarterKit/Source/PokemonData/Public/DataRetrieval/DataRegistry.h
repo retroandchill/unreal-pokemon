@@ -4,8 +4,7 @@
 #include "CoreMinimal.h"
 #include "DataRetrieval/DataTableProxy.h"
 #include "DataRetrieval/GameData.h"
-#include "Meta/PokeRegistry.h"
-#include "Meta/UniquePokeRegistry.h"
+#include "RetroLib/Meta/Registry.h"
 
 /**
  * Internal registry used to handle the tracking of the data table structs
@@ -24,7 +23,7 @@ class POKEMONDATA_API FDataRegistry {
      * The internal registry used to actually retrieve the objects.
      * @return The registry in question to retrieve
      */
-    using FInternalRegistry = TUniquePokeRegistry<IGameData, UDataTable *>;
+    using FInternalRegistry = Retro::Meta::TUniqueRegistry<IGameData, UDataTable *>;
 
     /**
      * Get the singleton instance of the class

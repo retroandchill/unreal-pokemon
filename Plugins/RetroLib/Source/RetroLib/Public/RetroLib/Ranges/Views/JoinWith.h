@@ -9,6 +9,7 @@
 
 #include "RetroLib/Functional/ExtensionMethods.h"
 #include "RetroLib/Ranges/Concepts/Concatable.h"
+#include "RetroLib/Ranges/Concepts/Containers.h"
 #include "RetroLib/Ranges/RangeBasics.h"
 #include "RetroLib/Utils/NonPropagatingCache.h"
 

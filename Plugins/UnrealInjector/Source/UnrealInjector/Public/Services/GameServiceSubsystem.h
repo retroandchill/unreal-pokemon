@@ -12,7 +12,6 @@
 #include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Optionals/Value.h"
-#include "RetroLib/Ranges/Compatibility/Array.h"
 #include "RetroLib/Ranges/Views/Elements.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "Service.h"

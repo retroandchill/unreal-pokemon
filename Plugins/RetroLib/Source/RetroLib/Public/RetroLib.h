@@ -13,6 +13,7 @@
 #include "RetroLib/Exceptions.h"
 #include "RetroLib/Functional.h"
 #include "RetroLib/FunctionTraits.h"
+#include "RetroLib/Meta.h"
 #include "RetroLib/Optionals.h"
 #include "RetroLib/Ranges.h"
 #include "RetroLib/TypeTraits.h"

@@ -7,7 +7,7 @@ public class PokemonData : ModuleRules {
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(
-            new[] { "Core", "Paper2D", "PokemonUtilities", "GameplayTags", "GameplayAbilities", "RetroLib" });
+            new[] { "Core", "Paper2D", "GameplayTags", "GameplayAbilities", "RetroLib" });
 
         PrivateDependencyModuleNames.AddRange(
             new[] { "CoreUObject", "Engine", "Slate", "SlateCore", "DeveloperSettings" });
