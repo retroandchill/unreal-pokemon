@@ -37,6 +37,11 @@ void UMoveForgetScreen::InitializeScene(const TScriptInterface<IPokemon> &Pokemo
     MoveSelectWindow->SetIndex(0);
 }
 
+UE5Coro::TCoroutine<bool> UMoveForgetScreen::AwaitPlayerDecision() {
+    auto [Result] = co_await OnMoveForgetComplete;
+    co_return Result;
+}
+
 void UMoveForgetScreen::MoveForgetComplete(bool bMoveForgotten) {
     CloseScreen();
     OnMoveForgetComplete.Broadcast(bMoveForgotten);

@@ -3,6 +3,7 @@
 #include "Utilities/PokemonUIAsyncActions.h"
 #include "PrimaryGameLayout.h"
 #include "Screens/BagScreen.h"
+#include "Screens/MoveForgetScreen.h"
 #include "Screens/PokemonSelectScreen.h"
 #include "Screens/TextDisplayScreen.h"
 
@@ -53,5 +54,12 @@ namespace Pokemon::UI {
         auto Screen = UBagScreen::AddBagScreenToStack(WorldContext);
         Screen->ApplyItemFilter(Filter);
         co_return co_await Screen->PromptItemSelection();
+    }
+
+    UE5Coro::TCoroutine<bool> PromptReplaceMove(const UObject *WorldContext, const TScriptInterface<IPokemon> &Pokemon,
+        FMoveHandle Move, FForceLatentCoroutine Coro) {
+        auto Screen = UMoveForgetScreen::AddMoveForgetScreenToStack(WorldContext);
+        Screen->InitializeScene(Pokemon, Move);
+        co_return co_await Screen->AwaitPlayerDecision();
     }
 } // namespace Pokemon::UI
