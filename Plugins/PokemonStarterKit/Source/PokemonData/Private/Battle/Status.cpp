@@ -1,6 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Battle/Status.h"
 #include "DataManager.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 
 TArray<FName> UStatusEffectHelper::GetStatusEffectNames() {
     static auto &Table = FDataManager::GetInstance().GetDataTable<FStatus>();

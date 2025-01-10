@@ -3,7 +3,6 @@
 #include "Pins/DataHandlePinStructPin.h"
 #include "RetroLib/Ranges/Algorithm/FindFirst.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
-#include "RetroLib/Ranges/Compatibility/Array.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "SSearchableComboBox.h"
 

@@ -6,6 +6,7 @@
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Misc/AutomationTest.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include "Species/Ability.h"
 #include "Utilities/K2Nodes.h"
 

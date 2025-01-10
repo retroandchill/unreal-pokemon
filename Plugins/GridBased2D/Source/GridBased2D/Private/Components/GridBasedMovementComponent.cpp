@@ -11,7 +11,8 @@
 #include "MathUtilities.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Casting/UClassCasts.h"
-#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
+
 #include "RetroLib/Ranges/Views/NameAliases.h"
 
 UGridBasedMovementComponent::UGridBasedMovementComponent() : CurrentPosition(0, 0), DesiredPosition(0, 0) {

@@ -3,7 +3,7 @@
 #include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Optionals/Value.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
-#include "RetroLib/Ranges/Compatibility/Array.h"
+
 #include "TestAdapter.h"
 #include <array>
 

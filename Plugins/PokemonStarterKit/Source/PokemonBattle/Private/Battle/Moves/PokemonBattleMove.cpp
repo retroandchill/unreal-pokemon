@@ -13,6 +13,7 @@
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 #include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/MakeWeak.h"
 
 TScriptInterface<IBattleMove> UPokemonBattleMove::Initialize(const TScriptInterface<IBattler> &Battler,

@@ -13,6 +13,7 @@
 #include "RetroLib/Ranges/FeatureBridge.h"
 #include "RetroLib/Ranges/RangeBasics.h"
 #include "RetroLib/Utils/NonPropagatingCache.h"
+#include "RetroLib/Ranges/Concepts/Containers.h"
 
 #if !RETROLIB_WITH_MODULES
 #include <ranges>

@@ -13,6 +13,7 @@
 #include "RetroLib/Ranges/RangeBasics.h"
 #include "RetroLib/Utils/Unreachable.h"
 #include "RetroLib/Utils/Variant.h"
+#include "RetroLib/Ranges/Concepts/Containers.h"
 
 #if !RETROLIB_WITH_MODULES
 #include <tuple>

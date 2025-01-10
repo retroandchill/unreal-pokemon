@@ -5,7 +5,7 @@
 #include "RetroLib/Optionals/AndThen.h"
 #include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
-#include "RetroLib/Ranges/Compatibility/Array.h"
+
 #include "RetroLib/Ranges/Views/Enumerate.h"
 #include "RetroLib/Utils/Construct.h"
 #include "Settings/PokemonStorageSystemSettings.h"

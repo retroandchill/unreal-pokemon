@@ -8,7 +8,7 @@
 #include "RetroLib/Optionals/Filter.h"
 #include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Ranges/Algorithm/FindFirst.h"
-#include "RetroLib/Ranges/Compatibility/Array.h"
+
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "RetroLib/Utils/SoftObjectRef.h"
 #include "Templates/NonNullSubclassOf.h"

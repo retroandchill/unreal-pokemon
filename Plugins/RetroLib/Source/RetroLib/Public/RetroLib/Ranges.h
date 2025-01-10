@@ -3,7 +3,6 @@
 #pragma once
 
 #include "RetroLib/Ranges/Algorithm.h"
-#include "RetroLib/Ranges/Compatibility.h"
 #include "RetroLib/Ranges/Concepts.h"
 #include "RetroLib/Ranges/FeatureBridge.h"
 #include "RetroLib/Ranges/RangeBasics.h"

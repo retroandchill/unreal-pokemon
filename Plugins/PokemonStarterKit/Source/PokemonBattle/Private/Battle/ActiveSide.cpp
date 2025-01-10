@@ -11,7 +11,7 @@
 #include "Pokemon/Pokemon.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
-#include "RetroLib/Ranges/Compatibility/Array.h"
+
 #include "RetroLib/Ranges/Views/Concat.h"
 #include "Strings/StringUtilities.h"
 #include "Trainers/Trainer.h"

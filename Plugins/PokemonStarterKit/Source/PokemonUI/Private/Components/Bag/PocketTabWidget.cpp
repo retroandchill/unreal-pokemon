@@ -10,6 +10,7 @@
 #include "Memory/CursorMemorySubsystem.h"
 #include "PokemonDataSettings.h"
 #include "RetroLib/Functional/BindMethod.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 
 UPocketTabWidget::UPocketTabWidget() {
     for (auto &Pockets = GetDefault<UPokemonDataSettings>()->PocketNames; auto &[ID, Name] : Pockets) {

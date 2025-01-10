@@ -12,6 +12,7 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Player/Bag.h"
 #include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/MakeStrong.h"
 
 UBattleItemEffect::UBattleItemEffect() {

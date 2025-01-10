@@ -1,7 +1,8 @@
 // "Unreal Pokémon" created by Retro & Chill.
 
 #include "Strings/StringUtilities.h"
-#include "RetroLib/Ranges/Compatibility/Array.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
+
 #include "RetroLib/Ranges/Views/JoinWith.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 

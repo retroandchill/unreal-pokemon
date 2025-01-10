@@ -34,6 +34,7 @@
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonBattleSettings.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/Construct.h"
 #include "Species/PokemonStatType.h"
 #include "Species/SpeciesData.h"

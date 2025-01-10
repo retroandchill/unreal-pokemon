@@ -7,6 +7,7 @@
 #include "AssetLoadingSettings.h"
 #include "AssetUtilities.h"
 #include "RetroLib/Exceptions/TypeException.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 
 namespace UE::Assets {
 
