@@ -6,21 +6,16 @@
 
 ULearnMove *ULearnMove::LearnMove(const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move) {
     auto Node = NewObject<ULearnMove>();
+    Node->SetWorldContext(Pokemon.GetObject());
     Node->Pokemon = Pokemon;
     Node->Move = Move;
     return Node;
 }
 
-void ULearnMove::Activate() {
-    Pokemon->GetMoveBlock()->LearnMove(
-        Move, FOnMoveLearnEnd::FDelegate::CreateUObject(this, &ULearnMove::ExecuteMoveLearnedOrRejected));
-}
-
-void ULearnMove::ExecuteMoveLearnedOrRejected(bool bMoveLearned) {
-    if (bMoveLearned) {
+UE5Coro::TCoroutine<> ULearnMove::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+    if (co_await Pokemon->GetMoveBlock()->LearnMove(Move)) {
         MoveLearned.Broadcast();
     } else {
         MoveRejected.Broadcast();
     }
-    SetReadyToDestroy();
 }

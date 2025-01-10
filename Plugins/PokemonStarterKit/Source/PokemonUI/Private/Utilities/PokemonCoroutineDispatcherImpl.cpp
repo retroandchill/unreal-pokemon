@@ -9,11 +9,11 @@
 #include "RetroLib/Utils/StringUtilities.h"
 #include "RPGUIManagerSubsystem.h"
 #include "Pokemon/Moves/MoveBlock.h"
+#include "Pokemon/Stats/StatBlock.h"
 #include "Screens/Screen.h"
 #include "Settings/PokemonMessageSettings.h"
 #include "Utilities/PokemonUIAsyncActions.h"
 #include "Utilities/TrainerHelpers.h"
-#include "Utilities/Node/Utility_ProcessLevelUp.h"
 
 UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::GiveItemToPokemon(
     const FItemHandle &Item,

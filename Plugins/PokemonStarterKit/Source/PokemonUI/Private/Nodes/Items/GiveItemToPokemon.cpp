@@ -1,9 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Nodes/Items/GiveItemToPokemon.h"
-#include "Blueprints/UtilityNodeSubsystem.h"
-#include "Kismet/GameplayStatics.h"
-#include "Utilities/Node/Utility_GiveItemToPokemon.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
 
 UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldContextObject, FItemHandle Item,

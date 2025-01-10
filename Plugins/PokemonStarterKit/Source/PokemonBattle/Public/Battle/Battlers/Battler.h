@@ -10,7 +10,7 @@
 #include "RetroLib/Ranges/Views/AnyView.h"
 #include "RetroLib/Ranges/Views/Generator.h"
 #include "UObject/Interface.h"
-#include "Utilities/Node/Utility_ProcessLevelUp.h"
+#include "Pokemon/Stats/StatBlock.h"
 
 #include "Battler.generated.h"
 

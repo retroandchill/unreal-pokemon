@@ -1,8 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Nodes/ChooseItemFromBag.h"
-#include "PokemonUISettings.h"
-#include "PrimaryGameLayout.h"
 #include "RetroLib/Optionals/IfPresentOrElse.h"
 #include "Screens/BagScreen.h"
 #include "Utilities/PokemonUIAsyncActions.h"

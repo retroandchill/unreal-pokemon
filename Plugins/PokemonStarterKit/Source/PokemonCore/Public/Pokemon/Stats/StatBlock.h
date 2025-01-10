@@ -4,13 +4,79 @@
 #include "CoreMinimal.h"
 #include "Species/Stat.h"
 #include "StatEntry.h"
-#include "Utilities/Node/Utility_ProcessLevelUp.h"
 
 #include "StatBlock.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE(FLevelUpEnd);
 
 class IPokemon;
+
+/**
+ * The change to a single stat for a Pokémon
+ */
+USTRUCT(BlueprintType)
+struct POKEMONCORE_API FStatChange {
+    GENERATED_BODY()
+
+    /**
+     * The stat value before the level up
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    int32 Before;
+
+    /**
+     * The stat value after the level up
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    int32 After;
+
+    int32 Diff() const;
+};
+
+/**
+ * The change to the Exp. bar fill for a Pokémon
+ */
+USTRUCT(BlueprintType)
+struct POKEMONCORE_API FExpPercentChange {
+    GENERATED_BODY()
+
+    /**
+     * The stat value before the level up
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    float Before;
+
+    /**
+     * The stat value after the level up
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    float After;
+};
+
+/**
+ * The changes to a stat following a level up
+ */
+USTRUCT(BlueprintType)
+struct POKEMONCORE_API FLevelUpStatChanges {
+    GENERATED_BODY()
+
+    /**
+     * The value of the level
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    FStatChange LevelChange;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    FExpPercentChange ExpPercentChange;
+
+    /**
+     * The changes to the individual stats in battle
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    TMap<FName, FStatChange> StatChanges;
+
+    FLevelUpStatChanges &operator+=(const FLevelUpStatChanges &Other);
+};
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)

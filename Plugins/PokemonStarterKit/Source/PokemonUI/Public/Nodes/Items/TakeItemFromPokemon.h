@@ -14,36 +14,22 @@ class IPokemon;
  * Take a Pokémon's hold item and return it to the bag
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API UTakeItemFromPokemon : public UBlueprintAsyncActionBase {
+class POKEMONUI_API UTakeItemFromPokemon : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
     /**
      * Give an item to a Pokémon to hold, and take a held item from a Pokémon
-     * @param WorldContextObject The object used to obtain the state of the world
      * @param Pokemon The Pokémon receiving the item
      * @return The node to execute the task with
      */
-    UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject"),
-              Category = "Selection")
-    static UTakeItemFromPokemon *TakeItemFromPokemon(const UObject *WorldContextObject,
-                                                     const TScriptInterface<IPokemon> &Pokemon);
+    UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", CallableWithoutWorldContext = true), Category = "Selection")
+    static UTakeItemFromPokemon *TakeItemFromPokemon(const TScriptInterface<IPokemon> &Pokemon);
 
-    void Activate() override;
+    protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro) override;
 
   private:
-    /**
-     * Function called to execute the item taken pin
-     */
-    UFUNCTION()
-    void ExecuteItemTaken();
-
-    /**
-     * Function called to execute the item not taken pin
-     */
-    UFUNCTION()
-    void ExecuteItemNotTaken();
-
     /**
      * Called when the item is taken from the Pokémon
      */
@@ -55,12 +41,6 @@ class POKEMONUI_API UTakeItemFromPokemon : public UBlueprintAsyncActionBase {
      */
     UPROPERTY(BlueprintAssignable)
     FItemResult ItemNotTaken;
-
-    /**
-     * The object used to obtain the state of the world to open the menu with
-     */
-    UPROPERTY()
-    TObjectPtr<const UObject> WorldContextObject;
 
     /**
      * The Pokémon receiving the item

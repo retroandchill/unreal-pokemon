@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/Stats/DefaultStatBlock.h"
-#include "Blueprints/UtilityNodeSubsystem.h"
 #include "DataManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
@@ -14,8 +13,7 @@
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
-#include "UE5Coro/Coroutine.h"
-#include "UE5Coro/Generator.h"
+#include "UE5Coro.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
 
 using namespace StatUtils;

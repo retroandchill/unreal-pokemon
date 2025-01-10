@@ -32,7 +32,7 @@ class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
 
     virtual Retro::TGenerator<FMoveHandle> GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const;
 
-    FVoidCoroutine LearnMove(FMoveHandle Move, FForceLatentCoroutine Coro) override;
+    UE5Coro::TCoroutine<bool> LearnMove(FMoveHandle Move, FForceLatentCoroutine Coro) override;
     TScriptInterface<IMove> CreateNewMove(const FMoveDTO &MoveID) override;
 
     UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")

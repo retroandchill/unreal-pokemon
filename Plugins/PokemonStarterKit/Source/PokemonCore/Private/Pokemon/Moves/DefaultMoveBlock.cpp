@@ -2,7 +2,6 @@
 
 #include "Pokemon/Moves/DefaultMoveBlock.h"
 #include "Algo/Unique.h"
-#include "Blueprints/UtilityNodeSubsystem.h"
 #include "DataManager.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/DefaultMove.h"
@@ -13,7 +12,6 @@
 #include "RetroLib/Utils/Construct.h"
 #include "Species/SpeciesData.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
-#include "Utilities/Node/Utility_LearnMove.h"
 
 TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterface<IPokemon> &Pokemon,
                                                            const FPokemonDTO &DTO) {
@@ -91,11 +89,9 @@ Retro::TGenerator<FMoveHandle> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialL
     // clang-format on
 }
 
-FVoidCoroutine UDefaultMoveBlock::LearnMove(FMoveHandle Move, FForceLatentCoroutine Coro) {
+UE5Coro::TCoroutine<bool> UDefaultMoveBlock::LearnMove(FMoveHandle Move, FForceLatentCoroutine Coro) {
     auto &Dispatcher = IPokemonCoroutineDispatcher::Get(this);
-    co_await Dispatcher.LearnMove(this, Move);
-    auto Subsystem = GetWorld()->GetGameInstance()->GetSubsystem<UUtilityNodeSubsystem>();
-    Subsystem->ExecuteUtilityFunction<UUtility_LearnMove>(Owner, Move);
+    co_return co_await Dispatcher.LearnMove(this, Move);
 }
 
 TScriptInterface<IMove> UDefaultMoveBlock::CreateNewMove(const FMoveDTO &MoveID) {

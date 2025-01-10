@@ -1,7 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/DisplayMessage.h"
-#include "PokemonUISettings.h"
-#include "PrimaryGameLayout.h"
 #include "Screens/TextDisplayScreen.h"
 #include "Utilities/PokemonUIAsyncActions.h"
 
