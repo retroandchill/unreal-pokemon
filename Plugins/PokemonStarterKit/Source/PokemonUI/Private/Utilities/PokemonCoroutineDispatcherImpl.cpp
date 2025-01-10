@@ -4,11 +4,11 @@
 #include "DataRetrieval/DataUtilities.h"
 #include "Player/Bag.h"
 #include "Pokemon/Pokemon.h"
-#include "PokemonUISettings.h"
 #include "RetroLib/Optionals/IfPresent.h"
 #include "RetroLib/Utils/StringUtilities.h"
 #include "RPGUIManagerSubsystem.h"
 #include "Screens/Screen.h"
+#include "Settings/PokemonMessageSettings.h"
 #include "Utilities/PokemonUIAsyncActions.h"
 #include "Utilities/TrainerHelpers.h"
 
@@ -16,7 +16,7 @@ UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::GiveItemToPokemon(con
                                                                              const FItemHandle &Item,
                                                                              const TScriptInterface<IPokemon> Pokemon,
                                                                              int PokemonIndex) const {
-    auto &Messages = GetDefault<UPokemonUISettings>()->ItemMessages;
+    auto &Messages = *GetDefault<UPokemonMessageSettings>();
 
     auto HeldItem = Pokemon->GetHoldItem();
     if (HeldItem.IsSet()) {
@@ -52,5 +52,25 @@ UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::GiveItemToPokemon(con
                                                                               NewItem.GetPortionName()));
     }
 
+    co_return true;
+}
+
+UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::TakeItemFromPokemon(const UObject *WorldContext,
+    const TScriptInterface<IPokemon> &Pokemon) const {
+    auto &Messages = *GetDefault<UPokemonMessageSettings>();
+    
+    auto HeldItem = Pokemon->GetHoldItem();
+    auto Bag = UTrainerHelpers::GetBag(WorldContext);
+    if (!HeldItem.IsSet() || !Bag->CanObtainItem(HeldItem->ID)) {
+        co_await Pokemon::UI::DisplayMessage(WorldContext, Messages.CannotTakeItemMessage);
+        co_return false;
+    }
+    
+    Bag->ObtainItem(HeldItem->ID);
+    Pokemon->RemoveHoldItem();
+    Retro::Optionals::OfNullable(URPGUIManagerSubsystem::Get(WorldContext).GetTopScreenOfStack()) |
+        Retro::Optionals::IfPresent(&UScreen::RefreshSelf);
+
+    co_await Pokemon::UI::DisplayMessage(WorldContext, FText::FormatNamed(Messages.TookItemMessage, TEXT("Pkmn"), Pokemon->GetNickname(), TEXT("Item"), HeldItem->GetPortionName()));
     co_return true;
 }

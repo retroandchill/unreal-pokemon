@@ -31,6 +31,8 @@ class POKEMONCORE_API IPokemonCoroutineDispatcher {
     virtual UE5Coro::TCoroutine<bool> GiveItemToPokemon(const UObject *WorldContext, const FItemHandle &Item,
                                                         const TScriptInterface<IPokemon> Pokemon,
                                                         int PokemonIndex) const = 0;
+
+    virtual UE5Coro::TCoroutine<bool> TakeItemFromPokemon(const UObject *WorldContext, const TScriptInterface<IPokemon> &Pokemon) const = 0;
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, IPokemonCoroutineDispatcher)

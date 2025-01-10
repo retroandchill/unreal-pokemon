@@ -19,4 +19,6 @@ class POKEMONUI_API UPokemonCoroutineDispatcherImpl : public UObject, public IPo
     UE5Coro::TCoroutine<bool> GiveItemToPokemon(const UObject *WorldContext, const FItemHandle &Item,
                                                 const TScriptInterface<IPokemon> Pokemon,
                                                 int PokemonIndex) const override;
+    
+    UE5Coro::TCoroutine<bool> TakeItemFromPokemon(const UObject *WorldContext, const TScriptInterface<IPokemon> &Pokemon) const override;
 };
