@@ -4,15 +4,12 @@
 #include "RetroLib/Utils/GameplayTagUtilities.h"
 #include "TestAdapter.h"
 
-namespace Retro::Testing {
-    const UE_DEFINE_GAMEPLAY_TAG(LandEncounter, "EncounterTypes.Land");
-}
-
 TEST_CASE_NAMED(FTestGetGameplayTagChild, "Unit Tests::RetroLib::GameplayTags::GetGamplayTagChild",
                 "[RetroLib][Utils]") {
-    auto ResultTag = UGameplayTagUtilities::RequestGameplayTagChild(Retro::Testing::LandEncounter, "Fake");
+    auto Tag = FGameplayTag::RequestGameplayTag("Tests.GenericTag.One");
+    auto ResultTag = UGameplayTagUtilities::RequestGameplayTagChild(Tag, "Fake");
     CHECK_FALSE(ResultTag.IsValid());
     ResultTag =
-        UGameplayTagUtilities::RequestGameplayTagChild(FGameplayTag::RequestGameplayTag("EncounterTypes"), "Land");
+        UGameplayTagUtilities::RequestGameplayTagChild(FGameplayTag::RequestGameplayTag("Tests.GenericTag"), "One");
     CHECK(ResultTag.IsValid());
 }
