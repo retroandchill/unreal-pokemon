@@ -3,16 +3,40 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UE5Coro.h"
 #include "UObject/Interface.h"
 
 #include "InventoryScreen.generated.h"
 
 class IPokemon;
 struct FItem;
+class IInventoryScreen;
+
+POKEMONUI_API struct FSelectedItemHandle {
+    FSelectedItemHandle(const TScriptInterface<IInventoryScreen> &InScreen, const FItem &InItem, int32 InQuantity);
+
+    const TScriptInterface<IInventoryScreen> &GetScreen() const {
+        return Screen;
+    }
+
+    const FItem &GetItem() const {
+        return Item;
+    }
+
+    int32 GetQuantity() const {
+        return Quantity;
+    }
+
+  private:
+    TScriptInterface<IInventoryScreen> Screen;
+    const FItem &Item;
+    int32 Quantity;
+};
+
 /**
  * Delegate for when an item is selected
  */
-DECLARE_DELEGATE_ThreeParams(FOnItemSelected, const TScriptInterface<class IInventoryScreen> &, const FItem &, int32);
+DECLARE_DELEGATE_OneParam(FOnItemSelected, TOptional<FSelectedItemHandle>);
 DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(bool, FItemFilter, const FItem &, Item);
 
 // This class does not need to be modified.
@@ -41,7 +65,7 @@ class POKEMONUI_API IInventoryScreen {
      * for when an item is selected.
      * @return The callback for when an item is selected by the player
      */
-    virtual FOnItemSelected &GetOnItemSelected() = 0;
+    virtual UE5Coro::TCoroutine<TOptional<FSelectedItemHandle>> PromptItemSelection() = 0;
 
     /**
      * Toggle whether the player can select an item or not in the menu

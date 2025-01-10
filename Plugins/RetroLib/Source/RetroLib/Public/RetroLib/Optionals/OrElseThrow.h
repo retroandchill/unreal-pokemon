@@ -21,7 +21,7 @@ namespace Retro::Optionals {
         constexpr decltype(auto) operator()(O &&Optional) const {
             return (*this)(std::forward<O>(Optional), [] { return std::bad_optional_access{}; });
         }
-        
+
         /**
          * Invokes the functor with the provided arguments and throws the result if the optional parameter does not have
          * a value. If the optional parameter does have a value, retrieves and returns it.

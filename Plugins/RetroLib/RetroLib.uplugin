@@ -39,6 +39,11 @@
 		{
 			"Name": "FunctionalTestingEditor",
 			"Enabled": true
+		},
+		{
+			"Name": "UE5Coro",
+			"Enabled": true,
+			"Optional": true
 		}
 	]
 }

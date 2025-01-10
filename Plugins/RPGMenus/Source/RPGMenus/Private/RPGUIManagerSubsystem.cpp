@@ -4,6 +4,7 @@
 #include "Data/RPGMenusSettings.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
+#include "Kismet/GameplayStatics.h"
 #include "PrimaryGameLayout.h"
 #include "RPGMenus.h"
 #include "Screens/Screen.h"
@@ -12,6 +13,14 @@ void URPGUIManagerSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
     MenuMappingContext =
         CastChecked<UInputMappingContext>(GetDefault<URPGMenusSettings>()->MenuMappingContext.TryLoad());
+}
+
+URPGUIManagerSubsystem &URPGUIManagerSubsystem::Get(const UObject *WorldContext) {
+    auto GameInstance = UGameplayStatics::GetGameInstance(WorldContext);
+    check(GameInstance != nullptr)
+    auto Subsystem = GameInstance->GetSubsystem<URPGUIManagerSubsystem>();
+    check(Subsystem != nullptr)
+    return *Subsystem;
 }
 
 UScreen *URPGUIManagerSubsystem::GetTopScreenOfStack() const {

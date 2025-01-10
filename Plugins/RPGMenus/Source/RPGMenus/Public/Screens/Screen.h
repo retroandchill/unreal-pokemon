@@ -12,7 +12,7 @@
 class USelectableWidget;
 struct FInputActionInstance;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScreenClosed);
+DECLARE_MULTICAST_DELEGATE(FOnScreenClosed);
 
 namespace RPG::Menus {
 
@@ -79,7 +79,6 @@ class RPGMENUS_API UScreen : public UCommonActivatableWidget {
     /**
      * Callback for when the screen is closed
      */
-    UPROPERTY(BlueprintAssignable)
     FOnScreenClosed OnScreenClosed;
 
     /**

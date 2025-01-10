@@ -83,7 +83,7 @@ class POKEMONBATTLE_API ABattleSequencer : public AActor {
             UE_LOG(LogBattle, Warning, TEXT("Battle sequencer is already processing!"))
             return;
         }
-        
+
         Retro::Delegates::Add(OnMessagesComplete, std::forward<A>(Args)...);
         if (Messages.empty()) {
             ProcessMessagesComplete();

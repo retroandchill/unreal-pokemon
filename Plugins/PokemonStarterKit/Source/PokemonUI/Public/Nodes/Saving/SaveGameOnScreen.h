@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #include "SaveGameOnScreen.generated.h"
 
@@ -15,7 +16,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScreenSaveComplete);
  * Attempt to save the game.
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API USaveGameOnScreen : public UBlueprintAsyncActionBase {
+class POKEMONUI_API USaveGameOnScreen : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
@@ -27,7 +28,8 @@ class POKEMONUI_API USaveGameOnScreen : public UBlueprintAsyncActionBase {
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Saving, meta = (DefaultToSelf = Screen))
     static USaveGameOnScreen *SaveGame(USaveScreen *Screen);
 
-    void Activate() override;
+  protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
 
   private:
     /**

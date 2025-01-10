@@ -13,9 +13,11 @@
 #include "Saving/Serialization/EnhancedSaveGame.h"
 #include "Settings/PokemonStorageSystemSettings.h"
 #include "Storage/StorageSystem.h"
+#include "Utilities/PokemonCoroutineDispatcher.h"
 
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
+    CoroutineDispatcher = UnrealInjector::NewInjectedDependency<IPokemonCoroutineDispatcher>(this);
 
     GrowthRates.Empty();
     for (auto RegisteredTypes = Exp::FGrowthRateRegistry::GetInstance().GetAllRegisteredTypes();

@@ -41,7 +41,7 @@ namespace InstanceofTest {
 
 TEST_CASE_NAMED(FStaticCastTest, "Unit Tests::RetroLib::Casting::StaticCast", "[utils]") {
     using namespace InstanceofTest;
-    
+
     SECTION("Can convert between numberic types") {
         CHECK(Retro::StaticCast<double>(4) == 4.0);
         CHECK(Retro::StaticCast<int>(4.0) == 4);
@@ -67,7 +67,7 @@ TEST_CASE_NAMED(FStaticCastTest, "Unit Tests::RetroLib::Casting::StaticCast", "[
 #if RTTI_ENABLED
 TEST_CASE_NAMED(FInstanceOfTest, "Unit Tests::RetroLib::Casting::InstanceOf", "[utils]") {
     using namespace InstanceofTest;
-    
+
     SECTION("Can work with raw pointers") {
         Derived1 Value1;
         Derived2 Value2;
@@ -127,7 +127,7 @@ TEST_CASE_NAMED(FInstanceOfTest, "Unit Tests::RetroLib::Casting::InstanceOf", "[
 
 TEST_CASE_NAMED(FDynamicCastTest, "Unit Tests::RetroLib::Casting::DynamicCast", "[utils]") {
     using namespace InstanceofTest;
-    
+
     SECTION("Can work with raw pointers") {
         Derived1 Value1;
         Derived2 Value2;

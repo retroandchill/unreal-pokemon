@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #include "DisplayMessageWithChoices.generated.h"
 
@@ -16,7 +17,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDisplayMessageWithChoicesOutputPin
  * Command for displaying a message with choices associated with it
  */
 UCLASS(meta = (HideThen, HasDedicatedAsyncNode))
-class POKEMONUI_API UDisplayMessageWithChoices : public UBlueprintAsyncActionBase {
+class POKEMONUI_API UDisplayMessageWithChoices : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
@@ -39,21 +40,10 @@ class POKEMONUI_API UDisplayMessageWithChoices : public UBlueprintAsyncActionBas
     static UDisplayMessageWithChoices *DisplayMessageWithChoices(const UObject *WorldContextObject, FText Message,
                                                                  const TArray<FText> &Choices);
 
-    void Activate() override;
+  protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
 
   private:
-    /**
-     * Function called to execute the on confirm pin
-     */
-    UFUNCTION()
-    void ExecuteOnChoiceSelected(int32 ChoiceIndex, FName ChoiceID);
-
-    /**
-     * The object used to obtain the state of the world to display the message with
-     */
-    UPROPERTY()
-    TObjectPtr<const UObject> WorldContextObject;
-
     /**
      * The message to display to the player
      */

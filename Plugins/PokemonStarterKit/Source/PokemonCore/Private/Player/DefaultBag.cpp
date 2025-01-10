@@ -113,6 +113,10 @@ int32 UDefaultBag::RemoveItem(FItemHandle ItemID, int32 Amount) {
     return Change;
 }
 
+void UDefaultBag::ClearBag() {
+    ItemSlots.Empty();
+}
+
 void UDefaultBag::SortPocket(FName Pocket, const IBagSorter &Sorter) {
     Sorter.SortPocket(ItemSlots.FindOrAdd(Pocket).Items);
 }

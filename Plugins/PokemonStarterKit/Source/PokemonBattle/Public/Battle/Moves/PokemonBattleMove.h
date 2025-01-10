@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "BattleMove.h"
-#include "RetroLib/Ranges/Views/Generator.h"
 #include "GameplayAbilitySpecHandle.h"
+#include "RetroLib/Ranges/Views/Generator.h"
 
 #include "PokemonBattleMove.generated.h"
 

@@ -40,7 +40,7 @@ namespace Retro {
     } // namespace Delegates
 
     RETROLIB_EXPORT template <Delegates::UEDelegate D, typename... A>
-    constexpr auto BindDelegate(D &&Delegate, A&&... Args) {
+    constexpr auto BindDelegate(D &&Delegate, A &&...Args) {
         if constexpr (sizeof...(A) > 0) {
             return BindBack(Delegates::TDelegateInvoker(std::forward<D>(Delegate)), std::forward<A>(Args)...);
         } else {
@@ -164,7 +164,7 @@ namespace Retro {
         RETROLIB_EXPORT constexpr auto Add = ExtensionMethod<FDelegateAdder{}>;
 
         template <typename D, typename... A>
-        concept CanAddToDelegate = requires(D& Delegate, A &&...Args) {
+        concept CanAddToDelegate = requires(D &Delegate, A &&...Args) {
             { Retro::Delegates::Add(Delegate, std::forward<A>(Args)...) } -> std::same_as<FDelegateHandle>;
         };
     } // namespace Delegates

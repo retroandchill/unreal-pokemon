@@ -67,7 +67,8 @@ namespace Retro::Testing::Delegates {
     };
 } // namespace Retro::Testing::Delegates
 
-TEST_CASE_NAMED(FDelegateBindingTest, "Unit Tests::RetroLib::Functional::Delegates::Wrapping", "[RetroLib][Functional]") {
+TEST_CASE_NAMED(FDelegateBindingTest, "Unit Tests::RetroLib::Functional::Delegates::Wrapping",
+                "[RetroLib][Functional]") {
     using namespace Retro::Testing::Delegates;
 
     SECTION("Should be able to bind a regular delegate") {
@@ -95,15 +96,17 @@ TEST_CASE_NAMED(FDelegateBindingTest, "Unit Tests::RetroLib::Functional::Delegat
     SECTION("Can binding a delegate to a range pipe") {
         std::array Strings = {FStringView(TEXT("1234567890")), FStringView(TEXT("123456789"))};
 
-        auto ValidStrings = Strings | Retro::Ranges::Views::Filter(Retro::BindDelegate(FDemoDelegate::CreateStatic(&IsLength), 10)) |
-                            Retro::Ranges::To<TArray>();
+        auto ValidStrings =
+            Strings | Retro::Ranges::Views::Filter(Retro::BindDelegate(FDemoDelegate::CreateStatic(&IsLength), 10)) |
+            Retro::Ranges::To<TArray>();
 
         REQUIRE(ValidStrings.Num() == 1);
         CHECK(ValidStrings[0] == TEXT("1234567890"));
     }
 }
 
-TEST_CASE_NAMED(FCreateDelegateTest, "Unit Tests::RetroLib::Functional::Delegates::Creation", "[RetroLib][Functional]") {
+TEST_CASE_NAMED(FCreateDelegateTest, "Unit Tests::RetroLib::Functional::Delegates::Creation",
+                "[RetroLib][Functional]") {
     using namespace Retro::Testing::Delegates;
 
     SECTION("Can bind free functions and lambdas") {

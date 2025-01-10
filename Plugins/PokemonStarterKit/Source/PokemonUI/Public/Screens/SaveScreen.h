@@ -67,9 +67,11 @@ class POKEMONUI_API USaveScreen : public UScreen {
     /**
      * Attempt to save the game
      */
-    void SaveGame(FOnSaveComplete &&OnComplete);
+    UE5Coro::TCoroutine<bool> SaveGame();
 
     RETRO_MULTICAST_DELEGATE_MEMBER(FExitSaveScreen, OnExitSaveScreen)
+
+    UE5Coro::TCoroutine<bool> UntilSaveComplete();
 
   protected:
     /**
@@ -83,17 +85,11 @@ class POKEMONUI_API USaveScreen : public UScreen {
     void ExitSaveScreen(bool bSuccess);
 
   private:
-    void CommitSaveGame(UEnhancedSaveGame *SaveGame);
-
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<USaveGameCard> SaveGameCard;
 
     UPROPERTY()
     TObjectPtr<UEnhancedSaveGame> CurrentSaveGame;
-
-    FOnSaveComplete OnSaveCompleteDelegate;
-
-    TOptional<Retro::TGameThreadFutureExecutor<UEnhancedSaveGame *>> SaveGameCreationFuture;
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, USaveScreen)

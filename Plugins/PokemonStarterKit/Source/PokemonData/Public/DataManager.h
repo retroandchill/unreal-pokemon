@@ -26,14 +26,14 @@ class POKEMONDATA_API FDataManager {
 
     template <typename T>
         requires Pokemon::Data::DataStructHandle<T>
-    auto GetData(T &&Handle) const {
-        return GetDataTable<typename std::remove_cvref_t<T>::FStructType>().GetData(Handle);
+    auto GetData(const T &Handle) const {
+        return GetDataTable<typename T::FValueType>().GetData(Handle);
     }
 
     template <typename T>
         requires Pokemon::Data::DataStructHandle<T>
-    auto GetDataChecked(T &&Handle) const {
-        return GetDataTable<typename std::remove_cvref_t<T>::FStructType>().GetDataChecked(Handle);
+    decltype(auto) GetDataChecked(const T &Handle) const {
+        return GetDataTable<typename T::FValueType>().GetDataChecked(Handle);
     }
 
     /**

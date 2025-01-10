@@ -3,29 +3,23 @@
 #include "Nodes/SelectPokemonFromParty.h"
 #include "PokemonUISettings.h"
 #include "PrimaryGameLayout.h"
+#include "RetroLib/Optionals/IfPresentOrElse.h"
 #include "Screens/PokemonSelectScreen.h"
+#include "Utilities/PokemonUIAsyncActions.h"
 
 USelectPokemonFromParty *USelectPokemonFromParty::SelectPokemonFromParty(const UObject *WorldContextObject,
                                                                          FText HelpText) {
     auto Node = NewObject<USelectPokemonFromParty>();
-    Node->WorldContextObject = WorldContextObject;
+    Node->SetWorldContext(WorldContextObject);
     Node->HelpText = HelpText;
     return Node;
 }
 
-void USelectPokemonFromParty::Activate() {
-    auto Screen = UPokemonSelectScreen::AddPokemonSelectScreenToStack(WorldContextObject);
-    Screen->GetOnPokemonSelect().BindUObject(this, &USelectPokemonFromParty::ExecuteOnSelected);
-    Screen->GetOnScreenClosed().AddUniqueDynamic(this, &USelectPokemonFromParty::ExecuteOnCanceled);
-}
-
-void USelectPokemonFromParty::ExecuteOnSelected(const TScriptInterface<IPartyScreen> &Screen,
-                                                const TScriptInterface<ITrainer> &Trainer, int32 Index) {
-    OnSelected.Broadcast(Screen, Trainer, Index);
-    SetReadyToDestroy();
-}
-
-void USelectPokemonFromParty::ExecuteOnCanceled() {
-    OnCanceled.Broadcast();
-    SetReadyToDestroy();
+UE5Coro::TCoroutine<> USelectPokemonFromParty::ExecuteCoroutine(FForceLatentCoroutine) {
+    Retro::Optionals::IfPresentOrElse(
+        co_await Pokemon::UI::SelectPokemonFromParty(GetWorldContext()),
+        [&](const FSelectedPokemonHandle &Handle) {
+            OnSelected.Broadcast(Handle.GetScreen(), Handle.GetTrainer(), Handle.GetIndex());
+        },
+        [this] { OnCanceled.Broadcast(); });
 }
