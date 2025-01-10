@@ -14,6 +14,6 @@ public class PokemonUI : ModuleRules {
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "UMG",
                                                              "RenderCore", "UnrealInjector", "CommonInput",
                                                              "PokemonItems", "Paper2D", "DynamicAssetLoader",
-                                                             "EnhancedSaveGame", "PokemonUtilities" });
+                                                             "EnhancedSaveGame", });
     }
 }

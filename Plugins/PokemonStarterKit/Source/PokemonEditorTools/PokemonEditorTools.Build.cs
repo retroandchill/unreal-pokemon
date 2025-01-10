@@ -9,6 +9,6 @@ public class PokemonEditorTools : ModuleRules {
         PrivateDependencyModuleNames.AddRange(
             new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "PokemonAssets", "DeveloperSettings",
                            "EditorSubsystem", "UnrealInjector", "PokemonBattle", "InputCore", "UnrealEd", "GraphEditor",
-                           "BlueprintGraph", "ToolWidgets", "PokemonBlueprintNodes", "PokemonUtilities" });
+                           "BlueprintGraph", "ToolWidgets", "PokemonBlueprintNodes", "RetroLib" });
     }
 }

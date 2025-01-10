@@ -17,4 +17,5 @@
 #include "RetroLib/Ranges.h"
 #include "RetroLib/TypeTraits.h"
 #include "RetroLib/Utils.h"
+#include "RetroLib/Meta.h"
 #include "RetroLib/Variants.h"

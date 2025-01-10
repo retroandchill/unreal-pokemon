@@ -11,7 +11,7 @@
  * Utility library for operations involving Strings (and Text)
  */
 UCLASS()
-class POKEMONUTILITIES_API UStringUtilities : public UBlueprintFunctionLibrary {
+class RETROLIB_API UStringUtilities : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
   public:

@@ -177,4 +177,48 @@
         : TAttribute<bool>(Get##MemberName() != 0)
 
 #endif
+
+#define DECLARE_STATIC_REGISTRY(Export, Name, ...) \
+    class Export Name : public __VA_ARGS__ { \
+        Name() = default; \
+        ~Name() = default; \
+      public: \
+        static Name &GetInstance(); \
+    };
+
+#define DEFINE_STATIC_REGISTRY(Name) \
+    Name& Name::GetInstance() { \
+        static Name Instance; \
+        return Instance; \
+    }
+    
+
+#define DECLARE_ABSTRACT_METATYPE                                                                                      \
+  public:                                                                                                              \
+    virtual FName GetClassName() const = 0;                                                                            \
+    static FName ClassName();                                                                                          \
+                                                                                                                       \
+  private:
+
+#define IMPLEMENT_ABSTRACT_METATYPE(Class)                                                                             \
+    FName Class::ClassName() {                                                                                         \
+        static const FName ClassName = TEXT(#Class);                                                                   \
+        return ClassName;                                                                                              \
+    }
+#define DECLARE_DERIVED_METATYPE                                                                                       \
+  public:                                                                                                              \
+    FName GetClassName() const override;                                                                               \
+    static FName ClassName();                                                                                          \
+                                                                                                                       \
+  private:
+
+#define IMPLEMENT_DERIVED_METATYPE(Class)                                                                              \
+    FName Class::GetClassName() const {                                                                                \
+        return ClassName();                                                                                            \
+    }                                                                                                                  \
+    FName Class::ClassName() {                                                                                         \
+        static const FName ClassName = TEXT(#Class);                                                                   \
+        return ClassName;                                                                                              \
+    }
+
 #endif

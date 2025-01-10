@@ -21,4 +21,6 @@
 #include "RetroLib/Utils/ScopedTimeDilationFactor.h"
 #include "RetroLib/Utils/SoftObjectRef.h"
 #include "RetroLib/Utils/BlueprintMathUtils.h"
+#include "RetroLib/Utils/GameplayTagUtilities.h"
+#include "RetroLib/Utils/StringUtilities.h"
 #endif

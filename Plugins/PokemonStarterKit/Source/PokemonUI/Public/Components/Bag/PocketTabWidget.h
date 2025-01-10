@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CommonTabListWidgetBase.h"
-#include "Manipulation/CircularIterator.h"
+#include "RetroLib/Ranges/CircularIterator.h"
 
 #include "PocketTabWidget.generated.h"
 
@@ -67,7 +67,7 @@ class POKEMONUI_API UPocketTabWidget : public UCommonUserWidget {
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UCommonActionWidget> PocketRightActionWidget;
 
-    TCircularIterator<FName> CurrentPocket;
+    Retro::TCircularIterator<const FName> CurrentPocket;
 
     FUIActionBindingHandle PocketLeftBinding;
     FUIActionBindingHandle PocketRightBinding;

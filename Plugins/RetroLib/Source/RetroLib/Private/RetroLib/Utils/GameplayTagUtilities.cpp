@@ -1,6 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "GameplayTags/GameplayTagUtilities.h"
+#include "RetroLib/Utils/GameplayTagUtilities.h"
 #include "GameplayTagsManager.h"
 
 FGameplayTag UGameplayTagUtilities::RequestGameplayTagChild(const FGameplayTag &Base, FName Suffix) {

@@ -2,9 +2,8 @@
 #include "Pokemon/Exp/Slow.h"
 #include "RetroLib/Utils/Math.h"
 
-using namespace Exp;
 
-int32 FSlow::ExpForLevel(int32 Level) const {
+int32 Exp::FSlow::ExpForLevel(int32 Level) const {
     check(Level > 0)
 
     if (Level == 1)

@@ -2,9 +2,8 @@
 #include "Pokemon/Exp/Erratic.h"
 #include "RetroLib/Utils/Math.h"
 
-using namespace Exp;
 
-int32 FErratic::ExpForLevel(int32 Level) const {
+int32 Exp::FErratic::ExpForLevel(int32 Level) const {
     check(Level > 0)
 
     if (Level == 1)

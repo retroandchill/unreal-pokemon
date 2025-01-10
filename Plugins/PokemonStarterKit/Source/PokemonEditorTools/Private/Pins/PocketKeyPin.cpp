@@ -9,7 +9,7 @@
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "SSearchableComboBox.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
-#include "Strings/StringUtilities.h"
+#include "RetroLib/Utils/StringUtilities.h"
 
 class UPokemonDataSettings;
 

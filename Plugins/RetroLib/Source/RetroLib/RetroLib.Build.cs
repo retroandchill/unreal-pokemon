@@ -15,7 +15,7 @@ public class RetroLib : ModuleRules {
         });
 
         PublicDependencyModuleNames.AddRange(new string[] {
-            "Core", "Engine"
+            "Core", "Engine", "GameplayTags"
             // ... add other public dependencies that you statically link with here ...
         });
 

@@ -2,10 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
 #include "AttributeSet.h"
-#include <memory>
 
 /**
  * Define all the information necessary to initialize a gameplay attribute

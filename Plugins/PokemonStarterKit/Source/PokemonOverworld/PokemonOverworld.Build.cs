@@ -10,7 +10,7 @@ public class PokemonOverworld : ModuleRules {
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore",
-                                                             "PokemonEncounters", "PokemonUtilities", "GameplayTasks",
+                                                             "PokemonEncounters", "GameplayTasks",
                                                              "GameplayTags" });
     }
 }

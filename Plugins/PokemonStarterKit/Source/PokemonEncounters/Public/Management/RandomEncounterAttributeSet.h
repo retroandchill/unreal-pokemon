@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
-#include "GameplayTags/AttributeMacros.h"
+#include "AttributeMacros.h"
 
 #include "RandomEncounterAttributeSet.generated.h"
 

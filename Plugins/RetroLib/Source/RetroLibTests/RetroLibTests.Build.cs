@@ -8,7 +8,7 @@ public class RetroLibTests : ModuleRules {
                                                             "FunctionalTesting", "FunctionalTestingEditor" });
 
         PrivateDependencyModuleNames.AddRange(
-            new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "RetroLib" });
+            new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "RetroLib", "GameplayTags" });
 
         if (Target.bEnableCppCoroutinesForEvaluation && !string.IsNullOrEmpty(GetModuleDirectory("UE5Coro"))) {
             PublicDependencyModuleNames.Add("UE5Coro");

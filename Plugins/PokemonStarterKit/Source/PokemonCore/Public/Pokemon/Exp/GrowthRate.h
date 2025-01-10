@@ -2,7 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Meta/GenericStaticUniqueRegistry.h"
+#include "RetroLib/Meta/Registry.h"
 
 namespace Exp {
     /**
@@ -20,8 +20,5 @@ namespace Exp {
         virtual int32 ExpForLevel(int32 Level) const = 0;
     };
 
-    /**
-     * Static registry for the growth rate types
-     */
-    using FGrowthRateRegistry = TGenericStaticUniqueRegistry<IGrowthRate>;
+    DECLARE_STATIC_REGISTRY(POKEMONCORE_API, FGrowthRateRegistry, Retro::Meta::TUniqueRegistry<IGrowthRate>);
 }; // namespace Exp

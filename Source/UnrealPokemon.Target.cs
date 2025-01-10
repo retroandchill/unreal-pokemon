@@ -12,7 +12,7 @@ public class UnrealPokemonTarget : TargetRules {
     }
 
     private void RegisterModulesCreatedByRider() {
-        ExtraModuleNames.AddRange(new string[] { "PokemonData", "PokemonUtilities", "PokemonCore", "GridBased2D",
+        ExtraModuleNames.AddRange(new string[] { "PokemonData", "PokemonCore", "GridBased2D",
                                                  "RPGMenus", "PokemonUI", "UnrealPokemon", "TileReplacer",
                                                  "PaperZDHelpers" });
     }

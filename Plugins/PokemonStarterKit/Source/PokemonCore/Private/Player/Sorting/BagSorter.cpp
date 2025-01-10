@@ -3,6 +3,8 @@
 #include "Player/Sorting/BagSorter.h"
 #include <functional>
 
+DEFINE_STATIC_REGISTRY(FBagSorterRegistry)
+
 IBagSorter::~IBagSorter() = default;
 
 void IBagSorter::SortPocket(TArrayView<FItemSlot> Pocket) const {
