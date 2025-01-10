@@ -6,12 +6,13 @@
 #include "Bag/Item.h"
 #include "Lookup/InjectableDependency.h"
 #include "UE5Coro.h"
+#include "Moves/MoveData.h"
 #include "UObject/Interface.h"
 
 #include "PokemonCoroutineDispatcher.generated.h"
 
 class IPokemon;
-struct FItem;
+
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable)
 class POKEMONCORE_API UPokemonCoroutineDispatcher : public UInterface {
@@ -30,9 +31,11 @@ class POKEMONCORE_API IPokemonCoroutineDispatcher {
 
     virtual UE5Coro::TCoroutine<bool> GiveItemToPokemon(const UObject *WorldContext, const FItemHandle &Item,
                                                         const TScriptInterface<IPokemon> Pokemon,
-                                                        int PokemonIndex) const = 0;
+                                                        int PokemonIndex, FForceLatentCoroutine Coro = {}) const = 0;
 
-    virtual UE5Coro::TCoroutine<bool> TakeItemFromPokemon(const UObject *WorldContext, const TScriptInterface<IPokemon> &Pokemon) const = 0;
+    virtual UE5Coro::TCoroutine<bool> TakeItemFromPokemon(const UObject *WorldContext, const TScriptInterface<IPokemon> &Pokemon, FForceLatentCoroutine Coro = {}) const = 0;
+
+    virtual UE5Coro::TCoroutine<bool> LearnMove(const UObject* WorldContext, const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move, FForceLatentCoroutine Coro = {}) const = 0;
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, IPokemonCoroutineDispatcher)

@@ -1,12 +1,14 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/PokemonCoroutineDispatcherImpl.h"
+#include "PokemonDataSettings.h"
 #include "DataRetrieval/DataUtilities.h"
 #include "Player/Bag.h"
 #include "Pokemon/Pokemon.h"
 #include "RetroLib/Optionals/IfPresent.h"
 #include "RetroLib/Utils/StringUtilities.h"
 #include "RPGUIManagerSubsystem.h"
+#include "Pokemon/Moves/MoveBlock.h"
 #include "Screens/Screen.h"
 #include "Settings/PokemonMessageSettings.h"
 #include "Utilities/PokemonUIAsyncActions.h"
@@ -15,7 +17,7 @@
 UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::GiveItemToPokemon(const UObject *WorldContext,
                                                                              const FItemHandle &Item,
                                                                              const TScriptInterface<IPokemon> Pokemon,
-                                                                             int PokemonIndex) const {
+                                                                             int PokemonIndex, FForceLatentCoroutine Coro) const {
     auto &Messages = *GetDefault<UPokemonMessageSettings>();
 
     auto HeldItem = Pokemon->GetHoldItem();
@@ -56,7 +58,7 @@ UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::GiveItemToPokemon(con
 }
 
 UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::TakeItemFromPokemon(const UObject *WorldContext,
-    const TScriptInterface<IPokemon> &Pokemon) const {
+                                                                               const TScriptInterface<IPokemon> &Pokemon, FForceLatentCoroutine Coro) const {
     auto &Messages = *GetDefault<UPokemonMessageSettings>();
     
     auto HeldItem = Pokemon->GetHoldItem();
@@ -73,4 +75,25 @@ UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::TakeItemFromPokemon(c
 
     co_await Pokemon::UI::DisplayMessage(WorldContext, FText::FormatNamed(Messages.TookItemMessage, TEXT("Pkmn"), Pokemon->GetNickname(), TEXT("Item"), HeldItem->GetPortionName()));
     co_return true;
+}
+
+UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::LearnMove(const UObject *WorldContext,
+                                                                     const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move, FForceLatentCoroutine Coro) const {
+    auto &Messages = *GetDefault<UPokemonMessageSettings>();
+    auto &MoveData = FDataManager::GetInstance().GetDataChecked(Move);
+    auto Nickname = Pokemon->GetNickname();
+    
+    auto MoveBlock = Pokemon->GetMoveBlock();
+    if (MoveBlock->HasOpenMoveSlot()) {
+        MoveBlock->PlaceMoveInOpenSlot(Move);
+        co_return true;
+    }
+    
+    co_await Pokemon::UI::DisplayMessage(WorldContext, FText::FormatNamed(Messages.LearnedMoveMessage, TEXT("Pkmn"), Nickname, TEXT("Move"), MoveData.RealName, TEXT("Count"), GetDefault<UPokemonDataSettings>()->MaxMoves));
+    if (!co_await Pokemon::UI::DisplayConfirmPrompt(WorldContext, FText::FormatNamed(Messages.ForgetMovePrompt, TEXT("Pkmn"), Nickname, TEXT("Move"), MoveData.RealName))) {
+        co_await Pokemon::UI::DisplayMessage(WorldContext, FText::FormatNamed(Messages.LearnedMoveMessage, TEXT("Pkmn"), Nickname, TEXT("Move"), MoveData.RealName));
+        co_return false;
+    }
+
+    co_return co_await Pokemon::UI::PromptReplaceMove(WorldContext, Pokemon, Move);
 }

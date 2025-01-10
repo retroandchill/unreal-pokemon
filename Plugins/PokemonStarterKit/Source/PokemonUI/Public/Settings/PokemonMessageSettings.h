@@ -44,4 +44,15 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = HoldItems)
     FText CannotTakeItemMessage = NSLOCTEXT("PokemonUI", "CannotTakeItemMessage", "The Bag is full. The Pokémon's item could not be removed.");
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Moves)
+    FText LearnedMoveMessage = NSLOCTEXT("PokemonUI", "LearnedMoveMessage", "{Pkmn} learned {Move}!");
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Moves)
+    FText TryingToLearnMessage = NSLOCTEXT("PokemonUI", "TryingToLearnMessage", "{Pkmn} wants to learn {Move}, but it already knows {Count} moves.");
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Moves)
+    FText ForgetMovePrompt = NSLOCTEXT("PokemonUI", "ForgetMovePrompt", "Should {Pkmn} forget a move to learn {Move}?");
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Moves)
+    FText MoveNotLearnedMessage = NSLOCTEXT("PokemonUI", "LearnedMoveMessage", "{Pkmn} did not learn {Move}.");
 };
