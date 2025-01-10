@@ -61,7 +61,10 @@ class POKEMONCORE_API IStatBlock {
     virtual float GetExpPercent() const = 0;
 
     /**
-     * Gain exp for the Pokémon in question
+     * Gain exp for the Pokémon in question.
+     *
+     * TODO: Remove the callback and make this a pure coroutine
+     * 
      * @param Change The change in experience
      * @param bShowMessages Should the messages be shown to the player
      * @param OnEnd What to call after all the messages have been shown

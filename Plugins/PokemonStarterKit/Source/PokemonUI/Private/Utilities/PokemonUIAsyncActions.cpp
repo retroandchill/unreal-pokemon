@@ -56,9 +56,9 @@ namespace Pokemon::UI {
         co_return co_await Screen->PromptItemSelection();
     }
 
-    UE5Coro::TCoroutine<bool> PromptReplaceMove(const UObject *WorldContext, const TScriptInterface<IPokemon> &Pokemon,
-        FMoveHandle Move, FForceLatentCoroutine Coro) {
-        auto Screen = UMoveForgetScreen::AddMoveForgetScreenToStack(WorldContext);
+    UE5Coro::TCoroutine<bool> PromptReplaceMove(const TScriptInterface<IPokemon> &Pokemon,
+                                                FMoveHandle Move, FForceLatentCoroutine Coro) {
+        auto Screen = UMoveForgetScreen::AddMoveForgetScreenToStack(Pokemon.GetObject());
         Screen->InitializeScene(Pokemon, Move);
         co_return co_await Screen->AwaitPlayerDecision();
     }

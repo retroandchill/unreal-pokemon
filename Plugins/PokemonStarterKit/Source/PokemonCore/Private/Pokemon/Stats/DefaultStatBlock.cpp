@@ -14,6 +14,9 @@
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
+#include "UE5Coro/Coroutine.h"
+#include "UE5Coro/Generator.h"
+#include "Utilities/PokemonCoroutineDispatcher.h"
 
 using namespace StatUtils;
 
@@ -117,9 +120,13 @@ FLevelUpStatChanges UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages,
             }
         }
 
-        auto Subsystem = GetWorld()->GetGameInstance()->GetSubsystem<UUtilityNodeSubsystem>();
-        Subsystem->ExecuteUtilityFunction<UUtility_ProcessLevelUp>(
-            Owner, Changes, bShowMessages, FSimpleDelegate::CreateLambda([OnEnd] { OnEnd.ExecuteIfBound(); }));
+        if (bShowMessages) {
+            [Changes, OnEnd](UE5Coro::TLatentContext<UDefaultStatBlock> This) -> UE5Coro::TCoroutine<> {
+                auto &Dispatcher = IPokemonCoroutineDispatcher::Get(This.Target);
+                co_await Dispatcher.ProcessLevelUp(This.Target, Changes);
+                OnEnd.ExecuteIfBound();
+            }(this);
+        }
     }
 
     return Changes;

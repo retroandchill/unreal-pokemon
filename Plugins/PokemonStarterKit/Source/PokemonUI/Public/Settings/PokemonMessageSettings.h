@@ -55,4 +55,7 @@ public:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Moves)
     FText MoveNotLearnedMessage = NSLOCTEXT("PokemonUI", "LearnedMoveMessage", "{Pkmn} did not learn {Move}.");
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Leveling)
+    FText GrewToLevelMessage = NSLOCTEXT("PokemonUI", "GrewToLevelMessage", "{Pkmn} grew to level {Level}!");
 };

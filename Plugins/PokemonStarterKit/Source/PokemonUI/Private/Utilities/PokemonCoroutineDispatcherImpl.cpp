@@ -13,15 +13,16 @@
 #include "Settings/PokemonMessageSettings.h"
 #include "Utilities/PokemonUIAsyncActions.h"
 #include "Utilities/TrainerHelpers.h"
+#include "Utilities/Node/Utility_ProcessLevelUp.h"
 
-UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::GiveItemToPokemon(const UObject *WorldContext,
-                                                                             const FItemHandle &Item,
-                                                                             const TScriptInterface<IPokemon> Pokemon,
-                                                                             int PokemonIndex, FForceLatentCoroutine Coro) const {
+UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::GiveItemToPokemon(
+    const FItemHandle &Item,
+    const TScriptInterface<IPokemon> Pokemon,
+    int PokemonIndex, FForceLatentCoroutine Coro) const {
     auto &Messages = *GetDefault<UPokemonMessageSettings>();
 
-    auto HeldItem = Pokemon->GetHoldItem();
-    if (HeldItem.IsSet()) {
+    auto WorldContext = Pokemon.GetObject();
+    if (auto HeldItem = Pokemon->GetHoldItem(); HeldItem.IsSet()) {
         auto &OldItemName = HeldItem->GetPortionName();
         auto &TextFormat = UStringUtilities::StartsWithVowelText(OldItemName) ? Messages.AlreadyHoldingItemConsonant
                                                                               : Messages.AlreadyHoldingItemVowel;
@@ -57,10 +58,11 @@ UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::GiveItemToPokemon(con
     co_return true;
 }
 
-UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::TakeItemFromPokemon(const UObject *WorldContext,
-                                                                               const TScriptInterface<IPokemon> &Pokemon, FForceLatentCoroutine Coro) const {
+UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::TakeItemFromPokemon(
+    const TScriptInterface<IPokemon> &Pokemon, FForceLatentCoroutine Coro) const {
     auto &Messages = *GetDefault<UPokemonMessageSettings>();
-    
+
+    auto WorldContext = Pokemon.GetObject();
     auto HeldItem = Pokemon->GetHoldItem();
     auto Bag = UTrainerHelpers::GetBag(WorldContext);
     if (!HeldItem.IsSet() || !Bag->CanObtainItem(HeldItem->ID)) {
@@ -77,8 +79,8 @@ UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::TakeItemFromPokemon(c
     co_return true;
 }
 
-UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::LearnMove(const UObject *WorldContext,
-                                                                     const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move, FForceLatentCoroutine Coro) const {
+UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::LearnMove(
+    const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move, FForceLatentCoroutine Coro) const {
     auto &Messages = *GetDefault<UPokemonMessageSettings>();
     auto &MoveData = FDataManager::GetInstance().GetDataChecked(Move);
     auto Nickname = Pokemon->GetNickname();
@@ -89,11 +91,27 @@ UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::LearnMove(const UObje
         co_return true;
     }
     
+    auto WorldContext = Pokemon.GetObject();
     co_await Pokemon::UI::DisplayMessage(WorldContext, FText::FormatNamed(Messages.LearnedMoveMessage, TEXT("Pkmn"), Nickname, TEXT("Move"), MoveData.RealName, TEXT("Count"), GetDefault<UPokemonDataSettings>()->MaxMoves));
     if (!co_await Pokemon::UI::DisplayConfirmPrompt(WorldContext, FText::FormatNamed(Messages.ForgetMovePrompt, TEXT("Pkmn"), Nickname, TEXT("Move"), MoveData.RealName))) {
         co_await Pokemon::UI::DisplayMessage(WorldContext, FText::FormatNamed(Messages.LearnedMoveMessage, TEXT("Pkmn"), Nickname, TEXT("Move"), MoveData.RealName));
         co_return false;
     }
 
-    co_return co_await Pokemon::UI::PromptReplaceMove(WorldContext, Pokemon, Move);
+    co_return co_await Pokemon::UI::PromptReplaceMove(Pokemon, Move);
+}
+
+UE5Coro::TCoroutine<> UPokemonCoroutineDispatcherImpl::ProcessLevelUp(
+    const TScriptInterface<IPokemon> &Pokemon, const FLevelUpStatChanges &StatChanges,
+    FForceLatentCoroutine Coro) const {
+    auto &Messages = *GetDefault<UPokemonMessageSettings>();
+    auto Nickname = Pokemon->GetNickname();
+
+    auto WorldContext = Pokemon.GetObject();
+    auto [Before, After] = StatChanges.LevelChange;
+    co_await Pokemon::UI::DisplayMessage(WorldContext, FText::FormatNamed(Messages.GrewToLevelMessage, TEXT("Pkmn"), Nickname, TEXT("Level"), StatChanges.LevelChange.After));
+    
+    for (auto Move : Pokemon->GetMoveBlock()->GetLevelUpMoves(Before, After)) {
+	    co_await LearnMove(Pokemon, Move);
+    }
 }

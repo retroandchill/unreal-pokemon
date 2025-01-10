@@ -11,6 +11,7 @@
 
 #include "PokemonCoroutineDispatcher.generated.h"
 
+struct FLevelUpStatChanges;
 class IPokemon;
 
 // This class does not need to be modified.
@@ -29,13 +30,15 @@ class POKEMONCORE_API IPokemonCoroutineDispatcher {
   public:
     static const IPokemonCoroutineDispatcher &Get(const UObject *WorldContext);
 
-    virtual UE5Coro::TCoroutine<bool> GiveItemToPokemon(const UObject *WorldContext, const FItemHandle &Item,
+    virtual UE5Coro::TCoroutine<bool> GiveItemToPokemon(const FItemHandle &Item,
                                                         const TScriptInterface<IPokemon> Pokemon,
                                                         int PokemonIndex, FForceLatentCoroutine Coro = {}) const = 0;
 
-    virtual UE5Coro::TCoroutine<bool> TakeItemFromPokemon(const UObject *WorldContext, const TScriptInterface<IPokemon> &Pokemon, FForceLatentCoroutine Coro = {}) const = 0;
+    virtual UE5Coro::TCoroutine<bool> TakeItemFromPokemon(const TScriptInterface<IPokemon> &Pokemon, FForceLatentCoroutine Coro = {}) const = 0;
 
-    virtual UE5Coro::TCoroutine<bool> LearnMove(const UObject* WorldContext, const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move, FForceLatentCoroutine Coro = {}) const = 0;
+    virtual UE5Coro::TCoroutine<bool> LearnMove(const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move, FForceLatentCoroutine Coro = {}) const = 0;
+
+    virtual UE5Coro::TCoroutine<> ProcessLevelUp(const TScriptInterface<IPokemon> &Pokemon, const FLevelUpStatChanges& StatChanges, FForceLatentCoroutine Coro = {}) const = 0;
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, IPokemonCoroutineDispatcher)

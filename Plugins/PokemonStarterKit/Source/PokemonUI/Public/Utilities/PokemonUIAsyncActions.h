@@ -30,7 +30,7 @@ namespace Pokemon::UI {
     POKEMONUI_API UE5Coro::TCoroutine<TOptional<FSelectedItemHandle>> SelectItemFromBag(const UObject *WorldContext,
         const FItemFilter &Filter, FForceLatentCoroutine Coro = {});
 
-    POKEMONUI_API UE5Coro::TCoroutine<bool> PromptReplaceMove(const UObject *WorldContext, const TScriptInterface<IPokemon>& Pokemon, FMoveHandle Move, FForceLatentCoroutine Coro = {});
+    POKEMONUI_API UE5Coro::TCoroutine<bool> PromptReplaceMove(const TScriptInterface<IPokemon>& Pokemon, FMoveHandle Move, FForceLatentCoroutine Coro = {});
 
     
 }; // namespace Pokemon::UI

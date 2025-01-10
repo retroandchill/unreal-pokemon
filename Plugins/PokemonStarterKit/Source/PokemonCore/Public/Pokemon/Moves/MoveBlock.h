@@ -6,7 +6,9 @@
 #include "Lookup/InjectableDependency.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/PokemonDTO.h"
+#include "RetroLib/Ranges/Views/Generator.h"
 #include "UObject/Interface.h"
+#include "UE5Coro.h"
 
 #include "MoveBlock.generated.h"
 
@@ -81,15 +83,14 @@ class POKEMONCORE_API IMoveBlock {
      * @param CurrentLevel The current level of the Pokémon
      * @return The moves that will be learned
      */
-    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Pokémon|Moves")
-    virtual TArray<FMoveHandle> GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const = 0;
+    virtual Retro::TGenerator<FMoveHandle> GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const = 0;
 
     /**
      * Teach a move to this Pokémon
      * @param Move The move to learn
-     * @param AfterMoveLearned This is called after the move learning prompt is done
+     * @param Coro This is called after the move learning prompt is done
      */
-    virtual void LearnMove(FMoveHandle Move, FOnMoveLearnEnd::FDelegate &&AfterMoveLearned) = 0;
+    virtual FVoidCoroutine LearnMove(FMoveHandle Move, FForceLatentCoroutine Coro = {}) = 0;
 
     /**
      * Create a new move interface object. This is typically a temporary used for the move learn screen)
