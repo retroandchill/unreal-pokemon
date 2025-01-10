@@ -86,7 +86,7 @@ namespace Retro::Ranges {
             return *this;
         }
 
-        constexpr friend TArrayIterator operator+(const TArrayIterator& It, S Offset) {
+        constexpr friend TArrayIterator operator+(const TArrayIterator &It, S Offset) {
             return TArrayIterator(It.Ptr + Offset, *It.CurrentArray);
         }
 
@@ -94,7 +94,7 @@ namespace Retro::Ranges {
             return Other + Offset;
         }
 
-        constexpr friend TArrayIterator operator-(const TArrayIterator& It, S Offset) {
+        constexpr friend TArrayIterator operator-(const TArrayIterator &It, S Offset) {
             return TArrayIterator(It.Ptr - Offset, *It.CurrentArray);
         }
 
@@ -118,7 +118,7 @@ namespace Retro::Ranges {
             if (CurrentArray == nullptr) {
                 return 0;
             }
-            
+
             if constexpr (UnrealSizedContainer<const C>) {
                 return CurrentArray->Num();
             } else {

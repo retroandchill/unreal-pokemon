@@ -158,7 +158,6 @@ TEST_CASE_NAMED(FPolymorphicCopyTest, "Unit Tests::RetroLib::Utils::Polymorphic:
     CHECK(Dereferenced3.GetValue() == 120);
 }
 
-
 TEST_CASE_NAMED(FPolymorphicMoveTest, "Unit Tests::RetroLib::Utils::Polymorphic::Moving", "[utils]") {
     using namespace Retro::Testing::Polymorphic;
 

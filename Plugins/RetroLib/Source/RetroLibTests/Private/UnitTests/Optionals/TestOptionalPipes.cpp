@@ -175,8 +175,10 @@ TEST_CASE_NAMED(FOptionalOrElseThrowTest, "Unit Tests::RetroLib::Optionals::OrEl
     CHECK_THROWS_AS(Value2 | Retro::Optionals::OrElseThrow(), std::bad_optional_access);
 
     constexpr auto AltThrow = [](std::string_view Message) { return std::runtime_error(Message.data()); };
-    CHECK_THROWS_AS(Value2 | Retro::Optionals::OrElseThrow(Retro::BindBack<AltThrow>("Could not get value!")), std::runtime_error);
-    CHECK_THROWS_AS(Value2 | Retro::Optionals::OrElseThrow(Retro::BindBack(AltThrow, "Could not get value!")), std::runtime_error);
+    CHECK_THROWS_AS(Value2 | Retro::Optionals::OrElseThrow(Retro::BindBack<AltThrow>("Could not get value!")),
+                    std::runtime_error);
+    CHECK_THROWS_AS(Value2 | Retro::Optionals::OrElseThrow(Retro::BindBack(AltThrow, "Could not get value!")),
+                    std::runtime_error);
 }
 
 TEST_CASE_NAMED(FOptionalGetTest, "Unit Tests::RetroLib::Optionals::Value", "[optionals]") {

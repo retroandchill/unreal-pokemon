@@ -26,6 +26,12 @@
         FAutomationTestFramework::Get().GetCurrentTest()->AddError(TEXT("Exception thrown where none expected"));      \
     }
 
+#define CO_REQUIRE(...)                                                                                                \
+    if (!(__VA_ARGS__)) {                                                                                              \
+        FAutomationTestFramework::Get().GetCurrentTest()->AddError(TEXT("Condition failed!"));                         \
+        co_return;                                                                                                     \
+    }
+
 #else
 #include <catch2/catch_test_macros.hpp>
 

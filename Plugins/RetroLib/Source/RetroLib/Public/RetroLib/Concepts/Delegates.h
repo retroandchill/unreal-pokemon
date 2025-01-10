@@ -5,6 +5,10 @@
 #ifdef __UNREAL__
 #include "RetroLib/TypeTraits.h"
 
+#if RETROLIB_WITH_UE5CORO
+#include "UE5Coro.h"
+#endif
+
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
 #endif
@@ -280,6 +284,33 @@ namespace Retro::Delegates {
     RETROLIB_EXPORT template <typename D, typename O, typename F, typename... A>
     concept CanAddMember = CanAddSP<D, O, F, A...> || CanAddSPLambda<D, O, F, A...> || CanAddUObject<D, O, F, A...> ||
                            CanAddWeakLambda<D, O, F, A...> || CanAddRaw<D, O, F, A...>;
+
+    template <typename>
+    struct TDelegateTraitsBase;
+
+    template <typename D, typename R, typename... A>
+    struct TDelegateTraitsBase<R (D::*)(A...) const> {
+        using ReturnType = R;
+        using ArgsTuple = TTuple<A...>;
+    };
+
+    template <typename>
+    struct TDelegateTraits;
+
+    template <UnicastDelegate D>
+    struct TDelegateTraits<D> : TDelegateTraitsBase<decltype(&D::Execute)> {};
+
+    template <MulticastDelegate D>
+    struct TDelegateTraits<D> : TDelegateTraitsBase<decltype(&D::Broadcast)> {};
+
+    template <UEDelegate D>
+    using TDelegateTuple = typename TDelegateTraits<D>::ArgsTuple;
+
+#if RETROLIB_WITH_UE5CORO
+    template <UEDelegate D, UEDelegate O>
+    UE5Coro::TCoroutine<> UntilEither(D &MainDelegate, O &OtherDelegate) {
+    }
+#endif
 
 } // namespace Retro::Delegates
 #endif

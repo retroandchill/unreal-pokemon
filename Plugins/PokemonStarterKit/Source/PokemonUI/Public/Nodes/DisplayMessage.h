@@ -2,7 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Kismet/BlueprintAsyncActionBase.h"
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #include "DisplayMessage.generated.h"
 
@@ -17,7 +17,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDisplayMessageOutputPin);
  * Displays a message and waits for the player to press the advance button.
  */
 UCLASS(meta = (HideThen, HasDedicatedAsyncNode))
-class POKEMONUI_API UDisplayMessage : public UBlueprintAsyncActionBase {
+class POKEMONUI_API UDisplayMessage : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
@@ -37,21 +37,10 @@ class POKEMONUI_API UDisplayMessage : public UBlueprintAsyncActionBase {
               Category = "Messages")
     static UDisplayMessage *DisplayMessage(const UObject *WorldContextObject, FText Message);
 
-    void Activate() override;
+  protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
 
   private:
-    /**
-     * Function called to execute the on confirm pin
-     */
-    UFUNCTION()
-    void ExecuteOnConfirm();
-
-    /**
-     * The object used to obtain the state of the world to display the message with
-     */
-    UPROPERTY()
-    TObjectPtr<const UObject> WorldContextObject;
-
     /**
      * The message to display to the player
      */

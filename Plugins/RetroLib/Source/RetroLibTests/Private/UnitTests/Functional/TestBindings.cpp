@@ -168,7 +168,8 @@ TEST_CASE_NAMED(FRuntimeMethodBinding, "Unit Tests::RetroLib::Functional::BindMe
     }
 }
 
-TEST_CASE_NAMED(FConstexprMethodBindingTest, "Unit Tests::RetroLib::Functional::BindMethod::Constexpr", "[functional]") {
+TEST_CASE_NAMED(FConstexprMethodBindingTest, "Unit Tests::RetroLib::Functional::BindMethod::Constexpr",
+                "[functional]") {
     SECTION("Can bind to an object of the given type") {
         TestClass Object;
         auto Binding = Retro::BindMethod<&TestClass::Method>(Object);
@@ -240,7 +241,8 @@ TEST_CASE_NAMED(FRuntimeCreateBindingTest, "Unit Tests::RetroLib::Functional::Cr
     }
 }
 
-TEST_CASE_NAMED(FConstexprCreateBindingTest, "Unit Tests::RetroLib::Functional::CreateBinding::Constepxr", "[functional]") {
+TEST_CASE_NAMED(FConstexprCreateBindingTest, "Unit Tests::RetroLib::Functional::CreateBinding::Constepxr",
+                "[functional]") {
     SECTION("Can bind a regular functor") {
         auto Binding = Retro::CreateBinding<Add>(4);
         CHECK(Binding(3) == 7);

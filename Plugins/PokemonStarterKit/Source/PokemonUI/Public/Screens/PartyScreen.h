@@ -3,18 +3,39 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UE5Coro.h"
 #include "UObject/Interface.h"
 
 #include "PartyScreen.generated.h"
 
+class IPartyScreen;
+class IPokemon;
 class UPartyMenuHandler;
 class ITrainer;
 
-/**
- * Delegate for when an item is selected
- */
-DECLARE_DELEGATE_ThreeParams(FOnPokemonSelected, const TScriptInterface<class IPartyScreen> &,
-                             const TScriptInterface<ITrainer> &, int32);
+POKEMONUI_API struct FSelectedPokemonHandle {
+    FSelectedPokemonHandle(const TScriptInterface<IPartyScreen> &InScreen, const TScriptInterface<ITrainer> &InTrainer,
+                           int32 InIndex);
+
+    const TScriptInterface<IPartyScreen> &GetScreen() const {
+        return Screen;
+    }
+
+    const TScriptInterface<ITrainer> &GetTrainer() const {
+        return Trainer;
+    }
+
+    int32 GetIndex() const {
+        return Index;
+    }
+
+    TScriptInterface<IPokemon> GetPokemon() const;
+
+  private:
+    TScriptInterface<IPartyScreen> Screen;
+    TScriptInterface<ITrainer> Trainer;
+    int32 Index;
+};
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
@@ -43,11 +64,7 @@ class POKEMONUI_API IPartyScreen {
     UFUNCTION(BlueprintCallable, Category = Owner)
     virtual APlayerController *GetPlayerController() const = 0;
 
-    /**
-     * Get the callback override for when a Pokémon is selected
-     * @return Override to the Pokémon selection callback
-     */
-    virtual FOnPokemonSelected &GetOnPokemonSelect() = 0;
+    virtual UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>> PromptPokemonSelection() = 0;
 
     /**
      * Remove the screen from the stack

@@ -43,7 +43,7 @@ void UTextDisplayScreen::DisplayChoices(FText TextToDisplay, const TArray<FText>
         Commands.Add(UCommand::CreateBasicCommand(Choice));
     }
     CommandWindow->SetCommands(std::move(Commands));
-    MessageWindow->ActivateWidget();
+    CommandWindow->ActivateWidget();
 }
 
 void UTextDisplayScreen::ClearDisplayText() {
@@ -56,7 +56,7 @@ void UTextDisplayScreen::AdvanceToNextMessage() {
     if (!bAdvancedMessage) {
         UE_LOG(LogBlueprint, Warning, TEXT("Attempted to advance message before next message is ready!"))
     }
-    
+
     NextMessage.Broadcast();
 }
 
@@ -70,4 +70,13 @@ void UTextDisplayScreen::DisplayChoicePrompt() {
 void UTextDisplayScreen::ProcessSelectedChoice(int32 Index, UCommand *Choice) {
     ProcessChoice.Broadcast(Index, Choice->GetID());
     CommandWindow->DeactivateWidget();
+}
+
+UE5Coro::TCoroutine<UCommonActivatableWidget *> UTextDisplayScreen::AwaitInputPrompt(FForceLatentCoroutine) const {
+    co_await UE5Coro::Latent::Until([this] { return MessageWindow->IsAwaitingInput(); });
+    if (CommandWindow->IsVisible()) {
+        co_return CommandWindow;
+    }
+
+    co_return MessageWindow;
 }

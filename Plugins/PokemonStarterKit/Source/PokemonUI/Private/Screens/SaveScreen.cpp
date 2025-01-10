@@ -4,6 +4,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
 #include "PokemonUI.h"
+#include "RetroLib/Async/Saving.h"
 #include "Saving/EnhancedSaveGameSubsystem.h"
 #include "Saving/PokemonSaveGame.h"
 #include "Saving/Serialization/EnhancedSaveGame.h"
@@ -39,34 +40,29 @@ void USaveScreen::SetSaveGame(UEnhancedSaveGame *SaveGame) {
     }
 }
 
-void USaveScreen::SaveGame(FOnSaveComplete &&OnComplete) {
+UE5Coro::TCoroutine<bool> USaveScreen::SaveGame() {
     UE_LOG(LogPokemonUI, Display, TEXT("Creating the save game!"));
-    check(!SaveGameCreationFuture.IsSet())
-    OnSaveCompleteDelegate = std::move(OnComplete);
-    SaveGameCreationFuture.Emplace(AsyncThread([this] {
+    auto SavedGame = co_await AsyncThread([this] {
         auto SaveGame = UEnhancedSaveGameSubsystem::Get(this).CreateSaveGame();
         return SaveGame;
-    }));
-    SaveGameCreationFuture->AddOnCompleteTask(this, &USaveScreen::CommitSaveGame);
+    });
+    UE_LOG(LogPokemonUI, Display, TEXT("Saving game!"));
+    auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
+    bool bSuccess =
+        co_await Retro::SaveGameToSlotAsync(SavedGame, Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex);
+    if (bSuccess) {
+        SetSaveGame(SavedGame);
+    }
+
+    co_return bSuccess;
+}
+
+UE5Coro::TCoroutine<bool> USaveScreen::UntilSaveComplete() {
+    auto [Result] = co_await OnExitSaveScreen;
+    co_return Result;
 }
 
 void USaveScreen::ExitSaveScreen(bool bSuccess) {
     CloseScreen();
     OnExitSaveScreen.Broadcast(bSuccess);
-    OnExitSaveScreen.Clear();
-}
-
-void USaveScreen::CommitSaveGame(UEnhancedSaveGame *SaveGame) {
-    UE_LOG(LogPokemonUI, Display, TEXT("Saving game!"));
-    auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
-    UGameplayStatics::AsyncSaveGameToSlot(SaveGame, Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex,
-                                          FAsyncSaveGameToSlotDelegate::CreateWeakLambda(
-                                              this, [this, SaveGame](const FString &, const int32, bool bSuccess) {
-                                                  if (bSuccess) {
-                                                      SetSaveGame(SaveGame);
-                                                  }
-                                                  OnSaveCompleteDelegate.ExecuteIfBound(bSuccess);
-                                                  OnSaveCompleteDelegate.Unbind();
-                                              }));
-    SaveGameCreationFuture.Reset();
 }

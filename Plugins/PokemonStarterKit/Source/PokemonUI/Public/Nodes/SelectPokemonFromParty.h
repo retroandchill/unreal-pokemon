@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 #include "Screens/Screen.h"
 
 #include "SelectPokemonFromParty.generated.h"
@@ -20,7 +21,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPokemonCancel);
  * Open the menu to select a Pokémon from the party
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API USelectPokemonFromParty : public UBlueprintAsyncActionBase {
+class POKEMONUI_API USelectPokemonFromParty : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
@@ -35,22 +36,10 @@ class POKEMONUI_API USelectPokemonFromParty : public UBlueprintAsyncActionBase {
               Category = "Selection")
     static USelectPokemonFromParty *SelectPokemonFromParty(const UObject *WorldContextObject, FText HelpText);
 
-    void Activate() override;
+  protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
 
   private:
-    /**
-     * Function called to execute the on selected pin
-     */
-    UFUNCTION()
-    void ExecuteOnSelected(const TScriptInterface<IPartyScreen> &Screen, const TScriptInterface<ITrainer> &Trainer,
-                           int32 Index);
-
-    /**
-     * Function called to execute the on cancelled pin
-     */
-    UFUNCTION()
-    void ExecuteOnCanceled();
-
     /**
      * Called when the player selects a Pokémon
      */
@@ -62,12 +51,6 @@ class POKEMONUI_API USelectPokemonFromParty : public UBlueprintAsyncActionBase {
      */
     UPROPERTY(BlueprintAssignable)
     FOnPokemonCancel OnCanceled;
-
-    /**
-     * The object used to obtain the state of the world to open the menu with
-     */
-    UPROPERTY()
-    TObjectPtr<const UObject> WorldContextObject;
 
     /**
      * The text used to serve as the prompt to the player

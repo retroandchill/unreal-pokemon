@@ -29,8 +29,9 @@ APlayerController *UPokemonSelectScreen::GetPlayerController() const {
     return GetOwningPlayer();
 }
 
-FOnPokemonSelected &UPokemonSelectScreen::GetOnPokemonSelect() {
-    return PokemonSelected;
+UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>> UPokemonSelectScreen::PromptPokemonSelection() {
+    auto [Result] = co_await PokemonSelected;
+    co_return Result;
 }
 
 void UPokemonSelectScreen::RefreshScene() {
@@ -56,14 +57,13 @@ void UPokemonSelectScreen::RemoveFromStack() {
 
 void UPokemonSelectScreen::CloseScreen() {
     Super::CloseScreen();
-    PokemonSelected.Unbind();
+    (void)PokemonSelected.ExecuteIfBound({});
 }
 
 void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
     auto Trainer = UPokemonSubsystem::GetInstance(this).GetPlayer();
     if (PokemonSelected.IsBound()) {
-        PokemonSelected.Execute(this, Trainer, Index);
-        PokemonSelected.Unbind();
+        PokemonSelected.Execute(FSelectedPokemonHandle(this, Trainer, Index));
         return;
     }
 

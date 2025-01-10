@@ -174,10 +174,10 @@ namespace Retro::Ranges {
                 return Copy;
             }
 
-            [[nodiscard]] friend constexpr TIterator
-            operator+(const difference_type Offset,
-                      const TIterator &Self) noexcept(noexcept(std::declval<std::ranges::iterator_t<R> &>() += Offset) &&
-                                                    std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
+            [[nodiscard]] friend constexpr TIterator operator+(
+                const difference_type Offset,
+                const TIterator &Self) noexcept(noexcept(std::declval<std::ranges::iterator_t<R> &>() += Offset) &&
+                                                std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
                 requires std::ranges::random_access_range<R>
             {
                 auto Copy = Self;

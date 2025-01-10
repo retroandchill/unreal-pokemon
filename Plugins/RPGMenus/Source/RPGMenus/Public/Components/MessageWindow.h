@@ -5,6 +5,8 @@
 #include "Blueprint/UserWidget.h"
 #include "CommonActivatableWidget.h"
 #include "Containers/Deque.h"
+#include "RetroLib/Functional/Delegates.h"
+#include "RetroLib/RetroLibMacros.h"
 
 #include "MessageWindow.generated.h"
 
@@ -60,8 +62,10 @@ class RPGMENUS_API UMessageWindow : public UCommonActivatableWidget {
      * Is this message window awaiting player input to advance?
      * @return If the window is currently awaiting input
      */
-    UFUNCTION(BlueprintPure, CAtegory = "Messages|Input")
+    UFUNCTION(BlueprintPure, Category = "Messages|Input")
     bool IsAwaitingInput() const;
+
+    RETRO_MULTICAST_DELEGATE_MEMBER(FSimpleMulticastDelegate, AdvanceTextReady);
 
     /**
      * Get the callback for when the text advances.
