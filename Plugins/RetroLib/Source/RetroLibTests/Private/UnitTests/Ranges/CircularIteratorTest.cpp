@@ -4,7 +4,7 @@
 #include <array>
 
 namespace Retro::Testing {
-    struct FTestStruct {
+    struct FMyTestStruct {
         int32 Value;
     };
 }
@@ -63,11 +63,11 @@ TEST_CASE_NAMED(FCircularIteratorTest, "Unit Tests::RetroLib::Ranges::CircularIt
         CHECK(*Iterator == 1);
 
         // Check that when we dereference a complex value we get a valid pointer
-        std::array<FTestStruct, 3> StructArray;
+        std::array<FMyTestStruct, 3> StructArray;
         StructArray[0].Value = 1;
         StructArray[1].Value = 2;
         StructArray[2].Value = 3;
-    Retro::TCircularIterator<FTestStruct> StructIterator(StructArray, 1);
+    Retro::TCircularIterator<FMyTestStruct> StructIterator(StructArray, 1);
         CHECK(StructIterator->Value, 2);
 
 }

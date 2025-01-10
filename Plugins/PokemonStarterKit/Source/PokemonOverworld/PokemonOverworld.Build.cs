@@ -7,6 +7,7 @@ public class PokemonOverworld : ModuleRules {
         PublicDependencyModuleNames.AddRange(new string[] {
             "Core",
             "GameplayAbilities",
+            "PokemonCore"
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore",
