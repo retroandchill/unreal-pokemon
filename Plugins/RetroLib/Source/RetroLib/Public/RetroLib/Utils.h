@@ -12,6 +12,7 @@
 #include "RetroLib/Utils/Unreachable.h"
 #include "RetroLib/Utils/ValidPtr.h"
 #include "RetroLib/Utils/Variant.h"
+#include "RetroLib/Utils/Math.h"
 
 #ifdef __UNREAL__
 #include "RetroLib/Utils/CommonString.h"
@@ -19,4 +20,5 @@
 #include "RetroLib/Utils/OpaqueStruct.h"
 #include "RetroLib/Utils/ScopedTimeDilationFactor.h"
 #include "RetroLib/Utils/SoftObjectRef.h"
+#include "RetroLib/Utils/BlueprintMathUtils.h"
 #endif

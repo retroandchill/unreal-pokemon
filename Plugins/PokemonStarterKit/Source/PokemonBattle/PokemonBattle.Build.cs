@@ -6,10 +6,9 @@ public class PokemonBattle : ModuleRules {
 
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "PokemonData", "PokemonCore", "GameplayAbilities",
                                                             "GameplayTags", "GameplayTasks", "PokemonUtilities",
-                                                            "DeveloperSettings", "DynamicAssetLoader", "PokemonAssets",
-                                                            "CommonMath" });
+                                                            "DeveloperSettings", "DynamicAssetLoader", "PokemonAssets"});
 
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore",
-                                                             "UnrealInjector", "PokemonAssets", "Paper2D" });
+                                                             "UnrealInjector", "PokemonAssets", "Paper2D", "RetroLib" });
     }
 }

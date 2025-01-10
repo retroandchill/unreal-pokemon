@@ -6,7 +6,7 @@ public class PokemonCore : ModuleRules {
     public PokemonCore(ReadOnlyTargetRules Target) : base(Target) {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicDependencyModuleNames.AddRange(new[] { "Core", "PokemonData", "CommonMath", "PokemonUtilities",
+        PublicDependencyModuleNames.AddRange(new[] { "Core", "PokemonData", "PokemonUtilities",
                                                      "UnrealInjector", "DeveloperSettings", "EnhancedSaveGame",
                                                      "GameplayTags" });
 

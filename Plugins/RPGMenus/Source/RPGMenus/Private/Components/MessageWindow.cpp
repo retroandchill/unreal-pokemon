@@ -4,7 +4,8 @@
 #include "Components/ScrollBox.h"
 #include "Components/SizeBox.h"
 #include "Input/CommonUIInputTypes.h"
-#include "MathUtilities.h"
+#include "RetroLib/Utils/BlueprintMathUtils.h"
+#include "RetroLib/Utils/Math.h"
 
 void UMessageWindow::NativeConstruct() {
     Super::NativeConstruct();
@@ -43,7 +44,7 @@ void UMessageWindow::NativeTick(const FGeometry &MyGeometry, float InDeltaTime) 
 
     if (float BottomScroll = ScrollBox->GetScrollOffsetOfEnd(); ScrollTimer.IsSet() && OriginalScroll.IsSet()) {
         ScrollTimer.GetValue() += InDeltaTime;
-        ScrollBox->SetScrollOffset(UMathUtilities::LinearInterpolation(OriginalScroll.GetValue(), BottomScroll,
+        ScrollBox->SetScrollOffset(Retro::LinearInterpolation(OriginalScroll.GetValue(), BottomScroll,
                                                                        ScrollSpeed, ScrollTimer.GetValue()));
 
         if (FMath::IsNearlyEqual(ScrollBox->GetScrollOffset(), BottomScroll)) {
