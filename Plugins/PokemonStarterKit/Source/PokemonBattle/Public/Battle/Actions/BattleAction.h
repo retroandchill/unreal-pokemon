@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "UE5Coro.h"
 
 class IBattler;
 
@@ -31,7 +32,7 @@ class POKEMONBATTLE_API IBattleAction {
     /**
      * Execute the action in question
      */
-    virtual void Execute() = 0;
+    virtual UE5Coro::TCoroutine<> Execute() = 0;
 
     /**
      * Is this action currently executing?

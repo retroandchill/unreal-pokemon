@@ -342,8 +342,12 @@ bool ABattlerActor::IsOwnedByPlayer() const {
     return WrappedPokemon->GetCurrentHandler() == UTrainerHelpers::GetPlayerCharacter(this);
 }
 
-void ABattlerActor::SelectActions() {
-    Controller->InitiateActionSelection(this);
+UE5Coro::TCoroutine<> ABattlerActor::SelectActions() {
+    if (!CanSelectActions()) {
+        co_return;
+    }
+    
+    Controller->ActionSelection(this);
 }
 
 void ABattlerActor::RequireSwitch() {
@@ -352,6 +356,10 @@ void ABattlerActor::RequireSwitch() {
 
 uint8 ABattlerActor::GetActionCount() const {
     return 1;
+}
+
+bool ABattlerActor::CanSelectActions() const {
+    return IsNotFainted();
 }
 
 Retro::TGenerator<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {

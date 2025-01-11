@@ -11,6 +11,7 @@
 #include "RetroLib/Ranges/Views/Generator.h"
 #include "UObject/Interface.h"
 #include "Pokemon/Stats/StatBlock.h"
+#include "UE5Coro/Coroutine.h"
 
 #include "Battler.generated.h"
 
@@ -246,7 +247,7 @@ class POKEMONBATTLE_API IBattler {
     /**
      * Select the actions for this battler
      */
-    virtual void SelectActions() = 0;
+    virtual UE5Coro::TCoroutine<> SelectActions() = 0;
 
     /**
      * Force the battler to choose a party member to switch to
@@ -259,6 +260,8 @@ class POKEMONBATTLE_API IBattler {
      * @return The number of actions that can be taken
      */
     virtual uint8 GetActionCount() const = 0;
+
+    virtual bool CanSelectActions() const = 0;
 
     UFUNCTION(BlueprintCallable, Category = "Battle|TurnFlow")
     virtual int32 GetTurnCount() const = 0;

@@ -2,16 +2,13 @@
 
 #include "Battle/Animations/AnimationActor.h"
 
-void AAnimationActor::BindDelegateToAnimationComplete_Implementation(const FBattleAnimationCompleteCallback &Delegate) {
-    OnBattleAnimationComplete.Add(Delegate);
-}
-
-void AAnimationActor::RemoveDelegateFromAnimationComplete_Implementation(
-    const FBattleAnimationCompleteCallback &Delegate) {
-    OnBattleAnimationComplete.Remove(Delegate);
+UE5Coro::TCoroutine<> AAnimationActor::PlayAnimation(FForceLatentCoroutine Coro) {
+    TFuture<void> Future = TFuture<void>(OnBattleAnimationComplete);
+    Play();
+    co_await Future;
+    Destroy();
 }
 
 void AAnimationActor::AnimationComplete() {
-    OnBattleAnimationComplete.Broadcast();
-    Destroy();
+    OnBattleAnimationComplete->EmplaceResult(0);
 }

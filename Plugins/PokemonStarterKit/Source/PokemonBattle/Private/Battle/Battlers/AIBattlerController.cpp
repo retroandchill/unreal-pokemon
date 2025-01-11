@@ -11,12 +11,32 @@
 #include "RetroLib/Utils/Construct.h"
 #include <functional>
 
-void UAIBattlerController::InitiateActionSelection(const TScriptInterface<IBattler> &Battler) const {
+UE5Coro::TCoroutine<TUniquePtr<IBattleAction>> UAIBattlerController::ActionSelection(
+    const TScriptInterface<IBattler> &Battler) const {
     // Doing this async is probably overkill, but as the AI gets more complicated and adds more conditions that it
     // needs to evaluate we're going to want to have this be on a separate thread to avoid frame dips while the AI
     // is choosing a move. Ideally we want these threads to resolve quickly (or at least faster than the player can
     // input their commands.
-    AsyncTask(ENamedThreads::AnyThread, std::bind_front(&UAIBattlerController::ChooseAction, this, Battler));
+    co_return co_await AsyncThread([&Battler] {
+        // clang-format off
+        auto PossibleMoves = Battler->GetMoves() |
+                             Retro::Ranges::Views::Filter(&IBattleMove::IsUsable) |
+                             Retro::Ranges::To<TArray>();
+        // clang-format on
+
+        // TODO: Right now we're just getting a proof of concept for the battle system for now, but eventually we will want
+        // this class to call to a series of additional child objects that represent the checks that can be used. It may
+        // be best to store a map or a list in a Data Asset that has all of the checks that would be applied and the minimum
+        // skill level needed to add those checks. For now though, just choose a random usable move and struggle if there
+        // are no such moves.
+        auto &Move = PossibleMoves[FMath::Rand() % PossibleMoves.Num()];
+        // clang-format off
+        auto Targets = Move->GetAllPossibleTargets() |
+                       Retro::Ranges::Views::Transform(Retro::Construct<FTargetWithIndex>) |
+                       Retro::Ranges::To<TArray>();
+        // clang-format on
+        return MakeUnique<FBattleActionUseMove>(Battler, Move, std::move(Targets));
+    });
 }
 
 void UAIBattlerController::InitiateForcedSwitch(const TScriptInterface<IBattler> &Battler) const {
@@ -25,27 +45,6 @@ void UAIBattlerController::InitiateForcedSwitch(const TScriptInterface<IBattler>
 
 void UAIBattlerController::BindOnActionReady(FActionReady &&QueueAction) {
     ActionReady = std::move(QueueAction);
-}
-
-void UAIBattlerController::ChooseAction(TScriptInterface<IBattler> Battler) const {
-    // clang-format off
-    auto PossibleMoves = Battler->GetMoves() |
-                         Retro::Ranges::Views::Filter(&IBattleMove::IsUsable) |
-                         Retro::Ranges::To<TArray>();
-    // clang-format on
-
-    // TODO: Right now we're just getting a proof of concept for the battle system for now, but eventually we will want
-    // this class to call to a series of additional child objects that represent the checks that can be used. It may
-    // be best to store a map or a list in a Data Asset that has all of the checks that would be applied and the minimum
-    // skill level needed to add those checks. For now though, just choose a random usable move and struggle if there
-    // are no such moves.
-    auto &Move = PossibleMoves[FMath::Rand() % PossibleMoves.Num()];
-    // clang-format off
-    auto Targets = Move->GetAllPossibleTargets() |
-                   Retro::Ranges::Views::Transform(Retro::Construct<FTargetWithIndex>) |
-                   Retro::Ranges::To<TArray>();
-    // clang-format on
-    ActionReady.ExecuteIfBound(MakeUnique<FBattleActionUseMove>(Battler, Move, std::move(Targets)));
 }
 
 void UAIBattlerController::ChoosePokemonToSwitchTo(TScriptInterface<IBattler> Battler) const {

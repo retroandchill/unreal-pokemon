@@ -2,7 +2,7 @@
 
 #include "Nodes/Moves/PromptReplaceMove.h"
 #include "Moves/MoveData.h"
-#include "Utilities/PokemonUIAsyncActions.h"
+#include "Utilities/PokemonCoroutineDispatcher.h"
 
 UPromptReplaceMove *UPromptReplaceMove::PromptReplaceMove(const UObject *WorldContextObject,
                                                           const TScriptInterface<IPokemon> &Pokemon,
@@ -15,7 +15,7 @@ UPromptReplaceMove *UPromptReplaceMove::PromptReplaceMove(const UObject *WorldCo
 }
 
 UE5Coro::TCoroutine<> UPromptReplaceMove::ExecuteCoroutine(FForceLatentCoroutine Coro) {
-    if (co_await Pokemon::UI::PromptReplaceMove(Pokemon, Move)) {
+    if (co_await IPokemonCoroutineDispatcher::Get(GetWorldContext()).PromptReplaceMove(Pokemon, Move)) {
         MoveLearned.Broadcast();
     } else {
         MoveNotLearned.Broadcast();

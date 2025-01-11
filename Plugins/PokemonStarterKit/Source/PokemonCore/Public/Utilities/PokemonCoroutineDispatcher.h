@@ -7,6 +7,8 @@
 #include "Lookup/InjectableDependency.h"
 #include "UE5Coro.h"
 #include "Moves/MoveData.h"
+#include "Screens/InventoryScreen.h"
+#include "Screens/PartyScreen.h"
 #include "UObject/Interface.h"
 
 #include "PokemonCoroutineDispatcher.generated.h"
@@ -26,9 +28,30 @@ class POKEMONCORE_API UPokemonCoroutineDispatcher : public UInterface {
 class POKEMONCORE_API IPokemonCoroutineDispatcher {
     GENERATED_BODY()
 
-    // Add interface functions to this class. This is the class that will be inherited to implement this interface.
+protected:
+    template <typename... A>
+    using TMultiCoroutine = UE5Coro::TCoroutine<TTuple<int32, FName>>;
+    
   public:
-    static const IPokemonCoroutineDispatcher &Get(const UObject *WorldContext);
+    static IPokemonCoroutineDispatcher &Get(const UObject *WorldContext);
+
+    virtual UE5Coro::TCoroutine<> DisplayMessage(FText Message, FForceLatentCoroutine Coro = {}) const = 0;
+
+    virtual TMultiCoroutine<int32, FName> DisplayMessageWithChoices(FText Message,
+                                                                    const TArray<FText> &Choices, FForceLatentCoroutine Coro = {}) const = 0;
+
+    virtual UE5Coro::TCoroutine<bool>
+    DisplayConfirmPrompt(FText Message,
+                         FText ConfirmOption = NSLOCTEXT("PokemonUI", "PromptYes", "Yes"),
+                         FText CancelOption = NSLOCTEXT("PokemonUI", "PromptNo", "No"), FForceLatentCoroutine Coro = {}) const = 0;
+
+    virtual UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>>
+    SelectPokemonFromParty(FForceLatentCoroutine Coro = {}) const = 0;
+
+    virtual UE5Coro::TCoroutine<TOptional<FSelectedItemHandle>> SelectItemFromBag(
+        const FItemFilter &Filter, FForceLatentCoroutine Coro = {}) const = 0;;
+
+    virtual UE5Coro::TCoroutine<bool> PromptReplaceMove(const TScriptInterface<IPokemon>& Pokemon, FMoveHandle Move, FForceLatentCoroutine Coro = {}) const = 0;
 
     virtual UE5Coro::TCoroutine<bool> GiveItemToPokemon(const FItemHandle &Item,
                                                         const TScriptInterface<IPokemon> Pokemon,

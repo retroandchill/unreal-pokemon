@@ -12,6 +12,8 @@
 #include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Battle/Events/TargetedEvents.h"
 #include "Battle/Tags.h"
+#include "Battle/Animations/BattleAnimation.h"
+#include "Battle/Display/BattleHUD.h"
 #include "Battle/Transitions/BattleInfo.h"
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
 #include "RetroLib/Casting/DynamicCast.h"
@@ -20,6 +22,7 @@
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Views/Concat.h"
+#include "Utilities/PokemonCoroutineDispatcher.h"
 
 APokemonBattle::APokemonBattle() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleAbilitySystemComponent>(FName("AbilitySystemComponent"));
@@ -35,7 +38,6 @@ TScriptInterface<IBattle> APokemonBattle::Initialize(const FBattleInfo &BattleIn
     TScriptInterface<IBattle> Self = this;
     Sides.Emplace(BattleInfo.CreatePlayerSide(Self, BattleSideClass.LoadSynchronous(), GetPlayerSidePosition()));
     Sides.Emplace(BattleInfo.CreateOpposingSide(Self, BattleSideClass.LoadSynchronous(), GetOpponentSidePosition()));
-    Execute_JumpToBattleScene(this, GetWorld()->GetGameInstance()->GetPrimaryPlayerController(false));
     return Self;
 }
 
@@ -46,6 +48,7 @@ void APokemonBattle::BeginPlay() {
     auto TransitionSubsystem = GetWorld()->GetSubsystem<UBattleTransitionSubsystem>();
     check(TransitionSubsystem != nullptr)
     TransitionSubsystem->SetRegisteredBattle(this);
+    Dispatcher = Retro::WrapPointer(&IPokemonCoroutineDispatcher::Get(this));
 }
 
 void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
@@ -65,53 +68,45 @@ bool APokemonBattle::IsTrainerBattle_Implementation() const {
     return !Sides[OpponentSideIndex]->GetTrainers().IsEmpty();
 }
 
-void APokemonBattle::JumpToBattleScene_Implementation(APlayerController *PlayerController) {
+UE5Coro::TCoroutine<> APokemonBattle::DisplaySideSendOutAnimation(int32 Index) {
+    check(Sides.IsValidIndex(Index))
+    if (auto SendOutText = Sides[Index]->GetSendOutText(); SendOutText.IsSet()) {
+        co_await Dispatcher->DisplayMessage(std::move(*SendOutText));
+    }
+    co_await IBattleAnimation::PlayAnimation(Index == OpponentSideIndex ? GetOpponentSendOutAnimation() : GetPlayerSendOutAnimation());
+}
+
+UE5Coro::TCoroutine<EBattleResult> APokemonBattle::ConductBattle(APlayerController *PlayerController) {
+    
     Phase = EBattlePhase::Setup;
     check(BattlePawn != nullptr && PlayerController != nullptr)
     StoredPlayerPawn = PlayerController->GetPawnOrSpectator();
     PlayerController->Possess(BattlePawn);
-    QueueBattleIntro();
-    QueueOpponentSendOut();
-    QueuePlayerSendOut();
-    ABattleSequencer::DisplayBattleMessages(this, &APokemonBattle::StartBattle);
-}
-
-void APokemonBattle::Tick(float DeltaSeconds) {
-    using enum EBattlePhase;
-    Super::Tick(DeltaSeconds);
-
-    if (Phase == Selecting && ActionSelectionFinished()) {
-        BeginActionProcessing();
-    } else if (Phase == Actions) {
-        if (ActionQueue.IsEmpty()) {
-            Phase = Judging;
-            if (bSwitchPrompting) {
-                EndTurn();
-            } else {
-                ProcessTurnDurationTrigger(ETurnDurationTrigger::TurnEnd);
-                Pokemon::Battle::Events::SendOutBattleEvent(this, nullptr, Pokemon::Battle::EndTurn);
-                ABattleSequencer::DisplayBattleMessages(this, &APokemonBattle::EndTurn);
-            }
-        } else if (auto Action = ActionQueue.Peek()->Get(); !Action->IsExecuting() && !bActionTextDisplayed) {
-            if (Action->CanExecute()) {
-                ExecuteAction(*Action);
-            } else {
-                ActionQueue.Pop();
-            }
-        } else if (ActionQueue.Peek()->Get()->IsComplete()) {
-            RefreshBattleHUD();
-            NextAction();
+    co_await IBattleAnimation::PlayAnimation(GetBattleIntro());
+    co_await Dispatcher->DisplayMessage(GetBattleIntroMessage());
+    co_await DisplaySideSendOutAnimation(OpponentSideIndex);
+    co_await DisplaySideSendOutAnimation(PlayerSideIndex);
+    
+    co_await StartBattle();
+    TOptional<int32> Result;
+    while (true) {
+        Result = co_await ProcessTurn();
+        if (Result.IsSet()) {
+            break;
         }
     }
+
+    check(Result.IsSet())
+    co_return co_await DecideBattle(*Result);
 }
 
-void APokemonBattle::StartBattle() {
-    CreateBattleHUD();
-    OnBattlersEnteringBattle(GetActiveBattlers());
-    ABattleSequencer::DisplayBattleMessages(this, &APokemonBattle::StartTurn);
+UE5Coro::TCoroutine<> APokemonBattle::StartBattle() {
+    HUD = CreateBattleHUD();
+    co_await OnBattlersEnteringBattle(GetActiveBattlers());
 }
 
-void APokemonBattle::OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) {
+UE5Coro::TCoroutine<> APokemonBattle::OnBattlersEnteringBattle(
+    Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) {
     // clang-format off
     auto Sorted = std::move(Battlers) |
                   Retro::Ranges::Views::Filter(&IBattler::IsNotFainted) |
@@ -130,6 +125,9 @@ void APokemonBattle::OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInt
     for (auto &Battler : Sorted) {
         Battler->RecordParticipation();
     }
+
+    // TODO: We need to actually handle the battle entrance abilities
+    co_return;
 }
 
 void APokemonBattle::QueueAction(TUniquePtr<IBattleAction> &&Action) {
@@ -186,10 +184,9 @@ Retro::TGenerator<TScriptInterface<IBattler>> APokemonBattle::GetActiveBattlers(
     // clang-format on
 }
 
-void APokemonBattle::ExecuteAction(IBattleAction &Action) {
-    bActionTextDisplayed = true;
-    QueueDisplayAction(Action.GetActionMessage());
-    ABattleSequencer::DisplayBattleMessages(this, [this] { ExecuteAction(); });
+UE5Coro::TCoroutine<> APokemonBattle::ExecuteAction(IBattleAction &Action) {
+    co_await Dispatcher->DisplayMessage(Action.GetActionMessage());
+    Action.Execute();
 }
 
 bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &Battler, bool bDuringBattle) {
@@ -225,7 +222,7 @@ bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &B
 
 void APokemonBattle::EndBattle_Implementation(EBattleResult Result) {
     Phase = EBattlePhase::Decided;
-    QueueBattleResultAnimation(Result);
+    GetBattleResultAnimation(Result);
     ABattleSequencer::DisplayBattleMessages(this, &APokemonBattle::ExitBattleScene, Result);
 }
 
@@ -249,18 +246,13 @@ FText APokemonBattle::GetBattleIntroMessage() const {
 void APokemonBattle::QueueOpponentSendOut() {
     check(Sides.IsValidIndex(OpponentSideIndex))
     const auto &Side = Sides[OpponentSideIndex];
-    QueueOpponentSendOutMessage(Side->GetSendOutText().Get(FText::GetEmpty()));
+    GetOpponentSendOutAnimation();
 }
 
 void APokemonBattle::QueuePlayerSendOut() {
     check(Sides.IsValidIndex(PlayerSideIndex))
     const auto &Side = Sides[PlayerSideIndex];
-    QueuePlayerSendOutMessage(Side->GetSendOutText().Get(FText::GetEmpty()));
-}
-
-void APokemonBattle::ExecuteAction() {
-    check(!ActionQueue.IsEmpty())
-    ActionQueue.Peek()->Get()->Execute();
+    GetPlayerSendOutAnimation();
 }
 
 void APokemonBattle::ExitBattleScene(EBattleResult Result) const {
@@ -285,55 +277,58 @@ void APokemonBattle::ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger) {
     // clang-format on
 }
 
-void APokemonBattle::StartTurn() {
+UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::ProcessTurn() {
     bSwitchPrompting = false;
     TurnCount++;
 
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
-    Phase = EBattlePhase::Selecting;
-    GetActiveBattlers() | Retro::Ranges::ForEach([this](const TScriptInterface<IBattler> &Battler) {
+    
+    for (auto Battler : GetActiveBattlers()) {
         auto BattlerId = Battler->GetInternalId();
         CurrentActionCount.Add(BattlerId, 0);
         ExpectedActionCount.Add(BattlerId, Battler->GetActionCount());
         Battler->SelectActions();
-    });
+    }
+
+    co_await UE5Coro::Latent::Until(Retro::BindMethod<&APokemonBattle::ActionSelectionFinished>(this));
+
+    co_await ActionProcessing();
+        
+    co_return co_await EndTurn();
 }
 
-void APokemonBattle::EndTurn() {
+UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::EndTurn() {
     ClearActionSelection();
     bool bRequiresSwaps = false;
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
     for (int32 i = 0; i < Sides.Num(); i++) {
         if (!Sides[i]->CanBattle()) {
-            DecideBattle(i);
-            return;
+            co_return i;
         }
 
         // TODO: We need to determine what happens if you get damaged by an entry hazard and the Pokémon you sent out
         // faints
-        Sides[i]->GetBattlers() | Retro::Ranges::Views::Filter(&IBattler::IsFainted) |
-            Retro::Ranges::ForEach([this, &bRequiresSwaps](const TScriptInterface<IBattler> &Battler) {
-                auto BattlerId = Battler->GetInternalId();
-                CurrentActionCount.Add(BattlerId, 0);
-                ExpectedActionCount.Add(BattlerId, Battler->GetActionCount());
-                Battler->RequireSwitch();
-                bRequiresSwaps = true;
-            });
+        for (auto Battler : Sides[i]->GetBattlers() | Retro::Ranges::Views::Filter(&IBattler::IsFainted)) {
+            auto BattlerId = Battler->GetInternalId();
+            CurrentActionCount.Add(BattlerId, 0);
+            ExpectedActionCount.Add(BattlerId, Battler->GetActionCount());
+            Battler->RequireSwitch();
+            bRequiresSwaps = true;
+        }
     }
 
-    // If we need swaps, we're going to enter a second selecting and action phase to process the swaps
     if (bRequiresSwaps) {
         bSwitchPrompting = true;
-        Phase = EBattlePhase::Selecting;
-    } else {
-        StartTurn();
+        co_await UE5Coro::Latent::Until(Retro::BindMethod<&APokemonBattle::ActionSelectionFinished>(this));
+        co_await ActionProcessing();
     }
+
+    co_return {};
 }
 
-void APokemonBattle::BeginActionProcessing() {
-    Phase = EBattlePhase::Actions;
+UE5Coro::TCoroutine<> APokemonBattle::ActionProcessing() {
     bActionTextDisplayed = false;
     SelectedActions.Sort([](const TUniquePtr<IBattleAction> &A, const TUniquePtr<IBattleAction> &B) {
         int32 PriorityA = A->GetPriority();
@@ -358,6 +353,14 @@ void APokemonBattle::BeginActionProcessing() {
         ActionQueue.Enqueue(std::move(Action));
     }
     SelectedActions.Reset();
+
+    while (!ActionQueue.IsEmpty()) {
+        if (auto Action = ActionQueue.Peek()->Get(); Action->CanExecute()) {
+            co_await ExecuteAction(*Action);
+        }
+
+        ActionQueue.Pop();
+    }
 }
 
 void APokemonBattle::NextAction() {
@@ -365,7 +368,9 @@ void APokemonBattle::NextAction() {
     bActionTextDisplayed = false;
 }
 
-void APokemonBattle::DecideBattle(int32 SideIndex) {
+UE5Coro::TCoroutine<EBattleResult> APokemonBattle::DecideBattle(int32 SideIndex) {
     using enum EBattleResult;
-    Execute_EndBattle(this, SideIndex == PlayerSideIndex ? Defeat : Victory);
+    auto Result = SideIndex == PlayerSideIndex ? Defeat : Victory;
+    co_await IBattleAnimation::PlayAnimation(GetBattleResultAnimation(Result));
+    co_return Result;
 }

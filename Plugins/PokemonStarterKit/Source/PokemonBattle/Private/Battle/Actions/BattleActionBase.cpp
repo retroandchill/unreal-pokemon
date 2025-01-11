@@ -21,9 +21,10 @@ bool FBattleActionBase::CanExecute() const {
     return !Battler->IsFainted() && Battler->GetOwningSide()->GetBattlers().Contains(Battler);
 }
 
-void FBattleActionBase::Execute() {
+UE5Coro::TCoroutine<> FBattleActionBase::Execute() {
     Executing = true;
     SpecHandle = ActivateAbility();
+    co_await UE5Coro::Latent::Until(Retro::BindMethod<&FBattleActionBase::IsComplete>(this));
 }
 
 bool FBattleActionBase::IsExecuting() const {

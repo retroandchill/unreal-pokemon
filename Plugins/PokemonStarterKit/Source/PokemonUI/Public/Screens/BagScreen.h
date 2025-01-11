@@ -7,6 +7,7 @@
 #include "Field/FieldItemEffect.h"
 #include "InventoryScreen.h"
 #include "ItemEffectLookup.h"
+#include "Screens/InventoryScreen.h"
 #include "Screens/Screen.h"
 
 #include "BagScreen.generated.h"

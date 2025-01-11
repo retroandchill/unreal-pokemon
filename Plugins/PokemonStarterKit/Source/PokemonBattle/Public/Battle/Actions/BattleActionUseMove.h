@@ -24,7 +24,7 @@ class POKEMONBATTLE_API FBattleActionUseMove : public FBattleActionBase {
     FString GetReferencerName() const override;
     int32 GetPriority() const override;
     FText GetActionMessage() const override;
-    void Execute() override;
+    UE5Coro::TCoroutine<> Execute() override;
 
   protected:
     FGameplayAbilitySpecHandle ActivateAbility() override;

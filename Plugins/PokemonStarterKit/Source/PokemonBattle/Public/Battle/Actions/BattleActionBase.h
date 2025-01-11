@@ -21,7 +21,7 @@ class POKEMONBATTLE_API FBattleActionBase : public FGCObject, public IBattleActi
     void AddReferencedObjects(FReferenceCollector &Collector) override;
     const TScriptInterface<IBattler> &GetBattler() const override;
     bool CanExecute() const override;
-    void Execute() override;
+    UE5Coro::TCoroutine<> Execute() override;
     bool IsExecuting() const override;
     bool IsComplete() const override;
 

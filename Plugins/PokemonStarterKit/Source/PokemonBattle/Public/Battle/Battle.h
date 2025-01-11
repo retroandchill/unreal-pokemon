@@ -6,6 +6,7 @@
 #include "RetroLib/Ranges/Views/AnyView.h"
 #include "RetroLib/Ranges/Views/Generator.h"
 #include "UObject/Interface.h"
+#include "UE5Coro.h"
 
 #include "Battle.generated.h"
 
@@ -91,16 +92,16 @@ class POKEMONBATTLE_API IBattle {
      * Have the player take possession of the battle pawn and begin the battle intro.
      * @param PlayerController The player controller to shift control over to the battle pawn
      */
-    UFUNCTION(BlueprintNativeEvent, Category = "Battle|Flow")
-    void JumpToBattleScene(APlayerController *PlayerController);
+    virtual UE5Coro::TCoroutine<EBattleResult> ConductBattle(APlayerController *PlayerController) = 0;
 
     /**
      * This is to be called after all pre-battle setup has been completed (i.e. intro animations, sending out Pokémon,
      * etc.)
      */
-    virtual void StartBattle() = 0;
+    virtual UE5Coro::TCoroutine<> StartBattle() = 0;
 
-    virtual void OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) = 0;
+    virtual UE5Coro::TCoroutine<> OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers)
+    = 0;
 
     /**
      * Add an action to the pending queue
@@ -148,7 +149,7 @@ class POKEMONBATTLE_API IBattle {
      * Execute the bound action in battle
      * @param Action The action to execute
      */
-    virtual void ExecuteAction(IBattleAction &Action) = 0;
+    virtual UE5Coro::TCoroutine<> ExecuteAction(IBattleAction &Action) = 0;
 
     /**
      * Take the current battler and check if the player is able to run from battle

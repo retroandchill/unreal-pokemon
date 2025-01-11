@@ -1,7 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/DisplayMessageWithChoices.h"
 #include "Screens/TextDisplayScreen.h"
-#include "Utilities/PokemonUIAsyncActions.h"
+#include "Utilities/PokemonCoroutineDispatcher.h"
 
 class UPokemonUISettings;
 
@@ -16,6 +16,7 @@ UDisplayMessageWithChoices *UDisplayMessageWithChoices::DisplayMessageWithChoice
 }
 
 UE5Coro::TCoroutine<> UDisplayMessageWithChoices::ExecuteCoroutine(FForceLatentCoroutine Coro) {
-    auto [ChoiceIndex, ChoiceID] = co_await Pokemon::UI::DisplayMessageWithChoices(GetWorldContext(), Message, Choices);
+    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(GetWorldContext());
+    auto [ChoiceIndex, ChoiceID] = co_await Dispatcher.DisplayMessageWithChoices(Message, Choices);
     OnChoiceSelected.Broadcast(ChoiceIndex, ChoiceID);
 }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BattlerController.h"
+#include "Battle/Actions/BattleActionUseMove.h"
 #include "UObject/Object.h"
 
 #include "AIBattlerController.generated.h"
@@ -18,7 +19,8 @@ class POKEMONBATTLE_API UAIBattlerController : public UObject, public IBattlerCo
     GENERATED_BODY()
 
   public:
-    void InitiateActionSelection(const TScriptInterface<IBattler> &Battler) const override;
+    UE5Coro::TCoroutine<TUniquePtr<IBattleAction>> ActionSelection(
+        const TScriptInterface<IBattler> &Battler) const override;
     void InitiateForcedSwitch(const TScriptInterface<IBattler> &Battler) const override;
     void BindOnActionReady(FActionReady &&QueueAction) override;
 
@@ -26,7 +28,7 @@ class POKEMONBATTLE_API UAIBattlerController : public UObject, public IBattlerCo
     /**
      * Perform an asynchronous action selection process
      */
-    void ChooseAction(TScriptInterface<IBattler> Battler) const;
+    TUniquePtr<IBattleAction> ChooseAction(TScriptInterface<IBattler> Battler) const;
 
     void ChoosePokemonToSwitchTo(TScriptInterface<IBattler> Battler) const;
 

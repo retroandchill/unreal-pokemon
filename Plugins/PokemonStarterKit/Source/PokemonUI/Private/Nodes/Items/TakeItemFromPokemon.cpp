@@ -12,8 +12,7 @@ UTakeItemFromPokemon *UTakeItemFromPokemon::TakeItemFromPokemon(
 }
 
 UE5Coro::TCoroutine<> UTakeItemFromPokemon::ExecuteCoroutine(FForceLatentCoroutine Coro) {
-    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(GetWorldContext());
-    if (co_await Dispatcher.TakeItemFromPokemon(Pokemon)) {
+    if (co_await IPokemonCoroutineDispatcher::Get(GetWorldContext()).TakeItemFromPokemon(Pokemon)) {
         ItemTaken.Broadcast();
     } else {
         ItemNotTaken.Broadcast();

@@ -31,7 +31,7 @@ FText FBattleActionUseMove::GetActionMessage() const {
                          {GetBattler()->GetNickname(), Move->GetDisplayName()});
 }
 
-void FBattleActionUseMove::Execute() {
+UE5Coro::TCoroutine<> FBattleActionUseMove::Execute() {
     FBattleActionBase::Execute();
 
     auto AttributeSet = GetBattler()->GetAbilityComponent()->GetCoreAttributes();

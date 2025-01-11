@@ -5,14 +5,17 @@
 #include "CoreMinimal.h"
 #include "Battle/Animations/BattleAnimation.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #include "PlayBattleAnimation.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBattleAnimationComplete)
 
 /**
  * Play a battle animation and wait for it to complete
  */
 UCLASS(meta = (HideThen))
-class POKEMONBATTLE_API UPlayBattleAnimation : public UBlueprintAsyncActionBase {
+class POKEMONBATTLE_API UPlayBattleAnimation : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
@@ -21,18 +24,13 @@ class POKEMONBATTLE_API UPlayBattleAnimation : public UBlueprintAsyncActionBase 
      * @param Animation The animation to play
      * @return The created animation node
      */
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Battle|Animations")
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Battle|Animations", meta = (WorldContext = WorldContext))
     static UPlayBattleAnimation *PlayBattleAnimation(const TScriptInterface<IBattleAnimation> &Animation);
 
-    void Activate() override;
+protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro) override;
 
   private:
-    /**
-     * Called when the animation is complete
-     */
-    UFUNCTION()
-    void OnAnimationComplete();
-
     /**
      * Called when the animation is complete
      */
@@ -44,9 +42,4 @@ class POKEMONBATTLE_API UPlayBattleAnimation : public UBlueprintAsyncActionBase 
      */
     UPROPERTY()
     TScriptInterface<IBattleAnimation> Animation;
-
-    /**
-     * The delegate to call back to
-     */
-    TUniquePtr<FBattleAnimationCompleteCallback> AnimationDelegate;
 };

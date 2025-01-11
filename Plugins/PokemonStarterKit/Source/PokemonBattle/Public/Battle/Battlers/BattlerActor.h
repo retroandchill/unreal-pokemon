@@ -113,9 +113,11 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = Ownership)
     bool IsOwnedByPlayer() const;
 
-    void SelectActions() override;
+    UE5Coro::TCoroutine<> SelectActions() override;
     void RequireSwitch() override;
     uint8 GetActionCount() const override;
+    bool CanSelectActions() const override;
+    
     Retro::TGenerator<TScriptInterface<IBattler>> GetAllies() const override;
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Visuals, meta = (AutoCreateRefTerm = Offset))

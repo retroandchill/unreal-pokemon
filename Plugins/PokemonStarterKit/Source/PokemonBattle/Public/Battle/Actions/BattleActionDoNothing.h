@@ -20,7 +20,7 @@ class POKEMONBATTLE_API FBattleActionDoNothing : public FGCObject, public IBattl
     FString GetReferencerName() const override;
     const TScriptInterface<IBattler> &GetBattler() const override;
     bool CanExecute() const override;
-    void Execute() override;
+    UE5Coro::TCoroutine<> Execute() override;
     bool IsExecuting() const override;
     bool IsComplete() const override;
     int32 GetPriority() const override;
