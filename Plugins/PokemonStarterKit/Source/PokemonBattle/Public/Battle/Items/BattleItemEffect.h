@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "UE5CoroGAS.h"
 
 class IBattler;
 struct FItem;
@@ -14,7 +15,7 @@ struct FItem;
  * Ability that handles the effect of the item being used in battle.
  */
 UCLASS(Abstract)
-class POKEMONBATTLE_API UBattleItemEffect : public UGameplayAbility {
+class POKEMONBATTLE_API UBattleItemEffect : public UUE5CoroGameplayAbility {
     GENERATED_BODY()
 
   public:
@@ -32,14 +33,15 @@ class POKEMONBATTLE_API UBattleItemEffect : public UGameplayAbility {
 
     bool ShouldAbilityRespondToEvent(const FGameplayAbilityActorInfo *ActorInfo,
                                      const FGameplayEventData *Payload) const override;
-    void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo,
-                         const FGameplayAbilityActivationInfo ActivationInfo,
-                         const FGameplayEventData *TriggerEventData) override;
-    void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo,
-                    const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility,
-                    bool bWasCancelled) override;
 
   protected:
+
+    UE5Coro::GAS::FAbilityCoroutine
+    ExecuteAbility(FGameplayAbilitySpecHandle Handle,
+                   const FGameplayAbilityActorInfo* ActorInfo,
+                   FGameplayAbilityActivationInfo ActivationInfo,
+                   const FGameplayEventData* TriggerEventData) override;
+    
     /**
      * Apply the global (no targets) effect of the item.
      * @param User The user of the item.

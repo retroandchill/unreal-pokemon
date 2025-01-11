@@ -116,7 +116,6 @@ private:
 
   protected:
     bool RunCheck_Implementation(const TScriptInterface<IBattler> &Battler, bool bDuringBattle) override;
-    void EndBattle_Implementation(EBattleResult Result) override;
 
   public:
     void BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) override;

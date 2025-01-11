@@ -6,6 +6,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Events/BattleMessage.h"
+#include "UE5CoroGAS.h"
 
 #include "BattleMoveFunctionCode.generated.h"
 
@@ -88,7 +89,7 @@ struct POKEMONBATTLE_API FAttackAndDefenseStats {
  * The gameplay ability for using a move.
  */
 UCLASS(Abstract)
-class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
+class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility {
     GENERATED_BODY()
 
   public:
@@ -106,14 +107,13 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
 
     bool ShouldAbilityRespondToEvent(const FGameplayAbilityActorInfo *ActorInfo,
                                      const FGameplayEventData *Payload) const override;
-    void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo,
-                         const FGameplayAbilityActivationInfo ActivationInfo,
-                         const FGameplayEventData *TriggerEventData) override;
-    void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo,
-                    const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility,
-                    bool bWasCancelled) override;
 
   protected:
+    UE5Coro::GAS::FAbilityCoroutine ExecuteAbility(FGameplayAbilitySpecHandle Handle,
+                   const FGameplayAbilityActorInfo* ActorInfo,
+                   FGameplayAbilityActivationInfo ActivationInfo,
+                   const FGameplayEventData* TriggerEventData) override;
+    
     /**
      * Determine the type of the move.
      * @return The calculated type
@@ -138,7 +138,8 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * @param User The user of the move
      * @param Targets The targets of the move
      */
-    void UseMove(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
+    UE5Coro::TCoroutine<> UseMove(const TScriptInterface<IBattler> &User,
+                                  const TArray<TScriptInterface<IBattler>> &Targets);
 
   protected:
     /**
@@ -214,8 +215,8 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * @param User The user of the move
      * @param Targets The targets to deal damage to
      */
-    UFUNCTION(BlueprintCallable, Category = "Moves|Damage")
-    void DealDamage(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
+    UE5Coro::TCoroutine<> DealDamage(const TScriptInterface<IBattler> &User,
+                                     const TArray<TScriptInterface<IBattler>> &Targets);
 
     /**
      * Calculate the damage dealt to a single target
@@ -311,8 +312,8 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * @param User The user of the move
      * @param Targets The targets of the move
      */
-    UFUNCTION(BlueprintCallable, Category = "Moves|Effects")
-    void ApplyMoveEffects(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
+    UE5Coro::TCoroutine<> ApplyMoveEffects(const TScriptInterface<IBattler> &User,
+                                           const TArray<TScriptInterface<IBattler>> &Targets);
 
     /**
      * Effect applied to a target that took damage from a move
@@ -353,9 +354,8 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * @param User The user of the move
      * @param Targets The targets of the move
      */
-    UFUNCTION(BlueprintCallable, Category = "Moves|Effects")
-    void ApplyAdditionalEffects(const TScriptInterface<IBattler> &User,
-                                const TArray<TScriptInterface<IBattler>> &Targets);
+    UE5Coro::TCoroutine<> ApplyAdditionalEffects(const TScriptInterface<IBattler> &User,
+                                                 const TArray<TScriptInterface<IBattler>> &Targets);
 
     /**
      * Apply any additional effect to a target
@@ -380,7 +380,8 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UGameplayAbility {
      * @param User The user of the move
      * @param Targets The targets of the move
      */
-    void EndMove(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
+    UE5Coro::TCoroutine<> EndMove(const TScriptInterface<IBattler> &User,
+                                  const TArray<TScriptInterface<IBattler>> &Targets);
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
     void AddExpGainSequence(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Target);

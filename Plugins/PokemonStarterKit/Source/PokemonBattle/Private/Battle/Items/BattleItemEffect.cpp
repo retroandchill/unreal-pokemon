@@ -30,11 +30,9 @@ bool UBattleItemEffect::ShouldAbilityRespondToEvent(const FGameplayAbilityActorI
     return ItemPayload->Ability == this;
 }
 
-void UBattleItemEffect::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
-                                        const FGameplayAbilityActorInfo *ActorInfo,
-                                        const FGameplayAbilityActivationInfo ActivationInfo,
-                                        const FGameplayEventData *TriggerEventData) {
-    Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+UE5Coro::GAS::FAbilityCoroutine UBattleItemEffect::ExecuteAbility(FGameplayAbilitySpecHandle Handle,
+    const FGameplayAbilityActorInfo *ActorInfo, FGameplayAbilityActivationInfo ActivationInfo,
+    const FGameplayEventData *TriggerEventData) {
     ActorInfo->AbilitySystemComponent->AddLooseGameplayTag(Pokemon::Battle::Items::UsingItem);
 
     check(TriggerEventData != nullptr)
@@ -47,21 +45,12 @@ void UBattleItemEffect::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
         bShouldConsumeItem |= ApplyEffectToTarget(User, Target);
     });
 
-    ABattleSequencer::DisplayBattleMessages(this, [this] {
-        ensure(CurrentActorInfo != nullptr);
-        EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
-    });
-}
-
-void UBattleItemEffect::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo,
-                                   const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility,
-                                   bool bWasCancelled) {
+    co_await ABattleSequencer::DisplayBattleMessages();
     ActorInfo->AbilitySystemComponent->RemoveLooseGameplayTag(Pokemon::Battle::Items::UsingItem);
     if (auto &ItemData = GetItem(); bShouldConsumeItem && ItemData.Consumable) {
         auto &Subsystem = UPokemonSubsystem::GetInstance(GetCurrentActorInfo()->AvatarActor.Get());
         Subsystem.GetBag()->RemoveItem(ItemID);
     }
-    Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
 bool UBattleItemEffect::ApplyEffectToTarget_Implementation(const TScriptInterface<IBattler> &User,

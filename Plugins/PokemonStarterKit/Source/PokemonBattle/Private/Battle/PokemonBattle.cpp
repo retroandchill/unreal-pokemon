@@ -225,12 +225,6 @@ bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &B
     return Rate >= 256.f || FMath::Rand() % 256 < Rate;
 }
 
-void APokemonBattle::EndBattle_Implementation(EBattleResult Result) {
-    Phase = EBattlePhase::Decided;
-    GetBattleResultAnimation(Result);
-    ABattleSequencer::DisplayBattleMessages(this, &APokemonBattle::ExitBattleScene, Result);
-}
-
 void APokemonBattle::BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) {
     OnBattleEnd.Add(std::move(Callback));
 }
@@ -319,6 +313,10 @@ UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::EndTurn() {
         co_await TFuture<void>(ActionsCompletePromise);
         co_await ActionProcessing();
     }
+
+    ProcessTurnDurationTrigger(ETurnDurationTrigger::TurnEnd);
+    Pokemon::Battle::Events::SendOutBattleEvent(this, nullptr, Pokemon::Battle::EndTurn);
+    co_await ABattleSequencer::DisplayBattleMessages();
 
     co_return {};
 }

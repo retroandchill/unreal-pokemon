@@ -14,12 +14,9 @@ USwitchActionBase::USwitchActionBase() {
     AbilityTrigger.TriggerTag = Pokemon::Battle::SwitchOut;
 }
 
-void USwitchActionBase::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
-                                        const FGameplayAbilityActorInfo *ActorInfo,
-                                        const FGameplayAbilityActivationInfo ActivationInfo,
-                                        const FGameplayEventData *TriggerEventData) {
-    Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-
+UE5Coro::GAS::FAbilityCoroutine USwitchActionBase::ExecuteAbility(FGameplayAbilitySpecHandle Handle,
+    const FGameplayAbilityActorInfo *ActorInfo, FGameplayAbilityActivationInfo ActivationInfo,
+    const FGameplayEventData *TriggerEventData) {
     // If this is not triggered by an event throw an exception
     check(TriggerEventData != nullptr)
     auto Payload = CastChecked<const USwitchPokemonPayload>(TriggerEventData->OptionalObject);
@@ -31,10 +28,12 @@ void USwitchActionBase::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
     check(Battler != nullptr)
     SwapTarget = Battler->GetOwningSide()->GetTrainerParty(OwningTrainer)[SwitchTargetIndex];
     QueueRecallAnimation(Battler);
-    ABattleSequencer::DisplayBattleMessages(this, &USwitchActionBase::SwapWithTarget);
+    co_await ABattleSequencer::DisplayBattleMessages();
+    co_await SwapWithTarget();
+    co_await TriggerOnSendOut();
 }
 
-void USwitchActionBase::SwapWithTarget() {
+UE5Coro::TCoroutine<> USwitchActionBase::SwapWithTarget() {
     auto &ActorInfo = *GetCurrentActorInfo();
     auto Battler = CastChecked<IBattler>(ActorInfo.AvatarActor);
     Battler->HideSprite();
@@ -44,14 +43,10 @@ void USwitchActionBase::SwapWithTarget() {
     auto TargetActor = CastChecked<AActor>(SwapTarget.GetObject());
     TargetActor->SetActorTransform(ActorInfo.AvatarActor->GetActorTransform());
     QueueSendOutAnimation(SwapTarget);
-    ABattleSequencer::DisplayBattleMessages(this, &USwitchActionBase::TriggerOnSendOut);
+    co_await ABattleSequencer::DisplayBattleMessages();
 }
 
-void USwitchActionBase::TriggerOnSendOut() {
+UE5Coro::TCoroutine<> USwitchActionBase::TriggerOnSendOut() {
     auto &Battle = SwapTarget->GetOwningSide()->GetOwningBattle();
-    Battle->OnBattlersEnteringBattle(Retro::Ranges::Views::Single(SwapTarget));
-    ABattleSequencer::DisplayBattleMessages(this, [this] {
-        ensure(CurrentActorInfo != nullptr);
-        EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
-    });
+    co_await Battle->OnBattlersEnteringBattle(Retro::Ranges::Views::Single(SwapTarget));
 }

@@ -5,8 +5,7 @@
 #include "CoreMinimal.h"
 #include "Battle/Events/BattleMessage.h"
 #include "GameFramework/Actor.h"
-#include "PokemonBattleModule.h"
-#include "RetroLib/Functional/Delegates.h"
+#include "UE5Coro.h"
 #include <queue>
 
 #include "BattleSequencer.generated.h"
@@ -43,22 +42,8 @@ class POKEMONBATTLE_API ABattleSequencer : public AActor {
 
     /**
      * Displays multiple battle messages during the battle sequence.
-     *
-     * @param Args Variadic template arguments representing the battle messages to be displayed.
      */
-    template <typename... A>
-        requires Retro::Delegates::CanAddToDelegate<FSimpleMulticastDelegate, A...>
-    static void DisplayBattleMessages(A &&...Args) {
-        if (Instance.IsValid()) {
-            Instance->ProcessBattleMessages(std::forward<A>(Args)...);
-        } else {
-            // If we don't have an initialized battle sequencer, then we need to short circuit this and create the
-            // delegate and immediately execute it to avoid a soft-lock. We can't use std::invoke here because the
-            // argument order isn't always correct to do that.
-            UE_LOG(LogBattle, Warning, UninitializedLog)
-            Retro::Delegates::Create<FSimpleDelegate>(std::forward<A>(Args)...).Execute();
-        }
-    }
+    static UE5Coro::TCoroutine<> DisplayBattleMessages();
 
     /**
      * Adds a battle message to the message queue.
@@ -73,26 +58,8 @@ class POKEMONBATTLE_API ABattleSequencer : public AActor {
 
     /**
      * Processes battle messages based on the provided variadic arguments.
-     *
-     * @param Args Variadic template arguments representing the battle messages to be processed.
      */
-    template <typename... A>
-        requires Retro::Delegates::CanAddToDelegate<FSimpleMulticastDelegate, A...>
-    void ProcessBattleMessages(A &&...Args) {
-        if (bIsProcessingMessages) {
-            UE_LOG(LogBattle, Warning, TEXT("Battle sequencer is already processing!"))
-            return;
-        }
-
-        Retro::Delegates::Add(OnMessagesComplete, std::forward<A>(Args)...);
-        if (Messages.empty()) {
-            ProcessMessagesComplete();
-            return;
-        }
-
-        bIsProcessingMessages = true;
-        DisplayBattleMessage(Messages.front());
-    }
+    UE5Coro::TCoroutine<> ProcessBattleMessages();
 
   protected:
     /**
@@ -103,21 +70,11 @@ class POKEMONBATTLE_API ABattleSequencer : public AActor {
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Sequencer")
     void DisplayBattleMessage(const FBattleMessage &Message);
 
-    /**
-     * Processes the next battle message in the queue.
-     *
-     * If there are no more messages in the queue, it triggers the completion process.
-     * Otherwise, it displays the next battle message.
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Sequencer")
-    void ProcessNextBattleMessage();
-
-  private:
-    void ProcessMessagesComplete();
+private:
+    UE5Coro::TCoroutine<> TryDisplayMessage(FText Message) const;
 
     static TWeakObjectPtr<ABattleSequencer> Instance;
     std::queue<FBattleMessage> Messages;
 
-    FSimpleMulticastDelegate OnMessagesComplete;
     bool bIsProcessingMessages = false;
 };

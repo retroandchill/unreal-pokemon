@@ -2,6 +2,8 @@
 
 #include "Battle/Animations/BattleSequencer.h"
 #include "PokemonBattleModule.h"
+#include "Battle/Animations/BattleAnimation.h"
+#include "Utilities/PokemonCoroutineDispatcher.h"
 
 TWeakObjectPtr<ABattleSequencer> ABattleSequencer::Instance;
 
@@ -36,19 +38,44 @@ void ABattleSequencer::QueueBattleMessageWithAnimation(FText Text, const TScript
     }
 }
 
-void ABattleSequencer::ProcessNextBattleMessage() {
-    check(!Messages.empty())
-    Messages.pop();
-
-    if (Messages.empty()) {
-        ProcessMessagesComplete();
-    } else {
-        DisplayBattleMessage(Messages.front());
+UE5Coro::TCoroutine<> ABattleSequencer::DisplayBattleMessages() {
+    if (!Instance.IsValid()) {
+        UE_LOG(LogBattle, Warning, UninitializedLog)
+        co_return;
     }
+    
+    co_await Instance->ProcessBattleMessages();
+
 }
 
-void ABattleSequencer::ProcessMessagesComplete() {
-    auto MessagesDelegate = std::move(OnMessagesComplete);
+UE5Coro::TCoroutine<> ABattleSequencer::ProcessBattleMessages() {
+    if (bIsProcessingMessages) {
+        UE_LOG(LogBattle, Warning, TEXT("Battle sequencer is already processing!"))
+        co_return;
+    }
+
+    bIsProcessingMessages = true;
+    while (!Messages.empty()) {
+        auto &First = Messages.front();
+        if (First.AnimationPlacement == EAnimationPlacement::Before) {
+            co_await TryDisplayMessage(First.Message);
+            co_await IBattleAnimation::PlayAnimation(this, First.Animation);
+        } else {
+            co_await TryDisplayMessage(First.Message);
+            co_await IBattleAnimation::PlayAnimation(this, First.Animation);
+        }
+        
+        Messages.pop();
+    }
+    
     bIsProcessingMessages = false;
-    MessagesDelegate.Broadcast();
+}
+
+UE5Coro::TCoroutine<> ABattleSequencer::TryDisplayMessage(FText Message) const {
+    if (Message.IsEmptyOrWhitespace()) {
+        co_return;
+    }
+
+    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(this);
+    co_await Dispatcher.DisplayMessage(std::move(Message));
 }
