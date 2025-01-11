@@ -30,10 +30,6 @@ bool FBattleActionDoNothing::IsExecuting() const {
     return false;
 }
 
-bool FBattleActionDoNothing::IsComplete() const {
-    return false;
-}
-
 int32 FBattleActionDoNothing::GetPriority() const {
     return 0;
 }

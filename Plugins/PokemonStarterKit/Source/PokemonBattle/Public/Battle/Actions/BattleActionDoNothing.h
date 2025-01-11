@@ -22,7 +22,6 @@ class POKEMONBATTLE_API FBattleActionDoNothing : public FGCObject, public IBattl
     bool CanExecute() const override;
     UE5Coro::TCoroutine<> Execute() override;
     bool IsExecuting() const override;
-    bool IsComplete() const override;
     int32 GetPriority() const override;
     FText GetActionMessage() const override;
 

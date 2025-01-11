@@ -23,7 +23,7 @@ class POKEMONBATTLE_API FBattleActionSwitchPokemon : public FBattleActionBase {
     FText GetActionMessage() const override;
 
   protected:
-    FGameplayAbilitySpecHandle ActivateAbility() override;
+    UE5Coro::TCoroutine<> ActivateAbility() override;
 
   private:
     TScriptInterface<IBattler> SwitchTarget;

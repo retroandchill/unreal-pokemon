@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemComponent.h"
 #include "NativeGameplayTags.h"
+#include "UE5Coro.h"
 
 #include "TargetedEvents.generated.h"
 
@@ -141,6 +143,9 @@ struct POKEMONBATTLE_API FTargetedEvent {
     }
 
 namespace Pokemon::Battle::Events {
+
+    POKEMONBATTLE_API UE5Coro::TCoroutine<> SendOutActivationEvent(const UAbilitySystemComponent* AbilityComponent, FGameplayAbilitySpecHandle Handle, FGameplayTag Tag, FGameplayEventData
+                                                                   EventData, FForceLatentCoroutine Coro = {});
 
     /**
      * Send out an event to the entire battle

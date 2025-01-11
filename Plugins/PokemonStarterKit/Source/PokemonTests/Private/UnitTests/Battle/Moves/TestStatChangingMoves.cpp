@@ -46,7 +46,7 @@ bool TestStatChangingMoves_RaiseUserStats::RunTest(const FString &Parameters) {
 
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {});
     Action.Execute();
-    UE_CHECK_TRUE(Action.IsComplete());
+    
     UE_CHECK_EQUAL(2.f, Battler1->GetAbilityComponent()->GetStatStages()->GetSpecialAttackStages());
 
     return true;
@@ -89,7 +89,7 @@ bool TestStatChangingMoves_RaiseUserStats_Failed::RunTest(const FString &Paramet
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {});
     AddExpectedMessage(TEXT("Nasty Plot failed!"), ELogVerbosity::Display);
     Action.Execute();
-    UE_CHECK_TRUE(Action.IsComplete());
+    
 
     return true;
 }
@@ -129,7 +129,7 @@ bool TestStatChangingMoves_LowerUserStats::RunTest(const FString &Parameters) {
 
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     Action.Execute();
-    UE_CHECK_TRUE(Action.IsComplete());
+    
     UE_CHECK_EQUAL(-1.f, Battler1->GetAbilityComponent()->GetStatStages()->GetDefenseStages());
     UE_CHECK_EQUAL(-1.f, Battler1->GetAbilityComponent()->GetStatStages()->GetSpecialDefenseStages());
 
@@ -171,7 +171,7 @@ bool TestStatChangingMoves_LowerTargetStats::RunTest(const FString &Parameters) 
 
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     Action.Execute();
-    UE_CHECK_TRUE(Action.IsComplete());
+    
     UE_CHECK_EQUAL(-2.f, Battler2->GetAbilityComponent()->GetStatStages()->GetSpecialDefenseStages());
 
     return true;
@@ -215,7 +215,7 @@ bool TestStatChangingMoves_LowerTargetStats_Failed::RunTest(const FString &Param
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Metal Sound failed against all targets!"), ELogVerbosity::Display);
     Action.Execute();
-    UE_CHECK_TRUE(Action.IsComplete());
+    
 
     return true;
 }

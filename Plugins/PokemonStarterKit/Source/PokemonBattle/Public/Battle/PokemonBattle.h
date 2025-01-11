@@ -165,6 +165,9 @@ private:
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     TScriptInterface<IBattleHUD> CreateBattleHUD();
 
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    TScriptInterface<IBattleAnimation> GetBattleEndAnimation(EBattleResult Result);
+
     /**
      * Refresh the battle HUD so that it is up to date
      */
@@ -281,6 +284,8 @@ private:
      * The number of actions we expect before proceeding to action execution
      */
     TMap<FGuid, uint8> ExpectedActionCount;
+
+    TSharedRef<TFutureState<int32>> ActionsCompletePromise = MakeShared<TFutureState<int32>>();
 
     /**
      * The actual queue of actions to be executed

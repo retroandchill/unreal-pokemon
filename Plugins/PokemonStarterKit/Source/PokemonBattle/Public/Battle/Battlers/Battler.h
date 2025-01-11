@@ -239,7 +239,7 @@ class POKEMONBATTLE_API IBattler {
     UFUNCTION(BlueprintCallable, Category = Switching)
     virtual FText GetRecallMessage() const = 0;
 
-    virtual FGameplayAbilitySpecHandle PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) = 0;
+    virtual UE5Coro::TCoroutine<> PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) = 0;
 
     UFUNCTION(BlueprintCallable, Category = Ownership)
     virtual bool IsOwnedByPlayer() const = 0;

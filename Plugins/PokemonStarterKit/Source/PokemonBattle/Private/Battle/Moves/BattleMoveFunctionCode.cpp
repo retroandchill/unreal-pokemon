@@ -28,6 +28,7 @@
 #include "PokemonBattleModule.h"
 #include "PokemonBattleSettings.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Views/Concat.h"
 #include "RetroLib/Utils/MakeStrong.h"
 #include "Species/Stat.h"

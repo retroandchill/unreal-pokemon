@@ -9,6 +9,8 @@
 #include "Battle/BattleSide.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Casting/UClassCasts.h"
+#include "RetroLib/Optionals/PtrOrNull.h"
+#include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Views/Concat.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
@@ -32,6 +34,20 @@ const FNativeGameplayTag &FTargetedEvent::GetTagForScope(ETargetedEventScope Sco
     default: // Battlefield
         return BattlefieldTag;
     }
+}
+
+UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutActivationEvent(const UAbilitySystemComponent* AbilityComponent, FGameplayAbilitySpecHandle Handle, FGameplayTag Tag, FGameplayEventData
+                                                                      EventData, FForceLatentCoroutine Coro) {
+    auto State = MakeShared<TFutureState<int32>>();
+    auto Ability = Retro::Optionals::OfNullable(AbilityComponent->FindAbilitySpecFromHandle(Handle)) |
+        Retro::Optionals::Transform(&FGameplayAbilitySpec::GetPrimaryInstance) |
+        Retro::Optionals::PtrOrNull;
+    check(Ability != nullptr)
+    Ability->OnGameplayAbilityEnded.AddLambda([&State](UGameplayAbility*) {
+        State->EmplaceResult(0);
+    });
+    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(AbilityComponent->GetOwnerActor(), Tag, std::move(EventData));
+    co_await TFuture<void>(State);
 }
 
 static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side) {

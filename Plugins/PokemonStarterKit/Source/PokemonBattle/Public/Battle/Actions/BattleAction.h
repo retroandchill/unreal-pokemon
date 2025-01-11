@@ -41,12 +41,6 @@ class POKEMONBATTLE_API IBattleAction {
     virtual bool IsExecuting() const = 0;
 
     /**
-     * Is this action's execution complete?
-     * @return Is the action's execution complete?
-     */
-    virtual bool IsComplete() const = 0;
-
-    /**
      * Get the action's priority in battle
      * @return The priority of the action
      */

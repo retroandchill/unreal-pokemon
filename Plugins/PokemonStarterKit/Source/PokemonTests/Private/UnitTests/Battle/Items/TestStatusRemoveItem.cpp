@@ -46,7 +46,7 @@ bool TestStatusRemoveItem::RunTest(const FString &Parameters) {
     FBattleActionUseItem Action(Battler1, "BURNHEAL", FItemTarget(TWeakInterfacePtr<IBattler>(Battler1.GetObject())));
     Action.Execute();
 
-    UE_CHECK_TRUE(Action.IsComplete());
+    
     UE_ASSERT_FALSE(Battler1->GetStatusEffect().IsSet());
 
     return true;

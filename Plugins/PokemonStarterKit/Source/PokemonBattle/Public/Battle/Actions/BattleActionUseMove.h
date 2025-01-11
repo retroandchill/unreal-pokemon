@@ -27,7 +27,7 @@ class POKEMONBATTLE_API FBattleActionUseMove : public FBattleActionBase {
     UE5Coro::TCoroutine<> Execute() override;
 
   protected:
-    FGameplayAbilitySpecHandle ActivateAbility() override;
+    UE5Coro::TCoroutine<> ActivateAbility() override;
 
   private:
     /**

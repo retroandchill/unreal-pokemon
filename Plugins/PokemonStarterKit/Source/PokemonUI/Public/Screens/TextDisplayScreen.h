@@ -59,6 +59,8 @@ class POKEMONUI_API UTextDisplayScreen : public UScreen {
 
     UE5Coro::TCoroutine<UCommonActivatableWidget *> AwaitInputPrompt(FForceLatentCoroutine Coro = {}) const;
 
+    UE5Coro::TCoroutine<> CheckIfMoreTextIsAdded(FForceLatentCoroutine Coro = {});
+
     /**
      * Assignable delegate for advancing to the next message
      */

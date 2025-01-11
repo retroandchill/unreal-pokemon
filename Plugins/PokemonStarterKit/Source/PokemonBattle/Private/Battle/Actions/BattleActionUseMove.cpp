@@ -39,6 +39,6 @@ UE5Coro::TCoroutine<> FBattleActionUseMove::Execute() {
     co_await FBattleActionBase::Execute();
 }
 
-FGameplayAbilitySpecHandle FBattleActionUseMove::ActivateAbility() {
-    return Move->TryActivateMove(Targets);
+UE5Coro::TCoroutine<> FBattleActionUseMove::ActivateAbility() {
+    co_return co_await Move->TryActivateMove(Targets);
 }

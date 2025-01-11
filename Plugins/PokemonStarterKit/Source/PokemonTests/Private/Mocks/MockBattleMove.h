@@ -32,5 +32,5 @@ class FMockBattleMove : public IBattleMove {
     MOCK_METHOD(int32, GetAdditionalEffectChance, (), (const override));
     MOCK_METHOD(void, PayCost, (int32 Amount), (override));
     MOCK_METHOD(const TScriptInterface<IBattler> &, GetOwningBattler, (), (const, override));
-    MOCK_METHOD(FGameplayAbilitySpecHandle, TryActivateMove, (const TArray<FTargetWithIndex> &Targets), (override));
+    MOCK_METHOD(UE5Coro::TCoroutine<>, TryActivateMove, (const TArray<FTargetWithIndex> &Targets), (override));
 };

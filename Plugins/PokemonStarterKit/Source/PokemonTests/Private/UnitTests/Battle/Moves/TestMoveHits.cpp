@@ -53,7 +53,7 @@ bool TestMoveHits_Certain::RunTest(const FString &Parameters) {
                        ELogVerbosity::Display);
     Action.Execute();
 
-    UE_CHECK_TRUE(Action.IsComplete());
+    
 
     return true;
 }
@@ -94,7 +94,7 @@ bool TestMoveHits_Regular::RunTest(const FString &Parameters) {
     AddExpectedMessage(TEXT("Hydro Pump missed Snorlax!"), ELogVerbosity::Display);
     Action.Execute();
 
-    UE_CHECK_TRUE(Action.IsComplete());
+    
     UE_CHECK_EQUAL(1.f, Battler2->GetHPPercent());
 
     return true;
@@ -141,7 +141,7 @@ bool TestMoveHits_AccuracyEvasionRegular::RunTest(const FString &Parameters) {
     AddExpectedMessage(TEXT("Accuracy threshold for Snorlax is 107"), ELogVerbosity::Display);
     Action.Execute();
 
-    UE_CHECK_TRUE(Action.IsComplete());
+    
 
     return true;
 }
@@ -188,7 +188,7 @@ bool TestMoveHits_AccuracyEvasionOutsideBounds::RunTest(const FString &Parameter
     AddExpectedMessage(TEXT("Hydro Pump missed Snorlax!"), ELogVerbosity::Display);
     Action.Execute();
 
-    UE_CHECK_TRUE(Action.IsComplete());
+    
     UE_CHECK_EQUAL(1.f, Battler2->GetHPPercent());
 
     return true;

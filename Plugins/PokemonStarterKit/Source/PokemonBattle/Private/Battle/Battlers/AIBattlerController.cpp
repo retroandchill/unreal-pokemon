@@ -17,7 +17,7 @@ void UAIBattlerController::ActionSelection(
     // needs to evaluate we're going to want to have this be on a separate thread to avoid frame dips while the AI
     // is choosing a move. Ideally we want these threads to resolve quickly (or at least faster than the player can
     // input their commands.
-    AsyncTask(ENamedThreads::AnyThread, [&Battler] {
+    AsyncTask(ENamedThreads::AnyThread, [this, Battler] {
         // clang-format off
         auto PossibleMoves = Battler->GetMoves() |
                              Retro::Ranges::Views::Filter(&IBattleMove::IsUsable) |
@@ -35,7 +35,7 @@ void UAIBattlerController::ActionSelection(
                        Retro::Ranges::Views::Transform(Retro::Construct<FTargetWithIndex>) |
                        Retro::Ranges::To<TArray>();
         // clang-format on
-        return MakeUnique<FBattleActionUseMove>(Battler, Move, std::move(Targets));
+        return ActionReady.ExecuteIfBound(MakeUnique<FBattleActionUseMove>(Battler, Move, std::move(Targets)));
     });
 }
 

@@ -32,7 +32,7 @@ class POKEMONBATTLE_API UInitiateBattle : public UBlueprintCoroutineActionBase {
      * @param Transition
      * @return The created async node
      */
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Battle, meta = (WorldContext = "WorldContext"))
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Battle, meta = (WorldContext = "WorldContextObject"))
     static UInitiateBattle *InitiateBattle(const UObject *WorldContextObject, const FBattleInfo &BattleInfo,
                                            TSubclassOf<ABattleTransitionActor> Transition);
 

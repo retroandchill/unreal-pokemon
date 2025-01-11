@@ -39,7 +39,7 @@ class FMockBattler : public IBattler {
     MOCK_METHOD(UTurnBasedEffectComponent *, GetTurnBasedEffectComponent, (), (const, override));
     MOCK_METHOD(const TArray<TScriptInterface<IBattleMove>> &, GetMoves, (), (const, override));
     MOCK_METHOD(FText, GetRecallMessage, (), (const, override));
-    MOCK_METHOD(FGameplayAbilitySpecHandle, PerformSwitch, (const TScriptInterface<IBattler> &SwitchTarget),
+    MOCK_METHOD(UE5Coro::TCoroutine<>, PerformSwitch, (const TScriptInterface<IBattler> &SwitchTarget),
                 (override));
     MOCK_METHOD(bool, IsOwnedByPlayer, (), (const, override));
     MOCK_METHOD(void, SelectActions, (), (override));

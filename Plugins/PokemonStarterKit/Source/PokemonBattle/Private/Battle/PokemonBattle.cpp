@@ -97,7 +97,9 @@ UE5Coro::TCoroutine<EBattleResult> APokemonBattle::ConductBattle(APlayerControll
     }
 
     check(Result.IsSet())
-    co_return co_await DecideBattle(*Result);
+    auto Ret = co_await DecideBattle(*Result);
+    co_await IBattleAnimation::PlayAnimation(GetBattleEndAnimation(Ret));
+    co_return Ret;
 }
 
 UE5Coro::TCoroutine<> APokemonBattle::StartBattle() {
@@ -143,6 +145,9 @@ void APokemonBattle::QueueAction(TUniquePtr<IBattleAction> &&Action) {
     FScopeLock Lock(&ActionMutex);
     SelectedActions.Add(std::move(Action));
     ActionCount++;
+    if (ActionSelectionFinished()) {
+        ActionsCompletePromise->EmplaceResult(ActionCount);
+    }
 }
 
 bool APokemonBattle::ActionSelectionFinished() const {
@@ -271,6 +276,7 @@ UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::ProcessTurn() {
 
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
+    ActionsCompletePromise = MakeShared<TFutureState<int32>>();
     
     for (auto Battler : GetActiveBattlers()) {
         auto BattlerId = Battler->GetInternalId();
@@ -279,7 +285,7 @@ UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::ProcessTurn() {
         Battler->SelectActions();
     }
 
-    co_await UE5Coro::Latent::Until(Retro::BindMethod<&APokemonBattle::ActionSelectionFinished>(this));
+    co_await TFuture<void>(ActionsCompletePromise);
 
     co_await ActionProcessing();
         
@@ -291,6 +297,7 @@ UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::EndTurn() {
     bool bRequiresSwaps = false;
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
+    ActionsCompletePromise = MakeShared<TFutureState<int32>>();
     for (int32 i = 0; i < Sides.Num(); i++) {
         if (!Sides[i]->CanBattle()) {
             co_return i;
@@ -309,7 +316,7 @@ UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::EndTurn() {
 
     if (bRequiresSwaps) {
         bSwitchPrompting = true;
-        co_await UE5Coro::Latent::Until(Retro::BindMethod<&APokemonBattle::ActionSelectionFinished>(this));
+        co_await TFuture<void>(ActionsCompletePromise);
         co_await ActionProcessing();
     }
 

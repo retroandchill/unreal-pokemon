@@ -51,7 +51,7 @@ bool TestMoveInflictStatusEffect_MainEffect::RunTest(const FString &Parameters) 
                        ELogVerbosity::Display);
     Action.Execute();
 
-    UE_CHECK_TRUE(Action.IsComplete());
+    
     UE_ASSERT_TRUE(Battler2->GetStatusEffect().IsSet());
     UE_CHECK_EQUAL(TEXT("BURN"), Battler2->GetStatusEffect()->StatusEffectID.ToString());
 
@@ -96,7 +96,7 @@ bool TestMoveInflictStatusEffect_AlreadyHas::RunTest(const FString &Parameters) 
     AddExpectedMessage(TEXT("Will-o-Wisp failed against all targets!"), ELogVerbosity::Display);
     Action.Execute();
 
-    UE_CHECK_TRUE(Action.IsComplete());
+    
 
     return true;
 }
@@ -146,7 +146,7 @@ bool TestMoveInflictStatusEffect_AdditionalEffect::RunTest(const FString &Parame
     AddExpectedMessage(TEXT("Applying additional effect of Fire Blast to Snorlax"), ELogVerbosity::Display);
     Action.Execute();
 
-    UE_CHECK_TRUE(Action.IsComplete());
+    
     UE_ASSERT_TRUE(Battler2->GetStatusEffect().IsSet());
     UE_CHECK_EQUAL(TEXT("BURN"), Battler2->GetStatusEffect()->StatusEffectID.ToString());
 
@@ -199,7 +199,7 @@ bool TestMoveInflictStatusEffect_AdditionalEffectBlocked::RunTest(const FString 
     AddExpectedMessage(TEXT("Fire Blast's additional effect chance is 0, skipping!"), ELogVerbosity::Display);
     Action.Execute();
 
-    UE_CHECK_TRUE(Action.IsComplete());
+    
     UE_CHECK_FALSE(Battler2->GetStatusEffect().IsSet());
 
     return true;

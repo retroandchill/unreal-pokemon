@@ -108,7 +108,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = Switching)
     FText GetRecallMessage() const;
 
-    FGameplayAbilitySpecHandle PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) override;
+    UE5Coro::TCoroutine<> PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) override;
 
     UFUNCTION(BlueprintPure, Category = Ownership)
     bool IsOwnedByPlayer() const;
