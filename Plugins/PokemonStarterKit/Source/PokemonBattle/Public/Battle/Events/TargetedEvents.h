@@ -144,7 +144,7 @@ struct POKEMONBATTLE_API FTargetedEvent {
 
 namespace Pokemon::Battle::Events {
 
-    POKEMONBATTLE_API UE5Coro::TCoroutine<> SendOutActivationEvent(const UAbilitySystemComponent* AbilityComponent, FGameplayAbilitySpecHandle Handle, FGameplayTag Tag, FGameplayEventData
+    POKEMONBATTLE_API UE5Coro::TCoroutine<> SendOutActivationEvent(UAbilitySystemComponent* AbilityComponent, FGameplayAbilitySpecHandle Handle, FGameplayTag Tag, FGameplayEventData
                                                                    EventData, FForceLatentCoroutine Coro = {});
 
     /**

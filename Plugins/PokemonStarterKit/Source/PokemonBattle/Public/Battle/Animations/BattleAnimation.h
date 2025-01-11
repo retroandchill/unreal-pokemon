@@ -24,5 +24,5 @@ class POKEMONBATTLE_API IBattleAnimation {
   public:
     virtual UE5Coro::TCoroutine<> PlayAnimation(FForceLatentCoroutine Coro = {}) = 0;
 
-    static UE5Coro::TCoroutine<> PlayAnimation(const TScriptInterface<IBattleAnimation> & Animation, FForceLatentCoroutine Coro = {});
+    static UE5Coro::TCoroutine<> PlayAnimation(const UObject* WorldContext, const TScriptInterface<IBattleAnimation> & Animation, FForceLatentCoroutine Coro = {});
 };

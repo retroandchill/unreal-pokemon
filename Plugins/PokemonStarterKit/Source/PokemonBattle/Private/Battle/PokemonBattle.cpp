@@ -73,7 +73,7 @@ UE5Coro::TCoroutine<> APokemonBattle::DisplaySideSendOutAnimation(int32 Index) {
     if (auto SendOutText = Sides[Index]->GetSendOutText(); SendOutText.IsSet()) {
         co_await Dispatcher->DisplayMessage(std::move(*SendOutText));
     }
-    co_await IBattleAnimation::PlayAnimation(Index == OpponentSideIndex ? GetOpponentSendOutAnimation() : GetPlayerSendOutAnimation());
+    co_await IBattleAnimation::PlayAnimation(this, Index == OpponentSideIndex ? GetOpponentSendOutAnimation() : GetPlayerSendOutAnimation());
 }
 
 UE5Coro::TCoroutine<EBattleResult> APokemonBattle::ConductBattle(APlayerController *PlayerController) {
@@ -82,7 +82,7 @@ UE5Coro::TCoroutine<EBattleResult> APokemonBattle::ConductBattle(APlayerControll
     check(BattlePawn != nullptr && PlayerController != nullptr)
     StoredPlayerPawn = PlayerController->GetPawnOrSpectator();
     PlayerController->Possess(BattlePawn);
-    co_await IBattleAnimation::PlayAnimation(GetBattleIntro());
+    co_await IBattleAnimation::PlayAnimation(this, GetBattleIntro());
     co_await Dispatcher->DisplayMessage(GetBattleIntroMessage());
     co_await DisplaySideSendOutAnimation(OpponentSideIndex);
     co_await DisplaySideSendOutAnimation(PlayerSideIndex);
@@ -98,7 +98,7 @@ UE5Coro::TCoroutine<EBattleResult> APokemonBattle::ConductBattle(APlayerControll
 
     check(Result.IsSet())
     auto Ret = co_await DecideBattle(*Result);
-    co_await IBattleAnimation::PlayAnimation(GetBattleEndAnimation(Ret));
+    co_await IBattleAnimation::PlayAnimation(this, GetBattleEndAnimation(Ret));
     co_return Ret;
 }
 
@@ -366,6 +366,6 @@ void APokemonBattle::NextAction() {
 UE5Coro::TCoroutine<EBattleResult> APokemonBattle::DecideBattle(int32 SideIndex) {
     using enum EBattleResult;
     auto Result = SideIndex == PlayerSideIndex ? Defeat : Victory;
-    co_await IBattleAnimation::PlayAnimation(GetBattleResultAnimation(Result));
+    co_await IBattleAnimation::PlayAnimation(this, GetBattleResultAnimation(Result));
     co_return Result;
 }
