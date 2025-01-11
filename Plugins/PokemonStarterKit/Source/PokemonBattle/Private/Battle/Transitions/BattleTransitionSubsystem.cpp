@@ -20,28 +20,17 @@ void UBattleTransitionSubsystem::SetBattleMap(const TSoftObjectPtr<UWorld> &NewB
 
 void UBattleTransitionSubsystem::SetRegisteredBattle(const TScriptInterface<IBattle> &Battle) {
     RegisteredBattle = Battle;
-    Battle->BindToOnBattleEnd(FOnBattleEnd::FDelegate::CreateUObject(this, &UBattleTransitionSubsystem::ExitBattle));
 }
 
-void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info,
-                                                TSubclassOf<ABattleTransitionActor> Transition) {
+UE5Coro::TCoroutine<EBattleResult> UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info,
+                                                                              TSubclassOf<ABattleTransitionActor> Transition) {
     auto PlayerController = GetWorld()->GetGameInstance()->GetPrimaryPlayerController(false);
     PlayerController->GetPawn()->DisableInput(PlayerController);
     static auto &BattleLevelOffset = GetDefault<UPokemonBattleSettings>()->BattleSceneOffset;
     if (Transition != nullptr) {
-        using FTransitionBinding = FOnBattleTransitionComplete::FDelegate;
-
         bBattleInitialized = false;
         CurrentTransition = GetWorld()->SpawnActor<ABattleTransitionActor>(Transition);
-        CurrentTransition->BindToOnComplete(FTransitionBinding::CreateWeakLambda(this, [this] {
-            if (RegisteredBattle.IsValid() && !bBattleInitialized) {
-                RegisteredBattle->Initialize(BattleInfo.GetValue());
-                bBattleInitialized = true;
-            }
-
-            CurrentTransition = nullptr;
-        }));
-        CurrentTransition->TransitionToBattle();
+        CurrentTransition->Execute();
     }
 
     StreamingStates.Reset();
@@ -59,7 +48,22 @@ void UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info,
                                                                            FRotator(), bSuccess);
     check(bSuccess)
     BattleInfo.Emplace(Info);
-    Battlefield->OnLevelShown.AddUniqueDynamic(this, &UBattleTransitionSubsystem::SetUpBattle);
+    if (Battlefield->IsLevelVisible()) {
+        co_await CurrentTransition->Execute();
+    } else {
+        co_await WhenAll( UE5Coro::Latent::UntilDelegate(Battlefield->OnLevelShown), CurrentTransition->Execute());
+    }
+
+    if (RegisteredBattle.IsValid() && !bBattleInitialized) {
+        RegisteredBattle->Initialize(BattleInfo.GetValue());
+        bBattleInitialized = true;
+    }
+
+    CurrentTransition = nullptr;
+    SetUpBattle();
+    auto Result = co_await RegisteredBattle->ConductBattle(GetWorld()->GetGameInstance()->GetPrimaryPlayerController(false));
+    ExitBattle();
+    co_return Result;
 }
 
 FDelegateHandle UBattleTransitionSubsystem::BindToBattleFinished(FBattleFinished::FDelegate &&Callback) {
@@ -80,19 +84,11 @@ void UBattleTransitionSubsystem::SetUpBattle() {
     }
 }
 
-void UBattleTransitionSubsystem::ExitBattle(EBattleResult Result) {
+void UBattleTransitionSubsystem::ExitBattle(FForceLatentCoroutine Coro) {
     check(Battlefield != nullptr)
     FLatentActionInfo LatentActionInfo;
     UGameplayStatics::UnloadStreamLevelBySoftObjectPtr(this, Battlefield->GetWorldAsset(), LatentActionInfo, false);
     check(BattleInfo.IsSet())
-    if (Result != EBattleResult::Defeat || BattleInfo->bLossAllowed) {
-        BattleFinished.Broadcast(Result);
-    } else {
-        // If the player loses we want all script callbacks to be removed
-        BattleFinished.Clear();
-        UPokemonSubsystem::GetInstance(this).PerformPlayerReset();
-    }
-
     Battlefield = nullptr;
     BattleInfo.Reset();
 

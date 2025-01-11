@@ -11,7 +11,7 @@
 #include "RetroLib/Ranges/Views/Generator.h"
 #include "UObject/Interface.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "UE5Coro/Coroutine.h"
+#include "UE5Coro.h"
 
 #include "Battler.generated.h"
 
@@ -247,7 +247,7 @@ class POKEMONBATTLE_API IBattler {
     /**
      * Select the actions for this battler
      */
-    virtual UE5Coro::TCoroutine<> SelectActions() = 0;
+    virtual void SelectActions() = 0;
 
     /**
      * Force the battler to choose a party member to switch to

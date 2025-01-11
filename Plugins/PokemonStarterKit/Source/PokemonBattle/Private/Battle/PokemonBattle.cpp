@@ -243,18 +243,6 @@ FText APokemonBattle::GetBattleIntroMessage() const {
     return Sides[OpponentSideIndex]->GetIntroText();
 }
 
-void APokemonBattle::QueueOpponentSendOut() {
-    check(Sides.IsValidIndex(OpponentSideIndex))
-    const auto &Side = Sides[OpponentSideIndex];
-    GetOpponentSendOutAnimation();
-}
-
-void APokemonBattle::QueuePlayerSendOut() {
-    check(Sides.IsValidIndex(PlayerSideIndex))
-    const auto &Side = Sides[PlayerSideIndex];
-    GetPlayerSendOutAnimation();
-}
-
 void APokemonBattle::ExitBattleScene(EBattleResult Result) const {
     // clang-format off
     Retro::Optionals::OfNullable(BattlePawn) |

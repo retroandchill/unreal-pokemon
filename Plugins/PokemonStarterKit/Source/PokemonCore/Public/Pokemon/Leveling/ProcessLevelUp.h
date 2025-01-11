@@ -6,7 +6,7 @@
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "RetroLib/Async/BlueprintCoroutineActionBase.h"
-#include "UE5Coro/Coroutine.h"
+#include "UE5Coro.h"
 
 #include "ProcessLevelUp.generated.h"
 

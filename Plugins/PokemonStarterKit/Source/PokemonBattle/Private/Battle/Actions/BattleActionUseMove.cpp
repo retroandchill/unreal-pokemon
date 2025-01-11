@@ -32,11 +32,11 @@ FText FBattleActionUseMove::GetActionMessage() const {
 }
 
 UE5Coro::TCoroutine<> FBattleActionUseMove::Execute() {
-    FBattleActionBase::Execute();
-
     auto AttributeSet = GetBattler()->GetAbilityComponent()->GetCoreAttributes();
     check(AttributeSet != nullptr)
     Move->PayCost(FMath::FloorToInt32(AttributeSet->GetMoveCost()));
+    
+    co_await FBattleActionBase::Execute();
 }
 
 FGameplayAbilitySpecHandle FBattleActionUseMove::ActivateAbility() {

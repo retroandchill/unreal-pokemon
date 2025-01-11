@@ -19,8 +19,7 @@ class POKEMONBATTLE_API UAIBattlerController : public UObject, public IBattlerCo
     GENERATED_BODY()
 
   public:
-    UE5Coro::TCoroutine<TUniquePtr<IBattleAction>> ActionSelection(
-        const TScriptInterface<IBattler> &Battler) const override;
+    void ActionSelection(const TScriptInterface<IBattler> &Battler) const override;
     void InitiateForcedSwitch(const TScriptInterface<IBattler> &Battler) const override;
     void BindOnActionReady(FActionReady &&QueueAction) override;
 

@@ -4,10 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "UE5Coro.h"
 
 #include "BattleTransitionActor.generated.h"
-
-DECLARE_MULTICAST_DELEGATE(FOnBattleTransitionComplete)
 
 /**
  * The actor used to perform the battle transition.
@@ -16,16 +15,16 @@ UCLASS(Abstract)
 class POKEMONBATTLE_API ABattleTransitionActor : public AActor {
     GENERATED_BODY()
 
-  public:
+public:
+    UE5Coro::TCoroutine<> Execute();
+
+  protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Transitions")
     void TransitionToBattle();
 
-    FDelegateHandle BindToOnComplete(FOnBattleTransitionComplete::FDelegate &&Binding);
-
-  protected:
     UFUNCTION(BlueprintCallable, Category = "Battle|Transitions")
     void CompleteTransition();
 
   private:
-    FOnBattleTransitionComplete OnBattleTransitionComplete;
+    TSharedRef<TFutureState<int32>> OnBattleTransitionComplete = MakeShared<TFutureState<int32>>();
 };

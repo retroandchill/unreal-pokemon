@@ -113,7 +113,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = Ownership)
     bool IsOwnedByPlayer() const;
 
-    UE5Coro::TCoroutine<> SelectActions() override;
+    void SelectActions() override;
     void RequireSwitch() override;
     uint8 GetActionCount() const override;
     bool CanSelectActions() const override;

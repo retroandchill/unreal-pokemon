@@ -2,11 +2,12 @@
 
 #include "Battle/Transitions/BattleTransitionActor.h"
 
-FDelegateHandle ABattleTransitionActor::BindToOnComplete(FOnBattleTransitionComplete::FDelegate &&Binding) {
-    return OnBattleTransitionComplete.Add(std::move(Binding));
+UE5Coro::TCoroutine<> ABattleTransitionActor::Execute() {
+    TransitionToBattle();
+    co_await TFuture<void>(OnBattleTransitionComplete);
+    Destroy();
 }
 
 void ABattleTransitionActor::CompleteTransition() {
-    OnBattleTransitionComplete.Broadcast();
-    Destroy();
+    OnBattleTransitionComplete->EmplaceResult(0);
 }

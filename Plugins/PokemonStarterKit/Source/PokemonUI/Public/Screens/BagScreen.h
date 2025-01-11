@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Bag/Item.h"
 #include "Field/FieldItemEffect.h"
-#include "InventoryScreen.h"
 #include "ItemEffectLookup.h"
 #include "Screens/InventoryScreen.h"
 #include "Screens/Screen.h"

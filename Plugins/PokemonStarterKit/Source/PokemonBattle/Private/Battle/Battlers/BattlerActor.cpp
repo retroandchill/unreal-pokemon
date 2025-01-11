@@ -342,9 +342,9 @@ bool ABattlerActor::IsOwnedByPlayer() const {
     return WrappedPokemon->GetCurrentHandler() == UTrainerHelpers::GetPlayerCharacter(this);
 }
 
-UE5Coro::TCoroutine<> ABattlerActor::SelectActions() {
+void ABattlerActor::SelectActions() {
     if (!CanSelectActions()) {
-        co_return;
+        return;
     }
     
     Controller->ActionSelection(this);

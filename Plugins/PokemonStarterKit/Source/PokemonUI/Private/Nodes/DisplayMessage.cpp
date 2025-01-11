@@ -1,7 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Nodes/DisplayMessage.h"
 #include "Screens/TextDisplayScreen.h"
-#include "Utilities/PokemonUIAsyncActions.h"
+#include "Utilities/PokemonCoroutineDispatcher.h"
 
 UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObject, FText Message) {
     auto Node = NewObject<UDisplayMessage>();
@@ -11,6 +11,7 @@ UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObje
 }
 
 UE5Coro::TCoroutine<> UDisplayMessage::ExecuteCoroutine(FForceLatentCoroutine Coro) {
-    co_await Pokemon::UI::DisplayMessage(GetWorldContext(), Message);
+    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(GetWorldContext());
+    co_await Dispatcher.DisplayMessage(Message);
     OnConfirm.Broadcast();
 }

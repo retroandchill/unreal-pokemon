@@ -9,7 +9,7 @@
 
 #include "PlayBattleAnimation.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBattleAnimationComplete)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBattleAnimationComplete);
 
 /**
  * Play a battle animation and wait for it to complete

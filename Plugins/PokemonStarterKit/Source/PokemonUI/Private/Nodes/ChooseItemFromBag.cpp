@@ -3,7 +3,7 @@
 #include "Nodes/ChooseItemFromBag.h"
 #include "RetroLib/Optionals/IfPresentOrElse.h"
 #include "Screens/BagScreen.h"
-#include "Utilities/PokemonUIAsyncActions.h"
+#include "Utilities/PokemonCoroutineDispatcher.h"
 
 UChooseItemFromBag *UChooseItemFromBag::ChooseItemFromBag(const UObject *WorldContextObject,
                                                           const FItemFilter &ItemFilter) {
@@ -14,8 +14,9 @@ UChooseItemFromBag *UChooseItemFromBag::ChooseItemFromBag(const UObject *WorldCo
 }
 
 UE5Coro::TCoroutine<> UChooseItemFromBag::ExecuteCoroutine(FForceLatentCoroutine) {
+    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(GetWorldContext());
     Retro::Optionals::IfPresentOrElse(
-        co_await Pokemon::UI::SelectItemFromBag(GetWorldContext(), ItemFilter),
+        co_await Dispatcher.SelectItemFromBag(ItemFilter),
         [&](const FSelectedItemHandle &Handle) {
             OnSelected.Broadcast(Handle.GetScreen(), Handle.GetItem(), Handle.GetQuantity());
         },

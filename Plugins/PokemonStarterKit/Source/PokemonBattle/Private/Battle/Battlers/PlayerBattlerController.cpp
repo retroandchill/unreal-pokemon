@@ -8,8 +8,7 @@ UPlayerBattlerController *UPlayerBattlerController::SetBattle(const TScriptInter
     return this;
 }
 
-UE5Coro::TCoroutine<TUniquePtr<IBattleAction>> UPlayerBattlerController::ActionSelection(
-    const TScriptInterface<IBattler> &Battler) const {
+void UPlayerBattlerController::ActionSelection(const TScriptInterface<IBattler> &Battler) const {
     IBattle::Execute_BeginActionSelection(BattleContext.GetObject(), Battler);
 }
 

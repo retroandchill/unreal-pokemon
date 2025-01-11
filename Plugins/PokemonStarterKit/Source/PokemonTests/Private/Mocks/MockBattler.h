@@ -45,6 +45,7 @@ class FMockBattler : public IBattler {
     MOCK_METHOD(void, SelectActions, (), (override));
     MOCK_METHOD(void, RequireSwitch, (), (override));
     MOCK_METHOD(uint8, GetActionCount, (), (const, override));
+    MOCK_METHOD(bool, CanSelectActions, (), (const, override));
     MOCK_METHOD(int32, GetTurnCount, (), (const, override));
     MOCK_METHOD(Retro::TGenerator<TScriptInterface<IBattler>>, GetAllies, (), (const, override));
     MOCK_METHOD(void, ShowSprite, (const FVector &Offset), (const, override));

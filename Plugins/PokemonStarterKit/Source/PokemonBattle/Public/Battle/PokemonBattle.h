@@ -80,7 +80,6 @@ private:
     UE5Coro::TCoroutine<> DisplaySideSendOutAnimation(int32 Index);
 
   public:
-    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
     UE5Coro::TCoroutine<> StartBattle() override;
 
     UE5Coro::TCoroutine<> OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers);
@@ -152,22 +151,10 @@ private:
     FText GetBattleIntroMessage() const;
 
     /**
-     * Send out the opposing side Pokémon
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
-    void QueueOpponentSendOut();
-
-    /**
      * Display the message for a Pokémon send out prior to the animation
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     TScriptInterface<IBattleAnimation> GetOpponentSendOutAnimation();
-
-    /**
-     * Play the animation to send out the player's Pokémon
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
-    void QueuePlayerSendOut();
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     TScriptInterface<IBattleAnimation> GetPlayerSendOutAnimation();
@@ -183,16 +170,6 @@ private:
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     void RefreshBattleHUD();
-
-    /**
-     * Display an action usage message with the given text
-     * @param MessageText The text of the message to display
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void QueueDisplayAction(const FText &MessageText);
-
-    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
-    void ExecuteAction();
 
     /**
      * Process the result of the battle and exit
@@ -220,7 +197,6 @@ private:
     /**
      * Run all checks that need to be handled at the end of the turn
      */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
     UE5Coro::TCoroutine<TOptional<int32>> EndTurn();
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Flow")

@@ -11,13 +11,13 @@
 #include "RetroLib/Utils/Construct.h"
 #include <functional>
 
-UE5Coro::TCoroutine<TUniquePtr<IBattleAction>> UAIBattlerController::ActionSelection(
+void UAIBattlerController::ActionSelection(
     const TScriptInterface<IBattler> &Battler) const {
     // Doing this async is probably overkill, but as the AI gets more complicated and adds more conditions that it
     // needs to evaluate we're going to want to have this be on a separate thread to avoid frame dips while the AI
     // is choosing a move. Ideally we want these threads to resolve quickly (or at least faster than the player can
     // input their commands.
-    co_return co_await AsyncThread([&Battler] {
+    AsyncTask(ENamedThreads::AnyThread, [&Battler] {
         // clang-format off
         auto PossibleMoves = Battler->GetMoves() |
                              Retro::Ranges::Views::Filter(&IBattleMove::IsUsable) |

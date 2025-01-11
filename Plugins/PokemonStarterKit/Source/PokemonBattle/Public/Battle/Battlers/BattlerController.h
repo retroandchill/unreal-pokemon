@@ -31,8 +31,7 @@ class POKEMONBATTLE_API IBattlerController {
      * Initiate the selection process for this battler
      * @param Battler
      */
-    virtual UE5Coro::TCoroutine<TUniquePtr<IBattleAction>> ActionSelection(
-        const TScriptInterface<IBattler> &Battler) const = 0;
+    virtual void ActionSelection(const TScriptInterface<IBattler> &Battler) const = 0;
 
     virtual void InitiateForcedSwitch(const TScriptInterface<IBattler> &Battler) const = 0;
 

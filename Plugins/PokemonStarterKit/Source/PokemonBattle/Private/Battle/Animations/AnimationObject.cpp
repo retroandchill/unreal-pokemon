@@ -3,9 +3,8 @@
 #include "Battle/Animations/AnimationObject.h"
 
 UE5Coro::TCoroutine<> UAnimationObject::PlayAnimation(FForceLatentCoroutine Coro) {
-    TFuture<void> Future = TFuture<void>(OnBattleAnimationComplete);
     Play();
-    co_await Future;
+    co_await TFuture<void>(OnBattleAnimationComplete);
 }
 
 void UAnimationObject::AnimationComplete() const {
