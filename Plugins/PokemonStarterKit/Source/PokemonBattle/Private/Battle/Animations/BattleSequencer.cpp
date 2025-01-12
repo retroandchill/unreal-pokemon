@@ -38,7 +38,7 @@ void ABattleSequencer::QueueBattleMessageWithAnimation(FText Text, const TScript
     }
 }
 
-UE5Coro::TCoroutine<> ABattleSequencer::DisplayBattleMessages() {
+FVoidCoroutine ABattleSequencer::DisplayBattleMessages(const UObject* WorldContext, FForceLatentCoroutine) {
     if (!Instance.IsValid()) {
         UE_LOG(LogBattle, Warning, UninitializedLog)
         co_return;
@@ -48,7 +48,7 @@ UE5Coro::TCoroutine<> ABattleSequencer::DisplayBattleMessages() {
 
 }
 
-UE5Coro::TCoroutine<> ABattleSequencer::ProcessBattleMessages() {
+UE5Coro::TCoroutine<> ABattleSequencer::ProcessBattleMessages(FForceLatentCoroutine) {
     if (bIsProcessingMessages) {
         UE_LOG(LogBattle, Warning, TEXT("Battle sequencer is already processing!"))
         co_return;
@@ -70,7 +70,7 @@ UE5Coro::TCoroutine<> ABattleSequencer::ProcessBattleMessages() {
     bIsProcessingMessages = false;
 }
 
-UE5Coro::TCoroutine<> ABattleSequencer::TryDisplayMessage(FText Message) const {
+UE5Coro::TCoroutine<> ABattleSequencer::TryDisplayMessage(FText Message, FForceLatentCoroutine) const {
     if (Message.IsEmptyOrWhitespace()) {
         co_return;
     }

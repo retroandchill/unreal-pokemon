@@ -26,7 +26,7 @@ AGivePokemonItemTest::AGivePokemonItemTest() {
     LogErrorHandling = EFunctionalTestLogHandling::OutputIgnored;
 }
 
-UE5Coro::TCoroutine<> AGivePokemonItemTest::RunTest(FForceLatentCoroutine Coro) {
+UE5Coro::TCoroutine<> AGivePokemonItemTest::RunTest(FForceLatentCoroutine) {
     Retro::FScopedTimeDilationFactor TimeDilation(this, 8);
     FPokemonDTO DemoPokemon = {.Species = "Pikachu", .Level = 25};
     Pokemon::Tests::FScopedParty Party(this, Retro::Ranges::Views::Single(std::ref(DemoPokemon)));

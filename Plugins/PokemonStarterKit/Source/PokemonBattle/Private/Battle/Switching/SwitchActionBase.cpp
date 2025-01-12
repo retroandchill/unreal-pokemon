@@ -28,7 +28,7 @@ UE5Coro::GAS::FAbilityCoroutine USwitchActionBase::ExecuteAbility(FGameplayAbili
     check(Battler != nullptr)
     SwapTarget = Battler->GetOwningSide()->GetTrainerParty(OwningTrainer)[SwitchTargetIndex];
     QueueRecallAnimation(Battler);
-    co_await ABattleSequencer::DisplayBattleMessages();
+    co_await ABattleSequencer::DisplayBattleMessages(this);
     co_await SwapWithTarget();
     co_await TriggerOnSendOut();
 }
@@ -43,7 +43,7 @@ UE5Coro::TCoroutine<> USwitchActionBase::SwapWithTarget() {
     auto TargetActor = CastChecked<AActor>(SwapTarget.GetObject());
     TargetActor->SetActorTransform(ActorInfo.AvatarActor->GetActorTransform());
     QueueSendOutAnimation(SwapTarget);
-    co_await ABattleSequencer::DisplayBattleMessages();
+    co_await ABattleSequencer::DisplayBattleMessages(this);
 }
 
 UE5Coro::TCoroutine<> USwitchActionBase::TriggerOnSendOut() {

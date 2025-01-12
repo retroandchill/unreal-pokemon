@@ -28,7 +28,7 @@ class POKEMONBATTLE_API UPlayBattleAnimation : public UBlueprintCoroutineActionB
     static UPlayBattleAnimation *PlayBattleAnimation(const TScriptInterface<IBattleAnimation> &Animation);
 
 protected:
-    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro) override;
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:
     /**

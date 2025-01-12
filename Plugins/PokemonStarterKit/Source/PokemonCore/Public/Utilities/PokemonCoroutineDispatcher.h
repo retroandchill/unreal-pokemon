@@ -35,33 +35,33 @@ protected:
   public:
     static IPokemonCoroutineDispatcher &Get(const UObject *WorldContext);
 
-    virtual UE5Coro::TCoroutine<> DisplayMessage(FText Message, FForceLatentCoroutine Coro = {}) const = 0;
+    virtual UE5Coro::TCoroutine<> DisplayMessage(FText Message, FForceLatentCoroutine = {}) const = 0;
 
     virtual TMultiCoroutine<int32, FName> DisplayMessageWithChoices(FText Message,
-                                                                    const TArray<FText> &Choices, FForceLatentCoroutine Coro = {}) const = 0;
+                                                                    const TArray<FText> &Choices, FForceLatentCoroutine = {}) const = 0;
 
     virtual UE5Coro::TCoroutine<bool>
     DisplayConfirmPrompt(FText Message,
                          FText ConfirmOption = NSLOCTEXT("PokemonUI", "PromptYes", "Yes"),
-                         FText CancelOption = NSLOCTEXT("PokemonUI", "PromptNo", "No"), FForceLatentCoroutine Coro = {}) const = 0;
+                         FText CancelOption = NSLOCTEXT("PokemonUI", "PromptNo", "No"), FForceLatentCoroutine = {}) const = 0;
 
     virtual UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>>
-    SelectPokemonFromParty(FForceLatentCoroutine Coro = {}) const = 0;
+    SelectPokemonFromParty(FForceLatentCoroutine = {}) const = 0;
 
     virtual UE5Coro::TCoroutine<TOptional<FSelectedItemHandle>> SelectItemFromBag(
-        const FItemFilter &Filter, FForceLatentCoroutine Coro = {}) const = 0;;
+        const FItemFilter &Filter, FForceLatentCoroutine = {}) const = 0;;
 
-    virtual UE5Coro::TCoroutine<bool> PromptReplaceMove(const TScriptInterface<IPokemon>& Pokemon, FMoveHandle Move, FForceLatentCoroutine Coro = {}) const = 0;
+    virtual UE5Coro::TCoroutine<bool> PromptReplaceMove(const TScriptInterface<IPokemon>& Pokemon, FMoveHandle Move, FForceLatentCoroutine = {}) const = 0;
 
     virtual UE5Coro::TCoroutine<bool> GiveItemToPokemon(const FItemHandle &Item,
                                                         const TScriptInterface<IPokemon> Pokemon,
-                                                        int PokemonIndex, FForceLatentCoroutine Coro = {}) const = 0;
+                                                        int PokemonIndex, FForceLatentCoroutine = {}) const = 0;
 
-    virtual UE5Coro::TCoroutine<bool> TakeItemFromPokemon(const TScriptInterface<IPokemon> &Pokemon, FForceLatentCoroutine Coro = {}) const = 0;
+    virtual UE5Coro::TCoroutine<bool> TakeItemFromPokemon(const TScriptInterface<IPokemon> &Pokemon, FForceLatentCoroutine = {}) const = 0;
 
-    virtual UE5Coro::TCoroutine<bool> LearnMove(const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move, FForceLatentCoroutine Coro = {}) const = 0;
+    virtual UE5Coro::TCoroutine<bool> LearnMove(const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move, FForceLatentCoroutine = {}) const = 0;
 
-    virtual UE5Coro::TCoroutine<> ProcessLevelUp(const TScriptInterface<IPokemon> &Pokemon, const FLevelUpStatChanges& StatChanges, FForceLatentCoroutine Coro = {}) const = 0;
+    virtual UE5Coro::TCoroutine<> ProcessLevelUp(const TScriptInterface<IPokemon> &Pokemon, const FLevelUpStatChanges& StatChanges, FForceLatentCoroutine = {}) const = 0;
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, IPokemonCoroutineDispatcher)

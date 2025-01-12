@@ -16,5 +16,5 @@ class POKEMONTESTS_API AGivePokemonItemTest : public ACoroutineFunctionalTest {
     AGivePokemonItemTest();
 
   protected:
-    UE5Coro::TCoroutine<> RunTest(FForceLatentCoroutine Coro) override;
+    UE5Coro::TCoroutine<> RunTest(FForceLatentCoroutine) override;
 };

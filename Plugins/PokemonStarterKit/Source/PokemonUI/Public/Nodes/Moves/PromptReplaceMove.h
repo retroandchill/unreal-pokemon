@@ -38,7 +38,7 @@ class POKEMONUI_API UPromptReplaceMove : public UBlueprintCoroutineActionBase {
                                                  const TScriptInterface<IPokemon> &Pokemon, const FMoveHandle &Move);
 
     protected:
-    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro) override;
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:
     /**

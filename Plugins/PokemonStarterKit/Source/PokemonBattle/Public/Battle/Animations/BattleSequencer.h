@@ -43,7 +43,7 @@ class POKEMONBATTLE_API ABattleSequencer : public AActor {
     /**
      * Displays multiple battle messages during the battle sequence.
      */
-    static UE5Coro::TCoroutine<> DisplayBattleMessages();
+    static FVoidCoroutine DisplayBattleMessages(const UObject* WorldContext, FForceLatentCoroutine = {});
 
     /**
      * Adds a battle message to the message queue.
@@ -59,7 +59,7 @@ class POKEMONBATTLE_API ABattleSequencer : public AActor {
     /**
      * Processes battle messages based on the provided variadic arguments.
      */
-    UE5Coro::TCoroutine<> ProcessBattleMessages();
+    UE5Coro::TCoroutine<> ProcessBattleMessages(FForceLatentCoroutine = {});
 
   protected:
     /**
@@ -71,7 +71,7 @@ class POKEMONBATTLE_API ABattleSequencer : public AActor {
     void DisplayBattleMessage(const FBattleMessage &Message);
 
 private:
-    UE5Coro::TCoroutine<> TryDisplayMessage(FText Message) const;
+    UE5Coro::TCoroutine<> TryDisplayMessage(FText Message, FForceLatentCoroutine = {}) const;
 
     static TWeakObjectPtr<ABattleSequencer> Instance;
     std::queue<FBattleMessage> Messages;

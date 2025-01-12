@@ -27,7 +27,7 @@ class POKEMONCORE_API UProcessLevelUp : public UBlueprintCoroutineActionBase {
                                            const FLevelUpStatChanges &StatChanges, bool bShowMessages);
 
 protected:
-    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro) override;
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:
     /**

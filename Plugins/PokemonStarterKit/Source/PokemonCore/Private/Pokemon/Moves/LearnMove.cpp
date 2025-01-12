@@ -12,7 +12,7 @@ ULearnMove *ULearnMove::LearnMove(const TScriptInterface<IPokemon> &Pokemon, FMo
     return Node;
 }
 
-UE5Coro::TCoroutine<> ULearnMove::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+UE5Coro::TCoroutine<> ULearnMove::ExecuteCoroutine(FForceLatentCoroutine) {
     if (co_await Pokemon->GetMoveBlock()->LearnMove(Move)) {
         MoveLearned.Broadcast();
     } else {

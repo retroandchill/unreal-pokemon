@@ -45,7 +45,7 @@ UE5Coro::GAS::FAbilityCoroutine UBattleItemEffect::ExecuteAbility(FGameplayAbili
         bShouldConsumeItem |= ApplyEffectToTarget(User, Target);
     });
 
-    co_await ABattleSequencer::DisplayBattleMessages();
+    co_await ABattleSequencer::DisplayBattleMessages(this);
     ActorInfo->AbilitySystemComponent->RemoveLooseGameplayTag(Pokemon::Battle::Items::UsingItem);
     if (auto &ItemData = GetItem(); bShouldConsumeItem && ItemData.Consumable) {
         auto &Subsystem = UPokemonSubsystem::GetInstance(GetCurrentActorInfo()->AvatarActor.Get());

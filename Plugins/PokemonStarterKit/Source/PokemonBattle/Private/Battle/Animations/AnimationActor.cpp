@@ -2,7 +2,7 @@
 
 #include "Battle/Animations/AnimationActor.h"
 
-UE5Coro::TCoroutine<> AAnimationActor::PlayAnimation(FForceLatentCoroutine Coro) {
+UE5Coro::TCoroutine<> AAnimationActor::PlayAnimation(FForceLatentCoroutine) {
     Play();
     co_await TFuture<void>(OnBattleAnimationComplete);
     Destroy();

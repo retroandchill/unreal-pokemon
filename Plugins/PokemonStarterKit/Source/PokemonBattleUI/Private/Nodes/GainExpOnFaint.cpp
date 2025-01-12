@@ -15,7 +15,7 @@ UGainExpOnFaint *UGainExpOnFaint::GainExpOnFaint(const UObject *WorldContextObje
     return Node;
 }
 
-UE5Coro::TCoroutine<> UGainExpOnFaint::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+UE5Coro::TCoroutine<> UGainExpOnFaint::ExecuteCoroutine(FForceLatentCoroutine) {
     co_await ProcessExpGain();
     OnComplete.Broadcast();
 }

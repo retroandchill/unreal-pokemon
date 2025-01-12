@@ -9,7 +9,7 @@ UPromptSaveGame *UPromptSaveGame::PromptToSave(const UObject *WorldContextObject
     return Node;
 }
 
-UE5Coro::TCoroutine<> UPromptSaveGame::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+UE5Coro::TCoroutine<> UPromptSaveGame::ExecuteCoroutine(FForceLatentCoroutine) {
     auto Screen = USaveScreen::AddSaveScreenToStack(GetWorldContext());
     auto bSuccess = co_await Screen->UntilSaveComplete();
     bSuccess ? Saved.Broadcast() : DidNotSave.Broadcast();

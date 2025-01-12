@@ -27,7 +27,7 @@ class POKEMONBATTLEUI_API UGainExpOnFaint : public UBlueprintCoroutineActionBase
                                            const TArray<TScriptInterface<IBattler>> &Battlers);
 
 protected:
-    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro) override;
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:
     UE5Coro::TCoroutine<> ProcessExpGain() const;

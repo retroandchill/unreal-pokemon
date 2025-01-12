@@ -13,7 +13,7 @@ UProcessLevelUp *UProcessLevelUp::ProcessLevelUp(const TScriptInterface<IPokemon
     return Node;
 }
 
-UE5Coro::TCoroutine<> UProcessLevelUp::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+UE5Coro::TCoroutine<> UProcessLevelUp::ExecuteCoroutine(FForceLatentCoroutine) {
     auto &Dispatcher = IPokemonCoroutineDispatcher::Get(GetWorldContext());
     if (bShowMessages) {
         co_await Dispatcher.ProcessLevelUp(Pokemon, StatChanges);

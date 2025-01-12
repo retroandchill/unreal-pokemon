@@ -90,7 +90,7 @@ class POKEMONCORE_API IMoveBlock {
      * @param Move The move to learn
      * @param Coro This is called after the move learning prompt is done
      */
-    virtual UE5Coro::TCoroutine<bool> LearnMove(FMoveHandle Move, FForceLatentCoroutine Coro = {}) = 0;
+    virtual UE5Coro::TCoroutine<bool> LearnMove(FMoveHandle Move, FForceLatentCoroutine = {}) = 0;
 
     /**
      * Create a new move interface object. This is typically a temporary used for the move learn screen)

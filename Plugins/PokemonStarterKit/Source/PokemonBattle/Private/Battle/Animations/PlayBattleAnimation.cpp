@@ -9,7 +9,7 @@ UPlayBattleAnimation *UPlayBattleAnimation::PlayBattleAnimation(const TScriptInt
     return Node;
 }
 
-UE5Coro::TCoroutine<> UPlayBattleAnimation::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+UE5Coro::TCoroutine<> UPlayBattleAnimation::ExecuteCoroutine(FForceLatentCoroutine) {
     co_await Animation->PlayAnimation();
     AnimationComplete.Broadcast();
 }

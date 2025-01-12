@@ -48,7 +48,7 @@ static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side) {
 }
 
 UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutActivationEvent(UAbilitySystemComponent* AbilityComponent, FGameplayAbilitySpecHandle Handle, FGameplayTag Tag, FGameplayEventData
-                                                                      EventData) {
+                                                                      EventData, FForceLatentCoroutine) {
     auto State = MakeShared<TFutureState<int32>>();
     auto Spec = AbilityComponent->FindAbilitySpecFromHandle(Handle);
     check(Spec != nullptr);

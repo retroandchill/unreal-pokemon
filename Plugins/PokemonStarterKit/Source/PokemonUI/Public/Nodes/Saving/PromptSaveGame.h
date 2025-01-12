@@ -28,7 +28,7 @@ class POKEMONUI_API UPromptSaveGame : public UBlueprintCoroutineActionBase {
     static UPromptSaveGame *PromptToSave(const UObject *WorldContextObject);
 
   protected:
-    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine = {}) override;
 
   private:
     /**

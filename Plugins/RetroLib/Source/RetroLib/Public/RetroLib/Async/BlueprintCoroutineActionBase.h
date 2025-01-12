@@ -27,10 +27,10 @@ class RETROLIB_API UBlueprintCoroutineActionBase : public UBlueprintAsyncActionB
     UWorld *GetWorld() const override;
 
   protected:
-    virtual UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) ABSTRACT_METHOD
+    virtual UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine = {}) ABSTRACT_METHOD
 
   public:
-    UE5Coro::TCoroutine<> UntilComplete(FForceLatentCoroutine Coro = {}) const;
+    UE5Coro::TCoroutine<> UntilComplete(FForceLatentCoroutine = {}) const;
 
   protected:
     const UObject *GetWorldContext() const {

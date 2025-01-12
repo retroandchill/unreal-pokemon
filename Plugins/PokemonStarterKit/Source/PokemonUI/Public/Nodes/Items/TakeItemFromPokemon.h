@@ -27,7 +27,7 @@ class POKEMONUI_API UTakeItemFromPokemon : public UBlueprintCoroutineActionBase 
     static UTakeItemFromPokemon *TakeItemFromPokemon(const TScriptInterface<IPokemon> &Pokemon);
 
     protected:
-    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro) override;
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:
     /**

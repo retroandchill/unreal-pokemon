@@ -38,7 +38,7 @@ class POKEMONUI_API UDisplayMessage : public UBlueprintCoroutineActionBase {
     static UDisplayMessage *DisplayMessage(const UObject *WorldContextObject, FText Message);
 
   protected:
-    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine = {}) override;
 
   private:
     /**

@@ -15,7 +15,7 @@ UDisplayMessageWithChoices *UDisplayMessageWithChoices::DisplayMessageWithChoice
     return Node;
 }
 
-UE5Coro::TCoroutine<> UDisplayMessageWithChoices::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+UE5Coro::TCoroutine<> UDisplayMessageWithChoices::ExecuteCoroutine(FForceLatentCoroutine) {
     auto &Dispatcher = IPokemonCoroutineDispatcher::Get(GetWorldContext());
     auto [ChoiceIndex, ChoiceID] = co_await Dispatcher.DisplayMessageWithChoices(Message, Choices);
     OnChoiceSelected.Broadcast(ChoiceIndex, ChoiceID);

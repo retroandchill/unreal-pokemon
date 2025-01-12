@@ -84,7 +84,7 @@ void UBattleTransitionSubsystem::SetUpBattle() {
     }
 }
 
-void UBattleTransitionSubsystem::ExitBattle() {
+void UBattleTransitionSubsystem::ExitBattle(FForceLatentCoroutine) {
     check(Battlefield != nullptr)
     FLatentActionInfo LatentActionInfo;
     UGameplayStatics::UnloadStreamLevelBySoftObjectPtr(this, Battlefield->GetWorldAsset(), LatentActionInfo, false);

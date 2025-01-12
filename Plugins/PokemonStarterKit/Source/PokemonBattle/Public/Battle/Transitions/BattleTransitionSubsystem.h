@@ -83,7 +83,7 @@ class POKEMONBATTLE_API UBattleTransitionSubsystem : public UWorldSubsystem {
     /**
      * Exit the current battle and return to the field
      */
-    void ExitBattle(FForceLatentCoroutine Coro = {});
+    void ExitBattle(FForceLatentCoroutine = {});
 
     /**
      * The map to jump to for battle

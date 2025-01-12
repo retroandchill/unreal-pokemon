@@ -8,7 +8,7 @@
 #include "Screens/TextDisplayScreen.h"
 #include "TestAdapter.h"
 
-UE5Coro::TCoroutine<> Pokemon::Testing::AdvanceMessages(const UObject *WorldContextObject, FForceLatentCoroutine Coro) {
+UE5Coro::TCoroutine<> Pokemon::Testing::AdvanceMessages(const UObject *WorldContextObject, FForceLatentCoroutine) {
     auto Screen = Cast<UTextDisplayScreen>(URPGUIManagerSubsystem::Get(WorldContextObject).GetTopScreenOfOverlay());
     if (Screen == nullptr) {
         co_return;
@@ -24,7 +24,7 @@ UE5Coro::TCoroutine<> Pokemon::Testing::AdvanceMessages(const UObject *WorldCont
 }
 
 UE5Coro::TCoroutine<> Pokemon::Testing::AdvanceMessagesUntilPrompt(const UObject *WorldContextObject,
-                                                                   int32 IndexToSelect, FForceLatentCoroutine Coro) {
+                                                                   int32 IndexToSelect, FForceLatentCoroutine) {
     auto Screen = Cast<UTextDisplayScreen>(URPGUIManagerSubsystem::Get(WorldContextObject).GetTopScreenOfOverlay());
     if (Screen == nullptr) {
         co_return;

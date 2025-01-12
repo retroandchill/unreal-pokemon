@@ -37,7 +37,7 @@ class POKEMONBATTLE_API UInitiateBattle : public UBlueprintCoroutineActionBase {
                                            TSubclassOf<ABattleTransitionActor> Transition);
 
     protected:
-    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro) override;;
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;;
 
   private:
     /**

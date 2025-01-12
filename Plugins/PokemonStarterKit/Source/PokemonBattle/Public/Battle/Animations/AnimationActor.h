@@ -13,7 +13,7 @@ class POKEMONBATTLE_API AAnimationActor : public AActor, public IBattleAnimation
     GENERATED_BODY()
 
 public:
-    virtual UE5Coro::TCoroutine<> PlayAnimation(FForceLatentCoroutine Coro = {}) override;
+    virtual UE5Coro::TCoroutine<> PlayAnimation(FForceLatentCoroutine = {}) override;
 
   protected:
     /**

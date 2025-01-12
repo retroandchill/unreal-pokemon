@@ -14,7 +14,7 @@ UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldCo
     return Node;
 }
 
-UE5Coro::TCoroutine<> UGiveItemToPokemon::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+UE5Coro::TCoroutine<> UGiveItemToPokemon::ExecuteCoroutine(FForceLatentCoroutine) {
     auto &Dispatcher = IPokemonCoroutineDispatcher::Get(GetWorldContext());
     auto bGiven = co_await Dispatcher.GiveItemToPokemon(Item, Pokemon, PokemonIndex);
     bGiven ? ItemGiven.Broadcast() : ItemRejected.Broadcast();

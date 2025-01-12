@@ -20,7 +20,7 @@
 #include "Utilities/TrainerHelpers.h"
 
 UE5Coro::TCoroutine<> UPokemonCoroutineDispatcherImpl::DisplayMessage(FText Message,
-                                                                      FForceLatentCoroutine Coro) const {
+                                                                      FForceLatentCoroutine) const {
     if (auto Controller = GetWorld()->GetFirstPlayerController(); Controller == nullptr) {
         // TODO: Remove this hack and alter how the tests run to avoid this
         co_return;
@@ -37,7 +37,7 @@ UE5Coro::TCoroutine<> UPokemonCoroutineDispatcherImpl::DisplayMessage(FText Mess
 }
 
 IPokemonCoroutineDispatcher::TMultiCoroutine<int, FName> UPokemonCoroutineDispatcherImpl::DisplayMessageWithChoices(
-    FText Message, const TArray<FText> &Choices, FForceLatentCoroutine Coro) const {
+    FText Message, const TArray<FText> &Choices, FForceLatentCoroutine) const {
     auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(this);
     auto Screen =
         Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
@@ -50,27 +50,27 @@ IPokemonCoroutineDispatcher::TMultiCoroutine<int, FName> UPokemonCoroutineDispat
 }
 
 UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::DisplayConfirmPrompt(
-    FText Message, FText ConfirmOption, FText CancelOption, FForceLatentCoroutine Coro) const {
+    FText Message, FText ConfirmOption, FText CancelOption, FForceLatentCoroutine) const {
     auto [ChoiceIndex, _] =
             co_await DisplayMessageWithChoices(std::move(Message), {std::move(ConfirmOption), std::move(CancelOption)});
     co_return ChoiceIndex == 0;
 }
 
 UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>> UPokemonCoroutineDispatcherImpl::SelectPokemonFromParty(
-    FForceLatentCoroutine Coro) const {
+    FForceLatentCoroutine) const {
     auto Screen = UPokemonSelectScreen::AddPokemonSelectScreenToStack(this);
     co_return co_await Screen->PromptPokemonSelection();
 }
 
 UE5Coro::TCoroutine<TOptional<FSelectedItemHandle>> UPokemonCoroutineDispatcherImpl::SelectItemFromBag(
-    const FItemFilter &Filter, FForceLatentCoroutine Coro) const {
+    const FItemFilter &Filter, FForceLatentCoroutine) const {
     auto Screen = UBagScreen::AddBagScreenToStack(this);
     Screen->ApplyItemFilter(Filter);
     co_return co_await Screen->PromptItemSelection();
 }
 
 UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::PromptReplaceMove(const TScriptInterface<IPokemon> &Pokemon,
-    FMoveHandle Move, FForceLatentCoroutine Coro) const {
+    FMoveHandle Move, FForceLatentCoroutine) const {
         auto Screen = UMoveForgetScreen::AddMoveForgetScreenToStack(this);
         Screen->InitializeScene(Pokemon, Move);
         co_return co_await Screen->AwaitPlayerDecision();
@@ -79,7 +79,7 @@ UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::PromptReplaceMove(con
 UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::GiveItemToPokemon(
     const FItemHandle &Item,
     const TScriptInterface<IPokemon> Pokemon,
-    int PokemonIndex, FForceLatentCoroutine Coro) const {
+    int PokemonIndex, FForceLatentCoroutine) const {
     auto &Messages = *GetDefault<UPokemonMessageSettings>();
 
     if (auto HeldItem = Pokemon->GetHoldItem(); HeldItem.IsSet()) {
@@ -117,7 +117,7 @@ UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::GiveItemToPokemon(
 }
 
 UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::TakeItemFromPokemon(
-    const TScriptInterface<IPokemon> &Pokemon, FForceLatentCoroutine Coro) const {
+    const TScriptInterface<IPokemon> &Pokemon, FForceLatentCoroutine) const {
     auto &Messages = *GetDefault<UPokemonMessageSettings>();
 
     auto WorldContext = Pokemon.GetObject();
@@ -138,7 +138,7 @@ UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::TakeItemFromPokemon(
 }
 
 UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::LearnMove(
-    const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move, FForceLatentCoroutine Coro) const {
+    const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move, FForceLatentCoroutine) const {
     auto &Messages = *GetDefault<UPokemonMessageSettings>();
     auto &MoveData = FDataManager::GetInstance().GetDataChecked(Move);
     auto Nickname = Pokemon->GetNickname();
@@ -161,7 +161,7 @@ UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::LearnMove(
 
 UE5Coro::TCoroutine<> UPokemonCoroutineDispatcherImpl::ProcessLevelUp(
     const TScriptInterface<IPokemon> &Pokemon, const FLevelUpStatChanges &StatChanges,
-    FForceLatentCoroutine Coro) const {
+    FForceLatentCoroutine) const {
     auto &Messages = *GetDefault<UPokemonMessageSettings>();
     auto Nickname = Pokemon->GetNickname();
 

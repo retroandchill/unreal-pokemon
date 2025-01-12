@@ -137,13 +137,14 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
      * Use the move on the given targets
      * @param User The user of the move
      * @param Targets The targets of the move
+     * @param Coro
      */
     UE5Coro::TCoroutine<> UseMove(const TScriptInterface<IBattler> &User,
-                                  const TArray<TScriptInterface<IBattler>> &Targets);
+                                  const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine = {});
 
     UE5Coro::TCoroutine<bool> CheckMoveSuccess(const TScriptInterface<IBattler> &User,
-                                                                    const TArray<TScriptInterface<IBattler>> &Targets,
-                                                                    TArray<TScriptInterface<IBattler>> &SuccessfulHits);
+                                               const TArray<TScriptInterface<IBattler>> &Targets,
+                                               TArray<TScriptInterface<IBattler>> &SuccessfulHits, FForceLatentCoroutine = {});
 
   protected:
     /**
@@ -207,7 +208,8 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
                                 const TScriptInterface<IBattler> &Target);
 
 private:
-    UE5Coro::TCoroutine<> PlayAnimation(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
+    UE5Coro::TCoroutine<> PlayAnimation(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine =
+                                            {});
 
 public:
     /**
@@ -223,9 +225,10 @@ public:
      * Take the damage effects of the move and apply them to the target
      * @param User The user of the move
      * @param Targets The targets to deal damage to
+     * @param Coro
      */
     UE5Coro::TCoroutine<> DealDamage(const TScriptInterface<IBattler> &User,
-                                     const TArray<TScriptInterface<IBattler>> &Targets);
+                                     const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine = {});
 
     /**
      * Calculate the damage dealt to a single target
@@ -320,9 +323,10 @@ public:
      * Apply any move effects to the targets
      * @param User The user of the move
      * @param Targets The targets of the move
+     * @param Coro
      */
     UE5Coro::TCoroutine<> ApplyMoveEffects(const TScriptInterface<IBattler> &User,
-                                           const TArray<TScriptInterface<IBattler>> &Targets);
+                                           const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine = {});
 
     /**
      * Effect applied to a target that took damage from a move
@@ -362,9 +366,10 @@ public:
      * Apply additional effects against the user
      * @param User The user of the move
      * @param Targets The targets of the move
+     * @param Coro
      */
     UE5Coro::TCoroutine<> ApplyAdditionalEffects(const TScriptInterface<IBattler> &User,
-                                                 const TArray<TScriptInterface<IBattler>> &Targets);
+                                                 const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine = {});
 
     /**
      * Apply any additional effect to a target
@@ -388,9 +393,10 @@ public:
      * Display the move effects to the player and end the move
      * @param User The user of the move
      * @param Targets The targets of the move
+     * @param Coro
      */
     UE5Coro::TCoroutine<> EndMove(const TScriptInterface<IBattler> &User,
-                                  const TArray<TScriptInterface<IBattler>> &Targets);
+                                  const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine = {});
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
     TScriptInterface<IBattleAnimation> GetExpGainSequence(const TScriptInterface<IBattler> &User,

@@ -13,7 +13,7 @@ UInitiateBattle *UInitiateBattle::InitiateBattle(const UObject *WorldContextObje
     return Node;
 }
 
-UE5Coro::TCoroutine<> UInitiateBattle::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+UE5Coro::TCoroutine<> UInitiateBattle::ExecuteCoroutine(FForceLatentCoroutine) {
     auto Subsystem = GetWorldContext()->GetWorld()->GetSubsystem<UBattleTransitionSubsystem>();
     check(Subsystem != nullptr)
     if (auto Result = co_await Subsystem->InitiateBattle(BattleInfo, Transition); Result != EBattleResult::Defeat || BattleInfo.bLossAllowed) {

@@ -85,7 +85,7 @@ UE5Coro::TCoroutine<UCommonActivatableWidget *> UTextDisplayScreen::AwaitInputPr
     co_return MessageWindow;
 }
 
-UE5Coro::TCoroutine<> UTextDisplayScreen::CheckIfMoreTextIsAdded(FForceLatentCoroutine Coro) {
+UE5Coro::TCoroutine<> UTextDisplayScreen::CheckIfMoreTextIsAdded(FForceLatentCoroutine) {
     co_await UE5Coro::Latent::NextTick();
     if (bAdvancedMessage) {
         CloseScreen();

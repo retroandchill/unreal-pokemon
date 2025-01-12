@@ -47,16 +47,10 @@ FAbilityPromise::FAbilityPromise(UUE5CoroGameplayAbility& Ability,
                                  const FGameplayAbilityActorInfo* ActorInfo,
                                  const FGameplayAbilityActivationInfo&,
                                  const FGameplayEventData*)
-	: Super(TLatentContext<>(&Ability, ActorInfo->OwnerActor->GetWorld()))
-{
-	checkf(IsValid(&Ability), TEXT("Attempting to execute invalid ability"));
-	checkf(IsValid(ActorInfo->OwnerActor->GetWorld()),
-	       TEXT("Attempting to execute ability in invalid world"));
-}
-
-FAbilityCoroutine FAbilityPromise::get_return_object() noexcept
-{
-	return static_cast<FAbilityCoroutine&&>(Super::get_return_object());
+	: Super(TLatentContext<>(&Ability, ActorInfo->OwnerActor->GetWorld())) {
+    checkf(IsValid(&Ability), TEXT("Attempting to execute invalid ability"));
+    checkf(IsValid(ActorInfo->OwnerActor->GetWorld()),
+           TEXT("Attempting to execute ability in invalid world"));
 }
 
 template<typename T>
