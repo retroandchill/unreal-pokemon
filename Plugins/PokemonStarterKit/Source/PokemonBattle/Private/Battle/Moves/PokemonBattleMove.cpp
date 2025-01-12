@@ -109,7 +109,7 @@ UE5Coro::TCoroutine<> UPokemonBattleMove::TryActivateMove(const TArray<FTargetWi
     auto OwnerActor = CastChecked<AActor>(Owner.GetObject());
     FGameplayEventData EventData;
     EventData.Instigator = OwnerActor;
-    
+
     auto Payload = NewObject<UUseMovePayload>();
     Payload->Move = this;
     bool bIsInstanced;
@@ -127,5 +127,6 @@ UE5Coro::TCoroutine<> UPokemonBattleMove::TryActivateMove(const TArray<FTargetWi
     // clang-format on
     EventData.TargetData.Data.Emplace(TargetData);
 
-    co_await Pokemon::Battle::Events::SendOutActivationEvent(AbilityComponent, FunctionCode, Pokemon::Battle::Moves::UsingMove, EventData);
+    co_await Pokemon::Battle::Events::SendOutActivationEvent(AbilityComponent, FunctionCode,
+                                                             Pokemon::Battle::Moves::UsingMove, EventData);
 }

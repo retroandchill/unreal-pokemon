@@ -15,8 +15,9 @@ USwitchActionBase::USwitchActionBase() {
 }
 
 UE5Coro::GAS::FAbilityCoroutine USwitchActionBase::ExecuteAbility(FGameplayAbilitySpecHandle Handle,
-    const FGameplayAbilityActorInfo *ActorInfo, FGameplayAbilityActivationInfo ActivationInfo,
-    const FGameplayEventData *TriggerEventData) {
+                                                                  const FGameplayAbilityActorInfo *ActorInfo,
+                                                                  FGameplayAbilityActivationInfo ActivationInfo,
+                                                                  const FGameplayEventData *TriggerEventData) {
     // If this is not triggered by an event throw an exception
     check(TriggerEventData != nullptr)
     auto Payload = CastChecked<const USwitchPokemonPayload>(TriggerEventData->OptionalObject);

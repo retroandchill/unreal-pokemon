@@ -2,6 +2,7 @@
 
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "Battle/Animations/BattleAnimation.h"
 #include "Battle/Animations/BattleSequencer.h"
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Attributes/TargetDamageStateAttributeSet.h"
@@ -27,7 +28,6 @@
 #include "Moves/Target.h"
 #include "PokemonBattleModule.h"
 #include "PokemonBattleSettings.h"
-#include "Battle/Animations/BattleAnimation.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Views/Concat.h"
@@ -58,8 +58,9 @@ bool UBattleMoveFunctionCode::ShouldAbilityRespondToEvent(const FGameplayAbility
 }
 
 UE5Coro::GAS::FAbilityCoroutine UBattleMoveFunctionCode::ExecuteAbility(FGameplayAbilitySpecHandle Handle,
-    const FGameplayAbilityActorInfo *ActorInfo, FGameplayAbilityActivationInfo ActivationInfo,
-    const FGameplayEventData *TriggerEventData) {
+                                                                        const FGameplayAbilityActorInfo *ActorInfo,
+                                                                        FGameplayAbilityActivationInfo ActivationInfo,
+                                                                        const FGameplayEventData *TriggerEventData) {
     // If this is not triggered by an event throw an exception
     check(TriggerEventData != nullptr)
     BattleMove = CastChecked<UUseMovePayload>(TriggerEventData->OptionalObject)->Move;
@@ -138,7 +139,8 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
 }
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
-                                                       const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine) {
+                                                       const TArray<TScriptInterface<IBattler>> &Targets,
+                                                       FForceLatentCoroutine) {
     TArray<TScriptInterface<IBattler>> SuccessfulHits;
     if (!co_await CheckMoveSuccess(User, Targets, SuccessfulHits)) {
         ProcessMoveFailure();
@@ -155,7 +157,8 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::UseMove(const TScriptInterface<IB
 
 UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(const TScriptInterface<IBattler> &User,
                                                                     const TArray<TScriptInterface<IBattler>> &Targets,
-                                                                    TArray<TScriptInterface<IBattler>> &SuccessfulHits, FForceLatentCoroutine) {
+                                                                    TArray<TScriptInterface<IBattler>> &SuccessfulHits,
+                                                                    FForceLatentCoroutine) {
     UE_LOG(LogBattle, Display, TEXT("%s is using move %s!"), *User->GetNickname().ToString(),
            *BattleMove->GetDisplayName().ToString())
     if (MoveFailed(User, Targets)) {
@@ -176,7 +179,7 @@ UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(const TScrip
         if (!bSuccess) {
             Target->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
             AddedTargetTags.FindChecked(CastChecked<AActor>(Target.GetObject()))
-                           .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
+                .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
         }
         return bSuccess;
     };
@@ -195,7 +198,7 @@ UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(const TScrip
                    *Target->GetNickname().ToString())
             Target->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Missed);
             AddedTargetTags.FindChecked(CastChecked<AActor>(Target.GetObject()))
-                           .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Missed);
+                .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Missed);
         }
         return bHitResult;
     };
@@ -208,7 +211,7 @@ UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(const TScrip
         EndMove(User, Targets);
         co_return false;
     }
-    
+
     co_return true;
 }
 
@@ -298,19 +301,21 @@ int32 UBattleMoveFunctionCode::CalculateBaseAccuracy_Implementation(int32 Accura
 }
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::PlayAnimation(const TScriptInterface<IBattler> &User,
-                                                             const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine) {
+                                                             const TArray<TScriptInterface<IBattler>> &Targets,
+                                                             FForceLatentCoroutine) {
     co_await ABattleSequencer::DisplayBattleMessages(this);
     co_await IBattleAnimation::PlayAnimation(GetMoveAnimation(User, Targets));
 }
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DealDamage(const TScriptInterface<IBattler> &User,
-                                                          const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine) {
+                                                          const TArray<TScriptInterface<IBattler>> &Targets,
+                                                          FForceLatentCoroutine) {
     if (BattleMove->GetCategory() != EMoveDamageCategory::Status) {
-            for (auto &Target : Targets) {
-                CalculateDamageAgainstTarget(User, Target, Targets.Num());
-            }
+        for (auto &Target : Targets) {
+            CalculateDamageAgainstTarget(User, Target, Targets.Num());
         }
-    
+    }
+
     // This is the list of tags to ignore when dealing out damage
     static const auto UnaffectedTagsFilter = FGameplayTagContainer::CreateFromArray(TArray<FGameplayTag>{
         Pokemon::Battle::Moves::MoveTarget_Unaffected, Pokemon::Battle::Moves::MoveTarget_NoDamage});
@@ -479,7 +484,8 @@ bool UBattleMoveFunctionCode::IsCritical_Implementation(const TScriptInterface<I
 }
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> &User,
-                                                                const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine) {
+                                                                const TArray<TScriptInterface<IBattler>> &Targets,
+                                                                FForceLatentCoroutine) {
     UE_LOG(LogBattle, Display, TEXT("Applying post-damage effects of %s!"), *BattleMove->GetDisplayName().ToString())
     for (auto &Target : Targets) {
         if (Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected)) {
@@ -521,7 +527,8 @@ void UBattleMoveFunctionCode::FaintCheck(const TScriptInterface<IBattler> &User,
 }
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScriptInterface<IBattler> &User,
-                                                                      const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine) {
+                                                                      const TArray<TScriptInterface<IBattler>> &Targets,
+                                                                      FForceLatentCoroutine) {
     UE_LOG(LogBattle, Display, TEXT("Applying additional effects of %s!"), *BattleMove->GetDisplayName().ToString())
     for (auto &Target : Targets) {
         if (Target->GetAbilityComponent()->GetTargetDamageStateAttributeSet()->GetCalculatedDamage() == 0.f) {
@@ -564,7 +571,8 @@ int32 UBattleMoveFunctionCode::CalculateAdditionalEffectChance_Implementation(
 }
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::EndMove(const TScriptInterface<IBattler> &User,
-                                                       const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine) {
+                                                       const TArray<TScriptInterface<IBattler>> &Targets,
+                                                       FForceLatentCoroutine) {
     co_await ABattleSequencer::DisplayBattleMessages(this);
     co_await IBattleAnimation::PlayAnimation(GetExpGainSequence(User, Targets));
 }

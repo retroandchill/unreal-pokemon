@@ -6,19 +6,14 @@
 
 UGainExp *UGainExp::GainExp(const TScriptInterface<IPokemon> &Pokemon, int32 ExpAmount, bool bShowMessages) {
     auto Node = NewObject<UGainExp>();
+    Node->SetWorldContext(Pokemon.GetObject());
     Node->Pokemon = Pokemon;
     Node->ExpAmount = ExpAmount;
     Node->bShowMessages = bShowMessages;
     return Node;
 }
 
-void UGainExp::Activate() {
-    FLevelUpEnd LevelUpEnd;
-    LevelUpEnd.BindDynamic(this, &UGainExp::ExecuteAfterExpGain);
-    Pokemon->GetStatBlock()->GainExp(ExpAmount, bShowMessages);
-}
-
-void UGainExp::ExecuteAfterExpGain() {
+UE5Coro::TCoroutine<> UGainExp::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine) {
+    co_await Pokemon->GetStatBlock()->GainExp(ExpAmount, bShowMessages);
     AfterExpGain.Broadcast();
-    SetReadyToDestroy();
 }

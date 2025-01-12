@@ -5,6 +5,7 @@
 #include "Bag/Item.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Events/TargetedEvents.h"
 #include "Battle/Events/UseItemPayload.h"
 #include "Battle/Items/BattleItemEffect.h"
 #include "Battle/Items/ItemLookup.h"
@@ -12,7 +13,6 @@
 #include "DataManager.h"
 #include "Pokemon/Pokemon.h"
 #include "PokemonBattleSettings.h"
-#include "Battle/Events/TargetedEvents.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/Transform.h"
@@ -94,5 +94,6 @@ UE5Coro::TCoroutine<> FBattleActionUseItem::ActivateAbility() {
     // clang-format on
     EventData.TargetData.Data.Emplace(TargetData);
 
-    co_await Pokemon::Battle::Events::SendOutActivationEvent(AbilityComponent, Handle, Pokemon::Battle::Items::UsingItem, std::move(EventData));
+    co_await Pokemon::Battle::Events::SendOutActivationEvent(AbilityComponent, Handle,
+                                                             Pokemon::Battle::Items::UsingItem, std::move(EventData));
 }

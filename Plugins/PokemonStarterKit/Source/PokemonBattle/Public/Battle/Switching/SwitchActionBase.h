@@ -24,12 +24,11 @@ class POKEMONBATTLE_API USwitchActionBase : public UUE5CoroGameplayAbility {
     USwitchActionBase();
 
   protected:
-    UE5Coro::GAS::FAbilityCoroutine
-    ExecuteAbility(FGameplayAbilitySpecHandle Handle,
-                   const FGameplayAbilityActorInfo* ActorInfo,
-                   FGameplayAbilityActivationInfo ActivationInfo,
-                   const FGameplayEventData* TriggerEventData) override;
-    
+    UE5Coro::GAS::FAbilityCoroutine ExecuteAbility(FGameplayAbilitySpecHandle Handle,
+                                                   const FGameplayAbilityActorInfo *ActorInfo,
+                                                   FGameplayAbilityActivationInfo ActivationInfo,
+                                                   const FGameplayEventData *TriggerEventData) override;
+
     /**
      * Play the animation to recall the Pokémon. It ends when {@link USwitchActionBase::SwapWithTarget} is called.
      * @param SwappingFrom The battler that is being recalled

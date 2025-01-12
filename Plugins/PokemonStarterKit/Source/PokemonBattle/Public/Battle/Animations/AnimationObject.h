@@ -15,7 +15,7 @@ UCLASS(Abstract, BlueprintType, Blueprintable, meta = (ShowWorldContextPin))
 class POKEMONBATTLE_API UAnimationObject : public UObject, public IBattleAnimation {
     GENERATED_BODY()
 
-public:
+  public:
     virtual UE5Coro::TCoroutine<> PlayAnimation() override;
 
   protected:
@@ -24,7 +24,7 @@ public:
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Animation")
     void Play();
-    
+
     /**
      * Signal that the animation is complete
      */

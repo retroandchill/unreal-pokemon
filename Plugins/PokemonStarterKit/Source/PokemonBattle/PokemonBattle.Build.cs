@@ -4,13 +4,12 @@ public class PokemonBattle : ModuleRules {
     public PokemonBattle(ReadOnlyTargetRules Target) : base(Target) {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "PokemonData", "PokemonCore", "GameplayAbilities",
-                                                            "GameplayTags", "GameplayTasks", "DeveloperSettings",
-                                                            "DynamicAssetLoader", "PokemonAssets", "UE5Coro", "UE5CoroGAS" });
+        PublicDependencyModuleNames.AddRange(
+            new string[] { "Core", "PokemonData", "PokemonCore", "GameplayAbilities", "GameplayTags", "GameplayTasks",
+                           "DeveloperSettings", "DynamicAssetLoader", "PokemonAssets", "UE5Coro", "UE5CoroGAS" });
 
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore",
                                                              "UnrealInjector", "PokemonAssets", "Paper2D",
-                                                             "RetroLib"
-        });
+                                                             "RetroLib" });
     }
 }

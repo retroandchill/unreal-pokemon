@@ -61,16 +61,18 @@ void UGridBasedMovementComponent::TickComponent(float DeltaTime, ELevelTick Tick
     UpdateAnimation(DeltaTime);
 }
 
-void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirection) {
+UE5Coro::TCoroutine<> UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirection,
+                                                                   FForceLatentCoroutine) {
+    if (MoveCallback.IsBound()) {
+        UE_LOG(LogBlueprint, Warning, TEXT("The movement timer is already set for character: %s"),
+               *GetOwner()->GetName())
+        co_return;
+    }
+
     FaceDirection(MovementDirection);
     if (auto [bCanMove, FoundActors] = MovementCheck(MovementDirection); !bCanMove) {
-        if (MoveCallback.IsSet()) {
-            auto Callback = std::move(MoveCallback.GetValue());
-            MoveCallback.Reset();
-            Callback();
-        }
         HitInteraction(FoundActors);
-        return;
+        co_return;
     }
 
     UGridUtils::AdjustMovementPosition(MovementDirection, DesiredPosition);
@@ -79,18 +81,7 @@ void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirec
     StopTimer.Reset();
     bIsMoving = true;
     OnMovementStateChange.Broadcast(true);
-}
-
-void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirection,
-                                                  TFunction<void()> &&MovementCompleteCallback) {
-    if (MoveCallback.IsSet()) {
-        UE_LOG(LogBlueprint, Warning, TEXT("The movement timer is already set for character: %s"),
-               *GetOwner()->GetName())
-        return;
-    }
-
-    MoveCallback.Emplace(std::move(MovementCompleteCallback));
-    MoveInDirection(MovementDirection);
+    co_await MoveCallback;
 }
 
 FMoveCheckResult UGridBasedMovementComponent::MovementCheck(EFacingDirection MovementDirection) const {
@@ -299,12 +290,7 @@ void UGridBasedMovementComponent::MoveComplete() {
     MoveTimer.Reset();
     StopTimer.Emplace(0.f);
 
-    // TODO: Decide if you want to refactor this at all. It might still be helpful to have for one time callbacks.
-    if (MoveCallback.IsSet()) {
-        auto Callback = std::move(MoveCallback.GetValue());
-        MoveCallback.Reset();
-        Callback();
-    }
+    MoveCallback.ExecuteIfBound();
     OnTakeStep.Broadcast();
 
     auto Owner = GetOwner();

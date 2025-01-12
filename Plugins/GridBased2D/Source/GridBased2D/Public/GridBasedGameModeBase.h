@@ -4,10 +4,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
 #include "GameFramework/GameModeBase.h"
+#include "UE5Coro.h"
 
 #include "GridBasedGameModeBase.generated.h"
 
-DECLARE_DYNAMIC_DELEGATE(FScreenTransitionCallback);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScreenTransitionFinished);
 
 /**
@@ -27,27 +27,13 @@ class GRIDBASED2D_API AGridBasedGameModeBase : public AGameMode {
 
     /**
      * Fade the screen in
-     * @param Callback The delegate to call to when complete
      */
-    UFUNCTION(BlueprintCallable, Category = "Screen Transitions")
-    void FadeIn(const FScreenTransitionCallback &Callback);
-
-    /**
-     * Fade the screen in
-     */
-    void FadeIn();
-
-    /**
-     * Fade the screen out
-     * @param Callback The delegate to call to when complete
-     */
-    UFUNCTION(BlueprintCallable, Category = "Screen Transitions")
-    void FadeOut(const FScreenTransitionCallback &Callback);
+    UE5Coro::TCoroutine<> FadeIn(FForceLatentCoroutine = {});
 
     /**
      * Fade the screen out
      */
-    void FadeOut();
+    UE5Coro::TCoroutine<> FadeOut(FForceLatentCoroutine = {});
 
   protected:
     /**
@@ -64,12 +50,14 @@ class GRIDBASED2D_API AGridBasedGameModeBase : public AGameMode {
 
     AActor *ChoosePlayerStart_Implementation(AController *Player) override;
 
-  public:
+    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Screen Transitions")
+    void ScreenTransitionFinished() const;
+
+  private:
     /**
      * Delegate called when the screen transition has completed
      */
-    UPROPERTY(BlueprintCallable, Category = "Screen Transition")
-    FOnScreenTransitionFinished OnScreenTransitionFinished;
+    FSimpleMulticastDelegate OnScreenTransitionFinished;
 
     /**
      * Override of the default grid size if set.

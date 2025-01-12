@@ -40,13 +40,12 @@ bool TestStatChangingMoves_RaiseUserStats::RunTest(const FString &Parameters) {
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    
 
     auto Battler1 = Side1->GetBattlers()[0];
 
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {});
     Action.Execute();
-    
+
     UE_CHECK_EQUAL(2.f, Battler1->GetAbilityComponent()->GetStatStages()->GetSpecialAttackStages());
 
     return true;
@@ -80,7 +79,6 @@ bool TestStatChangingMoves_RaiseUserStats_Failed::RunTest(const FString &Paramet
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    
 
     auto Battler1 = Side1->GetBattlers()[0];
     Battler1->GetAbilityComponent()->SetNumericAttributeBase(UStatStagesAttributeSet::GetSpecialAttackStagesAttribute(),
@@ -89,7 +87,6 @@ bool TestStatChangingMoves_RaiseUserStats_Failed::RunTest(const FString &Paramet
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {});
     AddExpectedMessage(TEXT("Nasty Plot failed!"), ELogVerbosity::Display);
     Action.Execute();
-    
 
     return true;
 }
@@ -122,14 +119,13 @@ bool TestStatChangingMoves_LowerUserStats::RunTest(const FString &Parameters) {
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     Action.Execute();
-    
+
     UE_CHECK_EQUAL(-1.f, Battler1->GetAbilityComponent()->GetStatStages()->GetDefenseStages());
     UE_CHECK_EQUAL(-1.f, Battler1->GetAbilityComponent()->GetStatStages()->GetSpecialDefenseStages());
 
@@ -164,14 +160,13 @@ bool TestStatChangingMoves_LowerTargetStats::RunTest(const FString &Parameters) 
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     Action.Execute();
-    
+
     UE_CHECK_EQUAL(-2.f, Battler2->GetAbilityComponent()->GetStatStages()->GetSpecialDefenseStages());
 
     return true;
@@ -205,7 +200,6 @@ bool TestStatChangingMoves_LowerTargetStats_Failed::RunTest(const FString &Param
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
@@ -215,7 +209,6 @@ bool TestStatChangingMoves_LowerTargetStats_Failed::RunTest(const FString &Param
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Metal Sound failed against all targets!"), ELogVerbosity::Display);
     Action.Execute();
-    
 
     return true;
 }

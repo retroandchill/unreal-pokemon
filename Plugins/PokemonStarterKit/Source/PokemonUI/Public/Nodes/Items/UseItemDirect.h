@@ -27,7 +27,7 @@ class POKEMONUI_API UUseItemDirect : public UUseItem {
      */
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Items, meta = (DefaultToSelf = Screen))
     static UUseItemDirect *UseItemDirect(UBagScreen *Screen, FName Item, int32 Quantity);
-    
-protected:
+
+  protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 };

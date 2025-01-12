@@ -7,11 +7,11 @@
 #include "GameplayAbilitySpecHandle.h"
 #include "GameplayEffectTypes.h"
 #include "Pokemon/Breeding/PokemonGender.h"
+#include "Pokemon/Stats/StatBlock.h"
 #include "RetroLib/Ranges/Views/AnyView.h"
 #include "RetroLib/Ranges/Views/Generator.h"
-#include "UObject/Interface.h"
-#include "Pokemon/Stats/StatBlock.h"
 #include "UE5Coro.h"
+#include "UObject/Interface.h"
 
 #include "Battler.generated.h"
 

@@ -15,10 +15,10 @@ UCLASS(Abstract)
 class POKEMONBATTLE_API ABattleTransitionActor : public AActor {
     GENERATED_BODY()
 
-public:
+  public:
     UE5Coro::TCoroutine<> Execute();
 
-    static UE5Coro::TCoroutine<> Execute(ABattleTransitionActor* Transition);
+    static UE5Coro::TCoroutine<> Execute(ABattleTransitionActor *Transition);
 
   protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Transitions")

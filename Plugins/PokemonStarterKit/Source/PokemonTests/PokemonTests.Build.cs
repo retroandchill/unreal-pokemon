@@ -45,7 +45,6 @@ public class PokemonTests : ModuleRules {
                                                              "RetroLibTests",
                                                              "RPGMenusTests",
                                                              "UE5Coro",
-                                                             "UE5CoroGAS"
-        });
+                                                             "UE5CoroGAS" });
     }
 }

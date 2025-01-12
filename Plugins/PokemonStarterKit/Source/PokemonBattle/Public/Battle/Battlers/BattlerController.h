@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Battle/Actions/BattleAction.h"
-#include "UObject/Interface.h"
 #include "UE5Coro.h"
+#include "UObject/Interface.h"
 
 #include "BattlerController.generated.h"
 

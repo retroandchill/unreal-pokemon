@@ -59,17 +59,18 @@ namespace Pokemon::UI {
     };
 
     /**
-         * Play an animation from start to finish with the following parameters
-         * @param Context
-         * @param StartPercent The starting percentage of the progress bar
-         * @param EndPercent The ending percentage of the progress bar
-         * @param Duration How long it should take to get there
-         * @param OnUpdate
-         * @param bShouldWrap
-         * @param OnWrapAround
-         */
-    POKEMONUI_API UE5Coro::TCoroutine<> ProgressBarAnimation(UE5Coro::TLatentContext<const UObject> Context, float StartPercent,
-                                        float EndPercent, float Duration, FSetNewPercent OnUpdate,
-                                        bool bShouldWrap = false, FSimpleDelegate OnWrapAround = FSimpleDelegate());
+     * Play an animation from start to finish with the following parameters
+     * @param Context
+     * @param StartPercent The starting percentage of the progress bar
+     * @param EndPercent The ending percentage of the progress bar
+     * @param Duration How long it should take to get there
+     * @param OnUpdate
+     * @param bShouldWrap
+     * @param OnWrapAround
+     */
+    POKEMONUI_API UE5Coro::TCoroutine<> ProgressBarAnimation(UE5Coro::TLatentContext<const UObject> Context,
+                                                             float StartPercent, float EndPercent, float Duration,
+                                                             FSetNewPercent OnUpdate, bool bShouldWrap = false,
+                                                             FSimpleDelegate OnWrapAround = FSimpleDelegate());
 
 } // namespace Pokemon::UI

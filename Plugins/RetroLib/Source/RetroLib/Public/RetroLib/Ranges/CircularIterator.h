@@ -63,7 +63,8 @@ namespace Retro {
          */
         TCircularIterator &operator+=(DifferenceType Amount) {
             check(Data.size() > CurrentIndex)
-            CurrentIndex = (CurrentIndex + Data.size() + Amount % static_cast<DifferenceType>(Data.size())) % Data.size();
+            CurrentIndex =
+                (CurrentIndex + Data.size() + Amount % static_cast<DifferenceType>(Data.size())) % Data.size();
             return *this;
         }
 

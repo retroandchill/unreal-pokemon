@@ -34,7 +34,7 @@ class POKEMONUI_API UUpdateHPBar : public UBlueprintCoroutineActionBase {
     static UUpdateHPBar *UpdateHPBar(UScreen *Screen, const TScriptInterface<IPokemon> &Pokemon,
                                      float MaxDuration = 1.f);
 
-protected:
+  protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:

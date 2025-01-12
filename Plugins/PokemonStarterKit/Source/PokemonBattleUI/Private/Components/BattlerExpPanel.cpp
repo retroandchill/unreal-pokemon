@@ -34,7 +34,8 @@ UE5Coro::TCoroutine<> UBattlerExpPanel::AnimateGain(float MaxDuration) {
     float EndPercent = CurrentBattler->GetExpPercent() + static_cast<float>(LevelDiff);
 
     float GainRate = FMath::Min((EndPercent - StartPercent) * AnimationGainSpeed, MaxDuration);
-    co_await Pokemon::UI::ProgressBarAnimation(this, StartPercent, EndPercent, GainRate,
+    co_await Pokemon::UI::ProgressBarAnimation(
+        this, StartPercent, EndPercent, GainRate,
         FSetNewPercent::CreateUObject(this, &UBattlerExpPanel::UpdateExpBarPercent), true,
         FSimpleDelegate::CreateUObject(this, &UBattlerExpPanel::OnLevelUp));
     OnGainAnimationComplete.Broadcast();

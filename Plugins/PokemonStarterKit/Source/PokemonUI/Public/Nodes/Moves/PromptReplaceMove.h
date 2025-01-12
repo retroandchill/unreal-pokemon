@@ -37,7 +37,7 @@ class POKEMONUI_API UPromptReplaceMove : public UBlueprintCoroutineActionBase {
     static UPromptReplaceMove *PromptReplaceMove(const UObject *WorldContextObject,
                                                  const TScriptInterface<IPokemon> &Pokemon, const FMoveHandle &Move);
 
-    protected:
+  protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:

@@ -35,7 +35,8 @@ UE5Coro::TCoroutine<> UPokemonBattlePanel::AnimateHP(float MaxDuration) {
     float DrainRate =
         FMath::Min(FMath::Abs(OldHP - CoreAttributes->GetHP()) * UPokemonUIUtils::AnimationDrainSpeed, MaxDuration);
     float CurrentPercent = CurrentBattler->GetHPPercent();
-    co_await Pokemon::UI::ProgressBarAnimation(this, HPPercent, CurrentPercent, DrainRate,
+    co_await Pokemon::UI::ProgressBarAnimation(
+        this, HPPercent, CurrentPercent, DrainRate,
         FSetNewPercent::CreateUObject(this, &UPokemonBattlePanel::UpdateHPPercent));
 }
 
