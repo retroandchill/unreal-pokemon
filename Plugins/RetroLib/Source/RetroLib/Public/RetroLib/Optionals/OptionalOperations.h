@@ -945,7 +945,8 @@ namespace Retro::Optionals {
     constexpr auto OfReference(T &Value) {
         if constexpr (RawReferenceOptionalValid<O, T>) {
             return O<T &>(Value);
-        } else {
+        } // namespace Retro::Optionals
+        else {
             return O<std::reference_wrapper<T>>(Value);
         }
     }

@@ -25,7 +25,7 @@ UE5Coro::TCoroutine<> UUpdateHPBar::ExecuteCoroutine(FForceLatentCoroutine Force
         OnAnimationComplete.Broadcast();
         co_return;
     }
-    
+
     auto SelectionPane = IPartyDisplayScreen::Execute_GetPokemonSelectionPane(Screen);
     check(IsValid(SelectionPane))
 
@@ -44,10 +44,10 @@ UE5Coro::TCoroutine<> UUpdateHPBar::ExecuteCoroutine(FForceLatentCoroutine Force
         FMath::Min(FMath::Abs(OldHP - Pokemon->GetCurrentHP()) * UPokemonUIUtils::AnimationDrainSpeed, MaxDuration);
     float CurrentPercent = static_cast<float>(Pokemon->GetCurrentHP()) / static_cast<float>(Pokemon->GetMaxHP());
     co_await Pokemon::UI::ProgressBarAnimation(GetWorldContext(), HPPercent, CurrentPercent, DrainRate,
-        FSetNewPercent::CreateWeakLambda(Panel, [this, Panel](float Percent) {
-            float HPValue = FMath::RoundToFloat(Pokemon->GetMaxHP() * Percent);
-            IHPBarPanel::Execute_UpdateHPBarPercent(Panel, Percent, HPValue);
-        }));
+                                               FSetNewPercent::CreateWeakLambda(Panel, [this, Panel](float Percent) {
+                                                   float HPValue = FMath::RoundToFloat(Pokemon->GetMaxHP() * Percent);
+                                                   IHPBarPanel::Execute_UpdateHPBarPercent(Panel, Percent, HPValue);
+                                               }));
 
     IHPBarPanel::Execute_UpdateHPBarPercent(Panel, ProgressBar->GetPercent(), Pokemon->GetCurrentHP());
     OnAnimationComplete.Broadcast();

@@ -26,7 +26,7 @@ class POKEMONCORE_API UProcessLevelUp : public UBlueprintCoroutineActionBase {
     static UProcessLevelUp *ProcessLevelUp(const TScriptInterface<IPokemon> &Pokemon,
                                            const FLevelUpStatChanges &StatChanges, bool bShowMessages);
 
-protected:
+  protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:

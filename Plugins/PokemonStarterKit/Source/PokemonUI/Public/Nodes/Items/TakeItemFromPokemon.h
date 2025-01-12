@@ -23,10 +23,11 @@ class POKEMONUI_API UTakeItemFromPokemon : public UBlueprintCoroutineActionBase 
      * @param Pokemon The Pokémon receiving the item
      * @return The node to execute the task with
      */
-    UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", CallableWithoutWorldContext = true), Category = "Selection")
+    UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true", CallableWithoutWorldContext = true),
+              Category = "Selection")
     static UTakeItemFromPokemon *TakeItemFromPokemon(const TScriptInterface<IPokemon> &Pokemon);
 
-    protected:
+  protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:

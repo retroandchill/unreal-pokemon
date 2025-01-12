@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #include "GainExp.generated.h"
 
@@ -18,7 +19,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAfterExpGain);
  * Gain the specified amount of experience for a Pokémon
  */
 UCLASS(meta = (HideThen))
-class POKEMONCORE_API UGainExp : public UBlueprintAsyncActionBase {
+class POKEMONCORE_API UGainExp : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
@@ -33,15 +34,10 @@ class POKEMONCORE_API UGainExp : public UBlueprintAsyncActionBase {
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Pokémon|Stats")
     static UGainExp *GainExp(const TScriptInterface<IPokemon> &Pokemon, int32 ExpAmount, bool bShowMessages);
 
-    void Activate() override;
+  protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:
-    /**
-     * Execute the callback after exp gain is completed
-     */
-    UFUNCTION()
-    void ExecuteAfterExpGain();
-
     /**
      * Called after level up messages are shown
      */

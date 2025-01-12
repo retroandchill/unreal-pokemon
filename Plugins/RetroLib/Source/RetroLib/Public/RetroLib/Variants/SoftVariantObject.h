@@ -3,8 +3,11 @@
 #pragma once
 
 #ifdef __UNREAL__
-#include "RetroLib/Async/AsyncLoadHandle.h"
 #include "RetroLib/Variants/VariantObject.h"
+
+#if RETROLIB_WITH_UE5CORO
+#include "UE5Coro.h"
+#endif
 
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
@@ -133,13 +136,34 @@ namespace Retro {
             return TOptional<T>(T(Result));
         }
 
+#if RETROLIB_WITH_UE5CORO
         /**
          * Perform an asynchronous load of the given object.
          * @return The handle for the async load
          */
-        TSharedRef<TAsyncLoadHandle<T>> LoadAsync() const {
-            return TAsyncLoadHandle<T>::Create(ToSoftObjectPath());
+        template <typename U>
+            requires(T::template StaticIsValidType<T>())
+        UE5Coro::TCoroutine<TOptional<U &>> LoadAsync() const {
+            if (TypeIndex != T::template GetTypeIndex<U>()) {
+                co_return TOptional<U &>();
+            }
+
+            co_return Optionals::OfNullable(static_cast<U *>(co_await UE5Coro::Latent::AsyncLoadObject(Ptr)));
         }
+
+        /**
+         * Perform an asynchronous load of the given object.
+         * @return The handle for the async load
+         */
+        UE5Coro::TCoroutine<TOptional<T>> LoadAsync() const {
+            auto Object = co_await UE5Coro::Latent::AsyncLoadObject(Ptr);
+            if (Object == nullptr || !T::IsValidType(Object)) {
+                co_return TOptional<T>();
+            }
+
+            co_return TOptional<T>(T(Object));
+        }
+#endif
 
         /**
          * Set the value from the given hard reference

@@ -27,7 +27,7 @@ public class DynamicAssetLoader : ModuleRules {
         DynamicallyLoadedModuleNames.AddRange(new string[] {
             // ... add any modules that your module loads dynamically here ...
         });
-        
+
         if (Target.bEnableCppCoroutinesForEvaluation && !string.IsNullOrEmpty(GetModuleDirectory("UE5Coro"))) {
             PublicDependencyModuleNames.Add("UE5Coro");
             PublicDefinitions.Add("DYN_ASSETS_WITH_UE5CORO=1");

@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Interface.h"
 #include "UE5Coro.h"
+#include "UObject/Interface.h"
+
 #include "BattleHUD.generated.h"
 
 class IBattler;
@@ -16,13 +17,12 @@ class POKEMONBATTLE_API UBattleHUD : public UInterface {
 };
 
 /**
- * 
+ *
  */
 class POKEMONBATTLE_API IBattleHUD {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
+  public:
     virtual void SelectAction(const TScriptInterface<IBattler> &Battler) = 0;
-
 };

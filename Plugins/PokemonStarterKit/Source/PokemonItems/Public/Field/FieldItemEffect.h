@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "RetroLib/Async/AsyncHelpers.h"
 #include "RetroLib/Concepts/Delegates.h"
 #include "RetroLib/Functional/Delegates.h"
 #include "RetroLib/RetroLibMacros.h"
-#include "RetroLib/Async/AsyncHelpers.h"
 #include "UObject/Object.h"
 
 #include "FieldItemEffect.generated.h"

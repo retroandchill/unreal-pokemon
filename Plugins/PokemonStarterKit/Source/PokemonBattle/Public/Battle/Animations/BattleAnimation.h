@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Interface.h"
 #include "UE5Coro.h"
+#include "UObject/Interface.h"
 
 #include "BattleAnimation.generated.h"
 
@@ -24,5 +24,5 @@ class POKEMONBATTLE_API IBattleAnimation {
   public:
     virtual UE5Coro::TCoroutine<> PlayAnimation() = 0;
 
-    static UE5Coro::TCoroutine<> PlayAnimation(const TScriptInterface<IBattleAnimation> & Animation);
+    static UE5Coro::TCoroutine<> PlayAnimation(const TScriptInterface<IBattleAnimation> &Animation);
 };

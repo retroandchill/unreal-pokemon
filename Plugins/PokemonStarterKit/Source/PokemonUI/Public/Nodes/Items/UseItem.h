@@ -34,7 +34,8 @@ class POKEMONUI_API UUseItem : public UBlueprintCoroutineActionBase {
     template <typename T, typename... A>
         requires Pokemon::Items::FieldItem<T, A...>
     UE5Coro::TCoroutine<> UseItem(FForceLatentCoroutine = {}, A &&...Args) {
-        if (auto &ItemData = FDataManager::GetInstance().GetDataTable<FItem>().GetDataChecked(ItemName); co_await BagScreen->TryUseItem<T, A...>(ItemData, ItemQuantity, std::forward<A>(Args)...)) {
+        if (auto &ItemData = FDataManager::GetInstance().GetDataTable<FItem>().GetDataChecked(ItemName);
+            co_await BagScreen->TryUseItem<T, A...>(ItemData, ItemQuantity, std::forward<A>(Args)...)) {
             ItemUsed.Broadcast();
         } else {
             ItemNotUsed.Broadcast();

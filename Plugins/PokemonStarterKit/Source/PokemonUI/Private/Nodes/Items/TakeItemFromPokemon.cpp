@@ -3,8 +3,7 @@
 #include "Nodes/Items/TakeItemFromPokemon.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
 
-UTakeItemFromPokemon *UTakeItemFromPokemon::TakeItemFromPokemon(
-    const TScriptInterface<IPokemon> &Pokemon) {
+UTakeItemFromPokemon *UTakeItemFromPokemon::TakeItemFromPokemon(const TScriptInterface<IPokemon> &Pokemon) {
     auto Node = NewObject<UTakeItemFromPokemon>();
     Node->SetWorldContext(Pokemon.GetObject());
     Node->Pokemon = Pokemon;

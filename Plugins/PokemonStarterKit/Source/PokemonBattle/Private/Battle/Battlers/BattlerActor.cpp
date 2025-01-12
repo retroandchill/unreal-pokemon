@@ -17,6 +17,7 @@
 #include "Battle/BattleSide.h"
 #include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Battle/Events/SwitchPokemonPayload.h"
+#include "Battle/Events/TargetedEvents.h"
 #include "Battle/Items/ItemLookup.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Battle/Moves/PokemonBattleMove.h"
@@ -33,7 +34,6 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonBattleSettings.h"
-#include "Battle/Events/TargetedEvents.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/Construct.h"
@@ -335,7 +335,8 @@ UE5Coro::TCoroutine<> ABattlerActor::PerformSwitch(const TScriptInterface<IBattl
     TargetData->SetActors({CastChecked<AActor>(SwitchTarget.GetObject())});
     EventData.TargetData.Data.Emplace(TargetData);
 
-    co_await Pokemon::Battle::Events::SendOutActivationEvent(BattlerAbilityComponent, SwitchActionHandle, Pokemon::Battle::SwitchOut, std::move(EventData));
+    co_await Pokemon::Battle::Events::SendOutActivationEvent(BattlerAbilityComponent, SwitchActionHandle,
+                                                             Pokemon::Battle::SwitchOut, std::move(EventData));
 }
 
 bool ABattlerActor::IsOwnedByPlayer() const {
@@ -346,7 +347,7 @@ void ABattlerActor::SelectActions() {
     if (!CanSelectActions()) {
         return;
     }
-    
+
     Controller->ActionSelection(this);
 }
 

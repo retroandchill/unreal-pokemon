@@ -35,7 +35,7 @@ UE5Coro::TCoroutine<> FBattleActionUseMove::Execute() {
     auto AttributeSet = GetBattler()->GetAbilityComponent()->GetCoreAttributes();
     check(AttributeSet != nullptr)
     Move->PayCost(FMath::FloorToInt32(AttributeSet->GetMoveCost()));
-    
+
     co_await FBattleActionBase::Execute();
 }
 

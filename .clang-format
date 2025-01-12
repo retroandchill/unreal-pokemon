@@ -25,7 +25,7 @@ AlwaysBreakTemplateDeclarations : Yes
 ForEachMacros: 
     - TRIPLE_LOOP
 Macros:
-    - check(x)=assert(x);
+    - check(x)={assert(x);}
     - verify(x)=x;
     - ABSTRACT_METHOD={}
     - SLATE_BEGIN_ARGS(InWidgetType)=struct FArguments { typedef FArguments WidgetArgsType; typedef InWidgetType WidgetType; FORCENOINLINE FArguments()

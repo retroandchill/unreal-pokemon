@@ -41,7 +41,7 @@ class POKEMONBATTLEUI_API UPlayBattlerHPAnimation : public UBlueprintCoroutineAc
                                                            const TScriptInterface<IBattler> &Battler,
                                                            float MaxDuration = 1.f);
 
-protected:
+  protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:

@@ -20,7 +20,7 @@ void AScopedFunctionalTest::PrepareTest() {
 
 void AScopedFunctionalTest::CleanUp() {
     Super::CleanUp();
-    
+
     // This will force all the destructors of the scoped components to be called
     ScopedData.Empty();
 }

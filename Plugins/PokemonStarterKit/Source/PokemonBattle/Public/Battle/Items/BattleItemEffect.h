@@ -35,13 +35,11 @@ class POKEMONBATTLE_API UBattleItemEffect : public UUE5CoroGameplayAbility {
                                      const FGameplayEventData *Payload) const override;
 
   protected:
+    UE5Coro::GAS::FAbilityCoroutine ExecuteAbility(FGameplayAbilitySpecHandle Handle,
+                                                   const FGameplayAbilityActorInfo *ActorInfo,
+                                                   FGameplayAbilityActivationInfo ActivationInfo,
+                                                   const FGameplayEventData *TriggerEventData) override;
 
-    UE5Coro::GAS::FAbilityCoroutine
-    ExecuteAbility(FGameplayAbilitySpecHandle Handle,
-                   const FGameplayAbilityActorInfo* ActorInfo,
-                   FGameplayAbilityActivationInfo ActivationInfo,
-                   const FGameplayEventData* TriggerEventData) override;
-    
     /**
      * Apply the global (no targets) effect of the item.
      * @param User The user of the item.

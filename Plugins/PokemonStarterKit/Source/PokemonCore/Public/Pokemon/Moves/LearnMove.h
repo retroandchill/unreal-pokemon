@@ -33,7 +33,7 @@ class POKEMONCORE_API ULearnMove : public UBlueprintCoroutineActionBase {
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Pokémon|Moves")
     static ULearnMove *LearnMove(const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move);
 
-    protected:
+  protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:

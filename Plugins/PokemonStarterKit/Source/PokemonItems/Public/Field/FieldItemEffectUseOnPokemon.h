@@ -18,9 +18,9 @@ UCLASS(Abstract)
 class POKEMONITEMS_API UFieldItemEffectUseOnPokemon : public UFieldItemEffect {
     GENERATED_BODY()
 
-public:
-    UE5Coro::TCoroutine<bool> UseItem(const FItem &Item, int32 Quantity, const TScriptInterface<IPokemon> &Pokemon);
-    
+  public:
+    UE5Coro::TCoroutine<bool> UseItem(const FItem &Item, int32 Quantity, TScriptInterface<IPokemon> Pokemon);
+
   protected:
     UFUNCTION(BlueprintImplementableEvent, Category = Items)
     void Use(const FItem &Item, int32 Quantity, const TScriptInterface<IPokemon> &Pokemon);

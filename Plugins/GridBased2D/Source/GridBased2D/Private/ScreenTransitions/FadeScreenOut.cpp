@@ -3,22 +3,16 @@
 #include "ScreenTransitions/FadeScreenOut.h"
 #include "GridUtils.h"
 
-UFadeScreenOut *UFadeScreenOut::FadeScreenOut(const UObject *WorldContext) {
+UFadeScreenOut *UFadeScreenOut::FadeScreenOut(const UObject *WorldContextObject) {
     auto Node = NewObject<UFadeScreenOut>();
-    Node->WorldContext = WorldContext;
+    Node->SetWorldContext(WorldContextObject);
     return Node;
 }
 
-void UFadeScreenOut::Activate() {
-    auto GameMode = UGridUtils::GetGridBasedGameMode(WorldContext);
+UE5Coro::TCoroutine<> UFadeScreenOut::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine) {
+    auto GameMode = UGridUtils::GetGridBasedGameMode(GetWorldContext());
     check(GameMode != nullptr)
 
-    FScreenTransitionCallback Callback;
-    Callback.BindDynamic(this, &UFadeScreenOut::TransitionFinished);
-    GameMode->FadeIn(Callback);
-}
-
-void UFadeScreenOut::TransitionFinished() {
+    co_await GameMode->FadeOut();
     OnScreenTransitionFinished.Broadcast();
-    SetReadyToDestroy();
 }

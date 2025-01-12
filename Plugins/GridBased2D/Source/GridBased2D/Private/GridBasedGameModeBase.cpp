@@ -4,32 +4,19 @@
 #include "GameFramework/PlayerStart.h"
 #include "GridBased2DSettings.h"
 #include "Map/MapSubsystem.h"
+#include "RetroLib/Async/AsyncHelpers.h"
 
 double AGridBasedGameModeBase::GetGridSize() const {
     static const double DefaultGridSize = GetDefault<UGridBased2DSettings>()->GetGridSize();
     return GridSize.Get(DefaultGridSize);
 }
 
-void AGridBasedGameModeBase::FadeIn(const FScreenTransitionCallback &Callback) {
-    OnScreenTransitionFinished.Clear();
-    OnScreenTransitionFinished.Add(Callback);
-    ScreenFadeIn();
+UE5Coro::TCoroutine<> AGridBasedGameModeBase::FadeIn(FForceLatentCoroutine) {
+    co_await Retro::BindToDelegateDispatch(OnScreenTransitionFinished, [this] { ScreenFadeIn(); });
 }
 
-void AGridBasedGameModeBase::FadeIn() {
-    OnScreenTransitionFinished.Clear();
-    ScreenFadeIn();
-}
-
-void AGridBasedGameModeBase::FadeOut(const FScreenTransitionCallback &Callback) {
-    OnScreenTransitionFinished.Clear();
-    OnScreenTransitionFinished.Add(Callback);
-    ScreenFadeOut();
-}
-
-void AGridBasedGameModeBase::FadeOut() {
-    OnScreenTransitionFinished.Clear();
-    ScreenFadeOut();
+UE5Coro::TCoroutine<> AGridBasedGameModeBase::FadeOut(FForceLatentCoroutine) {
+    co_await Retro::BindToDelegateDispatch(OnScreenTransitionFinished, [this] { ScreenFadeOut(); });
 }
 
 AActor *AGridBasedGameModeBase::ChoosePlayerStart_Implementation(AController *Player) {
@@ -48,4 +35,8 @@ AActor *AGridBasedGameModeBase::ChoosePlayerStart_Implementation(AController *Pl
     }
 
     return nullptr;
+}
+
+void AGridBasedGameModeBase::ScreenTransitionFinished() const {
+    OnScreenTransitionFinished.Broadcast();
 }

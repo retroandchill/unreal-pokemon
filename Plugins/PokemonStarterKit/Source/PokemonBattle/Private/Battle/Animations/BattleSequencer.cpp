@@ -1,8 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Animations/BattleSequencer.h"
-#include "PokemonBattleModule.h"
 #include "Battle/Animations/BattleAnimation.h"
+#include "PokemonBattleModule.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
 
 TWeakObjectPtr<ABattleSequencer> ABattleSequencer::Instance;
@@ -38,14 +38,13 @@ void ABattleSequencer::QueueBattleMessageWithAnimation(FText Text, const TScript
     }
 }
 
-FVoidCoroutine ABattleSequencer::DisplayBattleMessages(const UObject* WorldContext, FForceLatentCoroutine) {
+FVoidCoroutine ABattleSequencer::DisplayBattleMessages(const UObject *WorldContext, FForceLatentCoroutine) {
     if (!Instance.IsValid()) {
         UE_LOG(LogBattle, Warning, UninitializedLog)
         co_return;
     }
-    
-    co_await Instance->ProcessBattleMessages();
 
+    co_await Instance->ProcessBattleMessages();
 }
 
 UE5Coro::TCoroutine<> ABattleSequencer::ProcessBattleMessages(FForceLatentCoroutine) {
@@ -63,10 +62,10 @@ UE5Coro::TCoroutine<> ABattleSequencer::ProcessBattleMessages(FForceLatentCorout
             co_await TryDisplayMessage(BattleMessage.Message);
             co_await IBattleAnimation::PlayAnimation(BattleMessage.Animation);
         }
-        
+
         Messages.pop();
     }
-    
+
     bIsProcessingMessages = false;
 }
 
