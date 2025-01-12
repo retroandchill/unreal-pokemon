@@ -27,7 +27,7 @@ bool TestPokemonBattleClass_ActionSorting::RunTest(const FString &Parameters) {
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     Battle->Initialize({Side1, Side2});
-    Battle->ClearOnBattleEnd();
+    
 
     auto &ActionQueue = const_cast<TQueue<TUniquePtr<IBattleAction>> &>(Battle->GetActionQueue());
     auto &Actions = const_cast<TArray<TUniquePtr<IBattleAction>> &>(Battle->GetActions());

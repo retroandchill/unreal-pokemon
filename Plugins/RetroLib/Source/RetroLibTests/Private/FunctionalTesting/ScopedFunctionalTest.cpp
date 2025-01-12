@@ -18,9 +18,9 @@ void AScopedFunctionalTest::PrepareTest() {
     // clang-format on
 }
 
-void AScopedFunctionalTest::FinishTest(EFunctionalTestResult TestResult, const FString &Message) {
-    Super::FinishTest(TestResult, Message);
-
+void AScopedFunctionalTest::CleanUp() {
+    Super::CleanUp();
+    
     // This will force all the destructors of the scoped components to be called
     ScopedData.Empty();
 }

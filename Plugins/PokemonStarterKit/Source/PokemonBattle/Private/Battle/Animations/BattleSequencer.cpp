@@ -58,10 +58,10 @@ UE5Coro::TCoroutine<> ABattleSequencer::ProcessBattleMessages(FForceLatentCorout
     while (!Messages.empty()) {
         if (auto &BattleMessage = Messages.front(); BattleMessage.AnimationPlacement == EAnimationPlacement::Before) {
             co_await TryDisplayMessage(BattleMessage.Message);
-            co_await IBattleAnimation::PlayAnimation(this, BattleMessage.Animation);
+            co_await IBattleAnimation::PlayAnimation(BattleMessage.Animation);
         } else {
             co_await TryDisplayMessage(BattleMessage.Message);
-            co_await IBattleAnimation::PlayAnimation(this, BattleMessage.Animation);
+            co_await IBattleAnimation::PlayAnimation(BattleMessage.Animation);
         }
         
         Messages.pop();

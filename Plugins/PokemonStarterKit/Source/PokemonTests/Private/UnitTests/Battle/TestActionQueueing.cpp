@@ -26,7 +26,7 @@ bool TestActionQueueing::RunTest(const FString &Parameters) {
 
     auto Battle = World->SpawnActor<ATestPokemonBattle>();
     Battle->Initialize({Side1, Side2});
-    Battle->ClearOnBattleEnd();
+    
 
     auto QueueBattleAction = [&Battle](const TScriptInterface<IBattler> &Battler) {
         auto MockAction = MakeUnique<FMockBattleAction>();

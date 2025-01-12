@@ -23,14 +23,13 @@ void UBattleTransitionSubsystem::SetRegisteredBattle(const TScriptInterface<IBat
 }
 
 UE5Coro::TCoroutine<EBattleResult> UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info,
-                                                                              TSubclassOf<ABattleTransitionActor> Transition) {
+                                                                              TSubclassOf<ABattleTransitionActor> Transition, FForceLatentCoroutine) {
     auto PlayerController = GetWorld()->GetGameInstance()->GetPrimaryPlayerController(false);
     PlayerController->GetPawn()->DisableInput(PlayerController);
     static auto &BattleLevelOffset = GetDefault<UPokemonBattleSettings>()->BattleSceneOffset;
     if (Transition != nullptr) {
         bBattleInitialized = false;
         CurrentTransition = GetWorld()->SpawnActor<ABattleTransitionActor>(Transition);
-        CurrentTransition->Execute();
     }
 
     StreamingStates.Reset();
@@ -62,7 +61,7 @@ UE5Coro::TCoroutine<EBattleResult> UBattleTransitionSubsystem::InitiateBattle(co
     CurrentTransition = nullptr;
     SetUpBattle();
     auto Result = co_await RegisteredBattle->ConductBattle(GetWorld()->GetGameInstance()->GetPrimaryPlayerController(false));
-    ExitBattle();
+    co_await ExitBattle();
     co_return Result;
 }
 
@@ -84,12 +83,11 @@ void UBattleTransitionSubsystem::SetUpBattle() {
     }
 }
 
-void UBattleTransitionSubsystem::ExitBattle(FForceLatentCoroutine) {
+UE5Coro::TCoroutine<> UBattleTransitionSubsystem::ExitBattle(FForceLatentCoroutine) {
     check(Battlefield != nullptr)
     FLatentActionInfo LatentActionInfo;
     UGameplayStatics::UnloadStreamLevelBySoftObjectPtr(this, Battlefield->GetWorldAsset(), LatentActionInfo, false);
     check(BattleInfo.IsSet())
-    Battlefield = nullptr;
     BattleInfo.Reset();
 
     for (const auto &[Volume, bDisabled] : StreamingStates) {
@@ -100,4 +98,7 @@ void UBattleTransitionSubsystem::ExitBattle(FForceLatentCoroutine) {
 
     auto PlayerController = GetWorld()->GetGameInstance()->GetPrimaryPlayerController(false);
     PlayerController->GetPawn()->EnableInput(PlayerController);
+    
+    co_await Battlefield->OnLevelUnloaded;
+    Battlefield = nullptr;
 }

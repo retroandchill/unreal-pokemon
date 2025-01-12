@@ -22,7 +22,7 @@ class POKEMONBATTLE_API IBattleAnimation {
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
   public:
-    virtual UE5Coro::TCoroutine<> PlayAnimation(FForceLatentCoroutine = {}) = 0;
+    virtual UE5Coro::TCoroutine<> PlayAnimation() = 0;
 
-    static UE5Coro::TCoroutine<> PlayAnimation(const UObject* WorldContext, const TScriptInterface<IBattleAnimation> & Animation, FForceLatentCoroutine = {});
+    static UE5Coro::TCoroutine<> PlayAnimation(const TScriptInterface<IBattleAnimation> & Animation);
 };

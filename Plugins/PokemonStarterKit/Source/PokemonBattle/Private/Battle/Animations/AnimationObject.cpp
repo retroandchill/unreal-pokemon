@@ -2,7 +2,7 @@
 
 #include "Battle/Animations/AnimationObject.h"
 
-UE5Coro::TCoroutine<> UAnimationObject::PlayAnimation(FForceLatentCoroutine) {
+UE5Coro::TCoroutine<> UAnimationObject::PlayAnimation() {
     Play();
     co_await TFuture<void>(OnBattleAnimationComplete);
 }

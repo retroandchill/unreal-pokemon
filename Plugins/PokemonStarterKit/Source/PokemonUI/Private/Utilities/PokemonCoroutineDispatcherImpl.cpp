@@ -27,6 +27,9 @@ UE5Coro::TCoroutine<> UPokemonCoroutineDispatcherImpl::DisplayMessage(FText Mess
     }
 
     auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(this);
+    if (Layout == nullptr) {
+        co_return;
+    }
     auto Screen =
         Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
     if (Screen == nullptr) {

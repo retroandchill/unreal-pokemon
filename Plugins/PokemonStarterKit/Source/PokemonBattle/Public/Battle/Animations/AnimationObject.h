@@ -16,7 +16,7 @@ class POKEMONBATTLE_API UAnimationObject : public UObject, public IBattleAnimati
     GENERATED_BODY()
 
 public:
-    virtual UE5Coro::TCoroutine<> PlayAnimation(FForceLatentCoroutine = {}) override;
+    virtual UE5Coro::TCoroutine<> PlayAnimation() override;
 
   protected:
     /**

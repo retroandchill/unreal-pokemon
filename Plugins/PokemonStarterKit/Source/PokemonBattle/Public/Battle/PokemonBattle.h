@@ -74,12 +74,13 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
     bool IsTrainerBattle_Implementation() const override;
-    UE5Coro::TCoroutine<EBattleResult> ConductBattle(APlayerController *PlayerController) override;
+    UE5Coro::TCoroutine<EBattleResult> ConductBattle(APlayerController *PlayerController, FForceLatentCoroutine = {}) override;
 
 private:
     UE5Coro::TCoroutine<> DisplaySideSendOutAnimation(int32 Index);
+    UE5Coro::TCoroutine<EBattleResult> MainBattleLoop();
 
-  public:
+public:
     UE5Coro::TCoroutine<> StartBattle() override;
 
     UE5Coro::TCoroutine<> OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers);
@@ -112,16 +113,11 @@ private:
 
     Retro::TGenerator<TScriptInterface<IBattleSide>> GetSides() const override;
     Retro::TGenerator<TScriptInterface<IBattler>> GetActiveBattlers() const override;
-    UE5Coro::TCoroutine<> ExecuteAction(IBattleAction &Action) override;
+    UE5Coro::TCoroutine<> ExecuteAction(IBattleAction &Action, FForceLatentCoroutine = {}) override;
 
   protected:
     bool RunCheck_Implementation(const TScriptInterface<IBattler> &Battler, bool bDuringBattle) override;
 
-  public:
-    void BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) override;
-    void ClearOnBattleEnd() override;
-
-  protected:
     /**
      * Get the position of the player's side of the field
      * @return The player's primary spawn position
@@ -180,12 +176,7 @@ private:
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Flow")
     TScriptInterface<IBattleAnimation> GetBattleResultAnimation(EBattleResult Result);
 
-    /**
-     * Exit the battle scene and return to the map
-     * @param Result the result of the battle in question
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
-    void ExitBattleScene(EBattleResult Result) const;
+    void EndBattle_Implementation(EBattleResult Result) override;
 
   private:
     void ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger);
@@ -314,7 +305,7 @@ private:
     /**
      * Delegate that is invoked when the battle ends
      */
-    FOnBattleEnd OnBattleEnd;
+    TSharedRef<TFutureState<EBattleResult>> OnBattleEnd = MakeShared<TFutureState<EBattleResult>>();
 
     int32 RunAttempts = 0;
 };

@@ -56,9 +56,10 @@ class POKEMONBATTLE_API UBattleTransitionSubsystem : public UWorldSubsystem {
      * Initialize a wild battle with the provided Pokémon information
      * @param Info The Pokémon information that should be battled against
      * @param Transition
+     * @param 
      */
     UE5Coro::TCoroutine<EBattleResult> InitiateBattle(const FBattleInfo &Info,
-                                                      TSubclassOf<ABattleTransitionActor> Transition);
+                                                      TSubclassOf<ABattleTransitionActor> Transition, FForceLatentCoroutine = {});
 
     /**
      * Bind an action to when the battle finished delegate
@@ -83,7 +84,7 @@ class POKEMONBATTLE_API UBattleTransitionSubsystem : public UWorldSubsystem {
     /**
      * Exit the current battle and return to the field
      */
-    void ExitBattle(FForceLatentCoroutine = {});
+    UE5Coro::TCoroutine<> ExitBattle(FForceLatentCoroutine = {});
 
     /**
      * The map to jump to for battle

@@ -300,7 +300,7 @@ int32 UBattleMoveFunctionCode::CalculateBaseAccuracy_Implementation(int32 Accura
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::PlayAnimation(const TScriptInterface<IBattler> &User,
                                                              const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine) {
     co_await ABattleSequencer::DisplayBattleMessages(this);
-    co_await IBattleAnimation::PlayAnimation(this, GetMoveAnimation(User, Targets));
+    co_await IBattleAnimation::PlayAnimation(GetMoveAnimation(User, Targets));
 }
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DealDamage(const TScriptInterface<IBattler> &User,
@@ -566,7 +566,7 @@ int32 UBattleMoveFunctionCode::CalculateAdditionalEffectChance_Implementation(
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::EndMove(const TScriptInterface<IBattler> &User,
                                                        const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine) {
     co_await ABattleSequencer::DisplayBattleMessages(this);
-    co_await IBattleAnimation::PlayAnimation(this, GetExpGainSequence(User, Targets));
+    co_await IBattleAnimation::PlayAnimation(GetExpGainSequence(User, Targets));
 }
 
 TArray<FActiveGameplayEffectHandle>
