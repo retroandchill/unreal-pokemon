@@ -9,6 +9,7 @@ public class PokemonItems : ModuleRules {
             "PokemonCore",
             "PokemonAssets",
             "DynamicAssetLoader",
+            "UE5Coro"
         });
 
         PrivateDependencyModuleNames.AddRange(

@@ -83,23 +83,18 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
   public:
     template <typename T, typename... A>
         requires std::is_base_of_v<UFieldItemEffect, T>
-    void TryUseItem(const FItem &Item, int32 Quantity, FOnItemEffectComplete::FDelegate &&CompletionDelegate,
-                    A &&...Args) {
+    UE5Coro::TCoroutine<bool> TryUseItem(const FItem &Item, int32 Quantity, A &&...Args) {
         auto EffectClass = Pokemon::Items::FieldItemEffects.LoadClass<T>(Item.ID);
         if (!EffectClass.IsSet()) {
             OnItemEffectConclude(false, Item.ID);
-            CompletionDelegate.Execute(false);
-            return;
+            co_return false;
         }
 
         auto Effect = NewObject<T>(this, EffectClass.GetValue());
-        Effect->BindToOnEffectComplete(
-            this, [this, ItemID = Item.ID, Callback = std::move(CompletionDelegate)](bool bSuccess) {
-                OnItemEffectConclude(bSuccess, ItemID);
-                Callback.Execute(bSuccess);
-            });
-        Effect->Use(Item, Quantity, std::forward<A>(Args)...);
         CurrentItemEffect = Effect;
+        bool bSuccess = co_await Effect->UseItem(Item, Quantity, std::forward<A>(Args)...);
+        OnItemEffectConclude(bSuccess, Item.ID);
+        co_return bSuccess;
     }
 
   private:

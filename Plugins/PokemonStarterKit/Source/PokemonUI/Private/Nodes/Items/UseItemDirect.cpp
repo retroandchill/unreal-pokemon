@@ -7,6 +7,6 @@ UUseItemDirect *UUseItemDirect::UseItemDirect(UBagScreen *Screen, FName Item, in
     return ConstructUseItemNode<UUseItemDirect>(Screen, Item, Quantity);
 }
 
-void UUseItemDirect::Activate() {
-    UseItem<UFieldItemEffectDirect>();
+UE5Coro::TCoroutine<> UUseItemDirect::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine) {
+    co_await UseItem<UFieldItemEffectDirect>();
 }
