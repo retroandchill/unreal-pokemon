@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Animations/ProgressBarAnimation.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #include "UpdateHPBar.generated.h"
 
@@ -16,7 +17,7 @@ class UProgressBar;
  * Update a Pokémon's HP bar to its new desired value.
  */
 UCLASS(DisplayName = "Update HP Bar", meta = (HideThen))
-class POKEMONUI_API UUpdateHPBar : public UBlueprintAsyncActionBase {
+class POKEMONUI_API UUpdateHPBar : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
@@ -33,7 +34,8 @@ class POKEMONUI_API UUpdateHPBar : public UBlueprintAsyncActionBase {
     static UUpdateHPBar *UpdateHPBar(UScreen *Screen, const TScriptInterface<IPokemon> &Pokemon,
                                      float MaxDuration = 1.f);
 
-    void Activate() override;
+protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:
     /**
@@ -49,6 +51,4 @@ class POKEMONUI_API UUpdateHPBar : public UBlueprintAsyncActionBase {
     TScriptInterface<IPokemon> Pokemon;
 
     float MaxDuration;
-
-    Pokemon::UI::FProgressBarAnimation Animation;
 };

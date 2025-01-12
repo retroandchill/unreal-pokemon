@@ -9,28 +9,19 @@ UPlayBattlerHPAnimation *UPlayBattlerHPAnimation::PlayBattlerHPAnimation(const U
                                                                          const TScriptInterface<IBattler> &Battler,
                                                                          float MaxDuration) {
     auto Node = NewObject<UPlayBattlerHPAnimation>();
-    Node->WorldContextObject = WorldContextObject;
+    Node->SetWorldContext(WorldContextObject);
     Node->Battler = Battler;
     Node->MaxDuration = MaxDuration;
     return Node;
 }
 
-void UPlayBattlerHPAnimation::Activate() {
-    auto Panel = UBattleScreenHelpers::FindPokemonBattlePanel(WorldContextObject, Battler);
+UE5Coro::TCoroutine<> UPlayBattlerHPAnimation::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine) {
+    auto Panel = UBattleScreenHelpers::FindPokemonBattlePanel(GetWorldContext(), Battler);
     if (Panel == nullptr) {
-        ExecuteOnComplete();
-        return;
+        OnSelected.Broadcast();
+        co_return;
     }
-
-    FOnProgresBarUpdateComplete::FDelegate Callback;
-    Callback.BindDynamic(this, &UPlayBattlerHPAnimation::ExecuteOnComplete);
-    Panel->BindToOnProgressBarUpdateComplete(Callback);
-    UnbindActions.BindWeakLambda(Panel, &UPokemonBattlePanel::UnbindAllHPUpdateDelegates, Panel, this);
-    Panel->AnimateHP(MaxDuration);
-}
-
-void UPlayBattlerHPAnimation::ExecuteOnComplete() {
+    
+    co_await Panel->AnimateHP(MaxDuration);
     OnSelected.Broadcast();
-    UnbindActions.ExecuteIfBound();
-    SetReadyToDestroy();
 }

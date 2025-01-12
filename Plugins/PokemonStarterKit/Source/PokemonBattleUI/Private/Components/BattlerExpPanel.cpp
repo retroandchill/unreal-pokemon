@@ -10,19 +10,6 @@
  */
 constexpr float AnimationGainSpeed = 1.75f;
 
-using FUpdatePercent = Pokemon::UI::FSetNewPercent::FDelegate;
-using FUpdateComplete = Pokemon::UI::FOnAnimationComplete::FDelegate;
-
-void UBattlerExpPanel::NativeConstruct() {
-    Super::NativeConstruct();
-    ExpBarAnimation.SetWorldContext(this);
-    ExpBarAnimation.BindActionToPercentDelegate(
-        FUpdatePercent::CreateUObject(this, &UBattlerExpPanel::UpdateExpBarPercent));
-    ExpBarAnimation.BindActionToWrapAroundAnimation(FUpdateComplete::CreateUObject(this, &UBattlerExpPanel::OnLevelUp));
-    ExpBarAnimation.BindActionToCompleteDelegate(
-        FUpdateComplete::CreateUObject(this, &UBattlerExpPanel::OnExpGainComplete));
-}
-
 void UBattlerExpPanel::SetBattler(const TScriptInterface<IBattler> &Battler, const TOptional<int32> &Level,
                                   const TOptional<float> &ExpGainPercent) {
     CurrentBattler = Battler;
@@ -39,17 +26,21 @@ void UBattlerExpPanel::ChangeExpGainDisplay(int32 Gain) {
     ExpGain = Gain;
 }
 
-void UBattlerExpPanel::AnimateGain(float MaxDuration) {
+UE5Coro::TCoroutine<> UBattlerExpPanel::AnimateGain(float MaxDuration) {
+    using Pokemon::UI::FSetNewPercent;
     int32 LevelDiff = CurrentBattler->GetPokemonLevel() - DisplayedLevel;
     check(LevelDiff >= 0)
     float StartPercent = ExpBar->GetPercent();
     float EndPercent = CurrentBattler->GetExpPercent() + static_cast<float>(LevelDiff);
 
     float GainRate = FMath::Min((EndPercent - StartPercent) * AnimationGainSpeed, MaxDuration);
-    ExpBarAnimation.PlayAnimation(StartPercent, EndPercent, GainRate, true);
+    co_await Pokemon::UI::ProgressBarAnimation(this, StartPercent, EndPercent, GainRate,
+        FSetNewPercent::CreateUObject(this, &UBattlerExpPanel::UpdateExpBarPercent), true,
+        FSimpleDelegate::CreateUObject(this, &UBattlerExpPanel::OnLevelUp));
+    OnGainAnimationComplete.Broadcast();
 }
 
-void UBattlerExpPanel::BindOnAnimationComplete(FSimpleDelegate &&Callback) {
+void UBattlerExpPanel::BindOnAnimationComplete(FSimpleDelegate Callback) {
     OnGainAnimationComplete.Add(std::move(Callback));
 }
 

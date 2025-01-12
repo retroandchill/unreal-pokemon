@@ -20,9 +20,6 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UBattlerExpPanel : public UCommonUserWidget {
     GENERATED_BODY()
 
-  protected:
-    void NativeConstruct() override;
-
   public:
     /**
      * Sets the battler information to be displayed on the experience panel.
@@ -48,14 +45,14 @@ class POKEMONBATTLEUI_API UBattlerExpPanel : public UCommonUserWidget {
      *
      * @param MaxDuration The maximum duration allowed for the animation, in seconds.
      */
-    void AnimateGain(float MaxDuration = 3.f);
+    UE5Coro::TCoroutine<> AnimateGain(float MaxDuration = 3.f);
 
     /**
      * Binds a callback to be executed when the experience gain animation completes.
      *
      * @param Callback The delegate to be invoked upon the completion of the animation.
      */
-    void BindOnAnimationComplete(FSimpleDelegate &&Callback);
+    void BindOnAnimationComplete(FSimpleDelegate Callback);
 
   protected:
     /**
@@ -93,8 +90,6 @@ class POKEMONBATTLEUI_API UBattlerExpPanel : public UCommonUserWidget {
 
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<UCommonTextBlock> ExpGainText;
-
-    Pokemon::UI::FProgressBarAnimation ExpBarAnimation;
 
     FSimpleMulticastDelegate OnGainAnimationComplete;
 };
