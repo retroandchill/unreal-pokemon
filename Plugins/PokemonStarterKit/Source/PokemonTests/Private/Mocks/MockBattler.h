@@ -32,8 +32,8 @@ class FMockBattler : public IBattler {
     MOCK_METHOD(void, Faint, (), (const, override));
     MOCK_METHOD(bool, CanGainExp, (), (const, override));
     MOCK_METHOD(float, GetExpPercent, (), (const, override));
-    MOCK_METHOD(TArray<FExpGainInfo>, GiveExpToParticipants, (), (override));
-    MOCK_METHOD2(GainExpAndEVs, FLevelUpStatChanges(int32 Exp, const TMap<FName, uint8> &EVs));
+    MOCK_METHOD(UE5Coro::TCoroutine<TArray<FExpGainInfo>>, GiveExpToParticipants, (), (override));
+    MOCK_METHOD2(GainExpAndEVs, UE5Coro::TCoroutine<FLevelUpStatChanges>(int32 Exp, const TMap<FName, uint8> &EVs));
     MOCK_METHOD(TArray<FName>, GetTypes, (), (const, override));
     MOCK_METHOD(UBattlerAbilityComponent *, GetAbilityComponent, (), (const, override));
     MOCK_METHOD(UTurnBasedEffectComponent *, GetTurnBasedEffectComponent, (), (const, override));

@@ -141,6 +141,10 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
     UE5Coro::TCoroutine<> UseMove(const TScriptInterface<IBattler> &User,
                                   const TArray<TScriptInterface<IBattler>> &Targets);
 
+    UE5Coro::TCoroutine<bool> CheckMoveSuccess(const TScriptInterface<IBattler> &User,
+                                                                    const TArray<TScriptInterface<IBattler>> &Targets,
+                                                                    TArray<TScriptInterface<IBattler>> &SuccessfulHits);
+
   protected:
     /**
      * Check if the move failed completely
@@ -202,13 +206,18 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
     int32 CalculateBaseAccuracy(int32 Accuracy, const TScriptInterface<IBattler> &User,
                                 const TScriptInterface<IBattler> &Target);
 
+private:
+    UE5Coro::TCoroutine<> PlayAnimation(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
+
+public:
     /**
      * Display the given messages and play the animation of the move
      * @param User The user of the move
      * @param Targets The target of the move in question
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Display")
-    void QueueMoveAnimation(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
+    TScriptInterface<IBattleAnimation> GetMoveAnimation(const TScriptInterface<IBattler> &User,
+                                                          const TArray<TScriptInterface<IBattler>> &Targets);
 
     /**
      * Take the damage effects of the move and apply them to the target
@@ -384,7 +393,8 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
                                   const TArray<TScriptInterface<IBattler>> &Targets);
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Moves|Effects")
-    void AddExpGainSequence(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Target);
+    TScriptInterface<IBattleAnimation> GetExpGainSequence(const TScriptInterface<IBattler> &User,
+                                                          const TArray<TScriptInterface<IBattler>> &Target);
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = GameplayEffects)
     TArray<FActiveGameplayEffectHandle> ApplyGameplayEffectToBattler(const TScriptInterface<IBattler> &Battler,

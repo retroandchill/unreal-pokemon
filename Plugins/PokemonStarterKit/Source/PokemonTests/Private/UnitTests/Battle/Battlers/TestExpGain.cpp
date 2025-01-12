@@ -44,20 +44,20 @@ bool TestExpGain::RunTest(const FString &Parameters) {
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
 
-    auto Result = Battler2->GiveExpToParticipants();
+    auto Result = Battler2->GiveExpToParticipants().GetResult();
     UE_CHECK_EQUAL(1, Result.Num());
     UE_CHECK_TRUE(Result[0].GainingBattler == Battler1);
     UE_CHECK_EQUAL(1642, Result[0].Amount);
 
     Battler1->RecordParticipation();
-    Result = Battler2->GiveExpToParticipants();
+    Result = Battler2->GiveExpToParticipants().GetResult();
     UE_CHECK_EQUAL(1, Result.Num());
     UE_CHECK_TRUE(Result[0].GainingBattler == Battler1);
     UE_CHECK_EQUAL(3283, Result[0].Amount);
 
     Battler1->TakeBattleDamage(static_cast<int32>(Battler1->GetAbilityComponent()->GetCoreAttributes()->GetHP()));
     UE_CHECK_TRUE(Battler1->IsFainted());
-    Result = Battler2->GiveExpToParticipants();
+    Result = Battler2->GiveExpToParticipants().GetResult();
     UE_CHECK_EQUAL(1, Result.Num());
     UE_CHECK_TRUE(Result[0].GainingBattler == Battler1);
     UE_CHECK_EQUAL(0, Result[0].Amount);

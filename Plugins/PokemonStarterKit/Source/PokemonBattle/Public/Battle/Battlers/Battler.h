@@ -202,11 +202,9 @@ class POKEMONBATTLE_API IBattler {
     UFUNCTION(BlueprintCallable, Category = Stats)
     virtual float GetExpPercent() const = 0;
 
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual TArray<FExpGainInfo> GiveExpToParticipants() = 0;
+    virtual UE5Coro::TCoroutine<TArray<FExpGainInfo>> GiveExpToParticipants() = 0;
 
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual FLevelUpStatChanges GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) = 0;
+    virtual UE5Coro::TCoroutine<FLevelUpStatChanges> GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) = 0;
 
     /**
      * Get the Pokémon's current type

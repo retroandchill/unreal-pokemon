@@ -6,10 +6,10 @@ public class PokemonBattleUI : ModuleRules {
 
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "RPGMenus", "PokemonBattle", "PokemonUI",
                                                             "PokemonData", "PokemonCore", "CommonUI", "CommonGame",
-                                                            "DynamicAssetLoader", "UnrealInjector" });
+                                                            "DynamicAssetLoader", "UnrealInjector", "RetroLib", "UE5Coro" });
 
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "UMG",
                                                              "PokemonAssets", "GameplayAbilities", "GameplayTags",
-                                                             "Paper2D" });
+                                                             "Paper2D",  });
     }
 }

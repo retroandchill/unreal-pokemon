@@ -27,6 +27,7 @@
 #include "Moves/Target.h"
 #include "PokemonBattleModule.h"
 #include "PokemonBattleSettings.h"
+#include "Battle/Animations/BattleAnimation.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Views/Concat.h"
@@ -138,22 +139,35 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
                                                        const TArray<TScriptInterface<IBattler>> &Targets) {
+    TArray<TScriptInterface<IBattler>> SuccessfulHits;
+    if (!co_await CheckMoveSuccess(User, Targets, SuccessfulHits)) {
+        ProcessMoveFailure();
+        co_await EndMove(User, Targets);
+        co_return;
+    }
+
+    co_await PlayAnimation(User, SuccessfulHits);
+    co_await DealDamage(User, SuccessfulHits);
+    co_await ApplyMoveEffects(User, SuccessfulHits);
+    co_await ApplyAdditionalEffects(User, SuccessfulHits);
+    co_await EndMove(User, SuccessfulHits);
+}
+
+UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(const TScriptInterface<IBattler> &User,
+                                                                    const TArray<TScriptInterface<IBattler>> &Targets,
+                                                                    TArray<TScriptInterface<IBattler>> &SuccessfulHits) {
     UE_LOG(LogBattle, Display, TEXT("%s is using move %s!"), *User->GetNickname().ToString(),
            *BattleMove->GetDisplayName().ToString())
     if (MoveFailed(User, Targets)) {
         UE_LOG(LogBattle, Display, TEXT("%s failed!"), *BattleMove->GetDisplayName().ToString())
-        ProcessMoveFailure();
-        EndMove(User, Targets);
-        co_return;
+        co_return false;
     }
 
     if (Targets.IsEmpty() && BattleMove->GetTargetType().NumTargets != ETargetCount::NoneOrSelf &&
         !WorksWithNoTargets()) {
         ABattleSequencer::QueueBattleMessage(NSLOCTEXT("BattleMoveFunction", "NoTarget", "But there was no target..."));
         UE_LOG(LogBattle, Display, TEXT("%s has no targets!"), *BattleMove->GetDisplayName().ToString())
-        ProcessMoveFailure();
-        EndMove(User, Targets);
-        co_return;
+        co_return false;
     }
 
     auto TargetFailureCheckCallback = [this, &User](const TScriptInterface<IBattler> &Target) {
@@ -162,7 +176,7 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::UseMove(const TScriptInterface<IB
         if (!bSuccess) {
             Target->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
             AddedTargetTags.FindChecked(CastChecked<AActor>(Target.GetObject()))
-                .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
+                           .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
         }
         return bSuccess;
     };
@@ -171,9 +185,7 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::UseMove(const TScriptInterface<IB
 
     if (!Targets.IsEmpty() && FilteredTargets.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s failed against all targets!"), *BattleMove->GetDisplayName().ToString())
-        ProcessMoveFailure();
-        EndMove(User, Targets);
-        co_return;
+        co_return false;
     }
 
     auto HitCheckCallback = [this, &User](const TScriptInterface<IBattler> &Target) {
@@ -183,33 +195,21 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::UseMove(const TScriptInterface<IB
                    *Target->GetNickname().ToString())
             Target->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Missed);
             AddedTargetTags.FindChecked(CastChecked<AActor>(Target.GetObject()))
-                .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Missed);
+                           .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Missed);
         }
         return bHitResult;
     };
-    auto SuccessfulHits =
-        FilteredTargets | Retro::Ranges::Views::Filter(HitCheckCallback) | Retro::Ranges::To<TArray>();
+    SuccessfulHits = FilteredTargets | Retro::Ranges::Views::Filter(HitCheckCallback) | Retro::Ranges::To<TArray>();
 
     if (!Targets.IsEmpty() && SuccessfulHits.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s missed all targets!"), *BattleMove->GetDisplayName().ToString())
         ABattleSequencer::QueueBattleMessage(NSLOCTEXT("BattleMove", "HitCheckFailed", "But it missed!"));
         ProcessMoveFailure();
         EndMove(User, Targets);
-        co_return;
+        co_return false;
     }
-
-    if (BattleMove->GetCategory() != EMoveDamageCategory::Status) {
-        for (auto &Target : SuccessfulHits) {
-            CalculateDamageAgainstTarget(User, Target, SuccessfulHits.Num());
-        }
-    }
-
-    QueueMoveAnimation(User, SuccessfulHits);
-    co_await ABattleSequencer::DisplayBattleMessages();
-    co_await DealDamage(User, SuccessfulHits);
-    co_await ApplyMoveEffects(User, SuccessfulHits);
-    co_await ApplyAdditionalEffects(User, SuccessfulHits);
-    co_await EndMove(User, SuccessfulHits);
+    
+    co_return true;
 }
 
 bool UBattleMoveFunctionCode::MoveFailed_Implementation(const TScriptInterface<IBattler> &User,
@@ -297,8 +297,20 @@ int32 UBattleMoveFunctionCode::CalculateBaseAccuracy_Implementation(int32 Accura
     return Accuracy;
 }
 
+UE5Coro::TCoroutine<> UBattleMoveFunctionCode::PlayAnimation(const TScriptInterface<IBattler> &User,
+    const TArray<TScriptInterface<IBattler>> &Targets) {
+    co_await ABattleSequencer::DisplayBattleMessages();
+    co_await IBattleAnimation::PlayAnimation(this, GetMoveAnimation(User, Targets));
+}
+
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DealDamage(const TScriptInterface<IBattler> &User,
                                                           const TArray<TScriptInterface<IBattler>> &Targets) {
+    if (BattleMove->GetCategory() != EMoveDamageCategory::Status) {
+            for (auto &Target : Targets) {
+                CalculateDamageAgainstTarget(User, Target, Targets.Num());
+            }
+        }
+    
     // This is the list of tags to ignore when dealing out damage
     static const auto UnaffectedTagsFilter = FGameplayTagContainer::CreateFromArray(TArray<FGameplayTag>{
         Pokemon::Battle::Moves::MoveTarget_Unaffected, Pokemon::Battle::Moves::MoveTarget_NoDamage});
@@ -553,8 +565,8 @@ int32 UBattleMoveFunctionCode::CalculateAdditionalEffectChance_Implementation(
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::EndMove(const TScriptInterface<IBattler> &User,
                                                        const TArray<TScriptInterface<IBattler>> &Targets) {
-    AddExpGainSequence(User, Targets);
     co_await ABattleSequencer::DisplayBattleMessages();
+    co_await IBattleAnimation::PlayAnimation(this, GetExpGainSequence(User, Targets));
 }
 
 TArray<FActiveGameplayEffectHandle>

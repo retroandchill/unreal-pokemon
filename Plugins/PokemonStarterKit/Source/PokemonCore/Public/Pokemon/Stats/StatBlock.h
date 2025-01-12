@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "Species/Stat.h"
 #include "StatEntry.h"
+#include "UE5Coro.h"
 
 #include "StatBlock.generated.h"
 
@@ -133,15 +134,8 @@ class POKEMONCORE_API IStatBlock {
      * 
      * @param Change The change in experience
      * @param bShowMessages Should the messages be shown to the player
-     * @param OnEnd What to call after all the messages have been shown
      */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-#if CPP
-    virtual FLevelUpStatChanges GainExp(int32 Change, bool bShowMessages = false,
-                                        const FLevelUpEnd &OnEnd = FLevelUpEnd()) = 0;
-#else
-    virtual FLevelUpStatChanges GainExp(int32 Change, bool bShowMessages, const FLevelUpEnd &OnEnd) = 0;
-#endif
+    virtual UE5Coro::TCoroutine<FLevelUpStatChanges> GainExp(int32 Change, bool bShowMessages = false) = 0;
 
     /**
      * Get the Pokémon's Nature value

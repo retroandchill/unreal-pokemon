@@ -250,11 +250,11 @@ float ABattlerActor::GetExpPercent() const {
     return WrappedPokemon->GetStatBlock()->GetExpPercent();
 }
 
-TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
+UE5Coro::TCoroutine<TArray<FExpGainInfo>> ABattlerActor::GiveExpToParticipants() {
     TArray<FExpGainInfo> GainInfos;
     auto &Battle = OwningSide->GetOwningBattle();
     if (OwningSide != Battle->GetOpposingSide()) {
-        return GainInfos;
+        co_return GainInfos;
     }
 
     auto &BattleSettings = *GetDefault<UPokemonBattleSettings>();
@@ -269,7 +269,7 @@ TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
     for (auto &PlayerParty = Battle->GetPlayerSide()->GetTrainerParty(PlayerTrainer); auto &Battler : PlayerParty) {
         if (Battler->IsFainted()) {
             auto &GainInfo = GainInfos.Emplace_GetRef(Battler, 0);
-            GainInfo.StatChanges = Battler->GainExpAndEVs(GainInfo.Amount, {});
+            GainInfo.StatChanges = co_await Battler->GainExpAndEVs(GainInfo.Amount, {});
             continue;
         }
 
@@ -283,13 +283,13 @@ TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
                                             ExpAttributes.GetExpGainRate());
 
         auto &GainInfo = GainInfos.Emplace_GetRef(Battler, ExpGain);
-        GainInfo.StatChanges = Battler->GainExpAndEVs(GainInfo.Amount, Species.EVs);
+        GainInfo.StatChanges = co_await Battler->GainExpAndEVs(GainInfo.Amount, Species.EVs);
     }
 
-    return GainInfos;
+    co_return GainInfos;
 }
 
-FLevelUpStatChanges ABattlerActor::GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) {
+UE5Coro::TCoroutine<FLevelUpStatChanges> ABattlerActor::GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) {
     auto StatBlock = WrappedPokemon->GetStatBlock();
     for (auto &[ID, Amount] : EVs) {
         auto Stat = StatBlock->GetStat(ID);

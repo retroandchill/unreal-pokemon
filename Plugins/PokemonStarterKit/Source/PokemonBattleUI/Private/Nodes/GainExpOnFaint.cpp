@@ -10,25 +10,28 @@
 UGainExpOnFaint *UGainExpOnFaint::GainExpOnFaint(const UObject *WorldContextObject,
                                                  const TArray<TScriptInterface<IBattler>> &Battlers) {
     auto Node = NewObject<UGainExpOnFaint>();
-    Node->WorldContextObject = WorldContextObject;
+    Node->SetWorldContext(WorldContextObject);
     Node->Battlers = Battlers;
     return Node;
 }
 
-void UGainExpOnFaint::Activate() {
+UE5Coro::TCoroutine<> UGainExpOnFaint::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+    co_await ProcessExpGain();
+    OnComplete.Broadcast();
+}
+
+UE5Coro::TCoroutine<> UGainExpOnFaint::ProcessExpGain() const {
     auto ValidBattlers = Battlers.FilterByPredicate([](const TScriptInterface<IBattler> &Battler) {
         auto &OwningSide = Battler->GetOwningSide();
         return OwningSide == OwningSide->GetOwningBattle()->GetOpposingSide();
     });
     if (ValidBattlers.IsEmpty()) {
-        OnComplete.Broadcast();
-        SetReadyToDestroy();
-        return;
+        co_return;
     }
 
-    auto GainInfos = ValidBattlers[0]->GiveExpToParticipants();
+    auto GainInfos = co_await ValidBattlers[0]->GiveExpToParticipants();
     for (int32 i = 1; i < ValidBattlers.Num(); i++) {
-        auto AdditionalInfos = ValidBattlers[i]->GiveExpToParticipants();
+        auto AdditionalInfos = co_await ValidBattlers[i]->GiveExpToParticipants();
         check(GainInfos.Num() == AdditionalInfos.Num())
 
         for (int32 j = 0; j < GainInfos.Num(); j++) {
@@ -47,24 +50,11 @@ void UGainExpOnFaint::Activate() {
         }
     }
 
-    auto Screen = UBattleScreenHelpers::FindBattleScreen(WorldContextObject);
+    auto Screen = UBattleScreenHelpers::FindBattleScreen(GetWorldContext());
     if (Screen == nullptr) {
-        OnComplete.Broadcast();
-        SetReadyToDestroy();
-        return;
+        co_return;
     }
 
-    CompleteHandle =
-        Screen->BindToExpGainComplete(FSimpleDelegate::CreateUObject(this, &UGainExpOnFaint::OnExpGainComplete));
-    Screen->DisplayExpForGain(std::move(GainInfos));
-}
-
-void UGainExpOnFaint::OnExpGainComplete() {
-    auto Screen = UBattleScreenHelpers::FindBattleScreen(WorldContextObject);
-    check(Screen != nullptr)
-    ;
+    co_await Screen->DisplayExpForGain(std::move(GainInfos));
     Screen->FinishExpGainDisplay();
-    OnComplete.Broadcast();
-    Screen->RemoveFromExpGainComplete(CompleteHandle);
-    SetReadyToDestroy();
 }

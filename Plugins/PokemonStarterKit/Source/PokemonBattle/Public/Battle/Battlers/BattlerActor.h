@@ -88,10 +88,9 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = Stats)
     float GetExpPercent() const override;
 
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    TArray<FExpGainInfo> GiveExpToParticipants() override;
+    UE5Coro::TCoroutine<TArray<FExpGainInfo>> GiveExpToParticipants() override;
 
-    FLevelUpStatChanges GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) override;
+    UE5Coro::TCoroutine<FLevelUpStatChanges> GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
     TArray<FName> GetTypes() const override;

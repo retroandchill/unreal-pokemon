@@ -88,7 +88,7 @@ float UDefaultStatBlock::GetExpPercent() const {
     return (static_cast<float>(Exp) - ExpNeededForLevel) / TotalNeededForLevel;
 }
 
-FLevelUpStatChanges UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages, const FLevelUpEnd &OnEnd) {
+UE5Coro::TCoroutine<FLevelUpStatChanges> UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages) {
     FLevelUpStatChanges Changes;
     float ExpPercent = GetExpPercent();
     Changes.ExpPercentChange.Before = ExpPercent;
@@ -119,15 +119,12 @@ FLevelUpStatChanges UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages,
         }
 
         if (bShowMessages) {
-            [Changes, OnEnd](UE5Coro::TLatentContext<UDefaultStatBlock> This) -> UE5Coro::TCoroutine<> {
-                auto &Dispatcher = IPokemonCoroutineDispatcher::Get(This.Target);
-                co_await Dispatcher.ProcessLevelUp(This.Target, Changes);
-                OnEnd.ExecuteIfBound();
-            }(this);
+            auto &Dispatcher = IPokemonCoroutineDispatcher::Get(this);
+            co_await Dispatcher.ProcessLevelUp(this, Changes);
         }
     }
 
-    return Changes;
+    co_return Changes;
 }
 
 const FNature &UDefaultStatBlock::GetNature() const {
