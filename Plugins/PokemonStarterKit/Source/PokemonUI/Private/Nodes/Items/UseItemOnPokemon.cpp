@@ -10,6 +10,6 @@ UUseItemOnPokemon *UUseItemOnPokemon::UseItemOnPokemon(UBagScreen *Screen, FName
     return Node;
 }
 
-void UUseItemOnPokemon::Activate() {
-    UseItem<UFieldItemEffectUseOnPokemon>(Pokemon);
+UE5Coro::TCoroutine<> UUseItemOnPokemon::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine) {
+    co_await UseItem<UFieldItemEffectUseOnPokemon>({}, Pokemon);
 }

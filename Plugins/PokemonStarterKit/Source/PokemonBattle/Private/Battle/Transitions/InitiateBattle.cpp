@@ -2,30 +2,23 @@
 
 #include "Battle/Transitions/InitiateBattle.h"
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
+#include "Managers/PokemonSubsystem.h"
 
-UInitiateBattle *UInitiateBattle::InitiateBattle(const UObject *WorldContext, const FBattleInfo &BattleInfo,
+UInitiateBattle *UInitiateBattle::InitiateBattle(const UObject *WorldContextObject, const FBattleInfo &BattleInfo,
                                                  TSubclassOf<ABattleTransitionActor> Transition) {
     auto Node = NewObject<UInitiateBattle>();
-    Node->WorldContext = WorldContext;
+    Node->SetWorldContext(WorldContextObject);
     Node->BattleInfo = BattleInfo;
     Node->Transition = Transition;
     return Node;
 }
 
-void UInitiateBattle::Activate() {
-    auto Subsystem = WorldContext->GetWorld()->GetSubsystem<UBattleTransitionSubsystem>();
+UE5Coro::TCoroutine<> UInitiateBattle::ExecuteCoroutine(FForceLatentCoroutine) {
+    auto Subsystem = GetWorldContext()->GetWorld()->GetSubsystem<UBattleTransitionSubsystem>();
     check(Subsystem != nullptr)
-    OutputExecHandle.Emplace(Subsystem->BindToBattleFinished(
-        FBattleFinished::FDelegate::CreateUObject(this, &UInitiateBattle::OnBattleComplete)));
-    Subsystem->InitiateBattle(BattleInfo, Transition);
-}
-
-void UInitiateBattle::OnBattleComplete(EBattleResult Result) {
-    AfterBattle.Broadcast(Result);
-    auto Subsystem = WorldContext->GetWorld()->GetSubsystem<UBattleTransitionSubsystem>();
-    check(Subsystem != nullptr)
-    check(OutputExecHandle.IsSet())
-    Subsystem->RemoveFromBattleFinished(*OutputExecHandle);
-    OutputExecHandle.Reset();
-    SetReadyToDestroy();
+    if (auto Result = co_await Subsystem->InitiateBattle(BattleInfo, Transition); Result != EBattleResult::Defeat || BattleInfo.bLossAllowed) {
+        AfterBattle.Broadcast(Result);
+    } else {
+        UPokemonSubsystem::GetInstance(GetWorldContext()).PerformPlayerReset();
+    }
 }

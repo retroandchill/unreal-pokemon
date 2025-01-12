@@ -13,6 +13,8 @@
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/Move.h"
 #include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Optionals/PtrOrNull.h"
+#include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/MakeWeak.h"
 
@@ -102,12 +104,12 @@ const TScriptInterface<IBattler> &UPokemonBattleMove::GetOwningBattler() const {
     return Owner;
 }
 
-FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<FTargetWithIndex> &Targets) {
+UE5Coro::TCoroutine<> UPokemonBattleMove::TryActivateMove(const TArray<FTargetWithIndex> &Targets) {
     auto AbilityComponent = Owner->GetAbilityComponent();
     auto OwnerActor = CastChecked<AActor>(Owner.GetObject());
     FGameplayEventData EventData;
     EventData.Instigator = OwnerActor;
-
+    
     auto Payload = NewObject<UUseMovePayload>();
     Payload->Move = this;
     bool bIsInstanced;
@@ -125,6 +127,5 @@ FGameplayAbilitySpecHandle UPokemonBattleMove::TryActivateMove(const TArray<FTar
     // clang-format on
     EventData.TargetData.Data.Emplace(TargetData);
 
-    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor, Pokemon::Battle::Moves::UsingMove, EventData);
-    return FunctionCode;
+    co_await Pokemon::Battle::Events::SendOutActivationEvent(AbilityComponent, FunctionCode, Pokemon::Battle::Moves::UsingMove, EventData);
 }

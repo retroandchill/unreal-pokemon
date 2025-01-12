@@ -2,16 +2,11 @@
 
 #include "Battle/Animations/AnimationObject.h"
 
-void UAnimationObject::BindDelegateToAnimationComplete_Implementation(
-    const FBattleAnimationCompleteCallback &Delegate) {
-    OnBattleAnimationComplete.Add(Delegate);
-}
-
-void UAnimationObject::RemoveDelegateFromAnimationComplete_Implementation(
-    const FBattleAnimationCompleteCallback &Delegate) {
-    OnBattleAnimationComplete.Remove(Delegate);
+UE5Coro::TCoroutine<> UAnimationObject::PlayAnimation() {
+    Play();
+    co_await TFuture<void>(OnBattleAnimationComplete);
 }
 
 void UAnimationObject::AnimationComplete() const {
-    OnBattleAnimationComplete.Broadcast();
+    OnBattleAnimationComplete->EmplaceResult(0);
 }

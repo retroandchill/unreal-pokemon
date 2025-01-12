@@ -27,7 +27,7 @@ class POKEMONBATTLE_API FBattleActionUseItem : public FBattleActionBase {
     FText GetActionMessage() const override;
 
   protected:
-    FGameplayAbilitySpecHandle ActivateAbility() override;
+    UE5Coro::TCoroutine<> ActivateAbility() override;
 
   private:
     FName ItemID;

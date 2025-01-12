@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "RetroLib/Functional/Delegates.h"
 #include "Screens/Screen.h"
 
 #include "MoveForgetScreen.generated.h"
@@ -50,7 +51,7 @@ class POKEMONUI_API UMoveForgetScreen : public UScreen {
     /**
      * Called when the move deletion is completed
      */
-    RETRO_MULTICAST_DELEGATE_MEMBER(FOnMoveForgetComplete, OnMoveForgetComplete)
+    UE5Coro::TCoroutine<bool> AwaitPlayerDecision();
 
   protected:
     /**
@@ -150,6 +151,8 @@ class POKEMONUI_API UMoveForgetScreen : public UScreen {
      */
     UPROPERTY(BlueprintGetter = GetMoveInfoWindow, Category = Widgets, meta = (BindWidget))
     TObjectPtr<UMoveInfoWindow> MoveInfoWindow;
+
+    FOnMoveForgetComplete OnMoveForgetComplete;
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, UMoveForgetScreen)

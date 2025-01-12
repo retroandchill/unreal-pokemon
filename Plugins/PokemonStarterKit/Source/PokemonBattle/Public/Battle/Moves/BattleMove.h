@@ -8,6 +8,7 @@
 #include "RetroLib/Ranges/Views/AnyView.h"
 #include "RetroLib/Ranges/Views/Generator.h"
 #include "UObject/Interface.h"
+#include "UE5Coro.h"
 
 #include "BattleMove.generated.h"
 
@@ -136,5 +137,5 @@ class POKEMONBATTLE_API IBattleMove {
     /*
      * Try to activate the move returning the spec handle for the move execution
      */
-    virtual FGameplayAbilitySpecHandle TryActivateMove(const TArray<FTargetWithIndex> &Targets) = 0;
+    virtual UE5Coro::TCoroutine<> TryActivateMove(const TArray<FTargetWithIndex> &Targets) = 0;
 };

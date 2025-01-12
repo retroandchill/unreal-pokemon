@@ -10,7 +10,8 @@
 #include "RetroLib/Ranges/Views/AnyView.h"
 #include "RetroLib/Ranges/Views/Generator.h"
 #include "UObject/Interface.h"
-#include "Utilities/Node/Utility_ProcessLevelUp.h"
+#include "Pokemon/Stats/StatBlock.h"
+#include "UE5Coro.h"
 
 #include "Battler.generated.h"
 
@@ -201,11 +202,9 @@ class POKEMONBATTLE_API IBattler {
     UFUNCTION(BlueprintCallable, Category = Stats)
     virtual float GetExpPercent() const = 0;
 
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual TArray<FExpGainInfo> GiveExpToParticipants() = 0;
+    virtual UE5Coro::TCoroutine<TArray<FExpGainInfo>> GiveExpToParticipants() = 0;
 
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    virtual FLevelUpStatChanges GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) = 0;
+    virtual UE5Coro::TCoroutine<FLevelUpStatChanges> GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) = 0;
 
     /**
      * Get the Pokémon's current type
@@ -238,7 +237,7 @@ class POKEMONBATTLE_API IBattler {
     UFUNCTION(BlueprintCallable, Category = Switching)
     virtual FText GetRecallMessage() const = 0;
 
-    virtual FGameplayAbilitySpecHandle PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) = 0;
+    virtual UE5Coro::TCoroutine<> PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) = 0;
 
     UFUNCTION(BlueprintCallable, Category = Ownership)
     virtual bool IsOwnedByPlayer() const = 0;
@@ -259,6 +258,8 @@ class POKEMONBATTLE_API IBattler {
      * @return The number of actions that can be taken
      */
     virtual uint8 GetActionCount() const = 0;
+
+    virtual bool CanSelectActions() const = 0;
 
     UFUNCTION(BlueprintCallable, Category = "Battle|TurnFlow")
     virtual int32 GetTurnCount() const = 0;

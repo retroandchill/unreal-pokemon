@@ -6,6 +6,7 @@
 #include "CommonActivatableWidget.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
+#include "UE5Coro.h"
 
 #include "SelectableWidget.generated.h"
 
@@ -71,6 +72,8 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
 
     UFUNCTION(BlueprintPure, Category = Selection)
     UCommonButtonBase *GetSelectedOption() const;
+
+    UE5Coro::TCoroutine<TOptional<int32>> AwaitSelection();
 
     /**
      * @brief Retrieves the reference to the delegate for when the user presses confirm.

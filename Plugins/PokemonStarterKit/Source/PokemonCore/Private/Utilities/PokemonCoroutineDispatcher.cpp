@@ -6,12 +6,10 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(IPokemonCoroutineDispatcher)
 
-const IPokemonCoroutineDispatcher &IPokemonCoroutineDispatcher::Get(const UObject *WorldContext) {
+IPokemonCoroutineDispatcher &IPokemonCoroutineDispatcher::Get(const UObject *WorldContext) {
     auto GameInstance = UGameplayStatics::GetGameInstance(WorldContext);
     check(GameInstance != nullptr)
-    ;
     auto Subsystem = GameInstance->GetSubsystem<UPokemonSubsystem>();
     check(Subsystem != nullptr)
-    ;
     return Subsystem->GetCoroutineDispatcher();
 }

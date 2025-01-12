@@ -4,74 +4,33 @@
 #include "Kismet/GameplayStatics.h"
 #include "PokemonUI.h"
 
-using namespace Pokemon::UI;
-
-FBarAnimationData::FBarAnimationData(float StartingPercentage, float EndingPercentage, float AnimationDuration,
-                                     bool bWrapAround)
-    : StartingPercentage(StartingPercentage), EndPercentage(EndingPercentage), AnimationDuration(AnimationDuration),
-      bWrapAround(bWrapAround) {
-}
-
-void FProgressBarAnimation::PlayAnimation(float StartPercent, float EndPercent, float Duration, bool bShouldWrap) {
-    if (AnimationData.IsSet()) {
-        UE_LOG(LogPokemonUI, Warning,
-               TEXT("Attempted to animate a progress bar that already had an animation in progress!"))
-        return;
+namespace Pokemon::UI {
+    FBarAnimationData::FBarAnimationData(float StartingPercentage, float EndingPercentage, float AnimationDuration,
+                                         bool bWrapAround)
+        : StartingPercentage(StartingPercentage), EndPercentage(EndingPercentage), AnimationDuration(AnimationDuration),
+          bWrapAround(bWrapAround) {
     }
 
-    if (Duration == 0.f) {
-        SetNewPercent.Broadcast(EndPercent);
-        OnAnimationComplete.Broadcast();
-        return;
-    }
-
-    AnimationData.Emplace(StartPercent, EndPercent, Duration, bShouldWrap);
-    PercentLastTick = StartPercent;
-}
-
-void FProgressBarAnimation::BindActionToPercentDelegate(FSetNewPercent::FDelegate &&Binding) {
-    SetNewPercent.Add(std::move(Binding));
-}
-
-void FProgressBarAnimation::BindActionToWrapAroundAnimation(FOnAnimationComplete::FDelegate &&Binding) {
-    OnBarWrapAround.Add(std::move(Binding));
-}
-
-void FProgressBarAnimation::BindActionToCompleteDelegate(FOnAnimationComplete::FDelegate &&Binding) {
-    OnAnimationComplete.Add(std::move(Binding));
-}
-
-void FProgressBarAnimation::Tick(float DeltaTime) {
-    if (!AnimationData.IsSet()) {
-        return;
-    }
-
-    if (WorldContextObject.IsValid()) {
-        DeltaTime *= UGameplayStatics::GetGlobalTimeDilation(WorldContextObject.Get());
-    }
-
-    auto &[StartingPercentage, EndPercentage, AnimationDuration, CurrentTime, bWrapAround] = AnimationData.GetValue();
-    CurrentTime += DeltaTime;
-    float NewPercent = FMath::Lerp(StartingPercentage, EndPercentage, CurrentTime / AnimationDuration);
-    if (bWrapAround && StartingPercentage < EndPercentage) {
-        NewPercent = FMath::Fmod(NewPercent, 1.f);
-        if (PercentLastTick > NewPercent) {
-            OnBarWrapAround.Broadcast();
+    UE5Coro::TCoroutine<> ProgressBarAnimation(UE5Coro::TLatentContext<const UObject> Context,
+                                                               float StartPercent, float EndPercent, float Duration,
+                                                               FSetNewPercent OnUpdate, bool bShouldWrap, FSimpleDelegate
+                                                               OnWrapAround) {
+        if (Duration == 0.f) {
+            OnUpdate.ExecuteIfBound(EndPercent);
+            co_return;
         }
+
+        float PercentLastTick = StartPercent;
+        UE5Coro::Latent::Timeline(Context.Target, 0, 1, Duration, [&](double Progress) {
+            float NewPercent = FMath::Lerp(StartPercent, EndPercent, Progress);
+            if (bShouldWrap && StartPercent < EndPercent) {
+                NewPercent = FMath::Fmod(NewPercent, 1.f);
+                if (PercentLastTick > NewPercent) {
+                    OnWrapAround.ExecuteIfBound();
+                }
+            }
+
+            OnUpdate.ExecuteIfBound(NewPercent);
+        });
     }
-
-    SetNewPercent.Broadcast(NewPercent);
-    PercentLastTick = NewPercent;
-    if (CurrentTime >= AnimationDuration) {
-        AnimationData.Reset();
-        OnAnimationComplete.Broadcast();
-    }
-}
-
-TStatId FProgressBarAnimation::GetStatId() const {
-    RETURN_QUICK_DECLARE_CYCLE_STAT(UHPBar, STATGROUP_Tickables)
-}
-
-void FProgressBarAnimation::SetWorldContext(const UObject *WorldContext) {
-    WorldContextObject = WorldContext;
 }

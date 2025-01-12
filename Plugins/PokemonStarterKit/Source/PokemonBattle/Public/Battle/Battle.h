@@ -6,6 +6,7 @@
 #include "RetroLib/Ranges/Views/AnyView.h"
 #include "RetroLib/Ranges/Views/Generator.h"
 #include "UObject/Interface.h"
+#include "UE5Coro.h"
 
 #include "Battle.generated.h"
 
@@ -90,17 +91,18 @@ class POKEMONBATTLE_API IBattle {
     /**
      * Have the player take possession of the battle pawn and begin the battle intro.
      * @param PlayerController The player controller to shift control over to the battle pawn
+     * @param 
      */
-    UFUNCTION(BlueprintNativeEvent, Category = "Battle|Flow")
-    void JumpToBattleScene(APlayerController *PlayerController);
+    virtual UE5Coro::TCoroutine<EBattleResult> ConductBattle(APlayerController *PlayerController, FForceLatentCoroutine = {}) = 0;
 
     /**
      * This is to be called after all pre-battle setup has been completed (i.e. intro animations, sending out Pokémon,
      * etc.)
      */
-    virtual void StartBattle() = 0;
+    virtual UE5Coro::TCoroutine<> StartBattle() = 0;
 
-    virtual void OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) = 0;
+    virtual UE5Coro::TCoroutine<> OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers)
+    = 0;
 
     /**
      * Add an action to the pending queue
@@ -147,8 +149,9 @@ class POKEMONBATTLE_API IBattle {
     /**
      * Execute the bound action in battle
      * @param Action The action to execute
+     * @param 
      */
-    virtual void ExecuteAction(IBattleAction &Action) = 0;
+    virtual UE5Coro::TCoroutine<> ExecuteAction(IBattleAction &Action, FForceLatentCoroutine = {}) = 0;
 
     /**
      * Take the current battler and check if the player is able to run from battle
@@ -165,12 +168,4 @@ class POKEMONBATTLE_API IBattle {
      */
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Battle|Flow")
     void EndBattle(EBattleResult Result);
-
-    /**
-     * Bind a delegate for when the battle ends
-     * @param Callback The callback to invoke when the battle ends
-     */
-    virtual void BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) = 0;
-
-    virtual void ClearOnBattleEnd() = 0;
 };

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "UE5CoroGAS.h"
 
 #include "SwitchActionBase.generated.h"
 
@@ -13,7 +14,7 @@ class IBattler;
  * Base gameplay ability class for the switch action in battle.
  */
 UCLASS(Abstract)
-class POKEMONBATTLE_API USwitchActionBase : public UGameplayAbility {
+class POKEMONBATTLE_API USwitchActionBase : public UUE5CoroGameplayAbility {
     GENERATED_BODY()
 
   public:
@@ -22,11 +23,13 @@ class POKEMONBATTLE_API USwitchActionBase : public UGameplayAbility {
      */
     USwitchActionBase();
 
-    void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo *ActorInfo,
-                         const FGameplayAbilityActivationInfo ActivationInfo,
-                         const FGameplayEventData *TriggerEventData) override;
-
   protected:
+    UE5Coro::GAS::FAbilityCoroutine
+    ExecuteAbility(FGameplayAbilitySpecHandle Handle,
+                   const FGameplayAbilityActorInfo* ActorInfo,
+                   FGameplayAbilityActivationInfo ActivationInfo,
+                   const FGameplayEventData* TriggerEventData) override;
+    
     /**
      * Play the animation to recall the Pokémon. It ends when {@link USwitchActionBase::SwapWithTarget} is called.
      * @param SwappingFrom The battler that is being recalled
@@ -37,8 +40,7 @@ class POKEMONBATTLE_API USwitchActionBase : public UGameplayAbility {
     /**
      * Perform the internal swap of the Pokémon.
      */
-    UFUNCTION(BlueprintCallable, Category = Switching)
-    void SwapWithTarget();
+    UE5Coro::TCoroutine<> SwapWithTarget();
 
     /**
      * Play the animation for sending the new battler out.
@@ -47,8 +49,7 @@ class POKEMONBATTLE_API USwitchActionBase : public UGameplayAbility {
     UFUNCTION(BlueprintImplementableEvent, Category = Switching)
     void QueueSendOutAnimation(const TScriptInterface<IBattler> &SwappingTo);
 
-    UFUNCTION(BlueprintCallable, Category = Switching)
-    void TriggerOnSendOut();
+    UE5Coro::TCoroutine<> TriggerOnSendOut();
 
     UFUNCTION(BlueprintImplementableEvent, Category = Switching)
     void DisplaySwitchInEffects(const TScriptInterface<IBattler> &Battler);

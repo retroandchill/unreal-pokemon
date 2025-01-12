@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Battle/Actions/BattleAction.h"
 #include "UObject/Interface.h"
+#include "UE5Coro.h"
 
 #include "BattlerController.generated.h"
 
@@ -30,7 +31,7 @@ class POKEMONBATTLE_API IBattlerController {
      * Initiate the selection process for this battler
      * @param Battler
      */
-    virtual void InitiateActionSelection(const TScriptInterface<IBattler> &Battler) const = 0;
+    virtual void ActionSelection(const TScriptInterface<IBattler> &Battler) const = 0;
 
     virtual void InitiateForcedSwitch(const TScriptInterface<IBattler> &Battler) const = 0;
 

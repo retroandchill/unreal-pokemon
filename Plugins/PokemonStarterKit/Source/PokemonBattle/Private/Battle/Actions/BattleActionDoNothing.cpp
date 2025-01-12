@@ -21,15 +21,12 @@ bool FBattleActionDoNothing::CanExecute() const {
     return false;
 }
 
-void FBattleActionDoNothing::Execute() {
+UE5Coro::TCoroutine<> FBattleActionDoNothing::Execute() {
     // This will never get called
+    co_return;
 }
 
 bool FBattleActionDoNothing::IsExecuting() const {
-    return false;
-}
-
-bool FBattleActionDoNothing::IsComplete() const {
     return false;
 }
 

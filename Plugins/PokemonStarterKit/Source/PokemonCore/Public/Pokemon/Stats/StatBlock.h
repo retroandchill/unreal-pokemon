@@ -4,13 +4,80 @@
 #include "CoreMinimal.h"
 #include "Species/Stat.h"
 #include "StatEntry.h"
-#include "Utilities/Node/Utility_ProcessLevelUp.h"
+#include "UE5Coro.h"
 
 #include "StatBlock.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE(FLevelUpEnd);
 
 class IPokemon;
+
+/**
+ * The change to a single stat for a Pokémon
+ */
+USTRUCT(BlueprintType)
+struct POKEMONCORE_API FStatChange {
+    GENERATED_BODY()
+
+    /**
+     * The stat value before the level up
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    int32 Before;
+
+    /**
+     * The stat value after the level up
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    int32 After;
+
+    int32 Diff() const;
+};
+
+/**
+ * The change to the Exp. bar fill for a Pokémon
+ */
+USTRUCT(BlueprintType)
+struct POKEMONCORE_API FExpPercentChange {
+    GENERATED_BODY()
+
+    /**
+     * The stat value before the level up
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    float Before;
+
+    /**
+     * The stat value after the level up
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    float After;
+};
+
+/**
+ * The changes to a stat following a level up
+ */
+USTRUCT(BlueprintType)
+struct POKEMONCORE_API FLevelUpStatChanges {
+    GENERATED_BODY()
+
+    /**
+     * The value of the level
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    FStatChange LevelChange;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    FExpPercentChange ExpPercentChange;
+
+    /**
+     * The changes to the individual stats in battle
+     */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stats)
+    TMap<FName, FStatChange> StatChanges;
+
+    FLevelUpStatChanges &operator+=(const FLevelUpStatChanges &Other);
+};
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
@@ -61,18 +128,14 @@ class POKEMONCORE_API IStatBlock {
     virtual float GetExpPercent() const = 0;
 
     /**
-     * Gain exp for the Pokémon in question
+     * Gain exp for the Pokémon in question.
+     *
+     * TODO: Remove the callback and make this a pure coroutine
+     * 
      * @param Change The change in experience
      * @param bShowMessages Should the messages be shown to the player
-     * @param OnEnd What to call after all the messages have been shown
      */
-    UFUNCTION(BlueprintCallable, Category = Stats)
-#if CPP
-    virtual FLevelUpStatChanges GainExp(int32 Change, bool bShowMessages = false,
-                                        const FLevelUpEnd &OnEnd = FLevelUpEnd()) = 0;
-#else
-    virtual FLevelUpStatChanges GainExp(int32 Change, bool bShowMessages, const FLevelUpEnd &OnEnd) = 0;
-#endif
+    virtual UE5Coro::TCoroutine<FLevelUpStatChanges> GainExp(int32 Change, bool bShowMessages = false) = 0;
 
     /**
      * Get the Pokémon's Nature value

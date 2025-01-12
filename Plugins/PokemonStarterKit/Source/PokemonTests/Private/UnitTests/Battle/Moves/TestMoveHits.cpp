@@ -43,7 +43,7 @@ bool TestMoveHits_Certain::RunTest(const FString &Parameters) {
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    Battle->ClearOnBattleEnd();
+    
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
@@ -53,7 +53,7 @@ bool TestMoveHits_Certain::RunTest(const FString &Parameters) {
                        ELogVerbosity::Display);
     Action.Execute();
 
-    UE_CHECK_TRUE(Action.IsComplete());
+    
 
     return true;
 }
@@ -85,7 +85,7 @@ bool TestMoveHits_Regular::RunTest(const FString &Parameters) {
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    Battle->ClearOnBattleEnd();
+    
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
@@ -94,7 +94,7 @@ bool TestMoveHits_Regular::RunTest(const FString &Parameters) {
     AddExpectedMessage(TEXT("Hydro Pump missed Snorlax!"), ELogVerbosity::Display);
     Action.Execute();
 
-    UE_CHECK_TRUE(Action.IsComplete());
+    
     UE_CHECK_EQUAL(1.f, Battler2->GetHPPercent());
 
     return true;
@@ -128,7 +128,7 @@ bool TestMoveHits_AccuracyEvasionRegular::RunTest(const FString &Parameters) {
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    Battle->ClearOnBattleEnd();
+    
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
@@ -141,7 +141,7 @@ bool TestMoveHits_AccuracyEvasionRegular::RunTest(const FString &Parameters) {
     AddExpectedMessage(TEXT("Accuracy threshold for Snorlax is 107"), ELogVerbosity::Display);
     Action.Execute();
 
-    UE_CHECK_TRUE(Action.IsComplete());
+    
 
     return true;
 }
@@ -174,7 +174,7 @@ bool TestMoveHits_AccuracyEvasionOutsideBounds::RunTest(const FString &Parameter
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    Battle->ClearOnBattleEnd();
+    
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
@@ -188,7 +188,7 @@ bool TestMoveHits_AccuracyEvasionOutsideBounds::RunTest(const FString &Parameter
     AddExpectedMessage(TEXT("Hydro Pump missed Snorlax!"), ELogVerbosity::Display);
     Action.Execute();
 
-    UE_CHECK_TRUE(Action.IsComplete());
+    
     UE_CHECK_EQUAL(1.f, Battler2->GetHPPercent());
 
     return true;

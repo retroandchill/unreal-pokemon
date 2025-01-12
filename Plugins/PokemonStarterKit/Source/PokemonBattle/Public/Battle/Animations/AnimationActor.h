@@ -12,11 +12,16 @@ UCLASS(Abstract, BlueprintType, Blueprintable)
 class POKEMONBATTLE_API AAnimationActor : public AActor, public IBattleAnimation {
     GENERATED_BODY()
 
-  public:
-    void BindDelegateToAnimationComplete_Implementation(const FBattleAnimationCompleteCallback &Delegate) override;
-    void RemoveDelegateFromAnimationComplete_Implementation(const FBattleAnimationCompleteCallback &Delegate) override;
+public:
+    virtual UE5Coro::TCoroutine<> PlayAnimation() override;
 
   protected:
+    /**
+     * Play the animation playing the animation complete callback when the animation is complete
+     */
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Animation")
+    void Play();
+    
     /**
      * Signal that the animation is complete
      */
@@ -27,6 +32,5 @@ class POKEMONBATTLE_API AAnimationActor : public AActor, public IBattleAnimation
     /**
      * Called when the animation is complete
      */
-    UPROPERTY()
-    FOnBattleAnimationComplete OnBattleAnimationComplete;
+    TSharedRef<TFutureState<int32>> OnBattleAnimationComplete = MakeShared<TFutureState<int32>>();
 };

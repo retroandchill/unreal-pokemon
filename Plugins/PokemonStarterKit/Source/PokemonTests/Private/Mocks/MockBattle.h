@@ -15,8 +15,9 @@ class FMockBattle : public IBattle {
   public:
     MOCK_METHOD(TScriptInterface<IBattle>, Initialize, (TArray<TScriptInterface<IBattleSide>> && SidesIn), (override));
     MOCK_METHOD(TScriptInterface<IBattle>, Initialize, (const FBattleInfo &BattleInfo), (override));
-    MOCK_METHOD(void, StartBattle, (), (override));
-    MOCK_METHOD(void, OnBattlersEnteringBattle, (Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers),
+    MOCK_METHOD2(ConductBattle, UE5Coro::TCoroutine<EBattleResult>(APlayerController* Controller, FForceLatentCoroutine Coro));
+    MOCK_METHOD(UE5Coro::TCoroutine<>, StartBattle, (), (override));
+    MOCK_METHOD(UE5Coro::TCoroutine<>, OnBattlersEnteringBattle, (Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers),
                 (override));
     MOCK_METHOD(void, QueueAction, (TUniquePtr<IBattleAction> && Action), (override));
     MOCK_METHOD(bool, ActionSelectionFinished, (), (const, override));
@@ -25,7 +26,5 @@ class FMockBattle : public IBattle {
     MOCK_METHOD(const TScriptInterface<IBattleSide> &, GetOpposingSide, (), (const, override));
     MOCK_METHOD(Retro::TGenerator<TScriptInterface<IBattleSide>>, GetSides, (), (const, override));
     MOCK_METHOD(Retro::TGenerator<TScriptInterface<IBattler>>, GetActiveBattlers, (), (const, override));
-    MOCK_METHOD(void, ExecuteAction, (IBattleAction & Action), (override));
-    MOCK_METHOD(void, BindToOnBattleEnd, (FOnBattleEnd::FDelegate && Callback), (override));
-    MOCK_METHOD(void, ClearOnBattleEnd, (), (override));
+    MOCK_METHOD2(ExecuteAction, UE5Coro::TCoroutine<>(IBattleAction & Action, FForceLatentCoroutine Coro));
 };

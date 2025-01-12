@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "Moves/MoveData.h"
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #include "LearnMove.generated.h"
 
@@ -19,7 +20,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAfterMoveLearn);
  * Teach a move to a specific Pokémon
  */
 UCLASS(meta = (HideThen))
-class POKEMONCORE_API ULearnMove : public UBlueprintAsyncActionBase {
+class POKEMONCORE_API ULearnMove : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
@@ -32,16 +33,10 @@ class POKEMONCORE_API ULearnMove : public UBlueprintAsyncActionBase {
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Pokémon|Moves")
     static ULearnMove *LearnMove(const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move);
 
-    void Activate() override;
+    protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:
-    /**
-     * Exit the node on either a rejection or an acceptance
-     * @param bMoveLearned Was the move learned or not
-     */
-    UFUNCTION()
-    void ExecuteMoveLearnedOrRejected(bool bMoveLearned);
-
     /**
      * Called after the move is learned
      */

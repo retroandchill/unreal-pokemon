@@ -2,7 +2,6 @@
 
 #include "Pokemon/Moves/DefaultMoveBlock.h"
 #include "Algo/Unique.h"
-#include "Blueprints/UtilityNodeSubsystem.h"
 #include "DataManager.h"
 #include "Moves/MoveData.h"
 #include "Pokemon/Moves/DefaultMove.h"
@@ -12,7 +11,7 @@
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/Construct.h"
 #include "Species/SpeciesData.h"
-#include "Utilities/Node/Utility_LearnMove.h"
+#include "Utilities/PokemonCoroutineDispatcher.h"
 
 TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterface<IPokemon> &Pokemon,
                                                            const FPokemonDTO &DTO) {
@@ -70,7 +69,7 @@ void UDefaultMoveBlock::OverwriteMoveSlot(FMoveHandle Move, int32 SlotIndex) {
     Moves[SlotIndex] = CreateNewMove({.Move = Move});
 }
 
-TArray<FMoveHandle> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const {
+Retro::TGenerator<FMoveHandle> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const {
     auto &Species = Owner->GetSpecies();
 
     auto MoveLevelInRange = [InitialLevel, CurrentLevel](const FLevelUpMove &Move) {
@@ -82,18 +81,17 @@ TArray<FMoveHandle> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32
     };
 
     // clang-format off
-    return Species.Moves |
+    co_yield Retro::Ranges::TElementsOf(Species.Moves |
            Retro::Ranges::Views::Filter(MoveLevelInRange) |
            Retro::Ranges::Views::Filter(DoesNotKnowMove) |
            Retro::Ranges::Views::Transform(&FLevelUpMove::Move) |
-           Retro::Ranges::Views::Transform(Retro::Construct<FMoveHandle>) |    
-           Retro::Ranges::To<TArray>();
+           Retro::Ranges::Views::Transform(Retro::Construct<FMoveHandle>));
     // clang-format on
 }
 
-void UDefaultMoveBlock::LearnMove(FMoveHandle Move, FOnMoveLearnEnd::FDelegate &&AfterMoveLearned) {
-    auto Subsystem = GetWorld()->GetGameInstance()->GetSubsystem<UUtilityNodeSubsystem>();
-    Subsystem->ExecuteUtilityFunction<UUtility_LearnMove>(Owner, Move, std::move(AfterMoveLearned));
+UE5Coro::TCoroutine<bool> UDefaultMoveBlock::LearnMove(FMoveHandle Move, FForceLatentCoroutine) {
+    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(this);
+    co_return co_await Dispatcher.LearnMove(this, Move);
 }
 
 TScriptInterface<IMove> UDefaultMoveBlock::CreateNewMove(const FMoveDTO &MoveID) {

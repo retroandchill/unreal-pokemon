@@ -7,7 +7,7 @@ public class PokemonCore : ModuleRules {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(
-            new[] { "Core", "PokemonData", "UnrealInjector", "DeveloperSettings", "EnhancedSaveGame", "GameplayTags" });
+            new[] { "Core", "PokemonData", "UnrealInjector", "DeveloperSettings", "EnhancedSaveGame", "GameplayTags", "UE5Coro" });
 
         PrivateDependencyModuleNames.AddRange(
             new[] { "CoreUObject", "Engine", "Slate", "SlateCore", "Boost", "RetroLib" });

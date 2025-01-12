@@ -9,6 +9,8 @@
 #include "Battle/BattleSide.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Casting/UClassCasts.h"
+#include "RetroLib/Optionals/PtrOrNull.h"
+#include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Views/Concat.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
@@ -43,6 +45,21 @@ static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side) {
                           Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>);
     // clang-format on
     return Retro::Ranges::Views::Concat(std::move(SideView), std::move(ActiveBattlers));
+}
+
+UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutActivationEvent(UAbilitySystemComponent* AbilityComponent, FGameplayAbilitySpecHandle Handle, FGameplayTag Tag, FGameplayEventData
+                                                                      EventData, FForceLatentCoroutine) {
+    auto State = MakeShared<TFutureState<int32>>();
+    auto Spec = AbilityComponent->FindAbilitySpecFromHandle(Handle);
+    check(Spec != nullptr);
+    auto DelegateHandle = AbilityComponent->OnAbilityEnded.AddLambda([&State, Handle](const FAbilityEndedData& Data) {
+        if (Data.AbilitySpecHandle == Handle) {
+            State->EmplaceResult(0);
+        }
+    });
+    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(AbilityComponent->GetOwnerActor(), Tag, std::move(EventData));
+    co_await TFuture<void>(State);
+    AbilityComponent->OnAbilityEnded.Remove(DelegateHandle);
 }
 
 static void SendOutEventForActor(AActor *Actor, const FGameplayTag &Tag, FGameplayEventData &EventData) {

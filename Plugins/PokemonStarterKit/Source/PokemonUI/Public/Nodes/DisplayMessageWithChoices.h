@@ -41,7 +41,7 @@ class POKEMONUI_API UDisplayMessageWithChoices : public UBlueprintCoroutineActio
                                                                  const TArray<FText> &Choices);
 
   protected:
-    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine = {}) override;
 
   private:
     /**

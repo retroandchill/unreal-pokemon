@@ -14,7 +14,7 @@ UWorld *UBlueprintCoroutineActionBase::GetWorld() const {
     return WorldContext->GetWorld();
 }
 
-UE5Coro::TCoroutine<> UBlueprintCoroutineActionBase::UntilComplete(FForceLatentCoroutine Coro) const {
+UE5Coro::TCoroutine<> UBlueprintCoroutineActionBase::UntilComplete(FForceLatentCoroutine) const {
     co_await UE5Coro::Latent::Until([this] { return !HasAnyFlags(RF_StrongRefOnFrame); });
 }
 #endif

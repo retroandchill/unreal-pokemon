@@ -37,7 +37,7 @@ bool TestStatusRemoveItem::RunTest(const FString &Parameters) {
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    Battle->ClearOnBattleEnd();
+    
 
     auto Battler1 = Side1->GetBattlers()[0];
     UE_ASSERT_TRUE(Battler1->GetStatusEffect().IsSet());
@@ -46,7 +46,7 @@ bool TestStatusRemoveItem::RunTest(const FString &Parameters) {
     FBattleActionUseItem Action(Battler1, "BURNHEAL", FItemTarget(TWeakInterfacePtr<IBattler>(Battler1.GetObject())));
     Action.Execute();
 
-    UE_CHECK_TRUE(Action.IsComplete());
+    
     UE_ASSERT_FALSE(Battler1->GetStatusEffect().IsSet());
 
     return true;

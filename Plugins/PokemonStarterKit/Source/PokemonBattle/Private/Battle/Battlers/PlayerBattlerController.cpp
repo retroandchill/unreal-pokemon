@@ -8,7 +8,7 @@ UPlayerBattlerController *UPlayerBattlerController::SetBattle(const TScriptInter
     return this;
 }
 
-void UPlayerBattlerController::InitiateActionSelection(const TScriptInterface<IBattler> &Battler) const {
+void UPlayerBattlerController::ActionSelection(const TScriptInterface<IBattler> &Battler) const {
     IBattle::Execute_BeginActionSelection(BattleContext.GetObject(), Battler);
 }
 

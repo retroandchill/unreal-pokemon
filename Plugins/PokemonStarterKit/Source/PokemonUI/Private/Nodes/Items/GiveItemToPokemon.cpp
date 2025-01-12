@@ -1,9 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Nodes/Items/GiveItemToPokemon.h"
-#include "Blueprints/UtilityNodeSubsystem.h"
-#include "Kismet/GameplayStatics.h"
-#include "Utilities/Node/Utility_GiveItemToPokemon.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
 
 UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldContextObject, FItemHandle Item,
@@ -17,8 +14,8 @@ UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldCo
     return Node;
 }
 
-UE5Coro::TCoroutine<> UGiveItemToPokemon::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+UE5Coro::TCoroutine<> UGiveItemToPokemon::ExecuteCoroutine(FForceLatentCoroutine) {
     auto &Dispatcher = IPokemonCoroutineDispatcher::Get(GetWorldContext());
-    auto bGiven = co_await Dispatcher.GiveItemToPokemon(GetWorldContext(), Item, Pokemon, PokemonIndex);
+    auto bGiven = co_await Dispatcher.GiveItemToPokemon(Item, Pokemon, PokemonIndex);
     bGiven ? ItemGiven.Broadcast() : ItemRejected.Broadcast();
 }

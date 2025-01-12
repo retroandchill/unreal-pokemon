@@ -15,7 +15,7 @@ UGainExp *UGainExp::GainExp(const TScriptInterface<IPokemon> &Pokemon, int32 Exp
 void UGainExp::Activate() {
     FLevelUpEnd LevelUpEnd;
     LevelUpEnd.BindDynamic(this, &UGainExp::ExecuteAfterExpGain);
-    Pokemon->GetStatBlock()->GainExp(ExpAmount, bShowMessages, LevelUpEnd);
+    Pokemon->GetStatBlock()->GainExp(ExpAmount, bShowMessages);
 }
 
 void UGainExp::ExecuteAfterExpGain() {

@@ -2,7 +2,6 @@
 
 #include "Battle/Actions/BattleActionBase.h"
 #include "Battle/Battlers/Battler.h"
-#include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/BattleSide.h"
 #include <functional>
 
@@ -21,16 +20,10 @@ bool FBattleActionBase::CanExecute() const {
     return !Battler->IsFainted() && Battler->GetOwningSide()->GetBattlers().Contains(Battler);
 }
 
-void FBattleActionBase::Execute() {
-    Executing = true;
-    SpecHandle = ActivateAbility();
+UE5Coro::TCoroutine<> FBattleActionBase::Execute() {
+    co_await ActivateAbility();
 }
 
 bool FBattleActionBase::IsExecuting() const {
     return Executing;
-}
-
-bool FBattleActionBase::IsComplete() const {
-    auto Spec = Battler->GetAbilityComponent()->FindAbilitySpecFromHandle(SpecHandle);
-    return Executing && Spec != nullptr && !Spec->IsActive();
 }

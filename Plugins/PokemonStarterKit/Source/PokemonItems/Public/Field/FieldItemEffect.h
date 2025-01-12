@@ -6,6 +6,7 @@
 #include "RetroLib/Concepts/Delegates.h"
 #include "RetroLib/Functional/Delegates.h"
 #include "RetroLib/RetroLibMacros.h"
+#include "RetroLib/Async/AsyncHelpers.h"
 #include "UObject/Object.h"
 
 #include "FieldItemEffect.generated.h"
@@ -43,6 +44,6 @@ namespace Pokemon::Items {
     template <typename T, typename... A>
     concept FieldItem =
         std::is_base_of_v<UFieldItemEffect, T> && requires(T &Effect, const FItem &Item, int32 Quantity, A &&...Args) {
-            Effect.Use(Item, Quantity, std::forward<A>(Args)...);
+            { Effect.UseItem(Item, Quantity, std::forward<A>(Args)...) } -> std::same_as<UE5Coro::TCoroutine<bool>>;
         };
 } // namespace Pokemon::Items

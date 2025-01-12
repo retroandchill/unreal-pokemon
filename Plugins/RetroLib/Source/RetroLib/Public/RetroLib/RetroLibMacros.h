@@ -133,7 +133,13 @@
 #define RETRO_MULTICAST_DELEGATE_MEMBER(DelegateType, MemberName)                                                      \
   private:                                                                                                             \
     DelegateType MemberName;                                                                                           \
-                                                                                                                       \
+  protected: \
+    DelegateType& Get##MemberName() { \
+        return MemberName; \
+    } \
+    const DelegateType& Get##MemberName() const { \
+        return MemberName; \
+    } \
   public:                                                                                                              \
     template <typename F, typename... A>                                                                               \
         requires Retro::Delegates::CanAddFree<DelegateType, F, A...>                                                   \

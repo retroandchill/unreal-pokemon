@@ -28,9 +28,6 @@ UCLASS(Abstract)
 class POKEMONBATTLEUI_API UPokemonBattlePanel : public UUserWidget {
     GENERATED_BODY()
 
-  protected:
-    void NativeConstruct() override;
-
   public:
     /**
      * Get the currently displayed battler
@@ -58,27 +55,13 @@ class POKEMONBATTLEUI_API UPokemonBattlePanel : public UUserWidget {
      * Animate the change in HP to the new value
      * @param MaxDuration The maximum duration allowed for the battler
      */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Display")
-    void AnimateHP(float MaxDuration);
+    UE5Coro::TCoroutine<> AnimateHP(float MaxDuration);
 
     /**
      * Refresh the displayed status condition of the contained Pokémon
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Display")
     void RefreshStatusEffect();
-
-    /**
-     * Get the delegate used for updating the progress bar
-     * @param Binding The desired action
-     */
-    void BindToOnProgressBarUpdateComplete(const FOnProgresBarUpdateComplete::FDelegate &Binding);
-
-    /**
-     * Unbind all dynamic delegates from the HP update callback
-     * @param Object The object to unbind the delegate for
-     */
-    UFUNCTION()
-    void UnbindAllHPUpdateDelegates(UObject *Object);
 
   protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Display")
@@ -89,11 +72,6 @@ class POKEMONBATTLEUI_API UPokemonBattlePanel : public UUserWidget {
      * @param NewPercent The new HP percentage
      */
     virtual void UpdateHPPercent(float NewPercent);
-
-    /**
-     * Called when the HP percentage update is complete
-     */
-    virtual void HPPercentUpdateComplete() const;
 
   private:
     /**
@@ -113,15 +91,4 @@ class POKEMONBATTLEUI_API UPokemonBattlePanel : public UUserWidget {
      */
     UPROPERTY(BlueprintGetter = GetCurrentBattler, BlueprintSetter = SetBattler, Category = Battler)
     TScriptInterface<IBattler> CurrentBattler;
-
-    /**
-     * The animation for updating the HP bar
-     */
-    Pokemon::UI::FProgressBarAnimation HPBarUpdateAnimation;
-
-    /**
-     * Callback for when the HP bar is finished animating
-     */
-    UPROPERTY()
-    FOnProgresBarUpdateComplete OnHPBarUpdated;
 };

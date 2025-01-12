@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UE5Coro.h"
 
 namespace Pokemon::UI {
 
     /**
      * Callback delegate for updating the progress bar
      */
-    DECLARE_MULTICAST_DELEGATE_OneParam(FSetNewPercent, float);
+    DECLARE_DELEGATE_OneParam(FSetNewPercent, float);
 
     /**
      * Called when an animation is complete
@@ -58,71 +59,17 @@ namespace Pokemon::UI {
     };
 
     /**
-     * Animation component for draining a progress bar
-     */
-    class POKEMONUI_API FProgressBarAnimation : public FTickableGameObject {
-      public:
-        /**
          * Play an animation from start to finish with the following parameters
+         * @param Context
          * @param StartPercent The starting percentage of the progress bar
          * @param EndPercent The ending percentage of the progress bar
          * @param Duration How long it should take to get there
+         * @param OnUpdate
          * @param bShouldWrap
+         * @param OnWrapAround
          */
-        void PlayAnimation(float StartPercent, float EndPercent, float Duration, bool bShouldWrap = false);
-
-        /**
-         * Bind an action to the update callback for this component
-         * @param Binding The binding for the update action
-         */
-        void BindActionToPercentDelegate(FSetNewPercent::FDelegate &&Binding);
-
-        /**
-         * Bind an action to the wrap around callback for this component
-         * @param Binding The binding for the wrap around action
-         */
-        void BindActionToWrapAroundAnimation(FOnAnimationComplete::FDelegate &&Binding);
-
-        /**
-         * Bind an action to the complete callback for this component
-         * @param Binding The binding for the complete action
-         */
-        void BindActionToCompleteDelegate(FOnAnimationComplete::FDelegate &&Binding);
-
-        void Tick(float DeltaTime) override;
-        TStatId GetStatId() const override;
-
-        /**
-         * Set the context of the world for the animation.
-         *
-         * @param WorldContext Pointer to the world context UObject.
-         */
-        void SetWorldContext(const UObject *WorldContext);
-
-      private:
-        float PercentLastTick = 0.f;
-
-        /**
-         * Delegate for updating the percent of the progress bar
-         */
-        FSetNewPercent SetNewPercent;
-
-        /**
-         * Delegate for signalling that the progress bar has wrapped around
-         */
-        FOnAnimationComplete OnBarWrapAround;
-
-        /**
-         * Delegate for signalling that the animation is complete
-         */
-        FOnAnimationComplete OnAnimationComplete;
-
-        /**
-         * The animation data for this bar. Only animates when set.
-         */
-        TOptional<FBarAnimationData> AnimationData;
-
-        TWeakObjectPtr<const UObject> WorldContextObject;
-    };
+    POKEMONUI_API UE5Coro::TCoroutine<> ProgressBarAnimation(UE5Coro::TLatentContext<const UObject> Context, float StartPercent,
+                                        float EndPercent, float Duration, FSetNewPercent OnUpdate,
+                                        bool bShouldWrap = false, FSimpleDelegate OnWrapAround = FSimpleDelegate());
 
 } // namespace Pokemon::UI

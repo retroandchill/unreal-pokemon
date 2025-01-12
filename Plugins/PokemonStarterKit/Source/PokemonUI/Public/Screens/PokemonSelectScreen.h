@@ -3,7 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "PartyDisplayScreen.h"
-#include "PartyScreen.h"
+#include "Screens/PartyScreen.h"
 #include "RetroLib/Functional/Delegates.h"
 #include "Screens/Screen.h"
 #include "Trainers/Trainer.h"

@@ -4,20 +4,12 @@
 
 UPlayBattleAnimation *UPlayBattleAnimation::PlayBattleAnimation(const TScriptInterface<IBattleAnimation> &Animation) {
     auto Node = NewObject<UPlayBattleAnimation>();
+    Node->SetWorldContext(Animation.GetObject());
     Node->Animation = Animation;
     return Node;
 }
 
-void UPlayBattleAnimation::Activate() {
-    AnimationDelegate = MakeUnique<FBattleAnimationCompleteCallback>();
-    AnimationDelegate->BindDynamic(this, &UPlayBattleAnimation::OnAnimationComplete);
-    IBattleAnimation::Execute_BindDelegateToAnimationComplete(Animation.GetObject(), *AnimationDelegate);
-    IBattleAnimation::Execute_Play(Animation.GetObject());
-}
-
-void UPlayBattleAnimation::OnAnimationComplete() {
+UE5Coro::TCoroutine<> UPlayBattleAnimation::ExecuteCoroutine(FForceLatentCoroutine) {
+    co_await Animation->PlayAnimation();
     AnimationComplete.Broadcast();
-    IBattleAnimation::Execute_RemoveDelegateFromAnimationComplete(Animation.GetObject(), *AnimationDelegate);
-    AnimationDelegate.Reset();
-    SetReadyToDestroy();
 }

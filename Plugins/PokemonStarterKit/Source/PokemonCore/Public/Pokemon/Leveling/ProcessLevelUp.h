@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
-#include "Utilities/Node/Utility_ProcessLevelUp.h"
+#include "Pokemon/Stats/StatBlock.h"
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
+#include "UE5Coro.h"
 
 #include "ProcessLevelUp.generated.h"
 
@@ -16,7 +18,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAfterLevelUp);
  *
  */
 UCLASS(meta = (HideThen))
-class POKEMONCORE_API UProcessLevelUp : public UBlueprintAsyncActionBase {
+class POKEMONCORE_API UProcessLevelUp : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
@@ -24,15 +26,10 @@ class POKEMONCORE_API UProcessLevelUp : public UBlueprintAsyncActionBase {
     static UProcessLevelUp *ProcessLevelUp(const TScriptInterface<IPokemon> &Pokemon,
                                            const FLevelUpStatChanges &StatChanges, bool bShowMessages);
 
-    void Activate() override;
+protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:
-    /**
-     * Execute the callback after exp gain is completed
-     */
-    UFUNCTION()
-    void ExecuteAfterLevelUp();
-
     /**
      * Called after level up messages are shown
      */

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #include "PromptReplaceMove.generated.h"
 
@@ -20,7 +21,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMoveLearnComplete);
  * Prompt to forget a move and replace it with a new one
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API UPromptReplaceMove : public UBlueprintAsyncActionBase {
+class POKEMONUI_API UPromptReplaceMove : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
@@ -36,15 +37,10 @@ class POKEMONUI_API UPromptReplaceMove : public UBlueprintAsyncActionBase {
     static UPromptReplaceMove *PromptReplaceMove(const UObject *WorldContextObject,
                                                  const TScriptInterface<IPokemon> &Pokemon, const FMoveHandle &Move);
 
-    void Activate() override;
+    protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:
-    /**
-     * Called when the window is closed
-     * @param bMoveReplaced Was the move replaced
-     */
-    void OnMoveSelectionComplete(bool bMoveReplaced);
-
     /**
      * Called when the move was learned
      */
@@ -56,12 +52,6 @@ class POKEMONUI_API UPromptReplaceMove : public UBlueprintAsyncActionBase {
      */
     UPROPERTY(BlueprintAssignable)
     FMoveLearnComplete MoveNotLearned;
-
-    /**
-     * The object used to obtain the context about the world
-     */
-    UPROPERTY()
-    TObjectPtr<const UObject> WorldContextObject;
 
     /**
      * The Pokémon to learn a new move
