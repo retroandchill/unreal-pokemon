@@ -7,12 +7,13 @@
 UMoveInDirection *UMoveInDirection::MoveInDirection(const TScriptInterface<IGridMovable> &Character,
                                                     EFacingDirection MovementDirection) {
     auto Node = NewObject<UMoveInDirection>();
+    Node->SetWorldContext(Character.GetObject());
     Node->Character = Character;
     Node->MovementDirection = MovementDirection;
     return Node;
 }
 
-void UMoveInDirection::Activate() {
+UE5Coro::TCoroutine<> UMoveInDirection::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine) {
     bool bCanInput = false;
     APlayerController *PlayerController = nullptr;
     auto Pawn = Cast<APawn>(Character.GetObject());
@@ -25,12 +26,10 @@ void UMoveInDirection::Activate() {
     }
 
     auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Character.GetObject());
-    MovementComponent->MoveInDirection(MovementDirection, [this, PlayerController, bCanInput, Pawn] {
-        if (PlayerController != nullptr && bCanInput) {
-            Pawn->EnableInput(PlayerController);
-        }
+    co_await MovementComponent->MoveInDirection(MovementDirection);
+    if (PlayerController != nullptr && bCanInput) {
+        Pawn->EnableInput(PlayerController);
+    }
 
-        OnMovementFinished.Broadcast();
-        SetReadyToDestroy();
-    });
+    OnMovementFinished.Broadcast();
 }

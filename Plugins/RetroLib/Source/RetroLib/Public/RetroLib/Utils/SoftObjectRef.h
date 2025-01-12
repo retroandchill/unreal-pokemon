@@ -26,7 +26,7 @@ struct TSoftObjectRef {
     using IntrusiveUnsetOptionalStateType = TSoftObjectRef;
 
     template <typename... A>
-        requires std::constructible_from<TSoftObjectPtr<T>, A...>
+        requires std::constructible_from<TSoftObjectPtr<T>, A...> && (!Retro::PackSameAs<TSoftObjectRef, A...>)
     explicit TSoftObjectRef(A &&...Args) : Ptr(std::forward<A>(Args)...) {
         check(IsAssetValid());
     }

@@ -130,8 +130,6 @@ class POKEMONCORE_API IStatBlock {
     /**
      * Gain exp for the Pokémon in question.
      *
-     * TODO: Remove the callback and make this a pure coroutine
-     *
      * @param Change The change in experience
      * @param bShowMessages Should the messages be shown to the player
      */
