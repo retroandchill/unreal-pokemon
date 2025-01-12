@@ -123,6 +123,11 @@ namespace Retro {
 
         RETROLIB_EXPORT constexpr auto Bind = ExtensionMethod<FDelegateBinder{}>;
 
+        template <typename D, typename... A>
+        concept CanBindToDelegate = requires(D &Delegate, A &&...Args) {
+            { Retro::Delegates::Bind(Delegate, std::forward<A>(Args)...) } -> std::same_as<FDelegateHandle>;
+        };
+
         struct FDelegateAdder {
             template <MulticastDelegate D, UnicastDelegate O>
                 requires BindableTo<D, O>
@@ -168,6 +173,144 @@ namespace Retro {
         concept CanAddToDelegate = requires(D &Delegate, A &&...Args) {
             { Retro::Delegates::Add(Delegate, std::forward<A>(Args)...) } -> std::same_as<FDelegateHandle>;
         };
+
+        /**
+         * @class TScopedBinding
+         * @brief A RAII class for managing temporary bindings to native delegates.
+         *
+         * TScopedBinding is a utility that automatically binds a callable to a native
+         * delegate and ensures the binding is released when the instance of this class
+         * goes out of scope.
+         *
+         * This class is templated based on the type of the native delegate.
+         *
+         * There are different specializations of this class for native unicast
+         * delegates and native multicast delegates.
+         *
+         * @tparam D The type of the native delegate. It must satisfy the NativeDelegate concept.
+         *
+         * @note Instances of this class are non-copyable.
+         */
+        RETROLIB_EXPORT template <NativeDelegate>
+        class TScopedBinding;
+
+        /**
+         * @class TScopedBinding
+         * @brief A RAII (Resource Acquisition Is Initialization) wrapper for managing delegate bindings.
+         *
+         * The TScopedBinding class automatically binds a specified delegate with the provided arguments
+         * upon construction and ensures the delegate is unbound when the TScopedBinding instance
+         * goes out of scope. This provides safe and automatic cleanup, preventing dangling delegate
+         * bindings.
+         *
+         * @tparam D The type of the delegate to bind. It must satisfy the CanBindToDelegate concept.
+         *
+         * @note This class is non-copyable to ensure proper binding and unbinding semantics.
+         */
+        RETROLIB_EXPORT template <NativeUnicastDelegate D>
+        class TScopedBinding<D> {
+        public:
+            /**
+             * @brief Constructs a TScopedBinding instance and binds the provided delegate with the specified arguments.
+             *
+             * On construction, this constructor binds the given delegate instance by forwarding the provided arguments
+             * to the delegate's binding mechanism. This ensures that the delegate is properly bound during the
+             * lifespan of the TScopedBinding instance.
+             *
+             * @param Delegate Reference to the delegate to be managed.
+             * @param Args Variadic template arguments to be forwarded to the delegate binding process.
+             *
+             * @tparam A Parameter pack representing the types of the arguments to bind the delegate.
+             *
+             * @note The delegate binding mechanism uses the `Bind` function internally to establish the connection.
+             *       The binding will automatically be unbound when the TScopedBinding instance is destroyed.
+             */
+            template <typename... A>
+                requires CanBindToDelegate<D, A...>
+            constexpr explicit TScopedBinding(D& Delegate, A &&...Args) : Delegate(Delegate) {
+                Bind(Delegate, std::forward<A>(Args)...);
+            }
+
+            /**
+             * @brief Destructor for TScopedBinding.
+             *
+             * Automatically unbinds the managed delegate when the TScopedBinding instance is destroyed.
+             *
+             * This ensures that the delegate is properly cleaned up when the TScopedBinding object goes
+             * out of scope, helping to manage delegate lifetimes and prevent unintended behavior due to
+             * dangling bindings.
+             *
+             * @note The destructor calls the `Unbind` function on the managed delegate to release the binding.
+             */
+            ~TScopedBinding() {
+                Delegate.Unbind();
+            }
+
+            UE_NONCOPYABLE(TScopedBinding)
+
+        private:
+            D &Delegate;
+        };
+
+        /**
+         * @class TScopedBinding
+         * @brief A RAII (Resource Acquisition Is Initialization) utility for managing delegate bindings.
+         *
+         * The TScopedBinding class ensures that a delegate binding is automatically established during
+         * construction and released when the instance goes out of scope. This helps to maintain safe
+         * and predictable lifecycle management of delegate bindings, particularly in scenarios where
+         * temporary bindings are required.
+         *
+         * @tparam D The type of the delegate to manage. It must satisfy the CanAddToDelegate concept.
+         *
+         * @note This class is non-copyable to enforce proper binding and unbinding semantics.
+         */
+        RETROLIB_EXPORT template <NativeMulitcastDelegate D>
+        class TScopedBinding<D> {
+        public:
+            /**
+             * @brief Constructs a TScopedBinding instance, automatically binding a delegate.
+             *
+             * This constructor initializes the TScopedBinding object by binding the specified
+             * delegate with the provided arguments. The binding is performed using the `Add`
+             * function, and ensures that the delegate is properly connected as part of the
+             * TScopedBinding's lifecycle. When the TScopedBinding instance is destroyed,
+             * the binding will be automatically released.
+             *
+             * @param Delegate The delegate to which a binding is added. This must satisfy the CanAddToDelegate concept.
+             * @param Args Arguments to be passed for binding the delegate. These are forwarded to the `Add` function.
+             */
+            template <typename... A>
+                requires CanAddToDelegate<D, A...>
+            constexpr explicit TScopedBinding(D& Delegate, A &&...Args) : Delegate(Delegate), DelegateHandle(Add(Delegate, std::forward<A>(Args)...)) {
+            }
+
+            /**
+             * @brief Destructor for TScopedBinding.
+             *
+             * Automatically removes the binding associated with the managed delegate
+             * when the TScopedBinding instance is destroyed.
+             *
+             * Ensures that the delegate binding is properly cleaned up, preventing
+             * issues such as dangling references or unintentional behavior from
+             * lingering bindings.
+             *
+             * @note The destructor calls the `Remove` function on the delegate with
+             * the stored delegate handle to release the binding.
+             */
+            ~TScopedBinding() {
+                Delegate.Remove(DelegateHandle);
+            }
+
+            UE_NONCOPYABLE(TScopedBinding)
+
+        private:
+            D &Delegate;
+            FDelegateHandle DelegateHandle;
+        };
+
+        template <NativeDelegate D, typename... A>
+        TScopedBinding(D&, A&&...) -> TScopedBinding<D>;
     } // namespace Delegates
 
 } // namespace Retro

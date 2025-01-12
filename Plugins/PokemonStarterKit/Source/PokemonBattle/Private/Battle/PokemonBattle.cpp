@@ -251,7 +251,9 @@ FText APokemonBattle::GetBattleIntroMessage() const {
 }
 
 void APokemonBattle::EndBattle_Implementation(EBattleResult Result) {
-    OnBattleEnd->EmplaceResult(Result);
+    if (!OnBattleEnd->IsComplete()) {
+        OnBattleEnd->EmplaceResult(Result);
+    }
 }
 
 void APokemonBattle::ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger) {

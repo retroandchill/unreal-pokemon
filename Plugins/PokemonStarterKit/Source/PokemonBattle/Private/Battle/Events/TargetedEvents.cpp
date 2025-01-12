@@ -9,6 +9,7 @@
 #include "Battle/BattleSide.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Casting/UClassCasts.h"
+#include "RetroLib/Functional/Delegates.h"
 #include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
@@ -54,7 +55,7 @@ UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutActivationEvent(UAbilitySy
     auto State = MakeShared<TFutureState<int32>>();
     auto Spec = AbilityComponent->FindAbilitySpecFromHandle(Handle);
     check(Spec != nullptr);
-    auto DelegateHandle = AbilityComponent->OnAbilityEnded.AddLambda([&State, Handle](const FAbilityEndedData &Data) {
+    Retro::Delegates::TScopedBinding DelegateHandle(AbilityComponent->OnAbilityEnded, [&State, Handle](const FAbilityEndedData &Data) {
         if (Data.AbilitySpecHandle == Handle) {
             State->EmplaceResult(0);
         }
@@ -62,7 +63,6 @@ UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutActivationEvent(UAbilitySy
     UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(AbilityComponent->GetOwnerActor(), Tag,
                                                              std::move(EventData));
     co_await TFuture<void>(State);
-    AbilityComponent->OnAbilityEnded.Remove(DelegateHandle);
 }
 
 static void SendOutEventForActor(AActor *Actor, const FGameplayTag &Tag, FGameplayEventData &EventData) {
