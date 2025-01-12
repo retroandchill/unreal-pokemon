@@ -26,6 +26,7 @@ void UTextDisplayScreen::NativeConstruct() {
 
 void UTextDisplayScreen::SetText(FText TextToDisplay) {
     check(MessageWindow != nullptr)
+    bAdvancedMessage = false;
     MessageWindow->ClearDisplayText();
     MessageWindow->SetDisplayText(TextToDisplay);
     CommandWindow->SetVisibility(ESlateVisibility::Collapsed);
@@ -34,6 +35,7 @@ void UTextDisplayScreen::SetText(FText TextToDisplay) {
 
 void UTextDisplayScreen::DisplayChoices(FText TextToDisplay, const TArray<FText> &Choices) {
     check(MessageWindow != nullptr && CommandWindow != nullptr)
+    bAdvancedMessage = false;
     MessageWindow->ClearDisplayText();
     MessageWindow->SetDisplayText(TextToDisplay, true);
 
@@ -53,10 +55,12 @@ void UTextDisplayScreen::ClearDisplayText() {
 }
 
 void UTextDisplayScreen::AdvanceToNextMessage() {
-    if (!bAdvancedMessage) {
-        UE_LOG(LogBlueprint, Warning, TEXT("Attempted to advance message before next message is ready!"))
+    if (bAdvancedMessage) {
+        return;
     }
 
+    bAdvancedMessage = true;
+    CheckIfMoreTextIsAdded();
     NextMessage.Broadcast();
 }
 
@@ -79,4 +83,11 @@ UE5Coro::TCoroutine<UCommonActivatableWidget *> UTextDisplayScreen::AwaitInputPr
     }
 
     co_return MessageWindow;
+}
+
+UE5Coro::TCoroutine<> UTextDisplayScreen::CheckIfMoreTextIsAdded(FForceLatentCoroutine) {
+    co_await UE5Coro::Latent::NextTick();
+    if (bAdvancedMessage) {
+        CloseScreen();
+    }
 }

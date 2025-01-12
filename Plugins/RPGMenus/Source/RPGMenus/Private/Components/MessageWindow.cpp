@@ -57,6 +57,10 @@ void UMessageWindow::NativeTick(const FGeometry &MyGeometry, float InDeltaTime) 
     }
 }
 
+const FText &UMessageWindow::GetDisplayText() const {
+    return DialogueBox->GetCurrentLine();
+}
+
 void UMessageWindow::SetDisplayText(FText Text, bool bHasCommands) {
     check(DialogueBox != nullptr)
 

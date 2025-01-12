@@ -9,18 +9,6 @@
 #include "Graphics/GraphicsAssetClasses.h"
 #include "Utilities/PokemonUIUtils.h"
 
-using FUpdatePercent = Pokemon::UI::FSetNewPercent::FDelegate;
-using FUpdateComplete = Pokemon::UI::FOnAnimationComplete::FDelegate;
-
-void UPokemonBattlePanel::NativeConstruct() {
-    Super::NativeConstruct();
-    HPBarUpdateAnimation.SetWorldContext(this);
-    HPBarUpdateAnimation.BindActionToPercentDelegate(
-        FUpdatePercent::CreateUObject(this, &UPokemonBattlePanel::UpdateHPPercent));
-    HPBarUpdateAnimation.BindActionToCompleteDelegate(
-        FUpdateComplete::CreateUObject(this, &UPokemonBattlePanel::HPPercentUpdateComplete));
-}
-
 void UPokemonBattlePanel::SetBattler(const TScriptInterface<IBattler> &Battler) {
     CurrentBattler = Battler;
     Refresh();
@@ -39,22 +27,16 @@ void UPokemonBattlePanel::Refresh() {
     OnRefresh();
 }
 
-void UPokemonBattlePanel::BindToOnProgressBarUpdateComplete(const FOnProgresBarUpdateComplete::FDelegate &Binding) {
-    OnHPBarUpdated.Add(Binding);
-}
-
-void UPokemonBattlePanel::UnbindAllHPUpdateDelegates(UObject *Object) {
-    OnHPBarUpdated.RemoveAll(Object);
-}
-
-void UPokemonBattlePanel::AnimateHP(float MaxDuration) {
+UE5Coro::TCoroutine<> UPokemonBattlePanel::AnimateHP(float MaxDuration) {
+    using Pokemon::UI::FSetNewPercent;
     auto CoreAttributes = CurrentBattler->GetAbilityComponent()->GetCoreAttributes();
     float HPPercent = HPBar->GetPercent();
     float OldHP = FMath::RoundToFloat(CoreAttributes->GetMaxHP() * HPPercent);
     float DrainRate =
         FMath::Min(FMath::Abs(OldHP - CoreAttributes->GetHP()) * UPokemonUIUtils::AnimationDrainSpeed, MaxDuration);
     float CurrentPercent = CurrentBattler->GetHPPercent();
-    HPBarUpdateAnimation.PlayAnimation(HPPercent, CurrentPercent, DrainRate);
+    co_await Pokemon::UI::ProgressBarAnimation(this, HPPercent, CurrentPercent, DrainRate,
+        FSetNewPercent::CreateUObject(this, &UPokemonBattlePanel::UpdateHPPercent));
 }
 
 void UPokemonBattlePanel::RefreshStatusEffect() {
@@ -74,8 +56,4 @@ void UPokemonBattlePanel::RefreshStatusEffect() {
 
 void UPokemonBattlePanel::UpdateHPPercent(float NewPercent) {
     HPBar->SetPercent(NewPercent);
-}
-
-void UPokemonBattlePanel::HPPercentUpdateComplete() const {
-    OnHPBarUpdated.Broadcast();
 }

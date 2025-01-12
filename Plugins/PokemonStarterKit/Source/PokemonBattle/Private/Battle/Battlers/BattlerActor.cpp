@@ -33,6 +33,7 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 #include "PokemonBattleSettings.h"
+#include "Battle/Events/TargetedEvents.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/Construct.h"
@@ -249,11 +250,11 @@ float ABattlerActor::GetExpPercent() const {
     return WrappedPokemon->GetStatBlock()->GetExpPercent();
 }
 
-TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
+UE5Coro::TCoroutine<TArray<FExpGainInfo>> ABattlerActor::GiveExpToParticipants() {
     TArray<FExpGainInfo> GainInfos;
     auto &Battle = OwningSide->GetOwningBattle();
     if (OwningSide != Battle->GetOpposingSide()) {
-        return GainInfos;
+        co_return GainInfos;
     }
 
     auto &BattleSettings = *GetDefault<UPokemonBattleSettings>();
@@ -268,7 +269,7 @@ TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
     for (auto &PlayerParty = Battle->GetPlayerSide()->GetTrainerParty(PlayerTrainer); auto &Battler : PlayerParty) {
         if (Battler->IsFainted()) {
             auto &GainInfo = GainInfos.Emplace_GetRef(Battler, 0);
-            GainInfo.StatChanges = Battler->GainExpAndEVs(GainInfo.Amount, {});
+            GainInfo.StatChanges = co_await Battler->GainExpAndEVs(GainInfo.Amount, {});
             continue;
         }
 
@@ -282,13 +283,13 @@ TArray<FExpGainInfo> ABattlerActor::GiveExpToParticipants() {
                                             ExpAttributes.GetExpGainRate());
 
         auto &GainInfo = GainInfos.Emplace_GetRef(Battler, ExpGain);
-        GainInfo.StatChanges = Battler->GainExpAndEVs(GainInfo.Amount, Species.EVs);
+        GainInfo.StatChanges = co_await Battler->GainExpAndEVs(GainInfo.Amount, Species.EVs);
     }
 
-    return GainInfos;
+    co_return GainInfos;
 }
 
-FLevelUpStatChanges ABattlerActor::GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) {
+UE5Coro::TCoroutine<FLevelUpStatChanges> ABattlerActor::GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) {
     auto StatBlock = WrappedPokemon->GetStatBlock();
     for (auto &[ID, Amount] : EVs) {
         auto Stat = StatBlock->GetStat(ID);
@@ -317,7 +318,7 @@ FText ABattlerActor::GetRecallMessage() const {
     return GetMessageOnRecall();
 }
 
-FGameplayAbilitySpecHandle ABattlerActor::PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) {
+UE5Coro::TCoroutine<> ABattlerActor::PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) {
     FGameplayEventData EventData;
     EventData.Instigator = this;
 
@@ -334,8 +335,7 @@ FGameplayAbilitySpecHandle ABattlerActor::PerformSwitch(const TScriptInterface<I
     TargetData->SetActors({CastChecked<AActor>(SwitchTarget.GetObject())});
     EventData.TargetData.Data.Emplace(TargetData);
 
-    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, Pokemon::Battle::SwitchOut, EventData);
-    return SwitchActionHandle;
+    co_await Pokemon::Battle::Events::SendOutActivationEvent(BattlerAbilityComponent, SwitchActionHandle, Pokemon::Battle::SwitchOut, std::move(EventData));
 }
 
 bool ABattlerActor::IsOwnedByPlayer() const {
@@ -343,7 +343,11 @@ bool ABattlerActor::IsOwnedByPlayer() const {
 }
 
 void ABattlerActor::SelectActions() {
-    Controller->InitiateActionSelection(this);
+    if (!CanSelectActions()) {
+        return;
+    }
+    
+    Controller->ActionSelection(this);
 }
 
 void ABattlerActor::RequireSwitch() {
@@ -352,6 +356,10 @@ void ABattlerActor::RequireSwitch() {
 
 uint8 ABattlerActor::GetActionCount() const {
     return 1;
+}
+
+bool ABattlerActor::CanSelectActions() const {
+    return IsNotFainted();
 }
 
 Retro::TGenerator<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {

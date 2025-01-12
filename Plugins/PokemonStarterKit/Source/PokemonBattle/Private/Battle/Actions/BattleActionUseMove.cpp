@@ -31,14 +31,14 @@ FText FBattleActionUseMove::GetActionMessage() const {
                          {GetBattler()->GetNickname(), Move->GetDisplayName()});
 }
 
-void FBattleActionUseMove::Execute() {
-    FBattleActionBase::Execute();
-
+UE5Coro::TCoroutine<> FBattleActionUseMove::Execute() {
     auto AttributeSet = GetBattler()->GetAbilityComponent()->GetCoreAttributes();
     check(AttributeSet != nullptr)
     Move->PayCost(FMath::FloorToInt32(AttributeSet->GetMoveCost()));
+    
+    co_await FBattleActionBase::Execute();
 }
 
-FGameplayAbilitySpecHandle FBattleActionUseMove::ActivateAbility() {
-    return Move->TryActivateMove(Targets);
+UE5Coro::TCoroutine<> FBattleActionUseMove::ActivateAbility() {
+    co_return co_await Move->TryActivateMove(Targets);
 }

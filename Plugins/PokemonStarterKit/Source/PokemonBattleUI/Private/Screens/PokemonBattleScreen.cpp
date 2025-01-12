@@ -15,6 +15,7 @@
 #include "Components/BattleSwitchPane.h"
 #include "Components/ExpGainPane.h"
 #include "Components/PokemonActionOptions.h"
+#include "RetroLib/Async/AsyncHelpers.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/Construct.h"
@@ -114,10 +115,12 @@ UPokemonBattlePanel *UPokemonBattleScreen::FindPanelForBattler(const TScriptInte
     return Find != nullptr ? *Find : nullptr;
 }
 
-void UPokemonBattleScreen::DisplayExpForGain(TArray<FExpGainInfo> &&GainInfos) {
+UE5Coro::TCoroutine<> UPokemonBattleScreen::DisplayExpForGain(TArray<FExpGainInfo> GainInfos) {
     ExpGainPane->GainExp(std::move(GainInfos));
-    SwapToExpGainDisplay();
-    PlayExpGainAnimation();
+    co_await Retro::BindToDelegateDispatch(OnExpGainComplete, [this] {
+        SwapToExpGainDisplay();
+        PlayExpGainAnimation();
+    });
 }
 
 FDelegateHandle UPokemonBattleScreen::BindToExpGainComplete(FSimpleDelegate &&Callback) {

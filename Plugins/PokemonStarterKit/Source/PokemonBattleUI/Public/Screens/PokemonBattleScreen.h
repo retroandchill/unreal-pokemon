@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Display/BattleHUD.h"
 #include "Components/PokemonBattlePanel.h"
 #include "Screens/Screen.h"
 
@@ -21,7 +22,7 @@ class IBattle;
  * The underlying screen that sits on top of the battle system.
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
+class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen, public IBattleHUD {
     GENERATED_BODY()
 
   public:
@@ -54,7 +55,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      * @param Battler The battler who is selecting an action.
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
-    void SelectAction(const TScriptInterface<IBattler> &Battler);
+    void SelectAction(const TScriptInterface<IBattler> &Battler) override;
 
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
     void PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler);
@@ -92,7 +93,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen {
      */
     UPokemonBattlePanel *FindPanelForBattler(const TScriptInterface<IBattler> &Battler) const;
 
-    void DisplayExpForGain(TArray<FExpGainInfo> &&GainInfos);
+    UE5Coro::TCoroutine<> DisplayExpForGain(TArray<FExpGainInfo> GainInfos);
 
     FDelegateHandle BindToExpGainComplete(FSimpleDelegate &&Callback);
 

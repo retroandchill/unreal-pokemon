@@ -22,7 +22,7 @@ class RETROLIBTESTS_API AScopedFunctionalTest : public AEditorFunctionalTest {
 
   public:
     void PrepareTest() override;
-    void FinishTest(EFunctionalTestResult TestResult, const FString &Message) override;
+    void CleanUp() override;
 
     /**
      * @brief Adds data scoped for the functional test.

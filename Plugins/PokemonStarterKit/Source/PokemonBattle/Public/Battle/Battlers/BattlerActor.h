@@ -88,10 +88,9 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = Stats)
     float GetExpPercent() const override;
 
-    UFUNCTION(BlueprintCallable, Category = Stats)
-    TArray<FExpGainInfo> GiveExpToParticipants() override;
+    UE5Coro::TCoroutine<TArray<FExpGainInfo>> GiveExpToParticipants() override;
 
-    FLevelUpStatChanges GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) override;
+    UE5Coro::TCoroutine<FLevelUpStatChanges> GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) override;
 
     UFUNCTION(BlueprintPure, Category = Stats)
     TArray<FName> GetTypes() const override;
@@ -108,7 +107,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintPure, Category = Switching)
     FText GetRecallMessage() const;
 
-    FGameplayAbilitySpecHandle PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) override;
+    UE5Coro::TCoroutine<> PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) override;
 
     UFUNCTION(BlueprintPure, Category = Ownership)
     bool IsOwnedByPlayer() const;
@@ -116,6 +115,8 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     void SelectActions() override;
     void RequireSwitch() override;
     uint8 GetActionCount() const override;
+    bool CanSelectActions() const override;
+    
     Retro::TGenerator<TScriptInterface<IBattler>> GetAllies() const override;
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = Visuals, meta = (AutoCreateRefTerm = Offset))

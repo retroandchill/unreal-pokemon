@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #include "PlayBattlerHPAnimation.generated.h"
 
@@ -22,7 +23,7 @@ DECLARE_DELEGATE(FUnbindActions)
  * Play a battler's HP draining animation
  */
 UCLASS(DisplayName = "Play Battler HP Animation", meta = (HideThen))
-class POKEMONBATTLEUI_API UPlayBattlerHPAnimation : public UBlueprintAsyncActionBase {
+class POKEMONBATTLEUI_API UPlayBattlerHPAnimation : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
@@ -40,15 +41,10 @@ class POKEMONBATTLEUI_API UPlayBattlerHPAnimation : public UBlueprintAsyncAction
                                                            const TScriptInterface<IBattler> &Battler,
                                                            float MaxDuration = 1.f);
 
-    void Activate() override;
+protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:
-    /**
-     * Execute the action for when playback is complete
-     */
-    UFUNCTION()
-    void ExecuteOnComplete();
-
     /**
      * Called when animation is complete
      */
@@ -59,12 +55,6 @@ class POKEMONBATTLEUI_API UPlayBattlerHPAnimation : public UBlueprintAsyncAction
      * Delegate used for unbinding actions
      */
     FUnbindActions UnbindActions;
-
-    /**
-     * The object used to obtain the state of the world to obtain the screen with
-     */
-    UPROPERTY()
-    TObjectPtr<const UObject> WorldContextObject;
 
     /**
      * The battler whose HP is being updated

@@ -37,7 +37,7 @@ class POKEMONUI_API USelectPokemonFromParty : public UBlueprintCoroutineActionBa
     static USelectPokemonFromParty *SelectPokemonFromParty(const UObject *WorldContextObject, FText HelpText);
 
   protected:
-    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine Coro = {}) override;
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine = {}) override;
 
   private:
     /**

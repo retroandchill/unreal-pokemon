@@ -30,7 +30,8 @@ class POKEMONUI_API UUseItemOnPokemon : public UUseItem {
     static UUseItemOnPokemon *UseItemOnPokemon(UBagScreen *Screen, FName Item, int32 Quantity,
                                                const TScriptInterface<IPokemon> &Pokemon);
 
-    void Activate() override;
+protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:
     /**

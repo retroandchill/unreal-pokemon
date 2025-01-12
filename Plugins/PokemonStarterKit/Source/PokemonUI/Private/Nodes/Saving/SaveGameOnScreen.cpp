@@ -10,7 +10,7 @@ USaveGameOnScreen *USaveGameOnScreen::SaveGame(USaveScreen *Screen) {
     return Node;
 }
 
-UE5Coro::TCoroutine<> USaveGameOnScreen::ExecuteCoroutine(FForceLatentCoroutine Coro) {
+UE5Coro::TCoroutine<> USaveGameOnScreen::ExecuteCoroutine(FForceLatentCoroutine) {
     bool bSuccess = co_await Screen->SaveGame();
     bSuccess ? SaveSuccess.Broadcast() : SaveFailed.Broadcast();
 }

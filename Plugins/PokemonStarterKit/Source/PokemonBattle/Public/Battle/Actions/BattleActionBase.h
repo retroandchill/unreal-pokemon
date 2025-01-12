@@ -21,16 +21,15 @@ class POKEMONBATTLE_API FBattleActionBase : public FGCObject, public IBattleActi
     void AddReferencedObjects(FReferenceCollector &Collector) override;
     const TScriptInterface<IBattler> &GetBattler() const override;
     bool CanExecute() const override;
-    void Execute() override;
+    UE5Coro::TCoroutine<> Execute() override;
     bool IsExecuting() const override;
-    bool IsComplete() const override;
 
   protected:
     /**
      * Try to activate the underlying ability for this action
      * @return The underlying ability for this action
      */
-    virtual FGameplayAbilitySpecHandle ActivateAbility() = 0;
+    virtual UE5Coro::TCoroutine<> ActivateAbility() = 0;
 
   private:
     /**
@@ -42,9 +41,4 @@ class POKEMONBATTLE_API FBattleActionBase : public FGCObject, public IBattleActi
      * The current state of execution for a given action
      */
     bool Executing = false;
-
-    /**
-     * The spec for the active gameplay ability
-     */
-    FGameplayAbilitySpecHandle SpecHandle;
 };

@@ -26,6 +26,6 @@ FText FBattleActionSwitchPokemon::GetActionMessage() const {
     return FText::GetEmpty();
 }
 
-FGameplayAbilitySpecHandle FBattleActionSwitchPokemon::ActivateAbility() {
-    return GetBattler()->PerformSwitch(SwitchTarget);
+UE5Coro::TCoroutine<> FBattleActionSwitchPokemon::ActivateAbility() {
+    co_return co_await GetBattler()->PerformSwitch(SwitchTarget);
 }

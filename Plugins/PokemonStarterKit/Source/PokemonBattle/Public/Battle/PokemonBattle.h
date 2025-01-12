@@ -12,6 +12,9 @@
 
 #include "PokemonBattle.generated.h"
 
+class IBattleHUD;
+class IPokemonCoroutineDispatcher;
+class IBattleAnimation;
 class ABattleSequencer;
 class UTurnBasedEffectComponent;
 struct FGameplayTag;
@@ -71,16 +74,17 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
     bool IsTrainerBattle_Implementation() const override;
-    void JumpToBattleScene_Implementation(APlayerController *PlayerController) override;
+    UE5Coro::TCoroutine<EBattleResult> ConductBattle(APlayerController *PlayerController, FForceLatentCoroutine = {}) override;
 
-    void Tick(float DeltaSeconds) override;
+private:
+    UE5Coro::TCoroutine<> DisplaySideSendOutAnimation(int32 Index);
+    UE5Coro::TCoroutine<EBattleResult> MainBattleLoop();
 
-  public:
-    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
-    void StartBattle() override;
+public:
+    UE5Coro::TCoroutine<> StartBattle() override;
 
-    void OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers);
-
+    UE5Coro::TCoroutine<> OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers);
+    
     void QueueAction(TUniquePtr<IBattleAction> &&Action) override;
     bool ActionSelectionFinished() const override;
 
@@ -109,17 +113,11 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
 
     Retro::TGenerator<TScriptInterface<IBattleSide>> GetSides() const override;
     Retro::TGenerator<TScriptInterface<IBattler>> GetActiveBattlers() const override;
-    void ExecuteAction(IBattleAction &Action) override;
+    UE5Coro::TCoroutine<> ExecuteAction(IBattleAction &Action, FForceLatentCoroutine = {}) override;
 
   protected:
     bool RunCheck_Implementation(const TScriptInterface<IBattler> &Battler, bool bDuringBattle) override;
-    void EndBattle_Implementation(EBattleResult Result) override;
 
-  public:
-    void BindToOnBattleEnd(FOnBattleEnd::FDelegate &&Callback) override;
-    void ClearOnBattleEnd() override;
-
-  protected:
     /**
      * Get the position of the player's side of the field
      * @return The player's primary spawn position
@@ -139,7 +137,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      * Blueprint Graph.
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void QueueBattleIntro();
+    TScriptInterface<IBattleAnimation> GetBattleIntro();
 
     /**
      * Display the intro message for the battle.
@@ -148,32 +146,22 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     FText GetBattleIntroMessage() const;
 
     /**
-     * Send out the opposing side Pokémon
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
-    void QueueOpponentSendOut();
-
-    /**
      * Display the message for a Pokémon send out prior to the animation
-     * @param Message The message to display
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void QueueOpponentSendOutMessage(const FText &Message);
-
-    /**
-     * Play the animation to send out the player's Pokémon
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
-    void QueuePlayerSendOut();
+    TScriptInterface<IBattleAnimation> GetOpponentSendOutAnimation();
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void QueuePlayerSendOutMessage(const FText &Message);
+    TScriptInterface<IBattleAnimation> GetPlayerSendOutAnimation();
 
     /**
      * Create the HUD used for the battle system
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void CreateBattleHUD();
+    TScriptInterface<IBattleHUD> CreateBattleHUD();
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    TScriptInterface<IBattleAnimation> GetBattleEndAnimation(EBattleResult Result);
 
     /**
      * Refresh the battle HUD so that it is up to date
@@ -182,28 +170,13 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void RefreshBattleHUD();
 
     /**
-     * Display an action usage message with the given text
-     * @param MessageText The text of the message to display
-     */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
-    void QueueDisplayAction(const FText &MessageText);
-
-    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
-    void ExecuteAction();
-
-    /**
      * Process the result of the battle and exit
      * @param Result The outcome of the battle in question
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Flow")
-    void QueueBattleResultAnimation(EBattleResult Result);
+    TScriptInterface<IBattleAnimation> GetBattleResultAnimation(EBattleResult Result);
 
-    /**
-     * Exit the battle scene and return to the map
-     * @param Result the result of the battle in question
-     */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
-    void ExitBattleScene(EBattleResult Result) const;
+    void EndBattle_Implementation(EBattleResult Result) override;
 
   private:
     void ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger);
@@ -211,14 +184,13 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     /**
      * Run at the head of every turn. Increments the turn count and initiates action selection.
      */
-    void StartTurn();
+    UE5Coro::TCoroutine<TOptional<int32>> ProcessTurn();
 
   protected:
     /**
      * Run all checks that need to be handled at the end of the turn
      */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Flow")
-    void EndTurn();
+    UE5Coro::TCoroutine<TOptional<int32>> EndTurn();
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Flow")
     void ClearActionSelection();
@@ -227,7 +199,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     /**
      * Process all of the actions about to be performed
      */
-    void BeginActionProcessing();
+    UE5Coro::TCoroutine<> ActionProcessing();
 
     /**
      * Proceed to the next action in the queue
@@ -238,7 +210,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      * Decide the battle for the side with the given index
      * @param SideIndex The index for the battle side that cannot continue
      */
-    void DecideBattle(int32 SideIndex);
+    UE5Coro::TCoroutine<EBattleResult> DecideBattle(int32 SideIndex);
 
     /**
      * The ability system component used for this actor
@@ -255,6 +227,12 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     uint32 TurnCount = 0;
 
     bool bSwitchPrompting = false;
+
+    UPROPERTY()
+    TScriptInterface<IPokemonCoroutineDispatcher> Dispatcher;
+
+    UPROPERTY()
+    TScriptInterface<IBattleHUD> HUD;
 
     /**
      * The list of sides in battle
@@ -297,6 +275,8 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      */
     TMap<FGuid, uint8> ExpectedActionCount;
 
+    TSharedRef<TFutureState<int32>> ActionsCompletePromise = MakeShared<TFutureState<int32>>();
+
     /**
      * The actual queue of actions to be executed
      */
@@ -325,7 +305,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     /**
      * Delegate that is invoked when the battle ends
      */
-    FOnBattleEnd OnBattleEnd;
+    TSharedRef<TFutureState<EBattleResult>> OnBattleEnd = MakeShared<TFutureState<EBattleResult>>();
 
     int32 RunAttempts = 0;
 };

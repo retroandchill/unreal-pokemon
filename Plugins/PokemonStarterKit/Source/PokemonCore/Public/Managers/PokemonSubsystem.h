@@ -135,7 +135,7 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem, public 
     UFUNCTION(BlueprintCallable, Category = Reset)
     void SetPlayerResetLocationAsCurrentLocation(ACharacter *PlayerCharacter);
 
-    const IPokemonCoroutineDispatcher &GetCoroutineDispatcher() const {
+    IPokemonCoroutineDispatcher &GetCoroutineDispatcher() const {
         check(CoroutineDispatcher != nullptr)
         ;
         return *CoroutineDispatcher;

@@ -306,11 +306,8 @@ namespace Retro::Delegates {
     template <UEDelegate D>
     using TDelegateTuple = typename TDelegateTraits<D>::ArgsTuple;
 
-#if RETROLIB_WITH_UE5CORO
-    template <UEDelegate D, UEDelegate O>
-    UE5Coro::TCoroutine<> UntilEither(D &MainDelegate, O &OtherDelegate) {
-    }
-#endif
+    template <UEDelegate D>
+    using TDelegateFutureArgs = std::conditional_t<std::tuple_size_v<TDelegateTuple<D>> == 0, void, TDelegateTuple<D>>;
 
 } // namespace Retro::Delegates
 #endif

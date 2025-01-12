@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "UE5Coro.h"
 
 class IBattler;
 
@@ -31,19 +32,13 @@ class POKEMONBATTLE_API IBattleAction {
     /**
      * Execute the action in question
      */
-    virtual void Execute() = 0;
+    virtual UE5Coro::TCoroutine<> Execute() = 0;
 
     /**
      * Is this action currently executing?
      * @return Is the action currently executing?
      */
     virtual bool IsExecuting() const = 0;
-
-    /**
-     * Is this action's execution complete?
-     * @return Is the action's execution complete?
-     */
-    virtual bool IsComplete() const = 0;
 
     /**
      * Get the action's priority in battle

@@ -12,7 +12,10 @@
 #include "DataManager.h"
 #include "Pokemon/Pokemon.h"
 #include "PokemonBattleSettings.h"
+#include "Battle/Events/TargetedEvents.h"
 #include "RetroLib/Casting/DynamicCast.h"
+#include "RetroLib/Optionals/PtrOrNull.h"
+#include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/MakeWeak.h"
 
@@ -47,7 +50,7 @@ FText FBattleActionUseItem::GetActionMessage() const {
                          {GetBattler()->GetWrappedPokemon()->GetCurrentHandler()->GetTrainerName(), ItemData.RealName});
 }
 
-FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
+UE5Coro::TCoroutine<> FBattleActionUseItem::ActivateAbility() {
     auto EffectClass = Pokemon::Battle::Items::FindBattleItemEffect(ItemID);
     auto &Owner = GetBattler();
     auto AbilityComponent = Owner->GetAbilityComponent();
@@ -91,7 +94,5 @@ FGameplayAbilitySpecHandle FBattleActionUseItem::ActivateAbility() {
     // clang-format on
     EventData.TargetData.Data.Emplace(TargetData);
 
-    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwnerActor, Pokemon::Battle::Items::UsingItem, EventData);
-
-    return Handle;
+    co_await Pokemon::Battle::Events::SendOutActivationEvent(AbilityComponent, Handle, Pokemon::Battle::Items::UsingItem, std::move(EventData));
 }

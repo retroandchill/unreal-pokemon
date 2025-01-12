@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
+#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #include "GainExpOnFaint.generated.h"
 
@@ -16,7 +17,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FExpGainComplete);
  * Calculate and gain exp for the provided battlers who fainted.
  */
 UCLASS(meta = (HideThen))
-class POKEMONBATTLEUI_API UGainExpOnFaint : public UBlueprintAsyncActionBase {
+class POKEMONBATTLEUI_API UGainExpOnFaint : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
   public:
@@ -25,13 +26,11 @@ class POKEMONBATTLEUI_API UGainExpOnFaint : public UBlueprintAsyncActionBase {
     static UGainExpOnFaint *GainExpOnFaint(const UObject *WorldContextObject,
                                            const TArray<TScriptInterface<IBattler>> &Battlers);
 
-    void Activate() override;
+protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:
-    void OnExpGainComplete();
-
-    UPROPERTY()
-    TObjectPtr<const UObject> WorldContextObject;
+    UE5Coro::TCoroutine<> ProcessExpGain() const;
 
     UPROPERTY()
     TArray<TScriptInterface<IBattler>> Battlers;

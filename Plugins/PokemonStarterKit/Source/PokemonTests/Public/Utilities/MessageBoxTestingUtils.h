@@ -7,8 +7,8 @@
 
 namespace Pokemon::Testing {
     POKEMONTESTS_API UE5Coro::TCoroutine<> AdvanceMessages(const UObject *WorldContextObject,
-                                                           FForceLatentCoroutine Coro = {});
+                                                           FForceLatentCoroutine = {});
     POKEMONTESTS_API UE5Coro::TCoroutine<> AdvanceMessagesUntilPrompt(const UObject *WorldContextObject,
                                                                       int32 IndexToSelect = 0,
-                                                                      FForceLatentCoroutine Coro = {});
+                                                                      FForceLatentCoroutine = {});
 } // namespace Pokemon::Testing

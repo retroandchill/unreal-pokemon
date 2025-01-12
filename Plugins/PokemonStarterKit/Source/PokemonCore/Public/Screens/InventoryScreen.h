@@ -12,7 +12,7 @@ class IPokemon;
 struct FItem;
 class IInventoryScreen;
 
-POKEMONUI_API struct FSelectedItemHandle {
+struct POKEMONCORE_API FSelectedItemHandle {
     FSelectedItemHandle(const TScriptInterface<IInventoryScreen> &InScreen, const FItem &InItem, int32 InQuantity);
 
     const TScriptInterface<IInventoryScreen> &GetScreen() const {
@@ -41,14 +41,14 @@ DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(bool, FItemFilter, const FItem &, Item)
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
-class UInventoryScreen : public UInterface {
+class POKEMONCORE_API UInventoryScreen : public UInterface {
     GENERATED_BODY()
 };
 
 /**
  * Abstract declaration of the inventory screen used by the game
  */
-class POKEMONUI_API IInventoryScreen {
+class POKEMONCORE_API IInventoryScreen {
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

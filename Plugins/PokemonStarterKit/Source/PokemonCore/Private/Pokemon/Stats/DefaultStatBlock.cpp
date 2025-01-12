@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Pokemon/Stats/DefaultStatBlock.h"
-#include "Blueprints/UtilityNodeSubsystem.h"
 #include "DataManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
@@ -14,6 +13,8 @@
 #include "Species/Nature.h"
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
+#include "UE5Coro.h"
+#include "Utilities/PokemonCoroutineDispatcher.h"
 
 using namespace StatUtils;
 
@@ -87,7 +88,7 @@ float UDefaultStatBlock::GetExpPercent() const {
     return (static_cast<float>(Exp) - ExpNeededForLevel) / TotalNeededForLevel;
 }
 
-FLevelUpStatChanges UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages, const FLevelUpEnd &OnEnd) {
+UE5Coro::TCoroutine<FLevelUpStatChanges> UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages) {
     FLevelUpStatChanges Changes;
     float ExpPercent = GetExpPercent();
     Changes.ExpPercentChange.Before = ExpPercent;
@@ -117,12 +118,13 @@ FLevelUpStatChanges UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages,
             }
         }
 
-        auto Subsystem = GetWorld()->GetGameInstance()->GetSubsystem<UUtilityNodeSubsystem>();
-        Subsystem->ExecuteUtilityFunction<UUtility_ProcessLevelUp>(
-            Owner, Changes, bShowMessages, FSimpleDelegate::CreateLambda([OnEnd] { OnEnd.ExecuteIfBound(); }));
+        if (bShowMessages) {
+            auto &Dispatcher = IPokemonCoroutineDispatcher::Get(this);
+            co_await Dispatcher.ProcessLevelUp(this, Changes);
+        }
     }
 
-    return Changes;
+    co_return Changes;
 }
 
 const FNature &UDefaultStatBlock::GetNature() const {

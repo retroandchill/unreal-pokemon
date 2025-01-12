@@ -406,7 +406,8 @@ FLatentPromise::FLatentPromise(std::shared_ptr<FPromiseExtras> InExtras,
 		static_assert(sizeof...(Args) >= 1, "Provide a world context parameter");
 		using First = std::tuple_element_t<0, std::tuple<decltype(Args)...>>;
 		static_assert(std::convertible_to<First, const UObject*> ||
-		              std::convertible_to<First, const UObject&>,
+		              std::convertible_to<First, const UObject&> ||
+		              std::convertible_to<First, const FScriptInterface&>,
 		              "Provide a world context as the first parameter");
 		[this]<typename T>(const T& WorldContext, const auto&...)
 		{
@@ -415,8 +416,13 @@ FLatentPromise::FLatentPromise(std::shared_ptr<FPromiseExtras> InExtras,
 				World = WorldContext->GetWorld();
 				CreateLatentAction(WorldContext);
 			}
-			else
-			{
+		    else if constexpr (std::derived_from<T, FScriptInterface>)
+		    {
+		        World = WorldContext.GetObject()->GetWorld();
+		        CreateLatentAction(WorldContext.GetObject());
+		    }
+		    else
+		    {
 				World = WorldContext.GetWorld();
 				CreateLatentAction(&WorldContext);
 			}

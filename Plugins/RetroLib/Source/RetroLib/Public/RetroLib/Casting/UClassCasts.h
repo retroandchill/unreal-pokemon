@@ -261,12 +261,12 @@ namespace Retro {
 
     struct FWrapPointerFunction {
         template <std::derived_from<UObject> T>
-        constexpr auto operator()(T *Interface) {
+        constexpr auto operator()(T *Interface) const {
             return TObjectPtr<T>(Interface->_getUObject());
         }
 
         template <UnrealInterface T>
-        constexpr auto operator()(T *Interface) {
+        constexpr auto operator()(T *Interface) const {
             return TScriptInterface<T>(Interface->_getUObject());
         }
     };

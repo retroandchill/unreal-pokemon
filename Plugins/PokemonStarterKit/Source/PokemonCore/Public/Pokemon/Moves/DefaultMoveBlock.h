@@ -30,10 +30,9 @@ class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
     UFUNCTION(BlueprintCallable, Category = "Pokémon|Moves")
     void OverwriteMoveSlot(FMoveHandle Move, int32 SlotIndex) override;
 
-    UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Pokémon|Moves")
-    virtual TArray<FMoveHandle> GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const;
+    virtual Retro::TGenerator<FMoveHandle> GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const;
 
-    void LearnMove(FMoveHandle Move, FOnMoveLearnEnd::FDelegate &&AfterMoveLearned) override;
+    UE5Coro::TCoroutine<bool> LearnMove(FMoveHandle Move, FForceLatentCoroutine) override;
     TScriptInterface<IMove> CreateNewMove(const FMoveDTO &MoveID) override;
 
     UFUNCTION(BlueprintPure, Category = "Pokémon|Moves")

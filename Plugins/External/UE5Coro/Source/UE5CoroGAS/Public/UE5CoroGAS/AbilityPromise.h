@@ -60,24 +60,26 @@ static_assert(sizeof(FAbilityCoroutine) == sizeof(TCoroutine<>));
 #pragma region Private
 namespace UE5Coro::Private
 {
-class [[nodiscard]] UE5COROGAS_API FAbilityPromise
+class [[nodiscard]] FAbilityPromise
 	: public TCoroutinePromise<void, FLatentPromise>
 {
 	using Super = TCoroutinePromise;
 
 protected:
 	// Matches UUE5CoroAbilityTask::Execute
-	explicit FAbilityPromise(UUE5CoroAbilityTask&);
+	UE5COROGAS_API explicit FAbilityPromise(UUE5CoroAbilityTask&);
 
 	// Matches UUE5CoroGameplayAbility::ExecuteAbility
-	explicit FAbilityPromise(UUE5CoroGameplayAbility&,
+	UE5COROGAS_API explicit FAbilityPromise(UUE5CoroGameplayAbility&,
 	                         const FGameplayAbilitySpecHandle&,
 	                         const FGameplayAbilityActorInfo*,
 	                         const FGameplayAbilityActivationInfo&,
 	                         const FGameplayEventData*);
 
 public:
-	GAS::FAbilityCoroutine get_return_object() noexcept;
+    GAS::FAbilityCoroutine get_return_object() noexcept {
+        return static_cast<GAS::FAbilityCoroutine&&>(Super::get_return_object());
+    }
 };
 
 template<typename T>
