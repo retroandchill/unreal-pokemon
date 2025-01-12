@@ -18,6 +18,8 @@ class POKEMONBATTLE_API ABattleTransitionActor : public AActor {
 public:
     UE5Coro::TCoroutine<> Execute();
 
+    static UE5Coro::TCoroutine<> Execute(ABattleTransitionActor* Transition);
+
   protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Transitions")
     void TransitionToBattle();

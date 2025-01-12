@@ -56,13 +56,12 @@ UE5Coro::TCoroutine<> ABattleSequencer::ProcessBattleMessages() {
 
     bIsProcessingMessages = true;
     while (!Messages.empty()) {
-        auto &First = Messages.front();
-        if (First.AnimationPlacement == EAnimationPlacement::Before) {
-            co_await TryDisplayMessage(First.Message);
-            co_await IBattleAnimation::PlayAnimation(this, First.Animation);
+        if (auto &BattleMessage = Messages.front(); BattleMessage.AnimationPlacement == EAnimationPlacement::Before) {
+            co_await TryDisplayMessage(BattleMessage.Message);
+            co_await IBattleAnimation::PlayAnimation(this, BattleMessage.Animation);
         } else {
-            co_await TryDisplayMessage(First.Message);
-            co_await IBattleAnimation::PlayAnimation(this, First.Animation);
+            co_await TryDisplayMessage(BattleMessage.Message);
+            co_await IBattleAnimation::PlayAnimation(this, BattleMessage.Animation);
         }
         
         Messages.pop();

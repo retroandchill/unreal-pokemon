@@ -8,6 +8,12 @@ UE5Coro::TCoroutine<> ABattleTransitionActor::Execute() {
     Destroy();
 }
 
+UE5Coro::TCoroutine<> ABattleTransitionActor::Execute(ABattleTransitionActor *Transition) {
+    if (IsValid(Transition)) {
+        co_await Transition->Execute();
+    }
+}
+
 void ABattleTransitionActor::CompleteTransition() {
     OnBattleTransitionComplete->EmplaceResult(0);
 }

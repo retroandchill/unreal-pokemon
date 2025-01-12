@@ -49,9 +49,9 @@ UE5Coro::TCoroutine<EBattleResult> UBattleTransitionSubsystem::InitiateBattle(co
     check(bSuccess)
     BattleInfo.Emplace(Info);
     if (Battlefield->IsLevelVisible()) {
-        co_await CurrentTransition->Execute();
+        co_await ABattleTransitionActor::Execute(CurrentTransition);
     } else {
-        co_await WhenAll( UE5Coro::Latent::UntilDelegate(Battlefield->OnLevelShown), CurrentTransition->Execute());
+        co_await WhenAll( UE5Coro::Latent::UntilDelegate(Battlefield->OnLevelShown), ABattleTransitionActor::Execute(CurrentTransition));
     }
 
     if (RegisteredBattle.IsValid() && !bBattleInitialized) {
@@ -84,7 +84,7 @@ void UBattleTransitionSubsystem::SetUpBattle() {
     }
 }
 
-void UBattleTransitionSubsystem::ExitBattle(FForceLatentCoroutine Coro) {
+void UBattleTransitionSubsystem::ExitBattle() {
     check(Battlefield != nullptr)
     FLatentActionInfo LatentActionInfo;
     UGameplayStatics::UnloadStreamLevelBySoftObjectPtr(this, Battlefield->GetWorldAsset(), LatentActionInfo, false);
