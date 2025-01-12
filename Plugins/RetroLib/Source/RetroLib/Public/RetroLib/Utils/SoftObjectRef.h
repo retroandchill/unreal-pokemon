@@ -11,8 +11,6 @@
 #endif
 #endif
 
-#include "RetroLib/Async/AsyncLoadHandle.h"
-
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
 #endif

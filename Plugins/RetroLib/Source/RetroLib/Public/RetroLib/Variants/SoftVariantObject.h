@@ -3,7 +3,6 @@
 #pragma once
 
 #ifdef __UNREAL__
-#include "RetroLib/Async/AsyncLoadHandle.h"
 #include "RetroLib/Variants/VariantObject.h"
 
 #if RETROLIB_WITH_UE5CORO
