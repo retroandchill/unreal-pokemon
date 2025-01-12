@@ -40,7 +40,6 @@ bool TestDamageCalculation_PhysWeakNoCrit::RunTest(const FString &Parameters) {
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
@@ -48,7 +47,6 @@ bool TestDamageCalculation_PhysWeakNoCrit::RunTest(const FString &Parameters) {
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Garchomp calculated to take 170 damage"), ELogVerbosity::Display);
     Action.Execute();
-    
 
     return true;
 }
@@ -86,7 +84,6 @@ bool TestDamageCalculation_PhysWeakWithCrit::RunTest(const FString &Parameters) 
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    
 
     auto Battler1 = Side1->GetBattlers()[0];
     Battler1->GetAbilityComponent()->SetNumericAttributeBase(UStatStagesAttributeSet::GetAttackStagesAttribute(), -2.f);
@@ -97,7 +94,6 @@ bool TestDamageCalculation_PhysWeakWithCrit::RunTest(const FString &Parameters) 
     AddExpectedMessage(TEXT("Critical hit against Garchomp!"), ELogVerbosity::Display);
     AddExpectedMessage(TEXT("Garchomp calculated to take 279 damage"), ELogVerbosity::Display);
     Action.Execute();
-    
 
     return true;
 }
@@ -130,7 +126,6 @@ bool TestDamageCalculation_SpecResistCrit::RunTest(const FString &Parameters) {
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
@@ -139,7 +134,6 @@ bool TestDamageCalculation_SpecResistCrit::RunTest(const FString &Parameters) {
     AddExpectedMessage(TEXT("Critical hit against Milotic!"), ELogVerbosity::Display);
     AddExpectedMessage(TEXT("Milotic calculated to take 28 damage"), ELogVerbosity::Display);
     Action.Execute();
-    
 
     return true;
 }
@@ -174,7 +168,6 @@ bool TestDamageCalculation_SpecNormalCritBlocked::RunTest(const FString &Paramet
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
@@ -182,8 +175,6 @@ bool TestDamageCalculation_SpecNormalCritBlocked::RunTest(const FString &Paramet
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Drapion calculated to take 79 damage"), ELogVerbosity::Display);
     Action.Execute();
-
-    
 
     return true;
 }
@@ -216,7 +207,6 @@ bool TestDamageCalculation_NoEffect::RunTest(const FString &Parameters) {
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
@@ -225,7 +215,6 @@ bool TestDamageCalculation_NoEffect::RunTest(const FString &Parameters) {
     AddExpectedMessage(TEXT("Sylveon is unaffected by Draco Meteor!"), ELogVerbosity::Display);
     Action.Execute();
 
-    
     UE_CHECK_EQUAL(1.f, Battler2->GetHPPercent());
 
     return true;
@@ -260,7 +249,6 @@ bool TestDamageCalculation_SpeciesSpecificBoost::RunTest(const FString &Paramete
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
@@ -268,8 +256,6 @@ bool TestDamageCalculation_SpeciesSpecificBoost::RunTest(const FString &Paramete
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Druddigon calculated to take 631"), ELogVerbosity::Display);
     Action.Execute();
-
-    
 
     return true;
 }
@@ -304,7 +290,6 @@ bool TestDamageCalculation_HighCriticalHitRate::RunTest(const FString &Parameter
     auto Side2 = World->SpawnActor<ATestActiveSide>();
     Side2->Initialize(Battle, {Pokemon2}, false);
     Battle->Initialize({Side1, Side2});
-    
 
     auto Battler1 = Side1->GetBattlers()[0];
     auto Battler2 = Side2->GetBattlers()[0];
@@ -312,8 +297,6 @@ bool TestDamageCalculation_HighCriticalHitRate::RunTest(const FString &Parameter
     FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
     AddExpectedMessage(TEXT("Critical hit against Alakazam!"), ELogVerbosity::Display);
     Action.Execute();
-
-    
 
     return true;
 }

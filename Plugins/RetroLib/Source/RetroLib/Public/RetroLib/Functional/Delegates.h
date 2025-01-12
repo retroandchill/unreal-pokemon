@@ -63,7 +63,8 @@ namespace Retro {
         D Create(F &&Functor, A &&...Args) {
             if constexpr (CanBindStatic<D, F, A...>) {
                 return D::CreateStatic(std::forward<F>(Functor), std::forward<A>(Args)...);
-            } else {
+            } // namespace Delegates
+            else {
                 static_assert(CanBindLambda<D, F, A...>);
                 return D::CreateLambda(std::forward<F>(Functor), std::forward<A>(Args)...);
             }

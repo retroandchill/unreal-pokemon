@@ -44,7 +44,7 @@ class RPGMENUS_API UMessageWindow : public UCommonActivatableWidget {
 
   public:
     const FText &GetDisplayText() const;
-    
+
     /**
      * Set the text to display to the player
      * @param Text The text to display to the player

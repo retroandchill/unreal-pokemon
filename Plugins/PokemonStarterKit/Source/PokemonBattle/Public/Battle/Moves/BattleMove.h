@@ -7,8 +7,8 @@
 #include "Moves/MoveDamageCategory.h"
 #include "RetroLib/Ranges/Views/AnyView.h"
 #include "RetroLib/Ranges/Views/Generator.h"
-#include "UObject/Interface.h"
 #include "UE5Coro.h"
+#include "UObject/Interface.h"
 
 #include "BattleMove.generated.h"
 

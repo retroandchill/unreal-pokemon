@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BattlerController.h"
 #include "Battle/Actions/BattleActionUseMove.h"
+#include "BattlerController.h"
 #include "UObject/Object.h"
 
 #include "AIBattlerController.generated.h"

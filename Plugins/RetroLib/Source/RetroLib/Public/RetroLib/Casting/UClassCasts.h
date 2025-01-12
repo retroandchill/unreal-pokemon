@@ -197,8 +197,7 @@ namespace Retro {
                 // Trivial case, U is derived from T, so we know with certainty that this is valid
                 return true;
             } else {
-                check(Value._getUObject() != nullptr)
-                ;
+                check(Value._getUObject() != nullptr) ;
                 return Value._getUObject()->template IsA<T>();
             }
         }
@@ -230,8 +229,7 @@ namespace Retro {
                 // Trivial case, U is derived from T, so we know with certainty that this is valid
                 return true;
             } else {
-                check(Value._getUObject() != nullptr)
-                ;
+                check(Value._getUObject() != nullptr) ;
                 return Value._getUObject()->template Implements<typename T::UClassType>();
             }
         }

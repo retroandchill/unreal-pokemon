@@ -4,27 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DeveloperSettings.h"
+
 #include "PokemonMessageSettings.generated.h"
 
 USTRUCT(BlueprintType)
 struct POKEMONUI_API FItemMessages {
     GENERATED_BODY()
-
-    
 };
 
 /**
- * 
+ *
  */
 UCLASS(Config = Game, DefaultConfig, DisplayName = "Pokémon Standard Messages")
 class POKEMONUI_API UPokemonMessageSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
-public:
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, DisplayName = "Already Holding Item (Vowel)", Category = HoldItems)
+  public:
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, DisplayName = "Already Holding Item (Vowel)",
+              Category = HoldItems)
     FText AlreadyHoldingItemVowel = NSLOCTEXT("PokemonUI", "HoldingItemVowel", "{Pkmn} is already holding an {Item}.");
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, DisplayName = "Already Holding Item (Consonant)", Category = HoldItems)
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, DisplayName = "Already Holding Item (Consonant)",
+              Category = HoldItems)
     FText AlreadyHoldingItemConsonant =
         NSLOCTEXT("PokemonUI", "HoldingItemConsonant", "{Pkmn} is already holding a {Item}.");
 
@@ -42,13 +43,15 @@ public:
     FText TookItemMessage = NSLOCTEXT("PokemonUI", "TookItemMessage", "Received the {Item} from {Pkmn}.");
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = HoldItems)
-    FText CannotTakeItemMessage = NSLOCTEXT("PokemonUI", "CannotTakeItemMessage", "The Bag is full. The Pokémon's item could not be removed.");
+    FText CannotTakeItemMessage =
+        NSLOCTEXT("PokemonUI", "CannotTakeItemMessage", "The Bag is full. The Pokémon's item could not be removed.");
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Moves)
     FText LearnedMoveMessage = NSLOCTEXT("PokemonUI", "LearnedMoveMessage", "{Pkmn} learned {Move}!");
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Moves)
-    FText TryingToLearnMessage = NSLOCTEXT("PokemonUI", "TryingToLearnMessage", "{Pkmn} wants to learn {Move}, but it already knows {Count} moves.");
+    FText TryingToLearnMessage = NSLOCTEXT("PokemonUI", "TryingToLearnMessage",
+                                           "{Pkmn} wants to learn {Move}, but it already knows {Count} moves.");
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Moves)
     FText ForgetMovePrompt = NSLOCTEXT("PokemonUI", "ForgetMovePrompt", "Should {Pkmn} forget a move to learn {Move}?");

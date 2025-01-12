@@ -32,12 +32,14 @@ class POKEMONBATTLE_API UInitiateBattle : public UBlueprintCoroutineActionBase {
      * @param Transition
      * @return The created async node
      */
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Battle, meta = (WorldContext = "WorldContextObject"))
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Battle,
+              meta = (WorldContext = "WorldContextObject"))
     static UInitiateBattle *InitiateBattle(const UObject *WorldContextObject, const FBattleInfo &BattleInfo,
                                            TSubclassOf<ABattleTransitionActor> Transition);
 
-    protected:
-    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;;
+  protected:
+    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
+    ;
 
   private:
     /**

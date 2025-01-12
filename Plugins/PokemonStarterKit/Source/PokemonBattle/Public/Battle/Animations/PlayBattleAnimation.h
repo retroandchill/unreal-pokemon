@@ -24,10 +24,11 @@ class POKEMONBATTLE_API UPlayBattleAnimation : public UBlueprintCoroutineActionB
      * @param Animation The animation to play
      * @return The created animation node
      */
-    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Battle|Animations", meta = (WorldContext = WorldContext))
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Battle|Animations",
+              meta = (WorldContext = WorldContext))
     static UPlayBattleAnimation *PlayBattleAnimation(const TScriptInterface<IBattleAnimation> &Animation);
 
-protected:
+  protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
 
   private:

@@ -21,7 +21,7 @@ UE5Coro::TCoroutine<> UPlayBattlerHPAnimation::ExecuteCoroutine(FForceLatentCoro
         OnSelected.Broadcast();
         co_return;
     }
-    
+
     co_await Panel->AnimateHP(MaxDuration);
     OnSelected.Broadcast();
 }

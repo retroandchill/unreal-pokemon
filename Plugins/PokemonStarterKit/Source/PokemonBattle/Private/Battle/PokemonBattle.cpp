@@ -3,17 +3,17 @@
 #include "Battle/PokemonBattle.h"
 #include "Algo/NoneOf.h"
 #include "Battle/Actions/BattleAction.h"
+#include "Battle/Animations/BattleAnimation.h"
 #include "Battle/Animations/BattleSequencer.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/BattleAbilitySystemComponent.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Display/BattleHUD.h"
 #include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "Battle/Events/TargetedEvents.h"
 #include "Battle/Tags.h"
-#include "Battle/Animations/BattleAnimation.h"
-#include "Battle/Display/BattleHUD.h"
 #include "Battle/Transitions/BattleInfo.h"
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
 #include "RetroLib/Casting/DynamicCast.h"
@@ -73,7 +73,8 @@ UE5Coro::TCoroutine<> APokemonBattle::DisplaySideSendOutAnimation(int32 Index) {
     if (auto SendOutText = Sides[Index]->GetSendOutText(); SendOutText.IsSet()) {
         co_await Dispatcher->DisplayMessage(std::move(*SendOutText));
     }
-    co_await IBattleAnimation::PlayAnimation(Index == OpponentSideIndex ? GetOpponentSendOutAnimation() : GetPlayerSendOutAnimation());
+    co_await IBattleAnimation::PlayAnimation(Index == OpponentSideIndex ? GetOpponentSendOutAnimation()
+                                                                        : GetPlayerSendOutAnimation());
 }
 
 UE5Coro::TCoroutine<EBattleResult> APokemonBattle::MainBattleLoop() {
@@ -89,8 +90,9 @@ UE5Coro::TCoroutine<EBattleResult> APokemonBattle::MainBattleLoop() {
     co_return co_await DecideBattle(*Result);
 }
 
-UE5Coro::TCoroutine<EBattleResult> APokemonBattle::ConductBattle(APlayerController *PlayerController, FForceLatentCoroutine) {
-    
+UE5Coro::TCoroutine<EBattleResult> APokemonBattle::ConductBattle(APlayerController *PlayerController,
+                                                                 FForceLatentCoroutine) {
+
     Phase = EBattlePhase::Setup;
     check(BattlePawn != nullptr && PlayerController != nullptr)
     StoredPlayerPawn = PlayerController->GetPawnOrSpectator();
@@ -99,15 +101,15 @@ UE5Coro::TCoroutine<EBattleResult> APokemonBattle::ConductBattle(APlayerControll
     co_await Dispatcher->DisplayMessage(GetBattleIntroMessage());
     co_await DisplaySideSendOutAnimation(OpponentSideIndex);
     co_await DisplaySideSendOutAnimation(PlayerSideIndex);
-    
+
     co_await StartBattle();
-    
+
     auto MainLoop = MainBattleLoop();
     auto Interrupt = [](UE5Coro::TLatentContext<APokemonBattle> This) -> UE5Coro::TCoroutine<EBattleResult> {
         co_return co_await TFuture<EBattleResult>(This->OnBattleEnd);
     }(this);
     auto Result = co_await Race(MainLoop, Interrupt) == 0 ? MainLoop.GetResult() : Interrupt.GetResult();
-    
+
     co_await IBattleAnimation::PlayAnimation(GetBattleEndAnimation(Result));
 
     PlayerController->Possess(StoredPlayerPawn);
@@ -119,8 +121,8 @@ UE5Coro::TCoroutine<> APokemonBattle::StartBattle() {
     co_await OnBattlersEnteringBattle(GetActiveBattlers());
 }
 
-UE5Coro::TCoroutine<> APokemonBattle::OnBattlersEnteringBattle(
-    Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) {
+UE5Coro::TCoroutine<>
+APokemonBattle::OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) {
     // clang-format off
     auto Sorted = std::move(Battlers) |
                   Retro::Ranges::Views::Filter(&IBattler::IsNotFainted) |
@@ -272,7 +274,7 @@ UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::ProcessTurn() {
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
     ActionsCompletePromise = MakeShared<TFutureState<int32>>();
-    
+
     for (auto Battler : GetActiveBattlers()) {
         auto BattlerId = Battler->GetInternalId();
         CurrentActionCount.Add(BattlerId, 0);
@@ -283,7 +285,7 @@ UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::ProcessTurn() {
     co_await TFuture<void>(ActionsCompletePromise);
 
     co_await ActionProcessing();
-        
+
     co_return co_await EndTurn();
 }
 

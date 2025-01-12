@@ -31,8 +31,9 @@ bool UBattleItemEffect::ShouldAbilityRespondToEvent(const FGameplayAbilityActorI
 }
 
 UE5Coro::GAS::FAbilityCoroutine UBattleItemEffect::ExecuteAbility(FGameplayAbilitySpecHandle Handle,
-    const FGameplayAbilityActorInfo *ActorInfo, FGameplayAbilityActivationInfo ActivationInfo,
-    const FGameplayEventData *TriggerEventData) {
+                                                                  const FGameplayAbilityActorInfo *ActorInfo,
+                                                                  FGameplayAbilityActivationInfo ActivationInfo,
+                                                                  const FGameplayEventData *TriggerEventData) {
     ActorInfo->AbilitySystemComponent->AddLooseGameplayTag(Pokemon::Battle::Items::UsingItem);
 
     check(TriggerEventData != nullptr)

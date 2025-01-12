@@ -74,17 +74,18 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
     bool IsTrainerBattle_Implementation() const override;
-    UE5Coro::TCoroutine<EBattleResult> ConductBattle(APlayerController *PlayerController, FForceLatentCoroutine = {}) override;
+    UE5Coro::TCoroutine<EBattleResult> ConductBattle(APlayerController *PlayerController,
+                                                     FForceLatentCoroutine = {}) override;
 
-private:
+  private:
     UE5Coro::TCoroutine<> DisplaySideSendOutAnimation(int32 Index);
     UE5Coro::TCoroutine<EBattleResult> MainBattleLoop();
 
-public:
+  public:
     UE5Coro::TCoroutine<> StartBattle() override;
 
     UE5Coro::TCoroutine<> OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers);
-    
+
     void QueueAction(TUniquePtr<IBattleAction> &&Action) override;
     bool ActionSelectionFinished() const override;
 

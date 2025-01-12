@@ -11,10 +11,9 @@ namespace Pokemon::UI {
           bWrapAround(bWrapAround) {
     }
 
-    UE5Coro::TCoroutine<> ProgressBarAnimation(UE5Coro::TLatentContext<const UObject> Context,
-                                                               float StartPercent, float EndPercent, float Duration,
-                                                               FSetNewPercent OnUpdate, bool bShouldWrap, FSimpleDelegate
-                                                               OnWrapAround) {
+    UE5Coro::TCoroutine<> ProgressBarAnimation(UE5Coro::TLatentContext<const UObject> Context, float StartPercent,
+                                               float EndPercent, float Duration, FSetNewPercent OnUpdate,
+                                               bool bShouldWrap, FSimpleDelegate OnWrapAround) {
         if (Duration == 0.f) {
             OnUpdate.ExecuteIfBound(EndPercent);
             co_return;
@@ -33,4 +32,4 @@ namespace Pokemon::UI {
             OnUpdate.ExecuteIfBound(NewPercent);
         });
     }
-}
+} // namespace Pokemon::UI

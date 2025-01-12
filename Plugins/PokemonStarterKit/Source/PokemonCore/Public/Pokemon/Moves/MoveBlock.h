@@ -7,8 +7,8 @@
 #include "Moves/MoveData.h"
 #include "Pokemon/PokemonDTO.h"
 #include "RetroLib/Ranges/Views/Generator.h"
-#include "UObject/Interface.h"
 #include "UE5Coro.h"
+#include "UObject/Interface.h"
 
 #include "MoveBlock.generated.h"
 

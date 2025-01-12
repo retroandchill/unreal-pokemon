@@ -16,10 +16,10 @@ UCLASS()
 class POKEMONITEMS_API UFieldItemEffectDirect : public UFieldItemEffect {
     GENERATED_BODY()
 
-public:
+  public:
     UE5Coro::TCoroutine<bool> UseItem(const FItem &Item, int32 Quantity);
-    
-protected:
+
+  protected:
     UFUNCTION(BlueprintImplementableEvent, Category = Items)
     void Use(const FItem &Item, int32 Quantity);
 };
