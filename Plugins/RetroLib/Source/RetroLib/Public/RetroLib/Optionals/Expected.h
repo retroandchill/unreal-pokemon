@@ -20,40 +20,40 @@ namespace Retro {
         template <typename T = E>
             requires (!std::same_as<std::remove_cvref_t<T>, TUnexpected>) && (!std::same_as<
                          std::remove_cvref_t<T>, std::in_place_t>) && std::constructible_from<E, T>
-        constexpr explicit TUnexpected(T &&Arg) : Value(std::forward<T>(Arg)) {
+        constexpr explicit TUnexpected(T &&Arg) : Error(std::forward<T>(Arg)) {
         }
 
         template <typename... A>
             requires std::constructible_from<E, A...>
-        constexpr explicit TUnexpected(std::in_place_t, A &&... Arg) : Value(std::forward<A>(Arg)...) {
+        constexpr explicit TUnexpected(std::in_place_t, A &&... Arg) : Error(std::forward<A>(Arg)...) {
         }
 
         template <typename U, typename... A>
             requires std::constructible_from<E, std::initializer_list<U> &, A...>
-        constexpr explicit TUnexpected(std::in_place_t, std::initializer_list<U> InitializerList, A &&... Arg) : Value(
+        constexpr explicit TUnexpected(std::in_place_t, std::initializer_list<U> InitializerList, A &&... Arg) : Error(
             InitializerList, std::forward<A>(Arg)...) {
         }
 
         constexpr E &GetError() & noexcept {
-            return Value;
+            return Error;
         }
 
         constexpr const E &GetError() const & noexcept {
-            return Value;
+            return Error;
         }
 
         constexpr E &&GetError() && noexcept {
-            return std::move(Value);
+            return std::move(Error);
         }
 
         constexpr const E &&GetError() const && noexcept {
-            return std::move(Value);
+            return std::move(Error);
         }
 
         constexpr void Swap(TUnexpected &Other) noexcept(std::is_nothrow_swappable_v<E>) requires std::is_swappable_v<
             E> {
             using std::swap;
-            swap(Value, Other.Value);
+            swap(Error, Other.Error);
         }
 
         constexpr friend void swap(TUnexpected &A, TUnexpected &B) noexcept(std::is_nothrow_swappable_v<E>) requires
@@ -69,7 +69,7 @@ namespace Retro {
         }
 
     private:
-        E Value;
+        E Error;
     };
 
     RETROLIB_EXPORT template <typename E>
@@ -178,7 +178,7 @@ namespace Retro {
     template <NonVoidDestructible T, std::destructible E>
     class TExpected {
         template <NonVoidDestructible U, std::destructible G>
-        friend TExpected<U, G>;
+        friend class TExpected;
 
     public:
         using ValueType = T;
@@ -197,7 +197,7 @@ namespace Retro {
 
         constexpr TExpected(const TExpected &Other) requires
             std::copy_constructible<T> && std::copy_constructible<E> : IsValid(Other.IsValid) {
-            if (Other.IsValid()) {
+            if (Other.IsValid) {
                 std::construct_at(std::addressof(Value), Other.Value);
             } else {
                 std::construct_at(std::addressof(Error), Other.Error);
@@ -223,7 +223,7 @@ namespace Retro {
             requires ExpectedConstructibleFromOther<T, E, U, G, const U &, const G &>
         constexpr explicit(!std::convertible_to<const U &, T> || std::convertible_to<const G &, E>) TExpected(
             const TExpected<G, U> &Other) {
-            if (Other.HasValue()) {
+            if (Other.IsSet()) {
                 std::construct_at(std::addressof(Value), Other.Value);
             } else {
                 std::construct_at(std::addressof(Error), Other.Error);
@@ -234,7 +234,7 @@ namespace Retro {
             requires ExpectedConstructibleFromOther<T, E, U, G, U, G>
         constexpr explicit(!std::convertible_to<const U &, T> || std::convertible_to<const G &, E>) TExpected(
             TExpected<G, U> &&Other) {
-            if (Other.HasValue()) {
+            if (Other.IsSet()) {
                 std::construct_at(std::addressof(Value), std::move(Other.Value));
             } else {
                 std::construct_at(std::addressof(Error), std::move(Other.Error));
@@ -394,10 +394,10 @@ namespace Retro {
                       std::is_nothrow_move_constructible_v<E>)
         constexpr TExpected &operator=(TUnexpected<G> &&Other) {
             if (IsValid) {
-                ReinitExpected(Error, Value, std::move(Other.Error));
+                ReinitExpected(Error, Value, std::move(Other.GetError()));
                 IsValid = false;
             } else {
-                Error = std::move(Other.Error);
+                Error = std::move(Other.GetError());
             }
 
             return *this;
@@ -506,7 +506,7 @@ namespace Retro {
             return std::move(Value);
         }
 
-        [[nodiscard]] constexpr bool HasValue() const noexcept {
+        [[nodiscard]] constexpr bool IsSet() const noexcept {
             return IsValid;
         }
 
@@ -565,23 +565,23 @@ namespace Retro {
         template <typename U, typename G>
             requires (!std::is_void_v<U>) && EqualityComparable<T, U> && EqualityComparable<E, G>
         friend constexpr bool operator==(const TExpected &LHS, const TExpected<U, G> &RHS) noexcept {
-            if (LHS.HasValue() != RHS.HasValue()) {
+            if (LHS.IsSet() != RHS.IsSet()) {
                 return false;
             }
 
-            return LHS.HasValue() ? *LHS == *RHS : LHS.GetError() == RHS.GetError();
+            return LHS.IsSet() ? *LHS == *RHS : LHS.GetError() == RHS.GetError();
         }
 
         template <typename U>
             requires (!IsExpected<U>) && EqualityComparable<T, U>
         friend constexpr bool operator==(const TExpected &LHS, const U &RHS) {
-            return LHS.HasValue() && *LHS == RHS;
+            return LHS.IsSet() && *LHS == RHS;
         }
 
         template <typename G>
             requires EqualityComparable<E, G>
         friend constexpr bool operator==(const TExpected &LHS, const TUnexpected<G> &RHS) {
-            return !LHS.HasValue() && LHS.Error() == RHS;
+            return !LHS.IsSet() && LHS.Error() == RHS;
         }
 
         friend constexpr void swap(TExpected &LHS, TExpected &RHS) noexcept(noexcept(LHS.Swap(RHS))) {
@@ -600,7 +600,7 @@ namespace Retro {
     template <std::destructible E>
     class TExpected<void, E> {
         template <NonVoidDestructible U, std::destructible G>
-        friend TExpected<U, G>;
+        friend class TExpected;
 
     public:
         using ValueType = void;
@@ -665,7 +665,7 @@ namespace Retro {
         constexpr explicit(!std::convertible_to<const G &, E>) TExpected(const TUnexpected<G> &Other) : IsValid(
             Other.IsValid) {
             if (!Other.IsValid) {
-                std::construct_at(std::addressof(Error), Other.Error);
+                std::construct_at(std::addressof(Error), Other.GetError());
             }
         }
 
@@ -673,7 +673,7 @@ namespace Retro {
             requires std::constructible_from<E, G>
         constexpr explicit(!std::convertible_to<G, E>) TExpected(TUnexpected<G> &&Other) : IsValid(Other.IsValid) {
             if (!Other.IsValid) {
-                std::construct_at(std::addressof(Error), std::move(Other.Error));
+                std::construct_at(std::addressof(Error), std::move(Other.GetError()));
             }
         }
 
@@ -743,7 +743,7 @@ namespace Retro {
             requires std::constructible_from<E, const G &> && std::assignable_from<E &, const G &>
         constexpr TExpected &operator=(const TUnexpected<G> &Other) {
             if (IsValid) {
-                std::construct_at(std::addressof(Error), Other.Error);
+                std::construct_at(std::addressof(Error), Other.GetError());
                 IsValid = false;
             } else {
                 Error = Other.Error;
@@ -756,7 +756,7 @@ namespace Retro {
             requires std::constructible_from<E, G> && std::assignable_from<E &, G>
         constexpr TExpected &operator=(TUnexpected<G> &&Other) {
             if (IsValid) {
-                std::construct_at(std::addressof(Error), std::move(Other.Error));
+                std::construct_at(std::addressof(Error), std::move(Other.GetError()));
                 IsValid = false;
             } else {
                 Error = std::move(Other.Error);
@@ -791,7 +791,7 @@ namespace Retro {
             }
         }
 
-        [[nodiscard]] constexpr bool HasValue() const noexcept {
+        [[nodiscard]] constexpr bool IsSet() const noexcept {
             return IsValid;
         }
 
@@ -834,17 +834,17 @@ namespace Retro {
         template <typename U, typename G>
             requires std::is_void_v<U> && EqualityComparable<E, G>
         friend constexpr bool operator==(const TExpected &LHS, const TExpected<U, G> &RHS) {
-            if (LHS.HasValue() != RHS.HasValue()) {
+            if (LHS.IsSet() != RHS.IsSet()) {
                 return false;
             }
 
-            return LHS.HasValue() || LHS.GetError() == RHS.GetError();
+            return LHS.IsSet() || LHS.GetError() == RHS.GetError();
         }
 
         template <typename G>
             requires EqualityComparable<E, G>
         friend constexpr bool operator==(const TExpected &LHS, const G &RHS) {
-            return !LHS.HasValue() && LHS.Error() == RHS.Error();
+            return !LHS.IsSet() && LHS.Error() == RHS.Error();
         }
 
         friend constexpr void swap(TExpected &LHS, TExpected &RHS) noexcept {
