@@ -16,6 +16,21 @@
 
 namespace Retro::Optionals {
 
+    RETROLIB_EXPORT template <OptionalType O>
+    struct TConstructEmpty {
+        constexpr O operator()() const requires std::is_default_constructible_v<O> {
+            return O();
+        }
+    };
+
+    RETROLIB_EXPORT template <OptionalType O>
+    constexpr TConstructEmpty<O> ConstructEmpty;
+
+    template <typename O>
+    concept Filterable = requires(O&& Optional) {
+        { Retro::Optionals::ConstructEmpty<std::remove_cvref_t<O>>() } -> std::same_as<std::remove_cvref_t<O>>;
+    };
+
     struct FFilterInvoker {
         /**
          * @brief Applies the given functor to the value within an optional-like object and returns the optional based
@@ -35,19 +50,20 @@ namespace Retro::Optionals {
          * with its value preserved. Otherwise, an empty optional-like object of the same type is returned.
          */
         template <OptionalType O, typename F>
-            requires std::is_invocable_r_v<bool, F, TCommonReference<O>>
+            requires std::is_invocable_r_v<bool, F, TCommonReference<O>> && Filterable<O>
         constexpr auto operator()(O &&Optional, F &&Functor) const {
             if constexpr (std::is_lvalue_reference_v<O>) {
                 using FilteredType = decltype(MakeOptionalReference(std::forward<O>(Optional)));
+                static_assert(Filterable<FilteredType>);
                 return HasValue(std::forward<O>(Optional)) &&
                                std::invoke(std::forward<F>(Functor), Get<O>(std::forward<O>(Optional)))
                            ? MakeOptionalReference(std::forward<O>(Optional))
-                           : FilteredType();
+                           : ConstructEmpty<FilteredType>();
             } else {
                 return HasValue(std::forward<O>(Optional)) &&
                                std::invoke(std::forward<F>(Functor), Get<O>(std::forward<O>(Optional)))
                            ? O(std::forward<O>(Optional))
-                           : O();
+                           : ConstructEmpty<O>();
             }
         }
     };
