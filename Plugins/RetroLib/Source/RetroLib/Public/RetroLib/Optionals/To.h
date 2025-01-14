@@ -50,7 +50,7 @@ namespace Retro::Optionals {
     }
 
     RETROLIB_EXPORT template <ExpectedType T, OptionalType F, typename... A>
-        requires std::convertible_to<TTypeParam<F>, TTypeParam<T>> && CanCreateKnownExpected<T, A...> && (VoidOptional<T> == VoidOptional<F>)
+        requires std::convertible_to<TTypeParam<F>, TTypeParam<T>> && (!ExpectedType<F>) && CanCreateKnownExpected<T, A...> && (VoidOptional<T> == VoidOptional<F>)
     constexpr T To(F &&Optional, A&&... Args) {
         if (HasValue(Optional)) {
             if constexpr (VoidOptional<T>) {
@@ -61,6 +61,20 @@ namespace Retro::Optionals {
         }
 
         return CreateKnownExpected<T>(std::forward<A>(Args)...);
+    }
+
+    RETROLIB_EXPORT template <ExpectedType T, ExpectedType F>
+        requires std::convertible_to<TTypeParam<F>, TTypeParam<T>>
+    constexpr T To(F &&Optional) {
+        if (HasValue(Optional)) {
+            if constexpr (VoidOptional<T>) {
+                return T();
+            } else {
+                return T(Get(std::forward<F>(Optional)));
+            }
+        }
+
+        return PassError<T>(GetError(std::forward<F>(Optional)));
     }
 
     /**

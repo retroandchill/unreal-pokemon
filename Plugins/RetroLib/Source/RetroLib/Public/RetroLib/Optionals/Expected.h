@@ -73,7 +73,7 @@ namespace Retro {
     };
 
     RETROLIB_EXPORT template <typename E>
-    TUnexpected(E) -> TUnexpected<E>;
+    TUnexpected(E&&) -> TUnexpected<std::conditional_t<std::is_lvalue_reference_v<E>, E&&, E>>;
 
     RETROLIB_EXPORT template <typename E>
     class TBadExpectedAccess;
@@ -662,14 +662,12 @@ namespace Retro {
 
         template <typename G>
             requires std::constructible_from<E, const G &>
-        constexpr explicit(!std::convertible_to<const G &, E>) TExpected(const TUnexpected<G> &Other) : IsValid(false) {
-            std::construct_at(std::addressof(Error), Other.GetError());
+        constexpr explicit(!std::convertible_to<const G &, E>) TExpected(const TUnexpected<G> &Other) : IsValid(false), Error(Other.GetError()) {
         }
 
         template <typename G>
             requires std::constructible_from<E, G>
-        constexpr explicit(!std::convertible_to<G, E>) TExpected(TUnexpected<G> &&Other) : IsValid(false) {
-           std::construct_at(std::addressof(Error), std::move(Other.GetError()));
+        constexpr explicit(!std::convertible_to<G, E>) TExpected(TUnexpected<G> &&Other) : IsValid(false), Error(std::move(Other.GetError())) {
         }
 
         constexpr explicit TExpected(std::in_place_t) noexcept {
@@ -763,6 +761,7 @@ namespace Retro {
         constexpr void Emplace() noexcept {
             if (!IsValid) {
                 std::destroy_at(std::addressof(Error));
+                IsValid = true;
             }
         }
 

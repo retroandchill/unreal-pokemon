@@ -72,11 +72,11 @@ TEST_CASE_NAMED(FTestExpectedOperations, "Unit Tests::RetroLib::Optionals::Expec
 
 TEST_CASE_NAMED(FTestExpectedTransform, "Unit Tests::RetroLib::Optionals::Expected::Pipes::Transform", "[RetroLib][Optionals]") {
     SECTION("Can transform the expected using value types") {
-        Retro::TExpected<float, std::string> TestValue = 1.5;
+        Retro::TExpected<int, std::string> TestValue = 15;
         static_assert(Retro::Optionals::OptionalType<Retro::TExpected<float, std::string>>);
-        auto Transformed = TestValue | Retro::Optionals::Transform([](float V) { return std::to_string(V); });
+        auto Transformed = TestValue | Retro::Optionals::Transform([](int V) { return std::to_string(V); });
         REQUIRE(Transformed.IsSet());
-        CHECK(*Transformed == "1.5");
+        CHECK(*Transformed == "15");
     }
 
     SECTION("Can pass the error of a missing value along") {
@@ -139,7 +139,7 @@ TEST_CASE_NAMED(FTestExpectedIfPresent, "Unit Tests::RetroLib::Optionals::Expect
     }
 
     SECTION("Can operate on an expected with a void type") {
-        Retro::TExpected<void, std::string> TestValue(Retro::Unexpect, "Expected value to be less than 1.5");
+        Retro::TExpected<void, std::string> TestValue;
         bool Triggered = false;
         TestValue | Retro::Optionals::IfPresent([&Triggered] { Triggered = true; });
         CHECK(Triggered);
@@ -169,7 +169,7 @@ TEST_CASE_NAMED(FTestExpectedIfPresentOrElse, "Unit Tests::RetroLib::Optionals::
     }
 
     SECTION("Can operate on an expected with a void type") {
-        Retro::TExpected<void, std::string> TestValue(Retro::Unexpect, "Expected value to be less than 1.5");
+        Retro::TExpected<void, std::string> TestValue;
         bool Triggered = false;
         TestValue | Retro::Optionals::IfPresentOrElse([&Triggered] { Triggered = true; }, [] {});
         CHECK(Triggered);
