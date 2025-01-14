@@ -662,19 +662,14 @@ namespace Retro {
 
         template <typename G>
             requires std::constructible_from<E, const G &>
-        constexpr explicit(!std::convertible_to<const G &, E>) TExpected(const TUnexpected<G> &Other) : IsValid(
-            Other.IsValid) {
-            if (!Other.IsValid) {
-                std::construct_at(std::addressof(Error), Other.GetError());
-            }
+        constexpr explicit(!std::convertible_to<const G &, E>) TExpected(const TUnexpected<G> &Other) : IsValid(false) {
+            std::construct_at(std::addressof(Error), Other.GetError());
         }
 
         template <typename G>
             requires std::constructible_from<E, G>
-        constexpr explicit(!std::convertible_to<G, E>) TExpected(TUnexpected<G> &&Other) : IsValid(Other.IsValid) {
-            if (!Other.IsValid) {
-                std::construct_at(std::addressof(Error), std::move(Other.GetError()));
-            }
+        constexpr explicit(!std::convertible_to<G, E>) TExpected(TUnexpected<G> &&Other) : IsValid(false) {
+           std::construct_at(std::addressof(Error), std::move(Other.GetError()));
         }
 
         constexpr explicit TExpected(std::in_place_t) noexcept {

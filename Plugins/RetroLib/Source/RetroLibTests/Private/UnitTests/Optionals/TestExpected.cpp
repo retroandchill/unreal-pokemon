@@ -252,6 +252,14 @@ TEST_CASE_NAMED(FTestExpectedTo, "Unit Tests::RetroLib::Optionals::Expected::Pip
         CHECK(AsExpected.GetError() == "Invalid value");
     }
 
+    SECTION("Can convert a void expected to another void expected keeping the error") {
+        Retro::TExpected<void, std::string> TestValue(Retro::Unexpect, "Invalid value");
+        auto AsExpected = TestValue |
+            Retro::Optionals::To<Retro::TExpected, std::string_view>();
+        REQUIRE(!AsExpected.IsSet())
+        CHECK(AsExpected.GetError() == "Invalid value");
+    }
+
     SECTION("Can convert an optional to an expected, constructing the error type if needed") {
         std::optional Optional = 4;
         auto AsExpected = Optional |
