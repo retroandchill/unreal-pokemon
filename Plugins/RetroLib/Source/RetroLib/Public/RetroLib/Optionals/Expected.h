@@ -544,14 +544,22 @@ namespace Retro {
 
         template <typename U>
             requires std::convertible_to<T, U> && std::is_copy_constructible_v<T>
-        constexpr T Get(U&& Default) const & {
+        constexpr T Get(U&& Default) const & noexcept {
             return IsValid ? Value : std::forward<U>(Default);
         }
 
         template <typename U>
             requires std::convertible_to<T, U> && std::is_move_constructible_v<T>
-        constexpr T Get(U&& Default) && {
+        constexpr T Get(U&& Default) && noexcept {
             return IsValid ? std::move(Value) : std::forward<U>(Default);
+        }
+
+        constexpr T* GetPtrOrNull() noexcept {
+            return IsValid ? std::addressof(Value) : nullptr;
+        }
+
+        constexpr const T* GetPtrOrNull() const noexcept {
+            return IsValid ? std::addressof(Value) : nullptr;
         }
 
         constexpr E &GetError() & noexcept {
@@ -584,6 +592,14 @@ namespace Retro {
             requires std::convertible_to<G, E> && std::is_move_constructible_v<E>
         constexpr E GetError(G&& Default) && {
             return !IsValid ? std::forward<G>(Default) : std::move(Error);
+        }
+
+        constexpr E* GetErrorPtrOrNull() noexcept {
+            return !IsValid ? nullptr : std::addressof(Error);
+        }
+
+        constexpr const E* GetErrorPtrOrNull() const noexcept {
+            return !IsValid ? nullptr : std::addressof(Error);
         }
 
         template <typename U, typename G>
@@ -859,6 +875,14 @@ namespace Retro {
             requires std::convertible_to<G, E> && std::is_move_constructible_v<E>
         constexpr E GetError(G&& Default) && {
             return !IsValid ? std::forward<G>(Default) : std::move(Error);
+        }
+
+        constexpr E* GetErrorPtrOrNull() noexcept {
+            return !IsValid ? nullptr : std::addressof(Error);
+        }
+
+        constexpr const E* GetErrorPtrOrNull() const noexcept {
+            return !IsValid ? nullptr : std::addressof(Error);
         }
 
         template <typename U, typename G>

@@ -5,6 +5,7 @@
 #include "RetroLib/Optionals/IfPresentOrElse.h"
 #include "RetroLib/Optionals/To.h"
 #include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Optionals/TransformError.h"
 
 #if RETROLIB_WITH_MODULES
 import std;
@@ -34,6 +35,7 @@ TEST_CASE_NAMED(FTestExpectedOperations, "Unit Tests::RetroLib::Optionals::Expec
 
         auto Copy = TestValue;
         CHECK(TestValue == Copy)
+        CHECK(Copy.GetPtrOrNull() != TestValue.GetPtrOrNull())
 
         Copy = 23;
         CHECK_FALSE(TestValue == Copy);
@@ -290,5 +292,23 @@ TEST_CASE_NAMED(FTestExpectedTo, "Unit Tests::RetroLib::Optionals::Expected::Pip
             Retro::Optionals::To<Retro::TExpected, std::string>([] { return "Constructed error"; });
         REQUIRE(!AsExpected.IsSet())
         CHECK(AsExpected.GetError() == "Constructed error");
+    }
+}
+
+TEST_CASE_NAMED(FTestTransformError, "Unit Tests::RetroLib::Optionals::TransformError", "[RetroLib][Optionals]") {
+    SECTION("Can transform the error of an expected") {
+        Retro::TExpected<int, std::string> TestValue(Retro::Unexpect, "Invalid value");
+        auto Transformed = TestValue |
+            Retro::Optionals::TransformError([](const std::string &V) { return V.size(); });
+        REQUIRE(!Transformed.IsSet())
+        CHECK(Transformed.GetError() == 9);
+    }
+
+    SECTION("Can transform the error of an expected") {
+        Retro::TExpected<int, std::string> TestValue(3);
+        auto Transformed = TestValue |
+            Retro::Optionals::TransformError([](const std::string &V) { return V.size(); });
+        REQUIRE(Transformed.IsSet())
+        CHECK(*Transformed == 3);
     }
 }
