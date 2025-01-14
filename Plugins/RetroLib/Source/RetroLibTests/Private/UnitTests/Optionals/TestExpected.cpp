@@ -1,6 +1,9 @@
 ﻿#include "TestAdapter.h"
 #include "RetroLib/Optionals/AndThen.h"
+#include "RetroLib/Optionals/Error.h"
+#include "RetroLib/Optionals/ErrorPtrOrNull.h"
 #include "RetroLib/Optionals/Filter.h"
+#include "RetroLib/Optionals/IfNotPresent.h"
 #include "RetroLib/Optionals/IfPresent.h"
 #include "RetroLib/Optionals/IfPresentOrElse.h"
 #include "RetroLib/Optionals/To.h"
@@ -163,6 +166,15 @@ TEST_CASE_NAMED(FTestExpectedIfPresent, "Unit Tests::RetroLib::Optionals::Expect
         TestValue | Retro::Optionals::IfPresent([&Triggered] { Triggered = true; });
         CHECK(Triggered);
     }
+
+    SECTION("Can execute if a value is not present") {
+        int Sum = 0;
+        Retro::TExpected<void, int> Value1;
+        Value1 | Retro::Optionals::IfNotPresent([&Sum](int Value) { Sum += Value; });
+        Retro::TExpected<void, int> Value2 = Retro::TUnexpected(23);
+        Value2 | Retro::Optionals::IfNotPresent([&Sum](int Value) { Sum += Value; });
+        CHECK(Sum == 23);
+    }
 }
 
 TEST_CASE_NAMED(FTestExpectedIfPresentOrElse, "Unit Tests::RetroLib::Optionals::Expected::Pipes::IfPresentOrElse", "[RetroLib][Optionals]") {
@@ -310,5 +322,16 @@ TEST_CASE_NAMED(FTestTransformError, "Unit Tests::RetroLib::Optionals::Transform
             Retro::Optionals::TransformError([](const std::string &V) { return V.size(); });
         REQUIRE(Transformed.IsSet())
         CHECK(*Transformed == 3);
+    }
+}
+
+TEST_CASE_NAMED(FTestExpectedErrorGetter, "Unit Tests::RetroLib::Optionals::Expected::Error", "[RetroLib][Optionals]") {
+    SECTION("Can get the error of an expected") {
+        Retro::TExpected<int, std::string> TestValue(Retro::Unexpect, "Invalid value");
+        REQUIRE(Retro::Optionals::ErrorPtrOrNull(TestValue) != nullptr)
+        CHECK(Retro::Optionals::Error(TestValue) == "Invalid value")
+
+        TestValue.Emplace(10);
+        CHECK(Retro::Optionals::ErrorPtrOrNull(TestValue) == nullptr)
     }
 }
