@@ -585,21 +585,21 @@ namespace Retro {
         template <typename G>
             requires std::convertible_to<G, E> && std::is_copy_constructible_v<E>
         constexpr E GetError(G&& Default) const & {
-            return !IsValid ? std::forward<G>(Default) : Error;
+            return IsValid ? std::forward<G>(Default) : Error;
         }
 
         template <typename G>
             requires std::convertible_to<G, E> && std::is_move_constructible_v<E>
         constexpr E GetError(G&& Default) && {
-            return !IsValid ? std::forward<G>(Default) : std::move(Error);
+            return IsValid ? std::forward<G>(Default) : std::move(Error);
         }
 
         constexpr E* GetErrorPtrOrNull() noexcept {
-            return !IsValid ? nullptr : std::addressof(Error);
+            return IsValid ? nullptr : std::addressof(Error);
         }
 
         constexpr const E* GetErrorPtrOrNull() const noexcept {
-            return !IsValid ? nullptr : std::addressof(Error);
+            return IsValid ? nullptr : std::addressof(Error);
         }
 
         template <typename U, typename G>
@@ -868,21 +868,21 @@ namespace Retro {
         template <typename G>
             requires std::convertible_to<G, E> && std::is_copy_constructible_v<E>
         constexpr E GetError(G&& Default) const & {
-            return !IsValid ? std::forward<G>(Default) : Error;
+            return IsValid ? std::forward<G>(Default) : Error;
         }
 
         template <typename G>
             requires std::convertible_to<G, E> && std::is_move_constructible_v<E>
         constexpr E GetError(G&& Default) && {
-            return !IsValid ? std::forward<G>(Default) : std::move(Error);
+            return IsValid ? std::forward<G>(Default) : std::move(Error);
         }
 
         constexpr E* GetErrorPtrOrNull() noexcept {
-            return !IsValid ? nullptr : std::addressof(Error);
+            return IsValid ? nullptr : std::addressof(Error);
         }
 
         constexpr const E* GetErrorPtrOrNull() const noexcept {
-            return !IsValid ? nullptr : std::addressof(Error);
+            return IsValid ? nullptr : std::addressof(Error);
         }
 
         template <typename U, typename G>

@@ -313,7 +313,7 @@ TEST_CASE_NAMED(FTestTransformError, "Unit Tests::RetroLib::Optionals::Transform
         auto Transformed = TestValue |
             Retro::Optionals::TransformError([](const std::string &V) { return V.size(); });
         REQUIRE(!Transformed.IsSet())
-        CHECK(Transformed.GetError() == 9);
+        CHECK(Transformed.GetError() == 13);
     }
 
     SECTION("Can transform the error of an expected") {
