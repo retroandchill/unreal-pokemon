@@ -858,4 +858,13 @@ namespace Retro {
             E Error;
         };
     };
+
+    template <NonVoidDestructible T>
+    struct Optionals::TErrorPassthrough<T> {
+        template <typename E>
+            requires std::constructible_from<T, TUnexpected<std::remove_cvref_t<E>>>
+        constexpr T operator()(E&& Error) const {
+            return T(TUnexpected(std::forward<E>(Error)));
+        }
+    };
 }

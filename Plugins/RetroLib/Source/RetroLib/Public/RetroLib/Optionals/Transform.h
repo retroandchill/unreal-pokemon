@@ -28,6 +28,37 @@ namespace Retro::Optionals {
         }
     }
 
+    template <template <typename...> typename O, typename T, typename U, typename E>
+    constexpr auto FromResult(const O<U, E>& Expected, T&& Value) {
+        if constexpr (Nullable<T, O>) {
+            return OfNullable<O>(std::forward<T>(Value), GetError(Expected));
+        } else if constexpr (std::is_lvalue_reference_v<T>) {
+            return OfReference<O>(std::forward<T>(Value));
+        } else {
+            return Of<O>(std::forward<T>(Value));
+        }
+    }
+
+    template <template <typename...> typename O, typename T, typename U, typename E>
+    constexpr auto FromResult(O<U, E>&& Expected, T&& Value) {
+        if constexpr (Nullable<T, O>) {
+            return OfNullable<O>(std::forward<T>(Value), GetError(std::move(Expected)));
+        } else if constexpr (std::is_lvalue_reference_v<T>) {
+            return OfReference<O>(std::forward<T>(Value));
+        } else {
+            return Of<O>(std::forward<T>(Value));
+        }
+    }
+
+    template <OptionalType O, OptionalType P>
+    constexpr auto PassOptional(P&& Optional) {
+        if constexpr (ExpectedType<O>) {
+            return PassError<O>(GetError(std::forward<P>(Optional)));
+        } else {
+            return std::remove_cvref_t<O>();
+        }
+    }
+
     struct FTransformInvoker {
         /**
          * Invokes the given functor on the value held by the optional-like object, if it has a value.
@@ -46,7 +77,7 @@ namespace Retro::Optionals {
             return HasValue(std::forward<O>(Optional))
                        ? FromResult(std::forward<O>(Optional),
                                     std::invoke(std::forward<F>(Functor), Get<O>(std::forward<O>(Optional))))
-                       : ResultType();
+                       : PassOptional<ResultType>(std::forward<O>(Optional));
         }
     };
 
