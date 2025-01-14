@@ -35,6 +35,16 @@ namespace Retro::Optionals {
                 std::invoke(std::forward<G>(Absent));
             }
         }
+
+        template <ExpectedType O, typename F, typename G>
+            requires std::invocable<F, TCommonReference<O>> && std::invocable<G, TErrorReference<O>>
+        constexpr void operator()(O &&Optional, F &&Present, G &&Absent) const {
+            if (HasValue(std::forward<O>(Optional))) {
+                std::invoke(std::forward<F>(Present), Get(std::forward<O>(Optional)));
+            } else {
+                std::invoke(std::forward<G>(Absent), GetError(std::forward<O>(Optional)));
+            }
+        }
     };
 
     /**

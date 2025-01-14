@@ -39,7 +39,6 @@ namespace Retro::Optionals {
     concept StlOptional = requires(T &&optional) {
         optional.value();
         *optional;
-        optional.operator->();
         { optional.has_value() } -> std::same_as<bool>;
     };
 
@@ -769,7 +768,6 @@ namespace Retro::Optionals {
     concept UnrealOptional = requires(T &&Optional) {
         Optional.GetValue();
         *Optional;
-        Optional.operator->();
         { Optional.IsSet() } -> std::same_as<bool>;
     };
 
@@ -795,20 +793,28 @@ namespace Retro::Optionals {
         template <UnrealOptional O>
             requires std::same_as<T, std::decay_t<O>>
         static constexpr decltype(auto) Get(O &&Optional) {
-            if constexpr (std::is_lvalue_reference_v<TUeOptionalType<O>>) {
-                return *Optional;
+            if constexpr (TUeOptional<T>::IsValid) {
+                if constexpr (std::is_lvalue_reference_v<TUeOptionalType<O>>) {
+                    return *Optional;
+                } else {
+                    return Retro::ForwardLike<O>(*Optional);
+                }
             } else {
-                return Retro::ForwardLike<O>(*Optional);
+                return *std::forward<O>(Optional);
             }
         }
 
         template <UnrealOptional O>
             requires std::same_as<T, std::decay_t<O>>
         static constexpr decltype(auto) GetValue(O &&Optional) {
-            if constexpr (std::is_lvalue_reference_v<TUeOptionalType<O>>) {
-                return Optional.GetValue();
+            if constexpr (TUeOptional<T>::IsValid) {
+                if constexpr (std::is_lvalue_reference_v<TUeOptionalType<O>>) {
+                    return Optional.GetValue();
+                } else {
+                    return Retro::ForwardLike<O>(Optional.GetValue());
+                }
             } else {
-                return Retro::ForwardLike<O>(Optional.GetValue());
+                return std::forward<O>(Optional).GetValue();
             }
         }
 
@@ -821,7 +827,7 @@ namespace Retro::Optionals {
         template <UnrealExpected O>
             requires std::same_as<T, std::decay_t<O>>
         static constexpr decltype(auto) GetError(O&& Optional) {
-            return Retro::ForwardLike<O>(Optional.GetError());
+            return std::forward<O>(Optional).GetError();
         }
     };
 

@@ -212,7 +212,7 @@ namespace Retro {
             TExpected &&Other) noexcept(std::is_nothrow_move_constructible_v<T> && std::is_nothrow_move_constructible_v<
                                             E>) requires
             std::move_constructible<T> && std::move_constructible<E> : IsValid(Other.IsValid) {
-            if (Other.IsValid()) {
+            if (Other.IsValid) {
                 std::construct_at(std::addressof(Value), std::move(Other.Value));
             } else {
                 std::construct_at(std::addressof(Error), std::move(Other.Error));
@@ -258,7 +258,7 @@ namespace Retro {
         template <typename G>
             requires std::constructible_from<E, G>
         constexpr explicit(!std::convertible_to<G, E>) TExpected(TUnexpected<G> &&Err) : IsValid(false),
-            Error(std::move(Err.Error())) {
+            Error(std::move(Err.GetError())) {
         }
 
         template <typename... A>
@@ -696,7 +696,7 @@ namespace Retro {
 
         constexpr ~TExpected() requires (!std::is_trivially_destructible_v<E>) {
             if (!IsValid) {
-                std::destroy_at(Error);
+                std::destroy_at(std::addressof(Error));
             }
         }
 
@@ -759,7 +759,7 @@ namespace Retro {
                 std::construct_at(std::addressof(Error), std::move(Other.GetError()));
                 IsValid = false;
             } else {
-                Error = std::move(Other.Error);
+                Error = std::move(Other.GetError());
             }
 
             return *this;
@@ -767,7 +767,7 @@ namespace Retro {
 
         constexpr void Emplace() noexcept {
             if (!IsValid) {
-                std::destroy_at(Error);
+                std::destroy_at(std::addressof(Error));
             }
         }
 
@@ -799,13 +799,13 @@ namespace Retro {
             // I don't get why this is here, but it is in the specification.
         }
 
-        constexpr void GetValue() const & noexcept {
+        constexpr void GetValue() const & {
             if (!IsValid) {
                 throw TBadExpectedAccess(Error);
             }
         }
 
-        constexpr void GetValue() && noexcept {
+        constexpr void GetValue() && {
             if (!IsValid) {
                 throw TBadExpectedAccess(std::move(Error));
             }

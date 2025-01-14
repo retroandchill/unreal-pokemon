@@ -1,4 +1,7 @@
 ﻿#include "TestAdapter.h"
+#include "RetroLib/Optionals/Filter.h"
+#include "RetroLib/Optionals/IfPresentOrElse.h"
+#include "RetroLib/Optionals/Transform.h"
 
 #if RETROLIB_WITH_MODULES
 import std;
@@ -49,5 +52,93 @@ TEST_CASE_NAMED(FTestExpectedOperations, "Unit Tests::RetroLib::Optionals::Expec
         REQUIRE(Result.IsSet());
         CHECK(Result == std::vector{32, 32, 32, 32, 32, 32, 32, 32, 32, 32});
     }
-    
+
+    SECTION("Can construct using void as the first parameter") {
+        Retro::TExpected<void, std::string> TestValue;
+        REQUIRE(TestValue.IsSet());
+        CHECK_NOTHROW(TestValue.GetValue())
+
+        TestValue = Retro::TUnexpected(std::string("Invalid value"));
+        REQUIRE(!TestValue.IsSet());
+        CHECK_THROWS_AS(TestValue.GetValue(), Retro::TBadExpectedAccess<std::string>)
+
+        TestValue.Emplace();
+        REQUIRE(TestValue.IsSet());
+    }
+}
+
+TEST_CASE_NAMED(FTestExpectedTransform, "Unit Tests::RetroLib::Optionals::Expected::Pipes::Transform", "[RetroLib][Optionals]") {
+    SECTION("Can transform the expected using value types") {
+        Retro::TExpected<float, std::string> TestValue = 1.5;
+        static_assert(Retro::Optionals::OptionalType<Retro::TExpected<float, std::string>>);
+        auto Transformed = TestValue | Retro::Optionals::Transform([](float V) { return std::to_string(V); });
+        REQUIRE(Transformed.IsSet());
+        CHECK(*Transformed == "1.5");
+    }
+
+    SECTION("Can pass the error of a missing value along") {
+        auto Transformed = Retro::TExpected<float, std::string>(Retro::Unexpect, std::string("Invalid value")) |
+            Retro::Optionals::Transform([](float V) { return static_cast<int>(V); });
+        REQUIRE(!Transformed.IsSet());
+        CHECK(Transformed.GetError() == "Invalid value");
+    }
+
+    SECTION("Can transform a void expected, getting a simple supplier") {
+        auto Transformed = Retro::TExpected<void, std::string>() |
+            Retro::Optionals::Transform([] { return 5; });
+        REQUIRE(Transformed.IsSet());
+        CHECK(Transformed == 5);
+    }
+
+    SECTION("Can transform a void expected, getting a simple supplier with an invalid optional") {
+        auto Transformed = Retro::TExpected<void, std::string>(Retro::Unexpect, "Invalid") |
+            Retro::Optionals::Transform([] { return 5; });
+        REQUIRE(!Transformed.IsSet());
+        CHECK(Transformed.GetError() == "Invalid");
+    }
+}
+
+TEST_CASE_NAMED(FTestExpectedFilter, "Unit Tests::RetroLib::Optionals::Expected::Pipes::Filter", "[RetroLib][Optionals]") {
+    SECTION("Can filter an expected, default constructing the error") {
+        Retro::TExpected<float, std::string> TestValue = 1.5;
+        auto ValidFilter = TestValue |
+            Retro::Optionals::Filter([](float V) { return V > 1.f; });
+        REQUIRE(ValidFilter.IsSet());
+        CHECK(ValidFilter == TestValue);
+
+        auto InvalidFilter = TestValue |
+            Retro::Optionals::Filter([](float V) { return V < 1.f; });
+        REQUIRE(!InvalidFilter.IsSet());
+        CHECK(InvalidFilter.GetError().empty());
+    }
+
+    SECTION("Can supply an explicit value to use as the default") {
+        auto Filtered = Retro::TExpected<float, std::string>(1.5) |
+            Retro::Optionals::Filter([](float V) { return V < 1.f; }, "Expected value to be less than 1.5");
+        REQUIRE(!Filtered.IsSet());
+        CHECK(Filtered.GetError() == "Expected value to be less than 1.5");
+    }
+
+    SECTION("Can supply a functor to create the filter") {
+        auto Filtered = Retro::TExpected<float, std::string>(1.5) |
+            Retro::Optionals::Filter([](float V) { return V < 1.f; }, [] { return "Expected value to be less than 1.5"; });
+        REQUIRE(!Filtered.IsSet());
+        CHECK(Filtered.GetError() == "Expected value to be less than 1.5");
+    }
+}
+
+TEST_CASE_NAMED(FTestExpectedIfPresentOrElse, "Unit Tests::RetroLib::Optionals::Expected::Pipes::IfPresentOrElse", "[RetroLib][Optionals]") {
+    SECTION("Can operate on an expected while ignoring the error") {
+        Retro::TExpected<float, std::string> TestValue(Retro::Unexpect, "Expected value to be less than 1.5");
+        bool Triggered = false;
+        TestValue | Retro::Optionals::IfPresentOrElse([](float) { }, [&Triggered] { Triggered = true; });
+        CHECK(Triggered);
+    }
+
+    SECTION("Can operate on an expected while considering the error") {
+        Retro::TExpected<std::string, int> TestValue(Retro::Unexpect, 42);
+        int ErrorCode = 0;
+        TestValue | Retro::Optionals::IfPresentOrElse([](std::string&) { }, [&ErrorCode](int EC) { ErrorCode = EC; });
+        CHECK(ErrorCode == 42);
+    }
 }
