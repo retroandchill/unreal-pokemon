@@ -68,6 +68,23 @@ TEST_CASE_NAMED(FTestExpectedOperations, "Unit Tests::RetroLib::Optionals::Expec
         TestValue.Emplace();
         REQUIRE(TestValue.IsSet());
     }
+
+    SECTION("Can get alternate values/errors") {
+        Retro::TExpected<int, std::string> TestValue = 10;
+        CHECK(TestValue.Get(14) == 10)
+        CHECK(TestValue.GetError("Invalid string") == "Invalid string")
+
+        TestValue = Retro::TUnexpected(std::string("Real error"));
+        CHECK(TestValue.Get(14) == 14)
+        CHECK(TestValue.GetError("Invalid string") == "Real error")
+        
+        Retro::TExpected<void, std::string> SecondValue;
+        CHECK(SecondValue.GetError("Invalid string") == "Invalid string")
+
+        SecondValue = Retro::TUnexpected(std::string("Real error"));
+        CHECK(SecondValue.GetError("Invalid string") == "Real error")
+        
+    }
 }
 
 TEST_CASE_NAMED(FTestExpectedTransform, "Unit Tests::RetroLib::Optionals::Expected::Pipes::Transform", "[RetroLib][Optionals]") {

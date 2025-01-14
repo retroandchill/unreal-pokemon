@@ -542,6 +542,18 @@ namespace Retro {
             throw TBadExpectedAccess(std::move(Error));
         }
 
+        template <typename U>
+            requires std::convertible_to<T, U> && std::is_copy_constructible_v<T>
+        constexpr T Get(U&& Default) const & {
+            return IsValid ? Value : std::forward<U>(Default);
+        }
+
+        template <typename U>
+            requires std::convertible_to<T, U> && std::is_move_constructible_v<T>
+        constexpr T Get(U&& Default) && {
+            return IsValid ? std::move(Value) : std::forward<U>(Default);
+        }
+
         constexpr E &GetError() & noexcept {
             RETROLIB_ASSERT(!IsValid);
             return Error;
@@ -560,6 +572,18 @@ namespace Retro {
         constexpr const E &&GetError() const && noexcept {
             RETROLIB_ASSERT(!IsValid);
             return std::move(Error);
+        }
+
+        template <typename G>
+            requires std::convertible_to<G, E> && std::is_copy_constructible_v<E>
+        constexpr E GetError(G&& Default) const & {
+            return !IsValid ? std::forward<G>(Default) : Error;
+        }
+
+        template <typename G>
+            requires std::convertible_to<G, E> && std::is_move_constructible_v<E>
+        constexpr E GetError(G&& Default) && {
+            return !IsValid ? std::forward<G>(Default) : std::move(Error);
         }
 
         template <typename U, typename G>
@@ -823,6 +847,18 @@ namespace Retro {
         constexpr const E &&GetError() const && noexcept {
             RETROLIB_ASSERT(!IsValid);
             return std::move(Error);
+        }
+
+        template <typename G>
+            requires std::convertible_to<G, E> && std::is_copy_constructible_v<E>
+        constexpr E GetError(G&& Default) const & {
+            return !IsValid ? std::forward<G>(Default) : Error;
+        }
+
+        template <typename G>
+            requires std::convertible_to<G, E> && std::is_move_constructible_v<E>
+        constexpr E GetError(G&& Default) && {
+            return !IsValid ? std::forward<G>(Default) : std::move(Error);
         }
 
         template <typename U, typename G>
