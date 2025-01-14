@@ -50,15 +50,6 @@ namespace Retro::Optionals {
         }
     }
 
-    template <OptionalType O, OptionalType P>
-    constexpr auto PassOptional(P&& Optional) {
-        if constexpr (ExpectedType<O>) {
-            return PassError<O>(GetError(std::forward<P>(Optional)));
-        } else {
-            return std::remove_cvref_t<O>();
-        }
-    }
-
     struct FTransformInvoker {
         /**
          * Invokes the given functor on the value held by the optional-like object, if it has a value.

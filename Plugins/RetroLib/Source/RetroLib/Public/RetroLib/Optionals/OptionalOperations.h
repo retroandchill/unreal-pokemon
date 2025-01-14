@@ -16,6 +16,7 @@
 #endif
 #endif
 
+#include "GeometryCollection/GeometryCollectionParticlesData.h"
 #include "RetroLib/TypeTraits.h"
 #include "RetroLib/Utils/ForwardLike.h"
 #include "Templates/NonNullSubclassOf.h"
@@ -261,7 +262,7 @@ namespace Retro::Optionals {
 
     template <typename T, typename E>
     concept CanPassError = ExpectedType<T> && requires(E&& Error) {
-        { Retro::Optionals::PassError(std::forward<E>(Error)) } -> std::same_as<T>;
+        { Retro::Optionals::PassError<T>(std::forward<E>(Error)) } -> std::same_as<T>;
     };
     
 
@@ -313,6 +314,20 @@ namespace Retro::Optionals {
         requires OptionalType<O<std::reference_wrapper<T>>>
     struct TOptionalParameters<O<std::reference_wrapper<T>>> : FValidType {
         using ContainedType = T &;
+    };
+
+    template <template <typename...> typename O, typename T, typename E>
+        requires ExpectedType<O<T, E>>
+    struct TOptionalParameters<O<T, E>> : FValidType {
+        using ContainedType = T;
+        using ErrorType = E;
+    };
+
+    template <template <typename...> typename O, typename T, typename E>
+        requires ExpectedType<O<std::reference_wrapper<T>, E>>
+    struct TOptionalParameters<O<std::reference_wrapper<T>, E>> : FValidType {
+        using ContainedType = T&;
+        using ErrorType = E;
     };
 
     /**
@@ -552,8 +567,8 @@ namespace Retro::Optionals {
             return PassError<O<T, std::decay_t<E>>>(std::forward<E>(Error));
         }
 
-        template <typename T, typename F, typename E = std::invoke_result_t<F>>
-            requires std::invocable<F> && ExpectedType<O<T, std::decay_t<E>>> && CanPassError<O<T, std::decay_t<E>>, E>
+        template <typename T, typename E, typename F>
+            requires std::invocable<F> && std::convertible_to<std::invoke_result_t<F>, E> && ExpectedType<O<T, std::decay_t<E>>> && CanPassError<O<T, std::decay_t<E>>, E>
         static constexpr O<T, std::decay_t<E>> Create(F&& Supplier) {
             return PassError<O<T, std::decay_t<E>>>(std::invoke(std::forward<F>(Supplier)));
         }
@@ -569,8 +584,48 @@ namespace Retro::Optionals {
     constexpr auto CreateEmptyExpected(A&&... Args) {
         return TEmptyExpectedCreator<O>::template Create<T, E>(std::forward<A>(Args)...);
     }
-        
-    
+
+    template <typename>
+    struct TFullExpectedCreator;
+
+    template <template <typename...> typename O, typename T, typename E>
+        requires ExpectedType<O<T, E>>
+    struct TFullExpectedCreator<O<T, E>> {
+        template <typename... A>
+            requires CanCreateEmptyExpected<O, T, E, A...>
+        constexpr auto operator()(A&&... Args) const {
+            return TEmptyExpectedCreator<O>::template Create<T, E>(std::forward<A>(Args)...);
+        }
+    };
+
+    template <typename T>
+    constexpr TFullExpectedCreator<T> CreateKnownExpected;
+
+    template <typename T, typename... A>
+    concept CanCreateKnownExpected = requires(A&&... Args) {
+        { CreateKnownExpected<T>(std::forward<A>(Args)...) } -> ExpectedType;
+    };
+
+    template <OptionalType O, OptionalType P>
+        requires (ExpectedType<O> && ExpectedType<P>) || (!ExpectedType<O>)
+    constexpr auto PassOptional(P&& Optional) {
+        if constexpr (ExpectedType<O> && ExpectedType<P>) {
+            return PassError<O>(GetError(std::forward<P>(Optional)));
+        } else {
+            return std::remove_cvref_t<O>();
+        }
+    }
+
+    template <ExpectedType O, OptionalType P, typename... A>
+        requires (!ExpectedType<P>) && CanCreateKnownExpected<O, A...>
+    constexpr auto PassOptional(P&&, A&&... Args) {
+        return CreateKnownExpected<O>(std::forward<A>(Args)...);
+    }
+
+    template <typename O, typename P, typename... A>
+    concept CanPassOptional = OptionalType<O> && OptionalType<P> && requires(P&& Optional, A&&... Args) {
+        { PassOptional<O>(std::forward<P>(Optional), std::forward<A>(Args)...) } -> OptionalType;
+    };
 
     /**
      * @brief Represents an invalid type for a nullable optional parameter.

@@ -36,13 +36,23 @@ namespace Retro::Optionals {
      *       if present.
      */
     RETROLIB_EXPORT template <OptionalType T, OptionalType F>
-        requires std::convertible_to<TTypeParam<F>, TTypeParam<T>>
+        requires std::convertible_to<TTypeParam<F>, TTypeParam<T>> && (!ExpectedType<T>)
     constexpr T To(F &&Optional) {
         if (HasValue(Optional)) {
             return T(Get(std::forward<F>(Optional)));
         }
 
         return T();
+    }
+
+    RETROLIB_EXPORT template <ExpectedType T, OptionalType F, typename... A>
+        requires std::convertible_to<TTypeParam<F>, TTypeParam<T>> && CanCreateKnownExpected<T, A...>
+    constexpr T To(F &&Optional, A&&... Args) {
+        if (HasValue(Optional)) {
+            return T(Get(std::forward<F>(Optional)));
+        }
+
+        return CreateKnownExpected<T>(std::forward<A>(Args)...);
     }
 
     /**
@@ -67,28 +77,38 @@ namespace Retro::Optionals {
         }
     }
 
+    RETROLIB_EXPORT template <template <typename...> typename T, typename E, OptionalType F, typename... A>
+    constexpr auto To(F &&Optional, A&&... Args) {
+        if constexpr (std::is_lvalue_reference_v<TTypeParam<F>> &&
+                      !RawReferenceOptionalValid<T, std::remove_reference_t<TTypeParam<F>>, E>) {
+            return To<T<std::reference_wrapper<std::remove_reference_t<TTypeParam<F>>>, E>>(std::forward<F>(Optional), std::forward<A>(Args)...);
+        } else {
+            return To<T<TTypeParam<F>, E>>(std::forward<F>(Optional), std::forward<A>(Args)...);
+        }
+    }
+
     template <OptionalType T>
     struct TOInvoker {
-        template <OptionalType F>
+        template <OptionalType F, typename... A>
             requires std::convertible_to<TValueType<T>, TValueType<F>>
-        constexpr auto operator()(F &&Optional) const {
-            return To<T>(std::forward<F>(Optional));
+        constexpr auto operator()(F &&Optional, A&&... Args) const {
+            return To<T>(std::forward<F>(Optional), std::forward<A>(Args)...);
         }
     };
 
     template <OptionalType T>
     constexpr TOInvoker<T> ToFunction;
 
-    template <template <typename...> typename T>
+    template <template <typename...> typename T, typename... E>
     struct TTemplatedToInvoker {
-        template <OptionalType F>
-        constexpr auto operator()(F &&Optional) const {
-            return To<T>(std::forward<F>(Optional));
+        template <OptionalType F, typename... A>
+        constexpr auto operator()(F &&Optional, A&&... Args) const {
+            return To<T, E...>(std::forward<F>(Optional), std::forward<A>(Args)...);
         }
     };
 
-    template <template <typename...> typename T>
-    constexpr TTemplatedToInvoker<T> TemplatedToFunction;
+    template <template <typename...> typename T, typename... A>
+    constexpr TTemplatedToInvoker<T, A...> TemplatedToFunction;
 
     /**
      * @brief Provides an extension method for transforming an object into a specific target type.
@@ -100,8 +120,15 @@ namespace Retro::Optionals {
      * @return An extension method invoker for handling the conversion to the specified type.
      */
     RETROLIB_EXPORT template <OptionalType T>
+        requires (!ExpectedType<T>)
     constexpr auto To() {
         return ExtensionMethod<ToFunction<T>>();
+    }
+
+    RETROLIB_EXPORT template <ExpectedType T, typename... A>
+        requires CanCreateKnownExpected<T, A...>
+    constexpr auto To(A&&... Args) {
+        return ExtensionMethod<ToFunction<T>>(std::forward<A>(Args)...);
     }
 
     /**
@@ -118,6 +145,11 @@ namespace Retro::Optionals {
     RETROLIB_EXPORT template <template <typename...> typename T>
     constexpr auto To() {
         return ExtensionMethod<TemplatedToFunction<T>>();
+    }
+
+    RETROLIB_EXPORT template <template <typename...> typename T, typename E, typename... A>
+    constexpr auto To(A&&... Args) {
+        return ExtensionMethod<TemplatedToFunction<T, E>>(std::forward<A>(Args)...);
     }
 
 } // namespace Retro::Optionals

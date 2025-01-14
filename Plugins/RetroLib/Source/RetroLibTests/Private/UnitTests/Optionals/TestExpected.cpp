@@ -1,6 +1,9 @@
 ﻿#include "TestAdapter.h"
+#include "RetroLib/Optionals/AndThen.h"
 #include "RetroLib/Optionals/Filter.h"
+#include "RetroLib/Optionals/IfPresent.h"
 #include "RetroLib/Optionals/IfPresentOrElse.h"
+#include "RetroLib/Optionals/To.h"
 #include "RetroLib/Optionals/Transform.h"
 
 #if RETROLIB_WITH_MODULES
@@ -127,6 +130,22 @@ TEST_CASE_NAMED(FTestExpectedFilter, "Unit Tests::RetroLib::Optionals::Expected:
     }
 }
 
+TEST_CASE_NAMED(FTestExpectedIfPresent, "Unit Tests::RetroLib::Optionals::Expected::Pipes::IfPresent", "[RetroLib][Optionals]") {
+    SECTION("Can operate on an expected checking if the value is present") {
+        Retro::TExpected<int, std::string> TestValue(14);
+        int ValueOut = 0;
+        TestValue | Retro::Optionals::IfPresent([&ValueOut](int V) { ValueOut = V; });
+        CHECK(ValueOut == 14);
+    }
+
+    SECTION("Can operate on an expected with a void type") {
+        Retro::TExpected<void, std::string> TestValue(Retro::Unexpect, "Expected value to be less than 1.5");
+        bool Triggered = false;
+        TestValue | Retro::Optionals::IfPresent([&Triggered] { Triggered = true; });
+        CHECK(Triggered);
+    }
+}
+
 TEST_CASE_NAMED(FTestExpectedIfPresentOrElse, "Unit Tests::RetroLib::Optionals::Expected::Pipes::IfPresentOrElse", "[RetroLib][Optionals]") {
     SECTION("Can operate on an expected while ignoring the error") {
         Retro::TExpected<float, std::string> TestValue(Retro::Unexpect, "Expected value to be less than 1.5");
@@ -135,10 +154,116 @@ TEST_CASE_NAMED(FTestExpectedIfPresentOrElse, "Unit Tests::RetroLib::Optionals::
         CHECK(Triggered);
     }
 
+    SECTION("Can operate on an expected checking if the value is present") {
+        Retro::TExpected<int, std::string> TestValue(14);
+        int ValueOut = 0;
+        TestValue | Retro::Optionals::IfPresentOrElse([&ValueOut](int V) { ValueOut = V; }, [] {});
+        CHECK(ValueOut == 14);
+    }
+
     SECTION("Can operate on an expected while considering the error") {
         Retro::TExpected<std::string, int> TestValue(Retro::Unexpect, 42);
         int ErrorCode = 0;
         TestValue | Retro::Optionals::IfPresentOrElse([](std::string&) { }, [&ErrorCode](int EC) { ErrorCode = EC; });
         CHECK(ErrorCode == 42);
+    }
+
+    SECTION("Can operate on an expected with a void type") {
+        Retro::TExpected<void, std::string> TestValue(Retro::Unexpect, "Expected value to be less than 1.5");
+        bool Triggered = false;
+        TestValue | Retro::Optionals::IfPresentOrElse([&Triggered] { Triggered = true; }, [] {});
+        CHECK(Triggered);
+    }
+
+    SECTION("Can operate on a void expected while ignoring the error") {
+        Retro::TExpected<void, std::string> TestValue(Retro::Unexpect, "Expected value to be less than 1.5");
+        bool Triggered = false;
+        TestValue | Retro::Optionals::IfPresentOrElse([] { }, [&Triggered] { Triggered = true; });
+        CHECK(Triggered);
+    }
+
+    SECTION("Can operate on a void expected while considering the error") {
+        Retro::TExpected<void, int> TestValue(Retro::Unexpect, 42);
+        int ErrorCode = 0;
+        TestValue | Retro::Optionals::IfPresentOrElse([] { }, [&ErrorCode](int EC) { ErrorCode = EC; });
+        CHECK(ErrorCode == 42);
+    }
+}
+
+TEST_CASE_NAMED(FTestExpectedAndThen, "Unit Tests::RetroLib::Optionals::Expected::Pipes::AndThen", "[RetroLib][Optionals]") {
+    SECTION("Can convert an expected into an optional") {
+        Retro::TExpected<int, std::string> TestValue(14);
+        auto AsOptional = TestValue |
+            Retro::Optionals::AndThen([](int V) { return std::optional(V * 2); });
+        CHECK(AsOptional == 28)
+    }
+
+    SECTION("Can convert an expected to another expected") {
+        Retro::TExpected<int, std::string> TestValue(14);
+        auto AsExpected = TestValue |
+            Retro::Optionals::AndThen([](int V) { return Retro::TExpected<int, std::string_view>(V * 2); });
+        CHECK(AsExpected == 28)
+    }
+
+    SECTION("Can convert an expected to another expected keeping the error") {
+        Retro::TExpected<int, std::string> TestValue(Retro::Unexpect, "Invalid value");
+        auto AsExpected = TestValue |
+            Retro::Optionals::AndThen([](int V) { return Retro::TExpected<int, std::string_view>(V * 2); });
+        REQUIRE(!AsExpected.IsSet())
+        CHECK(AsExpected.GetError() == "Invalid value");
+    }
+
+    SECTION("Can convert an optional to an expected, constructing the error type if needed") {
+        std::optional Optional = 4;
+        auto AsExpected = Optional |
+            Retro::Optionals::AndThen([](int V) { return Retro::TExpected<int, std::string_view>(V * 2); }, "Unused error");
+        CHECK(AsExpected.IsSet())
+    }
+
+    SECTION("Can convert an optional to an expected, constructing the error type on demand") {
+        std::optional<int> Optional;
+        auto AsExpected = Optional |
+            Retro::Optionals::AndThen([](int V) { return Retro::TExpected<int, std::string_view>(V * 2); }, [] { return "Constructed error"; });
+        REQUIRE(!AsExpected.IsSet())
+        CHECK(AsExpected.GetError() == "Constructed error");
+    }
+}
+
+TEST_CASE_NAMED(FTestExpectedTo, "Unit Tests::RetroLib::Optionals::Expected::Pipes::To", "[RetroLib][Optionals]") {
+    SECTION("Can convert an expected into an optional") {
+        Retro::TExpected<int, std::string> TestValue(14);
+        auto AsOptional = TestValue |
+            Retro::Optionals::To<std::optional>();
+        CHECK(AsOptional == 14)
+    }
+
+    SECTION("Can convert an expected to another expected") {
+        Retro::TExpected<int, std::string> TestValue(14);
+        auto AsExpected = TestValue |
+            Retro::Optionals::To<Retro::TExpected<int, std::string_view>>();
+        CHECK(AsExpected == 14)
+    }
+
+    SECTION("Can convert an expected to another expected keeping the error") {
+        Retro::TExpected<int, std::string> TestValue(Retro::Unexpect, "Invalid value");
+        auto AsExpected = TestValue |
+            Retro::Optionals::To<Retro::TExpected, std::string_view>();
+        REQUIRE(!AsExpected.IsSet())
+        CHECK(AsExpected.GetError() == "Invalid value");
+    }
+
+    SECTION("Can convert an optional to an expected, constructing the error type if needed") {
+        std::optional Optional = 4;
+        auto AsExpected = Optional |
+            Retro::Optionals::To<Retro::TExpected<int, std::string_view>>("Unused error");
+        CHECK(AsExpected.IsSet())
+    }
+
+    SECTION("Can convert an optional to an expected, constructing the error type on demand") {
+        std::optional<int> Optional;
+        auto AsExpected = Optional |
+            Retro::Optionals::To<Retro::TExpected, std::string>([] { return "Constructed error"; });
+        REQUIRE(!AsExpected.IsSet())
+        CHECK(AsExpected.GetError() == "Constructed error");
     }
 }
