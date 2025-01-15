@@ -29,6 +29,14 @@ namespace Retro::Optionals {
                 std::invoke(std::forward<F>(Functor), Get(std::forward<O>(Optional)));
             }
         }
+        
+        template <VoidOptional O, typename F>
+            requires std::invocable<F>
+        constexpr void operator()(O &&Optional, F &&Functor) const {
+            if (HasValue(Optional)) {
+                std::invoke(std::forward<F>(Functor));
+            }
+        }
     };
 
     RETROLIB_EXPORT constexpr auto IfPresent = ExtensionMethod<FIfPresentInvoker{}>;

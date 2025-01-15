@@ -28,6 +28,28 @@ namespace Retro::Optionals {
         }
     }
 
+    template <template <typename...> typename O, typename T, typename U, typename E>
+    constexpr auto FromResult(const O<U, E>& Expected, T&& Value) {
+        if constexpr (Nullable<T, O>) {
+            return OfNullable<O, E>(std::forward<T>(Value), GetError(Expected));
+        } else if constexpr (std::is_lvalue_reference_v<T>) {
+            return OfReference<O, E>(std::forward<T>(Value));
+        } else {
+            return Of<O, E>(std::forward<T>(Value));
+        }
+    }
+
+    template <template <typename...> typename O, typename T, typename U, typename E>
+    constexpr auto FromResult(O<U, E>&& Expected, T&& Value) {
+        if constexpr (Nullable<T, O>) {
+            return OfNullable<O, E>(std::forward<T>(Value), GetError(std::move(Expected)));
+        } else if constexpr (std::is_lvalue_reference_v<T>) {
+            return OfReference<O, E>(std::forward<T>(Value));
+        } else {
+            return Of<O, E>(std::forward<T>(Value));
+        }
+    }
+
     struct FTransformInvoker {
         /**
          * Invokes the given functor on the value held by the optional-like object, if it has a value.
@@ -46,7 +68,17 @@ namespace Retro::Optionals {
             return HasValue(std::forward<O>(Optional))
                        ? FromResult(std::forward<O>(Optional),
                                     std::invoke(std::forward<F>(Functor), Get<O>(std::forward<O>(Optional))))
-                       : ResultType();
+                       : PassOptional<ResultType>(std::forward<O>(Optional));
+        }
+
+        template <VoidOptional O, typename F>
+            requires std::invocable<F>
+        constexpr auto operator()(O &&Optional, F &&Functor) const {
+            using ResultType = decltype(FromResult(std::forward<O>(Optional), std::invoke(std::forward<F>(Functor))));
+            return HasValue(std::forward<O>(Optional))
+                       ? FromResult(std::forward<O>(Optional),
+                                    std::invoke(std::forward<F>(Functor)))
+                       : PassOptional<ResultType>(std::forward<O>(Optional));
         }
     };
 

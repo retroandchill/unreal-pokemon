@@ -28,13 +28,21 @@ namespace Retro::Optionals {
          * @return The result of invoking the functor with the contained value of the optional,
          *         if the optional has a value. Otherwise, returns the default value of the functor's result type.
          */
-        template <OptionalType O, typename F>
+        template <OptionalType O, typename F, typename... A>
             requires std::invocable<F, TCommonReference<O>> &&
-                     OptionalType<std::invoke_result_t<F, TCommonReference<O>>>
-        constexpr auto operator()(O &&Optional, F &&Functor) const {
+                     OptionalType<std::invoke_result_t<F, TCommonReference<O>>> && CanPassOptional<std::invoke_result_t<F, TCommonReference<O>>, O, A...>
+        constexpr auto operator()(O &&Optional, F &&Functor, A&&... Args) const {
             return HasValue(std::forward<O>(Optional))
                        ? std::invoke(std::forward<F>(Functor), Get<O>(std::forward<O>(Optional)))
-                       : std::invoke_result_t<F, TCommonReference<O>>();
+                       : PassOptional<std::invoke_result_t<F, TCommonReference<O>>>(std::forward<O>(Optional), std::forward<A>(Args)...);
+        }
+
+        template <VoidOptional O, typename F, typename... A>
+            requires std::invocable<F> && OptionalType<std::invoke_result_t<F>> && CanPassOptional<std::invoke_result_t<F>, O, A...>
+        constexpr auto operator()(O &&Optional, F &&Functor, A&&... Args) const {
+            return HasValue(std::forward<O>(Optional))
+                       ? std::invoke(std::forward<F>(Functor))
+                       : PassOptional<std::invoke_result_t<F>>(std::forward<O>(Optional), std::forward<A>(Args)...);
         }
     };
 
