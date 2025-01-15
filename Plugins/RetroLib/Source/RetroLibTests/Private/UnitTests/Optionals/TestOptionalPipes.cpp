@@ -6,6 +6,7 @@
  * https://github.com/retroandchill
  */
 #include "TestAdapter.h"
+#include "RetroLib/Optionals/IfNotPresent.h"
 
 #if RETROLIB_WITH_MODULES
 import RetroLib;
@@ -341,6 +342,15 @@ TEST_CASE_NAMED(FOptionalIfPresentTest, "Unit Tests::RetroLib::Optionals::IfPres
         std::optional<int> Value2 = std::nullopt;
         Value2 | Retro::Optionals::IfPresent([&Sum](int Value) { Sum += Value; });
         CHECK(Sum == 34);
+    }
+
+    SECTION("Can execute if a value is not present") {
+        int Sum = 0;
+        std::optional Value1 = 34;
+        Value1 | Retro::Optionals::IfNotPresent([&Sum] { Sum += 5; });
+        std::optional<int> Value2 = std::nullopt;
+        Value2 | Retro::Optionals::IfNotPresent([&Sum] { Sum += 5; });
+        CHECK(Sum == 5);
     }
 
     SECTION("Can execute if a value is present, otherwise doing an alternate action") {
