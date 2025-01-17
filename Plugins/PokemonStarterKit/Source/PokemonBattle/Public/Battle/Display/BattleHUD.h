@@ -8,6 +8,7 @@
 
 #include "BattleHUD.generated.h"
 
+struct FExpGainInfo;
 class IBattler;
 class IBattleAction;
 // This class does not need to be modified.
@@ -25,4 +26,6 @@ class POKEMONBATTLE_API IBattleHUD {
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
   public:
     virtual void SelectAction(const TScriptInterface<IBattler> &Battler) = 0;
+
+    virtual UE5Coro::TCoroutine<> DisplayExpForGain(TArray<FExpGainInfo> GainInfos) = 0;
 };

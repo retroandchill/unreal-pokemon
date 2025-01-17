@@ -3,7 +3,7 @@
 #include "Battle/Moves/MoveLookup.h"
 #include "Battle/BlueprintClasses.h"
 #include "Battle/Moves/BattleMoveFunctionCode.h"
-#include "PokemonBattleSettings.h"
+#include "Battle/Settings/PokemonBattleSettings.h"
 #include "RetroLib/Optionals/OrElseGet.h"
 
 static TSubclassOf<UBattleMoveFunctionCode> GetDefaultMoveClass() {

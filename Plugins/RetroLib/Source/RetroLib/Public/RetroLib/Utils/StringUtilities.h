@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
+#include "RetroLib/Ranges/Views/JoinWith.h"
+#include "RetroLib/Ranges/Views/NameAliases.h"
 
 #include "StringUtilities.generated.h"
 
@@ -15,6 +18,9 @@ class RETROLIB_API UStringUtilities : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
   public:
+    static const FText ConjunctionAnd;
+    static const FText ConjunctionOr;
+    
     /**
      * Check if the supplied text starts with a vowel
      * @param Text The supplied text
@@ -75,4 +81,15 @@ class RETROLIB_API UStringUtilities : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintPure, Category = "Utilities|Strings", meta = (AutoCreateRefTerm = Delimiter))
     static FText JoinText(const TArray<FText> &Lines);
+
+    template <std::ranges::input_range R>
+        requires std::convertible_to<std::ranges::range_value_t<R>, FText>
+    static FText JoinText(R&& Lines) {
+        // clang-format off
+        return FText::FromString(Lines |
+                                 Retro::Ranges::Views::Transform(&FText::ToString) |
+                                 Retro::Ranges::Views::JoinWith(TEXT("\n")) |
+                                 Retro::Ranges::To<FString>());
+        // clang-format on
+    }
 };

@@ -121,17 +121,7 @@ UE5Coro::TCoroutine<> UPokemonBattleScreen::DisplayExpForGain(TArray<FExpGainInf
         SwapToExpGainDisplay();
         PlayExpGainAnimation();
     });
-}
-
-FDelegateHandle UPokemonBattleScreen::BindToExpGainComplete(FSimpleDelegate &&Callback) {
-    return OnExpGainComplete.Add(std::move(Callback));
-}
-
-void UPokemonBattleScreen::RemoveFromExpGainComplete(FDelegateHandle Handle) {
-    OnExpGainComplete.Remove(Handle);
-}
-
-void UPokemonBattleScreen::FinishExpGainDisplay() {
+    
     Algo::ForEach(Panels, &UPokemonBattlePanel::Refresh);
     SwapToPanelDisplay();
 }

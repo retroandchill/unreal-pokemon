@@ -42,4 +42,6 @@ class POKEMONBATTLE_API UBattlerHelpers : public UBlueprintFunctionLibrary {
               meta = (ExpandEnumAsExecs = "ReturnValue", DefaultToSelf = "Battler"))
     static EStatusEffectStatus GetStatusEffect(const TScriptInterface<IBattler> &Battler,
                                                FStatusEffectInfo &StatusEffect);
+
+    static UE5Coro::TCoroutine<> GainExpOnFaint(const TArray<TScriptInterface<IBattler>> &FainedBattlers);
 };

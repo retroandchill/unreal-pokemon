@@ -3,7 +3,7 @@
 #include "Battle/Stats//StatStageModMagnitudeCalculation.h"
 #include "AbilitySystemComponent.h"
 #include "Battle/Stats/StatTags.h"
-#include "PokemonBattleSettings.h"
+#include "Battle/Settings/PokemonBattleSettings.h"
 #include "Species/Stat.h"
 
 float UStatStageModMagnitudeCalculation::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec &Spec) const {

@@ -4,7 +4,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "Bag/Item.h"
 #include "Battle/BlueprintClasses.h"
-#include "PokemonBattleSettings.h"
+#include "Battle/Settings/PokemonBattleSettings.h"
 #include "RetroLib/Optionals/OrElseGet.h"
 #include "RetroLib/Optionals/OrElseValue.h"
 

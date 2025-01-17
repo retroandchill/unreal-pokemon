@@ -309,4 +309,6 @@ class POKEMONBATTLE_API IBattler {
      */
     UFUNCTION(BlueprintCallable, Category = StatusEffects)
     virtual void CureStatusEffect() = 0;
+    
+    virtual void OnMoveFailed(const TScriptInterface<IBattleMove>& Move) = 0;
 };

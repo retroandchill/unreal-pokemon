@@ -28,4 +28,5 @@ class FMockBattle : public IBattle {
     MOCK_METHOD(Retro::TGenerator<TScriptInterface<IBattleSide>>, GetSides, (), (const, override));
     MOCK_METHOD(Retro::TGenerator<TScriptInterface<IBattler>>, GetActiveBattlers, (), (const, override));
     MOCK_METHOD2(ExecuteAction, UE5Coro::TCoroutine<>(IBattleAction &Action, FForceLatentCoroutine Coro));
+    MOCK_METHOD(const TScriptInterface<IBattleHUD>&, GetBattleHUD, (), (const, override));
 };

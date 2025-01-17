@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "GameplayTagContainer.h"
+#include "UE5Coro.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Species/Stat.h"
 
 #include "StatChangeHelpers.generated.h"
 
@@ -39,6 +41,10 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
   public:
+    static UE5Coro::TCoroutine<bool> CanRaiseStat(UE5Coro::TLatentContext<const UObject> Context, const TScriptInterface<IBattler>& Battler, FMainBattleStatHandle Stat, bool bShowMessages = true, bool bIgnoreInversion = false);
+
+    static UE5Coro::TCoroutine<bool> CanLowerStat(UE5Coro::TLatentContext<const UObject>Context, const TScriptInterface<IBattler>& Battler, FMainBattleStatHandle Stat, bool bShowMessages = true, bool bIgnoreInversion = false);
+    
     /**
      * Get the value of a stat's stage
      * @param Battler The battler to check against
@@ -46,7 +52,7 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
      * @return The value of the stat's stage
      */
     UFUNCTION(BlueprintPure, Category = "Battle|Stats")
-    static int32 GetStatStageValue(const TScriptInterface<IBattler> &Battler, FName Stat);
+    static int32 GetStatStageValue(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat);
 
     /**
      * Check if a stat stage is at its maximum value
@@ -55,7 +61,7 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
      * @return Is this stat maxed out
      */
     UFUNCTION(BlueprintPure, Category = "Battle|Stats")
-    static bool StatStageAtMax(const TScriptInterface<IBattler> &Battler, FName Stat);
+    static bool StatStageAtMax(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat);
 
     /**
      * Check if a stat stage is at its minimum value
@@ -64,7 +70,7 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
      * @return Is this stat maxed out
      */
     UFUNCTION(BlueprintPure, Category = "Battle|Stats")
-    static bool StatStageAtMin(const TScriptInterface<IBattler> &Battler, FName Stat);
+    static bool StatStageAtMin(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat);
 
     /**
      * Perform a change to a battler's stat stages

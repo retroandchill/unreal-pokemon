@@ -106,6 +106,11 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = "Battle|Visuals")
     APawn *GetBattlePawn() const final;
 
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    const TScriptInterface<IBattleHUD>& GetBattleHUD() const override {
+        return BattleHUD;
+    }
+
     UFUNCTION(BlueprintPure, Category = "Battle|Content")
     const TScriptInterface<IBattleSide> &GetPlayerSide() const override;
 
@@ -160,7 +165,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     TScriptInterface<IBattleHUD> CreateBattleHUD();
-
+    
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     TScriptInterface<IBattleAnimation> GetBattleEndAnimation(EBattleResult Result);
 
@@ -309,4 +314,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     TSharedRef<TFutureState<EBattleResult>> OnBattleEnd = MakeShared<TFutureState<EBattleResult>>();
 
     int32 RunAttempts = 0;
+
+    UPROPERTY(BlueprintGetter = GetBattleHUD, Category = "Battle|Display")
+    TScriptInterface<IBattleHUD> BattleHUD;
 };

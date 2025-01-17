@@ -5,7 +5,7 @@
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Events/Moves/DamageModificationPayload.h"
 #include "Battle/Moves/MoveTags.h"
-#include "PokemonBattleSettings.h"
+#include "Battle/Settings/PokemonBattleSettings.h"
 
 UInnate_CriticalHitDamage::UInnate_CriticalHitDamage() {
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();

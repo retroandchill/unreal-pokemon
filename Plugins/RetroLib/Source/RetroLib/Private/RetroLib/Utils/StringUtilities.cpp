@@ -5,6 +5,9 @@
 #include "RetroLib/Ranges/Views/JoinWith.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 
+const FText UStringUtilities::ConjunctionAnd = NSLOCTEXT("StringUtils", "And", "and");
+const FText UStringUtilities::ConjunctionOr = NSLOCTEXT("StringUtils", "Or", "or");
+
 bool UStringUtilities::StartsWithVowelText(const FText &Text) {
     return StartsWithVowel(Text.ToString());
 }
@@ -61,10 +64,5 @@ FString UStringUtilities::FormatDate(const FDateTime &DateTime, const FString &F
 }
 
 FText UStringUtilities::JoinText(const TArray<FText> &Lines) {
-    // clang-format off
-    return FText::FromString(Lines |
-                             Retro::Ranges::Views::Transform(&FText::ToString) |
-                             Retro::Ranges::Views::JoinWith(TEXT("\n")) |
-                             Retro::Ranges::To<FString>());
-    // clang-format on
+    return JoinText<const TArray<FText> &>(Lines);
 }

@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Attributes/StatStagesAttributeSet.h"
-#include "PokemonBattleSettings.h"
+#include "Battle/Settings/PokemonBattleSettings.h"
 
 void UStatStagesAttributeSet::PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) {
     if (Attribute == GetSameTypeAttackBonusAttribute() || Attribute == GetCriticalHitStagesAttribute() ||

@@ -6,10 +6,58 @@
 #include "Battle/Stats/StatChangeCalculation.h"
 #include "Battle/Stats/StatTags.h"
 #include "DataManager.h"
-#include "PokemonBattleSettings.h"
+#include "Battle/Settings/PokemonBattleSettings.h"
+#include "Battle/Attributes/StatStagesAttributeSet.h"
+#include "Battle/Settings/BattleMessageSettings.h"
 #include "Species/Stat.h"
+#include "Utilities/PokemonCoroutineDispatcher.h"
 
-int32 UStatChangeHelpers::GetStatStageValue(const TScriptInterface<IBattler> &Battler, FName Stat) {
+UE5Coro::TCoroutine<bool> UStatChangeHelpers::CanRaiseStat(UE5Coro::TLatentContext<const UObject> Context,
+                                                           const TScriptInterface<IBattler> &Battler,
+                                                           FMainBattleStatHandle Stat, bool bShowMessages,
+                                                           bool bIgnoreInversion) {
+    if (!bIgnoreInversion && Battler->GetAbilityComponent()->GetStatStages()->GetStatStageMultiplier() < 0) {
+        co_return co_await CanLowerStat(Context, Battler, Stat, bShowMessages, true);
+    }
+
+    if (!StatStageAtMax(Battler, Stat)) {
+        co_return true;
+    }
+
+    if (bShowMessages) {
+        auto Settings = GetDefault<UBattleMessageSettings>();
+        IPokemonCoroutineDispatcher::Get(Context.Target)
+            .DisplayMessage(FText::FormatNamed(Settings->MaxStatMessage, "Pkmn", Battler->GetNickname(),
+                                               "Stat", FDataManager::GetInstance().GetDataChecked(Stat).RealName));
+    }
+
+    co_return false;
+}
+
+UE5Coro::TCoroutine<bool> UStatChangeHelpers::CanLowerStat(UE5Coro::TLatentContext<const UObject>Context,
+                                                           const TScriptInterface<IBattler> &Battler,
+                                                           FMainBattleStatHandle Stat, bool bShowMessages,
+                                                           bool bIgnoreInversion) {
+    if (!bIgnoreInversion && Battler->GetAbilityComponent()->GetStatStages()->GetStatStageMultiplier() < 0) {
+        co_return co_await CanRaiseStat(Context, Battler, Stat, bShowMessages, true);
+    }
+
+    if (!StatStageAtMin(Battler, Stat)) {
+        co_return true;
+    }
+
+    if (bShowMessages) {
+        auto Settings = GetDefault<UBattleMessageSettings>();
+        IPokemonCoroutineDispatcher::Get(Context.Target)
+            .DisplayMessage(FText::FormatNamed(Settings->MinStatMessage, "Pkmn", Battler->GetNickname(),
+                                               "Stat", FDataManager::GetInstance().GetDataChecked(Stat).RealName));
+    }
+
+    co_return false;
+    
+}
+
+int32 UStatChangeHelpers::GetStatStageValue(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat) {
     static auto &StatTable = FDataManager::GetInstance().GetInstance().GetDataTable<FStat>();
     auto StatData = StatTable.GetData(Stat);
     check(StatData != nullptr)
@@ -18,12 +66,12 @@ int32 UStatChangeHelpers::GetStatStageValue(const TScriptInterface<IBattler> &Ba
     return FMath::RoundToInt32(Stages);
 }
 
-bool UStatChangeHelpers::StatStageAtMax(const TScriptInterface<IBattler> &Battler, FName Stat) {
+bool UStatChangeHelpers::StatStageAtMax(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat) {
     static auto &StatInfo = GetDefault<UPokemonBattleSettings>()->StatStages;
     return GetStatStageValue(Battler, Stat) >= StatInfo.Num();
 }
 
-bool UStatChangeHelpers::StatStageAtMin(const TScriptInterface<IBattler> &Battler, FName Stat) {
+bool UStatChangeHelpers::StatStageAtMin(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat) {
     static auto &StatInfo = GetDefault<UPokemonBattleSettings>()->StatStages;
     return GetStatStageValue(Battler, Stat) <= -StatInfo.Num();
 }

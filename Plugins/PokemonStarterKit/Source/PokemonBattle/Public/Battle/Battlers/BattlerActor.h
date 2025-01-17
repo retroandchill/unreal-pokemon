@@ -139,6 +139,9 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     UFUNCTION(BlueprintCallable, Category = StatusEffects)
     void CureStatusEffect() override;
 
+    UFUNCTION(BlueprintImplementableEvent, Category = Moves)
+    void OnMoveFailed(const TScriptInterface<IBattleMove>& Move) override;
+
   protected:
     UFUNCTION(BlueprintImplementableEvent, Category = Switching)
     FText GetMessageOnRecall() const;

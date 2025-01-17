@@ -10,6 +10,7 @@
 
 #include "Battle.generated.h"
 
+class IBattleHUD;
 struct FBattleInfo;
 class IAbilityDisplayComponent;
 struct FGameplayEffectSpecHandle;
@@ -122,6 +123,8 @@ class POKEMONBATTLE_API IBattle {
      * @return The pawn used in battle
      */
     virtual APawn *GetBattlePawn() const = 0;
+
+    virtual const TScriptInterface<IBattleHUD>& GetBattleHUD() const = 0;
 
     virtual const TScriptInterface<IBattleSide> &GetPlayerSide() const = 0;
     virtual const TScriptInterface<IBattleSide> &GetOpposingSide() const = 0;

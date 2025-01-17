@@ -1,3 +1,4 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "PokemonBattleSettings.h"
+
+#include "Battle/Settings/BattleMessageSettings.h"

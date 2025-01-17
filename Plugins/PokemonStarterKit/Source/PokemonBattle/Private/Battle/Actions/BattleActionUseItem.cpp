@@ -12,7 +12,7 @@
 #include "Battle/Items/ItemTags.h"
 #include "DataManager.h"
 #include "Pokemon/Pokemon.h"
-#include "PokemonBattleSettings.h"
+#include "Battle/Settings/PokemonBattleSettings.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/Transform.h"

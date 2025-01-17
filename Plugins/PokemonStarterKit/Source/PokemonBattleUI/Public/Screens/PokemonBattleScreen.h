@@ -93,14 +93,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen, public IBattleH
      */
     UPokemonBattlePanel *FindPanelForBattler(const TScriptInterface<IBattler> &Battler) const;
 
-    UE5Coro::TCoroutine<> DisplayExpForGain(TArray<FExpGainInfo> GainInfos);
-
-    FDelegateHandle BindToExpGainComplete(FSimpleDelegate &&Callback);
-
-    void RemoveFromExpGainComplete(FDelegateHandle Handle);
-
-    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
-    void FinishExpGainDisplay();
+    UE5Coro::TCoroutine<> DisplayExpForGain(TArray<FExpGainInfo> GainInfos) override;
 
   protected:
     /**
