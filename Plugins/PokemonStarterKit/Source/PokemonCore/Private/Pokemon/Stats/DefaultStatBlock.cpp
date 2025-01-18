@@ -119,7 +119,7 @@ UE5Coro::TCoroutine<FLevelUpStatChanges> UDefaultStatBlock::GainExp(int32 Change
         }
 
         if (bShowMessages) {
-            auto &Dispatcher = IPokemonCoroutineDispatcher::Get(this);
+            auto &Dispatcher = IPokemonCoroutineDispatcher::Get();
             co_await Dispatcher.ProcessLevelUp(this, Changes);
         }
     }

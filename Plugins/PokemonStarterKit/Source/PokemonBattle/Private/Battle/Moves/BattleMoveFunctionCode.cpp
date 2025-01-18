@@ -521,7 +521,7 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DisplayDamage(const TArray<TScrip
                         Retro::Ranges::Views::Transform(&IBattler::GetNickname) |
                             Retro::Ranges::To<TArray>();
 
-    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(Targets[0].GetObject());
+    auto &Dispatcher = IPokemonCoroutineDispatcher::Get();
     auto Messages = GetDefault<UBattleMessageSettings>();
     if (!CriticalHits.IsEmpty()) {
         co_await Dispatcher.DisplayMessage(Targets.Num() > 1 ? FText::FormatNamed(Messages->CriticalHitMessageMulti, "Pkmn", UStringUtilities::GenerateList(CriticalHits, UStringUtilities::ConjunctionAnd)) : Messages->CriticalHitMessage);

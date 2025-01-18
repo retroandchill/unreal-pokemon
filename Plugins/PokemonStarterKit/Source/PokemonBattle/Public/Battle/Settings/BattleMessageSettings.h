@@ -6,6 +6,30 @@
 #include "Engine/DeveloperSettings.h"
 #include "BattleMessageSettings.generated.h"
 
+USTRUCT(BlueprintType)
+struct POKEMONBATTLE_API FStatChangeSettings {
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = "Battle|Stats")
+    FText StatChangeMessage = NSLOCTEXT("PokemonBattle", "StatChangeMessage", "{Pkmn}'s {Stat} {Change}!");
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = "Battle|Stats")
+    FText ModifiedChangeFormat = NSLOCTEXT("PokemonBattle", "StatChangeFormat", "{Change} {Modifier}");
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = "Battle|Stats")
+    FText IncreaseText = NSLOCTEXT("PokemonBattle", "StatIncreaseText", "rose");
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = "Battle|Stats")
+    FText DecreaseText = NSLOCTEXT("PokemonBattle", "StatDecreaseText", "fell");
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = "Battle|Stats")
+    TArray<FText> Modifiers = {
+        FText::GetEmpty(),
+        NSLOCTEXT("PokemonBattle", "ChangedSharply", "sharply"),
+        NSLOCTEXT("PokemonBattle", "ChangedDrastically", "drastically")
+    };
+};
+
 /**
  * 
  */
@@ -37,5 +61,8 @@ public:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Battle|Stats")
     FText MinStatMessage = NSLOCTEXT("PokemonBattle", "MinStatMessage", "{Pkmn}'s {Stat} won't go any lower!");
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Battle|Stats")
+    FStatChangeSettings StatChangeMessage;
 
 };

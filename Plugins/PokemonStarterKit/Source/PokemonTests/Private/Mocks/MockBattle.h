@@ -7,7 +7,10 @@
 #include "Battle/Battle.h"
 #include "Battle/Transitions/BattleInfo.h"
 #include "Mocking/UnrealMock.h"
+
+THIRD_PARTY_INCLUDES_START
 #include <gmock/gmock.h>
+THIRD_PARTY_INCLUDES_END
 
 class FMockBattle : public IBattle {
     DECLARE_MOCK_INTERFACE(FMockBattle)

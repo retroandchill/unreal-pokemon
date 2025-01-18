@@ -11,7 +11,7 @@ UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObje
 }
 
 UE5Coro::TCoroutine<> UDisplayMessage::ExecuteCoroutine(FForceLatentCoroutine) {
-    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(GetWorldContext());
+    auto &Dispatcher = IPokemonCoroutineDispatcher::Get();
     co_await Dispatcher.DisplayMessage(Message);
     OnConfirm.Broadcast();
 }

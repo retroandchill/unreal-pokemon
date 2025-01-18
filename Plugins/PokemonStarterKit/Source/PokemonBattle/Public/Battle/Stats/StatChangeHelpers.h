@@ -72,6 +72,9 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
     UFUNCTION(BlueprintPure, Category = "Battle|Stats")
     static bool StatStageAtMin(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat);
 
+    static TOptional<FText> GetStatChangeMessage(const TScriptInterface<IBattler> &Battler,
+                                                 const FText& StatName, int32 Change);
+
     /**
      * Perform a change to a battler's stat stages
      * @param Battler The battler in question to change the stats of
@@ -80,7 +83,7 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
      * @param Ability
      * @return The actual number of stages that were changed
      */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Stat")
-    static int32 ChangeBattlerStatStages(const TScriptInterface<IBattler> &Battler, FName Stat, int32 Stages,
-                                         UGameplayAbility *Ability = nullptr);
+    static UE5Coro::TCoroutine<int32> ChangeBattlerStatStages(const TScriptInterface<IBattler> &Battler, FName Stat,
+                                                              int32 Stages,
+                                                              UGameplayAbility *Ability = nullptr);
 };

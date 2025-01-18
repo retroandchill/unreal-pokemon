@@ -17,7 +17,7 @@
 
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);
-    CoroutineDispatcher = UnrealInjector::NewInjectedDependency<IPokemonCoroutineDispatcher>(this);
+    IPokemonCoroutineDispatcher::Init(this);
 
     GrowthRates.Empty();
     for (auto RegisteredTypes = Exp::FGrowthRateRegistry::GetInstance().GetAllRegisteredTypes();
@@ -29,6 +29,11 @@ void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
 #if !UE_BUILD_SHIPPING
     StartNewGame();
 #endif
+}
+
+void UPokemonSubsystem::Deinitialize() {
+    Super::Deinitialize();
+    IPokemonCoroutineDispatcher::Destroy();
 }
 
 UPokemonSubsystem &UPokemonSubsystem::GetInstance(const UObject *WorldContext) {

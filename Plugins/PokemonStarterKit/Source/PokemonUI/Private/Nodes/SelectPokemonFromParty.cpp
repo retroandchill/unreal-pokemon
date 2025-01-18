@@ -14,7 +14,7 @@ USelectPokemonFromParty *USelectPokemonFromParty::SelectPokemonFromParty(const U
 
 UE5Coro::TCoroutine<> USelectPokemonFromParty::ExecuteCoroutine(FForceLatentCoroutine) {
     Retro::Optionals::IfPresentOrElse(
-        co_await IPokemonCoroutineDispatcher::Get(GetWorldContext()).SelectPokemonFromParty(),
+        co_await IPokemonCoroutineDispatcher::Get().SelectPokemonFromParty(),
         [&](const FSelectedPokemonHandle &Handle) {
             OnSelected.Broadcast(Handle.GetScreen(), Handle.GetTrainer(), Handle.GetIndex());
         },

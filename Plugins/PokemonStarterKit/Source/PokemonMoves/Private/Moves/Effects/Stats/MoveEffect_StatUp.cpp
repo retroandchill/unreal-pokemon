@@ -33,6 +33,7 @@ UE5Coro::TCoroutine<> UMoveEffect_StatUp::ApplyGeneralEffect(const TScriptInterf
 }
 
 UE5Coro::TCoroutine<> UMoveEffect_StatUp::ApplyStatChanges(const TScriptInterface<IBattler> &User, FForceLatentCoroutine) {
-    // TODO: Implement me
-    co_return;
+    for (auto &[StatID, Change] : StatsToChange) {
+        co_await UStatChangeHelpers::ChangeBattlerStatStages(User, StatID, Change);
+    }
 }

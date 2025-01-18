@@ -74,6 +74,6 @@ UE5Coro::TCoroutine<> ABattleSequencer::TryDisplayMessage(FText Message, FForceL
         co_return;
     }
 
-    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(this);
+    auto &Dispatcher = IPokemonCoroutineDispatcher::Get();
     co_await Dispatcher.DisplayMessage(std::move(Message));
 }

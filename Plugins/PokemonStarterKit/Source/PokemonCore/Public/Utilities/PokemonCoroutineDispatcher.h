@@ -33,7 +33,14 @@ class POKEMONCORE_API IPokemonCoroutineDispatcher {
     using TMultiCoroutine = UE5Coro::TCoroutine<TTuple<int32, FName>>;
 
   public:
-    static IPokemonCoroutineDispatcher &Get(const UObject *WorldContext);
+    static bool Init(UObject* Outer);
+
+    static bool Destroy();
+    
+    static IPokemonCoroutineDispatcher &Get() {
+        check(Instance.Interface != nullptr);
+        return *Instance.Interface;
+    }
 
     virtual UE5Coro::TCoroutine<> DisplayMessage(FText Message, FForceLatentCoroutine = {}) const = 0;
 
@@ -68,6 +75,19 @@ class POKEMONCORE_API IPokemonCoroutineDispatcher {
     virtual UE5Coro::TCoroutine<> ProcessLevelUp(const TScriptInterface<IPokemon> &Pokemon,
                                                  const FLevelUpStatChanges &StatChanges,
                                                  FForceLatentCoroutine = {}) const = 0;
+
+private:
+    struct FStorage : FGCObject {
+        
+        void AddReferencedObjects(FReferenceCollector &Collector) override;
+        
+        FString GetReferencerName() const override;
+
+        TScriptInterface<IPokemonCoroutineDispatcher> Interface;
+
+    };
+    
+    static FStorage Instance;
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONCORE_API, IPokemonCoroutineDispatcher)
