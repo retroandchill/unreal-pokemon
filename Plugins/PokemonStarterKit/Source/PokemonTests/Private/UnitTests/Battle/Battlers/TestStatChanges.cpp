@@ -1,5 +1,4 @@
-﻿THIRD_PARTY_INCLUDES_START
-#include "Asserts.h"
+﻿#include "Asserts.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
@@ -14,7 +13,6 @@
 #include "Pokemon/PokemonDTO.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestBattlerActor.h"
-THIRD_PARTY_INCLUDES_END
 
 using namespace testing;
 
