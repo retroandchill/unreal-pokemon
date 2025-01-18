@@ -82,12 +82,6 @@ class POKEMONBATTLE_API UPokemonBattleSettings : public UDeveloperSettings {
     };
 
     /**
-     * The default ability used for using moves
-     */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = Battle, meta = (MetaClass = "BattleMoveFunctionCode"))
-    FSoftClassPath DefaultMoveAbility;
-
-    /**
      * The default ability used for using items in battle
      */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = Battle, meta = (MetaClass = "BattleItemEffect"))

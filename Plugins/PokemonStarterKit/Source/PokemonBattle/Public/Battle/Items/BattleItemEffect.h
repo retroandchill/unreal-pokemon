@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "UE5CoroGAS.h"
+#include "RetroLib/Ranges/Views/Generator.h"
 
 class IBattler;
 struct FItem;
@@ -14,7 +15,7 @@ struct FItem;
 /**
  * Ability that handles the effect of the item being used in battle.
  */
-UCLASS(Abstract)
+UCLASS(BlueprintType)
 class POKEMONBATTLE_API UBattleItemEffect : public UUE5CoroGameplayAbility {
     GENERATED_BODY()
 
@@ -43,36 +44,29 @@ class POKEMONBATTLE_API UBattleItemEffect : public UUE5CoroGameplayAbility {
     /**
      * Apply the global (no targets) effect of the item.
      * @param User The user of the item.
+     * @param 
      * @return Was the effect successfully applied? If none of these checks return true, this item will not be consumed.
      */
-    UFUNCTION(BlueprintNativeEvent, Category = Effect)
-    bool ApplyGlobalEffect(const TScriptInterface<IBattler> &User);
+    virtual UE5Coro::TCoroutine<bool> ApplyGlobalEffect(const TScriptInterface<IBattler> &User, FForceLatentCoroutine = {});
 
     /**
      * Apply the effect of the item to an individual target.
      * @param User The user of the item.
      * @param Target The target of the item in question
+     * @param 
      * @return Was the effect successfully applied? If none of these checks return true, this item will not be consumed.
      */
-    UFUNCTION(BlueprintNativeEvent, Category = Effect)
-    bool ApplyEffectToTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
+    virtual UE5Coro::TCoroutine<bool> ApplyEffectToTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, FForceLatentCoroutine = {});
 
     /**
      * Check if an individual target for the item is valid
      * @param Battler Was the item target valid
+     * @param 
      * @return Is this a valid target for the move.
      */
-    UFUNCTION(BlueprintNativeEvent, Category = Validation)
-    bool IsTargetValid(const TScriptInterface<IBattler> &Battler);
+    virtual UE5Coro::TCoroutine<bool> IsTargetValid(const TScriptInterface<IBattler> &Battler, FForceLatentCoroutine = {});
 
   private:
-    /**
-     * Filter out any invalid targets from this move
-     * @param TriggerEventData
-     * @return The array of filtered target actors
-     */
-    TArray<TScriptInterface<IBattler>> FilterInvalidTargets(const FGameplayEventData *TriggerEventData);
-
     FName ItemID;
 
     bool bShouldConsumeItem = false;

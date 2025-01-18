@@ -89,7 +89,7 @@ struct POKEMONBATTLE_API FAttackAndDefenseStats {
 /**
  * The gameplay ability for using a move.
  */
-UCLASS(Abstract, NotBlueprintable, BlueprintType)
+UCLASS(NotBlueprintable, BlueprintType)
 class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility {
     GENERATED_BODY()
 

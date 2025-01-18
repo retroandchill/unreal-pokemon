@@ -12,7 +12,7 @@ class IBattleAnimation;
 /**
  * 
  */
-UCLASS(Abstract)
+UCLASS(Abstract, Blueprintable)
 class POKEMONBATTLE_API UBattleAnimationGetter : public UObject {
     GENERATED_BODY()
 

@@ -3,18 +3,11 @@
 #include "Battle/Moves/MoveLookup.h"
 #include "Battle/BlueprintClasses.h"
 #include "Battle/Moves/BattleMoveFunctionCode.h"
-#include "Battle/Settings/PokemonBattleSettings.h"
-#include "RetroLib/Optionals/OrElseGet.h"
-
-static TSubclassOf<UBattleMoveFunctionCode> GetDefaultMoveClass() {
-    auto MoveClass = GetDefault<UPokemonBattleSettings>()->DefaultMoveAbility.TryLoadClass<UBattleMoveFunctionCode>();
-    check(MoveClass != nullptr)
-    return MoveClass;
-}
+#include "RetroLib/Optionals/OrElseValue.h"
 
 TSubclassOf<UBattleMoveFunctionCode> Pokemon::Battle::Moves::LookupMoveEffectClass(FName FunctionCode) {
     // clang-format off
     return Classes::MoveEffects.LoadClass(FunctionCode) |
-           Retro::Optionals::OrElseGet(&GetDefaultMoveClass);
+           Retro::Optionals::OrElseValue(UBattleMoveFunctionCode::StaticClass());
     // clang-format on
 }

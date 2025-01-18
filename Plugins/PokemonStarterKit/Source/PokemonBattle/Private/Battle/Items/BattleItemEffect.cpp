@@ -40,11 +40,24 @@ UE5Coro::GAS::FAbilityCoroutine UBattleItemEffect::ExecuteAbility(FGameplayAbili
     ItemID = CastChecked<UUseItemPayload>(TriggerEventData->OptionalObject)->Item;
 
     TScriptInterface<IBattler> User = ActorInfo->OwnerActor.Get();
-    bShouldConsumeItem = ApplyGlobalEffect(User);
-    auto Targets = FilterInvalidTargets(TriggerEventData);
-    Algo::ForEach(Targets, [&User, this](const TScriptInterface<IBattler> &Target) {
-        bShouldConsumeItem |= ApplyEffectToTarget(User, Target);
-    });
+    bShouldConsumeItem = co_await ApplyGlobalEffect(User);
+    // clang-format off
+    auto PossibleTargets = TriggerEventData->TargetData.Data |
+                           Retro::Ranges::Views::Transform(&FGameplayAbilityTargetData::GetActors) |
+                           Retro::Ranges::Views::Join |
+                           Retro::Ranges::Views::Transform(Retro::MakeStrongChecked) |
+                           Retro::Ranges::Views::Filter(Retro::ValidPtr) |
+                           Retro::Ranges::Views::Filter(Retro::InstanceOf<IBattler>) |
+                           Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<IBattler>) |
+                           Retro::Ranges::Views::Transform(Retro::WrapPointer);
+    // clang-format on
+    for (auto Target : PossibleTargets) {
+        if (!co_await IsTargetValid(Target)) {
+            continue;
+        }
+
+        bShouldConsumeItem |= co_await ApplyEffectToTarget(User, Target);
+    }
 
     co_await ABattleSequencer::DisplayBattleMessages(this);
     ActorInfo->AbilitySystemComponent->RemoveLooseGameplayTag(Pokemon::Battle::Items::UsingItem);
@@ -54,27 +67,17 @@ UE5Coro::GAS::FAbilityCoroutine UBattleItemEffect::ExecuteAbility(FGameplayAbili
     }
 }
 
-bool UBattleItemEffect::ApplyEffectToTarget_Implementation(const TScriptInterface<IBattler> &User,
-                                                           const TScriptInterface<IBattler> &Target) {
-    return false;
+UE5Coro::TCoroutine<bool> UBattleItemEffect::ApplyGlobalEffect(const TScriptInterface<IBattler> &User,
+                                                               FForceLatentCoroutine) {
+    co_return false;
 }
 
-bool UBattleItemEffect::ApplyGlobalEffect_Implementation(const TScriptInterface<IBattler> &User) {
-    return false;
+UE5Coro::TCoroutine<bool> UBattleItemEffect::ApplyEffectToTarget(const TScriptInterface<IBattler> &User,
+                                                                 const TScriptInterface<IBattler> &Target,
+                                                                 FForceLatentCoroutine) {
+    co_return false;
 }
 
-bool UBattleItemEffect::IsTargetValid_Implementation(const TScriptInterface<IBattler> &Battler) {
-    return true;
-}
-
-TArray<TScriptInterface<IBattler>> UBattleItemEffect::FilterInvalidTargets(const FGameplayEventData *TriggerEventData) {
-    // clang-format on
-    return TriggerEventData->TargetData.Data | Retro::Ranges::Views::Transform(&FGameplayAbilityTargetData::GetActors) |
-           Retro::Ranges::Views::Join | Retro::Ranges::Views::Transform(Retro::MakeStrongChecked) |
-           Retro::Ranges::Views::Filter(Retro::ValidPtr) | Retro::Ranges::Views::Filter(Retro::InstanceOf<IBattler>) |
-           Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<IBattler>) |
-           Retro::Ranges::Views::Transform(Retro::WrapPointer) |
-           Retro::Ranges::Views::Filter(Retro::BindMethod<&UBattleItemEffect::IsTargetValid>(this)) |
-           Retro::Ranges::To<TArray>();
-    // clang-format off
+UE5Coro::TCoroutine<bool> UBattleItemEffect::IsTargetValid(const TScriptInterface<IBattler> &Battler, FForceLatentCoroutine) {
+    co_return true;
 }
