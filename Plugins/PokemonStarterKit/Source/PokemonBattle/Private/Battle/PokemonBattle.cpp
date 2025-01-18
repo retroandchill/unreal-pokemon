@@ -48,7 +48,7 @@ void APokemonBattle::BeginPlay() {
     auto TransitionSubsystem = GetWorld()->GetSubsystem<UBattleTransitionSubsystem>();
     check(TransitionSubsystem != nullptr)
     TransitionSubsystem->SetRegisteredBattle(this);
-    Dispatcher = Retro::WrapPointer(&IPokemonCoroutineDispatcher::Get());
+    Dispatcher = Retro::WrapPointer(&IPokemonCoroutineDispatcher::Get(this));
 }
 
 void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {

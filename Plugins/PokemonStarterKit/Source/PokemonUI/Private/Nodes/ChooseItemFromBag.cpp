@@ -14,7 +14,7 @@ UChooseItemFromBag *UChooseItemFromBag::ChooseItemFromBag(const UObject *WorldCo
 }
 
 UE5Coro::TCoroutine<> UChooseItemFromBag::ExecuteCoroutine(FForceLatentCoroutine) {
-    auto &Dispatcher = IPokemonCoroutineDispatcher::Get();
+    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(GetWorldContext());
     Retro::Optionals::IfPresentOrElse(
         co_await Dispatcher.SelectItemFromBag(ItemFilter),
         [&](const FSelectedItemHandle &Handle) {

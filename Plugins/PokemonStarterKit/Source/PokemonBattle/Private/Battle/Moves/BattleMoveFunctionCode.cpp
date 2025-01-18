@@ -29,6 +29,7 @@
 #include "PokemonBattleModule.h"
 #include "Battle/Animations/BattleAnimationGetter.h"
 #include "Battle/Battlers/BattlerHelpers.h"
+#include "Battle/Effects/ApplyMessageGameplayEffectComponent.h"
 #include "Battle/Settings/PokemonBattleSettings.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
@@ -521,7 +522,7 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DisplayDamage(const TArray<TScrip
                         Retro::Ranges::Views::Transform(&IBattler::GetNickname) |
                             Retro::Ranges::To<TArray>();
 
-    auto &Dispatcher = IPokemonCoroutineDispatcher::Get();
+    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(Targets[0].GetObject());
     auto Messages = GetDefault<UBattleMessageSettings>();
     if (!CriticalHits.IsEmpty()) {
         co_await Dispatcher.DisplayMessage(Targets.Num() > 1 ? FText::FormatNamed(Messages->CriticalHitMessageMulti, "Pkmn", UStringUtilities::GenerateList(CriticalHits, UStringUtilities::ConjunctionAnd)) : Messages->CriticalHitMessage);
@@ -692,13 +693,24 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::EndMove(const TScriptInterface<IB
     co_await UBattlerHelpers::GainExpOnFaint(FaintedBattlers);
 }
 
-TArray<FActiveGameplayEffectHandle>
-UBattleMoveFunctionCode::ApplyGameplayEffectToBattler(const TScriptInterface<IBattler> &Battler,
+UE5Coro::TCoroutine<TArray<FActiveGameplayEffectHandle>> UBattleMoveFunctionCode::ApplyGameplayEffectToBattler(
+                                                        const TScriptInterface<IBattler> &Battler,
                                                       TSubclassOf<UGameplayEffect> EffectClass, int32 Level,
-                                                      int32 Stacks) const {
+                                                      int32 Stacks, FForceLatentCoroutine) const {
     FGameplayAbilityTargetDataHandle TargetDataHandle;
     auto &TargetData = TargetDataHandle.Data.Emplace_GetRef(MakeShared<FGameplayAbilityTargetData_ActorArray>());
     TargetData->SetActors({CastChecked<AActor>(Battler.GetObject())});
-    return ApplyGameplayEffectToTarget(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(),
+    auto AddedSpecs = ApplyGameplayEffectToTarget(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(),
                                        TargetDataHandle, EffectClass, Level, Stacks);
+    for (auto &Handle : AddedSpecs) {
+        auto Effect = Handle.GetOwningAbilitySystemComponent()->GetGameplayEffectCDO(Handle);
+        auto Component = Effect->FindComponent<UApplyMessageGameplayEffectComponent>();
+        if (Component == nullptr) {
+            continue;
+        }
+
+        co_await Component->DisplayApplyMessage(Battler.GetObject(), Battler->GetNickname());
+    }
+
+    co_return AddedSpecs;
 }

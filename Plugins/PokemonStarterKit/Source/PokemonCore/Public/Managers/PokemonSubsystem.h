@@ -25,7 +25,6 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem, public 
 
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
-    void Deinitialize() override;
 
     /**
      * Get the instance of this subsystem from the provided context.
@@ -136,6 +135,11 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem, public 
     UFUNCTION(BlueprintCallable, Category = Reset)
     void SetPlayerResetLocationAsCurrentLocation(ACharacter *PlayerCharacter);
 
+    IPokemonCoroutineDispatcher &GetCoroutineDispatcher() const {
+        check(CoroutineDispatcher != nullptr) ;
+        return *CoroutineDispatcher;
+    }
+
   private:
     /**
      * The trainer that represents the player character
@@ -175,4 +179,7 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem, public 
     TOptional<FTransform> LoadTransform;
 
     TOptional<FPlayerResetLocation> PlayerResetLocation;
+
+    UPROPERTY()
+    TScriptInterface<IPokemonCoroutineDispatcher> CoroutineDispatcher;
 };

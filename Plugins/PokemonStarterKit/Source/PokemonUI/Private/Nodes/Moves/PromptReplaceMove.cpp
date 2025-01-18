@@ -15,7 +15,7 @@ UPromptReplaceMove *UPromptReplaceMove::PromptReplaceMove(const UObject *WorldCo
 }
 
 UE5Coro::TCoroutine<> UPromptReplaceMove::ExecuteCoroutine(FForceLatentCoroutine) {
-    if (co_await IPokemonCoroutineDispatcher::Get().PromptReplaceMove(Pokemon, Move)) {
+    if (co_await IPokemonCoroutineDispatcher::Get(GetWorldContext()).PromptReplaceMove(Pokemon, Move)) {
         MoveLearned.Broadcast();
     } else {
         MoveNotLearned.Broadcast();

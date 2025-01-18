@@ -26,7 +26,7 @@ UE5Coro::TCoroutine<bool> UStatChangeHelpers::CanRaiseStat(UE5Coro::TLatentConte
 
     if (bShowMessages) {
         auto Settings = GetDefault<UBattleMessageSettings>();
-        IPokemonCoroutineDispatcher::Get()
+        IPokemonCoroutineDispatcher::Get(Context.Target)
             .DisplayMessage(FText::FormatNamed(Settings->MaxStatMessage, "Pkmn", Battler->GetNickname(),
                                                "Stat", FDataManager::GetInstance().GetDataChecked(Stat).RealName));
     }
@@ -48,7 +48,7 @@ UE5Coro::TCoroutine<bool> UStatChangeHelpers::CanLowerStat(UE5Coro::TLatentConte
 
     if (bShowMessages) {
         auto Settings = GetDefault<UBattleMessageSettings>();
-        IPokemonCoroutineDispatcher::Get()
+        IPokemonCoroutineDispatcher::Get(Context.Target)
             .DisplayMessage(FText::FormatNamed(Settings->MinStatMessage, "Pkmn", Battler->GetNickname(),
                                                "Stat", FDataManager::GetInstance().GetDataChecked(Stat).RealName));
     }
@@ -136,7 +136,7 @@ UE5Coro::TCoroutine<int32> UStatChangeHelpers::ChangeBattlerStatStages(const TSc
     AbilityComponent->ApplyGameplayEffectSpecToSelf(NewSpec);
 
     if (auto ChangeMessage = GetStatChangeMessage(Battler, StatData->RealName, ActualChange); ChangeMessage.IsSet()) {
-        co_await IPokemonCoroutineDispatcher::Get().DisplayMessage(*ChangeMessage);
+        co_await IPokemonCoroutineDispatcher::Get(Battler.GetObject()).DisplayMessage(*ChangeMessage);
     }
     
     co_return ActualChange;
