@@ -659,7 +659,7 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScr
         if (Roll < Chance) {
             UE_LOG(LogBattle, Display, TEXT("Applying additional effect of %s to %s!"),
                    *BattleMove->GetDisplayName().ToString(), *Target->GetNickname().ToString())
-            ApplyAdditionalEffect(User, Target);
+            co_await ApplyAdditionalEffect(User, Target);
         }
     }
 

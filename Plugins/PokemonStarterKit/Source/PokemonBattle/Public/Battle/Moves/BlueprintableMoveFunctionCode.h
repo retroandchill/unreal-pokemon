@@ -21,6 +21,8 @@ public:
     UE5Coro::TCoroutine<> ApplyEffectWhenDealingDamage(const TScriptInterface<IBattler> &User,
                                                        const TScriptInterface<IBattler> &Target, FForceLatentCoroutine = {}) final;
 
+    UE5Coro::TCoroutine<> ApplyAdditionalEffect(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) final;
+
     UE5Coro::TCoroutine<> ApplyEffectAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, FForceLatentCoroutine = {}) final;
 
     UE5Coro::TCoroutine<> ApplyGeneralEffect(const TScriptInterface<IBattler> &User, FForceLatentCoroutine = {}) final;
@@ -43,6 +45,12 @@ protected:
 
     UFUNCTION(BlueprintCallable, Category = "Move|Effects")
     void CompleteApplyEffectWhenDealingDamage();
+
+    UFUNCTION(BlueprintNativeEvent, Category = "Move|Effects")
+    void StartApplyAdditionalEffect(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
+
+    UFUNCTION(BlueprintCallable, Category = "Move|Effects")
+    void CompleteApplyAdditionalEffect();
 
     UFUNCTION(BlueprintNativeEvent, Category = "Move|Effects")
     void StartApplyEffectAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
