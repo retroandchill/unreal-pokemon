@@ -11,7 +11,7 @@ class IBattler;
 class UGameplayEffect;
 class UBattleMoveFunctionCode;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEffectApplyComplete, TArray<FActiveGameplayEffectHandle>, Effects);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEffectApplyComplete, const TArray<FActiveGameplayEffectHandle>&, Effects);
 
 /**
  * 

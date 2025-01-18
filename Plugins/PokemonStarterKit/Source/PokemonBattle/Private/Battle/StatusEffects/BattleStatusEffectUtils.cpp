@@ -3,21 +3,23 @@
 #include "Battle/StatusEffects/BattleStatusEffectUtils.h"
 #include "Battle/Animations/BattleSequencer.h"
 #include "Battle/Battlers/Battler.h"
+#include "Utilities/PokemonCoroutineDispatcher.h"
 
-bool UBattleStatusEffectUtils::CanStatusEffectBeInflicted(FName StatusEffectID,
-                                                          const TScriptInterface<IBattler> &Target,
-                                                          FText AlreadyAppliedFormat, FText HasOtherStatusFormat) {
-    if (auto &StatusEffect = Target->GetStatusEffect(); StatusEffect.IsSet()) {
-        if (auto &Status = StatusEffect.GetValue(); Status.StatusEffectID == StatusEffectID) {
-            ABattleSequencer::QueueBattleMessage(
-                FText::Format(AlreadyAppliedFormat, {{"Pkmn", Target->GetNickname()}}));
-        } else {
-            ABattleSequencer::QueueBattleMessage(
-                FText::Format(HasOtherStatusFormat, {{"Pkmn", Target->GetNickname()}}));
-        }
-
-        return false;
+UE5Coro::TCoroutine<bool> UBattleStatusEffectUtils::CanStatusEffectBeInflicted(UE5Coro::TLatentContext<const UObject> Context,
+                                                                               FName StatusEffectID,
+                                                                               const TScriptInterface<IBattler> &Target, const FText& AlreadyAppliedFormat, const FText& HasOtherStatusFormat) {
+    auto &StatusEffect = Target->GetStatusEffect();
+    if (!StatusEffect.IsSet()) {
+        co_return true;
     }
 
-    return true;
+    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(Context.Target);
+    if (auto &Status = StatusEffect.GetValue(); Status.StatusEffectID == StatusEffectID) {
+        co_await Dispatcher.DisplayMessage(FText::FormatNamed(AlreadyAppliedFormat, "Pkmn", Target->GetNickname()));
+    } else {
+        co_await Dispatcher.DisplayMessage(FText::FormatNamed(HasOtherStatusFormat, "Pkmn", Target->GetNickname()));
+    }
+
+    co_return false;
+
 }

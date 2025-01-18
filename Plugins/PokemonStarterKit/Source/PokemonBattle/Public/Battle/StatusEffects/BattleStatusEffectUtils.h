@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "UE5Coro.h"
 
 #include "BattleStatusEffectUtils.generated.h"
 
@@ -19,13 +20,13 @@ class POKEMONBATTLE_API UBattleStatusEffectUtils : public UBlueprintFunctionLibr
   public:
     /**
      * Check if a status effect can be inflicted on the target
+     * @param Context
      * @param StatusEffectID
      * @param Target The target of the status effect
      * @param AlreadyAppliedFormat
      * @param HasOtherStatusFormat
      * @return Can the effect be inflicted
      */
-    UFUNCTION(BlueprintCallable, Category = StatusEffects)
-    static bool CanStatusEffectBeInflicted(FName StatusEffectID, const TScriptInterface<IBattler> &Target,
-                                           FText AlreadyAppliedFormat, FText HasOtherStatusFormat);
+    static UE5Coro::TCoroutine<bool> CanStatusEffectBeInflicted(UE5Coro::TLatentContext<const UObject> Context, FName StatusEffectID,
+                                                                const TScriptInterface<IBattler> &Target, const FText& AlreadyAppliedFormat, const FText& HasOtherStatusFormat);
 };
