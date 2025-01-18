@@ -108,7 +108,7 @@ UE5Coro::GAS::FAbilityCoroutine UBattleMoveFunctionCode::ExecuteAbility(FGamepla
     auto TypePayload = NewObject<UMoveTypeDeterminedPayload>();
     TypePayload->User = User;
     TypePayload->Type = DeterminedType;
-    Pokemon::Battle::Events::SendOutMoveEvent(User, TypePayload, Pokemon::Battle::Moves::TypeDetermined);
+    co_await Pokemon::Battle::Events::SendOutMoveEvent(User, TypePayload, Pokemon::Battle::Moves::TypeDetermined);
     UE_LOG(LogBattle, Display, TEXT("%s determined to be %s-type!"), *BattleMove->GetDisplayName().ToString(),
            *DeterminedType.ToString())
 
@@ -259,7 +259,7 @@ UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::SuccessCheckAgainstTarget(con
     }
 
     auto Payload = USuccessCheckAgainstTargetPayload::Create(BattleMove, User, Target);
-    Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload,
+    co_await Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload,
                                                Pokemon::Battle::Moves::SuccessCheckAgainstTarget);
     co_return true;
 }
@@ -382,7 +382,7 @@ void UBattleMoveFunctionCode::CalculateDamageAgainstTarget_Implementation(const 
 
     int32 BasePower = CalculateBasePower(BattleMove->GetBasePower(), User, Target);
     auto Payload = UDamageModificationPayload::Create(User, Target, TargetCount, DeterminedType, BasePower);
-    Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Moves::DamageModificationEvents);
+    SYNC_EVENT(Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Moves::DamageModificationEvents))
     auto &PayloadData = Payload->GetData();
     float NewFinal = PayloadData.FinalDamageMultiplier;
     NewFinal *= User->GetAbilityComponent()->GetStatStages()->GetSameTypeAttackBonus();
@@ -453,7 +453,7 @@ float UBattleMoveFunctionCode::CalculateTypeMatchUp_Implementation(FName MoveTyp
     }
 
     auto Payload = UTypeMatchUpModPayload::Create(User, Target, MoveType, Effectiveness);
-    Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Types::FullTypeMatchUpEvents);
+    SYNC_EVENT(Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Types::FullTypeMatchUpEvents))
     return Payload->GetData().Multiplier;
 }
 
@@ -462,7 +462,7 @@ float UBattleMoveFunctionCode::CalculateSingleTypeMod_Implementation(FName Attac
                                                                      const TScriptInterface<IBattler> &Target) {
     float Effectiveness = UTypeHelper::GetTypeEffectiveness(AttackingType, DefendingType);
     auto Payload = USingleTypeModPayload::Create(User, Target, AttackingType, DefendingType, Effectiveness);
-    Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Types::SingleTypeModifierEvents);
+    SYNC_EVENT(Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Types::SingleTypeModifierEvents));
     return Payload->GetData().Multiplier;
 }
 
@@ -472,7 +472,7 @@ bool UBattleMoveFunctionCode::IsCritical_Implementation(const TScriptInterface<I
     auto Override = GetCriticalOverride(User, Target);
     auto Stage = static_cast<int32>(StatStagesAttributes->GetCriticalHitStages());
     auto Payload = UCriticalHitRateCalculationPayload::Create(this, User, Target, Override, Stage);
-    Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Moves::CriticalHitRateModEvents);
+    SYNC_EVENT(Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Moves::CriticalHitRateModEvents));
     auto &Data = Payload->GetData();
     Override = Data.Override;
     Stage = Data.CriticalHitRateStages;
@@ -680,8 +680,8 @@ int32 UBattleMoveFunctionCode::CalculateAdditionalEffectChance_Implementation(
     const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) {
     auto Payload =
         UAdditionalEffectChanceModificationPayload::Create(User, Target, BattleMove->GetAdditionalEffectChance());
-    Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload,
-                                               Pokemon::Battle::Moves::AdditionalEffectChanceEvents);
+    SYNC_EVENT(Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload,
+                                               Pokemon::Battle::Moves::AdditionalEffectChanceEvents));
     return FMath::RoundToInt32(Payload->GetData().AdditionalEffectChance);
 }
 
