@@ -2,7 +2,7 @@
 
 #include "Battle/Items/BlueprintableBattleItemEffect.h"
 
-UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::ApplyGlobalEffect(const TScriptInterface<IBattler> &User,
+UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::ApplyGlobalEffect(TScriptInterface<IBattler> User,
                                                                             FForceLatentCoroutine) {
     if (StageCompleteState->IsComplete()) {
         StageCompleteState = MakeShared<TFutureState<bool>>();
@@ -12,8 +12,8 @@ UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::ApplyGlobalEffect(cons
     co_return co_await TFuture<bool>(StageCompleteState);
 }
 
-UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::ApplyEffectToTarget(const TScriptInterface<IBattler> &User,
-                                                                              const TScriptInterface<IBattler> &Target,
+UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::ApplyEffectToTarget(TScriptInterface<IBattler> User,
+                                                                              TScriptInterface<IBattler> Target,
                                                                               FForceLatentCoroutine) {
     if (StageCompleteState->IsComplete()) {
         StageCompleteState = MakeShared<TFutureState<bool>>();
@@ -23,7 +23,7 @@ UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::ApplyEffectToTarget(co
     co_return co_await TFuture<bool>(StageCompleteState);
 }
 
-UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::IsTargetValid(const TScriptInterface<IBattler> &Battler,
+UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::IsTargetValid(TScriptInterface<IBattler> Battler,
                                                                         FForceLatentCoroutine) {
     if (StageCompleteState->IsComplete()) {
         StageCompleteState = MakeShared<TFutureState<bool>>();

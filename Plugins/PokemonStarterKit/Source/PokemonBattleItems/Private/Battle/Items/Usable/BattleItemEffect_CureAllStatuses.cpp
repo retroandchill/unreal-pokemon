@@ -4,8 +4,8 @@
 #include "Battle/StatusEffects/BattleStatusEffectUtils.h"
 
 UE5Coro::TCoroutine<bool>
-UBattleItemEffect_CureAllStatuses::ApplyEffectToTarget(const TScriptInterface<IBattler> &User,
-                                                       const TScriptInterface<IBattler> &Target,
+UBattleItemEffect_CureAllStatuses::ApplyEffectToTarget(TScriptInterface<IBattler> User,
+                                                       TScriptInterface<IBattler> Target,
                                                        FForceLatentCoroutine ForceLatentCoroutine) {
     return UBattleStatusEffectUtils::RemoveStatusEffectFromBattler(Target);
 }

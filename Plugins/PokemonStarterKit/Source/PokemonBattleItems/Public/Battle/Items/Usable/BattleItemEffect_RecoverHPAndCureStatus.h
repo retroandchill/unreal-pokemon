@@ -15,8 +15,8 @@ class POKEMONBATTLEITEMS_API UBattleItemEffect_RecoverHPAndCureStatus : public U
     GENERATED_BODY()
 
   protected:
-    UE5Coro::TCoroutine<bool> ApplyEffectToTarget(const TScriptInterface<IBattler> &User,
-                                                  const TScriptInterface<IBattler> &Target,
+    UE5Coro::TCoroutine<bool> ApplyEffectToTarget(TScriptInterface<IBattler> User,
+                                                  TScriptInterface<IBattler> Target,
                                                   FForceLatentCoroutine) override;
 
   private:

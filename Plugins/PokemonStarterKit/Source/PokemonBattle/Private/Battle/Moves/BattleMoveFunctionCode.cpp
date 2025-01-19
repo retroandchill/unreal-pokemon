@@ -111,7 +111,7 @@ UE5Coro::GAS::FAbilityCoroutine UBattleMoveFunctionCode::ExecuteAbility(FGamepla
     UE_LOG(LogBattle, Display, TEXT("%s determined to be %s-type!"), *BattleMove->GetDisplayName().ToString(),
            *DeterminedType.ToString())
 
-    co_await UseMove(User, Targets);
+    co_await UseMove(User, std::move(Targets));
 
     ActorInfo->AbilitySystemComponent->RemoveLooseGameplayTags(AddedTags, TNumericLimits<int32>::Max());
     for (auto &[Actor, Tags] : AddedTargetTags) {
@@ -143,8 +143,8 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
     // clang-format on
 }
 
-UE5Coro::TCoroutine<> UBattleMoveFunctionCode::UseMove(const TScriptInterface<IBattler> &User,
-                                                       const TArray<TScriptInterface<IBattler>> &Targets,
+UE5Coro::TCoroutine<> UBattleMoveFunctionCode::UseMove(TScriptInterface<IBattler> User,
+                                                       TArray<TScriptInterface<IBattler>> Targets,
                                                        FForceLatentCoroutine) {
     TArray<TScriptInterface<IBattler>> SuccessfulHits;
     if (!co_await CheckMoveSuccess(User, Targets, SuccessfulHits)) {
@@ -160,7 +160,7 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::UseMove(const TScriptInterface<IB
     co_await EndMove(User, SuccessfulHits, FainedBattlers);
 }
 
-UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(const TScriptInterface<IBattler> &User,
+UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(TScriptInterface<IBattler> User,
                                                                     const TArray<TScriptInterface<IBattler>> &Targets,
                                                                     TArray<TScriptInterface<IBattler>> &SuccessfulHits,
                                                                     FForceLatentCoroutine) {
@@ -223,7 +223,7 @@ UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(const TScrip
     co_return true;
 }
 
-UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::MoveFailed(const TScriptInterface<IBattler> &User,
+UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::MoveFailed(TScriptInterface<IBattler> User,
                                                               const TArray<TScriptInterface<IBattler>> &Targets,
                                                               FForceLatentCoroutine) {
     co_return false;
@@ -233,8 +233,8 @@ void UBattleMoveFunctionCode::ProcessMoveFailure(const TScriptInterface<IBattler
     User->OnMoveFailed(BattleMove);
 }
 
-UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::SuccessCheckAgainstTarget(const TScriptInterface<IBattler> &User,
-                                                                             const TScriptInterface<IBattler> &Target,
+UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::SuccessCheckAgainstTarget(TScriptInterface<IBattler> User,
+                                                                             TScriptInterface<IBattler> Target,
                                                                              FForceLatentCoroutine) {
     float TypeMod = CalculateTypeMatchUp(DeterminedType, User, Target);
     auto &TargetAbilities = *Target->GetAbilityComponent();
@@ -263,8 +263,8 @@ UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::SuccessCheckAgainstTarget(con
     co_return true;
 }
 
-UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::FailsAgainstTarget(const TScriptInterface<IBattler> &User,
-                                                                      const TScriptInterface<IBattler> &Target,
+UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::FailsAgainstTarget(TScriptInterface<IBattler> User,
+                                                                      TScriptInterface<IBattler> Target,
                                                                       FForceLatentCoroutine) {
     co_return false;
 }
@@ -315,14 +315,14 @@ int32 UBattleMoveFunctionCode::CalculateBaseAccuracy_Implementation(int32 Accura
     return Accuracy;
 }
 
-UE5Coro::TCoroutine<> UBattleMoveFunctionCode::PlayAnimation(const TScriptInterface<IBattler> &User,
+UE5Coro::TCoroutine<> UBattleMoveFunctionCode::PlayAnimation(TScriptInterface<IBattler> User,
                                                              const TArray<TScriptInterface<IBattler>> &Targets,
                                                              FForceLatentCoroutine) {
     // TODO: Retrieve the move animation
     co_return;
 }
 
-UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DealDamage(const TScriptInterface<IBattler> &User,
+UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DealDamage(TScriptInterface<IBattler> User,
                                                           const TArray<TScriptInterface<IBattler>> &Targets,
                                                           FForceLatentCoroutine) {
     if (BattleMove->GetCategory() != EMoveDamageCategory::Status) {
@@ -572,7 +572,7 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DisplayDamage(const TArray<TScrip
 }
 
 UE5Coro::TCoroutine<TArray<TScriptInterface<IBattler>>>
-UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> &User,
+UBattleMoveFunctionCode::ApplyMoveEffects(TScriptInterface<IBattler> User,
                                           const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine) {
     UE_LOG(LogBattle, Display, TEXT("Applying post-damage effects of %s!"), *BattleMove->GetDisplayName().ToString())
     for (auto &Target : Targets) {
@@ -604,28 +604,28 @@ UBattleMoveFunctionCode::ApplyMoveEffects(const TScriptInterface<IBattler> &User
     co_return co_await FaintCheck(User, Targets);
 }
 
-UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyEffectWhenDealingDamage(const TScriptInterface<IBattler> &User,
-                                                                            const TScriptInterface<IBattler> &Target,
+UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyEffectWhenDealingDamage(TScriptInterface<IBattler> User,
+                                                                            TScriptInterface<IBattler> Target,
                                                                             FForceLatentCoroutine) {
     // No effect in this method
     co_return;
 }
 
-UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyEffectAgainstTarget(const TScriptInterface<IBattler> &User,
-                                                                        const TScriptInterface<IBattler> &Target,
+UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyEffectAgainstTarget(TScriptInterface<IBattler> User,
+                                                                        TScriptInterface<IBattler> Target,
                                                                         FForceLatentCoroutine) {
     // No effect in this method
     co_return;
 }
 
-UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyGeneralEffect(const TScriptInterface<IBattler> &User,
+UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyGeneralEffect(TScriptInterface<IBattler> User,
                                                                   FForceLatentCoroutine) {
     // No effect in this method
     co_return;
 }
 
 UE5Coro::TCoroutine<TArray<TScriptInterface<IBattler>>>
-UBattleMoveFunctionCode::FaintCheck(const TScriptInterface<IBattler> &User,
+UBattleMoveFunctionCode::FaintCheck(TScriptInterface<IBattler> User,
                                     const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine) {
     using FAnim = TScriptInterface<IBattleAnimation>;
     constexpr auto GetFaintAnimation = &UBattleAnimationGetter::GetFaintAnimation;
@@ -642,7 +642,7 @@ UBattleMoveFunctionCode::FaintCheck(const TScriptInterface<IBattler> &User,
     co_return FaintedBattlers;
 }
 
-UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScriptInterface<IBattler> &User,
+UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyAdditionalEffects(TScriptInterface<IBattler> User,
                                                                       const TArray<TScriptInterface<IBattler>> &Targets,
                                                                       FForceLatentCoroutine) {
     UE_LOG(LogBattle, Display, TEXT("Applying additional effects of %s!"), *BattleMove->GetDisplayName().ToString())
@@ -676,8 +676,8 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScr
            *BattleMove->GetDisplayName().ToString())
 }
 
-UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyAdditionalEffect(const TScriptInterface<IBattler> &User,
-                                                                     const TScriptInterface<IBattler> &Target) {
+UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyAdditionalEffect(TScriptInterface<IBattler> User,
+                                                                     TScriptInterface<IBattler> Target) {
     // No effect in this method
     co_return;
 }

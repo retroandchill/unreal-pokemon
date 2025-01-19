@@ -16,8 +16,8 @@ class POKEMONMOVES_API UMoveEffect_StatDown : public UBattleMoveFunctionCode {
     GENERATED_BODY()
 
   public:
-    UE5Coro::TCoroutine<> ApplyEffectWhenDealingDamage(const TScriptInterface<IBattler> &User,
-                                                       const TScriptInterface<IBattler> &Target,
+    UE5Coro::TCoroutine<> ApplyEffectWhenDealingDamage(TScriptInterface<IBattler> User,
+                                                       TScriptInterface<IBattler> Target,
                                                        FForceLatentCoroutine) override;
 
   private:

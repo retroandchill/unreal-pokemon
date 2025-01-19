@@ -16,14 +16,14 @@ class POKEMONMOVES_API UMoveEffect_StatUp : public UBattleMoveFunctionCode {
     GENERATED_BODY()
 
   protected:
-    UE5Coro::TCoroutine<bool> MoveFailed(const TScriptInterface<IBattler> &User,
+    UE5Coro::TCoroutine<bool> MoveFailed(TScriptInterface<IBattler> User,
                                          const TArray<TScriptInterface<IBattler>> &Targets,
                                          FForceLatentCoroutine) override;
 
-    UE5Coro::TCoroutine<> ApplyAdditionalEffect(const TScriptInterface<IBattler> &User,
-                                                const TScriptInterface<IBattler> &Target) override;
+    UE5Coro::TCoroutine<> ApplyAdditionalEffect(TScriptInterface<IBattler> User,
+                                                TScriptInterface<IBattler> Target) override;
 
-    UE5Coro::TCoroutine<> ApplyGeneralEffect(const TScriptInterface<IBattler> &User, FForceLatentCoroutine) override;
+    UE5Coro::TCoroutine<> ApplyGeneralEffect(TScriptInterface<IBattler> User, FForceLatentCoroutine) override;
 
   private:
     UE5Coro::TCoroutine<> ApplyStatChanges(const TScriptInterface<IBattler> &User, FForceLatentCoroutine = {});

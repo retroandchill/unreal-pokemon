@@ -15,11 +15,11 @@ class POKEMONBATTLE_API UBlueprintableBattleItemEffect : public UBattleItemEffec
     GENERATED_BODY()
 
   protected:
-    UE5Coro::TCoroutine<bool> ApplyGlobalEffect(const TScriptInterface<IBattler> &User, FForceLatentCoroutine) final;
-    UE5Coro::TCoroutine<bool> ApplyEffectToTarget(const TScriptInterface<IBattler> &User,
-                                                  const TScriptInterface<IBattler> &Target,
+    UE5Coro::TCoroutine<bool> ApplyGlobalEffect(TScriptInterface<IBattler> User, FForceLatentCoroutine) final;
+    UE5Coro::TCoroutine<bool> ApplyEffectToTarget(TScriptInterface<IBattler> User,
+                                                  TScriptInterface<IBattler> Target,
                                                   FForceLatentCoroutine) final;
-    UE5Coro::TCoroutine<bool> IsTargetValid(const TScriptInterface<IBattler> &Battler,
+    UE5Coro::TCoroutine<bool> IsTargetValid(TScriptInterface<IBattler> Battler,
                                             FForceLatentCoroutine = {}) final;
 
     UFUNCTION(BlueprintNativeEvent, Category = "Battle|Items|Usable")

@@ -34,7 +34,7 @@ class POKEMONBATTLE_API IBattleHUD {
     virtual UE5Coro::TCoroutine<> DisplayExpForGain(UE5Coro::TLatentContext<const UObject> Context,
                                                     TArray<FExpGainInfo> GainInfos) = 0;
 
-    virtual UE5Coro::TCoroutine<> AnimateHPChange(const TScriptInterface<IBattler> &Battler, float MaxDuration = 1.f,
+    virtual UE5Coro::TCoroutine<> AnimateHPChange(TScriptInterface<IBattler> Battler, float MaxDuration = 1.f,
                                                   FForceLatentCoroutine = {}) = 0;
 
     virtual void PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler) = 0;

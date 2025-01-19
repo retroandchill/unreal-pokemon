@@ -127,7 +127,7 @@ UE5Coro::TCoroutine<> UPokemonBattleScreen::DisplayExpForGain(UE5Coro::TLatentCo
     SwapToPanelDisplay();
 }
 
-UE5Coro::TCoroutine<> UPokemonBattleScreen::AnimateHPChange(const TScriptInterface<IBattler> &Battler,
+UE5Coro::TCoroutine<> UPokemonBattleScreen::AnimateHPChange(TScriptInterface<IBattler> Battler,
                                                             float MaxDuration, FForceLatentCoroutine) {
     auto Panel = FindPanelForBattler(Battler);
     if (Panel == nullptr) {

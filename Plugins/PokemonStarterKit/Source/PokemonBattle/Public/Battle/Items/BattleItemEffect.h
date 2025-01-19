@@ -4,13 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
-#include "RetroLib/Ranges/Views/Generator.h"
 #include "UE5CoroGAS.h"
+
+#include "BattleItemEffect.generated.h"
 
 class IBattler;
 struct FItem;
-
-#include "BattleItemEffect.generated.h"
 
 /**
  * Ability that handles the effect of the item being used in battle.
@@ -47,7 +46,7 @@ class POKEMONBATTLE_API UBattleItemEffect : public UUE5CoroGameplayAbility {
      * @param
      * @return Was the effect successfully applied? If none of these checks return true, this item will not be consumed.
      */
-    virtual UE5Coro::TCoroutine<bool> ApplyGlobalEffect(const TScriptInterface<IBattler> &User,
+    virtual UE5Coro::TCoroutine<bool> ApplyGlobalEffect(TScriptInterface<IBattler> User,
                                                         FForceLatentCoroutine = {});
 
     /**
@@ -57,8 +56,8 @@ class POKEMONBATTLE_API UBattleItemEffect : public UUE5CoroGameplayAbility {
      * @param
      * @return Was the effect successfully applied? If none of these checks return true, this item will not be consumed.
      */
-    virtual UE5Coro::TCoroutine<bool> ApplyEffectToTarget(const TScriptInterface<IBattler> &User,
-                                                          const TScriptInterface<IBattler> &Target,
+    virtual UE5Coro::TCoroutine<bool> ApplyEffectToTarget(TScriptInterface<IBattler> User,
+                                                          TScriptInterface<IBattler> Target,
                                                           FForceLatentCoroutine = {});
 
     /**
@@ -67,7 +66,7 @@ class POKEMONBATTLE_API UBattleItemEffect : public UUE5CoroGameplayAbility {
      * @param
      * @return Is this a valid target for the move.
      */
-    virtual UE5Coro::TCoroutine<bool> IsTargetValid(const TScriptInterface<IBattler> &Battler,
+    virtual UE5Coro::TCoroutine<bool> IsTargetValid(TScriptInterface<IBattler> Battler,
                                                     FForceLatentCoroutine = {});
 
   private:

@@ -64,18 +64,18 @@ UE5Coro::GAS::FAbilityCoroutine UBattleItemEffect::ExecuteAbility(FGameplayAbili
     }
 }
 
-UE5Coro::TCoroutine<bool> UBattleItemEffect::ApplyGlobalEffect(const TScriptInterface<IBattler> &User,
+UE5Coro::TCoroutine<bool> UBattleItemEffect::ApplyGlobalEffect(TScriptInterface<IBattler> User,
                                                                FForceLatentCoroutine) {
     co_return false;
 }
 
-UE5Coro::TCoroutine<bool> UBattleItemEffect::ApplyEffectToTarget(const TScriptInterface<IBattler> &User,
-                                                                 const TScriptInterface<IBattler> &Target,
+UE5Coro::TCoroutine<bool> UBattleItemEffect::ApplyEffectToTarget(TScriptInterface<IBattler> User,
+                                                                 TScriptInterface<IBattler> Target,
                                                                  FForceLatentCoroutine) {
     co_return false;
 }
 
-UE5Coro::TCoroutine<bool> UBattleItemEffect::IsTargetValid(const TScriptInterface<IBattler> &Battler,
+UE5Coro::TCoroutine<bool> UBattleItemEffect::IsTargetValid(TScriptInterface<IBattler> Battler,
                                                            FForceLatentCoroutine) {
     co_return true;
 }

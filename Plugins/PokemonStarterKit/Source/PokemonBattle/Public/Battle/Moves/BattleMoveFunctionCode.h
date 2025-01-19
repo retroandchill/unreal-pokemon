@@ -138,10 +138,10 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
      * @param Targets The targets of the move
      * @param Coro
      */
-    UE5Coro::TCoroutine<> UseMove(const TScriptInterface<IBattler> &User,
-                                  const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine = {});
+    UE5Coro::TCoroutine<> UseMove(TScriptInterface<IBattler> User,
+                                  TArray<TScriptInterface<IBattler>> Targets, FForceLatentCoroutine = {});
 
-    UE5Coro::TCoroutine<bool> CheckMoveSuccess(const TScriptInterface<IBattler> &User,
+    UE5Coro::TCoroutine<bool> CheckMoveSuccess(TScriptInterface<IBattler> User,
                                                const TArray<TScriptInterface<IBattler>> &Targets,
                                                TArray<TScriptInterface<IBattler>> &SuccessfulHits,
                                                FForceLatentCoroutine = {});
@@ -154,7 +154,7 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
      * @param
      * @return Did the move fail?
      */
-    virtual UE5Coro::TCoroutine<bool> MoveFailed(const TScriptInterface<IBattler> &User,
+    virtual UE5Coro::TCoroutine<bool> MoveFailed(TScriptInterface<IBattler> User,
                                                  const TArray<TScriptInterface<IBattler>> &Targets,
                                                  FForceLatentCoroutine = {});
 
@@ -177,8 +177,8 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
      * @param
      * @return Did the move succeed against the target
      */
-    UE5Coro::TCoroutine<bool> SuccessCheckAgainstTarget(const TScriptInterface<IBattler> &User,
-                                                        const TScriptInterface<IBattler> &Target,
+    UE5Coro::TCoroutine<bool> SuccessCheckAgainstTarget(TScriptInterface<IBattler> User,
+                                                        TScriptInterface<IBattler> Target,
                                                         FForceLatentCoroutine = {});
 
     /**
@@ -188,8 +188,8 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
      * @param
      * @return Did the move fail?
      */
-    virtual UE5Coro::TCoroutine<bool> FailsAgainstTarget(const TScriptInterface<IBattler> &User,
-                                                         const TScriptInterface<IBattler> &Target,
+    virtual UE5Coro::TCoroutine<bool> FailsAgainstTarget(TScriptInterface<IBattler> User,
+                                                         TScriptInterface<IBattler> Target,
                                                          FForceLatentCoroutine = {});
 
     /**
@@ -213,7 +213,7 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
                                 const TScriptInterface<IBattler> &Target);
 
   private:
-    UE5Coro::TCoroutine<> PlayAnimation(const TScriptInterface<IBattler> &User,
+    UE5Coro::TCoroutine<> PlayAnimation(TScriptInterface<IBattler> User,
                                         const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine = {});
 
   protected:
@@ -223,7 +223,7 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
      * @param Targets The targets to deal damage to
      * @param Coro
      */
-    UE5Coro::TCoroutine<> DealDamage(const TScriptInterface<IBattler> &User,
+    UE5Coro::TCoroutine<> DealDamage(TScriptInterface<IBattler> User,
                                      const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine = {});
 
     /**
@@ -315,7 +315,7 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
      * @param Coro
      */
     UE5Coro::TCoroutine<TArray<TScriptInterface<IBattler>>>
-    ApplyMoveEffects(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets,
+    ApplyMoveEffects(TScriptInterface<IBattler> User, const TArray<TScriptInterface<IBattler>> &Targets,
                      FForceLatentCoroutine = {});
 
     /**
@@ -324,8 +324,8 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
      * @param Target the target of the move
      * @param
      */
-    virtual UE5Coro::TCoroutine<> ApplyEffectWhenDealingDamage(const TScriptInterface<IBattler> &User,
-                                                               const TScriptInterface<IBattler> &Target,
+    virtual UE5Coro::TCoroutine<> ApplyEffectWhenDealingDamage(TScriptInterface<IBattler> User,
+                                                               TScriptInterface<IBattler> Target,
                                                                FForceLatentCoroutine = {});
 
     /**
@@ -334,8 +334,8 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
      * @param Target The target of the move
      * @param
      */
-    virtual UE5Coro::TCoroutine<> ApplyEffectAgainstTarget(const TScriptInterface<IBattler> &User,
-                                                           const TScriptInterface<IBattler> &Target,
+    virtual UE5Coro::TCoroutine<> ApplyEffectAgainstTarget(TScriptInterface<IBattler> User,
+                                                           TScriptInterface<IBattler> Target,
                                                            FForceLatentCoroutine = {});
 
     /**
@@ -343,7 +343,7 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
      * @param User The user of the move
      * @param
      */
-    virtual UE5Coro::TCoroutine<> ApplyGeneralEffect(const TScriptInterface<IBattler> &User,
+    virtual UE5Coro::TCoroutine<> ApplyGeneralEffect(TScriptInterface<IBattler> User,
                                                      FForceLatentCoroutine = {});
 
     /**
@@ -354,7 +354,7 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
      * @param
      */
     static UE5Coro::TCoroutine<TArray<TScriptInterface<IBattler>>>
-    FaintCheck(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets,
+    FaintCheck(TScriptInterface<IBattler> User, const TArray<TScriptInterface<IBattler>> &Targets,
                FForceLatentCoroutine = {});
 
     /**
@@ -363,7 +363,7 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
      * @param Targets The targets of the move
      * @param Coro
      */
-    UE5Coro::TCoroutine<> ApplyAdditionalEffects(const TScriptInterface<IBattler> &User,
+    UE5Coro::TCoroutine<> ApplyAdditionalEffects(TScriptInterface<IBattler> User,
                                                  const TArray<TScriptInterface<IBattler>> &Targets,
                                                  FForceLatentCoroutine = {});
 
@@ -372,8 +372,8 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
      * @param User The user of the move
      * @param Target The target of the move
      */
-    virtual UE5Coro::TCoroutine<> ApplyAdditionalEffect(const TScriptInterface<IBattler> &User,
-                                                        const TScriptInterface<IBattler> &Target);
+    virtual UE5Coro::TCoroutine<> ApplyAdditionalEffect(TScriptInterface<IBattler> User,
+                                                        TScriptInterface<IBattler> Target);
 
     /**
      * Calculate the value of a move's additional effect chance

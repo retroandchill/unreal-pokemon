@@ -9,8 +9,8 @@
 #include "RetroLib/Optionals/OrElseGet.h"
 
 UE5Coro::TCoroutine<bool>
-UBattleItemEffect_RecoverHPAndCureStatus::ApplyEffectToTarget(const TScriptInterface<IBattler> &User,
-                                                              const TScriptInterface<IBattler> &Target,
+UBattleItemEffect_RecoverHPAndCureStatus::ApplyEffectToTarget(TScriptInterface<IBattler> User,
+                                                              TScriptInterface<IBattler> Target,
                                                               FForceLatentCoroutine ForceLatentCoroutine) {
     int32 Recovery = FMath::CeilToInt32(Target->GetAbilityComponent()->GetCoreAttributes()->GetMaxHP() * HPRecovery);
     bool bRemovedStatus = co_await UBattleStatusEffectUtils::RemoveStatusEffectFromBattler(Target);

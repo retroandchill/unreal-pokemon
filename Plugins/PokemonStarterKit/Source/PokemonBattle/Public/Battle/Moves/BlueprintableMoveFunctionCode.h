@@ -15,26 +15,26 @@ class POKEMONBATTLE_API UBlueprintableMoveFunctionCode : public UBattleMoveFunct
     GENERATED_BODY()
 
   public:
-    UE5Coro::TCoroutine<bool> MoveFailed(const TScriptInterface<IBattler> &User,
+    UE5Coro::TCoroutine<bool> MoveFailed(TScriptInterface<IBattler> User,
                                          const TArray<TScriptInterface<IBattler>> &Targets,
                                          FForceLatentCoroutine = {}) final;
 
-    UE5Coro::TCoroutine<bool> FailsAgainstTarget(const TScriptInterface<IBattler> &User,
-                                                 const TScriptInterface<IBattler> &Target,
+    UE5Coro::TCoroutine<bool> FailsAgainstTarget(TScriptInterface<IBattler> User,
+                                                 TScriptInterface<IBattler> Target,
                                                  FForceLatentCoroutine = {}) final;
 
-    UE5Coro::TCoroutine<> ApplyEffectWhenDealingDamage(const TScriptInterface<IBattler> &User,
-                                                       const TScriptInterface<IBattler> &Target,
+    UE5Coro::TCoroutine<> ApplyEffectWhenDealingDamage(TScriptInterface<IBattler> User,
+                                                       TScriptInterface<IBattler> Target,
                                                        FForceLatentCoroutine = {}) final;
 
-    UE5Coro::TCoroutine<> ApplyAdditionalEffect(const TScriptInterface<IBattler> &User,
-                                                const TScriptInterface<IBattler> &Target) final;
+    UE5Coro::TCoroutine<> ApplyAdditionalEffect(TScriptInterface<IBattler> User,
+                                                TScriptInterface<IBattler> Target) final;
 
-    UE5Coro::TCoroutine<> ApplyEffectAgainstTarget(const TScriptInterface<IBattler> &User,
-                                                   const TScriptInterface<IBattler> &Target,
+    UE5Coro::TCoroutine<> ApplyEffectAgainstTarget(TScriptInterface<IBattler> User,
+                                                   TScriptInterface<IBattler> Target,
                                                    FForceLatentCoroutine = {}) final;
 
-    UE5Coro::TCoroutine<> ApplyGeneralEffect(const TScriptInterface<IBattler> &User, FForceLatentCoroutine = {}) final;
+    UE5Coro::TCoroutine<> ApplyGeneralEffect(TScriptInterface<IBattler> User, FForceLatentCoroutine = {}) final;
 
   protected:
     UFUNCTION(BlueprintNativeEvent, Category = "Move|Checks")

@@ -96,8 +96,8 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen, public IBattleH
     UE5Coro::TCoroutine<> DisplayExpForGain(UE5Coro::TLatentContext<const UObject> Context,
                                             TArray<FExpGainInfo> GainInfos) override;
 
-    UE5Coro::TCoroutine<> AnimateHPChange(const TScriptInterface<IBattler> &Battler, float MaxDuration = 1.f,
-                                          FForceLatentCoroutine = {});
+    UE5Coro::TCoroutine<> AnimateHPChange(TScriptInterface<IBattler> Battler, float MaxDuration = 1.f,
+                                          FForceLatentCoroutine = {}) override;
 
   protected:
     /**
