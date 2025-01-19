@@ -23,27 +23,51 @@ namespace UE::Assets {
     class TBlueprintClass;
 } // namespace UE::Assets
 
-#if CPP
-RETRO_DECLARE_VARIANT_OBJECT_STRUCT(AssetClassType, UClass, UScriptStruct);
-#else
+struct FSoftAssetClassType;
+
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
-struct FAssetClassType {
-    UPROPERTY(EditAnywhere, meta = (AllowedClasses = "/Script/Engine.UClass,/Script/Engine.ScriptStruct"))
+struct FAssetClassType
+#if CPP
+    : Retro::TVariantObject<UClass, UScriptStruct> {
+#else
+    {
+#endif
+    RETRO_VARIANT_OBJECT_STRUCT_BODY(FSoftAssetClassType)
+    
+
+#if !CPP
+    private:
+    UPROPERTY(EditAnywhere)
     TObjectPtr<UObject> ContainedObject;
 
     UPROPERTY()
     uint64 TypeIndex;
+#endif
 };
 
+RETRO_DECLARE_VARIANT_OBJECT_STRUCT(FAssetClassType);
+
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
-struct FSoftAssetClassType {
-    UPROPERTY(EditAnywhere, meta = (AllowedClasses = "/Script/Engine.UClass,/Script/Engine.ScriptStruct"))
+struct FSoftAssetClassType
+#if CPP
+    : Retro::TSoftVariantObject<FAssetClassType> {
+#else
+{
+#endif
+    RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY()
+    
+
+#if !CPP
+private:
+    UPROPERTY(EditAnywhere)
     TSoftObjectPtr<UObject> Ptr;
 
     UPROPERTY()
     uint64 TypeIndex;
-};
 #endif
+};
+
+RETRO_DECLARE_SOFT_VARIANT_OBJECT_STRUCT(FSoftAssetClassType);
 
 template <>
 struct DYNAMICASSETLOADER_API TBaseStructure<FAssetClassType> {
