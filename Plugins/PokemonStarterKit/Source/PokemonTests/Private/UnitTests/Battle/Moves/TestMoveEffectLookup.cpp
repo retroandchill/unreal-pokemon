@@ -1,5 +1,5 @@
-﻿#include "Abilities/GameplayAbility.h"
-#include "Asserts.h"
+﻿#include "Asserts.h"
+#include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Misc/AutomationTest.h"
 
@@ -11,9 +11,9 @@ bool TestMoveEffectLookup::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(TEXT("Move_AlwaysCriticalHit_C"), MoveClass->GetName());
 
     MoveClass = Pokemon::Battle::Moves::LookupMoveEffectClass("NotARealMoveEffect");
-    UE_CHECK_EQUAL(TEXT("BP_MoveFunctionCode_C"), MoveClass->GetName());
+    UE_CHECK_EQUAL(TEXT("BattleMoveFunctionCode"), MoveClass->GetName());
 
     MoveClass = Pokemon::Battle::Moves::LookupMoveEffectClass(NAME_None);
-    UE_CHECK_EQUAL(TEXT("BP_MoveFunctionCode_C"), MoveClass->GetName());
+    UE_CHECK_EQUAL(TEXT("BattleMoveFunctionCode"), MoveClass->GetName());
     return true;
 }

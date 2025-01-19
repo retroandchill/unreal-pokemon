@@ -10,6 +10,7 @@
 
 #include "Battle.generated.h"
 
+class IBattleHUD;
 struct FBattleInfo;
 class IAbilityDisplayComponent;
 struct FGameplayEffectSpecHandle;
@@ -123,6 +124,8 @@ class POKEMONBATTLE_API IBattle {
      */
     virtual APawn *GetBattlePawn() const = 0;
 
+    virtual const TScriptInterface<IBattleHUD> &GetBattleHUD() const = 0;
+
     virtual const TScriptInterface<IBattleSide> &GetPlayerSide() const = 0;
     virtual const TScriptInterface<IBattleSide> &GetOpposingSide() const = 0;
 
@@ -141,11 +144,9 @@ class POKEMONBATTLE_API IBattle {
     /**
      * Initiate the process of selecting actions for the given battler.
      */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Selection")
-    void BeginActionSelection(const TScriptInterface<IBattler> &Battler);
+    virtual void BeginActionSelection(const TScriptInterface<IBattler> &Battler) = 0;
 
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Selection")
-    void PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler);
+    virtual void PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler) = 0;
 
     /**
      * Execute the bound action in battle

@@ -7,7 +7,10 @@
 #include "Battle/Battle.h"
 #include "Battle/Transitions/BattleInfo.h"
 #include "Mocking/UnrealMock.h"
+
+THIRD_PARTY_INCLUDES_START
 #include <gmock/gmock.h>
+THIRD_PARTY_INCLUDES_END
 
 class FMockBattle : public IBattle {
     DECLARE_MOCK_INTERFACE(FMockBattle)
@@ -28,4 +31,7 @@ class FMockBattle : public IBattle {
     MOCK_METHOD(Retro::TGenerator<TScriptInterface<IBattleSide>>, GetSides, (), (const, override));
     MOCK_METHOD(Retro::TGenerator<TScriptInterface<IBattler>>, GetActiveBattlers, (), (const, override));
     MOCK_METHOD2(ExecuteAction, UE5Coro::TCoroutine<>(IBattleAction &Action, FForceLatentCoroutine Coro));
+    MOCK_METHOD(const TScriptInterface<IBattleHUD> &, GetBattleHUD, (), (const, override));
+    MOCK_METHOD(void, BeginActionSelection, (const TScriptInterface<IBattler> &Battler), (override));
+    MOCK_METHOD(void, PromptMandatorySwitch, (const TScriptInterface<IBattler> &Battler), (override));
 };

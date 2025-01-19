@@ -12,7 +12,7 @@
 namespace Retro::Optionals {
 
     template <ExpectedType O, ExpectedType P>
-    constexpr auto TransformErrorPassthrough(P&& InputValue) {
+    constexpr auto TransformErrorPassthrough(P &&InputValue) {
         return O(Get(std::forward<P>(InputValue)));
     }
 
@@ -24,11 +24,15 @@ namespace Retro::Optionals {
     struct FTransformErrorInvoker {
         template <ExpectedType O, typename F>
             requires std::invocable<F, TErrorReference<O>>
-        constexpr auto operator()(O&& Optional, F&& Functor) const {
-            using TransformedType = decltype(TransformErrorHelper(std::forward<O>(Optional), std::invoke(std::forward<F>(Functor), GetError(std::forward<O>(Optional)))));
-            return HasValue(Optional) ? TransformErrorPassthrough<TransformedType>(std::forward<O>(Optional)) : TransformErrorHelper(std::forward<O>(Optional), std::invoke(std::forward<F>(Functor), GetError(std::forward<O>(Optional))));
+        constexpr auto operator()(O &&Optional, F &&Functor) const {
+            using TransformedType = decltype(TransformErrorHelper(
+                std::forward<O>(Optional), std::invoke(std::forward<F>(Functor), GetError(std::forward<O>(Optional)))));
+            return HasValue(Optional) ? TransformErrorPassthrough<TransformedType>(std::forward<O>(Optional))
+                                      : TransformErrorHelper(
+                                            std::forward<O>(Optional),
+                                            std::invoke(std::forward<F>(Functor), GetError(std::forward<O>(Optional))));
         }
     };
 
     RETROLIB_EXPORT constexpr auto TransformError = ExtensionMethod<FTransformErrorInvoker{}>;
-}
+} // namespace Retro::Optionals

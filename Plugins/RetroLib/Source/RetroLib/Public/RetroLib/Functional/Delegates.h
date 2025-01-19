@@ -209,7 +209,7 @@ namespace Retro {
          */
         RETROLIB_EXPORT template <NativeUnicastDelegate D>
         class TScopedBinding<D> {
-        public:
+          public:
             /**
              * @brief Constructs a TScopedBinding instance and binds the provided delegate with the specified arguments.
              *
@@ -227,7 +227,7 @@ namespace Retro {
              */
             template <typename... A>
                 requires CanBindToDelegate<D, A...>
-            constexpr explicit TScopedBinding(D& Delegate, A &&...Args) : Delegate(Delegate) {
+            constexpr explicit TScopedBinding(D &Delegate, A &&...Args) : Delegate(Delegate) {
                 Bind(Delegate, std::forward<A>(Args)...);
             }
 
@@ -248,7 +248,7 @@ namespace Retro {
 
             UE_NONCOPYABLE(TScopedBinding)
 
-        private:
+          private:
             D &Delegate;
         };
 
@@ -267,7 +267,7 @@ namespace Retro {
          */
         RETROLIB_EXPORT template <NativeMulitcastDelegate D>
         class TScopedBinding<D> {
-        public:
+          public:
             /**
              * @brief Constructs a TScopedBinding instance, automatically binding a delegate.
              *
@@ -282,7 +282,8 @@ namespace Retro {
              */
             template <typename... A>
                 requires CanAddToDelegate<D, A...>
-            constexpr explicit TScopedBinding(D& Delegate, A &&...Args) : Delegate(Delegate), DelegateHandle(Add(Delegate, std::forward<A>(Args)...)) {
+            constexpr explicit TScopedBinding(D &Delegate, A &&...Args)
+                : Delegate(Delegate), DelegateHandle(Add(Delegate, std::forward<A>(Args)...)) {
             }
 
             /**
@@ -304,13 +305,13 @@ namespace Retro {
 
             UE_NONCOPYABLE(TScopedBinding)
 
-        private:
+          private:
             D &Delegate;
             FDelegateHandle DelegateHandle;
         };
 
         template <NativeDelegate D, typename... A>
-        TScopedBinding(D&, A&&...) -> TScopedBinding<D>;
+        TScopedBinding(D &, A &&...) -> TScopedBinding<D>;
     } // namespace Delegates
 
 } // namespace Retro

@@ -6,7 +6,10 @@
 #include "Battle/Moves/BattleMove.h"
 #include "Mocking/UnrealMock.h"
 #include "Moves/Target.h"
+
+THIRD_PARTY_INCLUDES_START
 #include <gmock/gmock.h>
+THIRD_PARTY_INCLUDES_END
 
 /**
  *

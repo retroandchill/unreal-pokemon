@@ -5,7 +5,10 @@
 #include "CoreMinimal.h"
 #include "Battle/BattleSide.h"
 #include "Mocking/UnrealMock.h"
+
+THIRD_PARTY_INCLUDES_START
 #include <gmock/gmock.h>
+THIRD_PARTY_INCLUDES_END
 
 /**
  *

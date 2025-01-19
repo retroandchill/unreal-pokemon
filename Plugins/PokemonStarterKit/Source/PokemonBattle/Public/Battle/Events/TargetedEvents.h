@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
+#include "Battle/AsyncAbilityComponent.h"
 #include "NativeGameplayTags.h"
 #include "UE5Coro.h"
 
@@ -142,11 +143,21 @@ struct POKEMONBATTLE_API FTargetedEvent {
                                              ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD)                       \
     }
 
+#if DO_CHECK
+#define SYNC_EVENT(Expression)                                                                                         \
+    {                                                                                                                  \
+        auto Coro = Expression;                                                                                        \
+        check(Coro.IsDone())                                                                                           \
+    }
+#else
+#define SYNC_EVENT(Expression) Expression;
+#endif
+
 namespace Pokemon::Battle::Events {
 
-    POKEMONBATTLE_API UE5Coro::TCoroutine<> SendOutActivationEvent(UAbilitySystemComponent *AbilityComponent,
+    POKEMONBATTLE_API UE5Coro::TCoroutine<> SendOutActivationEvent(UAsyncAbilityComponent *AbilityComponent,
                                                                    FGameplayAbilitySpecHandle Handle, FGameplayTag Tag,
-                                                                   FGameplayEventData EventData,
+                                                                   const FGameplayEventData &EventData,
                                                                    FForceLatentCoroutine = {});
 
     /**
@@ -154,9 +165,11 @@ namespace Pokemon::Battle::Events {
      * @param Battle The battle in question
      * @param Payload The payload data for the event
      * @param Tag the tag to apply to the event
+     * @param
      */
-    POKEMONBATTLE_API void SendOutBattleEvent(const TScriptInterface<IBattle> &Battle, const UObject *Payload,
-                                              const FGameplayTag &Tag);
+    POKEMONBATTLE_API UE5Coro::TCoroutine<> SendOutBattleEvent(const TScriptInterface<IBattle> &Battle,
+                                                               const UObject *Payload, const FGameplayTag &Tag,
+                                                               FForceLatentCoroutine);
 
     /**
      * Send out a single event to the user of a move
@@ -164,8 +177,9 @@ namespace Pokemon::Battle::Events {
      * @param Payload The payload data for the event
      * @param EventTag The event tag to send out for this event
      */
-    POKEMONBATTLE_API void SendOutMoveEvent(const TScriptInterface<IBattler> &User, const UObject *Payload,
-                                            const FNativeGameplayTag &EventTag);
+    POKEMONBATTLE_API UE5Coro::TCoroutine<> SendOutMoveEvent(const TScriptInterface<IBattler> &User,
+                                                             const UObject *Payload,
+                                                             const FNativeGameplayTag &EventTag);
 
     /**
      * Send out a set of events to the battlefield.
@@ -174,8 +188,12 @@ namespace Pokemon::Battle::Events {
      * @param Payload The payload data for the event
      * @param EventTags The event tags to send out for this event
      */
-    POKEMONBATTLE_API void SendOutMoveEvents(const TScriptInterface<IBattler> &User,
-                                             const TScriptInterface<IBattler> &Target, const UObject *Payload,
-                                             const FTargetedEvent &EventTags);
+    POKEMONBATTLE_API UE5Coro::TCoroutine<> SendOutMoveEvents(const TScriptInterface<IBattler> &User,
+                                                              const TScriptInterface<IBattler> &Target,
+                                                              const UObject *Payload, const FTargetedEvent &EventTags);
+
+    POKEMONBATTLE_API UE5Coro::TCoroutine<int32> SendOutEventForActor(AActor *Actor, const FGameplayTag &Tag,
+                                                                      FGameplayEventData &EventData,
+                                                                      FForceLatentCoroutine = {});
 
 } // namespace Pokemon::Battle::Events

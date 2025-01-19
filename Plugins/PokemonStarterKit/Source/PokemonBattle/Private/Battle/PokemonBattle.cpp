@@ -4,7 +4,6 @@
 #include "Algo/NoneOf.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Animations/BattleAnimation.h"
-#include "Battle/Animations/BattleSequencer.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/BattleAbilitySystemComponent.h"
 #include "Battle/Battlers/Battler.h"
@@ -43,7 +42,6 @@ TScriptInterface<IBattle> APokemonBattle::Initialize(const FBattleInfo &BattleIn
 
 void APokemonBattle::BeginPlay() {
     Super::BeginPlay();
-    BattleSequencer = GetWorld()->SpawnActor<ABattleSequencer>(BattleSequencerClass.LoadSynchronous());
     AbilitySystemComponent->InitAbilityActorInfo(this, this);
     auto TransitionSubsystem = GetWorld()->GetSubsystem<UBattleTransitionSubsystem>();
     check(TransitionSubsystem != nullptr)
@@ -60,7 +58,6 @@ void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
             Actor->Destroy();
         });
     // clang-format on
-    BattleSequencer->Destroy();
 }
 
 bool APokemonBattle::IsTrainerBattle_Implementation() const {
@@ -117,7 +114,7 @@ UE5Coro::TCoroutine<EBattleResult> APokemonBattle::ConductBattle(APlayerControll
 }
 
 UE5Coro::TCoroutine<> APokemonBattle::StartBattle() {
-    HUD = CreateBattleHUD();
+    BattleHUD = CreateBattleHUD();
     co_await OnBattlersEnteringBattle(GetActiveBattlers());
 }
 
@@ -210,6 +207,16 @@ UE5Coro::TCoroutine<> APokemonBattle::ExecuteAction(IBattleAction &Action, FForc
     co_await Action.Execute();
 }
 
+void APokemonBattle::BeginActionSelection(const TScriptInterface<IBattler> &Battler) {
+    if (Retro::ValidPtr(BattleHUD)) {
+        BattleHUD->SelectAction(Battler);
+    }
+}
+
+void APokemonBattle::PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler) {
+    BattleHUD->PromptMandatorySwitch(Battler);
+}
+
 bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &Battler, bool bDuringBattle) {
     if (!bDuringBattle) {
         RunAttempts++;
@@ -248,6 +255,10 @@ APawn *APokemonBattle::GetBattlePawn() const {
 FText APokemonBattle::GetBattleIntroMessage() const {
     check(Sides.IsValidIndex(OpponentSideIndex))
     return Sides[OpponentSideIndex]->GetIntroText();
+}
+
+void APokemonBattle::RefreshBattleHUD() {
+    BattleHUD->Refresh();
 }
 
 void APokemonBattle::EndBattle_Implementation(EBattleResult Result) {
@@ -292,7 +303,7 @@ UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::ProcessTurn() {
 }
 
 UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::EndTurn() {
-    ClearActionSelection();
+    BattleHUD->ClearSelectingBattlers();
     bool bRequiresSwaps = false;
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
@@ -320,8 +331,7 @@ UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::EndTurn() {
     }
 
     ProcessTurnDurationTrigger(ETurnDurationTrigger::TurnEnd);
-    Pokemon::Battle::Events::SendOutBattleEvent(this, nullptr, Pokemon::Battle::EndTurn);
-    co_await ABattleSequencer::DisplayBattleMessages(this);
+    co_await Pokemon::Battle::Events::SendOutBattleEvent(this, nullptr, Pokemon::Battle::EndTurn, {});
 
     co_return {};
 }

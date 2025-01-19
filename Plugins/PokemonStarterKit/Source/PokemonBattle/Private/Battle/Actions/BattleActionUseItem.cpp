@@ -10,9 +10,9 @@
 #include "Battle/Items/BattleItemEffect.h"
 #include "Battle/Items/ItemLookup.h"
 #include "Battle/Items/ItemTags.h"
+#include "Battle/Settings/PokemonBattleSettings.h"
 #include "DataManager.h"
 #include "Pokemon/Pokemon.h"
-#include "PokemonBattleSettings.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/Transform.h"
@@ -95,5 +95,5 @@ UE5Coro::TCoroutine<> FBattleActionUseItem::ActivateAbility() {
     EventData.TargetData.Data.Emplace(TargetData);
 
     co_await Pokemon::Battle::Events::SendOutActivationEvent(AbilityComponent, Handle,
-                                                             Pokemon::Battle::Items::UsingItem, std::move(EventData));
+                                                             Pokemon::Battle::Items::UsingItem, EventData);
 }

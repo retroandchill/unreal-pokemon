@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Battle/Actions/BattleAction.h"
+
+THIRD_PARTY_INCLUDES_START
 #include <gmock/gmock.h>
+THIRD_PARTY_INCLUDES_END
 
 /**
  *

@@ -48,7 +48,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen, public IBattleH
     void SetBattle(const TScriptInterface<IBattle> &Battle);
 
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
-    void ClearSelectingBattlers();
+    void ClearSelectingBattlers() override;
 
     /**
      * Have a battler select an action from the HUD.
@@ -58,7 +58,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen, public IBattleH
     void SelectAction(const TScriptInterface<IBattler> &Battler) override;
 
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
-    void PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler);
+    void PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler) override;
 
     /**
      * Get the action select widget
@@ -84,7 +84,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen, public IBattleH
      * Refresh the battle HUD
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
-    void Refresh() const;
+    void Refresh() const override;
 
     /**
      * Attempt to find the panel for a battler
@@ -93,14 +93,11 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen, public IBattleH
      */
     UPokemonBattlePanel *FindPanelForBattler(const TScriptInterface<IBattler> &Battler) const;
 
-    UE5Coro::TCoroutine<> DisplayExpForGain(TArray<FExpGainInfo> GainInfos);
+    UE5Coro::TCoroutine<> DisplayExpForGain(UE5Coro::TLatentContext<const UObject> Context,
+                                            TArray<FExpGainInfo> GainInfos) override;
 
-    FDelegateHandle BindToExpGainComplete(FSimpleDelegate &&Callback);
-
-    void RemoveFromExpGainComplete(FDelegateHandle Handle);
-
-    UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
-    void FinishExpGainDisplay();
+    UE5Coro::TCoroutine<> AnimateHPChange(TScriptInterface<IBattler> Battler, float MaxDuration = 1.f,
+                                          FForceLatentCoroutine = {}) override;
 
   protected:
     /**

@@ -6,7 +6,10 @@
 #include "Mocking/UnrealMock.h"
 #include "Screens/PartyScreen.h"
 #include "UObject/Interface.h"
+
+THIRD_PARTY_INCLUDES_START
 #include <gmock/gmock.h>
+THIRD_PARTY_INCLUDES_END
 
 class FMockPartyScreen : public IPartyScreen {
     DECLARE_MOCK_INTERFACE(FMockPartyScreen)

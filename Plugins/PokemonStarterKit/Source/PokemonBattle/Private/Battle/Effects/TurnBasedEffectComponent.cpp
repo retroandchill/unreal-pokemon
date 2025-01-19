@@ -2,7 +2,6 @@
 
 #include "Battle/Effects/TurnBasedEffectComponent.h"
 #include "AbilitySystemComponent.h"
-#include "Battle/Events/BattleMessage.h"
 
 void UTurnBasedEffectComponent::BeginPlay() {
     Super::BeginPlay();

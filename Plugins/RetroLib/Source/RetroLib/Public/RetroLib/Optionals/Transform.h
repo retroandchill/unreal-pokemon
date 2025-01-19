@@ -29,7 +29,7 @@ namespace Retro::Optionals {
     }
 
     template <template <typename...> typename O, typename T, typename U, typename E>
-    constexpr auto FromResult(const O<U, E>& Expected, T&& Value) {
+    constexpr auto FromResult(const O<U, E> &Expected, T &&Value) {
         if constexpr (Nullable<T, O>) {
             return OfNullable<O, E>(std::forward<T>(Value), GetError(Expected));
         } else if constexpr (std::is_lvalue_reference_v<T>) {
@@ -40,7 +40,7 @@ namespace Retro::Optionals {
     }
 
     template <template <typename...> typename O, typename T, typename U, typename E>
-    constexpr auto FromResult(O<U, E>&& Expected, T&& Value) {
+    constexpr auto FromResult(O<U, E> &&Expected, T &&Value) {
         if constexpr (Nullable<T, O>) {
             return OfNullable<O, E>(std::forward<T>(Value), GetError(std::move(Expected)));
         } else if constexpr (std::is_lvalue_reference_v<T>) {
@@ -76,8 +76,7 @@ namespace Retro::Optionals {
         constexpr auto operator()(O &&Optional, F &&Functor) const {
             using ResultType = decltype(FromResult(std::forward<O>(Optional), std::invoke(std::forward<F>(Functor))));
             return HasValue(std::forward<O>(Optional))
-                       ? FromResult(std::forward<O>(Optional),
-                                    std::invoke(std::forward<F>(Functor)))
+                       ? FromResult(std::forward<O>(Optional), std::invoke(std::forward<F>(Functor)))
                        : PassOptional<ResultType>(std::forward<O>(Optional));
         }
     };

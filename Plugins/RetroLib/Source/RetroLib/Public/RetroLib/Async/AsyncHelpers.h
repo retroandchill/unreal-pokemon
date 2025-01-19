@@ -49,7 +49,8 @@ namespace Retro {
         requires std::invocable<F> && (std::tuple_size_v<Delegates::TDelegateTuple<D>> > 0)
     UE5Coro::TCoroutine<Delegates::TDelegateTuple<D>> BindToDelegateDispatch(D &Delegate, F &&Functor) {
         auto State = MakeShared<TFutureState<Delegates::TDelegateTuple<D>>>();
-        Delegates::TScopedBinding Binding(Delegate, [&State]<typename... A>(A &&...Args) { State->EmplaceResult(std::forward<A>(Args)...); });
+        Delegates::TScopedBinding Binding(
+            Delegate, [&State]<typename... A>(A &&...Args) { State->EmplaceResult(std::forward<A>(Args)...); });
         std::invoke(std::forward<F>(Functor));
         co_return co_await TFuture<Delegates::TDelegateTuple<D>>(State);
     }
