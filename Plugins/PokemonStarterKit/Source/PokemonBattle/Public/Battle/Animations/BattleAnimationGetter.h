@@ -20,11 +20,21 @@ class POKEMONBATTLE_API UBattleAnimationGetter : public UObject {
 public:
     static UBattleAnimationGetter& Get(const UObject* WorldContext);
 
+    static UBattleAnimationGetter& Get(const FScriptInterface& WorldContext) {
+        return Get(WorldContext.GetObject());
+    }
+
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Animations")
     TScriptInterface<IBattleAnimation> GetDamageAnimation(const TArray<TScriptInterface<IBattler>>& Battlers);
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Animations")
     TScriptInterface<IBattleAnimation> GetFaintAnimation(const TScriptInterface<IBattler>& Battler);
+
+    UFUNCTION(BlueprintImplementableEvent, Category = Switching)
+    TScriptInterface<IBattleAnimation> GetRecallAnimation(const TScriptInterface<IBattler> &SwappingFrom);
+
+    UFUNCTION(BlueprintImplementableEvent, Category = Switching)
+    TScriptInterface<IBattleAnimation> GetSendOutAnimation(const TScriptInterface<IBattler> &SwappingTo);
 
 };
 

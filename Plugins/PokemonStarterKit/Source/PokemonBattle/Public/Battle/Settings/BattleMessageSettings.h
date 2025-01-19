@@ -38,6 +38,12 @@ class POKEMONBATTLE_API UBattleMessageSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
 public:
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Battle)
+    FText NoTargetMessage = NSLOCTEXT("PokemonBattle", "NoTargetMessage", "But there was no target...");
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Battle)
+    FText MoveMissedMessage = NSLOCTEXT("BattleMove", "HitCheckFailed", "But it missed!");
+    
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName = "Critical Hit Message (Single Target)", Config, Category = Battle)
     FText CriticalHitMessage = NSLOCTEXT("PokemonBattle", "CriticalHitMessage", "A critical hit!");
 

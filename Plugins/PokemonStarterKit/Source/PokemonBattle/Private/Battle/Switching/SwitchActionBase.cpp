@@ -8,6 +8,8 @@
 #include "Battle/Events/BattleMessage.h"
 #include "Battle/Events/SwitchPokemonPayload.h"
 #include "Battle/Tags.h"
+#include "Battle/Animations/BattleAnimation.h"
+#include "Battle/Animations/BattleAnimationGetter.h"
 
 USwitchActionBase::USwitchActionBase() {
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
@@ -28,13 +30,13 @@ UE5Coro::GAS::FAbilityCoroutine USwitchActionBase::ExecuteAbility(FGameplayAbili
     TScriptInterface<IBattler> Battler = GetCurrentActorInfo()->AvatarActor.Get();
     check(Battler != nullptr)
     SwapTarget = Battler->GetOwningSide()->GetTrainerParty(OwningTrainer)[SwitchTargetIndex];
-    QueueRecallAnimation(Battler);
-    co_await ABattleSequencer::DisplayBattleMessages(this);
-    co_await SwapWithTarget();
+    auto &AnimationGetter = UBattleAnimationGetter::Get(Battler);
+    co_await IBattleAnimation::PlayAnimation(AnimationGetter.GetRecallAnimation(Battler));
+    co_await SwapWithTarget(AnimationGetter);
     co_await TriggerOnSendOut();
 }
 
-UE5Coro::TCoroutine<> USwitchActionBase::SwapWithTarget() {
+UE5Coro::TCoroutine<> USwitchActionBase::SwapWithTarget(UBattleAnimationGetter& AnimationGetter) {
     auto &ActorInfo = *GetCurrentActorInfo();
     auto Battler = CastChecked<IBattler>(ActorInfo.AvatarActor);
     Battler->HideSprite();
@@ -43,8 +45,7 @@ UE5Coro::TCoroutine<> USwitchActionBase::SwapWithTarget() {
 
     auto TargetActor = CastChecked<AActor>(SwapTarget.GetObject());
     TargetActor->SetActorTransform(ActorInfo.AvatarActor->GetActorTransform());
-    QueueSendOutAnimation(SwapTarget);
-    co_await ABattleSequencer::DisplayBattleMessages(this);
+    co_await IBattleAnimation::PlayAnimation(AnimationGetter.GetSendOutAnimation(SwapTarget));
 }
 
 UE5Coro::TCoroutine<> USwitchActionBase::TriggerOnSendOut() {

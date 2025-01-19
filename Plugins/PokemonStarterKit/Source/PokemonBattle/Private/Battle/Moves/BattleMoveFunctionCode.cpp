@@ -172,16 +172,15 @@ UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(const TScrip
         co_return false;
     }
 
+    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(User);
+    auto Settings = GetDefault<UBattleMessageSettings>();
     if (Targets.IsEmpty() && BattleMove->GetTargetType().NumTargets != ETargetCount::NoneOrSelf &&
         !WorksWithNoTargets()) {
-        ABattleSequencer::QueueBattleMessage(NSLOCTEXT("BattleMoveFunction", "NoTarget", "But there was no target..."));
+        co_await Dispatcher.DisplayMessage(Settings->NoTargetMessage);
         UE_LOG(LogBattle, Display, TEXT("%s has no targets!"), *BattleMove->GetDisplayName().ToString())
         co_return false;
     }
-
-    auto TargetFailureCheckCallback = [this, &User](const TScriptInterface<IBattler> &Target) -> UE5Coro::TCoroutine<bool> {
-        
-    };
+    
     TArray<TScriptInterface<IBattler>> FilteredTargets;
     FilteredTargets.Reserve(Targets.Num());
     for (auto Target : Targets) {
@@ -216,7 +215,7 @@ UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(const TScrip
 
     if (!Targets.IsEmpty() && SuccessfulHits.IsEmpty()) {
         UE_LOG(LogBattle, Display, TEXT("%s missed all targets!"), *BattleMove->GetDisplayName().ToString())
-        ABattleSequencer::QueueBattleMessage(NSLOCTEXT("BattleMove", "HitCheckFailed", "But it missed!"));
+        co_await Dispatcher.DisplayMessage(Settings->MoveMissedMessage);
         ProcessMoveFailure(User);
         co_await EndMove(User, Targets);
         co_return false;
@@ -318,9 +317,8 @@ int32 UBattleMoveFunctionCode::CalculateBaseAccuracy_Implementation(int32 Accura
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::PlayAnimation(const TScriptInterface<IBattler> &User,
                                                              const TArray<TScriptInterface<IBattler>> &Targets,
                                                              FForceLatentCoroutine) {
-    co_await ABattleSequencer::DisplayBattleMessages(this);
-
     // TODO: Retrieve the move animation
+    co_return;
 }
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DealDamage(const TScriptInterface<IBattler> &User,
@@ -361,7 +359,6 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DealDamage(const TScriptInterface
     }
 
     co_await DisplayDamage(Targets);
-    co_await ABattleSequencer::DisplayBattleMessages(this);
 }
 
 int32 UBattleMoveFunctionCode::CalculateBasePower_Implementation(int32 Power, const TScriptInterface<IBattler> &User,
@@ -590,9 +587,7 @@ UE5Coro::TCoroutine<TArray<TScriptInterface<IBattler>>> UBattleMoveFunctionCode:
     }
 
     co_await ApplyGeneralEffect(User);
-    auto FainedBattlers = co_await FaintCheck(User, Targets);
-    co_await ABattleSequencer::DisplayBattleMessages(this);
-    co_return FainedBattlers;
+    co_return co_await FaintCheck(User, Targets);
 }
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyEffectWhenDealingDamage(const TScriptInterface<IBattler> &User,
@@ -667,7 +662,6 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyAdditionalEffects(const TScr
 
     UE_LOG(LogBattle, Display, TEXT("%s has finished, display messages and concluding!"),
            *BattleMove->GetDisplayName().ToString())
-    co_await ABattleSequencer::DisplayBattleMessages(this);
 }
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyAdditionalEffect(const TScriptInterface<IBattler> &User,
@@ -689,6 +683,5 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::EndMove(const TScriptInterface<IB
                                                        const TArray<TScriptInterface<IBattler>> &Targets,
                                                        const TArray<TScriptInterface<IBattler>> &FaintedBattlers,
                                                        FForceLatentCoroutine) {
-    co_await ABattleSequencer::DisplayBattleMessages(this);
     co_await UBattlerHelpers::GainExpOnFaint(User.GetObject(), FaintedBattlers);
 }

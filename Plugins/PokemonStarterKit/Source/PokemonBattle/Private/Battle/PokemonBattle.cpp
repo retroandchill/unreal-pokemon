@@ -321,7 +321,6 @@ UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::EndTurn() {
 
     ProcessTurnDurationTrigger(ETurnDurationTrigger::TurnEnd);
     co_await Pokemon::Battle::Events::SendOutBattleEvent(this, nullptr, Pokemon::Battle::EndTurn, {});
-    co_await ABattleSequencer::DisplayBattleMessages(this);
 
     co_return {};
 }

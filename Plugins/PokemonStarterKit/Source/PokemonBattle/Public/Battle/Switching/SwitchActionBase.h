@@ -8,6 +8,7 @@
 
 #include "SwitchActionBase.generated.h"
 
+class UBattleAnimationGetter;
 class ITrainer;
 class IBattler;
 /**
@@ -39,7 +40,7 @@ class POKEMONBATTLE_API USwitchActionBase : public UUE5CoroGameplayAbility {
     /**
      * Perform the internal swap of the Pokémon.
      */
-    UE5Coro::TCoroutine<> SwapWithTarget();
+    UE5Coro::TCoroutine<> SwapWithTarget(UBattleAnimationGetter& AnimationGetter);
 
     /**
      * Play the animation for sending the new battler out.
