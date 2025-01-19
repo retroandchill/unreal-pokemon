@@ -208,7 +208,9 @@ UE5Coro::TCoroutine<> APokemonBattle::ExecuteAction(IBattleAction &Action, FForc
 }
 
 void APokemonBattle::BeginActionSelection(const TScriptInterface<IBattler> &Battler) {
-    BattleHUD->SelectAction(Battler);
+    if (Retro::ValidPtr(BattleHUD)) {
+        BattleHUD->SelectAction(Battler);
+    }
 }
 
 void APokemonBattle::PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler) {
