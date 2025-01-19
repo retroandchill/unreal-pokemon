@@ -1,7 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/StatusEffects/BattleStatusEffectUtils.h"
-#include "Battle/Animations/BattleSequencer.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/StatusEffects/StatusEffectLookup.h"

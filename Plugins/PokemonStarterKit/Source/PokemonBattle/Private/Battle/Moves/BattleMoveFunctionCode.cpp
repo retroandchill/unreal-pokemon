@@ -3,7 +3,6 @@
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Battle/Animations/BattleAnimation.h"
-#include "Battle/Animations/BattleSequencer.h"
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Attributes/TargetDamageStateAttributeSet.h"
 #include "Battle/Battlers/Battler.h"

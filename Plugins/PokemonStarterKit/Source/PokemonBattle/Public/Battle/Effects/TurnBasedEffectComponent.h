@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "ActiveGameplayEffectHandle.h"
 #include "Battle/Effects/TurnBasedGameplayEffect.h"
-#include "Battle/Events/BattleMessage.h"
 #include "Components/ActorComponent.h"
 #include "RetroLib/Ranges/Views/Elements.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"

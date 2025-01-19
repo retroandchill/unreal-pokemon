@@ -2,9 +2,7 @@
 
 #include "Battle/Items/BattleItemEffect.h"
 #include "AbilitySystemComponent.h"
-#include "Algo/ForEach.h"
 #include "Bag/Item.h"
-#include "Battle/Animations/BattleSequencer.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Events/UseItemPayload.h"
 #include "Battle/Items/ItemTags.h"
@@ -12,7 +10,6 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Player/Bag.h"
 #include "RetroLib/Casting/DynamicCast.h"
-#include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/MakeStrong.h"
 
 UBattleItemEffect::UBattleItemEffect() {

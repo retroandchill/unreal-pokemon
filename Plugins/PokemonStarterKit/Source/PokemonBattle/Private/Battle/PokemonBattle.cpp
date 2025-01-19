@@ -4,7 +4,6 @@
 #include "Algo/NoneOf.h"
 #include "Battle/Actions/BattleAction.h"
 #include "Battle/Animations/BattleAnimation.h"
-#include "Battle/Animations/BattleSequencer.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/BattleAbilitySystemComponent.h"
 #include "Battle/Battlers/Battler.h"
@@ -43,7 +42,6 @@ TScriptInterface<IBattle> APokemonBattle::Initialize(const FBattleInfo &BattleIn
 
 void APokemonBattle::BeginPlay() {
     Super::BeginPlay();
-    BattleSequencer = GetWorld()->SpawnActor<ABattleSequencer>(BattleSequencerClass.LoadSynchronous());
     AbilitySystemComponent->InitAbilityActorInfo(this, this);
     auto TransitionSubsystem = GetWorld()->GetSubsystem<UBattleTransitionSubsystem>();
     check(TransitionSubsystem != nullptr)
@@ -60,7 +58,6 @@ void APokemonBattle::EndPlay(const EEndPlayReason::Type EndPlayReason) {
             Actor->Destroy();
         });
     // clang-format on
-    BattleSequencer->Destroy();
 }
 
 bool APokemonBattle::IsTrainerBattle_Implementation() const {

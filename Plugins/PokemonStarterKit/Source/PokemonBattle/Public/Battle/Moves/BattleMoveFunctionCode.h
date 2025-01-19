@@ -3,9 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Abilities/GameplayAbility.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
-#include "Battle/Events/BattleMessage.h"
 #include "UE5CoroGAS.h"
 
 #include "BattleMoveFunctionCode.generated.h"

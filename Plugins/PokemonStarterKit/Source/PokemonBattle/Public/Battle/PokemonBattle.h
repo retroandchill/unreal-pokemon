@@ -15,7 +15,6 @@
 class IBattleHUD;
 class IPokemonCoroutineDispatcher;
 class IBattleAnimation;
-class ABattleSequencer;
 class UTurnBasedEffectComponent;
 struct FGameplayTag;
 class UGameplayAbilityDisplayComponent;
@@ -243,15 +242,6 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      */
     UPROPERTY()
     TArray<TScriptInterface<IBattleSide>> Sides;
-
-    UPROPERTY()
-    TObjectPtr<ABattleSequencer> BattleSequencer;
-
-    /**
-     * The class used to constructing the sides of the battle.
-     */
-    UPROPERTY(EditAnywhere, Category = "Battle|Classes")
-    TSoftClassPtr<ABattleSequencer> BattleSequencerClass;
 
     /**
      * The class used to constructing the sides of the battle.
