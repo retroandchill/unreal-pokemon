@@ -2,6 +2,10 @@
 
 #pragma once
 #include "DetailWidgetRow.h"
+#include "PropertyCustomizationHelpers.h"
+#include "RetroLib/Optionals/OrElseGet.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Utils/Construct.h"
 #include "RetroLib/Variants/SoftVariantObject.h"
 
 namespace Retro {
@@ -19,7 +23,7 @@ namespace Retro {
 
         void CustomizeHeader(TSharedRef<IPropertyHandle> StructPropertyHandle, FDetailWidgetRow &HeaderRow,
                              IPropertyTypeCustomizationUtils &StructCustomizationUtils) override {
-            auto WrappedProperty = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(T, Ptr));
+            SoftVariantObjectPropertyHandle = StructPropertyHandle;
             // clang-format off
 			HeaderRow.NameContent()
 				[
@@ -27,7 +31,15 @@ namespace Retro {
 				]
 				.ValueContent()
 				[
-					WrappedProperty->CreatePropertyValueWidget()
+				    SNew(SObjectPropertyEntryBox)
+                        .ObjectPath(this, &TSoftVariantObjectCustomization::GetCurrentAssetPath)
+                        .AllowedClass(UObject::StaticClass())
+                        .OnShouldFilterAsset(this, &TSoftVariantObjectCustomization::IsValidClass)
+                        .OnObjectChanged(this, &TSoftVariantObjectCustomization::OnAssetSelected)
+                        .DisplayUseSelected(true)
+                        .DisplayBrowse(true)
+                        .DisplayThumbnail(true)
+                        .ThumbnailPool(StructCustomizationUtils.GetThumbnailPool())
 				];
             // clang-format on
         }
@@ -36,5 +48,30 @@ namespace Retro {
                                IPropertyTypeCustomizationUtils &StructCustomizationUtils) override {
             // No child customization
         }
+
+    private:
+        T& GetSoftVariantObject() const {
+            void *StructData;
+            const auto Result = SoftVariantObjectPropertyHandle->GetValueData(StructData);
+            check(Result == FPropertyAccess::Success)
+            check(StructData != nullptr)
+            return *static_cast<T *>(StructData);
+        }
+        
+        FString GetCurrentAssetPath() const {
+            // clang-format off
+            return GetSoftVariantObject().ToSoftObjectPtr().ToString();
+            // clang-format on
+        }
+
+        bool IsValidClass(const FAssetData& Asset) const {
+            return !T::FHardReference::IsValidType(Asset.GetClass(EResolveClass::Yes));
+        }
+
+        void OnAssetSelected( const FAssetData& InAsset ) const {
+            GetSoftVariantObject().Set(TSoftObjectPtr(InAsset.GetSoftObjectPath()));
+        }
+
+        TSharedPtr<IPropertyHandle> SoftVariantObjectPropertyHandle;
     };
 } // namespace Retro

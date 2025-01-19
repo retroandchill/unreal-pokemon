@@ -3,6 +3,11 @@
 #pragma once
 
 #include "DetailWidgetRow.h"
+#include "PropertyCustomizationHelpers.h"
+#include "RetroLib/Optionals/IfPresent.h"
+#include "RetroLib/Optionals/OrElseGet.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Utils/Construct.h"
 #include "RetroLib/Variants/VariantObjectStruct.h"
 
 namespace Retro {
@@ -20,7 +25,7 @@ namespace Retro {
 
         void CustomizeHeader(TSharedRef<IPropertyHandle> StructPropertyHandle, FDetailWidgetRow &HeaderRow,
                              IPropertyTypeCustomizationUtils &StructCustomizationUtils) override {
-            auto WrappedProperty = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(T, ContainedObject));
+            VariantObjectPropertyHandle = StructPropertyHandle;
             // clang-format off
 			HeaderRow.NameContent()
 				[
@@ -28,26 +33,49 @@ namespace Retro {
 				]
 				.ValueContent()
 				[
-					WrappedProperty->CreatePropertyValueWidget()
+				    SNew(SObjectPropertyEntryBox)
+				        .ObjectPath(this, &TVariantObjectCustomization::GetCurrentAssetPath)
+                        .AllowedClass(UObject::StaticClass())
+				        .OnShouldFilterAsset(this, &TVariantObjectCustomization::IsValidClass)
+                        .OnObjectChanged(this, &TVariantObjectCustomization::OnAssetSelected)
+                        .DisplayUseSelected(true)
+                        .DisplayBrowse(true)
+						.DisplayThumbnail(true)
+					    .ThumbnailPool(StructCustomizationUtils.GetThumbnailPool())
 				];
             // clang-format on
-
-            WrappedProperty->SetOnPropertyValueChanged(FSimpleDelegate::CreateLambda([StructPropertyHandle] {
-                void *StructData;
-                if (const auto Result = StructPropertyHandle->GetValueData(StructData);
-                    Result != FPropertyAccess::Success) {
-                    return;
-                }
-
-                check(StructData != nullptr)
-                auto AsVariant = static_cast<T *>(StructData);
-                AsVariant->TypeIndex = AsVariant->GetTypeIndex(AsVariant->ContainedObject).GetValue();
-            }));
         }
 
         void CustomizeChildren(TSharedRef<IPropertyHandle> StructPropertyHandle, IDetailChildrenBuilder &ChildBuilder,
                                IPropertyTypeCustomizationUtils &StructCustomizationUtils) override {
             // No child customization
         }
+
+    private:
+        T& GetVariantObject() const {
+            void *StructData;
+            const auto Result = VariantObjectPropertyHandle->GetValueData(StructData);
+            check(Result == FPropertyAccess::Success)
+            check(StructData != nullptr)
+            return *static_cast<T *>(StructData);
+        }
+        
+        FString GetCurrentAssetPath() const {
+            // clang-format off
+            return GetVariantObject().TryGet() |
+                   Optionals::Transform([](const UObject &Obj) { return Obj.GetPathName(); }) |
+                   Optionals::OrElseGet(Construct<FString>);
+            // clang-format on
+        }
+
+        bool IsValidClass(const FAssetData& Asset) const {
+            return !T::IsValidType(Asset.GetClass(EResolveClass::Yes));
+        }
+
+        void OnAssetSelected( const FAssetData& InAsset ) const {
+            GetVariantObject().Set(InAsset.GetAsset());
+        }
+
+        TSharedPtr<IPropertyHandle> VariantObjectPropertyHandle;
     };
 } // namespace Retro
