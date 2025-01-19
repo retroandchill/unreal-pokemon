@@ -5,8 +5,8 @@
  * @author Retro & Chill
  * https://github.com/retroandchill
  */
-#include "TestAdapter.h"
 #include "RetroLib/Optionals/IfNotPresent.h"
+#include "TestAdapter.h"
 
 #if RETROLIB_WITH_MODULES
 import RetroLib;

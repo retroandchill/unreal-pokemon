@@ -21,10 +21,11 @@
 #include "Battle/Items/ItemLookup.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Battle/Moves/PokemonBattleMove.h"
+#include "Battle/Settings/PokemonBattleSettings.h"
 #include "Battle/Status.h"
 #include "Battle/StatusEffects/StatusEffectLookup.h"
 #include "Battle/StatusEffects/StatusEffectTags.h"
-#include "Battle/Switching/SwitchActionBase.h"
+#include "Battle/Switching/SwitchAction.h"
 #include "Battle/Tags.h"
 #include "DataManager.h"
 #include "Graphics/SpriteLoader.h"
@@ -33,7 +34,6 @@
 #include "Pokemon/Moves/MoveBlock.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "PokemonBattleSettings.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/Construct.h"
@@ -136,10 +136,8 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
         StatusEffect.Reset();
     }
 
-    auto SwitchActionAbility =
-        GetDefault<UPokemonBattleSettings>()->SwitchAbilityClass.TryLoadClass<USwitchActionBase>();
     SwitchActionHandle =
-        BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(SwitchActionAbility, 1, INDEX_NONE, this));
+        BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(USwitchAction::StaticClass(), 1, INDEX_NONE, this));
 
     return this;
 }
@@ -336,7 +334,7 @@ UE5Coro::TCoroutine<> ABattlerActor::PerformSwitch(const TScriptInterface<IBattl
     EventData.TargetData.Data.Emplace(TargetData);
 
     co_await Pokemon::Battle::Events::SendOutActivationEvent(BattlerAbilityComponent, SwitchActionHandle,
-                                                             Pokemon::Battle::SwitchOut, std::move(EventData));
+                                                             Pokemon::Battle::SwitchOut, EventData);
 }
 
 bool ABattlerActor::IsOwnedByPlayer() const {

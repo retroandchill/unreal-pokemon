@@ -3,7 +3,7 @@
 #include "Battle/Actions/BattleActionSwitchPokemon.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
-#include "PokemonBattleSettings.h"
+#include "Battle/Settings/PokemonBattleSettings.h"
 
 FBattleActionSwitchPokemon::FBattleActionSwitchPokemon(const TScriptInterface<IBattler> &BattlerIn,
                                                        const TScriptInterface<IBattler> &SwitchTargetIn)
@@ -27,5 +27,5 @@ FText FBattleActionSwitchPokemon::GetActionMessage() const {
 }
 
 UE5Coro::TCoroutine<> FBattleActionSwitchPokemon::ActivateAbility() {
-    co_return co_await GetBattler()->PerformSwitch(SwitchTarget);
+    return GetBattler()->PerformSwitch(SwitchTarget);
 }

@@ -18,26 +18,30 @@ namespace Retro::Optionals {
 
     RETROLIB_EXPORT template <OptionalType O>
     struct TConstructEmpty {
-        constexpr O operator()() const requires std::is_default_constructible_v<O> {
+        constexpr O operator()() const
+            requires std::is_default_constructible_v<O>
+        {
             return O();
         }
     };
 
     template <ExpectedType O>
     struct TConstructEmpty<O> {
-        constexpr O operator()() const requires std::is_default_constructible_v<TErrorType<O>> {
+        constexpr O operator()() const
+            requires std::is_default_constructible_v<TErrorType<O>>
+        {
             return PassError<O>(TErrorType<O>());
         }
 
         template <typename E>
             requires std::convertible_to<E, TErrorType<O>>
-        constexpr O operator()(E&& Error) const {
+        constexpr O operator()(E &&Error) const {
             return PassError<O>(std::forward<E>(Error));
         }
 
         template <typename F>
             requires std::invocable<F> && std::convertible_to<std::invoke_result_t<F>, TErrorType<O>>
-        constexpr O operator()(F&& Supplier) const {
+        constexpr O operator()(F &&Supplier) const {
             return PassError<O>(std::invoke(std::forward<F>(Supplier)));
         }
     };
@@ -46,8 +50,10 @@ namespace Retro::Optionals {
     constexpr TConstructEmpty<O> ConstructEmpty;
 
     template <typename O, typename... A>
-    concept Filterable = requires(O&& Optional, A&&... Args) {
-        { Retro::Optionals::ConstructEmpty<std::remove_cvref_t<O>>(std::forward<A>(Args)...) } -> std::same_as<std::remove_cvref_t<O>>;
+    concept Filterable = requires(O &&Optional, A &&...Args) {
+        {
+            Retro::Optionals::ConstructEmpty<std::remove_cvref_t<O>>(std::forward<A>(Args)...)
+        } -> std::same_as<std::remove_cvref_t<O>>;
     };
 
     struct FFilterInvoker {
@@ -70,7 +76,7 @@ namespace Retro::Optionals {
          */
         template <OptionalType O, typename F, typename... A>
             requires std::is_invocable_r_v<bool, F, TCommonReference<O>> && Filterable<O, A...>
-        constexpr auto operator()(O &&Optional, F &&Functor, A&&... Args) const {
+        constexpr auto operator()(O &&Optional, F &&Functor, A &&...Args) const {
             if constexpr (std::is_lvalue_reference_v<O>) {
                 using FilteredType = decltype(MakeOptionalReference(std::forward<O>(Optional)));
                 static_assert(Filterable<FilteredType>);

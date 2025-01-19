@@ -4,7 +4,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "Bag/Item.h"
 #include "Battle/BlueprintClasses.h"
-#include "PokemonBattleSettings.h"
+#include "Battle/Settings/PokemonBattleSettings.h"
 #include "RetroLib/Optionals/OrElseGet.h"
 #include "RetroLib/Optionals/OrElseValue.h"
 
@@ -22,16 +22,10 @@ TOptional<TNonNullSubclassOf<UGameplayAbility>> Pokemon::Battle::Items::FindHold
     // clang-format on
 }
 
-static TSubclassOf<UBattleItemEffect> FindDefaultItemEffect() {
-    auto ItemClass = GetDefault<UPokemonBattleSettings>()->DefaultBattleItemAbility.TryLoadClass<UGameplayAbility>();
-    check(ItemClass != nullptr)
-    return ItemClass;
-}
-
 TSubclassOf<UBattleItemEffect> Pokemon::Battle::Items::FindBattleItemEffect(FName ID) {
     // clang-format off
     return Classes::ItemEffects.LoadClass(ID) |
-           Retro::Optionals::OrElseGet(&FindDefaultItemEffect);
+           Retro::Optionals::OrElseValue(UBattleItemEffect::StaticClass());
     // clang-format on
 }
 

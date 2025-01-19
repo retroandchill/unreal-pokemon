@@ -9,11 +9,11 @@ UPlayerBattlerController *UPlayerBattlerController::SetBattle(const TScriptInter
 }
 
 void UPlayerBattlerController::ActionSelection(const TScriptInterface<IBattler> &Battler) const {
-    IBattle::Execute_BeginActionSelection(BattleContext.GetObject(), Battler);
+    BattleContext->BeginActionSelection(Battler);
 }
 
 void UPlayerBattlerController::InitiateForcedSwitch(const TScriptInterface<IBattler> &Battler) const {
-    IBattle::Execute_PromptMandatorySwitch(BattleContext.GetObject(), Battler);
+    BattleContext->PromptMandatorySwitch(Battler);
 }
 
 void UPlayerBattlerController::BindOnActionReady(FActionReady &&QueueAction) {

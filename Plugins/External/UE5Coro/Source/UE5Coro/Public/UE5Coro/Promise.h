@@ -346,10 +346,10 @@ public:
 template<typename T>
 void FPromiseExtras::ContinueWith(auto Fn)
 {
-	std::unique_lock _(Lock);
+	std::unique_lock UniqueLock(Lock);
 	if (IsComplete()) // Already completed?
 	{
-		_.unlock();
+		UniqueLock.unlock();
 		if constexpr (std::is_void_v<T>)
 			Fn();
 		else // T is controlled by TCoroutine<T>, safe to cast

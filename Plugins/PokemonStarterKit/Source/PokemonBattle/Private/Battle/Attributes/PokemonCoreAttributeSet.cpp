@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
-#include "PokemonBattleSettings.h"
+#include "Battle/Settings/PokemonBattleSettings.h"
 
 void UPokemonCoreAttributeSet::InitHP(float NewVal) {
     HP.SetBaseValue(NewVal);

@@ -6,7 +6,10 @@
 #include "Mocking/UnrealMock.h"
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
+
+THIRD_PARTY_INCLUDES_START
 #include <gmock/gmock.h>
+THIRD_PARTY_INCLUDES_END
 
 /**
  *

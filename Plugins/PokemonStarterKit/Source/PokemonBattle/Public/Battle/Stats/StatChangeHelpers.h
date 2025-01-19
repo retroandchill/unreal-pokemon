@@ -6,6 +6,8 @@
 #include "Abilities/GameplayAbility.h"
 #include "GameplayTagContainer.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Species/Stat.h"
+#include "UE5Coro.h"
 
 #include "StatChangeHelpers.generated.h"
 
@@ -39,6 +41,14 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
   public:
+    static UE5Coro::TCoroutine<bool> CanRaiseStat(UE5Coro::TLatentContext<const UObject> Context,
+                                                  const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat,
+                                                  bool bShowMessages = true, bool bIgnoreInversion = false);
+
+    static UE5Coro::TCoroutine<bool> CanLowerStat(UE5Coro::TLatentContext<const UObject> Context,
+                                                  const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat,
+                                                  bool bShowMessages = true, bool bIgnoreInversion = false);
+
     /**
      * Get the value of a stat's stage
      * @param Battler The battler to check against
@@ -46,7 +56,7 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
      * @return The value of the stat's stage
      */
     UFUNCTION(BlueprintPure, Category = "Battle|Stats")
-    static int32 GetStatStageValue(const TScriptInterface<IBattler> &Battler, FName Stat);
+    static int32 GetStatStageValue(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat);
 
     /**
      * Check if a stat stage is at its maximum value
@@ -55,7 +65,7 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
      * @return Is this stat maxed out
      */
     UFUNCTION(BlueprintPure, Category = "Battle|Stats")
-    static bool StatStageAtMax(const TScriptInterface<IBattler> &Battler, FName Stat);
+    static bool StatStageAtMax(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat);
 
     /**
      * Check if a stat stage is at its minimum value
@@ -64,7 +74,10 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
      * @return Is this stat maxed out
      */
     UFUNCTION(BlueprintPure, Category = "Battle|Stats")
-    static bool StatStageAtMin(const TScriptInterface<IBattler> &Battler, FName Stat);
+    static bool StatStageAtMin(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat);
+
+    static TOptional<FText> GetStatChangeMessage(const TScriptInterface<IBattler> &Battler, const FText &StatName,
+                                                 int32 Change);
 
     /**
      * Perform a change to a battler's stat stages
@@ -74,7 +87,6 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
      * @param Ability
      * @return The actual number of stages that were changed
      */
-    UFUNCTION(BlueprintCallable, Category = "Battle|Stat")
-    static int32 ChangeBattlerStatStages(const TScriptInterface<IBattler> &Battler, FName Stat, int32 Stages,
-                                         UGameplayAbility *Ability = nullptr);
+    static UE5Coro::TCoroutine<int32> ChangeBattlerStatStages(const TScriptInterface<IBattler> &Battler, FName Stat,
+                                                              int32 Stages, UGameplayAbility *Ability = nullptr);
 };

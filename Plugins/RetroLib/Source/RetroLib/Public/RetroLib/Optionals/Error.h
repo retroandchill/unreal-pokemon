@@ -12,10 +12,10 @@
 namespace Retro::Optionals {
     struct FErrorInvoker {
         template <ExpectedType O>
-        constexpr decltype(auto) operator()(O&& Optional) const {
+        constexpr decltype(auto) operator()(O &&Optional) const {
             return GetError(std::forward<O>(Optional));
         }
     };
 
     RETROLIB_EXPORT constexpr auto Error = ExtensionMethod<FErrorInvoker{}>();
-}
+} // namespace Retro::Optionals

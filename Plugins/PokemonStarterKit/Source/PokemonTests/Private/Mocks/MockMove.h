@@ -7,7 +7,10 @@
 #include "Moves/MoveData.h"
 #include "Moves/Target.h"
 #include "Pokemon/Moves/Move.h"
+
+THIRD_PARTY_INCLUDES_START
 #include <gmock/gmock.h>
+THIRD_PARTY_INCLUDES_END
 
 class FMockMove : public IMove {
     DECLARE_MOCK_INTERFACE(FMockMove)

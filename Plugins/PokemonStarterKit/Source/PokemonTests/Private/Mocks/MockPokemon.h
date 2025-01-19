@@ -8,7 +8,10 @@
 #include "Pokemon/PokemonDTO.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/OwnerInfo.h"
+
+THIRD_PARTY_INCLUDES_START
 #include <gmock/gmock.h>
+THIRD_PARTY_INCLUDES_END
 
 /**
  *

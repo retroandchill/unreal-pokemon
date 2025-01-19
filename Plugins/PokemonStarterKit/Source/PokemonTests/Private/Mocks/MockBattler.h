@@ -7,7 +7,10 @@
 #include "Battle/Status.h"
 #include "Mocking/UnrealMock.h"
 #include "Species/SpeciesData.h"
+
+THIRD_PARTY_INCLUDES_START
 #include <gmock/gmock.h>
+THIRD_PARTY_INCLUDES_END
 
 class FMockBattler : public IBattler {
     DECLARE_MOCK_INTERFACE(FMockBattler)
@@ -54,4 +57,5 @@ class FMockBattler : public IBattler {
     MOCK_METHOD(const TOptional<FStatusEffectInfo> &, GetStatusEffect, (), (const, override));
     MOCK_METHOD2(InflictStatusEffect, void(FStatusHandle StatusEffectID, FActiveGameplayEffectHandle EffectHandle));
     MOCK_METHOD(void, CureStatusEffect, (), (override));
+    MOCK_METHOD(void, OnMoveFailed, (const TScriptInterface<IBattleMove> &), (override));
 };

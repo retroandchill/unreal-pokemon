@@ -2,7 +2,6 @@
 
 #pragma once
 
-
 #include "RetroLib/Concepts/Pointers.h"
 #include "RetroLib/Functional/ExtensionMethods.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
@@ -21,7 +20,7 @@ namespace Retro::Optionals {
             return HasValue(std::forward<O>(Optional)) ? nullptr : GetPtrFromRef(GetError(std::forward<O>(Optional)));
         }
     };
-    
+
     RETROLIB_EXPORT constexpr auto ErrorPtrOrNull = ExtensionMethod<FErrorPtrOrNullInvoker{}>();
 
-}
+} // namespace Retro::Optionals
