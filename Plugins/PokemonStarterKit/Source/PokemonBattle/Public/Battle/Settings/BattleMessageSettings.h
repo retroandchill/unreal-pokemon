@@ -77,4 +77,10 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Battle|Effects")
     FText NoEffectMessage = NSLOCTEXT("PokemonBattle", "NoEffectMessage", "But it had no effect on {Pkmn}!");
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Battle|Switching")
+    FText PlayerSendOutMessage = NSLOCTEXT("PokemonBattle", "PlayerSendOutMessage", "Go {Pkmn}!");
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Battle|Switching")
+    FText OpponentSendOutMessage = NSLOCTEXT("PokemonBattle", "OpponentSendOutMessage", "{Trainer} send out {Pkmn}!");
+
 };

@@ -121,6 +121,9 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     Retro::TGenerator<TScriptInterface<IBattler>> GetActiveBattlers() const override;
     UE5Coro::TCoroutine<> ExecuteAction(IBattleAction &Action, FForceLatentCoroutine = {}) override;
 
+    void BeginActionSelection(const TScriptInterface<IBattler> &Battler) override;
+    void PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler) override;
+
   protected:
     bool RunCheck_Implementation(const TScriptInterface<IBattler> &Battler, bool bDuringBattle) override;
 
@@ -172,7 +175,6 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     /**
      * Refresh the battle HUD so that it is up to date
      */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     void RefreshBattleHUD();
 
     /**
@@ -198,7 +200,6 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      */
     UE5Coro::TCoroutine<TOptional<int32>> EndTurn();
 
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Flow")
     void ClearActionSelection();
 
   private:

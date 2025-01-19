@@ -210,6 +210,14 @@ UE5Coro::TCoroutine<> APokemonBattle::ExecuteAction(IBattleAction &Action, FForc
     co_await Action.Execute();
 }
 
+void APokemonBattle::BeginActionSelection(const TScriptInterface<IBattler> &Battler) {
+    BattleHUD->SelectAction(Battler);
+}
+
+void APokemonBattle::PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler) {
+    BattleHUD->PromptMandatorySwitch(Battler);
+}
+
 bool APokemonBattle::RunCheck_Implementation(const TScriptInterface<IBattler> &Battler, bool bDuringBattle) {
     if (!bDuringBattle) {
         RunAttempts++;
@@ -248,6 +256,10 @@ APawn *APokemonBattle::GetBattlePawn() const {
 FText APokemonBattle::GetBattleIntroMessage() const {
     check(Sides.IsValidIndex(OpponentSideIndex))
     return Sides[OpponentSideIndex]->GetIntroText();
+}
+
+void APokemonBattle::RefreshBattleHUD() {
+    BattleHUD->Refresh();
 }
 
 void APokemonBattle::EndBattle_Implementation(EBattleResult Result) {
@@ -292,7 +304,7 @@ UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::ProcessTurn() {
 }
 
 UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::EndTurn() {
-    ClearActionSelection();
+    BattleHUD->ClearSelectingBattlers();
     bool bRequiresSwaps = false;
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();

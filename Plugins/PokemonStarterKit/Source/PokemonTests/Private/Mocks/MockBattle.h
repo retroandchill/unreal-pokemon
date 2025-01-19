@@ -32,4 +32,6 @@ class FMockBattle : public IBattle {
     MOCK_METHOD(Retro::TGenerator<TScriptInterface<IBattler>>, GetActiveBattlers, (), (const, override));
     MOCK_METHOD2(ExecuteAction, UE5Coro::TCoroutine<>(IBattleAction &Action, FForceLatentCoroutine Coro));
     MOCK_METHOD(const TScriptInterface<IBattleHUD>&, GetBattleHUD, (), (const, override));
+    MOCK_METHOD(void, BeginActionSelection, (const TScriptInterface<IBattler>& Battler), (override));
+    MOCK_METHOD(void, PromptMandatorySwitch, (const TScriptInterface<IBattler>& Battler), (override));
 };

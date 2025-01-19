@@ -24,7 +24,7 @@
 #include "Battle/Status.h"
 #include "Battle/StatusEffects/StatusEffectLookup.h"
 #include "Battle/StatusEffects/StatusEffectTags.h"
-#include "Battle/Switching/SwitchActionBase.h"
+#include "Battle/Switching/SwitchAction.h"
 #include "Battle/Tags.h"
 #include "DataManager.h"
 #include "Graphics/SpriteLoader.h"
@@ -135,11 +135,9 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     } else {
         StatusEffect.Reset();
     }
-
-    auto SwitchActionAbility =
-        GetDefault<UPokemonBattleSettings>()->SwitchAbilityClass.TryLoadClass<USwitchActionBase>();
-    SwitchActionHandle =
-        BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(SwitchActionAbility, 1, INDEX_NONE, this));
+    
+    SwitchActionHandle = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(USwitchAction::StaticClass(),
+        1, INDEX_NONE, this));
 
     return this;
 }

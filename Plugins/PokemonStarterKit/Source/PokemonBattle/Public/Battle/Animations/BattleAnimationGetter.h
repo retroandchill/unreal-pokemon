@@ -34,7 +34,7 @@ public:
     TScriptInterface<IBattleAnimation> GetRecallAnimation(const TScriptInterface<IBattler> &SwappingFrom);
 
     UFUNCTION(BlueprintImplementableEvent, Category = Switching)
-    TScriptInterface<IBattleAnimation> GetSendOutAnimation(const TScriptInterface<IBattler> &SwappingTo);
+    TScriptInterface<IBattleAnimation> GetSendOutAnimation(const TScriptInterface<IBattler> &SwappingTo, const TScriptInterface<IBattler>& SwappingFrom);
 
 };
 

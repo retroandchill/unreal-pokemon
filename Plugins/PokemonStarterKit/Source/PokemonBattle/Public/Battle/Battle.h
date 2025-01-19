@@ -144,11 +144,9 @@ class POKEMONBATTLE_API IBattle {
     /**
      * Initiate the process of selecting actions for the given battler.
      */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Selection")
-    void BeginActionSelection(const TScriptInterface<IBattler> &Battler);
-
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Selection")
-    void PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler);
+    virtual void BeginActionSelection(const TScriptInterface<IBattler> &Battler) = 0;
+    
+    virtual void PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler) = 0;
 
     /**
      * Execute the bound action in battle

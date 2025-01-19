@@ -48,7 +48,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen, public IBattleH
     void SetBattle(const TScriptInterface<IBattle> &Battle);
 
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
-    void ClearSelectingBattlers();
+    void ClearSelectingBattlers() override;
 
     /**
      * Have a battler select an action from the HUD.
@@ -58,7 +58,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen, public IBattleH
     void SelectAction(const TScriptInterface<IBattler> &Battler) override;
 
     UFUNCTION(BlueprintCallable, Category = "Battle|Selection")
-    void PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler);
+    void PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler) override;
 
     /**
      * Get the action select widget
@@ -84,7 +84,7 @@ class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen, public IBattleH
      * Refresh the battle HUD
      */
     UFUNCTION(BlueprintCallable, Category = "Battle|Visuals")
-    void Refresh() const;
+    void Refresh() const override;
 
     /**
      * Attempt to find the panel for a battler

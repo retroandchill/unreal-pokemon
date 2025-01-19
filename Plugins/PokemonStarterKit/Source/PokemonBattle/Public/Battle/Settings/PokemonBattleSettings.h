@@ -82,12 +82,6 @@ class POKEMONBATTLE_API UPokemonBattleSettings : public UDeveloperSettings {
     };
 
     /**
-     * The default ability used for using items in battle
-     */
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = Battle, meta = (MetaClass = "BattleItemEffect"))
-    FSoftClassPath DefaultBattleItemAbility;
-
-    /**
      * The default level that is streamed in when starting a battle
      */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = Battle,
@@ -135,11 +129,4 @@ class POKEMONBATTLE_API UPokemonBattleSettings : public UDeveloperSettings {
      */
     UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = Switching)
     int32 ItemPriority = 6;
-
-    /**
-     * The priority of a switch action in battle
-     */
-    UPROPERTY(EditDefaultsOnly, Config, BlueprintReadOnly, Category = Switching,
-              meta = (MetaClass = "SwitchActionBase"))
-    FSoftClassPath SwitchAbilityClass;
 };
