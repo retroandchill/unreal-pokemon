@@ -3,20 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Battle/Status.h"
 #include "Engine/DeveloperSettings.h"
 
 #include "PokemonMessageSettings.generated.h"
-
-USTRUCT(BlueprintType)
-struct POKEMONUI_API FItemMessages {
-    GENERATED_BODY()
-};
 
 /**
  *
  */
 UCLASS(Config = Game, DefaultConfig, DisplayName = "Pokémon Standard Messages")
-class POKEMONUI_API UPokemonMessageSettings : public UDeveloperSettings {
+class POKEMONCORE_API UPokemonMessageSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
   public:
@@ -61,4 +57,10 @@ class POKEMONUI_API UPokemonMessageSettings : public UDeveloperSettings {
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Leveling)
     FText GrewToLevelMessage = NSLOCTEXT("PokemonUI", "GrewToLevelMessage", "{Pkmn} grew to level {Level}!");
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = StatusEffects, meta=(ForceInlineRow))
+    TMap<FStatusHandle, FText> ObtainedStatusEffectMessages;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = StatusEffects, meta=(ForceInlineRow))
+    TMap<FStatusHandle, FText> StatusEffectCuredMessages;
 };

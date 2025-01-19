@@ -20,7 +20,7 @@ class POKEMONBATTLE_API UCanStatusEffectBeInflicted : public UBlueprintCoroutine
 
 public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Battle|Status Effects")
-    static UCanStatusEffectBeInflicted* CanStatusEffectBeInflicted(FStatusHandle StatusEffectID, const TScriptInterface<IBattler>& Target, FText AlreadyAppliedFormat, FText HasOtherStatusFormat);
+    static UCanStatusEffectBeInflicted* CanStatusEffectBeInflicted(const TScriptInterface<IBattler>& Target, FStatusHandle StatusEffectID, FText AlreadyAppliedFormat, FText HasOtherStatusFormat);
 
 protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
@@ -30,10 +30,10 @@ private:
     FStatusCanBeInflicted OnComplete;
 
     UPROPERTY()
-    FStatusHandle StatusEffectID;
-
-    UPROPERTY()
     TScriptInterface<IBattler> Target;
+    
+    UPROPERTY()
+    FStatusHandle StatusEffectID;
 
     UPROPERTY()
     FText AlreadyAppliedFormat;

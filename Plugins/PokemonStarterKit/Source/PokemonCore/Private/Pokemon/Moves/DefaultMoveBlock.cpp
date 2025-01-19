@@ -90,8 +90,7 @@ Retro::TGenerator<FMoveHandle> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialL
 }
 
 UE5Coro::TCoroutine<bool> UDefaultMoveBlock::LearnMove(FMoveHandle Move, FForceLatentCoroutine) {
-    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(this);
-    co_return co_await Dispatcher.LearnMove(this, Move);
+    return IPokemonCoroutineDispatcher::Get(this).LearnMove(this, Move);
 }
 
 TScriptInterface<IMove> UDefaultMoveBlock::CreateNewMove(const FMoveDTO &MoveID) {

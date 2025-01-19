@@ -121,10 +121,6 @@ UE5Coro::TCoroutine<int32> UStatChangeHelpers::ChangeBattlerStatStages(const TSc
     Calculation.CalculationClassMagnitude = UStatChangeCalculation::StaticClass();
     Modifier.ModifierMagnitude = FGameplayEffectModifierMagnitude(Calculation);
 
-    static auto &Lookup = Pokemon::Battle::Stats::FLookup::Get();
-    auto &Cue = StatChangeEffect->GameplayCues.Emplace_GetRef(Lookup.GetGameplayCueTag(Stat), 0.f, 0.f);
-    Cue.MagnitudeAttribute = StatData->StagesAttribute;
-
     FGameplayEffectContextHandle Context;
     if (Ability != nullptr) {
         Context = Ability->MakeEffectContext(Ability->GetCurrentAbilitySpecHandle(), Ability->GetCurrentActorInfo());

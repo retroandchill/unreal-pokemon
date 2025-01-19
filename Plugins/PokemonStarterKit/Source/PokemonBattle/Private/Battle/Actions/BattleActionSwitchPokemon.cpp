@@ -27,5 +27,5 @@ FText FBattleActionSwitchPokemon::GetActionMessage() const {
 }
 
 UE5Coro::TCoroutine<> FBattleActionSwitchPokemon::ActivateAbility() {
-    co_return co_await GetBattler()->PerformSwitch(SwitchTarget);
+    return GetBattler()->PerformSwitch(SwitchTarget);
 }

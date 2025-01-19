@@ -65,4 +65,10 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Battle|Stats")
     FStatChangeSettings StatChangeMessage;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, DisplayName = "HP Restored Message", Config, Category = "Battle|Effects")
+    FText HPRestoredMessage = NSLOCTEXT("PokemonBattle", "HPRestoredMessage", "{Pkmn}'s HP was restored!");
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = "Battle|Effects")
+    FText NoEffectMessage = NSLOCTEXT("PokemonBattle", "NoEffectMessage", "But it had no effect on {Pkmn}!");
+
 };

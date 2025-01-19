@@ -16,5 +16,4 @@ public:
     UE5Coro::TCoroutine<int32> HandleGameplayEventAsync(FGameplayTag EventTag, const FGameplayEventData *Payload, FForceLatentCoroutine = {});
 
     UE5Coro::TCoroutine<bool> TriggerAbilityFromGameplayEventAsync(FGameplayAbilitySpecHandle AbilityToTrigger, FGameplayAbilityActorInfo* ActorInfo, FGameplayTag Tag, const FGameplayEventData* Payload, UAbilitySystemComponent& Component);
-
 };

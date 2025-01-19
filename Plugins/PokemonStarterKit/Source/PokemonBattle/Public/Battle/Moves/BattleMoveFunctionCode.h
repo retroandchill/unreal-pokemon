@@ -386,11 +386,6 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
     UE5Coro::TCoroutine<> EndMove(const TScriptInterface<IBattler> &User,
                                   const TArray<TScriptInterface<IBattler>> &Targets, const TArray<TScriptInterface<IBattler>>& FaintedBattlers = {}, FForceLatentCoroutine = {});
 
-public:
-    UE5Coro::TCoroutine<TArray<FActiveGameplayEffectHandle>> ApplyGameplayEffectToBattler(const TScriptInterface<IBattler> &Battler,
-        TSubclassOf<UGameplayEffect> EffectClass,
-        int32 Level, int32 Stacks, FForceLatentCoroutine = {}) const;
-
   private:
     /**
      * The underlying move that this ability wraps

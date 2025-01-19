@@ -690,27 +690,5 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::EndMove(const TScriptInterface<IB
                                                        const TArray<TScriptInterface<IBattler>> &FaintedBattlers,
                                                        FForceLatentCoroutine) {
     co_await ABattleSequencer::DisplayBattleMessages(this);
-    co_await UBattlerHelpers::GainExpOnFaint(FaintedBattlers);
-}
-
-UE5Coro::TCoroutine<TArray<FActiveGameplayEffectHandle>> UBattleMoveFunctionCode::ApplyGameplayEffectToBattler(
-                                                        const TScriptInterface<IBattler> &Battler,
-                                                      TSubclassOf<UGameplayEffect> EffectClass, int32 Level,
-                                                      int32 Stacks, FForceLatentCoroutine) const {
-    FGameplayAbilityTargetDataHandle TargetDataHandle;
-    auto &TargetData = TargetDataHandle.Data.Emplace_GetRef(MakeShared<FGameplayAbilityTargetData_ActorArray>());
-    TargetData->SetActors({CastChecked<AActor>(Battler.GetObject())});
-    auto AddedSpecs = ApplyGameplayEffectToTarget(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo(), GetCurrentActivationInfo(),
-                                       TargetDataHandle, EffectClass, Level, Stacks);
-    for (auto &Handle : AddedSpecs) {
-        auto Effect = Handle.GetOwningAbilitySystemComponent()->GetGameplayEffectCDO(Handle);
-        auto Component = Effect->FindComponent<UApplyMessageGameplayEffectComponent>();
-        if (Component == nullptr) {
-            continue;
-        }
-
-        co_await Component->DisplayApplyMessage(Battler.GetObject(), Battler->GetNickname());
-    }
-
-    co_return AddedSpecs;
+    co_await UBattlerHelpers::GainExpOnFaint(User.GetObject(), FaintedBattlers);
 }

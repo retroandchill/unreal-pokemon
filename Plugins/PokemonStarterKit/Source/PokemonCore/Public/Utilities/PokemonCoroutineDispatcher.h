@@ -35,6 +35,10 @@ class POKEMONCORE_API IPokemonCoroutineDispatcher {
   public:
     static IPokemonCoroutineDispatcher &Get(const UObject* WorldContext);
 
+    static IPokemonCoroutineDispatcher &Get(const FScriptInterface& WorldContext) {
+        return Get(WorldContext.GetObject());
+    }
+
     virtual UE5Coro::TCoroutine<> DisplayMessage(FText Message, FForceLatentCoroutine = {}) const = 0;
 
     virtual TMultiCoroutine<int32, FName> DisplayMessageWithChoices(FText Message, const TArray<FText> &Choices,

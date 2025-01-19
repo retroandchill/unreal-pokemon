@@ -5,8 +5,14 @@
 #include "AbilitySystemComponent.h"
 #include "Battle/Battle.h"
 #include "Battle/BattleSide.h"
+#include "Battle/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/Battlers/BattlerAbilityComponent.h"
 #include "Battle/Display/BattleHUD.h"
+#include "Battle/Effects/BattleEffectUtilities.h"
+#include "Battle/Settings/BattleMessageSettings.h"
+#include "Battle/Stats/StatChangeCalculation.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
+#include "Utilities/PokemonCoroutineDispatcher.h"
 
 float UBattlerHelpers::GetBattlerStat(const FGameplayAbilityActorInfo &ActorInfo, FGameplayAttribute Attribute,
                                       bool &bFound) {
@@ -24,7 +30,7 @@ EStatusEffectStatus UBattlerHelpers::GetStatusEffect(const TScriptInterface<IBat
     return EStatusEffectStatus::HasStatusEffect;
 }
 
-UE5Coro::TCoroutine<> UBattlerHelpers::GainExpOnFaint(const TArray<TScriptInterface<IBattler>> &FainedBattlers) {
+UE5Coro::TCoroutine<> UBattlerHelpers::GainExpOnFaint(UE5Coro::TLatentContext<const UObject> Context, const TArray<TScriptInterface<IBattler>> &FainedBattlers) {
     auto ValidBattlers = FainedBattlers |
         Retro::Ranges::Views::Filter([](const TScriptInterface<IBattler> &Battler) {
         auto &OwningSide = Battler->GetOwningSide();
@@ -61,5 +67,44 @@ UE5Coro::TCoroutine<> UBattlerHelpers::GainExpOnFaint(const TArray<TScriptInterf
         co_return;
     }
 
-    co_await HUD->DisplayExpForGain(std::move(GainInfos));
+    co_await HUD->DisplayExpForGain(Context, std::move(GainInfos));
+}
+
+UE5Coro::TCoroutine<bool> UBattlerHelpers::ApplyHPRecoveryEffect(const TScriptInterface<IBattler> &Battler,
+                                                                 int32 Amount, const UGameplayAbility * Ability, bool bShowFailureMessage, FForceLatentCoroutine) {
+    auto AbilityComponent = Battler->GetAbilityComponent();
+    auto Attributes = AbilityComponent->GetCoreAttributes();
+    float CurrentHP = Attributes->GetHP();
+    float MaxHP = Attributes->GetMaxHP();
+
+    auto &Dispatcher = IPokemonCoroutineDispatcher::Get(Battler);
+    auto Settings = GetDefault<UBattleMessageSettings>();
+    if (MaxHP <= CurrentHP) {
+        if (bShowFailureMessage) {
+            co_await Dispatcher.DisplayMessage(FText::FormatNamed(Settings->NoEffectMessage, "Pkmn", Battler->GetNickname()));
+        }
+        co_return false;
+    }
+
+    auto RecoveryEffect = NewObject<UGameplayEffect>();
+    RecoveryEffect->DurationPolicy = EGameplayEffectDurationType::Instant;
+
+    auto &Modifier = RecoveryEffect->Modifiers.Emplace_GetRef();
+    Modifier.Attribute = UPokemonCoreAttributeSet::GetHPAttribute();
+    Modifier.ModifierOp = EGameplayModOp::Additive;
+    Modifier.ModifierMagnitude = FGameplayEffectModifierMagnitude(static_cast<float>(Amount));
+
+    FGameplayEffectContextHandle Context;
+    if (Ability != nullptr) {
+        Context = Ability->MakeEffectContext(Ability->GetCurrentAbilitySpecHandle(), Ability->GetCurrentActorInfo());
+    } else {
+        Context = AbilityComponent->MakeEffectContext();
+    }
+    AbilityComponent->ApplyGameplayEffectToSelf(RecoveryEffect, 1, Context);
+
+    auto &BattleHUD = Battler->GetOwningSide()->GetOwningBattle()->GetBattleHUD();
+    co_await BattleHUD->AnimateHPChange(Battler);
+    co_await Dispatcher.DisplayMessage(FText::FormatNamed(Settings->HPRestoredMessage, "Pkmn", Battler->GetNickname()));
+
+    co_return true;
 }

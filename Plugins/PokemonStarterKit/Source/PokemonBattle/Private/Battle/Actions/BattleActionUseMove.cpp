@@ -40,5 +40,5 @@ UE5Coro::TCoroutine<> FBattleActionUseMove::Execute() {
 }
 
 UE5Coro::TCoroutine<> FBattleActionUseMove::ActivateAbility() {
-    co_return co_await Move->TryActivateMove(Targets);
+    return Move->TryActivateMove(Targets);
 }

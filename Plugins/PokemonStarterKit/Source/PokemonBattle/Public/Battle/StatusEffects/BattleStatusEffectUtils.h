@@ -3,8 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ActiveGameplayEffectHandle.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "UE5Coro.h"
+#include "Battle/Status.h"
 
 #include "BattleStatusEffectUtils.generated.h"
 
@@ -20,13 +22,20 @@ class POKEMONBATTLE_API UBattleStatusEffectUtils : public UBlueprintFunctionLibr
   public:
     /**
      * Check if a status effect can be inflicted on the target
-     * @param Context
-     * @param StatusEffectID
      * @param Target The target of the status effect
+     * @param StatusEffectID
      * @param AlreadyAppliedFormat
      * @param HasOtherStatusFormat
+     * @param 
      * @return Can the effect be inflicted
      */
-    static UE5Coro::TCoroutine<bool> CanStatusEffectBeInflicted(UE5Coro::TLatentContext<const UObject> Context, FName StatusEffectID,
-                                                                const TScriptInterface<IBattler> &Target, const FText& AlreadyAppliedFormat, const FText& HasOtherStatusFormat);
+    static UE5Coro::TCoroutine<bool> CanStatusEffectBeInflicted(const TScriptInterface<IBattler> &Target,
+                                                                FName StatusEffectID, const FText& AlreadyAppliedFormat, const FText& HasOtherStatusFormat, FForceLatentCoroutine = {});
+
+    static UE5Coro::TCoroutine<FActiveGameplayEffectHandle> ApplyStatusEffectToBattler(
+        const TScriptInterface<IBattler> &Battler, FStatusHandle StatusEffect, FForceLatentCoroutine = {});
+    
+    static UE5Coro::TCoroutine<bool> RemoveStatusEffectFromBattler(const TScriptInterface<IBattler> &Target, FForceLatentCoroutine = {});
+    
+    static UE5Coro::TCoroutine<bool> RemoveStatusEffectFromBattler(const TScriptInterface<IBattler> &Target, FStatusHandle StatusEffect, FForceLatentCoroutine = {}); 
 };

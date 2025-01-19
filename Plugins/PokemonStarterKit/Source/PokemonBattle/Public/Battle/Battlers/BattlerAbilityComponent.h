@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
+#include "Battle/AsyncAbilityComponent.h"
 #include <memory>
 
 #include "BattlerAbilityComponent.generated.h"
@@ -25,7 +26,7 @@ struct FModifierInformation {
 };
 
 UCLASS(ClassGroup = ("Gameplay Abilities"), meta = (BlueprintSpawnableComponent))
-class POKEMONBATTLE_API UBattlerAbilityComponent : public UAbilitySystemComponent {
+class POKEMONBATTLE_API UBattlerAbilityComponent : public UAsyncAbilityComponent {
     GENERATED_BODY()
 
   public:

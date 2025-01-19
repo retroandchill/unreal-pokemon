@@ -115,7 +115,7 @@ UPokemonBattlePanel *UPokemonBattleScreen::FindPanelForBattler(const TScriptInte
     return Find != nullptr ? *Find : nullptr;
 }
 
-UE5Coro::TCoroutine<> UPokemonBattleScreen::DisplayExpForGain(TArray<FExpGainInfo> GainInfos) {
+UE5Coro::TCoroutine<> UPokemonBattleScreen::DisplayExpForGain(UE5Coro::TLatentContext<const UObject> Context, TArray<FExpGainInfo> GainInfos) {
     ExpGainPane->GainExp(std::move(GainInfos));
     co_await Retro::BindToDelegateDispatch(OnExpGainComplete, [this] {
         SwapToExpGainDisplay();
@@ -124,6 +124,16 @@ UE5Coro::TCoroutine<> UPokemonBattleScreen::DisplayExpForGain(TArray<FExpGainInf
     
     Algo::ForEach(Panels, &UPokemonBattlePanel::Refresh);
     SwapToPanelDisplay();
+}
+
+UE5Coro::TCoroutine<> UPokemonBattleScreen::AnimateHPChange(const TScriptInterface<IBattler> &Battler,
+    float MaxDuration, FForceLatentCoroutine) {
+    auto Panel = FindPanelForBattler(Battler);
+    if (Panel == nullptr) {
+        co_return;
+    }
+
+    co_await Panel->AnimateHP(MaxDuration);
 }
 
 void UPokemonBattleScreen::AddPanelsForSide(int32 Index, const TScriptInterface<IBattleSide> &Side) {

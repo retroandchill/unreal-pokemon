@@ -14,6 +14,6 @@ UGainExpOnFaint *UGainExpOnFaint::GainExpOnFaint(const UObject *WorldContextObje
 }
 
 UE5Coro::TCoroutine<> UGainExpOnFaint::ExecuteCoroutine(FForceLatentCoroutine) {
-    co_await UBattlerHelpers::GainExpOnFaint(Battlers);
+    co_await UBattlerHelpers::GainExpOnFaint(GetWorldContext(), Battlers);
     OnComplete.Broadcast();
 }
