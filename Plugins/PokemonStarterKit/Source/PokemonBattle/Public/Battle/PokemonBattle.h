@@ -238,9 +238,6 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     UPROPERTY()
     TScriptInterface<IPokemonCoroutineDispatcher> Dispatcher;
 
-    UPROPERTY()
-    TScriptInterface<IBattleHUD> HUD;
-
     /**
      * The list of sides in battle
      */

@@ -71,6 +71,9 @@ class POKEMONBATTLE_API UPokemonBattleSettings : public UDeveloperSettings {
     GENERATED_BODY()
 
   public:
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Battle, meta = (MetaClass = "GameplayEffect"))
+    FSoftClassPath DealDamageEffect;
+    
     /**
      * The information about how stat stages are altered
      */

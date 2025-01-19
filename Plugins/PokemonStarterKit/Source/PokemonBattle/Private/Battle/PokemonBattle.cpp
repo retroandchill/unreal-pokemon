@@ -117,7 +117,7 @@ UE5Coro::TCoroutine<EBattleResult> APokemonBattle::ConductBattle(APlayerControll
 }
 
 UE5Coro::TCoroutine<> APokemonBattle::StartBattle() {
-    HUD = CreateBattleHUD();
+    BattleHUD = CreateBattleHUD();
     co_await OnBattlersEnteringBattle(GetActiveBattlers());
 }
 

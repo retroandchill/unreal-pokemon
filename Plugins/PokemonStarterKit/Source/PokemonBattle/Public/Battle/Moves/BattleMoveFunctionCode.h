@@ -410,12 +410,6 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
     FName DeterminedType;
 
     /**
-     * The effect used to deal damage to the opposing Pokémon
-     */
-    UPROPERTY(EditDefaultsOnly, Category = GameplayEffects)
-    TSubclassOf<UGameplayEffect> DealDamageEffect;
-
-    /**
      * The attribute that is used to determine the amount of PP a move should be reduced by
      */
     UPROPERTY()

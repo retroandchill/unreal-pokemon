@@ -335,7 +335,10 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DealDamage(const TScriptInterface
         Pokemon::Battle::Moves::MoveTarget_Unaffected, Pokemon::Battle::Moves::MoveTarget_NoDamage});
 
     UE_LOG(LogBattle, Display, TEXT("Dealing damage for %s!"), *BattleMove->GetDisplayName().ToString())
-    check(DealDamageEffect != nullptr)
+
+    TSubclassOf<UGameplayEffect> DealDamageEffect = co_await UE5Coro::Latent::AsyncLoadClass(TSoftClassPtr(GetDefault<UPokemonBattleSettings>()->DealDamageEffect));
+    check(DealDamageEffect != nullptr);
+    
     auto Handle = GetCurrentAbilitySpecHandle();
     auto ActorInfo = GetActorInfo();
     auto &ActivationInfo = GetCurrentActivationInfoRef();
