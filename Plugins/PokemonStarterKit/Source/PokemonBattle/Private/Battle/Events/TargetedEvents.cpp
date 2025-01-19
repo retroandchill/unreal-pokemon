@@ -50,22 +50,11 @@ static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side) {
     return Retro::Ranges::Views::Concat(std::move(SideView), std::move(ActiveBattlers));
 }
 
-UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutActivationEvent(UAbilitySystemComponent *AbilityComponent,
+UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutActivationEvent(UAsyncAbilityComponent* AbilityComponent,
                                                                       FGameplayAbilitySpecHandle Handle,
-                                                                      FGameplayTag Tag, FGameplayEventData EventData,
+                                                                      FGameplayTag Tag, const FGameplayEventData& EventData,
                                                                       FForceLatentCoroutine) {
-    auto State = MakeShared<TFutureState<int32>>();
-    auto Spec = AbilityComponent->FindAbilitySpecFromHandle(Handle);
-    check(Spec != nullptr);
-    Retro::Delegates::TScopedBinding DelegateHandle(AbilityComponent->OnAbilityEnded,
-                                                    [&State, Handle](const FAbilityEndedData &Data) {
-                                                        if (Data.AbilitySpecHandle == Handle) {
-                                                            State->EmplaceResult(0);
-                                                        }
-                                                    });
-    UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(AbilityComponent->GetOwnerActor(), Tag,
-                                                             std::move(EventData));
-    co_await TFuture<void>(State);
+    co_await AbilityComponent->TriggerAbilityFromGameplayEventAsync(Handle, AbilityComponent->AbilityActorInfo.Get(), Tag, &EventData, *AbilityComponent);
 }
 
 UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutBattleEvent(const TScriptInterface<IBattle> &Battle,
@@ -120,8 +109,8 @@ UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutMoveEvents(const TScriptIn
     co_await SendOutEventForActor(TargetActor, EventTags.TargetTag, EventData);
     for (auto Ally : Target->GetAllies() | Retro::Ranges::Views::Filter(&IBattler::IsNotFainted) |
         Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>)) {
-            SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
-            SendOutEventForActor(Ally, EventTags.TargetAllyTag, EventData);
+            co_await SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
+            co_await SendOutEventForActor(Ally, EventTags.TargetAllyTag, EventData);
     }
 
     auto UserSide = User->GetOwningSide();

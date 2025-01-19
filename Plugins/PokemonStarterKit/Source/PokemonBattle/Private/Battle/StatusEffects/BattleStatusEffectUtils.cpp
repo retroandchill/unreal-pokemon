@@ -39,8 +39,6 @@ UE5Coro::TCoroutine<FActiveGameplayEffectHandle> UBattleStatusEffectUtils::Apply
     auto Spec = AbilityComponent->MakeOutgoingSpec(StatusEffectClass.GetValue(), 0,
                                                               AbilityComponent->MakeEffectContext());
     auto Handle = AbilityComponent->ApplyGameplayEffectSpecToSelf(*Spec.Data);
-    Battler->InflictStatusEffect(StatusEffect, Handle);
-
     auto Settings = GetDefault<UPokemonMessageSettings>();
     if (auto MessageFormat = Settings->ObtainedStatusEffectMessages.Find(StatusEffect); MessageFormat != nullptr) {
         auto &Dispatcher = IPokemonCoroutineDispatcher::Get(Battler.GetObject());

@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "NativeGameplayTags.h"
 #include "UE5Coro.h"
+#include "Battle/AsyncAbilityComponent.h"
 
 #include "TargetedEvents.generated.h"
 
@@ -143,16 +144,16 @@ struct POKEMONBATTLE_API FTargetedEvent {
     }
 
 #if DO_CHECK
-#define SYNC_EVENT(Expression) { auto Coro = Expression; check(Expression.IsDone()) }
+#define SYNC_EVENT(Expression) { auto Coro = Expression; check(Coro.IsDone()) }
 #else
 #define SYNC_EVENT(Expression) Expression;
 #endif
 
 namespace Pokemon::Battle::Events {
 
-    POKEMONBATTLE_API UE5Coro::TCoroutine<> SendOutActivationEvent(UAbilitySystemComponent *AbilityComponent,
+    POKEMONBATTLE_API UE5Coro::TCoroutine<> SendOutActivationEvent(UAsyncAbilityComponent* AbilityComponent,
                                                                    FGameplayAbilitySpecHandle Handle, FGameplayTag Tag,
-                                                                   FGameplayEventData EventData,
+                                                                   const FGameplayEventData& EventData,
                                                                    FForceLatentCoroutine = {});
 
     /**

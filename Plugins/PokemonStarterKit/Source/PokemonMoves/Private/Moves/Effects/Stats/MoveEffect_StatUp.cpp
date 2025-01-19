@@ -12,7 +12,7 @@ UE5Coro::TCoroutine<bool> UMoveEffect_StatUp::MoveFailed(const TScriptInterface<
 
     bool bFailed = false;
     for (auto &[StatID, Change] : StatsToChange) {
-        bFailed |= co_await UStatChangeHelpers::CanRaiseStat(User.GetObject(), User, StatID);
+        bFailed |= !co_await UStatChangeHelpers::CanRaiseStat(User.GetObject(), User, StatID);
     }
 
     co_return bFailed;

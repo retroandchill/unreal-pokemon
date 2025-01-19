@@ -35,6 +35,7 @@ UE5Coro::GAS::FAbilityCoroutine UBattleItemEffect::ExecuteAbility(FGameplayAbili
                                                                   FGameplayAbilityActivationInfo ActivationInfo,
                                                                   const FGameplayEventData *TriggerEventData) {
     ActorInfo->AbilitySystemComponent->AddLooseGameplayTag(Pokemon::Battle::Items::UsingItem);
+    auto TargetDataCopy = TriggerEventData->TargetData.Data;
 
     check(TriggerEventData != nullptr)
     ItemID = CastChecked<UUseItemPayload>(TriggerEventData->OptionalObject)->Item;
@@ -42,7 +43,7 @@ UE5Coro::GAS::FAbilityCoroutine UBattleItemEffect::ExecuteAbility(FGameplayAbili
     TScriptInterface<IBattler> User = ActorInfo->OwnerActor.Get();
     bShouldConsumeItem = co_await ApplyGlobalEffect(User);
     // clang-format off
-    auto PossibleTargets = TriggerEventData->TargetData.Data |
+    auto PossibleTargets = TargetDataCopy |
                            Retro::Ranges::Views::Transform(&FGameplayAbilityTargetData::GetActors) |
                            Retro::Ranges::Views::Join |
                            Retro::Ranges::Views::Transform(Retro::MakeStrongChecked) |

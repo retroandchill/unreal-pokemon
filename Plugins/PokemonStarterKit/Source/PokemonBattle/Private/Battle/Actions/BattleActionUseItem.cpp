@@ -95,5 +95,5 @@ UE5Coro::TCoroutine<> FBattleActionUseItem::ActivateAbility() {
     EventData.TargetData.Data.Emplace(TargetData);
 
     co_await Pokemon::Battle::Events::SendOutActivationEvent(AbilityComponent, Handle,
-                                                             Pokemon::Battle::Items::UsingItem, std::move(EventData));
+                                                             Pokemon::Battle::Items::UsingItem, EventData);
 }

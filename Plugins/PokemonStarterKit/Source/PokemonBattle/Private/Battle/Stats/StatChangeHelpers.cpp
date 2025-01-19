@@ -26,7 +26,7 @@ UE5Coro::TCoroutine<bool> UStatChangeHelpers::CanRaiseStat(UE5Coro::TLatentConte
 
     if (bShowMessages) {
         auto Settings = GetDefault<UBattleMessageSettings>();
-        IPokemonCoroutineDispatcher::Get(Context.Target)
+        co_await IPokemonCoroutineDispatcher::Get(Context.Target)
             .DisplayMessage(FText::FormatNamed(Settings->MaxStatMessage, "Pkmn", Battler->GetNickname(),
                                                "Stat", FDataManager::GetInstance().GetDataChecked(Stat).RealName));
     }
@@ -48,7 +48,7 @@ UE5Coro::TCoroutine<bool> UStatChangeHelpers::CanLowerStat(UE5Coro::TLatentConte
 
     if (bShowMessages) {
         auto Settings = GetDefault<UBattleMessageSettings>();
-        IPokemonCoroutineDispatcher::Get(Context.Target)
+        co_await IPokemonCoroutineDispatcher::Get(Context.Target)
             .DisplayMessage(FText::FormatNamed(Settings->MinStatMessage, "Pkmn", Battler->GetNickname(),
                                                "Stat", FDataManager::GetInstance().GetDataChecked(Stat).RealName));
     }

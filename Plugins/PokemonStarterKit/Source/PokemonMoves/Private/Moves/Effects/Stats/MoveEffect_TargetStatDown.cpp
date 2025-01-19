@@ -12,7 +12,7 @@ UE5Coro::TCoroutine<bool> UMoveEffect_TargetStatDown::FailsAgainstTarget(const T
 
     bool bFailed = false;
     for (auto &[StatID, Change] : StatsToChange) {
-        bFailed |= co_await UStatChangeHelpers::CanLowerStat(User.GetObject(), Target, StatID);
+        bFailed |= !co_await UStatChangeHelpers::CanLowerStat(User.GetObject(), Target, StatID);
     }
 
     co_return bFailed;

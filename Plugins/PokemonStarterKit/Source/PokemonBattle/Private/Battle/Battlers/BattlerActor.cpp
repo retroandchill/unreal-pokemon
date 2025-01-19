@@ -334,7 +334,7 @@ UE5Coro::TCoroutine<> ABattlerActor::PerformSwitch(const TScriptInterface<IBattl
     EventData.TargetData.Data.Emplace(TargetData);
 
     co_await Pokemon::Battle::Events::SendOutActivationEvent(BattlerAbilityComponent, SwitchActionHandle,
-                                                             Pokemon::Battle::SwitchOut, std::move(EventData));
+                                                             Pokemon::Battle::SwitchOut, EventData);
 }
 
 bool ABattlerActor::IsOwnedByPlayer() const {

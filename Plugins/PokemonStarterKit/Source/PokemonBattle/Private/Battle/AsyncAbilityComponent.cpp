@@ -10,7 +10,7 @@ UE5Coro::TCoroutine<int32> UAsyncAbilityComponent::HandleGameplayEventAsync(FGam
                                                                             FForceLatentCoroutine) {
     int32 TriggeredCount = 0;
     auto CurrentTag = EventTag;
-    FScopedAbilityListLock ActiveScopeLock(*this);;
+    FScopedAbilityListLock ActiveScopeLock(*this);
     while (CurrentTag.IsValid()) {
         if (GameplayEventTriggeredAbilities.Contains(CurrentTag)) {
             for (auto TriggeredAbilityHandles = GameplayEventTriggeredAbilities[CurrentTag]; auto &AbilityHandle : TriggeredAbilityHandles) {
