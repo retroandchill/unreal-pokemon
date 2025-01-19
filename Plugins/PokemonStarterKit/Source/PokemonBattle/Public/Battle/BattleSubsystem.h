@@ -4,29 +4,26 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+
 #include "BattleSubsystem.generated.h"
 
 class UBattleAnimationGetter;
 /**
- * 
+ *
  */
 UCLASS()
 class POKEMONBATTLE_API UBattleSubsystem : public UGameInstanceSubsystem {
     GENERATED_BODY()
 
-public:
+  public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
-    UBattleAnimationGetter& GetAnimationGetter() const {
+    UBattleAnimationGetter &GetAnimationGetter() const {
         check(AnimationGetter != nullptr);
         return *AnimationGetter;
     }
 
-    
-    
-private:
+  private:
     UPROPERTY()
     TObjectPtr<UBattleAnimationGetter> AnimationGetter;
-
 };
-

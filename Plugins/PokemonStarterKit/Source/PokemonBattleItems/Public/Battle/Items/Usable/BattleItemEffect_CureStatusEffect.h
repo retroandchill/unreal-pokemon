@@ -3,22 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Battle/Status.h"
 #include "Battle/Items/BattleItemEffect.h"
+#include "Battle/Status.h"
+
 #include "BattleItemEffect_CureStatusEffect.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Abstract, Blueprintable)
 class POKEMONBATTLEITEMS_API UBattleItemEffect_CureStatusEffect : public UBattleItemEffect {
     GENERATED_BODY()
 
-protected:
-    UE5Coro::TCoroutine<bool> ApplyEffectToTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, FForceLatentCoroutine) override;
+  protected:
+    UE5Coro::TCoroutine<bool> ApplyEffectToTarget(const TScriptInterface<IBattler> &User,
+                                                  const TScriptInterface<IBattler> &Target,
+                                                  FForceLatentCoroutine) override;
 
-private:
+  private:
     UPROPERTY(EditDefaultsOnly, Category = "Battle|Items")
     FStatusHandle StatusEffectID;
-
 };

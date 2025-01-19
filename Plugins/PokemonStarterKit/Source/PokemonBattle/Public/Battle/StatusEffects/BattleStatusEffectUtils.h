@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "ActiveGameplayEffectHandle.h"
+#include "Battle/Status.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "UE5Coro.h"
-#include "Battle/Status.h"
 
 #include "BattleStatusEffectUtils.generated.h"
 
@@ -26,16 +26,22 @@ class POKEMONBATTLE_API UBattleStatusEffectUtils : public UBlueprintFunctionLibr
      * @param StatusEffectID
      * @param AlreadyAppliedFormat
      * @param HasOtherStatusFormat
-     * @param 
+     * @param
      * @return Can the effect be inflicted
      */
     static UE5Coro::TCoroutine<bool> CanStatusEffectBeInflicted(const TScriptInterface<IBattler> &Target,
-                                                                FName StatusEffectID, const FText& AlreadyAppliedFormat, const FText& HasOtherStatusFormat, FForceLatentCoroutine = {});
+                                                                FName StatusEffectID, const FText &AlreadyAppliedFormat,
+                                                                const FText &HasOtherStatusFormat,
+                                                                FForceLatentCoroutine = {});
 
-    static UE5Coro::TCoroutine<FActiveGameplayEffectHandle> ApplyStatusEffectToBattler(
-        const TScriptInterface<IBattler> &Battler, FStatusHandle StatusEffect, FForceLatentCoroutine = {});
-    
-    static UE5Coro::TCoroutine<bool> RemoveStatusEffectFromBattler(const TScriptInterface<IBattler> &Target, FForceLatentCoroutine = {});
-    
-    static UE5Coro::TCoroutine<bool> RemoveStatusEffectFromBattler(const TScriptInterface<IBattler> &Target, FStatusHandle StatusEffect, FForceLatentCoroutine = {}); 
+    static UE5Coro::TCoroutine<FActiveGameplayEffectHandle>
+    ApplyStatusEffectToBattler(const TScriptInterface<IBattler> &Battler, FStatusHandle StatusEffect,
+                               FForceLatentCoroutine = {});
+
+    static UE5Coro::TCoroutine<bool> RemoveStatusEffectFromBattler(const TScriptInterface<IBattler> &Target,
+                                                                   FForceLatentCoroutine = {});
+
+    static UE5Coro::TCoroutine<bool> RemoveStatusEffectFromBattler(const TScriptInterface<IBattler> &Target,
+                                                                   FStatusHandle StatusEffect,
+                                                                   FForceLatentCoroutine = {});
 };

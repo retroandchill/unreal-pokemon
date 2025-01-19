@@ -18,7 +18,7 @@ using namespace testing;
 
 BEGIN_DEFINE_SPEC(FTestStatChanges, "Unit Tests.Battle.Battlers.TestStatChanges",
                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
-    UE5Coro::TCoroutine<> TestProcedure(const FDoneDelegate &Delegate);
+UE5Coro::TCoroutine<> TestProcedure(const FDoneDelegate &Delegate);
 END_DEFINE_SPEC(FTestStatChanges)
 
 void FTestStatChanges::Define() {
@@ -95,9 +95,7 @@ void FTestStatChanges::Define() {
             UE_CHECK_EQUAL(196.f, CoreAttributes->GetDefense());
         });
 
-        LatentIt("ApplyEffect", [this](const FDoneDelegate &Delegate) {
-            TestProcedure(Delegate);
-        });
+        LatentIt("ApplyEffect", [this](const FDoneDelegate &Delegate) { TestProcedure(Delegate); });
     });
 }
 

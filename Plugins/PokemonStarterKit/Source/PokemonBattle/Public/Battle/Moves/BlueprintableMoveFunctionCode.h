@@ -4,32 +4,42 @@
 
 #include "CoreMinimal.h"
 #include "BattleMoveFunctionCode.h"
+
 #include "BlueprintableMoveFunctionCode.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Abstract, Blueprintable)
 class POKEMONBATTLE_API UBlueprintableMoveFunctionCode : public UBattleMoveFunctionCode {
     GENERATED_BODY()
 
-public:
-    UE5Coro::TCoroutine<bool> MoveFailed(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine = {}) final;
+  public:
+    UE5Coro::TCoroutine<bool> MoveFailed(const TScriptInterface<IBattler> &User,
+                                         const TArray<TScriptInterface<IBattler>> &Targets,
+                                         FForceLatentCoroutine = {}) final;
 
-    UE5Coro::TCoroutine<bool> FailsAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, FForceLatentCoroutine = {}) final;
+    UE5Coro::TCoroutine<bool> FailsAgainstTarget(const TScriptInterface<IBattler> &User,
+                                                 const TScriptInterface<IBattler> &Target,
+                                                 FForceLatentCoroutine = {}) final;
 
     UE5Coro::TCoroutine<> ApplyEffectWhenDealingDamage(const TScriptInterface<IBattler> &User,
-                                                       const TScriptInterface<IBattler> &Target, FForceLatentCoroutine = {}) final;
+                                                       const TScriptInterface<IBattler> &Target,
+                                                       FForceLatentCoroutine = {}) final;
 
-    UE5Coro::TCoroutine<> ApplyAdditionalEffect(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) final;
+    UE5Coro::TCoroutine<> ApplyAdditionalEffect(const TScriptInterface<IBattler> &User,
+                                                const TScriptInterface<IBattler> &Target) final;
 
-    UE5Coro::TCoroutine<> ApplyEffectAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, FForceLatentCoroutine = {}) final;
+    UE5Coro::TCoroutine<> ApplyEffectAgainstTarget(const TScriptInterface<IBattler> &User,
+                                                   const TScriptInterface<IBattler> &Target,
+                                                   FForceLatentCoroutine = {}) final;
 
     UE5Coro::TCoroutine<> ApplyGeneralEffect(const TScriptInterface<IBattler> &User, FForceLatentCoroutine = {}) final;
 
-protected:
+  protected:
     UFUNCTION(BlueprintNativeEvent, Category = "Move|Checks")
-    void StartMoveFailedCheck(const TScriptInterface<IBattler> &User, const TArray<TScriptInterface<IBattler>> &Targets);
+    void StartMoveFailedCheck(const TScriptInterface<IBattler> &User,
+                              const TArray<TScriptInterface<IBattler>> &Targets);
 
     UFUNCTION(BlueprintCallable, Category = "Move|Checks")
     void CompleteMoveFailedCheck(bool bFailed);
@@ -41,7 +51,8 @@ protected:
     void CompleteFailsAgainstTargetCheck(bool bFailed);
 
     UFUNCTION(BlueprintNativeEvent, Category = "Move|Effects")
-    void StartApplyEffectWhenDealingDamage(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
+    void StartApplyEffectWhenDealingDamage(const TScriptInterface<IBattler> &User,
+                                           const TScriptInterface<IBattler> &Target);
 
     UFUNCTION(BlueprintCallable, Category = "Move|Effects")
     void CompleteApplyEffectWhenDealingDamage();
@@ -53,7 +64,8 @@ protected:
     void CompleteApplyAdditionalEffect();
 
     UFUNCTION(BlueprintNativeEvent, Category = "Move|Effects")
-    void StartApplyEffectAgainstTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target);
+    void StartApplyEffectAgainstTarget(const TScriptInterface<IBattler> &User,
+                                       const TScriptInterface<IBattler> &Target);
 
     UFUNCTION(BlueprintCallable, Category = "Move|Effects")
     void CompleteApplyEffectAgainstTarget();
@@ -64,7 +76,6 @@ protected:
     UFUNCTION(BlueprintCallable, Category = "Move|Effects")
     void CompleteApplyGeneralEffect();
 
-private:
+  private:
     TSharedRef<TFutureState<bool>> CoroutineFutureState = MakeShared<TFutureState<bool>>();
-
 };

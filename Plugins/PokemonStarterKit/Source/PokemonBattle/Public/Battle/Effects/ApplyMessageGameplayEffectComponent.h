@@ -9,17 +9,17 @@
 #include "ApplyMessageGameplayEffectComponent.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(DisplayName = "Message on Apply")
 class POKEMONBATTLE_API UApplyMessageGameplayEffectComponent : public UGameplayEffectComponent {
     GENERATED_BODY()
 
-public:
-    UE5Coro::TCoroutine<> DisplayApplyMessage(UE5Coro::TLatentContext<const UObject> Context, const FText& TargetName) const;
+  public:
+    UE5Coro::TCoroutine<> DisplayApplyMessage(UE5Coro::TLatentContext<const UObject> Context,
+                                              const FText &TargetName) const;
 
-private:
+  private:
     UPROPERTY(EditAnywhere)
     FText MessageFormat;
-
 };

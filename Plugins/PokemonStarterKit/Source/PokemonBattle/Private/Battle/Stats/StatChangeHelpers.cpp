@@ -1,14 +1,14 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Battle/Stats/StatChangeHelpers.h"
+#include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/Settings/BattleMessageSettings.h"
+#include "Battle/Settings/PokemonBattleSettings.h"
 #include "Battle/Stats/StatChangeCalculation.h"
 #include "Battle/Stats/StatTags.h"
 #include "DataManager.h"
-#include "Battle/Settings/PokemonBattleSettings.h"
-#include "Battle/Attributes/StatStagesAttributeSet.h"
-#include "Battle/Settings/BattleMessageSettings.h"
 #include "Species/Stat.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
 
@@ -27,14 +27,14 @@ UE5Coro::TCoroutine<bool> UStatChangeHelpers::CanRaiseStat(UE5Coro::TLatentConte
     if (bShowMessages) {
         auto Settings = GetDefault<UBattleMessageSettings>();
         co_await IPokemonCoroutineDispatcher::Get(Context.Target)
-            .DisplayMessage(FText::FormatNamed(Settings->MaxStatMessage, "Pkmn", Battler->GetNickname(),
-                                               "Stat", FDataManager::GetInstance().GetDataChecked(Stat).RealName));
+            .DisplayMessage(FText::FormatNamed(Settings->MaxStatMessage, "Pkmn", Battler->GetNickname(), "Stat",
+                                               FDataManager::GetInstance().GetDataChecked(Stat).RealName));
     }
 
     co_return false;
 }
 
-UE5Coro::TCoroutine<bool> UStatChangeHelpers::CanLowerStat(UE5Coro::TLatentContext<const UObject>Context,
+UE5Coro::TCoroutine<bool> UStatChangeHelpers::CanLowerStat(UE5Coro::TLatentContext<const UObject> Context,
                                                            const TScriptInterface<IBattler> &Battler,
                                                            FMainBattleStatHandle Stat, bool bShowMessages,
                                                            bool bIgnoreInversion) {
@@ -49,12 +49,11 @@ UE5Coro::TCoroutine<bool> UStatChangeHelpers::CanLowerStat(UE5Coro::TLatentConte
     if (bShowMessages) {
         auto Settings = GetDefault<UBattleMessageSettings>();
         co_await IPokemonCoroutineDispatcher::Get(Context.Target)
-            .DisplayMessage(FText::FormatNamed(Settings->MinStatMessage, "Pkmn", Battler->GetNickname(),
-                                               "Stat", FDataManager::GetInstance().GetDataChecked(Stat).RealName));
+            .DisplayMessage(FText::FormatNamed(Settings->MinStatMessage, "Pkmn", Battler->GetNickname(), "Stat",
+                                               FDataManager::GetInstance().GetDataChecked(Stat).RealName));
     }
 
     co_return false;
-    
 }
 
 int32 UStatChangeHelpers::GetStatStageValue(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat) {
@@ -77,7 +76,7 @@ bool UStatChangeHelpers::StatStageAtMin(const TScriptInterface<IBattler> &Battle
 }
 
 TOptional<FText> UStatChangeHelpers::GetStatChangeMessage(const TScriptInterface<IBattler> &Battler,
-                                                          const FText& StatName, int32 Change) {
+                                                          const FText &StatName, int32 Change) {
     if (Change == 0) {
         return {};
     }
@@ -87,11 +86,16 @@ TOptional<FText> UStatChangeHelpers::GetStatChangeMessage(const TScriptInterface
 
     check(!Settings.Modifiers.IsEmpty())
     int32 ModiferIndex = FMath::Abs(Change) - 1;
-    auto &ModifierText = Settings.Modifiers.IsValidIndex(ModiferIndex) ? Settings.Modifiers[ModiferIndex] : Settings.Modifiers.Last();
+    auto &ModifierText =
+        Settings.Modifiers.IsValidIndex(ModiferIndex) ? Settings.Modifiers[ModiferIndex] : Settings.Modifiers.Last();
 
-    auto FullChangeText = ModifierText.IsEmptyOrWhitespace() ? ChangeText : FText::FormatNamed(Settings.ModifiedChangeFormat, "Change", ChangeText, "Modifier", ModifierText);
+    auto FullChangeText =
+        ModifierText.IsEmptyOrWhitespace()
+            ? ChangeText
+            : FText::FormatNamed(Settings.ModifiedChangeFormat, "Change", ChangeText, "Modifier", ModifierText);
 
-    return FText::FormatNamed(Settings.StatChangeMessage, "Pkmn", Battler->GetNickname(), "Stat", StatName, "Change", std::move(FullChangeText));
+    return FText::FormatNamed(Settings.StatChangeMessage, "Pkmn", Battler->GetNickname(), "Stat", StatName, "Change",
+                              std::move(FullChangeText));
 }
 
 UE5Coro::TCoroutine<int32> UStatChangeHelpers::ChangeBattlerStatStages(const TScriptInterface<IBattler> &Battler,
@@ -134,6 +138,6 @@ UE5Coro::TCoroutine<int32> UStatChangeHelpers::ChangeBattlerStatStages(const TSc
     if (auto ChangeMessage = GetStatChangeMessage(Battler, StatData->RealName, ActualChange); ChangeMessage.IsSet()) {
         co_await IPokemonCoroutineDispatcher::Get(Battler.GetObject()).DisplayMessage(*ChangeMessage);
     }
-    
+
     co_return ActualChange;
 }

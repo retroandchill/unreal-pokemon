@@ -20,7 +20,7 @@ class RETROLIB_API UStringUtilities : public UBlueprintFunctionLibrary {
   public:
     static const FText ConjunctionAnd;
     static const FText ConjunctionOr;
-    
+
     /**
      * Check if the supplied text starts with a vowel
      * @param Text The supplied text
@@ -84,7 +84,7 @@ class RETROLIB_API UStringUtilities : public UBlueprintFunctionLibrary {
 
     template <std::ranges::input_range R>
         requires std::convertible_to<std::ranges::range_value_t<R>, FText>
-    static FText JoinText(R&& Lines) {
+    static FText JoinText(R &&Lines) {
         // clang-format off
         return FText::FromString(Lines |
                                  Retro::Ranges::Views::Transform(&FText::ToString) |

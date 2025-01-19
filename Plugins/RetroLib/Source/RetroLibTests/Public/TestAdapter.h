@@ -15,14 +15,14 @@
         Expression;                                                                                                    \
         FAutomationTestFramework::Get().GetCurrentTest()->AddError(TEXT("No exception thrown"));                       \
     } catch (Exception &) {                                                                                            \
-    } catch (...) {                                                                                       \
+    } catch (...) {                                                                                                    \
         FAutomationTestFramework::Get().GetCurrentTest()->AddError(TEXT("Wrong exception thrown"));                    \
     }
 
 #define CHECK_NOTHROW(Expression)                                                                                      \
     try {                                                                                                              \
         Expression;                                                                                                    \
-    } catch (...) {                                                                                       \
+    } catch (...) {                                                                                                    \
         FAutomationTestFramework::Get().GetCurrentTest()->AddError(TEXT("Exception thrown where none expected"));      \
     }
 

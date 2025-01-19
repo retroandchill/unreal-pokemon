@@ -9,16 +9,18 @@
 #include "MoveEffect_StatDown.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Abstract, Blueprintable, BlueprintType)
 class POKEMONMOVES_API UMoveEffect_StatDown : public UBattleMoveFunctionCode {
     GENERATED_BODY()
 
-public:
-    UE5Coro::TCoroutine<> ApplyEffectWhenDealingDamage(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, FForceLatentCoroutine) override;
+  public:
+    UE5Coro::TCoroutine<> ApplyEffectWhenDealingDamage(const TScriptInterface<IBattler> &User,
+                                                       const TScriptInterface<IBattler> &Target,
+                                                       FForceLatentCoroutine) override;
 
-private:
+  private:
     UPROPERTY(EditDefaultsOnly, Category = "Battle|Stats")
     TArray<FBattleStatChangeValue> StatsToChange;
 };

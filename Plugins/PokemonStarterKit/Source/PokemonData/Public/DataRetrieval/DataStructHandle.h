@@ -174,13 +174,13 @@ class POKEMONDATA_API UDataStructHandleUtilities : public UBlueprintFunctionLibr
     }                                                                                                                  \
     friend uint32 GetTypeHash(const ClassName &Key) {                                                                  \
         return GetTypeHash(Key.RowID);                                                                                 \
-    } \
-    friend bool operator==(const ClassName& LHS, const ClassName& RHS) { \
-        return LHS.RowID == RHS.RowID; \
-    } \
-    friend bool operator==(const ClassName& LHS, const FName& RHS) { \
-        return LHS.RowID == RHS; \
-    } \
-    friend bool operator==(const FName& LHS, const ClassName& RHS) { \
-        return LHS == RHS.RowID; \
+    }                                                                                                                  \
+    friend bool operator==(const ClassName &LHS, const ClassName &RHS) {                                               \
+        return LHS.RowID == RHS.RowID;                                                                                 \
+    }                                                                                                                  \
+    friend bool operator==(const ClassName &LHS, const FName &RHS) {                                                   \
+        return LHS.RowID == RHS;                                                                                       \
+    }                                                                                                                  \
+    friend bool operator==(const FName &LHS, const ClassName &RHS) {                                                   \
+        return LHS == RHS.RowID;                                                                                       \
     }

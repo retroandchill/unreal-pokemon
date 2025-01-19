@@ -106,7 +106,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     APawn *GetBattlePawn() const final;
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const TScriptInterface<IBattleHUD>& GetBattleHUD() const override {
+    const TScriptInterface<IBattleHUD> &GetBattleHUD() const override {
         return BattleHUD;
     }
 
@@ -167,7 +167,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     TScriptInterface<IBattleHUD> CreateBattleHUD();
-    
+
     UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
     TScriptInterface<IBattleAnimation> GetBattleEndAnimation(EBattleResult Result);
 

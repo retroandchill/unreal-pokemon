@@ -43,8 +43,11 @@ class POKEMONBATTLE_API UBattlerHelpers : public UBlueprintFunctionLibrary {
     static EStatusEffectStatus GetStatusEffect(const TScriptInterface<IBattler> &Battler,
                                                FStatusEffectInfo &StatusEffect);
 
-    static UE5Coro::TCoroutine<> GainExpOnFaint(UE5Coro::TLatentContext<const UObject> Context, const TArray<TScriptInterface<IBattler>> &FainedBattlers);
+    static UE5Coro::TCoroutine<> GainExpOnFaint(UE5Coro::TLatentContext<const UObject> Context,
+                                                const TArray<TScriptInterface<IBattler>> &FainedBattlers);
 
-    static UE5Coro::TCoroutine<bool> ApplyHPRecoveryEffect(const TScriptInterface<IBattler> &Battler, int32 Amount, const UGameplayAbility * Ability = nullptr, bool bShowFailureMessage
-                                                               = false, FForceLatentCoroutine = {});
+    static UE5Coro::TCoroutine<bool> ApplyHPRecoveryEffect(const TScriptInterface<IBattler> &Battler, int32 Amount,
+                                                           const UGameplayAbility *Ability = nullptr,
+                                                           bool bShowFailureMessage = false,
+                                                           FForceLatentCoroutine = {});
 };

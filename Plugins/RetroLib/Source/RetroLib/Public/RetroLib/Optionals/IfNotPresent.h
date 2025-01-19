@@ -12,8 +12,8 @@
 namespace Retro::Optionals {
     struct FIfNotPresentInvoker {
         template <OptionalType O, typename F>
-            requires (!ExpectedType<O>) && std::invocable<F>
-        constexpr void operator()(O&& Optional, F&& Functor) const {
+            requires(!ExpectedType<O>) && std::invocable<F>
+        constexpr void operator()(O &&Optional, F &&Functor) const {
             if (!HasValue(Optional)) {
                 std::invoke(std::forward<F>(Functor));
             }
@@ -21,7 +21,7 @@ namespace Retro::Optionals {
 
         template <ExpectedType O, typename F>
             requires std::invocable<F, TErrorType<O>>
-        constexpr void operator()(O&& Optional, F&& Functor) const {
+        constexpr void operator()(O &&Optional, F &&Functor) const {
             if (!HasValue(Optional)) {
                 std::invoke(std::forward<F>(Functor), GetError(std::forward<O>(Optional)));
             }
@@ -29,4 +29,4 @@ namespace Retro::Optionals {
     };
 
     RETROLIB_EXPORT constexpr auto IfNotPresent = ExtensionMethod<FIfNotPresentInvoker{}>;
-}
+} // namespace Retro::Optionals

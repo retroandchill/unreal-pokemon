@@ -1,11 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Moves/Effects/Stats/MoveEffect_TargetStatDown.h"
 #include "Battle/Moves/BattleMove.h"
 
 UE5Coro::TCoroutine<bool> UMoveEffect_TargetStatDown::FailsAgainstTarget(const TScriptInterface<IBattler> &User,
-                                                                         const TScriptInterface<IBattler> &Target, FForceLatentCoroutine ForceLatentCoroutine) {
+                                                                         const TScriptInterface<IBattler> &Target,
+                                                                         FForceLatentCoroutine ForceLatentCoroutine) {
     if (GetMove()->GetCategory() != EMoveDamageCategory::Status) {
         co_return false;
     }
@@ -19,7 +19,7 @@ UE5Coro::TCoroutine<bool> UMoveEffect_TargetStatDown::FailsAgainstTarget(const T
 }
 
 UE5Coro::TCoroutine<> UMoveEffect_TargetStatDown::ApplyAdditionalEffect(const TScriptInterface<IBattler> &User,
-    const TScriptInterface<IBattler> &Target) {
+                                                                        const TScriptInterface<IBattler> &Target) {
     if (GetMove()->GetCategory() == EMoveDamageCategory::Status) {
         co_return;
     }
@@ -28,7 +28,8 @@ UE5Coro::TCoroutine<> UMoveEffect_TargetStatDown::ApplyAdditionalEffect(const TS
 }
 
 UE5Coro::TCoroutine<> UMoveEffect_TargetStatDown::ApplyEffectAgainstTarget(const TScriptInterface<IBattler> &User,
-    const TScriptInterface<IBattler> &Target, FForceLatentCoroutine ForceLatentCoroutine) {
+                                                                           const TScriptInterface<IBattler> &Target,
+                                                                           FForceLatentCoroutine ForceLatentCoroutine) {
     if (GetMove()->GetCategory() != EMoveDamageCategory::Status) {
         co_return;
     }
@@ -37,7 +38,7 @@ UE5Coro::TCoroutine<> UMoveEffect_TargetStatDown::ApplyEffectAgainstTarget(const
 }
 
 UE5Coro::TCoroutine<> UMoveEffect_TargetStatDown::ApplyStatChanges(const TScriptInterface<IBattler> &Target,
-    FForceLatentCoroutine) {
+                                                                   FForceLatentCoroutine) {
     for (auto &[StatID, Change] : StatsToChange) {
         co_await UStatChangeHelpers::ChangeBattlerStatStages(Target, StatID, -Change);
     }

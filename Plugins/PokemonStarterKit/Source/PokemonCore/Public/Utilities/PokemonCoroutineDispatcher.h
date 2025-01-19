@@ -33,9 +33,9 @@ class POKEMONCORE_API IPokemonCoroutineDispatcher {
     using TMultiCoroutine = UE5Coro::TCoroutine<TTuple<int32, FName>>;
 
   public:
-    static IPokemonCoroutineDispatcher &Get(const UObject* WorldContext);
+    static IPokemonCoroutineDispatcher &Get(const UObject *WorldContext);
 
-    static IPokemonCoroutineDispatcher &Get(const FScriptInterface& WorldContext) {
+    static IPokemonCoroutineDispatcher &Get(const FScriptInterface &WorldContext) {
         return Get(WorldContext.GetObject());
     }
 

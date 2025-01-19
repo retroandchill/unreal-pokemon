@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
-#include "UE5CoroGAS.h"
 #include "RetroLib/Ranges/Views/Generator.h"
+#include "UE5CoroGAS.h"
 
 class IBattler;
 struct FItem;
@@ -44,27 +44,31 @@ class POKEMONBATTLE_API UBattleItemEffect : public UUE5CoroGameplayAbility {
     /**
      * Apply the global (no targets) effect of the item.
      * @param User The user of the item.
-     * @param 
+     * @param
      * @return Was the effect successfully applied? If none of these checks return true, this item will not be consumed.
      */
-    virtual UE5Coro::TCoroutine<bool> ApplyGlobalEffect(const TScriptInterface<IBattler> &User, FForceLatentCoroutine = {});
+    virtual UE5Coro::TCoroutine<bool> ApplyGlobalEffect(const TScriptInterface<IBattler> &User,
+                                                        FForceLatentCoroutine = {});
 
     /**
      * Apply the effect of the item to an individual target.
      * @param User The user of the item.
      * @param Target The target of the item in question
-     * @param 
+     * @param
      * @return Was the effect successfully applied? If none of these checks return true, this item will not be consumed.
      */
-    virtual UE5Coro::TCoroutine<bool> ApplyEffectToTarget(const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target, FForceLatentCoroutine = {});
+    virtual UE5Coro::TCoroutine<bool> ApplyEffectToTarget(const TScriptInterface<IBattler> &User,
+                                                          const TScriptInterface<IBattler> &Target,
+                                                          FForceLatentCoroutine = {});
 
     /**
      * Check if an individual target for the item is valid
      * @param Battler Was the item target valid
-     * @param 
+     * @param
      * @return Is this a valid target for the move.
      */
-    virtual UE5Coro::TCoroutine<bool> IsTargetValid(const TScriptInterface<IBattler> &Battler, FForceLatentCoroutine = {});
+    virtual UE5Coro::TCoroutine<bool> IsTargetValid(const TScriptInterface<IBattler> &Battler,
+                                                    FForceLatentCoroutine = {});
 
   private:
     FName ItemID;

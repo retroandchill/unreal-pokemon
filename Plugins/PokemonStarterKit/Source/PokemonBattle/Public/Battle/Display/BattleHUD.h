@@ -26,14 +26,16 @@ class POKEMONBATTLE_API IBattleHUD {
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
   public:
     virtual void Refresh() const = 0;
-    
+
     virtual void SelectAction(const TScriptInterface<IBattler> &Battler) = 0;
 
     virtual void ClearSelectingBattlers() = 0;
 
-    virtual UE5Coro::TCoroutine<> DisplayExpForGain(UE5Coro::TLatentContext<const UObject> Context, TArray<FExpGainInfo> GainInfos) = 0;
+    virtual UE5Coro::TCoroutine<> DisplayExpForGain(UE5Coro::TLatentContext<const UObject> Context,
+                                                    TArray<FExpGainInfo> GainInfos) = 0;
 
-    virtual UE5Coro::TCoroutine<> AnimateHPChange(const TScriptInterface<IBattler> &Battler, float MaxDuration = 1.f, FForceLatentCoroutine = {}) = 0;
+    virtual UE5Coro::TCoroutine<> AnimateHPChange(const TScriptInterface<IBattler> &Battler, float MaxDuration = 1.f,
+                                                  FForceLatentCoroutine = {}) = 0;
 
-    virtual void PromptMandatorySwitch(const TScriptInterface<IBattler>& Battler) = 0;
+    virtual void PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler) = 0;
 };

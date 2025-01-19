@@ -1,10 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/Items/BlueprintableBattleItemEffect.h"
 
 UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::ApplyGlobalEffect(const TScriptInterface<IBattler> &User,
-    FForceLatentCoroutine) {
+                                                                            FForceLatentCoroutine) {
     if (StageCompleteState->IsComplete()) {
         StageCompleteState = MakeShared<TFutureState<bool>>();
     }
@@ -14,7 +13,8 @@ UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::ApplyGlobalEffect(cons
 }
 
 UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::ApplyEffectToTarget(const TScriptInterface<IBattler> &User,
-    const TScriptInterface<IBattler> &Target, FForceLatentCoroutine) {
+                                                                              const TScriptInterface<IBattler> &Target,
+                                                                              FForceLatentCoroutine) {
     if (StageCompleteState->IsComplete()) {
         StageCompleteState = MakeShared<TFutureState<bool>>();
     }
@@ -24,7 +24,7 @@ UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::ApplyEffectToTarget(co
 }
 
 UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::IsTargetValid(const TScriptInterface<IBattler> &Battler,
-    FForceLatentCoroutine) {
+                                                                        FForceLatentCoroutine) {
     if (StageCompleteState->IsComplete()) {
         StageCompleteState = MakeShared<TFutureState<bool>>();
     }
@@ -42,7 +42,7 @@ void UBlueprintableBattleItemEffect::CompleteApplyGlobalEffect(bool bResult) {
 }
 
 void UBlueprintableBattleItemEffect::StartApplyEffectToTarget_Implementation(const TScriptInterface<IBattler> &User,
-    const TScriptInterface<IBattler> &Target) {
+                                                                             const TScriptInterface<IBattler> &Target) {
     CompleteApplyEffectToTarget(false);
 }
 

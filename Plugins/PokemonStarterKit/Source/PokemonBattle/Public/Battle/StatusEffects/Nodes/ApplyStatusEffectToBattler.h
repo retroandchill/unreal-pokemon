@@ -6,33 +6,34 @@
 #include "ActiveGameplayEffectHandle.h"
 #include "Battle/Status.h"
 #include "RetroLib/Async/BlueprintCoroutineActionBase.h"
+
 #include "ApplyStatusEffectToBattler.generated.h"
 
 class IBattler;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStatusEffectApplied, FActiveGameplayEffectHandle, EffectHandle);
 
 /**
- * 
+ *
  */
 UCLASS(meta = (HideThen))
 class POKEMONBATTLE_API UApplyStatusEffectToBattler : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Battle|Status Effects")
-    static UApplyStatusEffectToBattler* ApplyStatusEffectToBattler(const TScriptInterface<IBattler>& Target, FStatusHandle StatusEffectID);
+    static UApplyStatusEffectToBattler *ApplyStatusEffectToBattler(const TScriptInterface<IBattler> &Target,
+                                                                   FStatusHandle StatusEffectID);
 
-protected:
+  protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
-    
-private:
+
+  private:
     UPROPERTY(BlueprintAssignable)
     FOnStatusEffectApplied OnComplete;
-    
+
     UPROPERTY()
     TScriptInterface<IBattler> Target;
 
     UPROPERTY()
     FStatusHandle StatusEffectID;
-
 };

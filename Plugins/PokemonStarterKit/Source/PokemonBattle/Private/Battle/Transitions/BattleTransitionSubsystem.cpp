@@ -2,12 +2,12 @@
 
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
 #include "Battle/Battle.h"
+#include "Battle/Settings/PokemonBattleSettings.h"
 #include "Battle/Transitions/BattleTransitionActor.h"
 #include "Engine/LevelStreamingDynamic.h"
 #include "Engine/LevelStreamingVolume.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
-#include "Battle/Settings/PokemonBattleSettings.h"
 
 void UBattleTransitionSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);

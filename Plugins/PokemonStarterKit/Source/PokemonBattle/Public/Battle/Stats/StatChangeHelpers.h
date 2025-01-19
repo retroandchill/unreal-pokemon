@@ -5,9 +5,9 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "GameplayTagContainer.h"
-#include "UE5Coro.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Species/Stat.h"
+#include "UE5Coro.h"
 
 #include "StatChangeHelpers.generated.h"
 
@@ -41,10 +41,14 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
   public:
-    static UE5Coro::TCoroutine<bool> CanRaiseStat(UE5Coro::TLatentContext<const UObject> Context, const TScriptInterface<IBattler>& Battler, FMainBattleStatHandle Stat, bool bShowMessages = true, bool bIgnoreInversion = false);
+    static UE5Coro::TCoroutine<bool> CanRaiseStat(UE5Coro::TLatentContext<const UObject> Context,
+                                                  const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat,
+                                                  bool bShowMessages = true, bool bIgnoreInversion = false);
 
-    static UE5Coro::TCoroutine<bool> CanLowerStat(UE5Coro::TLatentContext<const UObject>Context, const TScriptInterface<IBattler>& Battler, FMainBattleStatHandle Stat, bool bShowMessages = true, bool bIgnoreInversion = false);
-    
+    static UE5Coro::TCoroutine<bool> CanLowerStat(UE5Coro::TLatentContext<const UObject> Context,
+                                                  const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat,
+                                                  bool bShowMessages = true, bool bIgnoreInversion = false);
+
     /**
      * Get the value of a stat's stage
      * @param Battler The battler to check against
@@ -72,8 +76,8 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
     UFUNCTION(BlueprintPure, Category = "Battle|Stats")
     static bool StatStageAtMin(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat);
 
-    static TOptional<FText> GetStatChangeMessage(const TScriptInterface<IBattler> &Battler,
-                                                 const FText& StatName, int32 Change);
+    static TOptional<FText> GetStatChangeMessage(const TScriptInterface<IBattler> &Battler, const FText &StatName,
+                                                 int32 Change);
 
     /**
      * Perform a change to a battler's stat stages
@@ -84,6 +88,5 @@ class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
      * @return The actual number of stages that were changed
      */
     static UE5Coro::TCoroutine<int32> ChangeBattlerStatStages(const TScriptInterface<IBattler> &Battler, FName Stat,
-                                                              int32 Stages,
-                                                              UGameplayAbility *Ability = nullptr);
+                                                              int32 Stages, UGameplayAbility *Ability = nullptr);
 };

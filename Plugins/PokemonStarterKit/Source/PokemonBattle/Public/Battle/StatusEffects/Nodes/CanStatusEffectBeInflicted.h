@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Battle/Status.h"
 #include "RetroLib/Async/BlueprintCoroutineActionBase.h"
+
 #include "CanStatusEffectBeInflicted.generated.h"
 
 class IBattler;
@@ -12,26 +13,29 @@ class IBattler;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatusCanBeInflicted, bool, ReturnValue);
 
 /**
- * 
+ *
  */
 UCLASS(meta = (HideThen))
 class POKEMONBATTLE_API UCanStatusEffectBeInflicted : public UBlueprintCoroutineActionBase {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Battle|Status Effects")
-    static UCanStatusEffectBeInflicted* CanStatusEffectBeInflicted(const TScriptInterface<IBattler>& Target, FStatusHandle StatusEffectID, FText AlreadyAppliedFormat, FText HasOtherStatusFormat);
+    static UCanStatusEffectBeInflicted *CanStatusEffectBeInflicted(const TScriptInterface<IBattler> &Target,
+                                                                   FStatusHandle StatusEffectID,
+                                                                   FText AlreadyAppliedFormat,
+                                                                   FText HasOtherStatusFormat);
 
-protected:
+  protected:
     UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
-    
-private:
+
+  private:
     UPROPERTY(BlueprintAssignable)
     FStatusCanBeInflicted OnComplete;
 
     UPROPERTY()
     TScriptInterface<IBattler> Target;
-    
+
     UPROPERTY()
     FStatusHandle StatusEffectID;
 
@@ -40,5 +44,4 @@ private:
 
     UPROPERTY()
     FText HasOtherStatusFormat;
-
 };

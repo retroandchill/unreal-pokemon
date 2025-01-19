@@ -1,9 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Battle/AsyncAbilityComponent.h"
 #include "RetroLib/Functional/Delegates.h"
-
 
 UE5Coro::TCoroutine<int32> UAsyncAbilityComponent::HandleGameplayEventAsync(FGameplayTag EventTag,
                                                                             const FGameplayEventData *Payload,
@@ -13,8 +11,10 @@ UE5Coro::TCoroutine<int32> UAsyncAbilityComponent::HandleGameplayEventAsync(FGam
     FScopedAbilityListLock ActiveScopeLock(*this);
     while (CurrentTag.IsValid()) {
         if (GameplayEventTriggeredAbilities.Contains(CurrentTag)) {
-            for (auto TriggeredAbilityHandles = GameplayEventTriggeredAbilities[CurrentTag]; auto &AbilityHandle : TriggeredAbilityHandles) {
-                if (co_await TriggerAbilityFromGameplayEventAsync(AbilityHandle, AbilityActorInfo.Get(), EventTag, Payload, *this)) {
+            for (auto TriggeredAbilityHandles = GameplayEventTriggeredAbilities[CurrentTag];
+                 auto &AbilityHandle : TriggeredAbilityHandles) {
+                if (co_await TriggerAbilityFromGameplayEventAsync(AbilityHandle, AbilityActorInfo.Get(), EventTag,
+                                                                  Payload, *this)) {
                     TriggeredCount++;
                 }
             }
@@ -46,11 +46,12 @@ UE5Coro::TCoroutine<bool> UAsyncAbilityComponent::TriggerAbilityFromGameplayEven
     FGameplayAbilitySpecHandle AbilityToTrigger, FGameplayAbilityActorInfo *ActorInfo, FGameplayTag Tag,
     const FGameplayEventData *Payload, UAbilitySystemComponent &Component) {
     auto FutureState = MakeShared<TFutureState<int32>>();
-    Retro::Delegates::TScopedBinding Binding(OnAbilityEnded, [&FutureState, AbilityToTrigger](const FAbilityEndedData& Data) {
-        if (Data.AbilitySpecHandle == AbilityToTrigger) {
-            FutureState->EmplaceResult(0);
-        }
-    });
+    Retro::Delegates::TScopedBinding Binding(OnAbilityEnded,
+                                             [&FutureState, AbilityToTrigger](const FAbilityEndedData &Data) {
+                                                 if (Data.AbilitySpecHandle == AbilityToTrigger) {
+                                                     FutureState->EmplaceResult(0);
+                                                 }
+                                             });
     if (!TriggerAbilityFromGameplayEvent(AbilityToTrigger, ActorInfo, Tag, Payload, Component)) {
         co_return false;
     }

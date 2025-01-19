@@ -140,7 +140,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
     void CureStatusEffect() override;
 
     UFUNCTION(BlueprintImplementableEvent, Category = Moves)
-    void OnMoveFailed(const TScriptInterface<IBattleMove>& Move) override;
+    void OnMoveFailed(const TScriptInterface<IBattleMove> &Move) override;
 
   protected:
     UFUNCTION(BlueprintImplementableEvent, Category = Switching)

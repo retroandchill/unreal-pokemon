@@ -58,9 +58,9 @@ class POKEMONCORE_API UPokemonMessageSettings : public UDeveloperSettings {
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = Leveling)
     FText GrewToLevelMessage = NSLOCTEXT("PokemonUI", "GrewToLevelMessage", "{Pkmn} grew to level {Level}!");
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = StatusEffects, meta=(ForceInlineRow))
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = StatusEffects, meta = (ForceInlineRow))
     TMap<FStatusHandle, FText> ObtainedStatusEffectMessages;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = StatusEffects, meta=(ForceInlineRow))
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Config, Category = StatusEffects, meta = (ForceInlineRow))
     TMap<FStatusHandle, FText> StatusEffectCuredMessages;
 };

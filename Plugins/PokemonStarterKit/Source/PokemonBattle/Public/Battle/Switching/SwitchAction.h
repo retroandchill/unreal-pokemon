@@ -34,7 +34,9 @@ class POKEMONBATTLE_API USwitchAction : public UUE5CoroGameplayAbility {
     /**
      * Perform the internal swap of the Pokémon.
      */
-    UE5Coro::TCoroutine<> SwapWithTarget(const TScriptInterface<IBattler>& SwappingFrom, UBattleAnimationGetter& AnimationGetter, IPokemonCoroutineDispatcher& Dispatcher);
+    UE5Coro::TCoroutine<> SwapWithTarget(const TScriptInterface<IBattler> &SwappingFrom,
+                                         UBattleAnimationGetter &AnimationGetter,
+                                         IPokemonCoroutineDispatcher &Dispatcher);
 
     UE5Coro::TCoroutine<> TriggerOnSendOut();
 

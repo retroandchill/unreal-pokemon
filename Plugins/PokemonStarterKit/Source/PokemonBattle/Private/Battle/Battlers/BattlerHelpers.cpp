@@ -3,10 +3,10 @@
 #include "Battle/Battlers/BattlerHelpers.h"
 #include "Abilities/GameplayAbilityTypes.h"
 #include "AbilitySystemComponent.h"
-#include "Battle/Battle.h"
-#include "Battle/BattleSide.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
+#include "Battle/Battle.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
+#include "Battle/BattleSide.h"
 #include "Battle/Display/BattleHUD.h"
 #include "Battle/Effects/BattleEffectUtilities.h"
 #include "Battle/Settings/BattleMessageSettings.h"
@@ -30,13 +30,13 @@ EStatusEffectStatus UBattlerHelpers::GetStatusEffect(const TScriptInterface<IBat
     return EStatusEffectStatus::HasStatusEffect;
 }
 
-UE5Coro::TCoroutine<> UBattlerHelpers::GainExpOnFaint(UE5Coro::TLatentContext<const UObject> Context, const TArray<TScriptInterface<IBattler>> &FainedBattlers) {
-    auto ValidBattlers = FainedBattlers |
-        Retro::Ranges::Views::Filter([](const TScriptInterface<IBattler> &Battler) {
-        auto &OwningSide = Battler->GetOwningSide();
-        return OwningSide == OwningSide->GetOwningBattle()->GetOpposingSide();
-    }) |
-        Retro::Ranges::To<TArray>();
+UE5Coro::TCoroutine<> UBattlerHelpers::GainExpOnFaint(UE5Coro::TLatentContext<const UObject> Context,
+                                                      const TArray<TScriptInterface<IBattler>> &FainedBattlers) {
+    auto ValidBattlers = FainedBattlers | Retro::Ranges::Views::Filter([](const TScriptInterface<IBattler> &Battler) {
+                             auto &OwningSide = Battler->GetOwningSide();
+                             return OwningSide == OwningSide->GetOwningBattle()->GetOpposingSide();
+                         }) |
+                         Retro::Ranges::To<TArray>();
     if (ValidBattlers.IsEmpty()) {
         co_return;
     }
@@ -71,7 +71,8 @@ UE5Coro::TCoroutine<> UBattlerHelpers::GainExpOnFaint(UE5Coro::TLatentContext<co
 }
 
 UE5Coro::TCoroutine<bool> UBattlerHelpers::ApplyHPRecoveryEffect(const TScriptInterface<IBattler> &Battler,
-                                                                 int32 Amount, const UGameplayAbility * Ability, bool bShowFailureMessage, FForceLatentCoroutine) {
+                                                                 int32 Amount, const UGameplayAbility *Ability,
+                                                                 bool bShowFailureMessage, FForceLatentCoroutine) {
     auto AbilityComponent = Battler->GetAbilityComponent();
     auto Attributes = AbilityComponent->GetCoreAttributes();
     float CurrentHP = Attributes->GetHP();
@@ -81,7 +82,8 @@ UE5Coro::TCoroutine<bool> UBattlerHelpers::ApplyHPRecoveryEffect(const TScriptIn
     auto Settings = GetDefault<UBattleMessageSettings>();
     if (MaxHP <= CurrentHP) {
         if (bShowFailureMessage) {
-            co_await Dispatcher.DisplayMessage(FText::FormatNamed(Settings->NoEffectMessage, "Pkmn", Battler->GetNickname()));
+            co_await Dispatcher.DisplayMessage(
+                FText::FormatNamed(Settings->NoEffectMessage, "Pkmn", Battler->GetNickname()));
         }
         co_return false;
     }

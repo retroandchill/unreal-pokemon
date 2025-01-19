@@ -124,7 +124,7 @@ class POKEMONBATTLE_API IBattle {
      */
     virtual APawn *GetBattlePawn() const = 0;
 
-    virtual const TScriptInterface<IBattleHUD>& GetBattleHUD() const = 0;
+    virtual const TScriptInterface<IBattleHUD> &GetBattleHUD() const = 0;
 
     virtual const TScriptInterface<IBattleSide> &GetPlayerSide() const = 0;
     virtual const TScriptInterface<IBattleSide> &GetOpposingSide() const = 0;
@@ -145,7 +145,7 @@ class POKEMONBATTLE_API IBattle {
      * Initiate the process of selecting actions for the given battler.
      */
     virtual void BeginActionSelection(const TScriptInterface<IBattler> &Battler) = 0;
-    
+
     virtual void PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler) = 0;
 
     /**

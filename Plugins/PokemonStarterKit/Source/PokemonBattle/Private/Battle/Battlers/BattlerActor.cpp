@@ -21,6 +21,7 @@
 #include "Battle/Items/ItemLookup.h"
 #include "Battle/Moves/MoveLookup.h"
 #include "Battle/Moves/PokemonBattleMove.h"
+#include "Battle/Settings/PokemonBattleSettings.h"
 #include "Battle/Status.h"
 #include "Battle/StatusEffects/StatusEffectLookup.h"
 #include "Battle/StatusEffects/StatusEffectTags.h"
@@ -33,7 +34,6 @@
 #include "Pokemon/Moves/MoveBlock.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
-#include "Battle/Settings/PokemonBattleSettings.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/Construct.h"
@@ -135,9 +135,9 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     } else {
         StatusEffect.Reset();
     }
-    
-    SwitchActionHandle = BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(USwitchAction::StaticClass(),
-        1, INDEX_NONE, this));
+
+    SwitchActionHandle =
+        BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(USwitchAction::StaticClass(), 1, INDEX_NONE, this));
 
     return this;
 }

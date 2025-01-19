@@ -3,12 +3,12 @@
 #include "Battle/Events/TargetedEvents.h"
 #include "Abilities/GameplayAbilityTypes.h"
 #include "AbilitySystemBlueprintLibrary.h"
-#include "PokemonBattleModule.h"
 #include "Algo/ForEach.h"
 #include "Battle/AsyncAbilityComponent.h"
 #include "Battle/Battle.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
+#include "PokemonBattleModule.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Casting/UClassCasts.h"
 #include "RetroLib/Functional/Delegates.h"
@@ -50,16 +50,18 @@ static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side) {
     return Retro::Ranges::Views::Concat(std::move(SideView), std::move(ActiveBattlers));
 }
 
-UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutActivationEvent(UAsyncAbilityComponent* AbilityComponent,
+UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutActivationEvent(UAsyncAbilityComponent *AbilityComponent,
                                                                       FGameplayAbilitySpecHandle Handle,
-                                                                      FGameplayTag Tag, const FGameplayEventData& EventData,
+                                                                      FGameplayTag Tag,
+                                                                      const FGameplayEventData &EventData,
                                                                       FForceLatentCoroutine) {
-    co_await AbilityComponent->TriggerAbilityFromGameplayEventAsync(Handle, AbilityComponent->AbilityActorInfo.Get(), Tag, &EventData, *AbilityComponent);
+    co_await AbilityComponent->TriggerAbilityFromGameplayEventAsync(Handle, AbilityComponent->AbilityActorInfo.Get(),
+                                                                    Tag, &EventData, *AbilityComponent);
 }
 
 UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutBattleEvent(const TScriptInterface<IBattle> &Battle,
-                                                                  const UObject *Payload,
-                                                                  const FGameplayTag &Tag, FForceLatentCoroutine) {
+                                                                  const UObject *Payload, const FGameplayTag &Tag,
+                                                                  FForceLatentCoroutine) {
     auto BattleActor = Retro::CastInterfaceChecked<AActor>(Battle);
     FGameplayEventData EventData;
     EventData.Instigator = BattleActor;
@@ -99,7 +101,7 @@ UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutMoveEvents(const TScriptIn
     co_await SendOutEventForActor(UserActor, EventTags.GlobalTag, EventData);
     co_await SendOutEventForActor(UserActor, EventTags.UserTag, EventData);
     for (auto Ally : User->GetAllies() | Retro::Ranges::Views::Filter(&IBattler::IsNotFainted) |
-        Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>)) {
+                         Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>)) {
         co_await SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
         co_await SendOutEventForActor(Ally, EventTags.UserAllyTag, EventData);
     }
@@ -108,16 +110,17 @@ UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutMoveEvents(const TScriptIn
     co_await SendOutEventForActor(TargetActor, EventTags.GlobalTag, EventData);
     co_await SendOutEventForActor(TargetActor, EventTags.TargetTag, EventData);
     for (auto Ally : Target->GetAllies() | Retro::Ranges::Views::Filter(&IBattler::IsNotFainted) |
-        Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>)) {
-            co_await SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
-            co_await SendOutEventForActor(Ally, EventTags.TargetAllyTag, EventData);
+                         Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>)) {
+        co_await SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
+        co_await SendOutEventForActor(Ally, EventTags.TargetAllyTag, EventData);
     }
 
     auto UserSide = User->GetOwningSide();
     co_await SendOutEventForActor(CastChecked<AActor>(UserSide.GetObject()), EventTags.UserSideTag, EventData);
-    co_await SendOutEventForActor(CastChecked<AActor>(Target->GetOwningSide().GetObject()), EventTags.TargetSideTag, EventData);
-    co_await SendOutEventForActor(CastChecked<AActor>(UserSide->GetOwningBattle().GetObject()), EventTags.BattlefieldTag,
-                         EventData);
+    co_await SendOutEventForActor(CastChecked<AActor>(Target->GetOwningSide().GetObject()), EventTags.TargetSideTag,
+                                  EventData);
+    co_await SendOutEventForActor(CastChecked<AActor>(UserSide->GetOwningBattle().GetObject()),
+                                  EventTags.BattlefieldTag, EventData);
 }
 
 UE5Coro::TCoroutine<int32> Pokemon::Battle::Events::SendOutEventForActor(AActor *Actor, const FGameplayTag &Tag,
@@ -127,16 +130,16 @@ UE5Coro::TCoroutine<int32> Pokemon::Battle::Events::SendOutEventForActor(AActor 
     if (!IsValid(Actor)) {
         co_return 0;
     }
-    
+
     auto AbilitySystemComponent = Actor->GetComponentByClass<UAsyncAbilityComponent>();
     if (!IsValid(AbilitySystemComponent)) {
         UE_LOG(LogBattle, Error,
-               TEXT(
-                   "Pokemon::Battle::Events::SendOutEventForActor: Invalid ability system component retrieved from Actor %s. EventTag was %s"
-               ), *Actor->GetName(), *Tag.ToString());
+               TEXT("Pokemon::Battle::Events::SendOutEventForActor: Invalid ability system component retrieved from "
+                    "Actor %s. EventTag was %s"),
+               *Actor->GetName(), *Tag.ToString());
 
         co_return 0;
     }
-        
+
     co_return co_await AbilitySystemComponent->HandleGameplayEventAsync(Tag, &EventData);
 }

@@ -4,20 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "BattleItemEffect.h"
+
 #include "BlueprintableBattleItemEffect.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS(Abstract, Blueprintable, BlueprintType)
 class POKEMONBATTLE_API UBlueprintableBattleItemEffect : public UBattleItemEffect {
     GENERATED_BODY()
 
-protected:
+  protected:
     UE5Coro::TCoroutine<bool> ApplyGlobalEffect(const TScriptInterface<IBattler> &User, FForceLatentCoroutine) final;
     UE5Coro::TCoroutine<bool> ApplyEffectToTarget(const TScriptInterface<IBattler> &User,
-        const TScriptInterface<IBattler> &Target, FForceLatentCoroutine) final;
-    UE5Coro::TCoroutine<bool> IsTargetValid(const TScriptInterface<IBattler> &Battler, FForceLatentCoroutine = {}) final;
+                                                  const TScriptInterface<IBattler> &Target,
+                                                  FForceLatentCoroutine) final;
+    UE5Coro::TCoroutine<bool> IsTargetValid(const TScriptInterface<IBattler> &Battler,
+                                            FForceLatentCoroutine = {}) final;
 
     UFUNCTION(BlueprintNativeEvent, Category = "Battle|Items|Usable")
     void StartApplyGlobalEffect(const TScriptInterface<IBattler> &User);
@@ -37,7 +40,6 @@ protected:
     UFUNCTION(BlueprintCallable, Category = "Battle|Items|Usable")
     void CompleteIsTargetValidCheck(bool bResult);
 
-private:
+  private:
     TSharedRef<TFutureState<bool>> StageCompleteState = MakeShared<TFutureState<bool>>();
-
 };
