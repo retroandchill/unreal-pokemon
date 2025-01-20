@@ -18,6 +18,11 @@
 			"Name": "SimpleFlipbook",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "SimpleFlipbookEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	]
 }
