@@ -9,7 +9,7 @@ public class Simple2DEditor : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core", "Simple2D",
+                "Core", "Simple2D", "UnrealEd"
             }
         );
 
@@ -19,7 +19,9 @@ public class Simple2DEditor : ModuleRules
                 "CoreUObject",
                 "Engine",
                 "Slate",
-                "SlateCore"
+                "SlateCore", 
+                "Paper2D",
+                "Paper2DEditor"
             }
         );
     }

@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Factories/Factory.h"
 #include "SimpleFlipbook/Assets/SimpleFlipbook.h"
 
