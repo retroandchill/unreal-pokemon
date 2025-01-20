@@ -11,10 +11,10 @@ FWildBattleOpponentInfo::FWildBattleOpponentInfo(const TSharedRef<FPokemonDTO> &
     : OpposingPokemonInfo({PokemonInfo}) {
 }
 
-TScriptInterface<IBattleSide> FWildBattleOpponentInfo::CreateOpposingSide(const TScriptInterface<IBattle> &Battle,
-                                                                          const TSubclassOf<AActor> &SideClass,
-                                                                          const FTransform &Transform,
-                                                                          int32 ActivePokemonCount) {
+UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> FWildBattleOpponentInfo::CreateOpposingSide(TScriptInterface<IBattle> Battle,
+    TSubclassOf<AActor> SideClass,
+    const FTransform &Transform,
+    int32 ActivePokemonCount) {
     auto World = Battle.GetObject()->GetWorld();
     check(World != nullptr)
 
@@ -36,5 +36,5 @@ TScriptInterface<IBattleSide> FWildBattleOpponentInfo::CreateOpposingSide(const 
 
     // For a wild battle the number of Pokémon and the active side count must match
     check(Pokemon.Num() == ActivePokemonCount)
-    return Side->Initialize(Battle, Pokemon);
+    return Side->Initialize(Battle, std::move(Pokemon));
 }

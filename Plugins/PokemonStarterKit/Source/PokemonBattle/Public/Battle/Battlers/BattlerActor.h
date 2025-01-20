@@ -33,9 +33,9 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      */
     ABattlerActor();
 
-    TScriptInterface<IBattler> Initialize(const TScriptInterface<IBattleSide> &Side,
-                                          const TScriptInterface<IPokemon> &Pokemon,
-                                          bool ShowImmediately = false) override;
+    UE5Coro::TCoroutine<TScriptInterface<IBattler>> Initialize(TScriptInterface<IBattleSide> Side,
+                                                               TScriptInterface<IPokemon> Pokemon,
+                                                               bool ShowImmediately = false) override;
 
   protected:
     void BeginPlay() override;
@@ -160,7 +160,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      * Spawn the underlying sprite actor into the world
      * @param ShouldShow Is this process being invoked on the initialization of this battler (i.e. a Wild Pokémon)
      */
-    void SpawnSpriteActor(bool ShouldShow = false);
+    UE5Coro::TCoroutine<> SpawnSpriteActor(bool ShouldShow = false);
 
     /**
      * The ability component for the battler

@@ -56,12 +56,12 @@ UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info, TSubclassOf<
     }
 
     if (RegisteredBattle.IsValid() && !bBattleInitialized) {
-        RegisteredBattle->Initialize(BattleInfo.GetValue());
+        co_await RegisteredBattle->Initialize(BattleInfo.GetValue());
         bBattleInitialized = true;
     }
 
     CurrentTransition = nullptr;
-    SetUpBattle();
+    co_await SetUpBattle();
     auto Result =
         co_await RegisteredBattle->ConductBattle(GetWorld()->GetGameInstance()->GetPrimaryPlayerController(false));
     co_await ExitBattle();
@@ -76,12 +76,12 @@ void UBattleTransitionSubsystem::RemoveFromBattleFinished(const FDelegateHandle 
     BattleFinished.Remove(Handle);
 }
 
-void UBattleTransitionSubsystem::SetUpBattle() {
+UE5Coro::TCoroutine<> UBattleTransitionSubsystem::SetUpBattle() {
     check(RegisteredBattle.IsValid())
     check(BattleInfo.IsSet())
 
     if (CurrentTransition == nullptr && !bBattleInitialized) {
-        RegisteredBattle->Initialize(BattleInfo.GetValue());
+        co_await RegisteredBattle->Initialize(BattleInfo.GetValue());
         bBattleInitialized = true;
     }
 }

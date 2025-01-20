@@ -30,12 +30,13 @@ class POKEMONBATTLE_API AActiveSide : public AActor, public IBattleSide {
   public:
     AActiveSide();
 
-    TScriptInterface<IBattleSide> Initialize(const TScriptInterface<IBattle> &Battle,
-                                             const TArray<TScriptInterface<IPokemon>> &Pokemon,
-                                             bool ShowBackSprites) override;
-    TScriptInterface<IBattleSide> Initialize(const TScriptInterface<IBattle> &Battle,
-                                             const TScriptInterface<ITrainer> &Trainer, uint8 PokemonCount,
-                                             bool ShowBackSprites) override;
+    UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> Initialize(TScriptInterface<IBattle> Battle,
+                                                                  TArray<TScriptInterface<IPokemon>> Pokemon,
+                                                                  bool ShowBackSprites) override;
+    UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> Initialize(TScriptInterface<IBattle> Battle,
+                                                                  TScriptInterface<ITrainer> Trainer,
+                                                                  uint8 PokemonCount,
+                                                                  bool ShowBackSprites) override;
 
   protected:
     void BeginPlay() override;

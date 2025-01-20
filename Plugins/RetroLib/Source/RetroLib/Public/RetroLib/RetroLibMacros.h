@@ -43,16 +43,18 @@
 
 #ifdef __UNREAL__
 
-#define RETRO_VARIANT_OBJECT_STRUCT_BODY(SoftPtr) \
+#define RETRO_VARIANT_OBJECT_STRUCT_BODY(ClassName, SoftPtr) \
     using SoftPtrType = SoftPtr; \
     using Base = TVariantObject; \
+    ClassName() = default; \
     using Base::Base; \
     void Reset() { \
         SetUnchecked(nullptr); \
     }
 
-#define RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY() \
+#define RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY(ClassName) \
     using Base = TSoftVariantObject; \
+    ClassName() = default; \
     using Base::Base;
     
 

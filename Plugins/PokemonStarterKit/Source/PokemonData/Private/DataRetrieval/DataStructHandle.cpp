@@ -2,8 +2,10 @@
 
 #include "DataRetrieval/DataStructHandle.h"
 #include "Misc/OutputDeviceNull.h"
+#include "RetroLib/Blueprints/BlueprintRuntimeUtils.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
+#include <bit>
 
 #if WITH_METADATA
 bool Pokemon::Data::IsValidDataTableStruct(const UScriptStruct *Struct) {
@@ -42,12 +44,13 @@ TArray<TSharedPtr<FString>> Pokemon::Data::FStructWrapper::GetStructOptions() co
     check(GetOptionsFunction != nullptr && GetOptionsFunction->HasAnyFunctionFlags(EFunctionFlags::FUNC_Static))
 
     FGetOptionsParams Params;
-    auto GetOptionsCDO = GetOptionsFunction->GetOuterUClass()->GetDefaultObject();
-    GetOptionsCDO->ProcessEvent(GetOptionsFunction, &Params);
+    Retro::InvokeFunctionIsolated(GetOptionsFunction, Params);
 
     // clang-format off
     return Params.ReturnValue |
-           Retro::Ranges::Views::Transform([](FName N) -> TSharedPtr<FString> { return MakeShared<FString>(N.ToString()); }) |
+           Retro::Ranges::Views::Transform([](FName N) -> TSharedPtr<FString> {
+               return MakeShared<FString>(N.ToString());
+           }) |
            Retro::Ranges::To<TArray>();
     // clang-format on
 }
@@ -110,7 +113,7 @@ DEFINE_FUNCTION(UDataStructHandleUtilities::execNotEqual_HandleHandle) {
 
     bool bResult;
     P_NATIVE_BEGIN
-    bResult = DataHandle.RowID != Other;
+        bResult = DataHandle.RowID != Other;
     P_NATIVE_END
 
     *static_cast<bool *>(RESULT_PARAM) = bResult;

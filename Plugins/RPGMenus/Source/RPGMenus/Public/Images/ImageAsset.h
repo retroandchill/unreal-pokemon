@@ -20,7 +20,7 @@ struct FImageAsset
 #else
     {
 #endif
-    RETRO_VARIANT_OBJECT_STRUCT_BODY(FSoftImageAsset)
+    RETRO_VARIANT_OBJECT_STRUCT_BODY(FImageAsset, FSoftImageAsset)
 
 #if !CPP
     private:
@@ -41,7 +41,7 @@ struct FSoftImageAsset
 #else
 {
 #endif
-    RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY()
+    RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY(FSoftImageAsset)
 
 #if !CPP
 private:

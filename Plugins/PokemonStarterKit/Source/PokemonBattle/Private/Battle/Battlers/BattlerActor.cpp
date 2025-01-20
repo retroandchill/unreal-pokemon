@@ -59,8 +59,9 @@ ABattlerActor::ABattlerActor() {
     InnateAbilities.Add(UInnate_DamageSwing::StaticClass());
 }
 
-TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBattleSide> &Side,
-                                                     const TScriptInterface<IPokemon> &Pokemon, bool ShowImmediately) {
+UE5Coro::TCoroutine<TScriptInterface<IBattler>> ABattlerActor::Initialize(TScriptInterface<IBattleSide> Side,
+                                                                          TScriptInterface<IPokemon> Pokemon,
+                                                                          bool ShowImmediately) {
     OwningSide = Side;
     WrappedPokemon = Pokemon;
     InternalId = FGuid::NewGuid();
@@ -99,7 +100,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
             Retro::Ranges::Views::Transform(Retro::BindBack<&CreateBattleMove>(this)) |
             Retro::Ranges::To<TArray>();
     // clang-format on
-    SpawnSpriteActor(ShowImmediately);
+    co_await SpawnSpriteActor(ShowImmediately);
 
     auto &Battle = OwningSide->GetOwningBattle();
     if (OwningSide->ShowBackSprites()) {
@@ -139,7 +140,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     SwitchActionHandle =
         BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(USwitchAction::StaticClass(), 1, INDEX_NONE, this));
 
-    return this;
+    co_return this;
 }
 
 void ABattlerActor::BeginPlay() {
@@ -423,11 +424,11 @@ void ABattlerActor::UpdateHPValue(const FOnAttributeChangeData &Data) const {
     WrappedPokemon->SetCurrentHP(FMath::FloorToInt32(Data.NewValue));
 }
 
-void ABattlerActor::SpawnSpriteActor(bool ShouldShow) {
-    Sprite = GetWorld()->SpawnActor<AActor>(BattlerSpriteClass.LoadSynchronous(), GetSpriteTransform());
+UE5Coro::TCoroutine<> ABattlerActor::SpawnSpriteActor(bool ShouldShow) {
+    Sprite = GetWorld()->SpawnActor<AActor>(co_await UE5Coro::Latent::AsyncLoadClass(BattlerSpriteClass), GetSpriteTransform());
     Sprite->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
 
-    IBattlerSprite::Execute_SetBattleSprite(
-        Sprite, USpriteLoader::GetPokemonBattleSprite(WrappedPokemon, OwningSide->ShowBackSprites()));
+    auto BattleSprite = co_await USpriteLoader::GetLazyPokemonBattleSprite(WrappedPokemon, OwningSide->ShowBackSprites()).LoadAsync();
+    IBattlerSprite::Execute_SetBattleSprite(Sprite, BattleSprite.Get(FBattleRender()));
     Sprite->SetActorHiddenInGame(!ShouldShow);
 }

@@ -30,7 +30,7 @@ struct FBattleRender
 #else
     {
 #endif
-    RETRO_VARIANT_OBJECT_STRUCT_BODY(FSoftBattleRender)
+    RETRO_VARIANT_OBJECT_STRUCT_BODY(FBattleRender, FSoftBattleRender)
     
 #if !CPP
 private:
@@ -52,7 +52,7 @@ struct FSoftBattleRender
 #else
     {
 #endif
-    RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY()
+    RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY(FSoftBattleRender)
     
 #if !CPP
 private:

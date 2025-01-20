@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UE5Coro.h"
 
 #include "BattleOpponentInfo.generated.h"
 
@@ -25,10 +26,10 @@ class POKEMONBATTLE_API IBattleOpponentInfo {
      * @param ActivePokemonCount The number of Pokémon to spawn
      * @return The created side
      */
-    virtual TScriptInterface<IBattleSide> CreateOpposingSide(const TScriptInterface<IBattle> &Battle,
-                                                             const TSubclassOf<AActor> &SideClass,
-                                                             const FTransform &Transform,
-                                                             int32 ActivePokemonCount = 1) = 0;
+    virtual UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> CreateOpposingSide(TScriptInterface<IBattle> Battle,
+        TSubclassOf<AActor> SideClass,
+        const FTransform &Transform,
+        int32 ActivePokemonCount = 1) = 0;
 };
 
 /**
@@ -47,7 +48,7 @@ struct POKEMONBATTLE_API FBattleOpponentInfoHandle {
      * Create the opposing side of battle with this information
      * @return The created side
      */
-    FORCEINLINE TScriptInterface<IBattleSide> CreateOpposingSide(const TScriptInterface<IBattle> &Battle,
+    FORCEINLINE UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> CreateOpposingSide(TScriptInterface<IBattle> Battle,
                                                                  TSubclassOf<AActor> SideClass,
                                                                  const FTransform &Transform,
                                                                  int32 ActivePokemonCount = 1) const {

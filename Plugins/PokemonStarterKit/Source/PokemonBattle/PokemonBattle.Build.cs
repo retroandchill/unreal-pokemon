@@ -11,5 +11,9 @@ public class PokemonBattle : ModuleRules {
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore",
                                                              "UnrealInjector", "PokemonAssets", "Paper2D",
                                                              "RetroLib" });
+        
+        if (!string.IsNullOrEmpty(GetModuleDirectory("PaperZD"))) {
+            PublicDependencyModuleNames.Add("PaperZD");
+        }
     }
 }

@@ -32,7 +32,7 @@ struct FAssetClassType
 #else
     {
 #endif
-    RETRO_VARIANT_OBJECT_STRUCT_BODY(FSoftAssetClassType)
+    RETRO_VARIANT_OBJECT_STRUCT_BODY(FAssetClassType, FSoftAssetClassType)
     
 
 #if !CPP
@@ -54,7 +54,7 @@ struct FSoftAssetClassType
 #else
 {
 #endif
-    RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY()
+    RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY(FSoftAssetClassType)
     
 
 #if !CPP

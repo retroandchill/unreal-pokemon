@@ -164,7 +164,7 @@ CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::SoftVariantCast, UClass *, cons
 DEFINE_FUNCTION(UVariantObjectUtilities::execSoftVariantCast) {
     P_GET_OBJECT(UClass, Class)
     P_GET_OPAQUE_STRUCT(SoftStructProp, SoftVariantPtr)
-    P_GET_SOFTOBJECT(TSoftObjectPtr<>, SoftObject)
+    P_GET_SOFTOBJECT_REF(TSoftObjectPtr<>, SoftObject)
     P_FINISH
 
     try {

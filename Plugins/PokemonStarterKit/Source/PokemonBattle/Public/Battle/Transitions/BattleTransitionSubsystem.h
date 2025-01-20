@@ -78,8 +78,7 @@ class POKEMONBATTLE_API UBattleTransitionSubsystem : public UWorldSubsystem {
     /**
      * Set up the jump into battle
      */
-    UFUNCTION()
-    void SetUpBattle();
+    UE5Coro::TCoroutine<> SetUpBattle();
 
     /**
      * Exit the current battle and return to the field

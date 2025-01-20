@@ -29,9 +29,9 @@ AActiveSide::AActiveSide() {
     TurnBasedEffectComponent = CreateDefaultSubobject<UTurnBasedEffectComponent>(FName("TurnBasedEffectsComponent"));
 }
 
-TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBattle> &Battle,
-                                                      const TArray<TScriptInterface<IPokemon>> &Pokemon,
-                                                      bool ShowBackSprites) {
+UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScriptInterface<IBattle> Battle,
+                                                                           TArray<TScriptInterface<IPokemon>> Pokemon,
+                                                                           bool ShowBackSprites) {
     InternalId = FGuid::NewGuid();
     OwningBattle = Battle;
     SideSize = 1;
@@ -40,11 +40,11 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
     Trainers.Reset();
     TScriptInterface<IBattleSide> Side = this;
 
-    auto BattlerActorClass = BattlerClass.LoadSynchronous();
+    auto BattlerActorClass = co_await UE5Coro::Latent::AsyncLoadClass(BattlerClass);
     TArray<FText> Nicknames;
     for (auto &Pkmn : Pokemon) {
         auto Battler = GetWorld()->SpawnActor<AActor>(BattlerActorClass, GetBattlerSpawnPosition(0));
-        Battlers.Emplace_GetRef(Battler)->Initialize(Side, Pkmn, true);
+        co_await Battlers.Emplace_GetRef(Battler)->Initialize(Side, Pkmn, true);
         Battler->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
         Nicknames.Add(Pkmn->GetNickname());
     }
@@ -53,12 +53,13 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
     auto FullOpponentName = UStringUtilities::GenerateList(Nicknames, Contraction);
     IntroMessageText = FText::FormatNamed(WildBattleTextFormat, TEXT("Pkmn"), FullOpponentName);
     SendOutText.Reset();
-    return Side;
+    co_return Side;
 }
 
-TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBattle> &Battle,
-                                                      const TScriptInterface<ITrainer> &Trainer, uint8 PokemonCount,
-                                                      bool ShowBackSprites) {
+UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScriptInterface<IBattle> Battle,
+                                                                           TScriptInterface<ITrainer> Trainer,
+                                                                           uint8 PokemonCount,
+                                                                           bool ShowBackSprites) {
     InternalId = FGuid::NewGuid();
     OwningBattle = Battle;
     SideSize = PokemonCount;
@@ -69,10 +70,11 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
     TScriptInterface<IBattleSide> Side = this;
     auto &Party = Trainer->GetParty();
     auto &BattleParty = TrainerParties.Add(Trainer->GetInternalId()).Battlers;
+    auto LoadedBattlerClass = co_await UE5Coro::Latent::AsyncLoadClass(BattlerClass);
     for (uint8 i = 0; i < Party.Num(); i++) {
         auto SpawnPosition = i < PokemonCount ? GetBattlerSpawnPosition(i) : GetTransform();
-        auto Battler = GetWorld()->SpawnActor<AActor>(BattlerClass.LoadSynchronous(), SpawnPosition);
-        BattleParty.Emplace_GetRef(Battler)->Initialize(Side, Party.IsValidIndex(i) ? Party[i] : nullptr, false);
+        auto Battler = GetWorld()->SpawnActor<AActor>(LoadedBattlerClass, SpawnPosition);
+        co_await BattleParty.Emplace_GetRef(Battler)->Initialize(Side, Party.IsValidIndex(i) ? Party[i] : nullptr, false);
         Battler->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
     }
 
@@ -95,7 +97,7 @@ TScriptInterface<IBattleSide> AActiveSide::Initialize(const TScriptInterface<IBa
     // TODO: Add support for multiple battlers
     SendOutText = FText::FormatNamed(ShowBackSprites ? PlayerSendOutTextFormat : OpponentSendOutTextFormat,
                                      TEXT("Names"), TrainerName, TEXT("Pkmn"), Battlers[0]->GetNickname());
-    return Side;
+    co_return Side;
 }
 
 void AActiveSide::BeginPlay() {
