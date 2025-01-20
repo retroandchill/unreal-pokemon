@@ -49,6 +49,8 @@ namespace Retro {
     RETROLIB_EXPORT template <typename T>
         requires VariantObject<T>
     struct TSoftVariantObject {
+        using FHardReference = T;
+        
         static constexpr bool bHasIntrusiveUnsetOptionalState = true;
         using IntrusiveUnsetOptionalStateType = TSoftVariantObject;
 

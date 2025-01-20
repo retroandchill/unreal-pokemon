@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "BattleOpponentInfo.h"
 #include "UObject/Object.h"
+#include "UE5Coro.h"
 
 #include "BattleInfo.generated.h"
 
@@ -39,20 +40,21 @@ struct POKEMONBATTLE_API FBattleInfo {
     UPROPERTY(BlueprintReadWrite, Category = Battle)
     FBattleOpponentInfoHandle OpponentInfo;
 
-    TScriptInterface<IBattleSide> CreatePlayerSide(const TScriptInterface<IBattle> &Battle,
-                                                   const TSubclassOf<AActor> &SideClass,
-                                                   const FTransform &Transform) const;
+    UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> CreatePlayerSide(TScriptInterface<IBattle> Battle,
+                                                                        TSubclassOf<AActor> SideClass,
+                                                                        const FTransform &Transform, FForceLatentCoroutine = {}) const;
 
     /**
      * Create the opposing side of battle with this information
      * @param Battle The battle that will take ownership of the side
      * @param SideClass The class for the side that is being spawned in
      * @param Transform The transform to spawn the side at
+     * @param 
      * @return The created side
      */
-    FORCEINLINE TScriptInterface<IBattleSide> CreateOpposingSide(const TScriptInterface<IBattle> &Battle,
-                                                                 const TSubclassOf<AActor> &SideClass,
-                                                                 const FTransform &Transform) const {
+    FORCEINLINE UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> CreateOpposingSide(TScriptInterface<IBattle> Battle,
+        TSubclassOf<AActor> SideClass,
+        const FTransform &Transform, FForceLatentCoroutine = {}) const {
         return OpponentInfo.CreateOpposingSide(Battle, SideClass, Transform, OpponentSideCount);
     }
 };

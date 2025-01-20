@@ -32,6 +32,11 @@ class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
     UFUNCTION(BlueprintCallable, Category = "Sprites|Pokémon", meta = (CallableWithoutWorldContext))
     static FBattleRender GetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon, bool bBack = false);
 
+    UFUNCTION(BlueprintCallable, Category = "Sprites|Pokémon", meta = (CallableWithoutWorldContext, Latent, LatentInfo = LatentActionInfo))
+    static FVoidCoroutine AsyncGetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon, FBattleRender& OutRender, bool bBack = false, FLatentActionInfo LatentActionInfo = FLatentActionInfo());
+    
+    static UE5Coro::TCoroutine<FBattleRender> AsyncGetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon, bool bBack = false, FForceLatentCoroutine = {});
+
     /**
      * Retrieve the battle sprite for a given Pokémon species.
      * @param Species The species of Pokémon to get the battle sprite for.

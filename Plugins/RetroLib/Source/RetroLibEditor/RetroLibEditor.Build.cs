@@ -7,6 +7,8 @@ public class RetroLibEditor : ModuleRules {
         PublicDependencyModuleNames.AddRange(new string[] {
             "Core",
             "RetroLib",
+            "EditorWidgets",
+            "PropertyEditor"
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore" });

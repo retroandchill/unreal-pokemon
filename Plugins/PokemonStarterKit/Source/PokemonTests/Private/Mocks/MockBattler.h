@@ -16,9 +16,9 @@ class FMockBattler : public IBattler {
     DECLARE_MOCK_INTERFACE(FMockBattler)
 
   public:
-    MOCK_METHOD3(Initialize,
-                 TScriptInterface<IBattler>(const TScriptInterface<IBattleSide> &Side,
-                                            const TScriptInterface<IPokemon> &Pokemon, bool ShowImmediately));
+    MOCK_METHOD4(Initialize,
+                 UE5Coro::TCoroutine<TScriptInterface<IBattler>>(TScriptInterface<IBattleSide> Side,
+                                            TScriptInterface<IPokemon> Pokemon, bool ShowImmediately, FForceLatentCoroutine));
     MOCK_METHOD(FGuid, GetInternalId, (), (const, override));
     MOCK_METHOD(const TScriptInterface<IBattleSide> &, GetOwningSide, (), (const, override));
     MOCK_METHOD(const TScriptInterface<IPokemon> &, GetWrappedPokemon, (), (const, override));

@@ -32,3 +32,7 @@ void ATestBattlerActor::PostActorCreated() {
     check(StatStages != nullptr)
     Effects.Emplace(StatStages);
 }
+
+UE5Coro::TCoroutine<> ATestBattlerActor::SpawnSpriteActor(bool ShouldShow) {
+    co_return;
+}

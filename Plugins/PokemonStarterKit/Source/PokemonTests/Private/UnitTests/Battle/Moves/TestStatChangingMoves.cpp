@@ -1,4 +1,5 @@
 ﻿#include "Asserts.h"
+#include "TestAdapter.h"
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Battlers/Battler.h"
@@ -12,203 +13,179 @@
 #include "UtilityClasses/BattleActors/TestActiveSide.h"
 #include "UtilityClasses/BattleActors/TestPokemonBattle.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestStatChangingMoves_RaiseUserStats,
-                                 "Unit Tests.Battle.Moves.TestStatChangingMoves.RaiseUserStats.Success",
-                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+BEGIN_DEFINE_SPEC(FTestStatChangingMoves, "Unit Tests.Battle.Moves.TestStatChangingMoves", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
+CORO_FUNCTIONS()
+END_DEFINE_SPEC(FTestStatChangingMoves);
 
-bool TestStatChangingMoves_RaiseUserStats::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
-                                 .Level = 100,
-                                 .IVs = {{"SPECIAL_ATTACK", 31}},
-                                 .EVs = {{"SPECIAL_ATTACK", 252}},
-                                 .Nature = FName("MODEST"),
-                                 .Moves = {{.Move = TEXT("NASTYPLOT")}}});
-    auto Pokemon2 =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
-                                                                                 .Level = 100,
-                                                                                 .IVs = {{"SPECIAL_DEFENSE", 31}},
-                                                                                 .EVs = {{"SPECIAL_DEFENSE", 152}},
-                                                                                 .Nature = FName("CAREFUL")});
+void FTestStatChangingMoves::Define() {
+    CoroIt("RaiseUserStats.Success", [this]() -> UE5Coro::TCoroutine<> {
+        auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+        auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+            World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
+                                     .Level = 100,
+                                     .IVs = {{"SPECIAL_ATTACK", 31}},
+                                     .EVs = {{"SPECIAL_ATTACK", 252}},
+                                     .Nature = FName("MODEST"),
+                                     .Moves = {{.Move = TEXT("NASTYPLOT")}}});
+        auto Pokemon2 =
+            UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
+                                                                                     .Level = 100,
+                                                                                     .IVs = {{"SPECIAL_DEFENSE", 31}},
+                                                                                     .EVs = {{"SPECIAL_DEFENSE", 152}},
+                                                                                     .Nature = FName("CAREFUL")});
 
-    FTemporarySeed Seed(45126);
+        FTemporarySeed Seed(45126);
 
-    auto Battle = World->SpawnActor<ATestPokemonBattle>();
-    auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, {Pokemon1}, false);
-    auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, {Pokemon2}, false);
-    Battle->Initialize({Side1, Side2});
+        auto Battle = World->SpawnActor<ATestPokemonBattle>();
+        auto Side1 = World->SpawnActor<ATestActiveSide>();
+        co_await Side1->Initialize(Battle, {Pokemon1}, false);
+        auto Side2 = World->SpawnActor<ATestActiveSide>();
+        co_await Side2->Initialize(Battle, {Pokemon2}, false);
+        Battle->Initialize({Side1, Side2});
 
-    auto Battler1 = Side1->GetBattlers()[0];
+        auto Battler1 = Side1->GetBattlers()[0];
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {});
-    Action.Execute();
+        FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {});
+        co_await Action.Execute();
 
-    UE_CHECK_EQUAL(2.f, Battler1->GetAbilityComponent()->GetStatStages()->GetSpecialAttackStages());
+        UE_CHECK_EQUAL(2.f, Battler1->GetAbilityComponent()->GetStatStages()->GetSpecialAttackStages());
+    });
 
-    return true;
-}
+    CoroIt("RaiseUserStats.Failed", [this]() -> UE5Coro::TCoroutine<> {
+        auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+        auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+            World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
+                                     .Level = 100,
+                                     .IVs = {{"SPECIAL_ATTACK", 31}},
+                                     .EVs = {{"SPECIAL_ATTACK", 252}},
+                                     .Nature = FName("MODEST"),
+                                     .Moves = {{.Move = TEXT("NASTYPLOT")}}});
+        auto Pokemon2 =
+            UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
+                                                                                     .Level = 100,
+                                                                                     .IVs = {{"SPECIAL_DEFENSE", 31}},
+                                                                                     .EVs = {{"SPECIAL_DEFENSE", 152}},
+                                                                                     .Nature = FName("CAREFUL")});
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestStatChangingMoves_RaiseUserStats_Failed,
-                                 "Unit Tests.Battle.Moves.TestStatChangingMoves.RaiseUserStats.Failed",
-                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+        FTemporarySeed Seed(45126);
 
-bool TestStatChangingMoves_RaiseUserStats_Failed::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
-                                 .Level = 100,
-                                 .IVs = {{"SPECIAL_ATTACK", 31}},
-                                 .EVs = {{"SPECIAL_ATTACK", 252}},
-                                 .Nature = FName("MODEST"),
-                                 .Moves = {{.Move = TEXT("NASTYPLOT")}}});
-    auto Pokemon2 =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
-                                                                                 .Level = 100,
-                                                                                 .IVs = {{"SPECIAL_DEFENSE", 31}},
-                                                                                 .EVs = {{"SPECIAL_DEFENSE", 152}},
-                                                                                 .Nature = FName("CAREFUL")});
+        auto Battle = World->SpawnActor<ATestPokemonBattle>();
+        auto Side1 = World->SpawnActor<ATestActiveSide>();
+        co_await Side1->Initialize(Battle, {Pokemon1}, false);
+        auto Side2 = World->SpawnActor<ATestActiveSide>();
+        co_await Side2->Initialize(Battle, {Pokemon2}, false);
+        Battle->Initialize({Side1, Side2});
 
-    FTemporarySeed Seed(45126);
+        auto Battler1 = Side1->GetBattlers()[0];
+        Battler1->GetAbilityComponent()->SetNumericAttributeBase(UStatStagesAttributeSet::GetSpecialAttackStagesAttribute(),
+                                                                 6.f);
 
-    auto Battle = World->SpawnActor<ATestPokemonBattle>();
-    auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, {Pokemon1}, false);
-    auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, {Pokemon2}, false);
-    Battle->Initialize({Side1, Side2});
+        FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {});
+        AddExpectedMessage(TEXT("Nasty Plot failed!"), ELogVerbosity::Display);
+        co_await Action.Execute();
+    });
+    
+    CoroIt("LowerUserStats", [this]() -> UE5Coro::TCoroutine<> {
+        auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+        auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+            World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
+                                     .Level = 100,
+                                     .IVs = {{"SPECIAL_ATTACK", 31}},
+                                     .EVs = {{"SPECIAL_ATTACK", 252}},
+                                     .Nature = FName("MODEST"),
+                                     .Moves = {{.Move = TEXT("CLOSECOMBAT")}}});
+        auto Pokemon2 =
+            UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
+                                                                                     .Level = 100,
+                                                                                     .IVs = {{"SPECIAL_DEFENSE", 31}},
+                                                                                     .EVs = {{"SPECIAL_DEFENSE", 152}},
+                                                                                     .Nature = FName("CAREFUL")});
 
-    auto Battler1 = Side1->GetBattlers()[0];
-    Battler1->GetAbilityComponent()->SetNumericAttributeBase(UStatStagesAttributeSet::GetSpecialAttackStagesAttribute(),
-                                                             6.f);
+        FTemporarySeed Seed(45126);
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {});
-    AddExpectedMessage(TEXT("Nasty Plot failed!"), ELogVerbosity::Display);
-    Action.Execute();
+        auto Battle = World->SpawnActor<ATestPokemonBattle>();
+        auto Side1 = World->SpawnActor<ATestActiveSide>();
+        co_await Side1->Initialize(Battle, {Pokemon1}, false);
+        auto Side2 = World->SpawnActor<ATestActiveSide>();
+        co_await Side2->Initialize(Battle, {Pokemon2}, false);
+        Battle->Initialize({Side1, Side2});
 
-    return true;
-}
+        auto Battler1 = Side1->GetBattlers()[0];
+        auto Battler2 = Side2->GetBattlers()[0];
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestStatChangingMoves_LowerUserStats,
-                                 "Unit Tests.Battle.Moves.TestStatChangingMoves.LowerUserStats",
-                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+        FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
+        co_await Action.Execute();
 
-bool TestStatChangingMoves_LowerUserStats::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
-                                 .Level = 100,
-                                 .IVs = {{"SPECIAL_ATTACK", 31}},
-                                 .EVs = {{"SPECIAL_ATTACK", 252}},
-                                 .Nature = FName("MODEST"),
-                                 .Moves = {{.Move = TEXT("CLOSECOMBAT")}}});
-    auto Pokemon2 =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
-                                                                                 .Level = 100,
-                                                                                 .IVs = {{"SPECIAL_DEFENSE", 31}},
-                                                                                 .EVs = {{"SPECIAL_DEFENSE", 152}},
-                                                                                 .Nature = FName("CAREFUL")});
+        UE_CHECK_EQUAL(-1.f, Battler1->GetAbilityComponent()->GetStatStages()->GetDefenseStages());
+        UE_CHECK_EQUAL(-1.f, Battler1->GetAbilityComponent()->GetStatStages()->GetSpecialDefenseStages());
+    });
 
-    FTemporarySeed Seed(45126);
+    CoroIt("LowerTargetStats.Success", [this]() -> UE5Coro::TCoroutine<> {
+        auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+        auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+            World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
+                                     .Level = 100,
+                                     .IVs = {{"SPECIAL_ATTACK", 31}},
+                                     .EVs = {{"SPECIAL_ATTACK", 252}},
+                                     .Nature = FName("MODEST"),
+                                     .Moves = {{.Move = TEXT("METALSOUND")}}});
+        auto Pokemon2 =
+            UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
+                                                                                     .Level = 100,
+                                                                                     .IVs = {{"SPECIAL_DEFENSE", 31}},
+                                                                                     .EVs = {{"SPECIAL_DEFENSE", 152}},
+                                                                                     .Nature = FName("CAREFUL")});
 
-    auto Battle = World->SpawnActor<ATestPokemonBattle>();
-    auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, {Pokemon1}, false);
-    auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, {Pokemon2}, false);
-    Battle->Initialize({Side1, Side2});
+        FTemporarySeed Seed(45126);
 
-    auto Battler1 = Side1->GetBattlers()[0];
-    auto Battler2 = Side2->GetBattlers()[0];
+        auto Battle = World->SpawnActor<ATestPokemonBattle>();
+        auto Side1 = World->SpawnActor<ATestActiveSide>();
+        co_await Side1->Initialize(Battle, {Pokemon1}, false);
+        auto Side2 = World->SpawnActor<ATestActiveSide>();
+        co_await Side2->Initialize(Battle, {Pokemon2}, false);
+        Battle->Initialize({Side1, Side2});
 
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
-    Action.Execute();
+        auto Battler1 = Side1->GetBattlers()[0];
+        auto Battler2 = Side2->GetBattlers()[0];
 
-    UE_CHECK_EQUAL(-1.f, Battler1->GetAbilityComponent()->GetStatStages()->GetDefenseStages());
-    UE_CHECK_EQUAL(-1.f, Battler1->GetAbilityComponent()->GetStatStages()->GetSpecialDefenseStages());
+        FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
+        co_await Action.Execute();
 
-    return true;
-}
+        UE_CHECK_EQUAL(-2.f, Battler2->GetAbilityComponent()->GetStatStages()->GetSpecialDefenseStages());
+    });
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestStatChangingMoves_LowerTargetStats,
-                                 "Unit Tests.Battle.Moves.TestStatChangingMoves.LowerTargetStats.Success",
-                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+    CoroIt("LowerTargetStats.Failed", [this]() -> UE5Coro::TCoroutine<> {
+        auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+        auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+            World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
+                                     .Level = 100,
+                                     .IVs = {{"SPECIAL_ATTACK", 31}},
+                                     .EVs = {{"SPECIAL_ATTACK", 252}},
+                                     .Nature = FName("MODEST"),
+                                     .Moves = {{.Move = TEXT("METALSOUND")}}});
+        auto Pokemon2 =
+            UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
+                                                                                     .Level = 100,
+                                                                                     .IVs = {{"SPECIAL_DEFENSE", 31}},
+                                                                                     .EVs = {{"SPECIAL_DEFENSE", 152}},
+                                                                                     .Nature = FName("CAREFUL")});
 
-bool TestStatChangingMoves_LowerTargetStats::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
-                                 .Level = 100,
-                                 .IVs = {{"SPECIAL_ATTACK", 31}},
-                                 .EVs = {{"SPECIAL_ATTACK", 252}},
-                                 .Nature = FName("MODEST"),
-                                 .Moves = {{.Move = TEXT("METALSOUND")}}});
-    auto Pokemon2 =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
-                                                                                 .Level = 100,
-                                                                                 .IVs = {{"SPECIAL_DEFENSE", 31}},
-                                                                                 .EVs = {{"SPECIAL_DEFENSE", 152}},
-                                                                                 .Nature = FName("CAREFUL")});
+        FTemporarySeed Seed(45126);
 
-    FTemporarySeed Seed(45126);
+        auto Battle = World->SpawnActor<ATestPokemonBattle>();
+        auto Side1 = World->SpawnActor<ATestActiveSide>();
+        co_await Side1->Initialize(Battle, {Pokemon1}, false);
+        auto Side2 = World->SpawnActor<ATestActiveSide>();
+        co_await Side2->Initialize(Battle, {Pokemon2}, false);
+        Battle->Initialize({Side1, Side2});
 
-    auto Battle = World->SpawnActor<ATestPokemonBattle>();
-    auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, {Pokemon1}, false);
-    auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, {Pokemon2}, false);
-    Battle->Initialize({Side1, Side2});
+        auto Battler1 = Side1->GetBattlers()[0];
+        auto Battler2 = Side2->GetBattlers()[0];
+        Battler2->GetAbilityComponent()->SetNumericAttributeBase(
+            UStatStagesAttributeSet::GetSpecialDefenseStagesAttribute(), -6.f);
 
-    auto Battler1 = Side1->GetBattlers()[0];
-    auto Battler2 = Side2->GetBattlers()[0];
-
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
-    Action.Execute();
-
-    UE_CHECK_EQUAL(-2.f, Battler2->GetAbilityComponent()->GetStatStages()->GetSpecialDefenseStages());
-
-    return true;
-}
-
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestStatChangingMoves_LowerTargetStats_Failed,
-                                 "Unit Tests.Battle.Moves.TestStatChangingMoves.LowerTargetStats.Failed",
-                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
-
-bool TestStatChangingMoves_LowerTargetStats_Failed::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(), FPokemonDTO{.Species = TEXT("LUCARIO"),
-                                 .Level = 100,
-                                 .IVs = {{"SPECIAL_ATTACK", 31}},
-                                 .EVs = {{"SPECIAL_ATTACK", 252}},
-                                 .Nature = FName("MODEST"),
-                                 .Moves = {{.Move = TEXT("METALSOUND")}}});
-    auto Pokemon2 =
-        UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("SNORLAX"),
-                                                                                 .Level = 100,
-                                                                                 .IVs = {{"SPECIAL_DEFENSE", 31}},
-                                                                                 .EVs = {{"SPECIAL_DEFENSE", 152}},
-                                                                                 .Nature = FName("CAREFUL")});
-
-    FTemporarySeed Seed(45126);
-
-    auto Battle = World->SpawnActor<ATestPokemonBattle>();
-    auto Side1 = World->SpawnActor<ATestActiveSide>();
-    Side1->Initialize(Battle, {Pokemon1}, false);
-    auto Side2 = World->SpawnActor<ATestActiveSide>();
-    Side2->Initialize(Battle, {Pokemon2}, false);
-    Battle->Initialize({Side1, Side2});
-
-    auto Battler1 = Side1->GetBattlers()[0];
-    auto Battler2 = Side2->GetBattlers()[0];
-    Battler2->GetAbilityComponent()->SetNumericAttributeBase(
-        UStatStagesAttributeSet::GetSpecialDefenseStagesAttribute(), -6.f);
-
-    FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
-    AddExpectedMessage(TEXT("Metal Sound failed against all targets!"), ELogVerbosity::Display);
-    Action.Execute();
-
-    return true;
+        FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
+        AddExpectedMessage(TEXT("Metal Sound failed against all targets!"), ELogVerbosity::Display);
+        co_await Action.Execute();
+    });
 }
