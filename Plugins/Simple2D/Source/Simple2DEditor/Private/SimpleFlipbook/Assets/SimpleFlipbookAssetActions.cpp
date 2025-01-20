@@ -2,10 +2,8 @@
 
 
 #include "SimpleFlipbook/Assets/SimpleFlipbookAssetActions.h"
+#include "Paper2DEditorModule.h"
 #include "SimpleFlipbook/Assets/SimpleFlipbook.h"
-
-FSimpleFlipbookAssetActions::FSimpleFlipbookAssetActions(const FColor &Color, uint32 Categories) : Color(Color), Categories(Categories) {
-}
 
 FText FSimpleFlipbookAssetActions::GetName() const {
     return NSLOCTEXT("AssetTypeActions", "AssetTypeActions_SimpleFlipbook", "Simple Flipbook");
@@ -16,9 +14,9 @@ UClass * FSimpleFlipbookAssetActions::GetSupportedClass() const {
 }
 
 FColor FSimpleFlipbookAssetActions::GetTypeColor() const {
-    return Color;
+    return FColor(129, 196, 115);
 }
 
 uint32 FSimpleFlipbookAssetActions::GetCategories() {
-    return Categories;
+    return FModuleManager::GetModuleChecked<IPaper2DEditorModule>("Paper2DEditor").GetPaper2DAssetCategory();
 }
