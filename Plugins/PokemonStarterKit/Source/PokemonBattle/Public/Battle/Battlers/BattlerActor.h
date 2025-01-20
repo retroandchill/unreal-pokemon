@@ -160,7 +160,7 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
      * Spawn the underlying sprite actor into the world
      * @param ShouldShow Is this process being invoked on the initialization of this battler (i.e. a Wild Pokémon)
      */
-    UE5Coro::TCoroutine<> SpawnSpriteActor(bool ShouldShow = false);
+    virtual UE5Coro::TCoroutine<> SpawnSpriteActor(bool ShouldShow = false);
 
     /**
      * The ability component for the battler

@@ -238,6 +238,9 @@ bool ABattlerActor::IsNotFainted() const {
 }
 
 void ABattlerActor::Faint() const {
+    if (Sprite == nullptr) {
+        return;
+    }
     IBattlerSprite::Execute_Faint(Sprite);
 }
 
@@ -372,13 +375,19 @@ Retro::TGenerator<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
 }
 
 void ABattlerActor::ShowSprite(const FVector &Offset) const {
-    check(Sprite != nullptr)
+    if (Sprite == nullptr) {
+        return;
+    }
+    
     Sprite->SetActorLocation(Sprite->GetActorLocation() + Offset);
     Sprite->SetActorHiddenInGame(false);
 }
 
 void ABattlerActor::HideSprite() const {
-    check(Sprite != nullptr)
+    if (Sprite == nullptr) {
+        return;
+    }
+    
     Sprite->SetActorHiddenInGame(true);
 }
 

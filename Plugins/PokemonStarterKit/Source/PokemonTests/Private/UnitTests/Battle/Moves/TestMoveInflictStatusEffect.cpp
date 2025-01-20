@@ -40,7 +40,7 @@ void FTestMoveInflictStatusEffect::Define() {
         auto Side1 = World->SpawnActor<ATestActiveSide>();
         co_await Side1->Initialize(Battle, {Pokemon1}, false);
         auto Side2 = World->SpawnActor<ATestActiveSide>();
-        co_await Side1->Initialize(Battle, {Pokemon2}, false);
+        co_await Side2->Initialize(Battle, {Pokemon2}, false);
         Battle->Initialize({Side1, Side2});
 
         auto Battler1 = Side1->GetBattlers()[0];
@@ -78,7 +78,7 @@ void FTestMoveInflictStatusEffect::Define() {
         auto Side1 = World->SpawnActor<ATestActiveSide>();
         co_await Side1->Initialize(Battle, {Pokemon1}, false);
         auto Side2 = World->SpawnActor<ATestActiveSide>();
-        co_await Side1->Initialize(Battle, {Pokemon2}, false);
+        co_await Side2->Initialize(Battle, {Pokemon2}, false);
         Battle->Initialize({Side1, Side2});
 
         auto Battler1 = Side1->GetBattlers()[0];
@@ -118,7 +118,7 @@ void FTestMoveInflictStatusEffect::Define() {
         auto Side1 = World->SpawnActor<ATestActiveSide>();
         co_await Side1->Initialize(Battle, {Pokemon1}, false);
         auto Side2 = World->SpawnActor<ATestActiveSide>();
-        co_await Side1->Initialize(Battle, {Pokemon2}, false);
+        co_await Side2->Initialize(Battle, {Pokemon2}, false);
         Battle->Initialize({Side1, Side2});
 
         auto Battler1 = Side1->GetBattlers()[0];
@@ -163,7 +163,7 @@ void FTestMoveInflictStatusEffect::Define() {
         auto Side1 = World->SpawnActor<ATestActiveSide>();
         co_await Side1->Initialize(Battle, {Pokemon1}, false);
         auto Side2 = World->SpawnActor<ATestActiveSide>();
-        co_await Side1->Initialize(Battle, {Pokemon2}, false);
+        co_await Side2->Initialize(Battle, {Pokemon2}, false);
         Battle->Initialize({Side1, Side2});
 
         auto Battler1 = Side1->GetBattlers()[0];
