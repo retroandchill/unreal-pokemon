@@ -14,4 +14,5 @@ class POKEMONTESTS_API ATestBattlerActor : public ABattlerActor {
   public:
     ATestBattlerActor();
     void PostActorCreated() override;
+    UE5Coro::TCoroutine<> SpawnSpriteActor(bool ShouldShow) override;
 };

@@ -10,38 +10,50 @@
 
 #include "ImageAsset.generated.h"
 
-#if CPP
-RETRO_DECLARE_VARIANT_OBJECT_STRUCT(ImageAsset, UTexture2D, UTexture2DDynamic, UMaterialInterface,
-                                    ISlateTextureAtlasInterface, UPaperFlipbook);
-#else
+struct FSoftImageAsset;
+
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
-struct FImageAsset {
-    // clang-format off
-    UPROPERTY(EditAnywhere,
-              meta = (AllowedClasses =
-                          "/Script/Engine.Texture2D,/Script/Engine.Texture2DDynamic,/Script/Engine.MaterialInterface,/Script/Engine.SlateTextureAtlasInterface,/Script/Paper2D.PaperFlipbook",
-                      DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
-    // clang-format on
+struct FImageAsset
+#if CPP
+    : Retro::TVariantObject<UTexture2D, UTexture2DDynamic, UMaterialInterface,
+                                    ISlateTextureAtlasInterface, UPaperFlipbook> {
+#else
+    {
+#endif
+    RETRO_VARIANT_OBJECT_STRUCT_BODY(FImageAsset, FSoftImageAsset)
+
+#if !CPP
+    private:
+    UPROPERTY(EditAnywhere)
     TObjectPtr<UObject> ContainedObject;
 
     UPROPERTY()
     uint64 TypeIndex;
+#endif
 };
 
+RETRO_DECLARE_VARIANT_OBJECT_STRUCT(FImageAsset);
+
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
-struct FSoftImageAsset {
-    // clang-format off
-    UPROPERTY(EditAnywhere,
-              meta = (AllowedClasses =
-                          "/Script/Engine.Texture2D,/Script/Engine.Texture2DDynamic,/Script/Engine.MaterialInterface,/Script/Engine.SlateTextureAtlasInterface,/Script/Paper2D.PaperFlipbook",
-                      DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
-    // clang-format on
+struct FSoftImageAsset
+#if CPP
+    : Retro::TSoftVariantObject<FImageAsset> {
+#else
+{
+#endif
+    RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY(FSoftImageAsset)
+
+#if !CPP
+private:
+    UPROPERTY(EditAnywhere)
     TSoftObjectPtr<UObject> Ptr;
 
     UPROPERTY()
     uint64 TypeIndex;
-};
 #endif
+};
+
+RETRO_DECLARE_SOFT_VARIANT_OBJECT_STRUCT(FSoftImageAsset);
 
 template <>
 struct RPGMENUS_API TBaseStructure<FImageAsset> {

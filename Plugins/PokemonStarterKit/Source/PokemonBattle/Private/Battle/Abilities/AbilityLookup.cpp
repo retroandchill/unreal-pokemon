@@ -4,6 +4,8 @@
 #include "Abilities/GameplayAbility.h"
 #include "Battle/BlueprintClasses.h"
 
-TOptional<TNonNullSubclassOf<UGameplayAbility>> Pokemon::Battle::Abilities::CreateAbilityEffect(FName ID) {
-    return Classes::AbilityEffects.LoadClass(ID);
+namespace Pokemon::Battle::Abilities {
+    TOptional<TNonNullSubclassOf<UGameplayAbility>> CreateAbilityEffect(FName ID) {
+        return Classes::AbilityEffects.LoadClass(ID);
+    }
 }

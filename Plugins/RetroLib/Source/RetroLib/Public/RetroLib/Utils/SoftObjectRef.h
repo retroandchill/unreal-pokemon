@@ -185,26 +185,26 @@ namespace Retro::Optionals {
         template <template <typename...> typename O, typename U>
             requires std::derived_from<U, T> && OptionalType<O<TSoftObjectRef<U>>>
         static constexpr auto OfNullable(const TSoftObjectPtr<U> &Ptr) {
-            return Ptr.IsNull() ? O<ReferenceType>(ReferenceType(Ptr)) : O<ReferenceType>();
+            return !Ptr.IsNull() ? O<ReferenceType>(ReferenceType(Ptr)) : O<ReferenceType>();
         }
 
         template <template <typename...> typename O, typename U>
             requires std::derived_from<U, T> && OptionalType<O<TSoftObjectRef<U>>>
         static constexpr auto OfNullable(TSoftObjectPtr<U> &&Ptr) {
-            return Ptr.IsNull() ? O<ReferenceType>(ReferenceType(std::move(Ptr))) : O<ReferenceType>();
+            return !Ptr.IsNull() ? O<ReferenceType>(ReferenceType(std::move(Ptr))) : O<ReferenceType>();
         }
 
         template <template <typename...> typename O, typename U, typename E, typename... A>
             requires std::derived_from<U, T> && OptionalType<O<TSoftObjectRef<U>, E>>
         static constexpr auto OfNullable(const TSoftObjectPtr<U> &Ptr, A &&...Args) {
-            return Ptr.IsNull() ? O<ReferenceType, E>(ReferenceType(Ptr))
+            return !Ptr.IsNull() ? O<ReferenceType, E>(ReferenceType(Ptr))
                                 : CreateEmptyExpected<O, ReferenceType, E>(std::forward<A>(Args)...);
         }
 
         template <template <typename...> typename O, typename U, typename E, typename... A>
             requires std::derived_from<U, T> && OptionalType<O<TSoftObjectRef<U>, E>>
         static constexpr auto OfNullable(TSoftObjectPtr<U> &&Ptr, A &&...Args) {
-            return Ptr.IsNull() ? O<ReferenceType, E>(ReferenceType(std::move(Ptr)))
+            return !Ptr.IsNull() ? O<ReferenceType, E>(ReferenceType(std::move(Ptr)))
                                 : CreateEmptyExpected<O, ReferenceType, E>(std::forward<A>(Args)...);
         }
     };

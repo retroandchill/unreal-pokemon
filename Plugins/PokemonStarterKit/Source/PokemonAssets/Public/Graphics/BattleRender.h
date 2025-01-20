@@ -13,7 +13,7 @@
 
 #include "BattleRender.generated.h"
 
-#if CPP
+
 #define BATTLE_RENDER_BASE_TYPES USkeletalMesh, UStaticMesh, UPaperSprite, UPaperFlipbook
 #if WITH_PAPERZD
 #define BATTLE_RENDER_TYPES BATTLE_RENDER_BASE_TYPES, UPaperZDAnimSequence
@@ -21,34 +21,51 @@
 #define BATTLE_RENDER_TYPES BATTLE_RENDER_BASE_TYPES
 #endif
 
-RETRO_DECLARE_VARIANT_OBJECT_STRUCT(BattleRender, BATTLE_RENDER_TYPES);
-#else
+struct FSoftBattleRender;
+
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
-struct FBattleRender {
-    // clang-format off
-    UPROPERTY(EditAnywhere,
-              meta = (AllowedClasses =
-                          "/Script/Engine.SkeletalMesh,/Script/Engine.StaticMesh,/Script/Paper2D.PaperSprite,/Script/Paper2D.PaperFlipbook,/Script/PaperZD.PaperZDAnimSequence"))
-    // clang-format on
+struct FBattleRender
+#if CPP
+    : Retro::TVariantObject<BATTLE_RENDER_TYPES> {
+#else
+    {
+#endif
+    RETRO_VARIANT_OBJECT_STRUCT_BODY(FBattleRender, FSoftBattleRender)
+    
+#if !CPP
+private:
+    UPROPERTY(EditAnywhere)
     TObjectPtr<UObject> ContainedObject;
 
     UPROPERTY()
     uint64 TypeIndex;
+#endif
+    
 };
 
+RETRO_DECLARE_VARIANT_OBJECT_STRUCT(FBattleRender);
+
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
-struct FSoftBattleRender {
-    // clang-format off
-    UPROPERTY(EditAnywhere,
-              meta = (AllowedClasses =
-                          "/Script/Engine.SkeletalMesh,/Script/Engine.StaticMesh,/Script/Paper2D.PaperSprite,/Script/Paper2D.PaperFlipbook,/Script/PaperZD.PaperZDAnimSequence"))
-    // clang-format on
+struct FSoftBattleRender
+#if CPP
+    : Retro::TSoftVariantObject<FBattleRender> {
+#else
+    {
+#endif
+    RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY(FSoftBattleRender)
+    
+#if !CPP
+private:
+    UPROPERTY(EditAnywhere)
     TSoftObjectPtr<UObject> Ptr;
 
     UPROPERTY()
     uint64 TypeIndex;
-};
 #endif
+    
+};
+
+RETRO_DECLARE_SOFT_VARIANT_OBJECT_STRUCT(FSoftBattleRender);
 
 template <>
 struct POKEMONASSETS_API TBaseStructure<FBattleRender> {

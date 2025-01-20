@@ -103,11 +103,12 @@ class POKEMONBATTLE_API IBattler {
      * @param Side The side that owns this battler
      * @param Pokemon The Pokémon this wraps around
      * @param ShowImmediately Whether or not this battler should be visible immediately upon being spawned
+     * @param 
      * @return
      */
-    virtual TScriptInterface<IBattler> Initialize(const TScriptInterface<IBattleSide> &Side,
-                                                  const TScriptInterface<IPokemon> &Pokemon = nullptr,
-                                                  bool ShowImmediately = false) = 0;
+    virtual UE5Coro::TCoroutine<TScriptInterface<IBattler>> Initialize(TScriptInterface<IBattleSide> Side,
+                                                                       TScriptInterface<IPokemon> Pokemon = nullptr,
+                                                                       bool ShowImmediately = false, FForceLatentCoroutine = {}) = 0;
 
     /**
      * Get the internal ID for this battler

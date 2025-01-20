@@ -7,6 +7,7 @@ public class DynamicAssetLoaderEditor : ModuleRules {
         PublicDependencyModuleNames.AddRange(new string[] { "Core" });
 
         PrivateDependencyModuleNames.AddRange(
-            new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "DynamicAssetLoader", "RetroLibEditor" });
+            new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "DynamicAssetLoader", "RetroLibEditor", 
+                "EditorWidgets", "UnrealEd", "PropertyEditor" });
     }
 }

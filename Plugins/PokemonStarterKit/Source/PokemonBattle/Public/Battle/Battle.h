@@ -82,9 +82,10 @@ class POKEMONBATTLE_API IBattle {
     /**
      * Initialize a new battle with the given battle information
      * @param BattleInfo ThFSideWithIndexCallbacke information about the battle to use when initializing the battle
+     * @param 
      * @return A reference to this object
      */
-    virtual TScriptInterface<IBattle> Initialize(const FBattleInfo &BattleInfo) = 0;
+    virtual UE5Coro::TCoroutine<TScriptInterface<IBattle>> Initialize(FBattleInfo BattleInfo, FForceLatentCoroutine = {}) = 0;
 
     UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Battle|State")
     bool IsTrainerBattle() const;

@@ -42,35 +42,34 @@
 #endif
 
 #ifdef __UNREAL__
+
+#define RETRO_VARIANT_OBJECT_STRUCT_BODY(ClassName, SoftPtr) \
+    using SoftPtrType = SoftPtr; \
+    using Base = TVariantObject; \
+    ClassName() = default; \
+    using Base::Base; \
+    void Reset() { \
+        SetUnchecked(nullptr); \
+    }
+
+#define RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY(ClassName) \
+    using Base = TSoftVariantObject; \
+    ClassName() = default; \
+    using Base::Base;
+    
+
 /**
  * Declare a new variant object struct with the given name
  * @param StructName The name of the struct in question
  * @param ... The types that are registered to the struct type
  */
-#define RETRO_DECLARE_VARIANT_OBJECT_STRUCT(StructName, ...)                                                           \
-    struct FSoft##StructName;                                                                                          \
-    struct F##StructName : Retro::TVariantObject<__VA_ARGS__> {                                                        \
-        using SoftPtrType = FSoft##StructName;                                                                         \
-        F##StructName() = default;                                                                                     \
-        template <typename... T>                                                                                       \
-            requires std::constructible_from<TVariantObject, T...>                                                     \
-        explicit F##StructName(T &&...Args) : TVariantObject(std::forward<T>(Args)...) {                               \
-        }                                                                                                              \
-        void Reset() {                                                                                                 \
-            SetUnchecked(nullptr);                                                                                     \
-        }                                                                                                              \
-    };                                                                                                                 \
+#define RETRO_DECLARE_VARIANT_OBJECT_STRUCT(StructName) \
     template <>                                                                                                        \
-    struct Retro::TIsVariantObject<F##StructName> : std::true_type {};                                                 \
-    struct FSoft##StructName : Retro::TSoftVariantObject<F##StructName> {                                              \
-        FSoft##StructName() = default;                                                                                 \
-        template <typename... T>                                                                                       \
-            requires std::constructible_from<TSoftVariantObject, T...>                                                 \
-        explicit FSoft##StructName(T &&...Args) : TSoftVariantObject(std::forward<T>(Args)...) {                       \
-        }                                                                                                              \
-    };                                                                                                                 \
+    struct Retro::TIsVariantObject<StructName> : std::true_type {}
+
+#define RETRO_DECLARE_SOFT_VARIANT_OBJECT_STRUCT(StructName)                                                           \
     template <>                                                                                                        \
-    struct Retro::TIsSoftVariantObject<FSoft##StructName> : std::true_type {}
+    struct Retro::TIsSoftVariantObject<StructName> : std::true_type {}
 
 /**
  * Perform the static registration of the struct type. This is required to allow a variant struct to be accessible to

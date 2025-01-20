@@ -3,12 +3,25 @@
 #include "Graphics/SpriteLoader.h"
 #include "Graphics/GraphicsAssetClasses.h"
 #include "Pokemon/Pokemon.h"
+#include "RetroLib/Optionals/IfPresent.h"
+#include "RetroLib/Utils/Construct.h"
 #include "Species/SpeciesData.h"
 #include "Trainers/TrainerType.h"
 
 FBattleRender USpriteLoader::GetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon, bool bBack) {
     return GetSpeciesBattleSprite(Pokemon->GetSpecies().ID, bBack,
                                   {.Gender = Pokemon->GetGender(), .bShiny = Pokemon->IsShiny()});
+}
+
+FVoidCoroutine USpriteLoader::AsyncGetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon,
+    FBattleRender &OutRender, bool bBack, FLatentActionInfo) {
+    OutRender = co_await AsyncGetPokemonBattleSprite(Pokemon, bBack);
+}
+
+UE5Coro::TCoroutine<FBattleRender> USpriteLoader::AsyncGetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon,
+    bool bBack, FForceLatentCoroutine) {
+    co_return co_await GetLazyPokemonBattleSprite(Pokemon, bBack).LoadAsync() |
+        Retro::Optionals::OrElseGet(Retro::Construct<FBattleRender>);
 }
 
 FBattleRender USpriteLoader::GetSpeciesBattleSprite(FName Species, bool bBack,

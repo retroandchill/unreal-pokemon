@@ -60,7 +60,7 @@ void UEnhancedImage::SetBrushFromAtlasInterface(TScriptInterface<ISlateTextureAt
 }
 
 void UEnhancedImage::SetBrushFromPaperFlipbook(UPaperFlipbook *Flipbook, bool bMatchSize) {
-    Super::SetBrushFromAtlasInterface(Flipbook->GetSpriteAtFrame(0), bMatchSize);
+    Super::SetBrushFromAtlasInterface(Flipbook != nullptr ? Flipbook->GetSpriteAtFrame(0) : nullptr, bMatchSize);
     SourceImage.Set(Flipbook);
     bManualSize = !bMatchSize;
     if (FlipbookWidget != nullptr) {

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "RetroLib/Ranges/Views/AnyView.h"
 #include "RetroLib/Ranges/Views/Generator.h"
+#include "UE5Coro.h"
 #include "UObject/Interface.h"
 
 #include "BattleSide.generated.h"
@@ -36,11 +37,12 @@ class POKEMONBATTLE_API IBattleSide {
      * @param Battle The battle to take ownership of this side
      * @param Pokemon The Pokémon to battle against
      * @param ShowBackSprites
+     * @param 
      * @return This side post-initialization
      */
-    virtual TScriptInterface<IBattleSide> Initialize(const TScriptInterface<IBattle> &Battle,
-                                                     const TArray<TScriptInterface<IPokemon>> &Pokemon,
-                                                     bool ShowBackSprites = false) = 0;
+    virtual UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> Initialize(TScriptInterface<IBattle> Battle,
+                                                                          TArray<TScriptInterface<IPokemon>> Pokemon,
+                                                                          bool ShowBackSprites = false, FForceLatentCoroutine = {}) = 0;
 
     /**
      * Create a side containing a single-wild Pokémon
@@ -48,11 +50,13 @@ class POKEMONBATTLE_API IBattleSide {
      * @param Trainer The trainer to battle against
      * @param PokemonCount
      * @param ShowBackSprites
+     * @param 
      * @return This side post-initialization
      */
-    virtual TScriptInterface<IBattleSide> Initialize(const TScriptInterface<IBattle> &Battle,
-                                                     const TScriptInterface<ITrainer> &Trainer, uint8 PokemonCount = 1,
-                                                     bool ShowBackSprites = false) = 0;
+    virtual UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> Initialize(TScriptInterface<IBattle> Battle,
+                                                                          TScriptInterface<ITrainer> Trainer,
+                                                                          uint8 PokemonCount = 1,
+                                                                          bool ShowBackSprites = false, FForceLatentCoroutine = {}) = 0;
 
     virtual const FGuid &GetInternalId() const = 0;
 

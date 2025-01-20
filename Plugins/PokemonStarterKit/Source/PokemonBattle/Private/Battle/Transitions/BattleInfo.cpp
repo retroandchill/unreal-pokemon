@@ -4,9 +4,9 @@
 #include "Battle/BattleSide.h"
 #include "Managers/PokemonSubsystem.h"
 
-TScriptInterface<IBattleSide> FBattleInfo::CreatePlayerSide(const TScriptInterface<IBattle> &Battle,
-                                                            const TSubclassOf<AActor> &SideClass,
-                                                            const FTransform &Transform) const {
+UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> FBattleInfo::CreatePlayerSide(TScriptInterface<IBattle> Battle,
+    TSubclassOf<AActor> SideClass,
+    const FTransform &Transform, FForceLatentCoroutine) const {
     auto World = Battle.GetObject()->GetWorld();
     check(World != nullptr)
 

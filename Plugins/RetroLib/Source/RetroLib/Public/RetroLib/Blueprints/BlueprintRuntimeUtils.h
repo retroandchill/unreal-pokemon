@@ -5,6 +5,10 @@
 #ifdef __UNREAL__
 #include "RetroLib/Exceptions/InvalidArgumentException.h"
 
+#if !RETROLIB_WITH_MODULES
+#include <bit>
+#endif
+
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
 #endif
@@ -50,6 +54,41 @@ namespace Retro {
      * @throws FVariantException If the struct type is not a valid variant
      */
     RETROLIB_API IVariantRegistration &GetVariantRegistration(const FStructProperty &Property);
+
+    template <typename T>
+    void InvokeFunctionIsolated(UFunction *GetOptionsFunction, T&& Params) {
+        auto GetOptionsCDO = GetOptionsFunction->GetOuterUClass()->GetDefaultObject();
+
+        auto VirtualStackAllocator = FBlueprintContext::GetThreadSingleton()->GetVirtualStackAllocator();
+        UE_VSTACK_MAKE_FRAME(ProcessEventBookmark, VirtualStackAllocator);
+        auto Frame = std::bit_cast<uint8 *>(UE_VSTACK_ALLOC_ALIGNED(VirtualStackAllocator,
+                                                                    GetOptionsFunction->PropertiesSize,
+                                                                    GetOptionsFunction->GetMinAlignment()));
+        // zero the local property memory
+        if (auto NonParamsPropertiesSize = GetOptionsFunction->PropertiesSize - GetOptionsFunction->ParmsSize;
+            NonParamsPropertiesSize > 0) {
+            FMemory::Memzero(Frame + GetOptionsFunction->ParmsSize, NonParamsPropertiesSize);
+            }
+
+        // initialize the parameter properties
+        if (GetOptionsFunction->ParmsSize > 0) {
+            FMemory::Memcpy(Frame, &Params, GetOptionsFunction->ParmsSize);
+        }
+
+        // Create a new local execution stack.
+        FFrame NewStack(GetOptionsCDO, GetOptionsFunction, Frame, nullptr, GetOptionsFunction->ChildProperties);
+
+        checkSlow(NewStack.Locals || Function->ParmsSize == 0);
+
+        for (auto LocalProp = GetOptionsFunction->FirstPropertyToInit; LocalProp != nullptr; LocalProp = LocalProp->PostConstructLinkNext) {
+            LocalProp->InitializeValue_InContainer(NewStack.Locals);
+        }
+
+        // Call native function or UObject::ProcessInternal.
+        const bool bHasReturnParam = GetOptionsFunction->ReturnValueOffset != MAX_uint16;
+        uint8 *ReturnValueAddress = bHasReturnParam ? std::bit_cast<uint8 *>(std::addressof(std::forward<T>(Params))) + GetOptionsFunction->ReturnValueOffset : nullptr;
+        GetOptionsFunction->Invoke(GetOptionsCDO, NewStack, ReturnValueAddress);
+    }
 
 } // namespace Retro
 #endif

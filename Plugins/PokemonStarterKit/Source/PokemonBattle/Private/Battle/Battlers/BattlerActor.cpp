@@ -59,8 +59,9 @@ ABattlerActor::ABattlerActor() {
     InnateAbilities.Add(UInnate_DamageSwing::StaticClass());
 }
 
-TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBattleSide> &Side,
-                                                     const TScriptInterface<IPokemon> &Pokemon, bool ShowImmediately) {
+UE5Coro::TCoroutine<TScriptInterface<IBattler>> ABattlerActor::Initialize(TScriptInterface<IBattleSide> Side,
+                                                                          TScriptInterface<IPokemon> Pokemon,
+                                                                          bool ShowImmediately, FForceLatentCoroutine) {
     OwningSide = Side;
     WrappedPokemon = Pokemon;
     InternalId = FGuid::NewGuid();
@@ -99,7 +100,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
             Retro::Ranges::Views::Transform(Retro::BindBack<&CreateBattleMove>(this)) |
             Retro::Ranges::To<TArray>();
     // clang-format on
-    SpawnSpriteActor(ShowImmediately);
+    co_await SpawnSpriteActor(ShowImmediately);
 
     auto &Battle = OwningSide->GetOwningBattle();
     if (OwningSide->ShowBackSprites()) {
@@ -139,7 +140,7 @@ TScriptInterface<IBattler> ABattlerActor::Initialize(const TScriptInterface<IBat
     SwitchActionHandle =
         BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(USwitchAction::StaticClass(), 1, INDEX_NONE, this));
 
-    return this;
+    co_return this;
 }
 
 void ABattlerActor::BeginPlay() {
@@ -237,6 +238,9 @@ bool ABattlerActor::IsNotFainted() const {
 }
 
 void ABattlerActor::Faint() const {
+    if (Sprite == nullptr) {
+        return;
+    }
     IBattlerSprite::Execute_Faint(Sprite);
 }
 
@@ -371,13 +375,19 @@ Retro::TGenerator<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
 }
 
 void ABattlerActor::ShowSprite(const FVector &Offset) const {
-    check(Sprite != nullptr)
+    if (Sprite == nullptr) {
+        return;
+    }
+    
     Sprite->SetActorLocation(Sprite->GetActorLocation() + Offset);
     Sprite->SetActorHiddenInGame(false);
 }
 
 void ABattlerActor::HideSprite() const {
-    check(Sprite != nullptr)
+    if (Sprite == nullptr) {
+        return;
+    }
+    
     Sprite->SetActorHiddenInGame(true);
 }
 
@@ -423,11 +433,10 @@ void ABattlerActor::UpdateHPValue(const FOnAttributeChangeData &Data) const {
     WrappedPokemon->SetCurrentHP(FMath::FloorToInt32(Data.NewValue));
 }
 
-void ABattlerActor::SpawnSpriteActor(bool ShouldShow) {
-    Sprite = GetWorld()->SpawnActor<AActor>(BattlerSpriteClass.LoadSynchronous(), GetSpriteTransform());
+UE5Coro::TCoroutine<> ABattlerActor::SpawnSpriteActor(bool ShouldShow) {
+    Sprite = GetWorld()->SpawnActor<AActor>(co_await UE5Coro::Latent::AsyncLoadClass(BattlerSpriteClass), GetSpriteTransform());
     Sprite->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
-
-    IBattlerSprite::Execute_SetBattleSprite(
-        Sprite, USpriteLoader::GetPokemonBattleSprite(WrappedPokemon, OwningSide->ShowBackSprites()));
+    
+    IBattlerSprite::Execute_SetBattleSprite(Sprite, co_await USpriteLoader::AsyncGetPokemonBattleSprite(WrappedPokemon, OwningSide->ShowBackSprites()));
     Sprite->SetActorHiddenInGame(!ShouldShow);
 }
