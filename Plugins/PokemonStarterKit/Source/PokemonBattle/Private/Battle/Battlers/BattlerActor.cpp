@@ -427,8 +427,7 @@ void ABattlerActor::UpdateHPValue(const FOnAttributeChangeData &Data) const {
 UE5Coro::TCoroutine<> ABattlerActor::SpawnSpriteActor(bool ShouldShow) {
     Sprite = GetWorld()->SpawnActor<AActor>(co_await UE5Coro::Latent::AsyncLoadClass(BattlerSpriteClass), GetSpriteTransform());
     Sprite->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
-
-    auto BattleSprite = co_await USpriteLoader::GetLazyPokemonBattleSprite(WrappedPokemon, OwningSide->ShowBackSprites()).LoadAsync();
-    IBattlerSprite::Execute_SetBattleSprite(Sprite, BattleSprite.Get(FBattleRender()));
+    
+    IBattlerSprite::Execute_SetBattleSprite(Sprite, co_await USpriteLoader::AsyncGetPokemonBattleSprite(WrappedPokemon, OwningSide->ShowBackSprites()));
     Sprite->SetActorHiddenInGame(!ShouldShow);
 }
