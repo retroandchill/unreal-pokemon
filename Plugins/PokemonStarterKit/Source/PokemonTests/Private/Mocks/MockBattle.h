@@ -17,7 +17,7 @@ class FMockBattle : public IBattle {
 
   public:
     MOCK_METHOD(TScriptInterface<IBattle>, Initialize, (TArray<TScriptInterface<IBattleSide>> && SidesIn), (override));
-    MOCK_METHOD(UE5Coro::TCoroutine<TScriptInterface<IBattle>>, Initialize, (FBattleInfo BattleInfo, FForceLatentCoroutine), (override));
+    MOCK_METHOD2(Initialize, UE5Coro::TCoroutine<TScriptInterface<IBattle>>(FBattleInfo BattleInfo, FForceLatentCoroutine));
     MOCK_METHOD2(ConductBattle,
                  UE5Coro::TCoroutine<EBattleResult>(APlayerController *Controller, FForceLatentCoroutine Coro));
     MOCK_METHOD(UE5Coro::TCoroutine<>, StartBattle, (), (override));
