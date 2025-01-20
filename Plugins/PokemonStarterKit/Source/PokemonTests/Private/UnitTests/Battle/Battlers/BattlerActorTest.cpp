@@ -15,57 +15,56 @@
 #include "Pokemon/Stats/StatBlock.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestBattlerActor.h"
+#include "TestAdapter.h"
 #include <thread>
 
 using namespace testing;
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(BattlerActorTest_Stats, "Unit Tests.Battle.Battlers.BattlerActorTest.Stats",
-                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+BEGIN_DEFINE_SPEC(FBattlerActorTest, "Unit Tests.Battle.Battlers.BattlerActorTest",
+                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
+    CORO_FUNCTIONS()
 
-bool BattlerActorTest_Stats::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+END_DEFINE_SPEC(FBattlerActorTest);
 
-    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
-    CREATE_MOCK(IBattleSide, Side, FMockBattleSide, MockSide);
-    ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
-    ON_CALL(MockSide, ShowBackSprites).WillByDefault(Return(true));
+void FBattlerActorTest::Define() {
+    CoroIt("Stats", [this]() -> UE5Coro::TCoroutine<> {
+        auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
-    auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(), FPokemonDTO{.Species = TEXT("MIMIKYU"), .Level = 50});
-    auto Battler = World->SpawnActor<ATestBattlerActor>();
-    Battler->DispatchBeginPlay(false);
-    Battler->Initialize(Side, Pokemon);
+        CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+        CREATE_MOCK(IBattleSide, Side, FMockBattleSide, MockSide);
+        ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
+        ON_CALL(MockSide, ShowBackSprites).WillByDefault(Return(true));
 
-    UE_CHECK_TRUE(Battler->GetOwningSide() == Side);
-    UE_CHECK_EQUAL(Pokemon->GetNickname().ToString(), Battler->GetNickname().ToString());
-    UE_CHECK_EQUAL(Pokemon->GetGender(), Battler->GetGender());
-    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetLevel(), Battler->GetPokemonLevel());
+        auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
+            World.Get(), FPokemonDTO{.Species = TEXT("MIMIKYU"), .Level = 50});
+        auto Battler = World->SpawnActor<ATestBattlerActor>();
+        Battler->DispatchBeginPlay(false);
+        co_await Battler->Initialize(Side, Pokemon);
 
-    auto CoreAttributes = Battler->GetAbilityComponent()->GetCoreAttributes();
-    UE_CHECK_EQUAL(Pokemon->GetCurrentHP(), static_cast<int32>(CoreAttributes->GetHP()));
-    UE_CHECK_EQUAL(Pokemon->GetMaxHP(), static_cast<int32>(CoreAttributes->GetMaxHP()));
-    UE_CHECK_EQUAL(1.f, Battler->GetHPPercent());
-    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat("ATTACK")->GetStatValue(),
-                   static_cast<int32>(CoreAttributes->GetAttack()));
-    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat("DEFENSE")->GetStatValue(),
-                   static_cast<int32>(CoreAttributes->GetDefense()));
-    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat("SPECIAL_ATTACK")->GetStatValue(),
-                   static_cast<int32>(CoreAttributes->GetSpecialAttack()));
-    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat("SPECIAL_DEFENSE")->GetStatValue(),
-                   static_cast<int32>(CoreAttributes->GetSpecialDefense()));
-    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetStat("SPEED")->GetStatValue(),
-                   static_cast<int32>(CoreAttributes->GetSpeed()));
-    UE_CHECK_FALSE(Battler->IsFainted());
-    UE_CHECK_EQUAL(Pokemon->GetStatBlock()->GetExpPercent(), Battler->GetExpPercent());
+        CHECK(Battler->GetOwningSide() == Side);
+        CHECK(Pokemon->GetNickname().ToString() == Battler->GetNickname().ToString());
+        CHECK(Pokemon->GetGender() == Battler->GetGender());
+        CHECK(Pokemon->GetStatBlock()->GetLevel() == Battler->GetPokemonLevel());
 
-    auto &PokemonTypes = Pokemon->GetTypes();
-    auto BattlerTypes = Battler->GetTypes();
-    UE_ASSERT_EQUAL(PokemonTypes.Num(), BattlerTypes.Num());
-    for (int32 i = 0; i < BattlerTypes.Num(); i++) {
-        UE_CHECK_EQUAL(PokemonTypes[i], BattlerTypes[i]);
-    }
+        auto CoreAttributes = Battler->GetAbilityComponent()->GetCoreAttributes();
+        CHECK(Pokemon->GetCurrentHP() == static_cast<int32>(CoreAttributes->GetHP()));
+        CHECK(Pokemon->GetMaxHP() == static_cast<int32>(CoreAttributes->GetMaxHP()));
+        CHECK_EQUALS("Battler HP", Battler->GetHPPercent(), 1.f);
+        CHECK(Pokemon->GetStatBlock()->GetStat("ATTACK")->GetStatValue() == static_cast<int32>(CoreAttributes->GetAttack()));
+        CHECK(Pokemon->GetStatBlock()->GetStat("DEFENSE")->GetStatValue() == static_cast<int32>(CoreAttributes->GetDefense()));
+        CHECK(Pokemon->GetStatBlock()->GetStat("SPECIAL_ATTACK")->GetStatValue() == static_cast<int32>(CoreAttributes->GetSpecialAttack()));
+        CHECK(Pokemon->GetStatBlock()->GetStat("SPECIAL_DEFENSE")->GetStatValue() == static_cast<int32>(CoreAttributes->GetSpecialDefense()));
+        CHECK(Pokemon->GetStatBlock()->GetStat("SPEED")->GetStatValue() == static_cast<int32>(CoreAttributes->GetSpeed()));
+        CHECK_FALSE(Battler->IsFainted());
+        CHECK("Exp Percent", Battler->GetExpPercent(), Pokemon->GetStatBlock()->GetExpPercent());
 
-    return true;
+        auto &PokemonTypes = Pokemon->GetTypes();
+        auto BattlerTypes = Battler->GetTypes();
+        CO_REQUIRE(PokemonTypes.Num() == BattlerTypes.Num());
+        for (int32 i = 0; i < BattlerTypes.Num(); i++) {
+            CHECK(PokemonTypes[i] == BattlerTypes[i]);
+        }
+    });
 }
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAiBattlerController, "Unit Tests.Battle.Battlers.TestAiBattlerController",
@@ -93,7 +92,7 @@ bool TestAiBattlerController::RunTest(const FString &Parameters) {
                                            {.Move = TEXT("SHADOWCLAW")}}});
     auto Battler = World->SpawnActor<ATestBattlerActor>();
     Battler->DispatchBeginPlay(false);
-    Battler->Initialize(Side, Pokemon);
+    Battler->Initialize(Side, Pokemon).Wait();
 
     Battler->SelectActions();
     auto BusyWait = AsyncThread([&SelectedAction] {

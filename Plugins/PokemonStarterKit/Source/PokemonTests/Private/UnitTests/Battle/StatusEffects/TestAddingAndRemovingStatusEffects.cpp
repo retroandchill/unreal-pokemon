@@ -32,7 +32,7 @@ bool TestAddingAndRemovingStatusEffects::RunTest(const FString &Parameters) {
     ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
 
     auto Battler = World->SpawnActor<ATestBattlerActor>();
-    Battler->Initialize(Side, Pokemon1);
+    Battler->Initialize(Side, Pokemon1).Wait();
 
     auto AbilityComponent = Battler->GetAbilityComponent();
     auto StatusEffect = LoadClass<UGameplayEffect>(

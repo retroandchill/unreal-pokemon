@@ -36,7 +36,7 @@ bool BattlerHPSyncTest::RunTest(const FString &Parameters) {
     ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
 
     auto Battler = World->SpawnActor<ATestBattlerActor>();
-    Battler->Initialize(Side, Pokemon);
+    Battler->Initialize(Side, Pokemon).Wait();
 
     auto AbilityComponent = Battler->GetAbilityComponent();
     AbilityComponent->SetNumericAttributeBase(UPokemonCoreAttributeSet::GetHPAttribute(), 200.f);

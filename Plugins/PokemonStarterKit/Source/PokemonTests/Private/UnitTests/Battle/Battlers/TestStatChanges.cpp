@@ -1,4 +1,5 @@
 ﻿#include "Asserts.h"
+#include "TestAdapter.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
@@ -18,12 +19,12 @@ using namespace testing;
 
 BEGIN_DEFINE_SPEC(FTestStatChanges, "Unit Tests.Battle.Battlers.TestStatChanges",
                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
-UE5Coro::TCoroutine<> TestProcedure(const FDoneDelegate &Delegate);
+CORO_FUNCTIONS()
 END_DEFINE_SPEC(FTestStatChanges)
 
 void FTestStatChanges::Define() {
     Describe("StatChanges", [this] {
-        It("Unaltered", [this] {
+        CoroIt("Unaltered", [this]() -> UE5Coro::TCoroutine<> {
             auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
             auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
                 World.Get(), FPokemonDTO{.Species = TEXT("MIMIKYU"),
@@ -42,7 +43,7 @@ void FTestStatChanges::Define() {
             ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
 
             auto Battler = World->SpawnActor<ATestBattlerActor>();
-            Battler->Initialize(Side, Pokemon1);
+            co_await Battler->Initialize(Side, Pokemon1);
 
             auto AbilityComponent = Battler->GetAbilityComponent();
             auto CoreAttributes = AbilityComponent->GetCoreAttributes();
@@ -57,7 +58,7 @@ void FTestStatChanges::Define() {
             UE_CHECK_EQUAL(436.f, CoreAttributes->GetSpeed());
         });
 
-        It("IgnoreTags", [this] {
+        CoroIt("IgnoreTags", [this]() -> UE5Coro::TCoroutine<> {
             auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
             auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
                 World.Get(), FPokemonDTO{.Species = TEXT("MIMIKYU"),
@@ -76,7 +77,7 @@ void FTestStatChanges::Define() {
             ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
 
             auto Battler = World->SpawnActor<ATestBattlerActor>();
-            Battler->Initialize(Side, Pokemon1);
+            co_await Battler->Initialize(Side, Pokemon1);
 
             auto AbilityComponent = Battler->GetAbilityComponent();
             auto CoreAttributes = AbilityComponent->GetCoreAttributes();
@@ -95,45 +96,41 @@ void FTestStatChanges::Define() {
             UE_CHECK_EQUAL(196.f, CoreAttributes->GetDefense());
         });
 
-        LatentIt("ApplyEffect", [this](const FDoneDelegate &Delegate) { TestProcedure(Delegate); });
+        CoroIt("ApplyEffect", [this]() -> UE5Coro::TCoroutine<> {
+            auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+            auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+                World.Get(), FPokemonDTO{.Species = TEXT("MIMIKYU"),
+                                         .Level = 100,
+                                         .IVs = {{"HP", 31},
+                                                 {"ATTACK", 31},
+                                                 {"DEFENSE", 31},
+                                                 {"SPECIAL_ATTACK", 31},
+                                                 {"SPECIAL_DEFENSE", 31},
+                                                 {"SPEED", 31}},
+                                         .EVs = {{"HP", 4}, {"ATTACK", 252}, {"SPEED", 252}},
+                                         .Nature = FName("ADAMANT")});
+
+            CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+            CREATE_MOCK(IBattleSide, Side, FMockBattleSide, MockSide);
+            ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
+
+            auto Battler = World->SpawnActor<ATestBattlerActor>();
+            Battler->Initialize(Side, Pokemon1).Wait();
+
+            auto AbilityComponent = Battler->GetAbilityComponent();
+            auto StatStagesComponent = AbilityComponent->GetStatStages();
+            UE_CHECK_EQUAL(2, co_await UStatChangeHelpers::ChangeBattlerStatStages(Battler, "ATTACK", 2));
+            UE_CHECK_EQUAL(2.f, StatStagesComponent->GetAttackStages());
+
+            AbilityComponent->SetNumericAttributeBase(UStatStagesAttributeSet::GetAttackStagesAttribute(), 5.f);
+            UE_CHECK_EQUAL(1, co_await UStatChangeHelpers::ChangeBattlerStatStages(Battler, "ATTACK", 2));
+            UE_CHECK_EQUAL(6.f, StatStagesComponent->GetAttackStages());
+
+            UE_CHECK_EQUAL(-7, co_await UStatChangeHelpers::ChangeBattlerStatStages(Battler, "ATTACK", -7));
+            UE_CHECK_EQUAL(-1.f, StatStagesComponent->GetAttackStages());
+            AbilityComponent->SetNumericAttributeBase(UStatStagesAttributeSet::GetAttackStagesAttribute(), -4.f);
+            UE_CHECK_EQUAL(-2, co_await UStatChangeHelpers::ChangeBattlerStatStages(Battler, "ATTACK", -3));
+            UE_CHECK_EQUAL(-6.f, StatStagesComponent->GetAttackStages());
+        });
     });
-}
-
-UE5Coro::TCoroutine<> FTestStatChanges::TestProcedure(const FDoneDelegate &Delegate) {
-    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-    auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(), FPokemonDTO{.Species = TEXT("MIMIKYU"),
-                                 .Level = 100,
-                                 .IVs = {{"HP", 31},
-                                         {"ATTACK", 31},
-                                         {"DEFENSE", 31},
-                                         {"SPECIAL_ATTACK", 31},
-                                         {"SPECIAL_DEFENSE", 31},
-                                         {"SPEED", 31}},
-                                 .EVs = {{"HP", 4}, {"ATTACK", 252}, {"SPEED", 252}},
-                                 .Nature = FName("ADAMANT")});
-
-    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
-    CREATE_MOCK(IBattleSide, Side, FMockBattleSide, MockSide);
-    ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
-
-    auto Battler = World->SpawnActor<ATestBattlerActor>();
-    Battler->Initialize(Side, Pokemon1);
-
-    auto AbilityComponent = Battler->GetAbilityComponent();
-    auto StatStagesComponent = AbilityComponent->GetStatStages();
-    UE_CHECK_EQUAL(2, co_await UStatChangeHelpers::ChangeBattlerStatStages(Battler, "ATTACK", 2));
-    UE_CHECK_EQUAL(2.f, StatStagesComponent->GetAttackStages());
-
-    AbilityComponent->SetNumericAttributeBase(UStatStagesAttributeSet::GetAttackStagesAttribute(), 5.f);
-    UE_CHECK_EQUAL(1, co_await UStatChangeHelpers::ChangeBattlerStatStages(Battler, "ATTACK", 2));
-    UE_CHECK_EQUAL(6.f, StatStagesComponent->GetAttackStages());
-
-    UE_CHECK_EQUAL(-7, co_await UStatChangeHelpers::ChangeBattlerStatStages(Battler, "ATTACK", -7));
-    UE_CHECK_EQUAL(-1.f, StatStagesComponent->GetAttackStages());
-    AbilityComponent->SetNumericAttributeBase(UStatStagesAttributeSet::GetAttackStagesAttribute(), -4.f);
-    UE_CHECK_EQUAL(-2, co_await UStatChangeHelpers::ChangeBattlerStatStages(Battler, "ATTACK", -3));
-    UE_CHECK_EQUAL(-6.f, StatStagesComponent->GetAttackStages());
-
-    Delegate.ExecuteIfBound();
 }
