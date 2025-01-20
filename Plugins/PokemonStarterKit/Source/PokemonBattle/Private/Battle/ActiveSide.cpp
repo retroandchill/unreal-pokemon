@@ -31,7 +31,7 @@ AActiveSide::AActiveSide() {
 
 UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScriptInterface<IBattle> Battle,
                                                                            TArray<TScriptInterface<IPokemon>> Pokemon,
-                                                                           bool ShowBackSprites) {
+                                                                           bool ShowBackSprites, FForceLatentCoroutine) {
     InternalId = FGuid::NewGuid();
     OwningBattle = Battle;
     SideSize = 1;
@@ -59,7 +59,7 @@ UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScri
 UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScriptInterface<IBattle> Battle,
                                                                            TScriptInterface<ITrainer> Trainer,
                                                                            uint8 PokemonCount,
-                                                                           bool ShowBackSprites) {
+                                                                           bool ShowBackSprites, FForceLatentCoroutine) {
     InternalId = FGuid::NewGuid();
     OwningBattle = Battle;
     SideSize = PokemonCount;

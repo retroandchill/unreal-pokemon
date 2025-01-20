@@ -33,7 +33,7 @@ TScriptInterface<IBattle> APokemonBattle::Initialize(TArray<TScriptInterface<IBa
     return this;
 }
 
-UE5Coro::TCoroutine<TScriptInterface<IBattle>> APokemonBattle::Initialize(const FBattleInfo &BattleInfo) {
+UE5Coro::TCoroutine<TScriptInterface<IBattle>> APokemonBattle::Initialize(FBattleInfo BattleInfo, FForceLatentCoroutine) {
     TScriptInterface<IBattle> Self = this;
     auto SideClass = co_await UE5Coro::Latent::AsyncLoadClass(BattleSideClass);
     Sides.Emplace(co_await BattleInfo.CreatePlayerSide(Self, SideClass, GetPlayerSidePosition()));

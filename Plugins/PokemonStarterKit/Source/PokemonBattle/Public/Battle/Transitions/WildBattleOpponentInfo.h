@@ -20,7 +20,7 @@ class POKEMONBATTLE_API FWildBattleOpponentInfo : public IBattleOpponentInfo {
 
     UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> CreateOpposingSide(TScriptInterface<IBattle> Battle,
                                                                           TSubclassOf<AActor> SideClass, const FTransform &Transform,
-                                                                          int32 ActivePokemonCount = 1) override;
+                                                                          int32 ActivePokemonCount = 1, FForceLatentCoroutine = {}) override;
 
   private:
     /**

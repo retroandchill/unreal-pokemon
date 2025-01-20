@@ -59,31 +59,13 @@ class POKEMONBATTLE_API UBattleTransitionSubsystem : public UWorldSubsystem {
      * @param
      */
     UE5Coro::TCoroutine<EBattleResult>
-    InitiateBattle(const FBattleInfo &Info, TSubclassOf<ABattleTransitionActor> Transition, FForceLatentCoroutine = {});
-
-    /**
-     * Bind an action to when the battle finished delegate
-     * @param Callback The callback to dispatch
-     * @return The handle for the bound delegate
-     */
-    FDelegateHandle BindToBattleFinished(FBattleFinished::FDelegate &&Callback);
-
-    /**
-     * Remove the given binding from the battle finished delegate
-     * @param Handle The handle to callback when battle is complete
-     */
-    void RemoveFromBattleFinished(const FDelegateHandle &Handle);
+    InitiateBattle(FBattleInfo Info, TSubclassOf<ABattleTransitionActor> Transition, FForceLatentCoroutine = {});
 
   private:
     /**
-     * Set up the jump into battle
-     */
-    UE5Coro::TCoroutine<> SetUpBattle();
-
-    /**
      * Exit the current battle and return to the field
      */
-    UE5Coro::TCoroutine<> ExitBattle(FForceLatentCoroutine = {});
+    UE5Coro::TCoroutine<> ExitBattle(ULevelStreamingDynamic* Battlefield, const TArray<FLevelStreamingVolumeState>& StreamingStates, FForceLatentCoroutine = {}) const;
 
     /**
      * The map to jump to for battle
@@ -95,28 +77,4 @@ class POKEMONBATTLE_API UBattleTransitionSubsystem : public UWorldSubsystem {
      * The registered battle object for this subsystem
      */
     TWeakInterfacePtr<IBattle> RegisteredBattle;
-
-    /**
-     * The streamed level for the battlefield
-     */
-    UPROPERTY()
-    TObjectPtr<ULevelStreamingDynamic> Battlefield;
-
-    UPROPERTY()
-    TObjectPtr<ABattleTransitionActor> CurrentTransition;
-
-    bool bBattleInitialized = false;
-
-    /**
-     * The information about the battle in question
-     */
-    TOptional<FBattleInfo> BattleInfo;
-
-    /**
-     * Delegate dispatched when a battle is complete and scripts should continue (i.e. this doesn't continue if the
-     * player loses and loss is not allowed).
-     */
-    FBattleFinished BattleFinished;
-
-    TArray<FLevelStreamingVolumeState> StreamingStates;
 };

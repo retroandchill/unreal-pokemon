@@ -14,7 +14,7 @@ FWildBattleOpponentInfo::FWildBattleOpponentInfo(const TSharedRef<FPokemonDTO> &
 UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> FWildBattleOpponentInfo::CreateOpposingSide(TScriptInterface<IBattle> Battle,
     TSubclassOf<AActor> SideClass,
     const FTransform &Transform,
-    int32 ActivePokemonCount) {
+    int32 ActivePokemonCount, FForceLatentCoroutine) {
     auto World = Battle.GetObject()->GetWorld();
     check(World != nullptr)
 

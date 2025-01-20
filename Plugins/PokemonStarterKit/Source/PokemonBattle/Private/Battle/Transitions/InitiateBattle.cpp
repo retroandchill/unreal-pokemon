@@ -16,7 +16,7 @@ UInitiateBattle *UInitiateBattle::InitiateBattle(const UObject *WorldContextObje
 UE5Coro::TCoroutine<> UInitiateBattle::ExecuteCoroutine(FForceLatentCoroutine) {
     auto Subsystem = GetWorldContext()->GetWorld()->GetSubsystem<UBattleTransitionSubsystem>();
     check(Subsystem != nullptr)
-    if (auto Result = co_await Subsystem->InitiateBattle(BattleInfo, Transition);
+    if (auto Result = co_await Subsystem->InitiateBattle(std::move(BattleInfo), Transition);
         Result != EBattleResult::Defeat || BattleInfo.bLossAllowed) {
         AfterBattle.Broadcast(Result);
     } else {

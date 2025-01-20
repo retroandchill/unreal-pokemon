@@ -61,7 +61,7 @@ ABattlerActor::ABattlerActor() {
 
 UE5Coro::TCoroutine<TScriptInterface<IBattler>> ABattlerActor::Initialize(TScriptInterface<IBattleSide> Side,
                                                                           TScriptInterface<IPokemon> Pokemon,
-                                                                          bool ShowImmediately) {
+                                                                          bool ShowImmediately, FForceLatentCoroutine) {
     OwningSide = Side;
     WrappedPokemon = Pokemon;
     InternalId = FGuid::NewGuid();

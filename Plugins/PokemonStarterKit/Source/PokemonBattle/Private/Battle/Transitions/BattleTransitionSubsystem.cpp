@@ -23,17 +23,17 @@ void UBattleTransitionSubsystem::SetRegisteredBattle(const TScriptInterface<IBat
 }
 
 UE5Coro::TCoroutine<EBattleResult>
-UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info, TSubclassOf<ABattleTransitionActor> Transition,
+UBattleTransitionSubsystem::InitiateBattle(FBattleInfo Info, TSubclassOf<ABattleTransitionActor> Transition,
                                            FForceLatentCoroutine) {
     auto PlayerController = GetWorld()->GetGameInstance()->GetPrimaryPlayerController(false);
     PlayerController->GetPawn()->DisableInput(PlayerController);
     static auto &BattleLevelOffset = GetDefault<UPokemonBattleSettings>()->BattleSceneOffset;
+    ABattleTransitionActor *CurrentTransition = nullptr;
     if (Transition != nullptr) {
-        bBattleInitialized = false;
         CurrentTransition = GetWorld()->SpawnActor<ABattleTransitionActor>(Transition);
     }
 
-    StreamingStates.Reset();
+    TArray<FLevelStreamingVolumeState> StreamingStates;
     TArray<AActor *> LevelStreamingVolumes;
     UGameplayStatics::GetAllActorsOfClass(this, ALevelStreamingVolume::StaticClass(), LevelStreamingVolumes);
     for (auto Actor : LevelStreamingVolumes) {
@@ -44,10 +44,9 @@ UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info, TSubclassOf<
     }
 
     bool bSuccess;
-    Battlefield = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, BattleMap, BattleLevelOffset,
+    ULevelStreamingDynamic* Battlefield = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, BattleMap, BattleLevelOffset,
                                                                            FRotator(), bSuccess);
     check(bSuccess)
-    BattleInfo.Emplace(Info);
     if (Battlefield->IsLevelVisible()) {
         co_await ABattleTransitionActor::Execute(CurrentTransition);
     } else {
@@ -55,49 +54,23 @@ UBattleTransitionSubsystem::InitiateBattle(const FBattleInfo &Info, TSubclassOf<
                          ABattleTransitionActor::Execute(CurrentTransition));
     }
 
-    if (RegisteredBattle.IsValid() && !bBattleInitialized) {
-        co_await RegisteredBattle->Initialize(BattleInfo.GetValue());
-        bBattleInitialized = true;
-    }
+    check(RegisteredBattle.IsValid())
+    co_await RegisteredBattle->Initialize(std::move(Info));
 
-    CurrentTransition = nullptr;
-    co_await SetUpBattle();
     auto Result =
         co_await RegisteredBattle->ConductBattle(GetWorld()->GetGameInstance()->GetPrimaryPlayerController(false));
-    co_await ExitBattle();
+    co_await ExitBattle(Battlefield, StreamingStates);
     co_return Result;
 }
 
-FDelegateHandle UBattleTransitionSubsystem::BindToBattleFinished(FBattleFinished::FDelegate &&Callback) {
-    return BattleFinished.Add(std::move(Callback));
-}
-
-void UBattleTransitionSubsystem::RemoveFromBattleFinished(const FDelegateHandle &Handle) {
-    BattleFinished.Remove(Handle);
-}
-
-UE5Coro::TCoroutine<> UBattleTransitionSubsystem::SetUpBattle() {
-    check(RegisteredBattle.IsValid())
-    check(BattleInfo.IsSet())
-
-    if (CurrentTransition == nullptr && !bBattleInitialized) {
-        co_await RegisteredBattle->Initialize(BattleInfo.GetValue());
-        bBattleInitialized = true;
-    }
-}
-
-UE5Coro::TCoroutine<> UBattleTransitionSubsystem::ExitBattle(FForceLatentCoroutine) {
+UE5Coro::TCoroutine<> UBattleTransitionSubsystem::ExitBattle(ULevelStreamingDynamic* Battlefield, const TArray<FLevelStreamingVolumeState>& StreamingStates, FForceLatentCoroutine) const {
     check(Battlefield != nullptr)
     FLatentActionInfo LatentActionInfo;
     UGameplayStatics::UnloadStreamLevelBySoftObjectPtr(this, Battlefield->GetWorldAsset(), LatentActionInfo, false);
-    check(BattleInfo.IsSet())
-    BattleInfo.Reset();
 
     for (const auto &[Volume, bDisabled] : StreamingStates) {
         Volume->bDisabled = bDisabled;
     }
-    StreamingStates.Reset();
-    bBattleInitialized = false;
 
     auto PlayerController = GetWorld()->GetGameInstance()->GetPrimaryPlayerController(false);
     PlayerController->GetPawn()->EnableInput(PlayerController);

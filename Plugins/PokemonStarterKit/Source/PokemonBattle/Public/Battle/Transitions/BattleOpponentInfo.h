@@ -24,12 +24,13 @@ class POKEMONBATTLE_API IBattleOpponentInfo {
      * @param SideClass The class for the side that is being spawned in
      * @param Transform The transform to spawn the side at
      * @param ActivePokemonCount The number of Pokémon to spawn
+     * @param 
      * @return The created side
      */
     virtual UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> CreateOpposingSide(TScriptInterface<IBattle> Battle,
         TSubclassOf<AActor> SideClass,
         const FTransform &Transform,
-        int32 ActivePokemonCount = 1) = 0;
+        int32 ActivePokemonCount = 1, FForceLatentCoroutine = {}) = 0;
 };
 
 /**
@@ -49,9 +50,9 @@ struct POKEMONBATTLE_API FBattleOpponentInfoHandle {
      * @return The created side
      */
     FORCEINLINE UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> CreateOpposingSide(TScriptInterface<IBattle> Battle,
-                                                                 TSubclassOf<AActor> SideClass,
-                                                                 const FTransform &Transform,
-                                                                 int32 ActivePokemonCount = 1) const {
+        TSubclassOf<AActor> SideClass,
+        const FTransform &Transform,
+        int32 ActivePokemonCount = 1, FForceLatentCoroutine = {}) const {
         return Data->CreateOpposingSide(Battle, SideClass, Transform, ActivePokemonCount);
     }
 };
