@@ -7,8 +7,8 @@
 /**
  * 
  */
-class SIMPLEFLIPBOOKEDITOR_API SimpleFlipbookAssetActions {
+class SIMPLE2DEDITOR_API FSimpleFlipbookAssetActions {
 public:
-    SimpleFlipbookAssetActions();
-    ~SimpleFlipbookAssetActions();
+    FSimpleFlipbookAssetActions();
+    ~FSimpleFlipbookAssetActions();
 };

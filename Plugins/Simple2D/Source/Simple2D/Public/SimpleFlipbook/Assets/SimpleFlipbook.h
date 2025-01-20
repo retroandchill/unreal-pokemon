@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class SIMPLEFLIPBOOK_API USimpleFlipbook : public UObject {
+class SIMPLE2D_API USimpleFlipbook : public UObject {
     GENERATED_BODY()
 
 public:

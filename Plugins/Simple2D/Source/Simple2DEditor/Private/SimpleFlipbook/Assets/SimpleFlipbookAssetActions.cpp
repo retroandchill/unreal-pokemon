@@ -4,8 +4,8 @@
 #include "SimpleFlipbook/Assets/SimpleFlipbookAssetActions.h"
 
 
-SimpleFlipbookAssetActions::SimpleFlipbookAssetActions() {
+FSimpleFlipbookAssetActions::FSimpleFlipbookAssetActions() {
 }
 
-SimpleFlipbookAssetActions::~SimpleFlipbookAssetActions() {
+FSimpleFlipbookAssetActions::~FSimpleFlipbookAssetActions() {
 }

@@ -20,7 +20,7 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "SimpleFlipbookEditor",
+			"Name": "Simple2DEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
 		}

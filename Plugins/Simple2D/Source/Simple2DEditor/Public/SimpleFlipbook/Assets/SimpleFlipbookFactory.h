@@ -12,7 +12,7 @@
  * 
  */
 UCLASS()
-class SIMPLEFLIPBOOKEDITOR_API USimpleFlipbookFactory : public UFactory {
+class SIMPLE2DEDITOR_API USimpleFlipbookFactory : public UFactory {
     GENERATED_BODY()
 
 public:

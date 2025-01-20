@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FSimpleFlipbookEditorModule : public IModuleInterface {
+class FSimple2DEditorModule : public IModuleInterface {
 public:
     void StartupModule() override;
     void ShutdownModule() override;

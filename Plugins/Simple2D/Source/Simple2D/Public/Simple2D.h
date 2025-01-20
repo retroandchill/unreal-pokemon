@@ -4,7 +4,7 @@
 
 #include "Modules/ModuleManager.h"
 
-class FSimpleFlipbookModule : public IModuleInterface
+class FSimple2DModule : public IModuleInterface
 {
 public:
 	void StartupModule() override;
