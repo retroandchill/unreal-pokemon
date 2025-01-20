@@ -2,7 +2,7 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
-	"FriendlyName": "SimpleFlipbook",
+	"FriendlyName": "Simple2D",
 	"Description": "",
 	"Category": "Other",
 	"CreatedBy": "",
@@ -15,7 +15,7 @@
 	"Installed": false,
 	"Modules": [
 		{
-			"Name": "SimpleFlipbook",
+			"Name": "Simple2D",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		},

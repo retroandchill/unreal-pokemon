@@ -1,15 +1,15 @@
 ﻿using UnrealBuildTool;
 
-public class SimpleFlipbookEditor : ModuleRules
+public class Simple2DEditor : ModuleRules
 {
-    public SimpleFlipbookEditor(ReadOnlyTargetRules Target) : base(Target)
+    public Simple2DEditor(ReadOnlyTargetRules Target) : base(Target)
     {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core",
+                "Core", "Simple2D",
             }
         );
 

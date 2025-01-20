@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class SimpleFlipbook : ModuleRules
+public class Simple2D : ModuleRules
 {
-	public SimpleFlipbook(ReadOnlyTargetRules Target) : base(Target)
+	public Simple2D(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
