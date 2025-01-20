@@ -115,7 +115,7 @@ void FTestStatChanges::Define() {
             ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
 
             auto Battler = World->SpawnActor<ATestBattlerActor>();
-            Battler->Initialize(Side, Pokemon1).Wait();
+            co_await Battler->Initialize(Side, Pokemon1);
 
             auto AbilityComponent = Battler->GetAbilityComponent();
             auto StatStagesComponent = AbilityComponent->GetStatStages();

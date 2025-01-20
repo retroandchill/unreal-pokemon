@@ -56,7 +56,7 @@ void FBattlerActorTest::Define() {
         CHECK(Pokemon->GetStatBlock()->GetStat("SPECIAL_DEFENSE")->GetStatValue() == static_cast<int32>(CoreAttributes->GetSpecialDefense()));
         CHECK(Pokemon->GetStatBlock()->GetStat("SPEED")->GetStatValue() == static_cast<int32>(CoreAttributes->GetSpeed()));
         CHECK_FALSE(Battler->IsFainted());
-        CHECK("Exp Percent", Battler->GetExpPercent(), Pokemon->GetStatBlock()->GetExpPercent());
+        CHECK_EQUALS("Exp Percent", Battler->GetExpPercent(), Pokemon->GetStatBlock()->GetExpPercent());
 
         auto &PokemonTypes = Pokemon->GetTypes();
         auto BattlerTypes = Battler->GetTypes();
@@ -65,50 +65,44 @@ void FBattlerActorTest::Define() {
             CHECK(PokemonTypes[i] == BattlerTypes[i]);
         }
     });
-}
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestAiBattlerController, "Unit Tests.Battle.Battlers.TestAiBattlerController",
-                                 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+    CoroIt("AiBattlerController", [this]() -> UE5Coro::TCoroutine<> {
+        auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
-bool TestAiBattlerController::RunTest(const FString &Parameters) {
-    auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
+        CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
+        CREATE_MOCK(IBattleSide, Side, FMockBattleSide, MockSide);
+        ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
+        ON_CALL(MockSide, ShowBackSprites).WillByDefault(Return(false));
 
-    CREATE_MOCK(IBattle, Battle, FMockBattle, MockBattle);
-    CREATE_MOCK(IBattleSide, Side, FMockBattleSide, MockSide);
-    ON_CALL(MockSide, GetOwningBattle).WillByDefault(ReturnRef(Battle));
-    ON_CALL(MockSide, ShowBackSprites).WillByDefault(Return(false));
+        FString SelectedAction;
+        ON_CALL(MockBattle, QueueAction).WillByDefault([&SelectedAction](const TUniquePtr<IBattleAction> &Action) {
+            SelectedAction = Action->GetActionMessage().ToString();
+        });
 
-    FString SelectedAction;
-    ON_CALL(MockBattle, QueueAction).WillByDefault([&SelectedAction](const TUniquePtr<IBattleAction> &Action) {
-        SelectedAction = Action->GetActionMessage().ToString();
+        auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
+            World.Get(), FPokemonDTO{.Species = TEXT("MIMIKYU"),
+                                     .Level = 50,
+                                     .Moves = {{.Move = TEXT("SHADOWSNEAK")},
+                                               {.Move = TEXT("PLAYROUGH")},
+                                               {.Move = TEXT("SWORDSDANCE")},
+                                               {.Move = TEXT("SHADOWCLAW")}}});
+        auto Battler = World->SpawnActor<ATestBattlerActor>();
+        Battler->DispatchBeginPlay(false);
+        co_await Battler->Initialize(Side, Pokemon);
+
+        Battler->SelectActions();
+        co_await AsyncThread([&SelectedAction] {
+            while (SelectedAction.IsEmpty()) {
+                std::this_thread::yield();
+            }
+        });
+        
+        TArray<FString> PossibleMessages = {
+            TEXT("Mimikyu used Shadow Sneak!"),
+            TEXT("Mimikyu used Play Rough!"),
+            TEXT("Mimikyu used Swords Dance!"),
+            TEXT("Mimikyu used Shadow Claw!"),
+        };
+        UE_CHECK_TRUE(PossibleMessages.Contains(SelectedAction));
     });
-
-    auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
-        World.Get(), FPokemonDTO{.Species = TEXT("MIMIKYU"),
-                                 .Level = 50,
-                                 .Moves = {{.Move = TEXT("SHADOWSNEAK")},
-                                           {.Move = TEXT("PLAYROUGH")},
-                                           {.Move = TEXT("SWORDSDANCE")},
-                                           {.Move = TEXT("SHADOWCLAW")}}});
-    auto Battler = World->SpawnActor<ATestBattlerActor>();
-    Battler->DispatchBeginPlay(false);
-    Battler->Initialize(Side, Pokemon).Wait();
-
-    Battler->SelectActions();
-    auto BusyWait = AsyncThread([&SelectedAction] {
-        while (SelectedAction.IsEmpty()) {
-            std::this_thread::yield();
-        }
-    });
-
-    UE_ASSERT_TRUE(BusyWait.WaitFor(FTimespan::FromMinutes(2)));
-    TArray<FString> PossibleMessages = {
-        TEXT("Mimikyu used Shadow Sneak!"),
-        TEXT("Mimikyu used Play Rough!"),
-        TEXT("Mimikyu used Swords Dance!"),
-        TEXT("Mimikyu used Shadow Claw!"),
-    };
-    UE_CHECK_TRUE(PossibleMessages.Contains(SelectedAction));
-
-    return true;
 }
