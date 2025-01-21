@@ -13,11 +13,14 @@ USTRUCT()
 struct FSimpleFlipbookKeyFrame {
     GENERATED_BODY()
 
-    UPROPERTY()
+    UPROPERTY(Category=Sprite, EditAnywhere, meta=(ClampMin=0))
     int32 Row = 0;
 
-    UPROPERTY()
+    UPROPERTY(Category=Sprite, EditAnywhere, meta=(ClampMin=0))
     int32 Column = 0;
+
+    UPROPERTY(Category=Sprite, EditAnywhere, meta=(ClampMin=1))
+    int32 FrameRun = 1;
     
 };
 
@@ -41,9 +44,7 @@ public:
     }
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    int32 GetNumFrames() const {
-        return TotalFrames;
-    }
+    int32 GetNumFrames() const;
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
     int32 GetRows() const {
@@ -62,7 +63,7 @@ public:
 
     UFUNCTION(BlueprintCallable, Category="Sprite")
     int32 GetNumKeyFrames() const {
-        return GetNumFrames();
+        return KeyFrames.Num();
     }
 
     UFUNCTION(BlueprintCallable, Category="Sprite")
@@ -71,10 +72,14 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sprite")
     int32 GetKeyFrameIndexAtTime(float Time, bool bClampToEnds = false) const;
 
-    const FSimpleFlipbookKeyFrame& GetKeyFrameChecked(int32 Index) const;
+    const FSimpleFlipbookKeyFrame &GetKeyFrameChecked(int32 Index) const {
+        return KeyFrames[Index];
+    }
 
     UFUNCTION(BlueprintCallable, Category="Sprite")
-    bool IsValidKeyFrameIndex(int32 Index) const;
+    bool IsValidKeyFrameIndex(int32 Index) const {
+        return KeyFrames.IsValidIndex(Index);
+    }
 
     FBoxSphereBounds GetRenderBounds() const;
 
@@ -91,8 +96,8 @@ private:
     UPROPERTY(EditAnywhere, BlueprintGetter = GetReferenceSprite, Category = Sprite)
     TObjectPtr<UPaperSprite> ReferenceSprite;
 
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetNumFrames, Category = Sprite, meta = (ClamMin = 1, UIMin = 1))
-    int32 TotalFrames = 1;
+    UPROPERTY(EditAnywhere, Category = Sprite, meta = (ClamMin = 1, UIMin = 1))
+    TArray<FSimpleFlipbookKeyFrame> KeyFrames;
     
     UPROPERTY(EditAnywhere, BlueprintGetter = GetRows, Category = Sprite, meta = (ClamMin = 1, UIMin = 1))
     int32 Rows = 1;

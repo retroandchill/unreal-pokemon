@@ -10,6 +10,16 @@ USimpleFlipbook::USimpleFlipbook() {
     DefaultMaterial = MaskedMaterialRef.Object;
 }
 
+int32 USimpleFlipbook::GetNumFrames() const {
+    int32 SumFrames = 0;
+    for (int32 KeyFrameIndex = 0; KeyFrameIndex < KeyFrames.Num(); ++KeyFrameIndex)
+    {
+        SumFrames += KeyFrames[KeyFrameIndex].FrameRun;
+    }
+
+    return SumFrames;
+}
+
 float USimpleFlipbook::GetTotalDuration() const {
     if (FramesPerSecond != 0) {
         return static_cast<float>(GetNumFrames()) / FramesPerSecond;
@@ -19,24 +29,30 @@ float USimpleFlipbook::GetTotalDuration() const {
 }
 
 int32 USimpleFlipbook::GetKeyFrameIndexAtTime(float Time, bool bClampToEnds) const {
-    if (Time < 0.0f && !bClampToEnds) {
+    if (Time < 0.0f && !bClampToEnds)
+    {
         return INDEX_NONE;
     }
 
-    if (FramesPerSecond > 0.0f) {
-        return FMath::Min(FMath::FloorToInt32(Time / FramesPerSecond), GetNumKeyFrames() - 1);
+    if (FramesPerSecond > 0.0f)
+    {
+        float SumTime = 0.0f;
+
+        for (int32 KeyFrameIndex = 0; KeyFrameIndex < KeyFrames.Num(); ++KeyFrameIndex)
+        {
+            SumTime += KeyFrames[KeyFrameIndex].FrameRun / FramesPerSecond;
+
+            if (Time <= SumTime)
+            {
+                return KeyFrameIndex;
+            }
+        }
+
+        // Return the last frame (note: relies on INDEX_NONE = -1 if there are no key frames)
+        return KeyFrames.Num() - 1;
     }
     
-    return GetNumKeyFrames() > 0 ? 0 : INDEX_NONE;
-}
-
-const FSimpleFlipbookKeyFrame & USimpleFlipbook::GetKeyFrameChecked(int32 Index) const {
-    check(IsValidKeyFrameIndex(Index))
-    return { .Row = Index / Columns, .Column = Index % Columns };
-}
-
-bool USimpleFlipbook::IsValidKeyFrameIndex(int32 Index) const {
-    return Index < 0 || Index >= GetNumKeyFrames();
+    return KeyFrames.Num() > 0 ? 0 : INDEX_NONE;
 }
 
 FBoxSphereBounds USimpleFlipbook::GetRenderBounds() const {
