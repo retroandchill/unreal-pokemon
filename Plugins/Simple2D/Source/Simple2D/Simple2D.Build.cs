@@ -17,7 +17,6 @@ public class Simple2D : ModuleRules
 		
 		PrivateIncludePaths.AddRange(
 			new string[] {
-				Path.Combine(GetModuleDirectory("Paper2D"), "Private")
 			}
 			);
 			

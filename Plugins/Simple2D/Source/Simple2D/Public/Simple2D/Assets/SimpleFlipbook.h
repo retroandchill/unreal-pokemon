@@ -13,14 +13,14 @@ namespace EFlipbookCollisionMode {
 
 class UPaperSprite;
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FSimpleFlipbookKeyFrame {
     GENERATED_BODY()
 
-    UPROPERTY(Category=Sprite, EditAnywhere, meta=(ClampMin=0))
+    UPROPERTY(Category=Sprite, EditAnywhere, BlueprintReadOnly, meta=(ClampMin=0))
     int32 Index = 0;
 
-    UPROPERTY(Category=Sprite, EditAnywhere, meta=(ClampMin=1))
+    UPROPERTY(Category=Sprite, EditAnywhere, BlueprintReadOnly, meta=(ClampMin=1))
     int32 FrameRun = 1;
     
 };
@@ -28,7 +28,7 @@ struct FSimpleFlipbookKeyFrame {
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class SIMPLE2D_API USimpleFlipbook : public UObject {
     GENERATED_BODY()
 
@@ -81,6 +81,7 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sprite")
     int32 GetKeyFrameIndexAtTime(float Time, bool bClampToEnds = false) const;
 
+    UFUNCTION(BlueprintCallable, Category="Sprite")
     const FSimpleFlipbookKeyFrame &GetKeyFrameChecked(int32 Index) const {
         return KeyFrames[Index];
     }

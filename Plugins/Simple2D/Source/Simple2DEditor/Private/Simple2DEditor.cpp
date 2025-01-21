@@ -1,7 +1,7 @@
 ﻿#include "Simple2DEditor.h"
 #include "AssetToolsModule.h"
 #include "PaperFlipbook.h"
-#include "SimpleFlipbook/Assets/SimpleFlipbookAssetActions.h"
+#include "../../Simple2D/Public/Simple2D"
 
 class IPaper2DEditorModule;
 

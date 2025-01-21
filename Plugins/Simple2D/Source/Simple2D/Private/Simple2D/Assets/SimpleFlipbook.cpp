@@ -1,7 +1,7 @@
 // "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "SimpleFlipbook/Assets/SimpleFlipbook.h"
+#include "../../../Public/Simple2D"
 #include "Paper2DModule.h"
 #include "PaperSprite.h"
 
