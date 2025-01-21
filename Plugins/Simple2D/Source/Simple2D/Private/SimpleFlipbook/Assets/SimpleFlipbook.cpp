@@ -6,7 +6,7 @@
 #include "PaperSprite.h"
 
 USimpleFlipbook::USimpleFlipbook() {
-    static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaskedMaterialRef(TEXT("/Paper2D/MaskedUnlitSpriteMaterial"));
+    static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaskedMaterialRef(TEXT("/Simple2D/Materials/MaskedUnlitFlipbookMaterial"));
     DefaultMaterial = MaskedMaterialRef.Object;
 }
 
