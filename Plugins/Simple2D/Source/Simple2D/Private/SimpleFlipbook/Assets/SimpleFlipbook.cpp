@@ -1,7 +1,8 @@
-﻿// "Unreal Pokémon" created by Retro & Chill.
+// "Unreal Pokémon" created by Retro & Chill.
 
 
 #include "SimpleFlipbook/Assets/SimpleFlipbook.h"
+#include "Paper2DModule.h"
 #include "PaperSprite.h"
 
 USimpleFlipbook::USimpleFlipbook() {
@@ -29,7 +30,7 @@ int32 USimpleFlipbook::GetKeyFrameIndexAtTime(float Time, bool bClampToEnds) con
     return GetNumKeyFrames() > 0 ? 0 : INDEX_NONE;
 }
 
-FSimpleFlipbookKeyFrame USimpleFlipbook::GetKeyFrameChecked(int32 Index) const {
+const FSimpleFlipbookKeyFrame & USimpleFlipbook::GetKeyFrameChecked(int32 Index) const {
     check(IsValidKeyFrameIndex(Index))
     return { .Row = Index / Columns, .Column = Index % Columns };
 }

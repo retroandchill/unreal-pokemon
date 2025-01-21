@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "PaperSpriteAtlas.h"
 #include "UObject/Object.h"
 #include "SpriteEditorOnlyTypes.h"
 #include "SimpleFlipbook.generated.h"
@@ -31,8 +32,8 @@ public:
     USimpleFlipbook();
     
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UTexture2D* GetSourceTexture() const {
-        return SourceTexture;
+    UPaperSprite* GetReferenceSprite() const {
+        return ReferenceSprite;
     }
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
@@ -66,7 +67,7 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sprite")
     int32 GetKeyFrameIndexAtTime(float Time, bool bClampToEnds = false) const;
 
-    FSimpleFlipbookKeyFrame GetKeyFrameChecked(int32 Index) const;
+    const FSimpleFlipbookKeyFrame& GetKeyFrameChecked(int32 Index) const;
 
     UFUNCTION(BlueprintCallable, Category="Sprite")
     bool IsValidKeyFrameIndex(int32 Index) const;
@@ -78,18 +79,13 @@ public:
         return DefaultMaterial;
     }
 
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UPaperSprite* GetReferenceSprite() const {
-        return ReferenceSprite;
-    }
-
 #if WITH_EDITOR
     void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif
 
 private:
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetSourceTexture, Category = Sprite)
-    TObjectPtr<UTexture2D> SourceTexture;
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetReferenceSprite, Category = Sprite)
+    TObjectPtr<UPaperSprite> ReferenceSprite;
 
     UPROPERTY(EditAnywhere, BlueprintGetter = GetNumFrames, Category = Sprite, meta = (ClamMin = 1, UIMin = 1))
     int32 TotalFrames = 1;
@@ -105,8 +101,5 @@ private:
     
     UPROPERTY(EditAnywhere, BlueprintGetter = GetDefaultMaterial, Category = Sprite)
     TObjectPtr<UMaterialInterface> DefaultMaterial;
-
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetReferenceSprite, Category = Sprite)
-    TObjectPtr<UPaperSprite> ReferenceSprite;
 
 };
