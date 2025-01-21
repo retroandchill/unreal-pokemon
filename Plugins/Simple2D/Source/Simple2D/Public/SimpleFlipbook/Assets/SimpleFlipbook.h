@@ -7,6 +7,10 @@
 #include "SpriteEditorOnlyTypes.h"
 #include "SimpleFlipbook.generated.h"
 
+namespace EFlipbookCollisionMode {
+    enum Type : int;
+}
+
 class UPaperSprite;
 
 USTRUCT()
@@ -14,10 +18,7 @@ struct FSimpleFlipbookKeyFrame {
     GENERATED_BODY()
 
     UPROPERTY(Category=Sprite, EditAnywhere, meta=(ClampMin=0))
-    int32 Row = 0;
-
-    UPROPERTY(Category=Sprite, EditAnywhere, meta=(ClampMin=0))
-    int32 Column = 0;
+    int32 Index = 0;
 
     UPROPERTY(Category=Sprite, EditAnywhere, meta=(ClampMin=1))
     int32 FrameRun = 1;
@@ -38,6 +39,9 @@ public:
     UPaperSprite* GetReferenceSprite() const {
         return ReferenceSprite;
     }
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    TEnumAsByte<EFlipbookCollisionMode::Type> GetCollisionSource() const { return CollisionSource; }
 
     bool ContainsSprite(UPaperSprite* Sprite) const {
         return Sprite == ReferenceSprite;
@@ -95,6 +99,9 @@ public:
 private:
     UPROPERTY(EditAnywhere, BlueprintGetter = GetReferenceSprite, Category = Sprite)
     TObjectPtr<UPaperSprite> ReferenceSprite;
+
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetCollisionSource, Category=Sprite, meta = (InvalidEnumValues = EachFrameCollision))
+    TEnumAsByte<EFlipbookCollisionMode::Type> CollisionSource;
 
     UPROPERTY(EditAnywhere, Category = Sprite, meta = (ClamMin = 1, UIMin = 1))
     TArray<FSimpleFlipbookKeyFrame> KeyFrames;

@@ -1,5 +1,6 @@
 ﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
+using System.IO;
 using UnrealBuildTool;
 
 public class Simple2D : ModuleRules
@@ -13,11 +14,10 @@ public class Simple2D : ModuleRules
 				// ... add public include paths required here ...
 			}
 			);
-				
 		
 		PrivateIncludePaths.AddRange(
 			new string[] {
-				// ... add other private include paths required here ...
+				Path.Combine(GetModuleDirectory("Paper2D"), "Private")
 			}
 			);
 			
@@ -38,6 +38,10 @@ public class Simple2D : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+				"Engine",
+				"RenderCore",
+				"Renderer",
+				"RHI"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
