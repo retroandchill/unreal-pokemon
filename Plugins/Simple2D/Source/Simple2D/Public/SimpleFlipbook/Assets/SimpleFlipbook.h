@@ -34,6 +34,11 @@ class SIMPLE2D_API USimpleFlipbook : public UObject {
 
 public:
     USimpleFlipbook();
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    UTexture2D* GetSourceTexture() const {
+        return SourceTexture;
+    }
     
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
     UPaperSprite* GetReferenceSprite() const {
@@ -97,6 +102,9 @@ public:
 #endif
 
 private:
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetSourceTexture, Category = Sprite)
+    TObjectPtr<UTexture2D> SourceTexture;
+    
     UPROPERTY(EditAnywhere, BlueprintGetter = GetReferenceSprite, Category = Sprite)
     TObjectPtr<UPaperSprite> ReferenceSprite;
 
