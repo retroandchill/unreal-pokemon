@@ -36,6 +36,10 @@ public:
         return ReferenceSprite;
     }
 
+    bool ContainsSprite(UPaperSprite* Sprite) const {
+        return Sprite == ReferenceSprite;
+    }
+
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
     int32 GetNumFrames() const {
         return TotalFrames;
