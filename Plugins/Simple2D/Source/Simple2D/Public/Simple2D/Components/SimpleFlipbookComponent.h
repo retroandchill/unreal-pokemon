@@ -141,7 +141,6 @@ public:
     void GetUsedTextures(TArray<UTexture *> &OutTextures, EMaterialQualityLevel::Type QualityLevel) override;
     UMaterialInterface *GetMaterial(int32 MaterialIndex) const override;
     int32 GetNumMaterials() const override;
-    UBodySetup *GetBodySetup() override;
 
 private:
     /** Flipbook currently being played */

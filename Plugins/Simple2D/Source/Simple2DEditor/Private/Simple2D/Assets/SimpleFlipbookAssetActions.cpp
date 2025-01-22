@@ -1,9 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "../../../../Simple2D/Public/Simple2D"
+#include "Simple2D/Assets/SimpleFlipbookAssetActions.h"
 #include "Paper2DEditorModule.h"
-#include "../../../../Simple2D/Public/Simple2D"
+#include "Simple2D/Assets/SimpleFlipbook.h"
 
 FText FSimpleFlipbookAssetActions::GetName() const {
     return NSLOCTEXT("AssetTypeActions", "AssetTypeActions_SimpleFlipbook", "Simple Flipbook");

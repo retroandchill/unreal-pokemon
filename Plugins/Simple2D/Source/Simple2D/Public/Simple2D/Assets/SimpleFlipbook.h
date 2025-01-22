@@ -3,6 +3,7 @@
 #pragma once
 
 #include "PaperSpriteAtlas.h"
+#include "SpriteDrawCall.h"
 #include "UObject/Object.h"
 #include "SpriteEditorOnlyTypes.h"
 #include "SimpleFlipbook.generated.h"
@@ -38,18 +39,6 @@ public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
     UTexture2D* GetSourceTexture() const {
         return SourceTexture;
-    }
-    
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UPaperSprite* GetReferenceSprite() const {
-        return ReferenceSprite;
-    }
-
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    TEnumAsByte<EFlipbookCollisionMode::Type> GetCollisionSource() const { return CollisionSource; }
-
-    bool ContainsSprite(UPaperSprite* Sprite) const {
-        return Sprite == ReferenceSprite;
     }
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
@@ -93,24 +82,46 @@ public:
 
     FBoxSphereBounds GetRenderBounds() const;
 
+    float GetPixelsPerUnrealUnit() const { return PixelsPerUnrealUnit; }
+
+    // Return the scaling factor between Unreal units (cm) and pixels
+    float GetUnrealUnitsPerPixel() const { return 1.0f / PixelsPerUnrealUnit; }
+
+    // Returns the raw pivot position (ignoring pixel snapping)
+    FVector2D GetRawPivotPosition() const;
+
+    // Returns the current pivot position in texture space
+    FVector2D GetPivotPosition() const;
+
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
     UMaterialInterface* GetDefaultMaterial() const {
         return DefaultMaterial;
     }
 
+    FAdditionalSpriteTextureArray GetBakedAdditionalSourceTextures() const;
+
+    FSpriteDrawCallRecord CreateDrawCallRecord() const;
+
+    int32 GetAlternateMaterialSplitIndex() const {
+        return AlternateMaterialSplitIndex;
+    }
+
 #if WITH_EDITOR
     void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+
+    void RebuildRenderData();
+
+    FVector2D ConvertTextureSpaceToPivotSpace(FVector2D Input) const;
+    
+    void CreatePolygonFromBoundingBox(FSpriteGeometryCollection& GeomOwner) const;
 #endif
 
 private:
     UPROPERTY(EditAnywhere, BlueprintGetter = GetSourceTexture, Category = Sprite)
     TObjectPtr<UTexture2D> SourceTexture;
-    
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetReferenceSprite, Category = Sprite)
-    TObjectPtr<UPaperSprite> ReferenceSprite;
 
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetCollisionSource, Category=Sprite, meta = (InvalidEnumValues = EachFrameCollision))
-    TEnumAsByte<EFlipbookCollisionMode::Type> CollisionSource;
+    UPROPERTY(Category=Sprite, EditAnywhere, AssetRegistrySearchable, meta=(DisplayName="Additional Textures"))
+    TArray<TObjectPtr<UTexture>> AdditionalSourceTextures;
 
     UPROPERTY(EditAnywhere, Category = Sprite, meta = (ClamMin = 1, UIMin = 1))
     TArray<FSimpleFlipbookKeyFrame> KeyFrames;
@@ -126,5 +137,44 @@ private:
     
     UPROPERTY(EditAnywhere, BlueprintGetter = GetDefaultMaterial, Category = Sprite)
     TObjectPtr<UMaterialInterface> DefaultMaterial;
+
+    // The scaling factor between pixels and Unreal units (cm) (e.g., 0.64 would make a 64 pixel wide sprite take up 100 cm)
+    UPROPERTY(Category=Sprite, EditAnywhere, meta = (DisplayName = "Pixels per unit"))
+    float PixelsPerUnrealUnit;
+
+#if WITH_EDITORONLY_DATA
+    // Pivot mode
+    UPROPERTY(Category=Sprite, EditAnywhere)
+    TEnumAsByte<ESpritePivotMode::Type> PivotMode;
+
+    // Custom pivot point (relative to the sprite rectangle)
+    UPROPERTY(Category=Sprite, EditAnywhere)
+    FVector2D CustomPivotPoint;
+
+    // Should the pivot be snapped to a pixel boundary?
+    UPROPERTY(Category=Sprite, EditAnywhere, AdvancedDisplay)
+    bool bSnapPivotToPixelGrid;
+
+    // Custom collision geometry polygons (in texture space)
+    UPROPERTY(Category=Collision, EditAnywhere)
+    FSpriteGeometryCollection CollisionGeometry;
+
+    // The extrusion thickness of collision geometry when using a 3D collision domain
+    UPROPERTY(Category=Collision, EditAnywhere)
+    float CollisionThickness;
+
+    UPROPERTY()
+    FSpriteGeometryCollection RenderGeometry;
+#endif
+
+    UPROPERTY()
+    int32 AlternateMaterialSplitIndex = INDEX_NONE;
+
+    // Baked render data (triangle vertices, stored as XY UV tuples)
+    //   XY is the XZ position in world space, relative to the pivot
+    //   UV is normalized (0..1)
+    //   There should always be a multiple of three elements in this array
+    UPROPERTY()
+    TArray<FVector4> BakedRenderData;
 
 };

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Factories/Factory.h"
-#include "../../../../Simple2D/Public/Simple2D"
+#include "Simple2D/Assets/SimpleFlipbook.h"
 
 #include "SimpleFlipbookFactory.generated.h"
 

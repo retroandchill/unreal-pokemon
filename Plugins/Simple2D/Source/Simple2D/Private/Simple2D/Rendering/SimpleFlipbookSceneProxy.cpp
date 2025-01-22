@@ -3,10 +3,9 @@
 
 #include "Simple2D/Rendering/SimpleFlipbookSceneProxy.h"
 #include "MaterialDomain.h"
-#include "Paper2DModule.h"
 #include <bit>
 
-FSimpleFlipbookSceneProxy::FSimpleFlipbookSceneProxy(const UMeshComponent *InComponent) : FPrimitiveSceneProxy(InComponent) {
+FSimpleFlipbookSceneProxy::FSimpleFlipbookSceneProxy(const UMeshComponent *InComponent) : FPaperRenderSceneProxy(InComponent) {
     Material = InComponent->GetMaterial(0);
     if (Material == nullptr)
     {
@@ -25,4 +24,7 @@ FSimpleFlipbookSceneProxy::FSimpleFlipbookSceneProxy(const UMeshComponent *InCom
 SIZE_T FSimpleFlipbookSceneProxy::GetTypeHash() const {
     static size_t UniquePointer;
     return std::bit_cast<size_t>(std::addressof(UniquePointer));
+}
+
+void FSimpleFlipbookSceneProxy::SetFlipbookBounds(const FSpriteDrawCallRecord &NewDynamicData) {
 }

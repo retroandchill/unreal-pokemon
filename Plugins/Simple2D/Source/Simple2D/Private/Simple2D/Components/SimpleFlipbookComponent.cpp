@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "../../../Public/Simple2D"
+#include "Simple2D/Components/SimpleFlipbookComponent.h"
 #include "PaperFlipbook.h"
 #include "PaperSprite.h"
 #include "Simple2D.h"
@@ -9,8 +9,8 @@
 #include "Misc/UObjectToken.h"
 #include "Net/UnrealNetwork.h"
 #include "PhysicsEngine/BodySetup.h"
-#include "../../../Public/Simple2D"
-#include "../../../Public/Simple2D"
+#include "Simple2D/Assets/SimpleFlipbook.h"
+#include "Simple2D/Rendering/SimpleFlipbookSceneProxy.h"
 
 DECLARE_CYCLE_STAT(TEXT("Tick Simple Flipbook"), STAT_TickSimpleFlipbook, STATGROUP_Simple2D);
 
@@ -303,18 +303,14 @@ void USimpleFlipbookComponent::TickComponent(float DeltaTime, enum ELevelTick Ti
 
 void USimpleFlipbookComponent::SendRenderDynamicData_Concurrent() {
     if (SceneProxy != nullptr) {
-        UPaperSprite *SpriteToSend = SourceFlipbook != nullptr ? SourceFlipbook->GetReferenceSprite() : nullptr;
-
-        FSpriteDrawCallRecord DrawCall;
-        DrawCall.BuildFromSprite(SpriteToSend);
+        auto DrawCall = SourceFlipbook != nullptr ? SourceFlipbook->CreateDrawCallRecord() : FSpriteDrawCallRecord();
         DrawCall.Color = SpriteColor.ToFColor(false);
-        const int32 SplitIndex = SpriteToSend ? SpriteToSend->AlternateMaterialSplitIndex : INDEX_NONE;
 
         auto InSceneProxy = static_cast<FSimpleFlipbookSceneProxy *>(SceneProxy);
         UBodySetup *InBodySetup = CachedBodySetup;
         ENQUEUE_RENDER_COMMAND(FSendPaperRenderComponentDynamicData)(
-            [InSceneProxy, DrawCall, InBodySetup, SplitIndex](FRHICommandListImmediate &) {
-                InSceneProxy->SetSprite_RenderThread(DrawCall, SplitIndex);
+            [InSceneProxy, DrawCall, InBodySetup](FRHICommandListImmediate &) {
+                InSceneProxy->SetFlipbookBounds(DrawCall);
                 InSceneProxy->SetBodySetup_RenderThread(InBodySetup);
             });
     }
@@ -351,17 +347,15 @@ FPrimitiveSceneProxy *USimpleFlipbookComponent::CreateSceneProxy() {
     auto NewProxy = MakeUnique<FSimpleFlipbookSceneProxy>(this);
 
     CalculateCurrentFrame();
-    UPaperSprite *SpriteToSend = SourceFlipbook != nullptr ? SourceFlipbook->GetReferenceSprite() : nullptr;
-    const int32 SplitIndex = SpriteToSend ? SpriteToSend->AlternateMaterialSplitIndex : INDEX_NONE;
+    const int32 SplitIndex = SourceFlipbook != nullptr ? SourceFlipbook->GetAlternateMaterialSplitIndex() : INDEX_NONE;
 
-    FSpriteDrawCallRecord DrawCall;
-    DrawCall.BuildFromSprite(SpriteToSend);
+    auto DrawCall = SourceFlipbook != nullptr ? SourceFlipbook->CreateDrawCallRecord() : FSpriteDrawCallRecord();
     DrawCall.Color = SpriteColor.ToFColor(false);
 
     auto InSceneProxy = NewProxy.Get();
     ENQUEUE_RENDER_COMMAND(FCreatePaperFlipbookProxy_SetSprite)(
-        [InSceneProxy, DrawCall, SplitIndex](FRHICommandListImmediate &RHICmdList) {
-            InSceneProxy->SetSprite_RenderThread(DrawCall, SplitIndex);
+        [InSceneProxy, DrawCall](FRHICommandListImmediate &) {
+            InSceneProxy->SetFlipbookBounds(DrawCall);
         });
     return NewProxy.Release();
 }
@@ -392,8 +386,8 @@ FBoxSphereBounds USimpleFlipbookComponent::CalcBounds(const FTransform &LocalToW
 void USimpleFlipbookComponent::GetUsedTextures(TArray<UTexture *> &OutTextures,
                                                EMaterialQualityLevel::Type QualityLevel) {
     // Get the texture referenced by each keyframe
-    if (SourceFlipbook != nullptr && SourceFlipbook->GetReferenceSprite() != nullptr) {
-        OutTextures.AddUnique(SourceFlipbook->GetReferenceSprite()->GetBakedTexture());
+    if (SourceFlipbook != nullptr) {
+        OutTextures.AddUnique(SourceFlipbook->GetSourceTexture());
     }
 
     // Get any textures referenced by our materials
@@ -413,18 +407,4 @@ UMaterialInterface *USimpleFlipbookComponent::GetMaterial(int32 MaterialIndex) c
 
 int32 USimpleFlipbookComponent::GetNumMaterials() const {
     return FMath::Max<int32>(OverrideMaterials.Num(), 1);
-}
-
-UBodySetup *USimpleFlipbookComponent::GetBodySetup() {
-    CachedBodySetup = nullptr;
-
-    if ((SourceFlipbook != nullptr) && (SourceFlipbook->GetCollisionSource() != EFlipbookCollisionMode::NoCollision)) {
-        check(SourceFlipbook->GetCollisionSource() != EFlipbookCollisionMode::EachFrameCollision)
-
-        if (auto PotentialSpriteSource = SourceFlipbook->GetReferenceSprite(); PotentialSpriteSource != nullptr) {
-            CachedBodySetup = PotentialSpriteSource->BodySetup;
-        }
-    }
-
-    return CachedBodySetup;
 }
