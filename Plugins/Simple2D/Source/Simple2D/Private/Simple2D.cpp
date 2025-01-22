@@ -1,10 +1,11 @@
 ﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "Simple2D.h"
+#include "Simple2D/Rendering/FlipbookRenderSection.h"
 
 void FSimple2DModule::StartupModule()
 {
-	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
+	Simple2D::FSimpleFlipbookTangents::SetTangentsFromPaperAxes();
 }
 
 void FSimple2DModule::ShutdownModule()

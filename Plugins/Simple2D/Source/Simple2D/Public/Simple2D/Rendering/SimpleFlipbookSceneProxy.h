@@ -3,6 +3,7 @@
 #pragma once
 
 #include "FlipbookRenderSection.h"
+#include "FlipbookTextureOverrideRenderProxy.h"
 #include "PrimitiveSceneProxy.h"
 #include "SimpleFlipbookVertexBuffer.h"
 #include "SimpleFlipbookVertexFactory.h"
@@ -10,14 +11,15 @@
 struct FSpriteDrawCallRecord;
 
 namespace Simple2D {
-    class FFlipbookTextureOverrideRenderProxy;
-    
     /**
      * 
      */
     class SIMPLE2D_API FSimpleFlipbookSceneProxy : public FPrimitiveSceneProxy {
     public:
         explicit FSimpleFlipbookSceneProxy(const UMeshComponent* InComponent);
+        ~FSimpleFlipbookSceneProxy() override;
+
+        UE_NONCOPYABLE(FSimpleFlipbookSceneProxy)
     
         SIZE_T GetTypeHash() const override;
     
@@ -71,8 +73,6 @@ namespace Simple2D {
         FCollisionResponseContainer CollisionResponse;
 
 #if WITH_EDITOR
-        using FFlipbookRenderSceneProxyTextureOverrideMap = TMap<const UTexture*, const UTexture*>;
-        
         // The texture override list
         FFlipbookRenderSceneProxyTextureOverrideMap TextureOverrideList;
 #endif

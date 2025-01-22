@@ -5,9 +5,13 @@
 #include "DynamicMeshBuilder.h"
 #include "MaterialDomain.h"
 #include "Paper2DModule.h"
+#include "Simple2D.h"
 #include "Materials/MaterialRenderProxy.h"
 #include "Simple2D/Rendering/FlipbookTextureOverrideRenderProxy.h"
 #include <bit>
+
+DECLARE_CYCLE_STAT(TEXT("Get New Batch Meshes"), STAT_Simple2DRender_GetNewBatchMeshes, STATGROUP_Simple2D);
+DECLARE_CYCLE_STAT(TEXT("SpriteProxy GDME"), STAT_Simple2DRenderSceneProxy_GetDynamicMeshElements, STATGROUP_Simple2D);
 
 namespace Simple2D {
     static TAutoConsoleVariable CVarDrawSpritesAsTwoSided(
@@ -19,8 +23,8 @@ namespace Simple2D {
         FPrimitiveSceneProxy(InComponent),
         VertexFactory(InComponent->GetWorld()->GetFeatureLevel()), Owner(InComponent->GetOwner()),
         bCastShadow(InComponent->CastShadow), MaterialRelevance(InComponent->GetMaterialRelevance(GetScene().GetFeatureLevel())),
-        CollisionResponse(InComponent->GetCollisionResponseToChannels()) {
-        SetWireframeColor(FLinearColor::White), bDrawTwoSided(CVarDrawSpritesAsTwoSided.GetValueOnAnyThread() != 0), bSpritesUseVertexBufferPath(CVarDrawSpritesUsingPrebuiltVertexBuffers.GetValueOnAnyThread() != 0), Material(InComponent->GetMaterial(0)), AlternateMaterial(InComponent->GetMaterial(1));
+        CollisionResponse(InComponent->GetCollisionResponseToChannels()), bDrawTwoSided(CVarDrawSpritesAsTwoSided.GetValueOnAnyThread() != 0), bSpritesUseVertexBufferPath(CVarDrawSpritesUsingPrebuiltVertexBuffers.GetValueOnAnyThread() != 0), Material(InComponent->GetMaterial(0)), AlternateMaterial(InComponent->GetMaterial(1)) {
+        SetWireframeColor(FLinearColor::White);
 
         if (Material == nullptr) {
             Material = UMaterial::GetDefaultMaterial(MD_Surface);
@@ -29,6 +33,11 @@ namespace Simple2D {
         if (AlternateMaterial == nullptr) {
             AlternateMaterial = UMaterial::GetDefaultMaterial(MD_Surface);
         }
+    }
+
+    FSimpleFlipbookSceneProxy::~FSimpleFlipbookSceneProxy() {
+        VertexBuffer.ReleaseResource();
+        VertexFactory.ReleaseResource();
     }
 
     SIZE_T FSimpleFlipbookSceneProxy::GetTypeHash() const {
@@ -51,7 +60,7 @@ namespace Simple2D {
 
     void FSimpleFlipbookSceneProxy::GetDynamicMeshElements(const TArray<const FSceneView *> &Views,
         const FSceneViewFamily &ViewFamily, uint32 VisibilityMap, FMeshElementCollector &Collector) const {
-        SCOPE_CYCLE_COUNTER(STAT_PaperRenderSceneProxy_GetDynamicMeshElements);
+        SCOPE_CYCLE_COUNTER(STAT_Simple2DRenderSceneProxy_GetDynamicMeshElements);
 
         const FEngineShowFlags& EngineShowFlags = ViewFamily.EngineShowFlags;
 
@@ -128,7 +137,7 @@ namespace Simple2D {
     void FSimpleFlipbookSceneProxy::CreateRenderThreadResources(FRHICommandListBase &RHICmdList) {
         if (bSpritesUseVertexBufferPath && (Vertices.Num() > 0))
         {
-            VertexBuffer.Vertices = Vertices;
+            VertexBuffer.SetVertices(Vertices);
 
             // Init the resources
             VertexBuffer.InitResource(RHICmdList);
@@ -171,7 +180,7 @@ namespace Simple2D {
         const auto& Section = BatchedSections[SectionIndex];
         if (Section.IsValid())
         {
-            checkSlow(VertexBuffer.IsInitialized() && VertexFactory.IsInitialized());
+            checkSlow(VertexBuffer.IsFullyInitialized() && VertexFactory.IsFullyInitialized());
 
             OutMeshBatch.bCanApplyViewModeOverrides = true;
             OutMeshBatch.bUseWireframeSelectionColoring = bIsSelected;
@@ -208,7 +217,7 @@ namespace Simple2D {
 		return;
 	}
 
-	SCOPE_CYCLE_COUNTER(STAT_PaperRender_GetNewBatchMeshes);
+	SCOPE_CYCLE_COUNTER(STAT_Simple2DRender_GetNewBatchMeshes);
 
 	const uint8 DPG = GetDepthPriorityGroup(View);
 	const bool bIsWireframeView = View->Family->EngineShowFlags.Wireframe;
@@ -322,10 +331,10 @@ namespace Simple2D {
 
         if (bSpritesUseVertexBufferPath && (Vertices.Num() > 0))
         {
-            VertexBuffer.Vertices = Vertices;
+            VertexBuffer.SetVertices(Vertices);
 
             //We want the proxy to update the buffer, if it has been already initialized
-            if (VertexBuffer.IsInitialized())
+            if (VertexBuffer.IsFullyInitialized())
             {
                 const bool bFactoryRequiresReInitialization = VertexBuffer.CommitRequiresBufferRecreation();
                 VertexBuffer.CommitVertexData(RHICmdList);
@@ -366,7 +375,7 @@ namespace Simple2D {
 
         if (!Result->CheckValidity(ParentMaterialProxy))
         {
-            Collector.CacheUniformExpressions(Result, true);
+            Collector.CacheUniformExpressions(Result.Get(), true);
         }
 
         return Result.Get();
