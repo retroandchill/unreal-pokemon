@@ -2,7 +2,7 @@
 
 
 #include "Simple2D/Assets/SimpleFlipbook.h"
-#include "BitmapUtils.h"
+#include "AlphaBitmap.h"
 #include "Paper2DModule.h"
 #include "PaperSprite.h"
 
@@ -69,6 +69,47 @@ FBoxSphereBounds USimpleFlipbook::GetRenderBounds() const {
     return FBoxSphereBounds(BoundingBox);
 }
 
+FVector2D USimpleFlipbook::GetRawPivotPosition() const {
+    FVector2D TopLeftUV = FVector2D::ZeroVector;
+    FVector2D Dimension = SourceTexture != nullptr
+                              ? FVector2D(SourceTexture->GetSizeX() / Columns, SourceTexture->GetSizeY() / Rows)
+                              : FVector2D::ZeroVector;
+    switch (PivotMode) {
+    case ESpritePivotMode::Top_Left:
+        return TopLeftUV;
+    case ESpritePivotMode::Top_Center:
+        return FVector2D(TopLeftUV.X + Dimension.X * 0.5f, TopLeftUV.Y);
+    case ESpritePivotMode::Top_Right:
+        return FVector2D(TopLeftUV.X + Dimension.X, TopLeftUV.Y);
+    case ESpritePivotMode::Center_Left:
+        return FVector2D(TopLeftUV.X, TopLeftUV.Y + Dimension.Y * 0.5f);
+    case ESpritePivotMode::Center_Center:
+        return FVector2D(TopLeftUV.X + Dimension.X * 0.5f, TopLeftUV.Y + Dimension.Y * 0.5f);
+    case ESpritePivotMode::Center_Right:
+        return FVector2D(TopLeftUV.X + Dimension.X, TopLeftUV.Y + Dimension.Y * 0.5f);
+    case ESpritePivotMode::Bottom_Left:
+        return FVector2D(TopLeftUV.X, TopLeftUV.Y + Dimension.Y);
+    case ESpritePivotMode::Bottom_Center:
+        return FVector2D(TopLeftUV.X + Dimension.X * 0.5f, TopLeftUV.Y + Dimension.Y);
+    case ESpritePivotMode::Bottom_Right:
+        return TopLeftUV + Dimension;
+    case ESpritePivotMode::Custom:
+    default:
+        return CustomPivotPoint;
+    }
+}
+
+FVector2D USimpleFlipbook::GetPivotPosition() const {
+    FVector2D RawPivot = GetRawPivotPosition();
+
+    if (bSnapPivotToPixelGrid) {
+        RawPivot.X = FMath::RoundToFloat(RawPivot.X);
+        RawPivot.Y = FMath::RoundToFloat(RawPivot.Y);
+    }
+
+    return RawPivot;
+}
+
 FAdditionalSpriteTextureArray USimpleFlipbook::GetBakedAdditionalSourceTextures() const {
     return FAdditionalSpriteTextureArray(AdditionalSourceTextures);
 }
@@ -109,8 +150,8 @@ void USimpleFlipbook::RebuildRenderData() {
         EffectiveTexture->ConditionalPostLoad();
         TextureSize = FVector2D(EffectiveTexture->GetImportedSize());
     }
-    const float InverseWidth = 1.0f / TextureSize.X;
-    const float InverseHeight = 1.0f / TextureSize.Y;
+    const float InverseWidth = static_cast<float>(Columns) / TextureSize.X;
+    const float InverseHeight = static_cast<float>(Rows) / TextureSize.Y;
 
     // Adjust for the pivot and store in the baked geometry buffer
     const float UnitsPerPixel = GetUnrealUnitsPerPixel();
@@ -206,10 +247,10 @@ FVector2D USimpleFlipbook::ConvertTextureSpaceToPivotSpace(FVector2D Input) cons
     return FVector2D(X, Y);
 }
 
-void USimpleFlipbook::CreatePolygonFromBoundingBox(FSpriteGeometryCollection& GeomOwner) const {
+void USimpleFlipbook::CreatePolygonFromBoundingBox(FSpriteGeometryCollection &GeomOwner) const {
     FVector2D BoxSize = SourceTexture != nullptr
-                      ? FVector2D(SourceTexture->GetSizeX() / Columns, SourceTexture->GetSizeY() / Rows)
-                      : FVector2D(0, 0);
+                            ? FVector2D(SourceTexture->GetSizeX() / Columns, SourceTexture->GetSizeY() / Rows)
+                            : FVector2D(0, 0);
     FVector2D BoxPosition(0, 0);
 
     // Recenter the box

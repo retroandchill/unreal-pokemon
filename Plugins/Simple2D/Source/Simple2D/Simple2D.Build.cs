@@ -8,17 +8,6 @@ public class Simple2D : ModuleRules
 	public Simple2D(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
-		
-		PublicIncludePaths.AddRange(
-			new string[] {
-				Path.Combine(GetModuleDirectory("Paper2D"), "Private")
-			}
-			);
-		
-		PrivateIncludePaths.AddRange(
-			new string[] {
-			}
-			);
 			
 		
 		PublicDependencyModuleNames.AddRange(

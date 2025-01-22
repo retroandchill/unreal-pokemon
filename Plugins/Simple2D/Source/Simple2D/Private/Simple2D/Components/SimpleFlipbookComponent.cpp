@@ -306,12 +306,10 @@ void USimpleFlipbookComponent::SendRenderDynamicData_Concurrent() {
         auto DrawCall = SourceFlipbook != nullptr ? SourceFlipbook->CreateDrawCallRecord() : FSpriteDrawCallRecord();
         DrawCall.Color = SpriteColor.ToFColor(false);
 
-        auto InSceneProxy = static_cast<FSimpleFlipbookSceneProxy *>(SceneProxy);
-        UBodySetup *InBodySetup = CachedBodySetup;
+        auto InSceneProxy = static_cast<Simple2D::FSimpleFlipbookSceneProxy *>(SceneProxy);
         ENQUEUE_RENDER_COMMAND(FSendPaperRenderComponentDynamicData)(
-            [InSceneProxy, DrawCall, InBodySetup](FRHICommandListImmediate &) {
+            [InSceneProxy, DrawCall](FRHICommandListImmediate &) {
                 InSceneProxy->SetFlipbookBounds(DrawCall);
-                InSceneProxy->SetBodySetup_RenderThread(InBodySetup);
             });
     }
 }
@@ -344,7 +342,7 @@ void USimpleFlipbookComponent::CheckForErrors() {
 #endif
 
 FPrimitiveSceneProxy *USimpleFlipbookComponent::CreateSceneProxy() {
-    auto NewProxy = MakeUnique<FSimpleFlipbookSceneProxy>(this);
+    auto NewProxy = MakeUnique<Simple2D::FSimpleFlipbookSceneProxy>(this);
 
     CalculateCurrentFrame();
     const int32 SplitIndex = SourceFlipbook != nullptr ? SourceFlipbook->GetAlternateMaterialSplitIndex() : INDEX_NONE;
@@ -364,23 +362,15 @@ FBoxSphereBounds USimpleFlipbookComponent::CalcBounds(const FTransform &LocalToW
     if (SourceFlipbook != nullptr) {
         // Graphics bounds.
         FBoxSphereBounds NewBounds = SourceFlipbook->GetRenderBounds().TransformBy(LocalToWorld);
-
-        // Add bounds of collision geometry (if present).
-        if (CachedBodySetup != nullptr) {
-            const FBox AggGeomBox = CachedBodySetup->AggGeom.CalcAABB(LocalToWorld);
-            if (AggGeomBox.IsValid) {
-                NewBounds = Union(NewBounds, FBoxSphereBounds(AggGeomBox));
-            }
-        }
-
+        
         // Apply bounds scale
         NewBounds.BoxExtent *= BoundsScale;
         NewBounds.SphereRadius *= BoundsScale;
 
         return NewBounds;
-    } else {
-        return FBoxSphereBounds(LocalToWorld.GetLocation(), FVector::ZeroVector, 0.f);
     }
+    
+    return FBoxSphereBounds(LocalToWorld.GetLocation(), FVector::ZeroVector, 0.f);
 }
 
 void USimpleFlipbookComponent::GetUsedTextures(TArray<UTexture *> &OutTextures,

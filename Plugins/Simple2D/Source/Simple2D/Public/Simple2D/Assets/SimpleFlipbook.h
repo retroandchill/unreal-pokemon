@@ -140,12 +140,12 @@ private:
 
     // The scaling factor between pixels and Unreal units (cm) (e.g., 0.64 would make a 64 pixel wide sprite take up 100 cm)
     UPROPERTY(Category=Sprite, EditAnywhere, meta = (DisplayName = "Pixels per unit"))
-    float PixelsPerUnrealUnit;
+    float PixelsPerUnrealUnit = 1.f;
 
 #if WITH_EDITORONLY_DATA
     // Pivot mode
     UPROPERTY(Category=Sprite, EditAnywhere)
-    TEnumAsByte<ESpritePivotMode::Type> PivotMode;
+    TEnumAsByte<ESpritePivotMode::Type> PivotMode = ESpritePivotMode::Center_Center;
 
     // Custom pivot point (relative to the sprite rectangle)
     UPROPERTY(Category=Sprite, EditAnywhere)
@@ -153,15 +153,7 @@ private:
 
     // Should the pivot be snapped to a pixel boundary?
     UPROPERTY(Category=Sprite, EditAnywhere, AdvancedDisplay)
-    bool bSnapPivotToPixelGrid;
-
-    // Custom collision geometry polygons (in texture space)
-    UPROPERTY(Category=Collision, EditAnywhere)
-    FSpriteGeometryCollection CollisionGeometry;
-
-    // The extrusion thickness of collision geometry when using a 3D collision domain
-    UPROPERTY(Category=Collision, EditAnywhere)
-    float CollisionThickness;
+    bool bSnapPivotToPixelGrid = true;
 
     UPROPERTY()
     FSpriteGeometryCollection RenderGeometry;

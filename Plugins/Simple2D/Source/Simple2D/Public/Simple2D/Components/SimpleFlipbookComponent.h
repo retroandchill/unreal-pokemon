@@ -148,6 +148,9 @@ private:
     TObjectPtr<USimpleFlipbook> SourceFlipbook;
 
     UPROPERTY(Transient)
+    TObjectPtr<UMaterialInterface> BaseMaterial;
+
+    UPROPERTY(Transient)
     TObjectPtr<UMaterialInstanceDynamic> MaterialInstance;
 
     /** Current play rate of the flipbook */
@@ -177,10 +180,6 @@ private:
     /** Vertex color to apply to the frames */
     UPROPERTY(BlueprintGetter = GetSpriteColor, BlueprintSetter = SetSpriteColor, Interp, Category=Sprite)
     FLinearColor SpriteColor = FLinearColor::White;
-
-    /** The cached body setup */
-    UPROPERTY(Transient)
-    TObjectPtr<UBodySetup> CachedBodySetup;
 
     /** Event called whenever a non-looping flipbook finishes playing (either reaching the beginning or the end, depending on the play direction) */
     UPROPERTY(BlueprintAssignable)
