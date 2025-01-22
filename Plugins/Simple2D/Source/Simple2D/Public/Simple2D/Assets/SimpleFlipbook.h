@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "PaperSpriteAtlas.h"
 #include "SpriteDrawCall.h"
 #include "UObject/Object.h"
 #include "SpriteEditorOnlyTypes.h"
@@ -12,10 +11,22 @@ namespace EFlipbookCollisionMode {
     enum Type : int;
 }
 
-class UPaperSprite;
+USTRUCT()
+struct SIMPLE2D_API FSimpleFlipbookDrawCall : public FSpriteDrawCallRecord {
+    GENERATED_BODY()
+
+    UPROPERTY()
+    int32 Rows = 1;
+
+    UPROPERTY()
+    int32 Columns = 1;
+
+    UPROPERTY()
+    int32 FrameNumber = 0;
+};
 
 USTRUCT(BlueprintType)
-struct FSimpleFlipbookKeyFrame {
+struct SIMPLE2D_API FSimpleFlipbookKeyFrame {
     GENERATED_BODY()
 
     UPROPERTY(Category=Sprite, EditAnywhere, BlueprintReadOnly, meta=(ClampMin=0))
@@ -100,7 +111,7 @@ public:
 
     FAdditionalSpriteTextureArray GetBakedAdditionalSourceTextures() const;
 
-    FSpriteDrawCallRecord CreateDrawCallRecord() const;
+    FSimpleFlipbookDrawCall CreateDrawCallRecord(int32 FrameIndex) const;
 
     int32 GetAlternateMaterialSplitIndex() const {
         return AlternateMaterialSplitIndex;

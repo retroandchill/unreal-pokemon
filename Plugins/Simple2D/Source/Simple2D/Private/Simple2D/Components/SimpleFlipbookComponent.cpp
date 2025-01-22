@@ -303,7 +303,7 @@ void USimpleFlipbookComponent::TickComponent(float DeltaTime, enum ELevelTick Ti
 
 void USimpleFlipbookComponent::SendRenderDynamicData_Concurrent() {
     if (SceneProxy != nullptr) {
-        auto DrawCall = SourceFlipbook != nullptr ? SourceFlipbook->CreateDrawCallRecord() : FSpriteDrawCallRecord();
+        auto DrawCall = SourceFlipbook != nullptr ? SourceFlipbook->CreateDrawCallRecord(CachedFrameIndex) : FSimpleFlipbookDrawCall();
         DrawCall.Color = SpriteColor.ToFColor(false);
 
         auto InSceneProxy = static_cast<Simple2D::FSimpleFlipbookSceneProxy *>(SceneProxy);
@@ -347,7 +347,7 @@ FPrimitiveSceneProxy *USimpleFlipbookComponent::CreateSceneProxy() {
     CalculateCurrentFrame();
     const int32 SplitIndex = SourceFlipbook != nullptr ? SourceFlipbook->GetAlternateMaterialSplitIndex() : INDEX_NONE;
 
-    auto DrawCall = SourceFlipbook != nullptr ? SourceFlipbook->CreateDrawCallRecord() : FSpriteDrawCallRecord();
+    auto DrawCall = SourceFlipbook != nullptr ? SourceFlipbook->CreateDrawCallRecord(CachedFrameIndex) : FSimpleFlipbookDrawCall();
     DrawCall.Color = SpriteColor.ToFColor(false);
 
     auto InSceneProxy = NewProxy.Get();

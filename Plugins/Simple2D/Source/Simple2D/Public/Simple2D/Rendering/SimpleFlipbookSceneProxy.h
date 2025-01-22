@@ -8,6 +8,7 @@
 #include "SimpleFlipbookVertexBuffer.h"
 #include "SimpleFlipbookVertexFactory.h"
 
+struct FSimpleFlipbookDrawCall;
 struct FSpriteDrawCallRecord;
 
 namespace Simple2D {
@@ -23,7 +24,7 @@ namespace Simple2D {
     
         SIZE_T GetTypeHash() const override;
     
-        void SetFlipbookBounds(const FSpriteDrawCallRecord& NewDynamicData);
+        void SetFlipbookBounds(const FSimpleFlipbookDrawCall & NewDynamicData);
 
         void GetDynamicMeshElements(const TArray<const FSceneView*>& Views, const FSceneViewFamily& ViewFamily, uint32 VisibilityMap, FMeshElementCollector& Collector) const override;
         FPrimitiveViewRelevance GetViewRelevance(const FSceneView* View) const override;

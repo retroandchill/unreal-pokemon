@@ -2,21 +2,25 @@
 
 
 #include "Simple2D/Rendering/FlipbookTextureOverrideRenderProxy.h"
+#include "MovieSceneSequencePlayer.h"
 
 namespace Simple2D {
     const FName FFlipbookTextureOverrideRenderProxy::TextureParameterName(TEXT("SpriteTexture"));
     const FName FFlipbookTextureOverrideRenderProxy::AdditionalTextureParameterRootName(TEXT("SpriteAdditionalTexture"));
+    const FName FFlipbookTextureOverrideRenderProxy::RowsParameterName(TEXT("Rows"));
+    const FName FFlipbookTextureOverrideRenderProxy::ColumnsParameterName(TEXT("Columns"));
+    const FName FFlipbookTextureOverrideRenderProxy::FrameParameterName(TEXT("Frame"));
     
 #if WITH_EDITOR
     FFlipbookTextureOverrideRenderProxy::FFlipbookTextureOverrideRenderProxy(const FMaterialRenderProxy *InParent,
-        const UTexture *InBaseTexture, FAdditionalSpriteTextureArray InAdditionalTextures,
+        const UTexture *InBaseTexture, FAdditionalSpriteTextureArray InAdditionalTextures, int32 Rows, int32 Columns, int32 FrameNumber,
         const FFlipbookRenderSceneProxyTextureOverrideMap &InTextureOverrideList)
     #else
     FFlipbookTextureOverrideRenderProxy::FFlipbookTextureOverrideRenderProxy(const FMaterialRenderProxy *InParent,
-        const UTexture *InBaseTexture, FAdditionalSpriteTextureArray InAdditionalTextures) 
+        const UTexture *InBaseTexture, FAdditionalSpriteTextureArray InAdditionalTextures, int32 Rows, int32 Columns, int32 FrameNumber) 
     #endif
         : FMaterialRenderProxy(InParent ? InParent->GetMaterialName() : TEXT("FSpriteTextureOverrideRenderProxy")),
-          Parent(InParent), BaseTexture(InBaseTexture), AdditionalTextures(InAdditionalTextures),
+          Parent(InParent), BaseTexture(InBaseTexture), AdditionalTextures(InAdditionalTextures), Rows(Rows), Columns(Columns), FrameNumber(FrameNumber),
     #if WITH_EDITOR
           TextureOverrideList(InTextureOverrideList),
     #endif
@@ -43,13 +47,17 @@ namespace Simple2D {
     }
 
     void FFlipbookTextureOverrideRenderProxy::Reinitialize(const FMaterialRenderProxy *InParent,
-        const UTexture *InBaseTexture, FAdditionalSpriteTextureArray InAdditionalTextures) {
+                                                           const UTexture *InBaseTexture, FAdditionalSpriteTextureArray InAdditionalTextures, int32 NewRows, int32 NewColumns, int32
+                                                           NewFrameNumber) {
         if ((InParent != Parent) || (InBaseTexture != BaseTexture) || (InAdditionalTextures != AdditionalTextures))
         {
             Parent = InParent;
             BaseTexture = InBaseTexture;
             AdditionalTextures = InAdditionalTextures;
             ParentMaterialSerialNumber = INDEX_NONE;
+            Rows = NewRows;
+            Columns = NewColumns;
+            FrameNumber = NewFrameNumber;
         }
     }
 
@@ -92,6 +100,21 @@ namespace Simple2D {
                     return true;
                 }
             }
+        } else if (Type == EMaterialParameterType::Scalar) {
+            if (ParameterInfo.Name == RowsParameterName) {
+                OutValue = static_cast<float>(Rows);
+                    return true;
+            }
+            
+            if (ParameterInfo.Name == ColumnsParameterName) {
+                OutValue = static_cast<float>(Columns);
+                return true;
+            }
+            
+            if (ParameterInfo.Name == FrameParameterName) {
+                OutValue = static_cast<float>(FrameNumber);
+                return true;
+            }
         }
 
         return Parent->GetParameterValue(Type, ParameterInfo, OutValue, Context);
@@ -111,5 +134,17 @@ namespace Simple2D {
 #else
 		return InTexture;
 #endif
+    }
+
+    bool FFlipbookTextureOverrideRenderProxy::FrameDataMatches(int32 OtherRows, int32 OtherColumns,
+                                                               int32 OtherFrame) const {
+        return Rows == OtherRows && Columns == OtherColumns && FrameNumber == OtherFrame;
+    }
+
+    void FFlipbookTextureOverrideRenderProxy::UpdateFrameData(int32 NewRows, int32 NewColumns, int32 NewFrame) {
+        Rows = NewRows;
+        Columns = NewColumns;
+        FrameNumber = NewFrame;
+        InvalidateUniformExpressionCache(false);
     }
 }

@@ -7,6 +7,7 @@
 #include "Paper2DModule.h"
 #include "Simple2D.h"
 #include "Materials/MaterialRenderProxy.h"
+#include "Simple2D/Assets/SimpleFlipbook.h"
 #include "Simple2D/Rendering/FlipbookTextureOverrideRenderProxy.h"
 #include <bit>
 
@@ -45,7 +46,7 @@ namespace Simple2D {
         return std::bit_cast<size_t>(std::addressof(UniquePointer));
     }
 
-    void FSimpleFlipbookSceneProxy::SetFlipbookBounds(const FSpriteDrawCallRecord &NewDynamicData) {
+    void FSimpleFlipbookSceneProxy::SetFlipbookBounds(const FSimpleFlipbookDrawCall& NewDynamicData) {
         SCOPE_CYCLE_COUNTER(STAT_PaperRender_SetSpriteRT);
 
         BatchedSections.Reset();
@@ -53,6 +54,9 @@ namespace Simple2D {
 
         auto &Section = BatchedSections[BatchedSections.AddDefaulted()];
         Section.Material = Material;
+        Section.Columns = NewDynamicData.Columns;
+        Section.Rows = NewDynamicData.Rows;
+        Section.FrameNumber = NewDynamicData.FrameNumber;
         Section.AddVerticesFromDrawCallRecord(NewDynamicData, 0, NewDynamicData.RenderVerts.Num(), Vertices);
 
         RecreateCachedRenderData(FRHICommandListImmediate::Get());
@@ -324,7 +328,7 @@ namespace Simple2D {
             if ((Proxy != nullptr) && BatchedSections.IsValidIndex(BatchIndex))
             {
                 const auto& Section = BatchedSections[BatchIndex];
-                Proxy->Reinitialize(Section.Material->GetRenderProxy(), Section.BaseTexture, Section.AdditionalTextures);
+                Proxy->Reinitialize(Section.Material->GetRenderProxy(), Section.BaseTexture, Section.AdditionalTextures, Section.Rows, Section.Columns, Section.FrameNumber);
             }
             ++BatchIndex;
         }
@@ -367,10 +371,12 @@ namespace Simple2D {
         {
             const auto& Section = BatchedSections[SectionIndex];
 #if WITH_EDITOR
-            Result = MakeUnique<FFlipbookTextureOverrideRenderProxy>(ParentMaterialProxy, Section.BaseTexture, Section.AdditionalTextures, TextureOverrideList);
+            Result = MakeUnique<FFlipbookTextureOverrideRenderProxy>(ParentMaterialProxy, Section.BaseTexture, Section.AdditionalTextures, Section.Rows, Section.Columns, Section.FrameNumber, TextureOverrideList);
 #else
-            Result = MakeUnique<FFlipbookTextureOverrideRenderProxy>(ParentMaterialProxy, Section.BaseTexture, Section.AdditionalTextures);
+            Result = MakeUnique<FFlipbookTextureOverrideRenderProxy>(ParentMaterialProxy, Section.BaseTexture, Section.AdditionalTextures, Section.Rows, Section.Columns, Section.FrameNumber);
 #endif
+        } else if (const auto& Section = BatchedSections[SectionIndex]; !Result->FrameDataMatches(Section.Rows, Section.Columns, Section.FrameNumber)) {
+            Result->UpdateFrameData(Section.Rows, Section.Columns, Section.FrameNumber);
         }
 
         if (!Result->CheckValidity(ParentMaterialProxy))

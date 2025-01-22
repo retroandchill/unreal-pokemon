@@ -30,19 +30,15 @@ namespace Simple2D {
      * 
      */
     struct SIMPLE2D_API FFlipbookRenderSection {
-        UMaterialInterface *Material;
-        UTexture *BaseTexture;
+        UMaterialInterface *Material = nullptr;
+        UTexture *BaseTexture = nullptr;
         FAdditionalSpriteTextureArray AdditionalTextures;
+        int32 Rows = 1;
+        int32 Columns = 1;
+        int32 FrameNumber = 0;
 
-        int32 VertexOffset;
-        int32 NumVertices;
-
-        FFlipbookRenderSection()
-            : Material(nullptr)
-              , BaseTexture(nullptr)
-              , VertexOffset(INDEX_NONE)
-              , NumVertices(0) {
-        }
+        int32 VertexOffset = INDEX_NONE;
+        int32 NumVertices = 0;
 
         FTexture *GetBaseTextureResource() const;
 

@@ -114,14 +114,17 @@ FAdditionalSpriteTextureArray USimpleFlipbook::GetBakedAdditionalSourceTextures(
     return FAdditionalSpriteTextureArray(AdditionalSourceTextures);
 }
 
-FSpriteDrawCallRecord USimpleFlipbook::CreateDrawCallRecord() const {
-    FSpriteDrawCallRecord DrawCall;
+FSimpleFlipbookDrawCall USimpleFlipbook::CreateDrawCallRecord(int32 FrameIndex) const {
+    FSimpleFlipbookDrawCall DrawCall;
 
     DrawCall.Destination = FVector::ZeroVector;
     DrawCall.BaseTexture = GetSourceTexture();
     DrawCall.AdditionalTextures = GetBakedAdditionalSourceTextures();
     DrawCall.Color = FColor::White;
     DrawCall.RenderVerts = BakedRenderData;
+    DrawCall.Columns = Columns;
+    DrawCall.Rows = Rows;
+    DrawCall.FrameNumber = GetKeyFrameChecked(FrameIndex).Index;
 
     return DrawCall;
 }
