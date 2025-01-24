@@ -21,7 +21,8 @@ public class Simple2DEditor : ModuleRules
                 "Slate",
                 "SlateCore", 
                 "Paper2D",
-                "Paper2DEditor"
+                "Paper2DEditor",
+                "PropertyEditor"
             }
         );
     }

@@ -37,6 +37,12 @@ struct SIMPLE2D_API FSimpleFlipbookKeyFrame {
     
 };
 
+#if WITH_EDITOR
+namespace Simple2D {
+    class FSimpleFlipbookDetailsCustomization;
+}
+#endif
+
 /**
  * 
  */
@@ -128,6 +134,10 @@ public:
 #endif
 
 private:
+#if WITH_EDITOR
+    friend Simple2D::FSimpleFlipbookDetailsCustomization;
+#endif
+    
     UPROPERTY(EditAnywhere, BlueprintGetter = GetSourceTexture, Category = Sprite)
     TObjectPtr<UTexture2D> SourceTexture;
 
