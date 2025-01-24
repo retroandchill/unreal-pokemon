@@ -131,9 +131,16 @@ FSimpleFlipbookDrawCall USimpleFlipbook::CreateDrawCallRecord(int32 FrameIndex) 
 
 #if WITH_EDITOR
 void USimpleFlipbook::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
+    if (PixelsPerUnrealUnit <= 0.0f)
+    {
+        PixelsPerUnrealUnit = 1.0f;
+    }
+    
     if (FramesPerSecond < 0.0f) {
         FramesPerSecond = 0.0f;
     }
+    
+    CustomPivotPoint = GetPivotPosition();
 
     UObject::PostEditChangeProperty(PropertyChangedEvent);
 
