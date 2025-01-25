@@ -24,7 +24,9 @@ public class Simple2DEditor : ModuleRules
                 "Paper2DEditor",
                 "PropertyEditor",
                 "EditorInteractiveToolsFramework",
-                "InputCore"
+                "InputCore",
+                "RenderCore",
+                "Projects"
             }
         );
     }
