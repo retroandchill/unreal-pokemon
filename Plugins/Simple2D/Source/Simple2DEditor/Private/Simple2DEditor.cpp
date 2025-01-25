@@ -5,6 +5,7 @@
 #include "Simple2D/Assets/SimpleFlipbook.h"
 #include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookAssetActions.h"
 #include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookDetailsCustomization.h"
+#include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookThumbnailRenderer.h"
 
 class IPaper2DEditorModule;
 
@@ -22,6 +23,8 @@ void FSimple2DEditorModule::StartupModule()
         PropertyModule.RegisterCustomClassLayout(USimpleFlipbook::StaticClass()->GetFName(),
             FOnGetDetailCustomizationInstance::CreateStatic(
                 &Simple2D::FSimpleFlipbookDetailsCustomization::MakeInstance));
+
+        UThumbnailManager::Get().RegisterCustomRenderer(USimpleFlipbook::StaticClass(), USimpleFlipbookThumbnailRenderer::StaticClass());
 
         Simple2D::FSimple2DStyle::Initialize();
     });

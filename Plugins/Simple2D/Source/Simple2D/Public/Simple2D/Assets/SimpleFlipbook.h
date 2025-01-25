@@ -141,6 +141,7 @@ private:
     friend Simple2D::FSimpleFlipbookDetailsCustomization;
 #endif
     friend Simple2D::FScopedSimpleFlipbookMutator;
+    friend class USimpleFlipbookThumbnailRenderer;
     
     UPROPERTY(EditAnywhere, BlueprintGetter = GetSourceTexture, Category = Sprite)
     TObjectPtr<UTexture2D> SourceTexture;
