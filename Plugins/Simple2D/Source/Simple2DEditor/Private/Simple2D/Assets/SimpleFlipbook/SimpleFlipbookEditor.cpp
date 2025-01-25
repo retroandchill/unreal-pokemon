@@ -6,6 +6,7 @@
 #include "Editor/KismetWidgets/Public/SScrubControlPanel.h"
 #include "Framework/Commands/GenericCommands.h"
 #include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookEditorCommands.h"
+#include "Simple2D/Assets/SimpleFlipbook/Widgets/SimpleFlipbookEditorViewport.h"
 #include "Simple2D/Components/SimpleFlipbookComponent.h"
 
 namespace Simple2D {

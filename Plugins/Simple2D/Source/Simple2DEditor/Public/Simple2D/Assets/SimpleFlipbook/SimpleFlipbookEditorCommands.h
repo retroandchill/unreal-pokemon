@@ -19,18 +19,11 @@ namespace Simple2D {
 
         TSharedPtr<FUICommandInfo> SetShowGrid;
         TSharedPtr<FUICommandInfo> SetShowBounds;
-        TSharedPtr<FUICommandInfo> SetShowCollision;
-
         TSharedPtr<FUICommandInfo> SetShowPivot;
-        TSharedPtr<FUICommandInfo> SetShowSockets;
 
         TSharedPtr<FUICommandInfo> AddNewFrame;
         TSharedPtr<FUICommandInfo> AddNewFrameBefore;
         TSharedPtr<FUICommandInfo> AddNewFrameAfter;
-
-        TSharedPtr<FUICommandInfo> PickNewSpriteFrame;
-        TSharedPtr<FUICommandInfo> EditSpriteFrame;
-        TSharedPtr<FUICommandInfo> ShowInContentBrowser;
         
     };
 }
