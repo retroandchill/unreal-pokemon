@@ -2,7 +2,8 @@ from typing import Optional
 
 from unreal import Texture2D, PaperSprite, PaperSpriteFactory, AssetToolsHelpers, Vector2D, SpritePivotMode, \
     PaperFlipbook, PaperFlipbookFactory, Array, PaperFlipbookKeyFrame, PaperZDAnimationSource, PaperZDAnimSequence, \
-    Object, PaperZDAnimSequenceFactory, PaperZDAnimSequence_Flipbook, PaperZDEditorHelpers, Name
+    Object, PaperZDAnimSequenceFactory, PaperZDAnimSequence_Flipbook, PaperZDEditorHelpers, Name, \
+    SimpleFlipbook, SimpleFlipbookFactory, SimpleFlipbookKeyFrame
 
 INVALID_ASSET_ERROR = 'Invalid asset type created'
 
@@ -158,6 +159,35 @@ def compile_sprites_into_directional_flipbooks(source_texture: Texture2D, sprite
 
     return flipbooks
 
+def compile_texture_into_flipbook(source_texture: Texture2D, rows: int, columns: int,
+                                  frame_rate: float, frame_order: Optional[list[tuple[int, int]]] = None,
+                                  pivot_mode: SpritePivotMode = SpritePivotMode.CENTER_CENTER) -> SimpleFlipbook:
+    asset_tools = AssetToolsHelpers.get_asset_tools()
+    factory = SimpleFlipbookFactory()
+    texture_package = get_parent_package(get_package_name(source_texture))
+
+    new_flipbook = asset_tools.create_asset(source_texture.get_name(), texture_package,
+                                            PaperFlipbook.static_class(), factory)
+    if not isinstance(new_flipbook, PaperFlipbook):
+        raise RuntimeError(INVALID_ASSET_ERROR)
+
+    new_flipbook.set_editor_property('source_texture', source_texture)
+    new_flipbook.set_editor_property('rows', rows)
+    new_flipbook.set_editor_property('columns', columns)
+
+    key_frames: Array[SimpleFlipbookKeyFrame] = Array(SimpleFlipbookKeyFrame)
+    if frame_order is None:
+        frame_order = map(lambda x: (x, 1), range(rows * columns))
+    for index, run in frame_order:
+        frame = SimpleFlipbookKeyFrame()
+        frame.set_editor_property('index', index)
+        frame.set_editor_property('frame_run', run)
+        key_frames.append(frame)
+
+    new_flipbook.set_editor_property('key_frames', key_frames)
+    new_flipbook.set_editor_property('frames_per_second', frame_rate)
+    new_flipbook.set_editor_property('pivot_mode', )
+    return new_flipbook
 
 def place_flipbooks_in_animation_source(source_texture: Texture2D, flipbooks: list[PaperFlipbook],
                                         animation_source: PaperZDAnimationSource) -> PaperZDAnimSequence:
