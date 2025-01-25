@@ -8,6 +8,7 @@
 #include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookEditorCommands.h"
 #include "Simple2D/Assets/SimpleFlipbook/Widgets/SimpleFlipbookEditorViewport.h"
 #include "Simple2D/Components/SimpleFlipbookComponent.h"
+#include "Widgets/SimpleFlipbookTimeline.h"
 
 namespace Simple2D {
 
@@ -221,7 +222,7 @@ namespace Simple2D {
 			    .Padding(0, 8, 0, 0)
 			    .AutoHeight()
 			    [
-				    SNew(SFlipbookTimeline, GetToolkitCommands())
+				    SNew(SSimpleFlipbookTimeline, GetToolkitCommands())
 				    .FlipbookBeingEdited(this, &FSimpleFlipbookEditor::GetFlipbookBeingEdited)
 				    .OnSelectionChanged(this, &FSimpleFlipbookEditor::SetSelection)
 				    .PlayTime(this, &FSimpleFlipbookEditor::GetPlaybackPosition)
