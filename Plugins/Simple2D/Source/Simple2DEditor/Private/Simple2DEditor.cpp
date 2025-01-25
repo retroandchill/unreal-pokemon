@@ -1,5 +1,7 @@
 ﻿#include "Simple2DEditor.h"
 #include "AssetToolsModule.h"
+#include "ComponentAssetBroker.h"
+#include "Simple2D/Simple2DStyle.h"
 #include "Simple2D/Assets/SimpleFlipbook.h"
 #include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookAssetActions.h"
 #include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookDetailsCustomization.h"
@@ -20,12 +22,19 @@ void FSimple2DEditorModule::StartupModule()
         PropertyModule.RegisterCustomClassLayout(USimpleFlipbook::StaticClass()->GetFName(),
             FOnGetDetailCustomizationInstance::CreateStatic(
                 &Simple2D::FSimpleFlipbookDetailsCustomization::MakeInstance));
+
+        Simple2D::FSimple2DStyle::Initialize();
     });
 }
 
 void FSimple2DEditorModule::ShutdownModule()
 {
-    // No special shutdown needed
+    FCoreDelegates::OnPostEngineInit.RemoveAll(this);
+
+    FlipbookEditor_MenuExtensibilityManager.Reset();
+    FlipbookEditor_ToolBarExtensibilityManager.Reset();
+
+    Simple2D::FSimple2DStyle::Shutdown();
 }
     
 IMPLEMENT_MODULE(FSimple2DEditorModule, Simple2DEditor)
