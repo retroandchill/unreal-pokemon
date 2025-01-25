@@ -13,10 +13,10 @@ def execute(base_package: str, manifest_file: str):
     """
     with open(manifest_file, "r") as manifest_file:
         csv_reader = csv.reader(manifest_file)
-        data: list[tuple[str, int, int, int, int, list[int]]] = []
+        data: list[tuple[str, int, int, int, float, list[int]]] = []
         next(csv_reader, None)
         for row in csv_reader:
-            data.append((row[0], int(row[1]), int(row[2]), int(row[3]), int(row[4]), eval(row[5])))
+            data.append((row[0], int(row[1]), int(row[2]), int(row[3]), float(row[4]), eval(row[5])))
 
     with ScopedSlowTask(len(data), "Importing Sprites") as slow_task:
         slow_task.make_dialog(True)
