@@ -13,7 +13,7 @@ def execute(base_package: str, manifest_file: str, material: MaterialInterface):
     """
     with open(manifest_file, "r") as manifest_file:
         csv_reader = csv.reader(manifest_file)
-        data: list[tuple[str, int, int, int, float, list[int]]] = []
+        data: list[tuple[str, int, int, int, float, list[tuple[int, int]]]] = []
         next(csv_reader, None)
         for row in csv_reader:
             data.append((row[0], int(row[1]), int(row[2]), int(row[3]), float(row[4]), eval(row[5])))
