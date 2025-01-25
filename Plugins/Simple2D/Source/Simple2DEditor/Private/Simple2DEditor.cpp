@@ -11,7 +11,7 @@ void FSimple2DEditorModule::StartupModule()
     FCoreDelegates::OnPostEngineInit.AddLambda([this] {
         // Register asset types
         IAssetTools &AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
-        AssetTools.RegisterAssetTypeActions(MakeShared<FSimpleFlipbookAssetActions>());
+        AssetTools.RegisterAssetTypeActions(MakeShared<Simple2D::FSimpleFlipbookAssetActions>());
 
         auto &PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
         PropertyModule.RegisterCustomClassLayout(USimpleFlipbook::StaticClass()->GetFName(),

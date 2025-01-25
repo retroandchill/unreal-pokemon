@@ -37,11 +37,12 @@ struct SIMPLE2D_API FSimpleFlipbookKeyFrame {
     
 };
 
-#if WITH_EDITOR
 namespace Simple2D {
+    class FScopedSimpleFlipbookMutator;
+#if WITH_EDITOR
     class FSimpleFlipbookDetailsCustomization;
-}
 #endif
+}
 
 /**
  * 
@@ -123,6 +124,8 @@ public:
         return AlternateMaterialSplitIndex;
     }
 
+    void InvalidateCachedData();
+
 #if WITH_EDITOR
     void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
@@ -137,6 +140,7 @@ private:
 #if WITH_EDITOR
     friend Simple2D::FSimpleFlipbookDetailsCustomization;
 #endif
+    friend Simple2D::FScopedSimpleFlipbookMutator;
     
     UPROPERTY(EditAnywhere, BlueprintGetter = GetSourceTexture, Category = Sprite)
     TObjectPtr<UTexture2D> SourceTexture;
@@ -191,3 +195,40 @@ private:
     TArray<FVector4> BakedRenderData;
 
 };
+
+namespace Simple2D {
+    class FScopedSimpleFlipbookMutator
+    {
+    public:
+        float& FramesPerSecond;
+        TArray<FSimpleFlipbookKeyFrame>& KeyFrames;
+
+    private:
+        USimpleFlipbook* SourceFlipbook;
+
+    public:
+        explicit FScopedSimpleFlipbookMutator(USimpleFlipbook* InFlipbook)
+            : FramesPerSecond(InFlipbook->FramesPerSecond)
+            , KeyFrames(InFlipbook->KeyFrames)
+            , SourceFlipbook(InFlipbook)
+        {
+        }
+
+        ~FScopedSimpleFlipbookMutator()
+        {
+            InvalidateCachedData();
+        }
+
+        UE_NONCOPYABLE(FScopedSimpleFlipbookMutator)
+
+        void InvalidateCachedData()
+        {
+            SourceFlipbook->InvalidateCachedData();
+        }
+
+        USimpleFlipbook* GetSourceFlipbook() const
+        {
+            return SourceFlipbook;
+        }
+    };
+}

@@ -9,7 +9,7 @@ public class Simple2DEditor : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core", "Simple2D", "UnrealEd"
+                "Core", "Simple2D", "UnrealEd", "EditorWidgets"
             }
         );
 

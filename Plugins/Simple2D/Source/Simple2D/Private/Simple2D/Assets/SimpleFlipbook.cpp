@@ -129,6 +129,10 @@ FSimpleFlipbookDrawCall USimpleFlipbook::CreateDrawCallRecord(int32 FrameIndex) 
     return DrawCall;
 }
 
+void USimpleFlipbook::InvalidateCachedData() {
+    // No cached data yet, but the functions that currently have to iterate over all frames can use cached data in the future
+}
+
 #if WITH_EDITOR
 void USimpleFlipbook::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
     if (PixelsPerUnrealUnit <= 0.0f)

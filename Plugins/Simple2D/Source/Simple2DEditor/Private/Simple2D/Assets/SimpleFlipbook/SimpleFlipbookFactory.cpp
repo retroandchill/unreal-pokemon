@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "Simple2D/Assets/SimpleFlipbookFactory.h"
+#include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookFactory.h"
 
 USimpleFlipbookFactory::USimpleFlipbookFactory() {
     SupportedClass = USimpleFlipbook::StaticClass();

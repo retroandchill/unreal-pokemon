@@ -1,7 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 
-#include "Simple2D/Assets/SimpleFlipbookDetailsCustomization.h"
+#include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookDetailsCustomization.h"
 #include "DetailCategoryBuilder.h"
 #include "DetailLayoutBuilder.h"
 #include "DetailWidgetRow.h"
