@@ -159,7 +159,8 @@ def compile_sprites_into_directional_flipbooks(source_texture: Texture2D, sprite
 
     return flipbooks
 
-def compile_texture_into_flipbook(source_texture: Texture2D, rows: int, columns: int,
+def compile_texture_into_flipbook(source_texture: Texture2D, material: MaterialInterface,
+                                  rows: int, columns: int,
                                   frame_rate: float, frame_order: Optional[list[tuple[int, int]]] = None,
                                   pivot_mode: SpritePivotMode = SpritePivotMode.CENTER_CENTER) -> SimpleFlipbook:
     asset_tools = AssetToolsHelpers.get_asset_tools()
@@ -172,6 +173,7 @@ def compile_texture_into_flipbook(source_texture: Texture2D, rows: int, columns:
         raise RuntimeError(INVALID_ASSET_ERROR)
 
     new_flipbook.set_editor_property('source_texture', source_texture)
+    new_flipbook.set_editor_property('default_material', material)
     new_flipbook.set_editor_property('rows', rows)
     new_flipbook.set_editor_property('columns', columns)
 
