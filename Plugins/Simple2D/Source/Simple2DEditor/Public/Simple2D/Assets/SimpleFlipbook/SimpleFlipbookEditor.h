@@ -18,8 +18,8 @@ namespace Simple2D {
      */
     class SIMPLE2DEDITOR_API FSimpleFlipbookEditor : public FAssetEditorToolkit, public FGCObject {
     public:
-        void RegisterTabSpawners(const TSharedRef<FTabManager> &TabManager) override;
-        void UnregisterTabSpawners(const TSharedRef<FTabManager> &TabManager) override;
+        void RegisterTabSpawners(const TSharedRef<FTabManager> &InTabManager) override;
+        void UnregisterTabSpawners(const TSharedRef<FTabManager> &InTabManager) override;
 
         FName GetToolkitFName() const override;
         FText GetBaseToolkitName() const override;

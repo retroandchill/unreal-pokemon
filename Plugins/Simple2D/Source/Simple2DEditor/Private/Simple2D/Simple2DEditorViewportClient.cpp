@@ -91,7 +91,7 @@ namespace Simple2D {
         }
     }
 
-    void FSimple2DEditorViewportClient::DrawSelectionRectangles(FViewport *Viewport, FCanvas *Canvas) {
+    void FSimple2DEditorViewportClient::DrawSelectionRectangles(FViewport *, FCanvas *Canvas) {
         for (auto &[TopLeft, Dimensions, Color] : SelectionRectangles)
         {
             const float X = (TopLeft.X - ZoomPos.X) * ZoomAmount;

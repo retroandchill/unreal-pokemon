@@ -8,7 +8,8 @@
 #include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookEditorCommands.h"
 #include "Simple2D/Assets/SimpleFlipbook/Widgets/SimpleFlipbookEditorViewport.h"
 #include "Simple2D/Components/SimpleFlipbookComponent.h"
-#include "Widgets/SimpleFlipbookTimeline.h"
+#include "Simple2D/Assets/SimpleFlipbook/Widgets/SimpleFlipbookTimeline.h"
+#include "Simple2D/Assets/SimpleFlipbook/Widgets/SimpleFlipbookPropertiesTabsBody.h"
 
 namespace Simple2D {
 
@@ -19,28 +20,28 @@ namespace Simple2D {
 
     const FName FlipbookEditorAppName = FName(TEXT("FlipbookEditorApp"));
 
-    void FSimpleFlipbookEditor::RegisterTabSpawners(const TSharedRef<FTabManager> &TabManager) {
-        WorkspaceMenuCategory = TabManager->AddLocalWorkspaceMenuCategory(NSLOCTEXT("Simple2D", "WorkspaceMenu_FlipbookEditor", "Flipbook Editor"));
+    void FSimpleFlipbookEditor::RegisterTabSpawners(const TSharedRef<FTabManager> &InTabManager) {
+        WorkspaceMenuCategory = InTabManager->AddLocalWorkspaceMenuCategory(NSLOCTEXT("Simple2D", "WorkspaceMenu_FlipbookEditor", "Flipbook Editor"));
         auto WorkspaceMenuCategoryRef = WorkspaceMenuCategory.ToSharedRef();
 
-        FAssetEditorToolkit::RegisterTabSpawners(TabManager);
+        FAssetEditorToolkit::RegisterTabSpawners(InTabManager);
 
-        TabManager->RegisterTabSpawner(FlipbookTabs::ViewportID, FOnSpawnTab::CreateSP(this, &FSimpleFlipbookEditor::SpawnTab_Viewport))
+        InTabManager->RegisterTabSpawner(FlipbookTabs::ViewportID, FOnSpawnTab::CreateSP(this, &FSimpleFlipbookEditor::SpawnTab_Viewport))
             .SetDisplayName( NSLOCTEXT("Simple2D", "ViewportTab", "Viewport") )
             .SetGroup(WorkspaceMenuCategoryRef)
             .SetIcon(FSlateIcon(FAppStyle::GetAppStyleSetName(), "LevelEditor.Tabs.Viewports"));
 
-        TabManager->RegisterTabSpawner(FlipbookTabs::DetailsID, FOnSpawnTab::CreateSP(this, &FSimpleFlipbookEditor::SpawnTab_Details))
+        InTabManager->RegisterTabSpawner(FlipbookTabs::DetailsID, FOnSpawnTab::CreateSP(this, &FSimpleFlipbookEditor::SpawnTab_Details))
             .SetDisplayName( NSLOCTEXT("Simple2D", "DetailsTabLabel", "Details") )
             .SetGroup(WorkspaceMenuCategoryRef)
             .SetIcon(FSlateIcon(FAppStyle::GetAppStyleSetName(), "LevelEditor.Tabs.Details"));
     }
 
-    void FSimpleFlipbookEditor::UnregisterTabSpawners(const TSharedRef<FTabManager> &TabManager) {
-        FAssetEditorToolkit::UnregisterTabSpawners(TabManager);
+    void FSimpleFlipbookEditor::UnregisterTabSpawners(const TSharedRef<FTabManager> &InTabManager) {
+        FAssetEditorToolkit::UnregisterTabSpawners(InTabManager);
 
-        TabManager->UnregisterTabSpawner(FlipbookTabs::ViewportID);
-        TabManager->UnregisterTabSpawner(FlipbookTabs::DetailsID);
+        InTabManager->UnregisterTabSpawner(FlipbookTabs::ViewportID);
+        InTabManager->UnregisterTabSpawner(FlipbookTabs::DetailsID);
     }
 
     FName FSimpleFlipbookEditor::GetToolkitFName() const {
@@ -244,7 +245,7 @@ namespace Simple2D {
         return SNew(SDockTab)
             .Label(NSLOCTEXT("Simple2D", "DetailsTab_Title", "Details"))
             [
-                SNew(SFlipbookPropertiesTabBody, FlipbookEditorPtr.ToSharedPtr())
+                SNew(SSimpleFlipbookPropertiesTabsBody, FlipbookEditorPtr.ToSharedPtr())
             ];
     }
 

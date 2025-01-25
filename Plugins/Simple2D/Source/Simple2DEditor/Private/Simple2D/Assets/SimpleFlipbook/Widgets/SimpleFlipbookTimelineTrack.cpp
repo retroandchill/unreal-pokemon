@@ -291,10 +291,10 @@ namespace Simple2D {
             MainBoxPtr->AddSlot()
                       .AutoWidth()
             [
-                SNew(SSimpleFlipbookKeyframeWidget, KeyFrameIdx, CommandList)
-                .SlateUnitsPerFrame(this->SlateUnitsPerFrame)
-                .FlipbookBeingEdited(this->FlipbookBeingEdited)
-                .OnSelectionChanged(this->OnSelectionChanged)
+                SNew(SSimpleFlipbookKeyframeWidget, KeyFrameIdx)
+                    .SlateUnitsPerFrame(this->SlateUnitsPerFrame)
+                    .FlipbookBeingEdited(this->FlipbookBeingEdited)
+                    .OnSelectionChanged(this->OnSelectionChanged)
             ];
         }
     }

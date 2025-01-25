@@ -9,7 +9,7 @@ public class Simple2DEditor : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core", "Simple2D", "UnrealEd", "EditorWidgets", "RetroLib"
+                "Core", "Simple2D", "UnrealEd", "EditorWidgets", "RetroLib", "KismetWidgets", "DeveloperSettings"
             }
         );
 
@@ -22,7 +22,9 @@ public class Simple2DEditor : ModuleRules
                 "SlateCore", 
                 "Paper2D",
                 "Paper2DEditor",
-                "PropertyEditor"
+                "PropertyEditor",
+                "EditorInteractiveToolsFramework",
+                "InputCore"
             }
         );
     }

@@ -1,14 +1,17 @@
 ﻿#include "Simple2DEditor.h"
 #include "AssetToolsModule.h"
 #include "Simple2D/Assets/SimpleFlipbook.h"
-#include "Simple2D/Assets/SimpleFlipbookAssetActions.h"
-#include "Simple2D/Assets/SimpleFlipbookDetailsCustomization.h"
+#include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookAssetActions.h"
+#include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookDetailsCustomization.h"
 
 class IPaper2DEditorModule;
 
 void FSimple2DEditorModule::StartupModule()
 {
     FCoreDelegates::OnPostEngineInit.AddLambda([this] {
+        FlipbookEditor_MenuExtensibilityManager = MakeShared<FExtensibilityManager>();
+        FlipbookEditor_ToolBarExtensibilityManager = MakeShared<FExtensibilityManager>();
+        
         // Register asset types
         IAssetTools &AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
         AssetTools.RegisterAssetTypeActions(MakeShared<Simple2D::FSimpleFlipbookAssetActions>());

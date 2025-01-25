@@ -24,6 +24,9 @@ namespace Simple2D {
         TSharedPtr<FUICommandInfo> AddNewFrame;
         TSharedPtr<FUICommandInfo> AddNewFrameBefore;
         TSharedPtr<FUICommandInfo> AddNewFrameAfter;
+
+    private:
+        friend TCommands;
         
     };
 }

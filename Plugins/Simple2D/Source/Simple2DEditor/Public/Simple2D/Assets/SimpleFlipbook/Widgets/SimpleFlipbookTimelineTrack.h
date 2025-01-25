@@ -13,7 +13,7 @@ namespace Simple2D {
         constexpr float HandleWidth = 12.0f;
         constexpr float FrameHeight = 48;
         constexpr float HeightBeforeFrames = 16;
-        constexpr FMargin FramePadding(0.0f, 7.0f, 0.0f, 7.0f);
+        const FMargin FramePadding(0.0f, 7.0f, 0.0f, 7.0f);
     }
 
     class FKeyFrameDragDropOp : public FDragDropOperation {
@@ -58,7 +58,7 @@ namespace Simple2D {
             }
 
             SLATE_ATTRIBUTE(float, SlateUnitsPerFrame)
-            SLATE_ATTRIBUTE(class UPaperFlipbook*, FlipbookBeingEdited)
+            SLATE_ATTRIBUTE(USimpleFlipbook*, FlipbookBeingEdited)
             SLATE_EVENT(FOnKeyframeSelectionChanged, OnSelectionChanged)
 
         SLATE_END_ARGS()
@@ -103,7 +103,7 @@ namespace Simple2D {
             }
 
             SLATE_ATTRIBUTE(float, SlateUnitsPerFrame)
-            SLATE_ATTRIBUTE(class UPaperFlipbook*, FlipbookBeingEdited)
+            SLATE_ATTRIBUTE(USimpleFlipbook*, FlipbookBeingEdited)
             SLATE_EVENT(FOnKeyframeSelectionChanged, OnSelectionChanged)
 
         SLATE_END_ARGS()

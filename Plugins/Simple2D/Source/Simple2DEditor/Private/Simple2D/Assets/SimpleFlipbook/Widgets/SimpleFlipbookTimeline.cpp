@@ -5,6 +5,7 @@
 #include "Simple2D/Assets/SimpleFlipbook.h"
 #include "SlateOptMacros.h"
 #include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookEditorCommands.h"
+#include "Simple2D/Assets/SimpleFlipbook/Widgets/SimpleFlipbookTimelineHeader.h"
 #include "Simple2D/Assets/SimpleFlipbook/Widgets/SimpleFlipbookTimelineTrack.h"
 #include "Widgets/Colors/SColorBlock.h"
 #include <array>
