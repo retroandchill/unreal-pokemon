@@ -82,7 +82,7 @@ void USimpleFlipbookComponent::Play() {
 }
 
 void USimpleFlipbookComponent::PlayFromStart() {
-    SetPlaybackPosition(0.0f, /*bFireEvents=*/ false);
+    SetPlaybackPosition(0.0f);
     Play();
 }
 
@@ -93,7 +93,7 @@ void USimpleFlipbookComponent::Reverse() {
 }
 
 void USimpleFlipbookComponent::ReverseFromEnd() {
-    SetPlaybackPosition(GetFlipbookLength(), /*bFireEvents=*/ false);
+    SetPlaybackPosition(GetFlipbookLength());
     Reverse();
 }
 
@@ -112,7 +112,7 @@ bool USimpleFlipbookComponent::IsReversing() const {
 void USimpleFlipbookComponent::SetPlaybackPositionInFrames(int32 NewFramePosition, bool bFireEvents) {
     const float Framerate = GetFlipbookFramerate();
     const float NewTime = (Framerate > 0.0f) ? (NewFramePosition / Framerate) : 0.0f;
-    SetPlaybackPosition(NewTime, bFireEvents);
+    SetPlaybackPosition(NewTime);
 }
 
 int32 USimpleFlipbookComponent::GetPlaybackPositionInFrames() const {
@@ -125,34 +125,9 @@ int32 USimpleFlipbookComponent::GetPlaybackPositionInFrames() const {
     return 0;
 }
 
-void USimpleFlipbookComponent::SetPlaybackPosition(float NewPosition, bool bFireEvents) {
+void USimpleFlipbookComponent::SetPlaybackPosition(float NewPosition) {
     float OldPosition = AccumulatedTime;
     AccumulatedTime = NewPosition;
-
-    // If we should be firing events for this track...
-    if (bFireEvents) {
-        float MinTime;
-        float MaxTime;
-        if (!bReversePlayback) {
-            // If playing sequence forwards.
-            MinTime = OldPosition;
-            MaxTime = AccumulatedTime;
-
-            // Slight hack here.. if playing forwards and reaching the end of the sequence, force it over a little to ensure we fire events actually on the end of the sequence.
-            if (MaxTime == GetFlipbookLength()) {
-                MaxTime += (float)KINDA_SMALL_NUMBER;
-            }
-        } else {
-            // If playing sequence backwards.
-            MinTime = AccumulatedTime;
-            MaxTime = OldPosition;
-
-            // Same small hack as above for backwards case.
-            if (MinTime == 0.0f) {
-                MinTime -= (float)KINDA_SMALL_NUMBER;
-            }
-        }
-    }
 
     if (OldPosition != AccumulatedTime) {
         CalculateCurrentFrame();
@@ -180,7 +155,7 @@ float USimpleFlipbookComponent::GetPlayRate() const {
 }
 
 void USimpleFlipbookComponent::SetNewTime(float NewTime) {
-    SetPlaybackPosition(NewTime, false);
+    SetPlaybackPosition(NewTime);
 }
 
 float USimpleFlipbookComponent::GetFlipbookLength() const {
@@ -233,8 +208,8 @@ void USimpleFlipbookComponent::TickFlipbook(float DeltaTime) {
             if (NewPosition > TimelineLength) {
                 if (bLooping) {
                     // If looping, play to end, jump to start, and set target to somewhere near the beginning.
-                    SetPlaybackPosition(TimelineLength, true);
-                    SetPlaybackPosition(0.0f, false);
+                    SetPlaybackPosition(TimelineLength);
+                    SetPlaybackPosition(0.0f);
 
                     if (TimelineLength > 0.0f) {
                         while (NewPosition > TimelineLength) {
@@ -254,8 +229,8 @@ void USimpleFlipbookComponent::TickFlipbook(float DeltaTime) {
             if (NewPosition < 0.0f) {
                 if (bLooping) {
                     // If looping, play to start, jump to end, and set target to somewhere near the end.
-                    SetPlaybackPosition(0.0f, true);
-                    SetPlaybackPosition(TimelineLength, false);
+                    SetPlaybackPosition(0.0f);
+                    SetPlaybackPosition(TimelineLength);
 
                     if (TimelineLength > 0.0f) {
                         while (NewPosition < 0.0f) {
@@ -273,7 +248,7 @@ void USimpleFlipbookComponent::TickFlipbook(float DeltaTime) {
             }
         }
 
-        SetPlaybackPosition(NewPosition, true);
+        SetPlaybackPosition(NewPosition);
     }
 
     // Notify user that the flipbook finished playing

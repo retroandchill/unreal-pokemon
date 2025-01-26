@@ -74,7 +74,7 @@ public:
 
     /** Jump to a position in the flipbook (expressed in seconds). If bFireEvents is true, event functions will fire, otherwise they will not. */
     UFUNCTION(BlueprintCallable, Category="Components|Flipbook")
-    void SetPlaybackPosition(float NewPosition, bool bFireEvents);
+    void SetPlaybackPosition(float NewPosition);
 
     /** Get the current playback position (in seconds) of the flipbook */
     UFUNCTION(BlueprintCallable, Category="Components|Flipbook")

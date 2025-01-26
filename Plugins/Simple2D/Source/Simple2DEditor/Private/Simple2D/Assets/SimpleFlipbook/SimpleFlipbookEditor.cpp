@@ -374,7 +374,7 @@ namespace Simple2D {
     FReply FSimpleFlipbookEditor::OnClick_Forward_End() {
         auto* PreviewComponent = GetPreviewComponent();
         PreviewComponent->Stop();
-        PreviewComponent->SetPlaybackPosition(PreviewComponent->GetFlipbookLength(), false);
+        PreviewComponent->SetPlaybackPosition(PreviewComponent->GetFlipbookLength());
         return FReply::Handled();
     }
 
@@ -412,7 +412,7 @@ namespace Simple2D {
     FReply FSimpleFlipbookEditor::OnClick_Backward_End() {
         auto* PreviewComponent = GetPreviewComponent();
         PreviewComponent->Stop();
-        PreviewComponent->SetPlaybackPosition(0.0f, false);
+        PreviewComponent->SetPlaybackPosition(0.0f);
         return FReply::Handled();
     }
 
@@ -440,7 +440,7 @@ namespace Simple2D {
 
     void FSimpleFlipbookEditor::SetPlaybackPosition(float NewTime) {
         NewTime = FMath::Clamp<float>(NewTime, 0.0f, GetTotalSequenceLength());
-        GetPreviewComponent()->SetPlaybackPosition(NewTime, false);
+        GetPreviewComponent()->SetPlaybackPosition(NewTime);
     }
 
     bool FSimpleFlipbookEditor::IsLooping() const {

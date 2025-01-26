@@ -63,7 +63,7 @@ namespace Simple2D {
 
         int32 GetPlaybackPositionInFrames() const;
 
-        void SetPlaybackPosition(float NewPosition, bool bFireEvents);
+        void SetPlaybackPosition(float NewPosition);
 
         float GetPlaybackPosition() const;
 
