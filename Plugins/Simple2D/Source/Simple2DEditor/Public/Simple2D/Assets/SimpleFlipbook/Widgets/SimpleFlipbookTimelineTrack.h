@@ -9,7 +9,7 @@
 #include "RetroLib/Optionals/OptionalOperations.h"
 
 namespace Simple2D {
-    namespace Flipbook {
+    namespace Flipbooks {
         constexpr float HandleWidth = 12.0f;
         constexpr float FrameHeight = 48;
         constexpr float HeightBeforeFrames = 16;

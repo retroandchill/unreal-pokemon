@@ -152,7 +152,7 @@ namespace Simple2D {
             }
 
             static int32 GetFrameRunAtIndex(const UObject *Object, int32 Index) {
-                return static_cast<const T*>(Object)->GetKeyFrameChecked(Index).Index;
+                return static_cast<const T*>(Object)->GetKeyFrameChecked(Index).FrameRun;
             }
 
             static bool IsValidKeyFrameIndex(const UObject *Object, int32 Index) {

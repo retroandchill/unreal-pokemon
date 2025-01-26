@@ -15,8 +15,8 @@ namespace Simple2D {
         const FLinearColor BorderColor = FLinearColor::White;
 
         return SNew(SBox)
-            .WidthOverride(WidgetWidth - Flipbook::FramePadding.GetTotalSpaceAlong<Orient_Horizontal>())
-            .HeightOverride(Flipbook::FrameHeight - Flipbook::FramePadding.GetTotalSpaceAlong<Orient_Vertical>())
+            .WidthOverride(WidgetWidth - Flipbooks::FramePadding.GetTotalSpaceAlong<Orient_Horizontal>())
+            .HeightOverride(Flipbooks::FrameHeight - Flipbooks::FramePadding.GetTotalSpaceAlong<Orient_Vertical>())
             [
                 SNew(SBorder)
                 .BorderImage(FSimple2DStyle::Get()->GetBrush("FlipbookEditor.RegionBody"))
@@ -98,7 +98,7 @@ namespace Simple2D {
 		+SOverlay::Slot()
 		[
 			SNew(SBox)
-			.Padding(Flipbook::FramePadding)
+			.Padding(Flipbooks::FramePadding)
 			.WidthOverride(this, &SSimpleFlipbookKeyframeWidget::GetFrameWidth)
 			[
 				SNew(SBorder)
@@ -119,7 +119,7 @@ namespace Simple2D {
 		.HAlign(HAlign_Right)
 		[
 			SNew(SBox)
-			.WidthOverride(Flipbook::HandleWidth)
+			.WidthOverride(Flipbooks::HandleWidth)
 			[
 				SNew(SSimpleFlipbookTrackHandle)
 				.SlateUnitsPerFrame(SlateUnitsPerFrame)

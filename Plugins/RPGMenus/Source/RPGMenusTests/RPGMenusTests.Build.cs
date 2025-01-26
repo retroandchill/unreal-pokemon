@@ -12,6 +12,6 @@ public class RPGMenusTests : ModuleRules {
         PrivateDependencyModuleNames.AddRange(
             new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "RPGMenus", "RPGMenusEditor",
                            "AutomationTestHelpers", "UMG", "InputCore", "UnrealEd", "BlueprintGraph", "KismetCompiler",
-                           "CommonUI", "GameplayTags", "DynamicAssetLoader", "Paper2D" });
+                           "CommonUI", "GameplayTags", "DynamicAssetLoader", "Paper2D", "Simple2D" });
     }
 }

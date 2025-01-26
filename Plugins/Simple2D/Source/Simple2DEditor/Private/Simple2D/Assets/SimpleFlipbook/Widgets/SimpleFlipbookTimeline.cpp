@@ -68,7 +68,7 @@ namespace Simple2D {
 					    .AutoHeight()
 					    [
 						    SNew(SBox)
-						    .HeightOverride(Flipbook::FrameHeight)
+						    .HeightOverride(Flipbooks::FrameHeight)
 						    [
 							    TimelineTrack.ToSharedRef()
 						    ]

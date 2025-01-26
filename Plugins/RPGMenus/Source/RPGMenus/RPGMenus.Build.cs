@@ -8,7 +8,8 @@ public class RPGMenus : ModuleRules {
 
         PublicDependencyModuleNames.AddRange(
             new string[] { "Core", "UMG", "InputCore", "CommonUI", "CommonGame", "GameplayTags", "EnhancedInput",
-                           "Paper2D", "PaperFlipbookWidget", "UnrealInjector", "RetroLib", "UE5Coro" });
+                           "Paper2D", "PaperFlipbookWidget", "UnrealInjector", "RetroLib", "UE5Coro", "Simple2D"
+            });
 
         PrivateDependencyModuleNames.AddRange(new string[] {
             "CoreUObject",

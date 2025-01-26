@@ -163,7 +163,7 @@ namespace Retro {
         template <typename U, typename F>
             requires(std::same_as<T, U> || ...) && std::invocable<F, U *>
         static constexpr decltype(auto) VisitSingle(UObject *Object, F &&Functor) {
-            return std::invoke(std::forward<F>(Functor), static_cast<U *>(Object));
+            return std::invoke(std::forward<F>(Functor), std::bit_cast<U *>(Object));
         }
 
       protected:
@@ -389,6 +389,16 @@ namespace Retro {
         void Set(const FScriptInterface &Object) {
             ContainedObject = Object.GetObject();
             TypeIndex = GetTypeIndex(Object.GetObject()).GetValue();
+        }
+
+        friend bool operator==(const TVariantObject &A, const TVariantObject &B) = default;
+        
+        friend bool operator==(const TVariantObject &A, const UObject *B) {
+            return A.ContainedObject == B;
+        }
+
+        friend bool operator==(const UObject *A, const TVariantObject& B) {
+            return A == B.ContainedObject;
         }
 
       protected:

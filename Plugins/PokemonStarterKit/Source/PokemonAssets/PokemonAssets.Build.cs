@@ -15,7 +15,7 @@ public class PokemonAssets : ModuleRules {
         });
 
         PublicDependencyModuleNames.AddRange(new string[] {
-            "Core", "DeveloperSettings", "Paper2D", "RPGMenus", "PokemonCore", "RetroLib", "UE5Coro"
+            "Core", "DeveloperSettings", "Paper2D", "RPGMenus", "PokemonCore", "RetroLib", "UE5Coro", "Simple2D"
             // ... add other public dependencies that you statically link with here ...
         });
 

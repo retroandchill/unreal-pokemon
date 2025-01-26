@@ -35,12 +35,6 @@ namespace Simple2D {
         void UpdateFrameData(int32 NewRows, int32 NewColumns, int32 NewFrame);
         
     private:
-        static const FName TextureParameterName;
-        static const FName AdditionalTextureParameterRootName;
-        static const FName RowsParameterName;
-        static const FName ColumnsParameterName;
-        static const FName FrameParameterName;
-        
         const FMaterialRenderProxy* Parent;
         const UTexture* BaseTexture;
         FAdditionalSpriteTextureArray AdditionalTextures;

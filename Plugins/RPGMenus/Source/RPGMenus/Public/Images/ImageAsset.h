@@ -6,6 +6,7 @@
 #include "Engine/Texture2DDynamic.h"
 #include "PaperFlipbook.h"
 #include "RetroLib/Variants/SoftVariantObject.h"
+#include "Simple2D/Assets/SimpleFlipbook.h"
 #include "Slate/SlateTextureAtlasInterface.h"
 
 #include "ImageAsset.generated.h"
@@ -16,7 +17,7 @@ USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FImageAsset
 #if CPP
     : Retro::TVariantObject<UTexture2D, UTexture2DDynamic, UMaterialInterface,
-                                    ISlateTextureAtlasInterface, UPaperFlipbook> {
+                                    ISlateTextureAtlasInterface, UPaperFlipbook, USimpleFlipbook> {
 #else
     {
 #endif

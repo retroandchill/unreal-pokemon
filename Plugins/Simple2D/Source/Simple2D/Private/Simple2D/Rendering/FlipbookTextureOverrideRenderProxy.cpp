@@ -3,13 +3,10 @@
 
 #include "Simple2D/Rendering/FlipbookTextureOverrideRenderProxy.h"
 #include "MovieSceneSequencePlayer.h"
+#include "Simple2D/Rendering/MaterialSettings.h"
 
 namespace Simple2D {
-    const FName FFlipbookTextureOverrideRenderProxy::TextureParameterName(TEXT("SpriteTexture"));
-    const FName FFlipbookTextureOverrideRenderProxy::AdditionalTextureParameterRootName(TEXT("SpriteAdditionalTexture"));
-    const FName FFlipbookTextureOverrideRenderProxy::RowsParameterName(TEXT("Rows"));
-    const FName FFlipbookTextureOverrideRenderProxy::ColumnsParameterName(TEXT("Columns"));
-    const FName FFlipbookTextureOverrideRenderProxy::FrameParameterName(TEXT("Frame"));
+    
     
 #if WITH_EDITOR
     FFlipbookTextureOverrideRenderProxy::FFlipbookTextureOverrideRenderProxy(const FMaterialRenderProxy *InParent,
@@ -84,7 +81,7 @@ namespace Simple2D {
         const FMaterialRenderContext &Context) const {
         if (Type == EMaterialParameterType::Texture)
         {
-            if (ParameterInfo.Name == TextureParameterName)
+            if (ParameterInfo.Name == Flipbooks::TextureParameterName)
             {
                 OutValue = ApplyEditorOverrides(BaseTexture);
                 return true;
@@ -92,7 +89,7 @@ namespace Simple2D {
 
             for (int32 AdditionalSlotIndex = 0; AdditionalSlotIndex < AdditionalTextures.Num(); ++AdditionalSlotIndex)
             {
-                FName AdditionalSlotName = AdditionalTextureParameterRootName;
+                FName AdditionalSlotName = Flipbooks::AdditionalTextureParameterRootName;
                 AdditionalSlotName.SetNumber(AdditionalSlotIndex + 1);
                 if (ParameterInfo.Name == AdditionalSlotName)
                 {
@@ -101,17 +98,17 @@ namespace Simple2D {
                 }
             }
         } else if (Type == EMaterialParameterType::Scalar) {
-            if (ParameterInfo.Name == RowsParameterName) {
+            if (ParameterInfo.Name == Flipbooks::RowsParameterName) {
                 OutValue = static_cast<float>(Rows);
                     return true;
             }
             
-            if (ParameterInfo.Name == ColumnsParameterName) {
+            if (ParameterInfo.Name == Flipbooks::ColumnsParameterName) {
                 OutValue = static_cast<float>(Columns);
                 return true;
             }
             
-            if (ParameterInfo.Name == FrameParameterName) {
+            if (ParameterInfo.Name == Flipbooks::FrameParameterName) {
                 OutValue = static_cast<float>(FrameNumber);
                 return true;
             }

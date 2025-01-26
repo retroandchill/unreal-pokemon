@@ -15,7 +15,7 @@ namespace Simple2D {
         DECLARE_MULTICAST_DELEGATE_OneParam(FOnFrameIndexChanged, std::any)
         
     public:
-        FFlipbookTicker() = delete;
+        FFlipbookTicker() = default;
 
         template <Flipbook T>
         explicit FFlipbookTicker(T *Object) : Proxy(Object) {
@@ -82,13 +82,14 @@ namespace Simple2D {
         int32 GetFlipbookLengthInFrames() const;
 
         float GetFlipbookFramerate() const;
+        
+        void CalculateCurrentFrame();
 
         RETRO_MULTICAST_DELEGATE_MEMBER(FOnFrameIndexChanged, OnFrameIndexChanged)
         RETRO_MULTICAST_DELEGATE_MEMBER(FSimpleMulticastDelegate, OnFinishedPlaying)
         
-    private:
-        void CalculateCurrentFrame();
         
+    private:
         FFlipbookProxy Proxy;
 
         float PlayRate = 1.0;
