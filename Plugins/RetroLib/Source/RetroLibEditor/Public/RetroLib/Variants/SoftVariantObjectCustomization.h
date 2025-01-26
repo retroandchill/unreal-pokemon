@@ -69,7 +69,9 @@ namespace Retro {
         }
 
         void OnAssetSelected( const FAssetData& InAsset ) const {
+            SoftVariantObjectPropertyHandle->NotifyPreChange();
             GetSoftVariantObject().Set(TSoftObjectPtr(InAsset.GetSoftObjectPath()));
+            SoftVariantObjectPropertyHandle->NotifyPostChange(EPropertyChangeType::ValueSet);
         }
 
         TSharedPtr<IPropertyHandle> SoftVariantObjectPropertyHandle;

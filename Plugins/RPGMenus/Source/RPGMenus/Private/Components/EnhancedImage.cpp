@@ -6,18 +6,13 @@
 #include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/Transform.h"
 #include "Slate/SlateBrushAsset.h"
-#include "SPaperFlipbookWidget.h"
 #include "Simple2D/Rendering/MaterialSettings.h"
-#include "Widgets/Layout/SWidgetSwitcher.h"
 
 DECLARE_CYCLE_STAT(TEXT("Tick Enhanced Image"), STAT_TickEnhancedImage, STATGROUP_RPGMenus);
 
-constexpr int32 ImageWidgetIndex = 0;
-constexpr int32 PaperFlipbookWidgetIndex = 1;
-
 UEnhancedImage::UEnhancedImage() {
     static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaskedMaterialRef(
-        TEXT("/Simple2D/Materials/MaskedUnlitFlipbookMaterial"));
+        TEXT("/Simple2D/Materials/MaskedWidgetFlipbookMaterial"));
     SimpleFlipbookBaseMaterial = MaskedMaterialRef.Object;
     
     FlipbookTicker.BindToOnFinishedPlaying(this, &UEnhancedImage::OnFlipbookFinishedPlaying);
@@ -207,7 +202,11 @@ void UEnhancedImage::PostEditChangeProperty(FPropertyChangedEvent &PropertyChang
     Super::PostEditChangeProperty(PropertyChangedEvent);
     if (PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(UEnhancedImage, SourceImage)) {
         auto UpdateBrush = GetBrush();
-        if (SourceImage.IsType<UPaperFlipbook>()) {
+        if (SourceImage.IsType<USimpleFlipbook>()) {
+            const auto &Flipbook = SourceImage.Get<USimpleFlipbook>();
+            CreateSimpleFlipbookMaterialInstance(Flipbook);
+            UpdateBrush.SetResourceObject(SimpleFlipbookMaterialInstance);
+        } else if (SourceImage.IsType<UPaperFlipbook>()) {
             const auto &Flipbook = SourceImage.Get<UPaperFlipbook>();
             UpdateBrush.SetResourceObject(Flipbook.GetSpriteAtFrame(0));
         } else {
@@ -266,10 +265,6 @@ void UEnhancedImage::CreateSimpleFlipbookMaterialInstance(const USimpleFlipbook&
                                                             static_cast<float>(Flipbook.GetRows()));
     SimpleFlipbookMaterialInstance->SetScalarParameterValue(Simple2D::Flipbooks::ColumnsParameterName,
                                                             static_cast<float>(Flipbook.GetColumns()));
-}
-
-int32 UEnhancedImage::GetWidgetIndex() const {
-    return SourceImage.IsType<UPaperFlipbook>() ? PaperFlipbookWidgetIndex : ImageWidgetIndex;
 }
 
 void UEnhancedImage::OnFlipbookFinishedPlaying() const {

@@ -73,7 +73,9 @@ namespace Retro {
         }
 
         void OnAssetSelected( const FAssetData& InAsset ) const {
+            VariantObjectPropertyHandle->NotifyPreChange();
             GetVariantObject().Set(InAsset.GetAsset());
+            VariantObjectPropertyHandle->NotifyPostChange(EPropertyChangeType::ValueSet);
         }
 
         TSharedPtr<IPropertyHandle> VariantObjectPropertyHandle;

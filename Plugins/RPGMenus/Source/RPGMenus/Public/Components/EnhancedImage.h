@@ -72,8 +72,6 @@ class RPGMENUS_API UEnhancedImage : public UCommonLazyImage, public FTickableGam
 
     void CreateSimpleFlipbookMaterialInstance(const USimpleFlipbook& Flipbook);
 
-    int32 GetWidgetIndex() const;
-
     void OnFlipbookFinishedPlaying() const;
 
     void OnFrameIndexChanged(std::any KeyFrame);
