@@ -14,7 +14,7 @@ public class Simple2D : ModuleRules
 			new string[]
 			{
 				"Core",
-				"Paper2D"
+				"Paper2D", "RetroLib"
 			}
 			);
 			

@@ -5,6 +5,7 @@
 #include "SpriteDrawCall.h"
 #include "UObject/Object.h"
 #include "SpriteEditorOnlyTypes.h"
+
 #include "SimpleFlipbook.generated.h"
 
 namespace EFlipbookCollisionMode {
