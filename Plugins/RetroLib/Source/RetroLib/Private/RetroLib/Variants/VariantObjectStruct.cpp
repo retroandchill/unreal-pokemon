@@ -3,6 +3,7 @@
 #ifdef __UNREAL__
 #include "RetroLib/Variants/VariantObjectStruct.h"
 #include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Optionals/AndThen.h"
 
 namespace Retro {
     FVariantObjectStructRegistry &FVariantObjectStructRegistry::Get() {
@@ -17,10 +18,8 @@ namespace Retro {
 
     TOptional<IVariantConversion &> FVariantObjectStructRegistry::GetVariantStructConversion(const UScriptStruct &From,
         const UScriptStruct &To) {
-        using FInner = TMap<FName, TSharedRef<IVariantConversion>>;
-        return Optionals::OfNullable(RegisteredConversions.Find(From.GetFName())) |
-               Optionals::Transform([&To](FInner& Inner) { return Inner.Find(To.GetFName()); }) |
-               Optionals::Transform(&TSharedRef<IVariantConversion>::Get);
+        return GetVariantStructData(From) |
+               Optionals::AndThen(BindBack<&IVariantRegistration::GetConversion>(std::ref(To)));
     }
 } // namespace Retro
 #endif
