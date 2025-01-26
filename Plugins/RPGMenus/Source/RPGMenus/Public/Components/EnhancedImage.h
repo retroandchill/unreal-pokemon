@@ -64,6 +64,7 @@ class RPGMENUS_API UEnhancedImage : public UCommonLazyImage, public FTickableGam
     void SynchronizeProperties() override;
 
 #if WITH_EDITOR
+    void PostLoad() override;
     void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
 #endif
 
@@ -106,6 +107,6 @@ class RPGMENUS_API UEnhancedImage : public UCommonLazyImage, public FTickableGam
     UPROPERTY(Category = Appearance, EditAnywhere)
     TObjectPtr<UMaterialInterface> SimpleFlipbookBaseMaterial;
 
-    UPROPERTY()
+    UPROPERTY(Transient)
     TObjectPtr<UMaterialInstanceDynamic> SimpleFlipbookMaterialInstance;
 };
