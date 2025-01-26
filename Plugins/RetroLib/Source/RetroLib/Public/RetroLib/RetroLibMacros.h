@@ -44,9 +44,16 @@
 #ifdef __UNREAL__
 
 #define RETRO_VARIANT_OBJECT_STRUCT_BODY(ClassName, SoftPtr) \
+    public: \
     using SoftPtrType = SoftPtr; \
     using Base = TVariantObject; \
     ClassName() = default; \
+    private: \
+    ClassName(UObject* InObject, size_t InTypeIndex) : Base(InObject, InTypeIndex) {} \
+    template <typename... T> \
+        requires ((std::derived_from<T, UObject> || Retro::UnrealInterface<T>) && ...) \
+    friend struct TVariantObject; \
+    public: \
     using Base::Base; \
     void Reset() { \
         SetUnchecked(nullptr); \
@@ -55,6 +62,12 @@
 #define RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY(ClassName) \
     using Base = TSoftVariantObject; \
     ClassName() = default; \
+    private: \
+    ClassName(const TSoftObjectPtr<>& Object, size_t Index) : Base(Object, Index) {} \
+    ClassName(TSoftObjectPtr<>&& Object, size_t Index) : Base(std::move(Object), Index) {} \
+    template <Retro::VariantObject U> \
+    friend struct TSoftVariantObject; \
+    public: \
     using Base::Base;
     
 
@@ -65,7 +78,7 @@
  */
 #define RETRO_DECLARE_VARIANT_OBJECT_STRUCT(StructName) \
     template <>                                                                                                        \
-    struct Retro::TIsVariantObject<StructName> : std::true_type {}
+    struct Retro::TVariantObjectTraits<StructName> : Retro::TVariantObjectTraits<StructName::Base> {}
 
 #define RETRO_DECLARE_SOFT_VARIANT_OBJECT_STRUCT(StructName)                                                           \
     template <>                                                                                                        \
@@ -77,8 +90,12 @@
  * @param StructName The name of the struct to implement.
  */
 #define RETRO_DEFINE_VARIANT_OBJECT_STRUCT(StructName)                                                                 \
-    static const bool __##StructName__Registration =                                                                   \
+    static const bool __##StructName##__Registration =                                                                   \
         Retro::FVariantObjectStructRegistry::RegisterVariantStruct<StructName>()
+
+#define RETRO_DEFINE_VARIANT_OBJECT_CONVERSION(From, To) \
+    static const bool __##From##__##To##__Conversion__Registration = \
+        Retro::FVariantObjectStructRegistry::RegisterVariantConversion<From, To>()
 
 #define P_GET_WILDCARD_PARAM(PropVar, PointerVar)                                                                      \
     Stack.StepCompiledIn<FProperty>(nullptr);                                                                          \

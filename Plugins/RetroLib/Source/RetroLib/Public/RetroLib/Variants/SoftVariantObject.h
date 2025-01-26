@@ -1,6 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+#include "Engine/AssetManager.h"
 
 #ifdef __UNREAL__
 #include "RetroLib/Variants/VariantObject.h"
@@ -14,8 +15,7 @@
 #endif
 
 namespace Retro {
-    template <typename T>
-        requires VariantObject<T>
+    template <VariantObject T>
     struct TSoftVariantObject;
 
     template <typename>
@@ -46,8 +46,7 @@ namespace Retro {
      * Represents a soft (path) reference to an object of one of serveral possible types.
      * @tparam T The variant object that dictates the data for this variant
      */
-    RETROLIB_EXPORT template <typename T>
-        requires VariantObject<T>
+    RETROLIB_EXPORT template <VariantObject T>
     struct TSoftVariantObject {
         using FHardReference = T;
         
@@ -60,7 +59,7 @@ namespace Retro {
          * @param Args The arguments to pass
          */
         template <typename... A>
-            requires std::constructible_from<TSoftObjectPtr<>, A...>
+            requires std::constructible_from<TSoftObjectPtr<>, A...> && (!PackSameAs<TSoftVariantObject, A...>)
         explicit TSoftVariantObject(A &&...Args)
             : Ptr(std::forward<A>(Args)...), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue()) {
         }
@@ -72,6 +71,17 @@ namespace Retro {
         explicit TSoftVariantObject(const T &Object)
             : Ptr(&Object.Get()), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue()) {
         }
+
+    protected:
+        TSoftVariantObject(const TSoftObjectPtr<>& Object, size_t Index) : Ptr(Object), TypeIndex(Index) {
+            
+        }
+        
+        TSoftVariantObject(TSoftObjectPtr<>&& Object, size_t Index) : Ptr(std::move(Object)), TypeIndex(Index) {
+            
+        }
+
+    public:
 
         constexpr uint64 GetTypeIndex() const {
             return TypeIndex;
@@ -229,12 +239,36 @@ namespace Retro {
             return T::GetTypeIndex(Data);
         }
 
+        template <SoftVariantObject U>
+            requires ConvertibleVariantObjects<T, typename U::FHardReference>
+        constexpr auto Convert() const & {
+            constexpr auto TypeMapping = Retro::VariantIndexMapping<T, typename U::FHardReference>;
+            return TypeMapping[TypeIndex] |
+                Optionals::To<TOptional>() |
+                Optionals::Transform([this](size_t TargetIndex) { return U(Ptr, TargetIndex); });
+        }
+
+        template <SoftVariantObject U>
+            requires ConvertibleVariantObjects<T, typename U::FHardReference>
+        constexpr auto Convert() && noexcept {
+            constexpr auto TypeMapping = Retro::VariantIndexMapping<T, typename U::FHardReference>;
+            return TypeMapping[TypeIndex] |
+                Optionals::To<TOptional>() |
+                Optionals::Transform([this](size_t TargetIndex) {
+                    TypeIndex = T::template GetTypeIndex<std::nullptr_t>();
+                    return U(std::move(Ptr), TargetIndex);
+                });
+        }
+
       private:
         friend struct TOptional<TSoftVariantObject>;
 
         template <typename U>
             requires SoftVariantObjectStruct<U>
         friend class TSoftVariantObjectCustomization;
+
+        template <VariantObject U>
+        friend struct TSoftVariantObject;
 
         explicit TSoftVariantObject(FIntrusiveUnsetOptionalState) {
         }

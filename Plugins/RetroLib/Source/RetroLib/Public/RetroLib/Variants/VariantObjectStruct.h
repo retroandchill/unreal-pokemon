@@ -23,7 +23,7 @@ namespace Retro {
      * function that will then trigger an actual blueprint exception.
      */
     class RETROLIB_API IVariantRegistration {
-      public:
+    public:
         virtual ~IVariantRegistration() = default;
 
         /**
@@ -130,7 +130,7 @@ namespace Retro {
     template <typename T>
         requires VariantObjectStruct<T>
     class TVariantStructRegistration : public IVariantRegistration {
-      public:
+    public:
         UScriptStruct *GetStructType() const final {
             return GetScriptStruct<T>();
         }
@@ -153,12 +153,11 @@ namespace Retro {
 
         void SetStructValue(UObject *SourceObject, const FStructProperty &Property, uint8 *StructValue) const final {
             ValidateStructsMatch(Property, GetStructType());
-            void *VariantPtr = StructValue;
-            auto Variant = static_cast<T *>(VariantPtr);
+            auto Variant = std::bit_cast<T *>(StructValue);
             if (auto TypeIndex = T::GetTypeIndex(SourceObject);
                 !TypeIndex.IsSet() || TypeIndex.GetValue() == T::template GetTypeIndex<std::nullptr_t>()) {
                 throw FVariantException("Incompatible object parameter; the supplied object is not of a "
-                                        "valid type for this variant object");
+                    "valid type for this variant object");
             }
 
             Variant->Set(SourceObject);
@@ -166,8 +165,7 @@ namespace Retro {
 
         TOptional<UObject &> GetValue(const FStructProperty &Property, uint8 *StructValue) const final {
             ValidateStructsMatch(Property, GetStructType());
-            void *VariantPtr = StructValue;
-            auto Variant = static_cast<T *>(VariantPtr);
+            auto Variant = std::bit_cast<T *>(StructValue);
             return Variant->TryGet();
         }
 
@@ -175,11 +173,8 @@ namespace Retro {
                            const FStructProperty &SoftProperty, uint8 *SoftStructValue) const final {
             ValidateStructsMatch(Property, GetStructType());
             ValidateStructsMatch(SoftProperty, GetSoftStructType());
-            const void *VariantPtr = StructValue;
-            auto Variant = static_cast<const T *>(VariantPtr);
-
-            void *SoftVariantPtr = SoftStructValue;
-            auto SoftVariant = static_cast<typename T::SoftPtrType *>(SoftVariantPtr);
+            auto Variant = std::bit_cast<const T *>(StructValue);
+            auto SoftVariant = std::bit_cast<typename T::SoftPtrType *>(SoftStructValue);
 
             SoftVariant->Set(*Variant);
         }
@@ -187,16 +182,14 @@ namespace Retro {
         void MakeSoftValue(const TSoftObjectPtr<> &Path, const FStructProperty &SoftProperty,
                            uint8 *SoftStructValue) const final {
             ValidateStructsMatch(SoftProperty, GetSoftStructType());
-            void *SoftVariantPtr = SoftStructValue;
-            auto SoftVariant = static_cast<typename T::SoftPtrType *>(SoftVariantPtr);
+            auto SoftVariant = std::bit_cast<typename T::SoftPtrType *>(SoftStructValue);
             SoftVariant->Set(Path);
         }
 
         TOptional<TSoftObjectRef<>> TryGetSoftValue(const UClass *Class, const FStructProperty &SoftProperty,
                                                     uint8 *SoftStructValue) const final {
             ValidateStructsMatch(SoftProperty, GetSoftStructType());
-            const void *SoftVariantPtr = SoftStructValue;
-            auto SoftVariant = static_cast<const typename T::SoftPtrType *>(SoftVariantPtr);
+            auto SoftVariant = std::bit_cast<const typename T::SoftPtrType *>(SoftStructValue);
             if (auto ClassIndex = T::GetTypeIndexForClass(Class);
                 !ClassIndex.IsSet() || *ClassIndex != SoftVariant->GetTypeIndex()) {
                 return TOptional<TSoftObjectRef<>>();
@@ -209,11 +202,8 @@ namespace Retro {
                              const FStructProperty &Property, uint8 *StructValue) const final {
             ValidateStructsMatch(Property, GetStructType());
             ValidateStructsMatch(SoftProperty, GetSoftStructType());
-            void *VariantPtr = StructValue;
-            auto Variant = static_cast<T *>(VariantPtr);
-
-            const void *SoftVariantPtr = SoftStructValue;
-            auto SoftVariant = static_cast<const typename T::SoftPtrType *>(SoftVariantPtr);
+            auto Variant = std::bit_cast<T *>(SoftStructValue);
+            auto SoftVariant = std::bit_cast<const typename T::SoftPtrType *>(SoftStructValue);
 
             auto Result = SoftVariant->LoadSynchronous();
             if (!Result.IsSet()) {
@@ -229,6 +219,76 @@ namespace Retro {
         }
     };
 
+    class RETROLIB_API IVariantConversion {
+    public:
+        virtual ~IVariantConversion() = default;
+
+        virtual UScriptStruct *GetSourceStructType() const = 0;
+
+        virtual UScriptStruct *GetSourceSoftStructType() const = 0;
+
+        virtual UScriptStruct *GetDestStructType() const = 0;
+
+        virtual UScriptStruct *GetDestSoftStructType() const = 0;
+
+        virtual bool ConvertVariant(const FStructProperty &SourceProperty, const uint8 *SourceValue,
+                                    const FStructProperty &DestProperty, uint8 *DestValue) const = 0;
+
+        virtual bool ConvertSoftVariant(const FStructProperty &SourceProperty, const uint8 *SourceValue,
+                                        const FStructProperty &DestProperty, uint8 *DestValue) const = 0;
+    };
+
+    template <VariantObjectStruct T, VariantObjectStruct U>
+    class TVariantConversionImpl : public IVariantConversion {
+    public:
+        UScriptStruct *GetSourceStructType() const final {
+            return GetScriptStruct<T>();
+        }
+
+        UScriptStruct *GetSourceSoftStructType() const final {
+            return GetScriptStruct<typename T::SoftPtrType>();
+        }
+
+        UScriptStruct *GetDestStructType() const final {
+            return GetScriptStruct<U>();
+        }
+
+        UScriptStruct *GetDestSoftStructType() const final {
+            return GetScriptStruct<typename U::SoftPtrType>();
+        }
+
+        bool ConvertVariant(const FStructProperty &SourceProperty, const uint8 *SourceValue,
+                            const FStructProperty &DestProperty, uint8 *DestValue) const final {
+            ValidateStructsMatch(SourceProperty, GetSourceStructType());
+            ValidateStructsMatch(DestProperty, GetDestStructType());
+            auto SourcePtr = std::bit_cast<const T *>(SourceValue);
+            auto DestPtr = std::bit_cast<U *>(DestValue);
+
+            if (TOptional<U> Converted = SourcePtr->template Convert<U>(); Converted.IsSet()) {
+                *DestPtr = Converted.GetValue();
+                return true;
+            }
+
+            return false;
+        }
+
+        bool ConvertSoftVariant(const FStructProperty &SourceProperty, const uint8 *SourceValue,
+                                const FStructProperty &DestProperty, uint8 *DestValue) const final {
+            ValidateStructsMatch(SourceProperty, GetSourceSoftStructType());
+            ValidateStructsMatch(DestProperty, GetDestSoftStructType());
+            auto SourcePtr = std::bit_cast<const T *>(SourceValue);
+            auto DestPtr = std::bit_cast<U *>(DestValue);
+
+            if (TOptional<U> Converted = SourcePtr->template Convert<U>(); Converted.IsSet()) {
+                *DestPtr = std::move(Converted.GetValue());
+                return true;
+            }
+
+            return false;
+        }
+
+    };
+
     /**
      * Static registry for a variant struct object.
      */
@@ -236,7 +296,7 @@ namespace Retro {
         FVariantObjectStructRegistry() = default;
         ~FVariantObjectStructRegistry() = default;
 
-      public:
+    public:
         FVariantObjectStructRegistry(const FVariantObjectStructRegistry &) = delete;
         FVariantObjectStructRegistry(FVariantObjectStructRegistry &&) = delete;
 
@@ -271,6 +331,24 @@ namespace Retro {
             return true;
         }
 
+        template <VariantObjectStruct T, VariantObjectStruct U>
+        static bool RegisterVariantConversion() {
+            FCoreDelegates::OnPostEngineInit | Delegates::Add([] {
+                auto &Instance = Get();
+                auto SourceStruct = GetScriptStruct<T>();
+                auto DestStruct = GetScriptStruct<U>();
+                auto &DestMap = Instance.RegisteredConversions.FindOrAdd(SourceStruct->GetFName());
+                auto &Registered = DestMap.Emplace(DestStruct->GetFName(), MakeShared<TVariantConversionImpl<T, U>>());
+                // We're using a shared pointer to avoid double allocating identical registration info for the same
+                // class
+                auto SoftSource = GetScriptStruct<typename T::SoftPtrType>();
+                auto SoftDest = GetScriptStruct<typename T::SoftPtrType>();
+                auto &SoftDestMap = Instance.RegisteredConversions.FindOrAdd(SoftSource->GetFName());
+                SoftDestMap.Emplace(SoftDest->GetFName(), Registered);
+            });
+            return true;
+        }
+
         /**
          * Get the variant struct data for the given struct type.
          * @param Struct The non-null refrence to the struct type
@@ -283,12 +361,26 @@ namespace Retro {
          * @return The iterable range of all the registered structs.
          */
         auto GetAllRegisteredStructs() const {
-            return RegisteredStructs | Ranges::Views::Values |
+            // clang-format off
+            return RegisteredStructs |
+                   Ranges::Views::Values |
                    Ranges::Views::Transform(&TSharedRef<IVariantRegistration>::operator*);
+            // clang-format on
         }
 
-      private:
+        auto GetAllRegisteredConversions() const {
+            // clang-format off
+            return RegisteredConversions |
+                   Ranges::Views::Values |
+                   Ranges::Views::Join |
+                   Ranges::Views::Values |
+                   Ranges::Views::Transform(&TSharedRef<IVariantConversion>::operator*);
+            // clang-format on
+        }
+
+    private:
         TMap<FName, TSharedRef<IVariantRegistration>> RegisteredStructs;
+        TMap<FName, TMap<FName, TSharedRef<IVariantConversion>>> RegisteredConversions;
     };
 } // namespace Retro
 #endif
