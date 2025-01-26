@@ -15,6 +15,7 @@
 
 namespace Retro {
     class IVariantRegistration;
+    class IVariantConversion;
     class FTypeException;
 
     /**
@@ -54,6 +55,8 @@ namespace Retro {
      * @throws FVariantException If the struct type is not a valid variant
      */
     RETROLIB_API IVariantRegistration &GetVariantRegistration(const FStructProperty &Property);
+
+    RETROLIB_API IVariantConversion &GetVariantConversion(const FStructProperty &From, const FStructProperty &To);
 
     template <typename T>
     void InvokeFunctionIsolated(UFunction *GetOptionsFunction, T&& Params) {

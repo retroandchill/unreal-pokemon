@@ -355,6 +355,8 @@ namespace Retro {
          * @return The registration of the struct (if found)
          */
         TOptional<IVariantRegistration &> GetVariantStructData(const UScriptStruct &Struct);
+        
+        TOptional<IVariantConversion &> GetVariantStructConversion(const UScriptStruct &From, const UScriptStruct& To);
 
         /**
          * Get the range of all registered structs.
