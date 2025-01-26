@@ -168,7 +168,7 @@ def compile_texture_into_flipbook(source_texture: Texture2D, material: MaterialI
     texture_package = get_parent_package(get_package_name(source_texture))
 
     new_flipbook = asset_tools.create_asset(source_texture.get_name(), texture_package,
-                                            PaperFlipbook.static_class(), factory)
+                                            SimpleFlipbook.static_class(), factory)
     if not isinstance(new_flipbook, SimpleFlipbook):
         raise RuntimeError(INVALID_ASSET_ERROR)
 
