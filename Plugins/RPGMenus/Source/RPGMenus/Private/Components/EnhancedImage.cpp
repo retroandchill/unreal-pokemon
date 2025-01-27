@@ -150,8 +150,7 @@ FVoidCoroutine UEnhancedImage::SetBrushFromLazyImageAsset(const FSoftImageAsset 
                                                           FForceLatentCoroutine) {
     if (auto &SoftPointer = LazyImage.ToSoftObjectPtr(); !SoftPointer.IsNull()) {
         auto LoadedAsset = co_await LazyImage.LoadAsync();
-        ensureMsgf(LazyImage.IsValid(), TEXT("Failed to load %s"), *LazyImage.ToSoftObjectPath().ToString());
-        check(LoadedAsset.IsSet())
+        ensureMsgf(LoadedAsset.IsSet(), TEXT("Failed to load %s"), *LazyImage.ToSoftObjectPath().ToString());
         SetBrushFromImageAsset(LoadedAsset.GetValue(), bMatchSize);
     } else {
         // Hack to get into the private method that is inaccessible
