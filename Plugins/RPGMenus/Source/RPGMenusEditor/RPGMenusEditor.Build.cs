@@ -12,7 +12,7 @@ public class RPGMenusEditor : ModuleRules {
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore", "UnrealEd",
-                                                             "RetroLibEditor", "RPGMenus", "Paper2D", 
-                                                             "EditorWidgets", "PropertyEditor", "Simple2D" });
+                                                             "RetroLibEditor", "RPGMenus", "Paper2D", "EditorWidgets",
+                                                             "PropertyEditor", "Simple2D" });
     }
 }

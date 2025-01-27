@@ -58,14 +58,16 @@ class POKEMONBATTLE_API UBattleTransitionSubsystem : public UWorldSubsystem {
      * @param Transition
      * @param
      */
-    UE5Coro::TCoroutine<EBattleResult>
-    InitiateBattle(FBattleInfo Info, TSubclassOf<ABattleTransitionActor> Transition, FForceLatentCoroutine = {});
+    UE5Coro::TCoroutine<EBattleResult> InitiateBattle(FBattleInfo Info, TSubclassOf<ABattleTransitionActor> Transition,
+                                                      FForceLatentCoroutine = {});
 
   private:
     /**
      * Exit the current battle and return to the field
      */
-    UE5Coro::TCoroutine<> ExitBattle(ULevelStreamingDynamic* Battlefield, const TArray<FLevelStreamingVolumeState>& StreamingStates, FForceLatentCoroutine = {}) const;
+    UE5Coro::TCoroutine<> ExitBattle(ULevelStreamingDynamic *Battlefield,
+                                     const TArray<FLevelStreamingVolumeState> &StreamingStates,
+                                     FForceLatentCoroutine = {}) const;
 
     /**
      * The map to jump to for battle

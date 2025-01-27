@@ -1,15 +1,13 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Simple2D/Assets/SimpleFlipbook/Widgets/SimpleFlipbookEditorViewportToolbar.h"
 #include "SEditorViewport.h"
-
-#include "SlateOptMacros.h"
 #include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookEditorCommands.h"
+#include "SlateOptMacros.h"
 
 namespace Simple2D {
-    void SSimpleFlipbookEditorViewportToolbar::Construct(const FArguments &,
-                                                         const TSharedPtr<ICommonEditorViewportToolbarInfoProvider> &InInfoProvider) {
+    void SSimpleFlipbookEditorViewportToolbar::Construct(
+        const FArguments &, const TSharedPtr<ICommonEditorViewportToolbarInfoProvider> &InInfoProvider) {
         SCommonEditorViewportToolbarBase::Construct(SCommonEditorViewportToolbarBase::FArguments(), InInfoProvider);
     }
 
@@ -20,15 +18,15 @@ namespace Simple2D {
 
         constexpr bool bInShouldCloseWindowAfterMenuSelection = true;
         FMenuBuilder ShowMenuBuilder(bInShouldCloseWindowAfterMenuSelection, ViewportRef->GetCommandList());
-            ShowMenuBuilder.AddMenuEntry(FSimpleFlipbookEditorCommands::Get().SetShowPivot);
+        ShowMenuBuilder.AddMenuEntry(FSimpleFlipbookEditorCommands::Get().SetShowPivot);
 
-            ShowMenuBuilder.AddMenuSeparator();
+        ShowMenuBuilder.AddMenuSeparator();
 
-            ShowMenuBuilder.AddMenuEntry(FSimpleFlipbookEditorCommands::Get().SetShowGrid);
-            ShowMenuBuilder.AddMenuEntry(FSimpleFlipbookEditorCommands::Get().SetShowBounds);
+        ShowMenuBuilder.AddMenuEntry(FSimpleFlipbookEditorCommands::Get().SetShowGrid);
+        ShowMenuBuilder.AddMenuEntry(FSimpleFlipbookEditorCommands::Get().SetShowBounds);
 
-            ShowMenuBuilder.AddMenuSeparator();
+        ShowMenuBuilder.AddMenuSeparator();
 
         return ShowMenuBuilder.MakeWidget();
     }
-}
+} // namespace Simple2D

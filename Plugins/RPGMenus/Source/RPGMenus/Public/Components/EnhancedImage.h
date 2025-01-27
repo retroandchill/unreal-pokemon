@@ -23,7 +23,7 @@ class RPGMENUS_API UEnhancedImage : public UCommonLazyImage, public FTickableGam
 
   public:
     UEnhancedImage();
-    
+
     void SetBrush(const FSlateBrush &InBrush) override;
 
   private:
@@ -41,19 +41,24 @@ class RPGMENUS_API UEnhancedImage : public UCommonLazyImage, public FTickableGam
     virtual void SetBrushFromPaperFlipbook(UPaperFlipbook *Flipbook, bool bMatchSize = false);
 
     UFUNCTION(BlueprintCallable, Category = Image)
-    virtual void SetBrushFromSimpleFlipbook(USimpleFlipbook* Flipbook, bool bMatchSize = false);
+    virtual void SetBrushFromSimpleFlipbook(USimpleFlipbook *Flipbook, bool bMatchSize = false);
 
     UFUNCTION(BlueprintCallable, Category = Image)
     virtual void SetBrushFromImageAsset(const FImageAsset &ImageAsset, bool bMatchSize = false);
 
     UFUNCTION(BlueprintCallable, Category = LazyImage)
-    FVoidCoroutine SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook, bool bMatchSize = false, FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
+    FVoidCoroutine SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook,
+                                                 bool bMatchSize = false,
+                                                 FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
 
     UFUNCTION(BlueprintCallable, Category = LazyImage)
-    FVoidCoroutine SetBrushFromLazySimpleFlipbook(const TSoftObjectPtr<USimpleFlipbook> &LazyFlipbook, bool bMatchSize = false, FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
+    FVoidCoroutine SetBrushFromLazySimpleFlipbook(const TSoftObjectPtr<USimpleFlipbook> &LazyFlipbook,
+                                                  bool bMatchSize = false,
+                                                  FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
 
     UFUNCTION(BlueprintCallable, Category = LazyImage)
-    FVoidCoroutine SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize = false, FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
+    FVoidCoroutine SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize = false,
+                                              FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
 
     void Tick(float DeltaTime) override;
     virtual TStatId GetStatId() const override;
@@ -71,7 +76,7 @@ class RPGMENUS_API UEnhancedImage : public UCommonLazyImage, public FTickableGam
   private:
     void SetSourceImageInternal(UObject *Object);
 
-    void CreateSimpleFlipbookMaterialInstance(const USimpleFlipbook& Flipbook);
+    void CreateSimpleFlipbookMaterialInstance(const USimpleFlipbook &Flipbook);
 
     void OnFlipbookFinishedPlaying() const;
 

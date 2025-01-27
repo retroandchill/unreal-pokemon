@@ -17,12 +17,13 @@ class FMockBattleSide : public IBattleSide {
     DECLARE_MOCK_INTERFACE(FMockBattleSide)
 
   public:
-    MOCK_METHOD4(Initialize, UE5Coro::TCoroutine<TScriptInterface<IBattleSide>>(TScriptInterface<IBattle> Battle,
-                                                           TArray<TScriptInterface<IPokemon>> Pokemon,
-                                                           bool ShowBackSprites, FForceLatentCoroutine));
-    MOCK_METHOD5(Initialize, UE5Coro::TCoroutine<TScriptInterface<IBattleSide>>(TScriptInterface<IBattle> Battle,
-                                                           TScriptInterface<ITrainer> Trainer,
-                                                           uint8 PokemonCount, bool ShowBackSprites, FForceLatentCoroutine));
+    MOCK_METHOD4(Initialize,
+                 UE5Coro::TCoroutine<TScriptInterface<IBattleSide>>(TScriptInterface<IBattle> Battle,
+                                                                    TArray<TScriptInterface<IPokemon>> Pokemon,
+                                                                    bool ShowBackSprites, FForceLatentCoroutine));
+    MOCK_METHOD5(Initialize, UE5Coro::TCoroutine<TScriptInterface<IBattleSide>>(
+                                 TScriptInterface<IBattle> Battle, TScriptInterface<ITrainer> Trainer,
+                                 uint8 PokemonCount, bool ShowBackSprites, FForceLatentCoroutine));
     MOCK_METHOD(const FGuid &, GetInternalId, (), (const, override));
     MOCK_METHOD(const TScriptInterface<IBattle> &, GetOwningBattle, (), (const, override));
     MOCK_METHOD(UTurnBasedEffectComponent *, GetTurnBasedEffectComponent, (), (const, override));

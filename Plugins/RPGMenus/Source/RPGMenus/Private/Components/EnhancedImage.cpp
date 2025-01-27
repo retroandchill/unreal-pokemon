@@ -2,11 +2,11 @@
 
 #include "Components/EnhancedImage.h"
 #include "PaperSprite.h"
-#include "RPGMenus.h"
 #include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/Transform.h"
-#include "Slate/SlateBrushAsset.h"
+#include "RPGMenus.h"
 #include "Simple2D/Rendering/MaterialSettings.h"
+#include "Slate/SlateBrushAsset.h"
 
 DECLARE_CYCLE_STAT(TEXT("Tick Enhanced Image"), STAT_TickEnhancedImage, STATGROUP_RPGMenus);
 
@@ -14,7 +14,7 @@ UEnhancedImage::UEnhancedImage() {
     static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaskedMaterialRef(
         TEXT("/Simple2D/Materials/MaskedWidgetFlipbookMaterial"));
     SimpleFlipbookBaseMaterial = MaskedMaterialRef.Object;
-    
+
     FlipbookTicker.BindToOnFinishedPlaying(this, &UEnhancedImage::OnFlipbookFinishedPlaying);
     FlipbookTicker.BindToOnFrameIndexChanged(this, &UEnhancedImage::OnFrameIndexChanged);
 }
@@ -74,7 +74,7 @@ void UEnhancedImage::SetBrushFromPaperFlipbook(UPaperFlipbook *Flipbook, bool bM
     bManualSize = !bMatchSize;
 }
 
-void UEnhancedImage::SetBrushFromSimpleFlipbook(USimpleFlipbook* Flipbook, bool bMatchSize) {
+void UEnhancedImage::SetBrushFromSimpleFlipbook(USimpleFlipbook *Flipbook, bool bMatchSize) {
     if (Flipbook != nullptr) {
         if (SourceImage != Flipbook || SimpleFlipbookMaterialInstance == nullptr) {
             CreateSimpleFlipbookMaterialInstance(*Flipbook);
@@ -90,7 +90,8 @@ void UEnhancedImage::SetBrushFromSimpleFlipbook(USimpleFlipbook* Flipbook, bool 
 
     if (bMatchSize) {
         if (auto Texture = Flipbook->GetSourceTexture(); !bManualSize && Texture != nullptr) {
-            SetDesiredSizeOverride(FVector2D(Texture->GetSizeX() / Flipbook->GetColumns(), Texture->GetSizeY() / Flipbook->GetRows()));
+            SetDesiredSizeOverride(
+                FVector2D(Texture->GetSizeX() / Flipbook->GetColumns(), Texture->GetSizeY() / Flipbook->GetRows()));
         }
     }
 }
@@ -145,11 +146,11 @@ FVoidCoroutine UEnhancedImage::SetBrushFromLazySimpleFlipbook(const TSoftObjectP
     }
 }
 
-FVoidCoroutine UEnhancedImage::SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize, FForceLatentCoroutine) {
+FVoidCoroutine UEnhancedImage::SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize,
+                                                          FForceLatentCoroutine) {
     if (auto &SoftPointer = LazyImage.ToSoftObjectPtr(); !SoftPointer.IsNull()) {
         auto LoadedAsset = co_await LazyImage.LoadAsync();
-        ensureMsgf(LazyImage.IsValid(), TEXT("Failed to load %s"),
-                                        *LazyImage.ToSoftObjectPath().ToString());
+        ensureMsgf(LazyImage.IsValid(), TEXT("Failed to load %s"), *LazyImage.ToSoftObjectPath().ToString());
         check(LoadedAsset.IsSet())
         SetBrushFromImageAsset(LoadedAsset.GetValue(), bMatchSize);
     } else {
@@ -247,7 +248,8 @@ void UEnhancedImage::PostEditChangeProperty(FPropertyChangedEvent &PropertyChang
             case FImageAsset::GetTypeIndex<USimpleFlipbook>(): {
                 auto &Flipbook = SourceImage.Get<USimpleFlipbook>();
                 auto Texture = Flipbook.GetSourceTexture();
-                SetDesiredSizeOverride(FVector2D(Texture->GetSizeX() / Flipbook.GetColumns(), Texture->GetSizeY() / Flipbook.GetRows()));
+                SetDesiredSizeOverride(
+                    FVector2D(Texture->GetSizeX() / Flipbook.GetColumns(), Texture->GetSizeY() / Flipbook.GetRows()));
                 break;
             }
             default:
@@ -266,9 +268,7 @@ void UEnhancedImage::SetSourceImageInternal(UObject *Object) {
     }
 }
 
-
-
-void UEnhancedImage::CreateSimpleFlipbookMaterialInstance(const USimpleFlipbook& Flipbook) {
+void UEnhancedImage::CreateSimpleFlipbookMaterialInstance(const USimpleFlipbook &Flipbook) {
     SimpleFlipbookMaterialInstance = UMaterialInstanceDynamic::Create(SimpleFlipbookBaseMaterial, this);
     SimpleFlipbookMaterialInstance->SetTextureParameterValue(Simple2D::Flipbooks::TextureParameterName,
                                                              Flipbook.GetSourceTexture());
@@ -284,7 +284,7 @@ void UEnhancedImage::OnFlipbookFinishedPlaying() const {
 
 void UEnhancedImage::OnFrameIndexChanged(std::any KeyFrame) {
     if (KeyFrame.type() == typeid(FPaperFlipbookKeyFrame)) {
-        if (auto &[Sprite, FrameRun] = std::any_cast<FPaperFlipbookKeyFrame&>(KeyFrame); Sprite != nullptr) {
+        if (auto &[Sprite, FrameRun] = std::any_cast<FPaperFlipbookKeyFrame &>(KeyFrame); Sprite != nullptr) {
             const FSlateAtlasData SpriteAtlasData = Sprite->GetSlateAtlasData();
             const FVector2D SpriteSize = SpriteAtlasData.GetSourceDimensions();
             SetBrushResourceObject(Sprite);
@@ -296,13 +296,15 @@ void UEnhancedImage::OnFrameIndexChanged(std::any KeyFrame) {
             SetBrushResourceObject(nullptr);
         }
     } else if (KeyFrame.type() == typeid(FSimpleFlipbookKeyFrame)) {
-        auto &[Index, FrameRun] = std::any_cast<FSimpleFlipbookKeyFrame&>(KeyFrame);
+        auto &[Index, FrameRun] = std::any_cast<FSimpleFlipbookKeyFrame &>(KeyFrame);
         check(IsValid(SimpleFlipbookMaterialInstance))
         if (auto &Flipbook = SourceImage.Get<USimpleFlipbook>(); Flipbook.IsValidKeyFrameIndex(Index)) {
-            SimpleFlipbookMaterialInstance->SetScalarParameterValue(Simple2D::Flipbooks::FrameParameterName, static_cast<float>(Index));
+            SimpleFlipbookMaterialInstance->SetScalarParameterValue(Simple2D::Flipbooks::FrameParameterName,
+                                                                    static_cast<float>(Index));
             SetBrushResourceObject(SimpleFlipbookMaterialInstance);
             if (auto Texture = Flipbook.GetSourceTexture(); !bManualSize && Texture != nullptr) {
-                SetDesiredSizeOverride(FVector2D(Texture->GetSizeX() / Flipbook.GetColumns(), Texture->GetSizeY() / Flipbook.GetRows()));
+                SetDesiredSizeOverride(
+                    FVector2D(Texture->GetSizeX() / Flipbook.GetColumns(), Texture->GetSizeY() / Flipbook.GetRows()));
             }
         } else {
             SetBrushResourceObject(nullptr);

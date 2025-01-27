@@ -1,5 +1,4 @@
 ﻿#include "Asserts.h"
-#include "TestAdapter.h"
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Battlers/Battler.h"
@@ -8,12 +7,14 @@
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
+#include "TestAdapter.h"
 #include "Utilities/TemporarySeed.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestActiveSide.h"
 #include "UtilityClasses/BattleActors/TestPokemonBattle.h"
 
-BEGIN_DEFINE_SPEC(FTestStatChangingMoves, "Unit Tests.Battle.Moves.TestStatChangingMoves", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
+BEGIN_DEFINE_SPEC(FTestStatChangingMoves, "Unit Tests.Battle.Moves.TestStatChangingMoves",
+                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
 CORO_FUNCTIONS()
 END_DEFINE_SPEC(FTestStatChangingMoves);
 
@@ -77,14 +78,14 @@ void FTestStatChangingMoves::Define() {
         Battle->Initialize({Side1, Side2});
 
         auto Battler1 = Side1->GetBattlers()[0];
-        Battler1->GetAbilityComponent()->SetNumericAttributeBase(UStatStagesAttributeSet::GetSpecialAttackStagesAttribute(),
-                                                                 6.f);
+        Battler1->GetAbilityComponent()->SetNumericAttributeBase(
+            UStatStagesAttributeSet::GetSpecialAttackStagesAttribute(), 6.f);
 
         FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {});
         AddExpectedMessage(TEXT("Nasty Plot failed!"), ELogVerbosity::Display);
         co_await Action.Execute();
     });
-    
+
     CoroIt("LowerUserStats", [this]() -> UE5Coro::TCoroutine<> {
         auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
         auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(

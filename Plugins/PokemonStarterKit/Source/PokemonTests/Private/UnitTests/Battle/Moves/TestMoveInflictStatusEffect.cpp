@@ -1,11 +1,11 @@
 ﻿#include "Asserts.h"
-#include "TestAdapter.h"
 #include "Battle/Actions/BattleActionUseMove.h"
 #include "Battle/Battlers/Battler.h"
 #include "Lookup/InjectionUtilities.h"
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
+#include "TestAdapter.h"
 #include "Utilities/TemporarySeed.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestActiveSide.h"
@@ -13,7 +13,8 @@
 
 class IPokemon;
 
-BEGIN_DEFINE_SPEC(FTestMoveInflictStatusEffect, "Unit Tests.Battle.Moves.TestMoveInflictStatusEffect", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
+BEGIN_DEFINE_SPEC(FTestMoveInflictStatusEffect, "Unit Tests.Battle.Moves.TestMoveInflictStatusEffect",
+                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
 CORO_FUNCTIONS()
 END_DEFINE_SPEC(FTestMoveInflictStatusEffect);
 

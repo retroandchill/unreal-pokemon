@@ -8,4 +8,4 @@ namespace Pokemon::Battle::Abilities {
     TOptional<TNonNullSubclassOf<UGameplayAbility>> CreateAbilityEffect(FName ID) {
         return Classes::AbilityEffects.LoadClass(ID);
     }
-}
+} // namespace Pokemon::Battle::Abilities

@@ -1,6 +1,5 @@
 // "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Simple2D/Assets/SimpleFlipbook.h"
 #include "AlphaBitmap.h"
 #include "Paper2DModule.h"
@@ -130,20 +129,20 @@ FSimpleFlipbookDrawCall USimpleFlipbook::CreateDrawCallRecord(int32 FrameIndex) 
 }
 
 void USimpleFlipbook::InvalidateCachedData() {
-    // No cached data yet, but the functions that currently have to iterate over all frames can use cached data in the future
+    // No cached data yet, but the functions that currently have to iterate over all frames can use cached data in the
+    // future
 }
 
 #if WITH_EDITOR
 void USimpleFlipbook::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
-    if (PixelsPerUnrealUnit <= 0.0f)
-    {
+    if (PixelsPerUnrealUnit <= 0.0f) {
         PixelsPerUnrealUnit = 1.0f;
     }
-    
+
     if (FramesPerSecond < 0.0f) {
         FramesPerSecond = 0.0f;
     }
-    
+
     CustomPivotPoint = GetPivotPosition();
 
     UObject::PostEditChangeProperty(PropertyChangedEvent);
@@ -218,12 +217,12 @@ void USimpleFlipbook::RebuildRenderData() {
 
     // Triangulate the render geometry
     TArray<FVector2D> TriangluatedPoints;
-    RenderGeometry.Triangulate(/*out*/ TriangluatedPoints, /*bIncludeBoxes=*/ true);
+    RenderGeometry.Triangulate(/*out*/ TriangluatedPoints, /*bIncludeBoxes=*/true);
 
     // Triangulate the alternate render geometry, if present
     if (AlternateGeometry.Shapes.Num() > 0) {
         TArray<FVector2D> AlternateTriangluatedPoints;
-        AlternateGeometry.Triangulate(/*out*/ AlternateTriangluatedPoints, /*bIncludeBoxes=*/ true);
+        AlternateGeometry.Triangulate(/*out*/ AlternateTriangluatedPoints, /*bIncludeBoxes=*/true);
 
         AlternateMaterialSplitIndex = TriangluatedPoints.Num();
         TriangluatedPoints.Append(AlternateTriangluatedPoints);
@@ -240,8 +239,8 @@ void USimpleFlipbook::RebuildRenderData() {
         const FVector2D PivotSpacePos = ConvertTextureSpaceToPivotSpace(SourcePos);
         const FVector2D UV(SourcePos + FVector2D::ZeroVector);
 
-        new(BakedRenderData) FVector4(PivotSpacePos.X * UnitsPerPixel, PivotSpacePos.Y * UnitsPerPixel,
-                                      UV.X * InverseWidth, UV.Y * InverseHeight);
+        new (BakedRenderData) FVector4(PivotSpacePos.X * UnitsPerPixel, PivotSpacePos.Y * UnitsPerPixel,
+                                       UV.X * InverseWidth, UV.Y * InverseHeight);
     }
 
     check((BakedRenderData.Num() % 3) == 0);

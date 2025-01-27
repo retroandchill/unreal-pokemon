@@ -16,15 +16,15 @@ struct FSoftImageAsset;
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FImageAsset
 #if CPP
-    : Retro::TVariantObject<UTexture2D, UTexture2DDynamic, UMaterialInterface,
-                                    ISlateTextureAtlasInterface, UPaperFlipbook, USimpleFlipbook> {
+    : Retro::TVariantObject<UTexture2D, UTexture2DDynamic, UMaterialInterface, ISlateTextureAtlasInterface,
+                            UPaperFlipbook, USimpleFlipbook> {
 #else
-    {
+{
 #endif
     RETRO_VARIANT_OBJECT_STRUCT_BODY(FImageAsset, FSoftImageAsset)
 
 #if !CPP
-    private:
+  private:
     UPROPERTY(EditAnywhere)
     TObjectPtr<UObject> ContainedObject;
 
@@ -45,7 +45,7 @@ struct FSoftImageAsset
     RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY(FSoftImageAsset)
 
 #if !CPP
-private:
+  private:
     UPROPERTY(EditAnywhere)
     TSoftObjectPtr<UObject> Ptr;
 

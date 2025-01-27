@@ -5,15 +5,14 @@
 #include "CoreMinimal.h"
 #include "PaperFlipbook.h"
 #include "PaperSprite.h"
-#include "Simple2D/Assets/SimpleFlipbook.h"
 #include "RetroLib/Variants/SoftVariantObject.h"
+#include "Simple2D/Assets/SimpleFlipbook.h"
 
 #if WITH_PAPERZD
 #include "AnimSequences/PaperZDAnimSequence.h"
 #endif
 
 #include "BattleRender.generated.h"
-
 
 #define BATTLE_RENDER_BASE_TYPES USkeletalMesh, UStaticMesh, UPaperSprite, UPaperFlipbook, USimpleFlipbook
 #if WITH_PAPERZD
@@ -29,19 +28,18 @@ struct FBattleRender
 #if CPP
     : Retro::TVariantObject<BATTLE_RENDER_TYPES> {
 #else
-    {
+{
 #endif
     RETRO_VARIANT_OBJECT_STRUCT_BODY(FBattleRender, FSoftBattleRender)
-    
+
 #if !CPP
-private:
+  private:
     UPROPERTY(EditAnywhere)
     TObjectPtr<UObject> ContainedObject;
 
     UPROPERTY()
     uint64 TypeIndex;
 #endif
-    
 };
 
 RETRO_DECLARE_VARIANT_OBJECT_STRUCT(FBattleRender);
@@ -51,19 +49,18 @@ struct FSoftBattleRender
 #if CPP
     : Retro::TSoftVariantObject<FBattleRender> {
 #else
-    {
+{
 #endif
     RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY(FSoftBattleRender)
-    
+
 #if !CPP
-private:
+  private:
     UPROPERTY(EditAnywhere)
     TSoftObjectPtr<UObject> Ptr;
 
     UPROPERTY()
     uint64 TypeIndex;
 #endif
-    
 };
 
 RETRO_DECLARE_SOFT_VARIANT_OBJECT_STRUCT(FSoftBattleRender);

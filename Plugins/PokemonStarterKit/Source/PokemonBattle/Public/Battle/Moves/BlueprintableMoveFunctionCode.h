@@ -19,8 +19,7 @@ class POKEMONBATTLE_API UBlueprintableMoveFunctionCode : public UBattleMoveFunct
                                          const TArray<TScriptInterface<IBattler>> &Targets,
                                          FForceLatentCoroutine = {}) final;
 
-    UE5Coro::TCoroutine<bool> FailsAgainstTarget(TScriptInterface<IBattler> User,
-                                                 TScriptInterface<IBattler> Target,
+    UE5Coro::TCoroutine<bool> FailsAgainstTarget(TScriptInterface<IBattler> User, TScriptInterface<IBattler> Target,
                                                  FForceLatentCoroutine = {}) final;
 
     UE5Coro::TCoroutine<> ApplyEffectWhenDealingDamage(TScriptInterface<IBattler> User,
@@ -30,8 +29,7 @@ class POKEMONBATTLE_API UBlueprintableMoveFunctionCode : public UBattleMoveFunct
     UE5Coro::TCoroutine<> ApplyAdditionalEffect(TScriptInterface<IBattler> User,
                                                 TScriptInterface<IBattler> Target) final;
 
-    UE5Coro::TCoroutine<> ApplyEffectAgainstTarget(TScriptInterface<IBattler> User,
-                                                   TScriptInterface<IBattler> Target,
+    UE5Coro::TCoroutine<> ApplyEffectAgainstTarget(TScriptInterface<IBattler> User, TScriptInterface<IBattler> Target,
                                                    FForceLatentCoroutine = {}) final;
 
     UE5Coro::TCoroutine<> ApplyGeneralEffect(TScriptInterface<IBattler> User, FForceLatentCoroutine = {}) final;

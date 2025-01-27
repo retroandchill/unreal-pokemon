@@ -14,12 +14,12 @@ FBattleRender USpriteLoader::GetPokemonBattleSprite(const TScriptInterface<IPoke
 }
 
 FVoidCoroutine USpriteLoader::AsyncGetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon,
-    FBattleRender &OutRender, bool bBack, FLatentActionInfo) {
+                                                          FBattleRender &OutRender, bool bBack, FLatentActionInfo) {
     OutRender = co_await AsyncGetPokemonBattleSprite(Pokemon, bBack);
 }
 
 UE5Coro::TCoroutine<FBattleRender> USpriteLoader::AsyncGetPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon,
-    bool bBack, FForceLatentCoroutine) {
+                                                                              bool bBack, FForceLatentCoroutine) {
     co_return co_await GetLazyPokemonBattleSprite(Pokemon, bBack).LoadAsync() |
         Retro::Optionals::OrElseGet(Retro::Construct<FBattleRender>);
 }

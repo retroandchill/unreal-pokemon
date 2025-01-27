@@ -49,26 +49,26 @@ namespace Retro {
             // No child customization
         }
 
-    private:
-        T& GetSoftVariantObject() const {
+      private:
+        T &GetSoftVariantObject() const {
             void *StructData;
             const auto Result = SoftVariantObjectPropertyHandle->GetValueData(StructData);
             check(Result == FPropertyAccess::Success)
             check(StructData != nullptr)
             return *static_cast<T *>(StructData);
         }
-        
+
         FString GetCurrentAssetPath() const {
             // clang-format off
             return GetSoftVariantObject().ToSoftObjectPtr().ToString();
             // clang-format on
         }
 
-        bool IsValidClass(const FAssetData& Asset) const {
+        bool IsValidClass(const FAssetData &Asset) const {
             return !T::FHardReference::IsValidType(Asset.GetClass(EResolveClass::Yes));
         }
 
-        void OnAssetSelected( const FAssetData& InAsset ) const {
+        void OnAssetSelected(const FAssetData &InAsset) const {
             SoftVariantObjectPropertyHandle->NotifyPreChange();
             GetSoftVariantObject().Set(TSoftObjectPtr(InAsset.GetSoftObjectPath()));
             SoftVariantObjectPropertyHandle->NotifyPostChange(EPropertyChangeType::ValueSet);

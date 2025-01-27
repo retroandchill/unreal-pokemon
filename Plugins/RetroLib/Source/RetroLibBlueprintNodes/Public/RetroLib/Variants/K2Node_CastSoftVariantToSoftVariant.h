@@ -4,22 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "K2Node_VariantCastBase.h"
+
 #include "K2Node_CastSoftVariantToSoftVariant.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class RETROLIBBLUEPRINTNODES_API UK2Node_CastSoftVariantToSoftVariant : public UK2Node_VariantCastBase {
     GENERATED_BODY()
 
-public:
+  public:
     void Initialize(UScriptStruct *Input, UScriptStruct *Output);
 
     FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
     FText GetTooltipText() const override;
 
-protected:
+  protected:
     void CreateInputAndOutputPins() override;
     void AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
                                  Retro::IVariantRegistration &Registration) const override;
@@ -27,11 +28,10 @@ protected:
     UEdGraphPin *GetOutputPin() const override;
     FCastFunctionInfo GetPerformCastNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
 
-private:
+  private:
     UPROPERTY()
     TObjectPtr<UScriptStruct> InputType;
-    
+
     UPROPERTY()
     TObjectPtr<UScriptStruct> OutputType;
-
 };

@@ -30,7 +30,7 @@ namespace Retro {
      * from one struct type to another, supporting both standard and 'soft' variants.
      */
     RETROLIB_EXPORT class RETROLIB_API IVariantConversion {
-    public:
+      public:
         virtual ~IVariantConversion() = default;
 
         /**
@@ -101,7 +101,7 @@ namespace Retro {
 
     template <VariantObjectStruct T, VariantObjectStruct U>
     class TVariantConversionImpl : public IVariantConversion {
-    public:
+      public:
         UScriptStruct *GetSourceStructType() const final {
             return GetScriptStruct<T>();
         }
@@ -147,7 +147,6 @@ namespace Retro {
 
             return false;
         }
-
     };
 
     /**
@@ -156,7 +155,7 @@ namespace Retro {
      * function that will then trigger an actual blueprint exception.
      */
     RETROLIB_EXPORT class RETROLIB_API IVariantRegistration {
-    public:
+      public:
         virtual ~IVariantRegistration() = default;
 
         /**
@@ -259,7 +258,8 @@ namespace Retro {
          * Implementations may provide a specialized conversion logic for handling variant struct data.
          *
          * @param To The target UScriptStruct type to which the data should be converted.
-         * @return An optional reference to an IVariantConversion object if a valid conversion exists, or an empty optional otherwise.
+         * @return An optional reference to an IVariantConversion object if a valid conversion exists, or an empty
+         * optional otherwise.
          */
         virtual TOptional<IVariantConversion &> GetConversion(const UScriptStruct &To) const = 0;
 
@@ -269,12 +269,10 @@ namespace Retro {
          * into their appropriate shared reference variant type.
          */
         auto GetAllConversions() const {
-            return Conversions |
-                Ranges::Views::Values |
-                    Ranges::Views::Transform(&TSharedRef<IVariantConversion>::Get);
+            return Conversions | Ranges::Views::Values | Ranges::Views::Transform(&TSharedRef<IVariantConversion>::Get);
         }
-    
-    protected:
+
+      protected:
         /**
          * Retrieves the map of variant conversions.
          * This map associates FName keys with shared references to IVariantConversion,
@@ -297,9 +295,9 @@ namespace Retro {
             return Conversions;
         }
 
-    private:
+      private:
         friend class FVariantObjectStructRegistry;
-        
+
         TMap<FName, TSharedRef<IVariantConversion>> Conversions;
     };
 
@@ -311,7 +309,7 @@ namespace Retro {
     template <typename T>
         requires VariantObjectStruct<T>
     class TVariantStructRegistration : public IVariantRegistration {
-    public:
+      public:
         UScriptStruct *GetStructType() const final {
             return GetScriptStruct<T>();
         }
@@ -338,7 +336,7 @@ namespace Retro {
             if (auto TypeIndex = T::GetTypeIndex(SourceObject);
                 !TypeIndex.IsSet() || TypeIndex.GetValue() == T::template GetTypeIndex<std::nullptr_t>()) {
                 throw FVariantException("Incompatible object parameter; the supplied object is not of a "
-                    "valid type for this variant object");
+                                        "valid type for this variant object");
             }
 
             Variant->Set(SourceObject);
@@ -409,12 +407,12 @@ namespace Retro {
      * Static registry for a variant struct object.
      */
     class RETROLIB_API FVariantObjectStructRegistry {
-        DECLARE_MULTICAST_DELEGATE_TwoParams(FOnRegistrationComplete, FName, IVariantRegistration&);
-        
+        DECLARE_MULTICAST_DELEGATE_TwoParams(FOnRegistrationComplete, FName, IVariantRegistration &);
+
         FVariantObjectStructRegistry() = default;
         ~FVariantObjectStructRegistry() = default;
 
-    public:
+      public:
         FVariantObjectStructRegistry(const FVariantObjectStructRegistry &) = delete;
         FVariantObjectStructRegistry(FVariantObjectStructRegistry &&) = delete;
 
@@ -470,8 +468,7 @@ namespace Retro {
                 auto DestStruct = GetScriptStruct<U>();
                 auto DestRegistration = co_await Instance.AsyncGetVariantStructData(*SourceStruct);
                 auto &DestMap = DestRegistration->GetMutableConversions();
-                auto &Registered = DestMap.Emplace(DestStruct->GetFName(),
-                                                   MakeShared<TVariantConversionImpl<T, U>>());
+                auto &Registered = DestMap.Emplace(DestStruct->GetFName(), MakeShared<TVariantConversionImpl<T, U>>());
                 // We're using a shared pointer to avoid double allocating identical registration info for the same
                 // class
                 auto SoftDest = GetScriptStruct<typename U::SoftPtrType>();
@@ -495,7 +492,8 @@ namespace Retro {
          *
          * @param From The source UScriptStruct type to convert from.
          * @param To The target UScriptStruct type to convert to.
-         * @return An optional conversion interface capable of handling the transformation, or an empty optional if no conversion is available.
+         * @return An optional conversion interface capable of handling the transformation, or an empty optional if no
+         * conversion is available.
          */
         TOptional<IVariantConversion &> GetVariantStructConversion(const UScriptStruct &From, const UScriptStruct &To);
 
@@ -519,7 +517,8 @@ namespace Retro {
          * The pipeline combines multiple operations such as aggregating conversions,
          * flattening nested collections, extracting values, and dereferencing shared references.
          *
-         * @return A range containing all the registered variant conversion interfaces as dereferenced shared references.
+         * @return A range containing all the registered variant conversion interfaces as dereferenced shared
+         * references.
          */
         auto GetAllRegisteredConversions() const {
             // clang-format off
@@ -531,11 +530,11 @@ namespace Retro {
             // clang-format on
         }
 
-    private:
+      private:
 #if RETROLIB_WITH_UE5CORO
         UE5Coro::TCoroutine<IVariantRegistration *> AsyncGetVariantStructData(const UScriptStruct &Struct);
 #endif
-        
+
         TMap<FName, TSharedRef<IVariantRegistration>> RegisteredStructs;
         FOnRegistrationComplete OnRegistered;
     };

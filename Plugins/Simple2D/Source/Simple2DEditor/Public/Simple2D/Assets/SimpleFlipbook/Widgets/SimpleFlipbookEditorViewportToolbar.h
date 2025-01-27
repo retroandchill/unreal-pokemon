@@ -8,17 +8,18 @@
 
 namespace Simple2D {
     /**
-     * 
+     *
      */
     class SIMPLE2DEDITOR_API SSimpleFlipbookEditorViewportToolbar : public SCommonEditorViewportToolbarBase {
-    public:
+      public:
         SLATE_BEGIN_ARGS(SSimpleFlipbookEditorViewportToolbar) {
-        }
+            }
 
-        SLATE_END_ARGS()
+            SLATE_END_ARGS()
 
-        void Construct(const FArguments& InArgs, const TSharedPtr<ICommonEditorViewportToolbarInfoProvider> &InInfoProvider);
+            void Construct(const FArguments &InArgs,
+                           const TSharedPtr<ICommonEditorViewportToolbarInfoProvider> &InInfoProvider);
 
-        TSharedRef<SWidget> GenerateShowMenu() const override;
-    };
-}
+            TSharedRef<SWidget> GenerateShowMenu() const override;
+        };
+    }

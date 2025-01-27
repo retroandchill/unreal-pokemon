@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookAssetActions.h"
 #include "Paper2DEditorModule.h"
 #include "Simple2D/Assets/SimpleFlipbook.h"
@@ -11,7 +10,7 @@ namespace Simple2D {
         return NSLOCTEXT("AssetTypeActions", "AssetTypeActions_SimpleFlipbook", "Simple Flipbook");
     }
 
-    UClass * FSimpleFlipbookAssetActions::GetSupportedClass() const {
+    UClass *FSimpleFlipbookAssetActions::GetSupportedClass() const {
         return USimpleFlipbook::StaticClass();
     }
 
@@ -24,11 +23,11 @@ namespace Simple2D {
     }
 
     void FSimpleFlipbookAssetActions::OpenAssetEditor(const TArray<UObject *> &InObjects,
-        TSharedPtr<IToolkitHost> EditWithinLevelEditor) {
+                                                      TSharedPtr<IToolkitHost> EditWithinLevelEditor) {
         auto Mode = EditWithinLevelEditor.IsValid() ? EToolkitMode::WorldCentric : EToolkitMode::Standalone;
         for (auto Obj : InObjects) {
-            auto* Flipbook = Cast<USimpleFlipbook>(Obj);
-            if ( Flipbook == nullptr) {
+            auto *Flipbook = Cast<USimpleFlipbook>(Obj);
+            if (Flipbook == nullptr) {
                 continue;
             }
 
@@ -36,4 +35,4 @@ namespace Simple2D {
             NewFlipbookEditor->InitFlipbookEditor(Mode, EditWithinLevelEditor, Flipbook);
         }
     }
-}
+} // namespace Simple2D

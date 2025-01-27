@@ -4,14 +4,18 @@
 #include "Modules/ModuleManager.h"
 
 class FSimple2DEditorModule : public IModuleInterface {
-public:
+  public:
     void StartupModule() override;
     void ShutdownModule() override;
 
-    TSharedPtr<FExtensibilityManager> GetFlipbookEditorMenuExtensibilityManager() { return FlipbookEditor_MenuExtensibilityManager; }
-    TSharedPtr<FExtensibilityManager> GetFlipbookEditorToolBarExtensibilityManager() { return FlipbookEditor_ToolBarExtensibilityManager; }
+    TSharedPtr<FExtensibilityManager> GetFlipbookEditorMenuExtensibilityManager() {
+        return FlipbookEditor_MenuExtensibilityManager;
+    }
+    TSharedPtr<FExtensibilityManager> GetFlipbookEditorToolBarExtensibilityManager() {
+        return FlipbookEditor_ToolBarExtensibilityManager;
+    }
 
-private:
+  private:
     TSharedPtr<FExtensibilityManager> FlipbookEditor_MenuExtensibilityManager;
     TSharedPtr<FExtensibilityManager> FlipbookEditor_ToolBarExtensibilityManager;
 };

@@ -13,16 +13,16 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
 #include "Pokemon/Stats/StatBlock.h"
+#include "TestAdapter.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestBattlerActor.h"
-#include "TestAdapter.h"
 #include <thread>
 
 using namespace testing;
 
 BEGIN_DEFINE_SPEC(FBattlerActorTest, "Unit Tests.Battle.Battlers.BattlerActorTest",
                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
-    CORO_FUNCTIONS()
+CORO_FUNCTIONS()
 
 END_DEFINE_SPEC(FBattlerActorTest);
 
@@ -50,11 +50,16 @@ void FBattlerActorTest::Define() {
         CHECK(Pokemon->GetCurrentHP() == static_cast<int32>(CoreAttributes->GetHP()));
         CHECK(Pokemon->GetMaxHP() == static_cast<int32>(CoreAttributes->GetMaxHP()));
         CHECK_EQUALS("Battler HP", Battler->GetHPPercent(), 1.f);
-        CHECK(Pokemon->GetStatBlock()->GetStat("ATTACK")->GetStatValue() == static_cast<int32>(CoreAttributes->GetAttack()));
-        CHECK(Pokemon->GetStatBlock()->GetStat("DEFENSE")->GetStatValue() == static_cast<int32>(CoreAttributes->GetDefense()));
-        CHECK(Pokemon->GetStatBlock()->GetStat("SPECIAL_ATTACK")->GetStatValue() == static_cast<int32>(CoreAttributes->GetSpecialAttack()));
-        CHECK(Pokemon->GetStatBlock()->GetStat("SPECIAL_DEFENSE")->GetStatValue() == static_cast<int32>(CoreAttributes->GetSpecialDefense()));
-        CHECK(Pokemon->GetStatBlock()->GetStat("SPEED")->GetStatValue() == static_cast<int32>(CoreAttributes->GetSpeed()));
+        CHECK(Pokemon->GetStatBlock()->GetStat("ATTACK")->GetStatValue() ==
+              static_cast<int32>(CoreAttributes->GetAttack()));
+        CHECK(Pokemon->GetStatBlock()->GetStat("DEFENSE")->GetStatValue() ==
+              static_cast<int32>(CoreAttributes->GetDefense()));
+        CHECK(Pokemon->GetStatBlock()->GetStat("SPECIAL_ATTACK")->GetStatValue() ==
+              static_cast<int32>(CoreAttributes->GetSpecialAttack()));
+        CHECK(Pokemon->GetStatBlock()->GetStat("SPECIAL_DEFENSE")->GetStatValue() ==
+              static_cast<int32>(CoreAttributes->GetSpecialDefense()));
+        CHECK(Pokemon->GetStatBlock()->GetStat("SPEED")->GetStatValue() ==
+              static_cast<int32>(CoreAttributes->GetSpeed()));
         CHECK_FALSE(Battler->IsFainted());
         CHECK_EQUALS("Exp Percent", Battler->GetExpPercent(), Pokemon->GetStatBlock()->GetExpPercent());
 
@@ -96,7 +101,7 @@ void FBattlerActorTest::Define() {
                 std::this_thread::yield();
             }
         });
-        
+
         TArray<FString> PossibleMessages = {
             TEXT("Mimikyu used Shadow Sneak!"),
             TEXT("Mimikyu used Play Rough!"),

@@ -3,18 +3,21 @@
 #pragma once
 #include "Simple2D/Simple2DStyle.h"
 
-
 namespace Simple2D {
     /**
-     * 
+     *
      */
     class SIMPLE2DEDITOR_API FSimpleFlipbookEditorCommands : public TCommands<FSimpleFlipbookEditorCommands> {
-    protected:
-        FSimpleFlipbookEditorCommands() : TCommands(TEXT("SimpleFlipbookEditor"),NSLOCTEXT("Contexts", "SimpleFlipbookEditor", "Simple Flipbook Editor"),NAME_None, FSimple2DStyle::Get()->GetStyleSetName()) {}
+      protected:
+        FSimpleFlipbookEditorCommands()
+            : TCommands(TEXT("SimpleFlipbookEditor"),
+                        NSLOCTEXT("Contexts", "SimpleFlipbookEditor", "Simple Flipbook Editor"), NAME_None,
+                        FSimple2DStyle::Get()->GetStyleSetName()) {
+        }
 
         void RegisterCommands() override;
 
-    public:
+      public:
         TSharedPtr<FUICommandInfo> AddKeyFrame;
 
         TSharedPtr<FUICommandInfo> SetShowGrid;
@@ -25,8 +28,7 @@ namespace Simple2D {
         TSharedPtr<FUICommandInfo> AddNewFrameBefore;
         TSharedPtr<FUICommandInfo> AddNewFrameAfter;
 
-    private:
+      private:
         friend TCommands;
-        
     };
-}
+} // namespace Simple2D

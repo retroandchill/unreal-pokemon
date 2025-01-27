@@ -12,9 +12,9 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/RetroLibMacros.h"
+#include <optional>
 #include <tuple>
 #include <type_traits>
-#include <optional>
 #endif
 
 #ifndef RETROLIB_EXPORT
@@ -162,7 +162,8 @@ namespace Retro {
     }
 
     template <typename T, typename U>
-    concept HasOverlappingTypes = TupleLike<T> && TupleLike<U> && HasOverlappingTypesImpl<T, U>(std::make_index_sequence<std::tuple_size_v<T>>{});
+    concept HasOverlappingTypes =
+        TupleLike<T> && TupleLike<U> && HasOverlappingTypesImpl<T, U>(std::make_index_sequence<std::tuple_size_v<T>>{});
 
     template <TupleLike T, typename A, size_t... I>
     consteval std::optional<size_t> GetTypeIndexImpl(std::index_sequence<I...>) {
@@ -173,7 +174,7 @@ namespace Retro {
     consteval std::optional<size_t> GetIndexOfType() {
         if constexpr (I >= std::tuple_size_v<T>) {
             return std::nullopt;
-        } else if constexpr(std::same_as<A, std::tuple_element_t<I,T>>){
+        } else if constexpr (std::same_as<A, std::tuple_element_t<I, T>>) {
             return I;
         } else {
             return GetIndexOfType<I + 1, A, T>();
@@ -185,9 +186,10 @@ namespace Retro {
 
     template <TupleLike T, TupleLike U, size_t... I>
     consteval auto GetMatchingTupleIndexesImpl(std::index_sequence<I...>) {
-        return std::array{ IndexInTuple<std::tuple_element_t<I, U>, T>... };
+        return std::array{IndexInTuple<std::tuple_element_t<I, U>, T>...};
     }
 
     template <TupleLike T, TupleLike U>
-    constexpr auto MatchingTupleIndexes = GetMatchingTupleIndexesImpl<T, U>(std::make_index_sequence<std::tuple_size_v<U>>{});
+    constexpr auto MatchingTupleIndexes =
+        GetMatchingTupleIndexesImpl<T, U>(std::make_index_sequence<std::tuple_size_v<U>>{});
 } // namespace Retro

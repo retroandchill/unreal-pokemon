@@ -113,7 +113,7 @@ DEFINE_FUNCTION(UDataStructHandleUtilities::execNotEqual_HandleHandle) {
 
     bool bResult;
     P_NATIVE_BEGIN
-        bResult = DataHandle.RowID != Other;
+    bResult = DataHandle.RowID != Other;
     P_NATIVE_END
 
     *static_cast<bool *>(RESULT_PARAM) = bResult;

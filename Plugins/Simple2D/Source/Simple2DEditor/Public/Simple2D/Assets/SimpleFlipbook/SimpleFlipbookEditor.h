@@ -2,11 +2,10 @@
 
 #pragma once
 
-#include "Toolkits/AssetEditorToolkit.h"
-#include "Simple2D/Assets/SimpleFlipbook.h"
+#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
 #include "ITransportControl.h"
-#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
-#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
+#include "Simple2D/Assets/SimpleFlipbook.h"
+#include "Toolkits/AssetEditorToolkit.h"
 
 class USimpleFlipbookComponent;
 
@@ -14,10 +13,10 @@ namespace Simple2D {
     class SSimpleFlipbookEditorViewport;
 
     /**
-     * 
+     *
      */
     class SIMPLE2DEDITOR_API FSimpleFlipbookEditor : public FAssetEditorToolkit, public FGCObject {
-    public:
+      public:
         void RegisterTabSpawners(const TSharedRef<FTabManager> &InTabManager) override;
         void UnregisterTabSpawners(const TSharedRef<FTabManager> &InTabManager) override;
 
@@ -43,7 +42,7 @@ namespace Simple2D {
 
         USimpleFlipbookComponent *GetPreviewComponent() const;
 
-    private:
+      private:
         float GetFramesPerSecond() const {
             return FlipbookBeingEdited->GetFramesPerSecond();
         }
@@ -53,9 +52,8 @@ namespace Simple2D {
             if (TotalLengthInFrames == 0) {
                 return INDEX_NONE;
             }
-            
-            return FMath::Clamp<int32>((int32)(GetPlaybackPosition() * GetFramesPerSecond()), 0,
-                                       TotalLengthInFrames);
+
+            return FMath::Clamp<int32>((int32)(GetPlaybackPosition() * GetFramesPerSecond()), 0, TotalLengthInFrames);
         }
 
         void SetCurrentFrame(int32 NewIndex) {
@@ -113,4 +111,4 @@ namespace Simple2D {
         mutable float ViewInputMax = 0.f;
         mutable float LastObservedSequenceLength = 0.f;
     };
-}
+} // namespace Simple2D

@@ -30,13 +30,12 @@ struct FAssetClassType
 #if CPP
     : Retro::TVariantObject<UClass, UScriptStruct> {
 #else
-    {
+{
 #endif
     RETRO_VARIANT_OBJECT_STRUCT_BODY(FAssetClassType, FSoftAssetClassType)
-    
 
 #if !CPP
-    private:
+  private:
     UPROPERTY(EditAnywhere)
     TObjectPtr<UObject> ContainedObject;
 
@@ -55,10 +54,9 @@ struct FSoftAssetClassType
 {
 #endif
     RETRO_SOFT_VARIANT_OBJECT_STRUCT_BODY(FSoftAssetClassType)
-    
 
 #if !CPP
-private:
+  private:
     UPROPERTY(EditAnywhere)
     TSoftObjectPtr<UObject> Ptr;
 

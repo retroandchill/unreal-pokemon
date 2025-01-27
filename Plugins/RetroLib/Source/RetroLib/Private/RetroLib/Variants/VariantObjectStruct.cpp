@@ -2,8 +2,8 @@
 
 #ifdef __UNREAL__
 #include "RetroLib/Variants/VariantObjectStruct.h"
-#include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Optionals/AndThen.h"
+#include "RetroLib/Optionals/Transform.h"
 
 namespace Retro {
     FVariantObjectStructRegistry &FVariantObjectStructRegistry::Get() {
@@ -17,20 +17,21 @@ namespace Retro {
     }
 
     TOptional<IVariantConversion &> FVariantObjectStructRegistry::GetVariantStructConversion(const UScriptStruct &From,
-        const UScriptStruct &To) {
+                                                                                             const UScriptStruct &To) {
         return GetVariantStructData(From) |
                Optionals::AndThen(BindBack<&IVariantRegistration::GetConversion>(std::ref(To)));
     }
-    
+
 #if RETROLIB_WITH_UE5CORO
-    UE5Coro::TCoroutine<IVariantRegistration *> FVariantObjectStructRegistry::AsyncGetVariantStructData(
-        const UScriptStruct &Struct) {
+    UE5Coro::TCoroutine<IVariantRegistration *>
+    FVariantObjectStructRegistry::AsyncGetVariantStructData(const UScriptStruct &Struct) {
         if (auto StructData = RegisteredStructs.Find(Struct.GetFName()); StructData != nullptr) {
             co_return &StructData->Get();
         }
 
         while (true) {
-            if (auto [Name, Registration] = co_await OnRegistered; Registration.GetStructType() == &Struct || Registration.GetSoftStructType() == &Struct) {
+            if (auto [Name, Registration] = co_await OnRegistered;
+                Registration.GetStructType() == &Struct || Registration.GetSoftStructType() == &Struct) {
                 co_return &Registration;
             }
         }

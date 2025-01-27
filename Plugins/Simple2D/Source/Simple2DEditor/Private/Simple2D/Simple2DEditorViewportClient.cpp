@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Simple2D/Simple2DEditorViewportClient.h"
 #include "CanvasTypes.h"
 #include "ImageUtils.h"
@@ -9,27 +8,21 @@
 namespace Simple2D {
 
     FSimple2DEditorViewportClient::FSimple2DEditorViewportClient(
-        const TWeakPtr<SEditorViewport> &InEditorViewportWidget) : FEditorViewportClient(nullptr, nullptr, InEditorViewportWidget) {
+        const TWeakPtr<SEditorViewport> &InEditorViewportWidget)
+        : FEditorViewportClient(nullptr, nullptr, InEditorViewportWidget) {
         const bool XX = FMath::IsNearlyEqual(PaperAxisX.X, static_cast<FVector::FReal>(1.0f));
         const bool XY = FMath::IsNearlyEqual(PaperAxisX.Y, static_cast<FVector::FReal>(1.0f));
         const bool YY = FMath::IsNearlyEqual(PaperAxisY.Y, static_cast<FVector::FReal>(1.0f));
         const bool YZ = FMath::IsNearlyEqual(PaperAxisY.Z, static_cast<FVector::FReal>(1.0f));
 
         ELevelViewportType NewViewportType = LVT_OrthoXZ;
-        if (XX && YY)
-        {
+        if (XX && YY) {
             NewViewportType = LVT_OrthoXY;
-        }
-        else if (XX && YZ)
-        {
+        } else if (XX && YZ) {
             NewViewportType = LVT_OrthoXZ;
-        }
-        else if (XY && YZ)
-        {
+        } else if (XY && YZ) {
             NewViewportType = LVT_OrthoYZ;
-        }
-        else
-        {
+        } else {
             //@TODO: Unsupported axes
         }
         SetViewModes(VMI_Lit, VMI_Lit);
@@ -39,8 +32,7 @@ namespace Simple2D {
     }
 
     void FSimple2DEditorViewportClient::Tick(float DeltaSeconds) {
-        if (auto Size = Viewport->GetSizeXY(); bDeferZoomToSprite && (Size.X > 0) && (Size.Y > 0))
-        {
+        if (auto Size = Viewport->GetSizeXY(); bDeferZoomToSprite && (Size.X > 0) && (Size.Y > 0)) {
             FBox BoundsToFocus = GetDesiredFocusBounds();
             if (ViewportType != LVT_Perspective) {
                 TGuardValue SaveViewportType(ViewportType, LVT_Perspective);
@@ -50,7 +42,7 @@ namespace Simple2D {
             FocusViewportOnBox(BoundsToFocus, bDeferZoomToSpriteIsInstant);
             bDeferZoomToSprite = false;
         }
-        
+
         FEditorViewportClient::Tick(DeltaSeconds);
     }
 
@@ -74,7 +66,7 @@ namespace Simple2D {
     }
 
     void FSimple2DEditorViewportClient::SetupCheckerboardTexture(const FColor &ColorOne, const FColor &ColorTwo,
-        int32 CheckerSize) {
+                                                                 int32 CheckerSize) {
         if (CheckerboardTexture == nullptr) {
             CheckerboardTexture = FImageUtils::CreateCheckerboardTexture(ColorOne, ColorTwo, CheckerSize);
         }
@@ -85,15 +77,14 @@ namespace Simple2D {
             if (CheckerboardTexture->GetResource()) {
                 CheckerboardTexture->ReleaseResource();
             }
-            
+
             CheckerboardTexture->MarkAsGarbage();
             CheckerboardTexture = nullptr;
         }
     }
 
     void FSimple2DEditorViewportClient::DrawSelectionRectangles(FViewport *, FCanvas *Canvas) {
-        for (auto &[TopLeft, Dimensions, Color] : SelectionRectangles)
-        {
+        for (auto &[TopLeft, Dimensions, Color] : SelectionRectangles) {
             const float X = (TopLeft.X - ZoomPos.X) * ZoomAmount;
             const float Y = (TopLeft.Y - ZoomPos.Y) * ZoomAmount;
             const float W = Dimensions.X * ZoomAmount;
@@ -103,4 +94,4 @@ namespace Simple2D {
             Canvas->DrawTile(X, Y, W, H, 0, 0, 1, 1, Color, GWhiteTexture, bAlphaBlend);
         }
     }
-}
+} // namespace Simple2D

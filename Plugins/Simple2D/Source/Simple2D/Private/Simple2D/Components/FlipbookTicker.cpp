@@ -1,75 +1,53 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Simple2D/Components/FlipbookTicker.h"
-
 
 namespace Simple2D {
     void FFlipbookTicker::TickFlipbook(float DeltaTime) {
         bool bIsFinished = false;
 
-        if (bPlaying)
-        {
+        if (bPlaying) {
             const float TimelineLength = GetFlipbookLength();
             const float EffectiveDeltaTime = DeltaTime * (bReversePlayback ? (-PlayRate) : (PlayRate));
 
             float NewPosition = AccumulatedTime + EffectiveDeltaTime;
 
-            if (EffectiveDeltaTime > 0.0f)
-            {
-                if (NewPosition > TimelineLength)
-                {
-                    if (bLooping)
-                    {
+            if (EffectiveDeltaTime > 0.0f) {
+                if (NewPosition > TimelineLength) {
+                    if (bLooping) {
                         // If looping, play to end, jump to start, and set target to somewhere near the beginning.
                         SetPlaybackPosition(TimelineLength);
                         SetPlaybackPosition(0.0f);
 
-                        if (TimelineLength > 0.0f)
-                        {
-                            while (NewPosition > TimelineLength)
-                            {
+                        if (TimelineLength > 0.0f) {
+                            while (NewPosition > TimelineLength) {
                                 NewPosition -= TimelineLength;
                             }
-                        }
-                        else
-                        {
+                        } else {
                             NewPosition = 0.0f;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         // If not looping, snap to end and stop playing.
                         NewPosition = TimelineLength;
                         Stop();
                         bIsFinished = true;
                     }
                 }
-            }
-            else
-            {
-                if (NewPosition < 0.0f)
-                {
-                    if (bLooping)
-                    {
+            } else {
+                if (NewPosition < 0.0f) {
+                    if (bLooping) {
                         // If looping, play to start, jump to end, and set target to somewhere near the end.
                         SetPlaybackPosition(0.0f);
                         SetPlaybackPosition(TimelineLength);
 
-                        if (TimelineLength > 0.0f)
-                        {
-                            while (NewPosition < 0.0f)
-                            {
+                        if (TimelineLength > 0.0f) {
+                            while (NewPosition < 0.0f) {
                                 NewPosition += TimelineLength;
                             }
-                        }
-                        else
-                        {
+                        } else {
                             NewPosition = 0.0f;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         // If not looping, snap to start and stop playing.
                         NewPosition = 0.0f;
                         Stop();
@@ -82,8 +60,7 @@ namespace Simple2D {
         }
 
         // Notify user that the flipbook finished playing
-        if (bIsFinished)
-        {
+        if (bIsFinished) {
             OnFinishedPlaying.Broadcast();
         }
     }
@@ -128,11 +105,10 @@ namespace Simple2D {
 
     int32 FFlipbookTicker::GetPlaybackPositionInFrames() const {
         const float Framerate = GetFlipbookFramerate();
-        if (const int32 NumFrames = GetFlipbookLengthInFrames(); NumFrames > 0)
-        {
+        if (const int32 NumFrames = GetFlipbookLengthInFrames(); NumFrames > 0) {
             return FMath::Clamp<int32>(FMath::TruncToInt(AccumulatedTime * Framerate), 0, NumFrames - 1);
         }
-        
+
         return 0;
     }
 
@@ -140,14 +116,13 @@ namespace Simple2D {
         float OldPosition = AccumulatedTime;
         AccumulatedTime = NewPosition;
 
-        if (OldPosition != AccumulatedTime)
-        {
+        if (OldPosition != AccumulatedTime) {
             CalculateCurrentFrame();
         }
     }
 
     float FFlipbookTicker::GetPlaybackPosition() const {
-	    return AccumulatedTime;
+        return AccumulatedTime;
     }
 
     void FFlipbookTicker::SetLooping(bool bNewLooping) {
@@ -186,9 +161,8 @@ namespace Simple2D {
         const int32 LastCachedFrame = CachedFrameIndex;
         CachedFrameIndex = (Proxy != nullptr) ? Proxy.GetKeyFrameIndexAtTime(AccumulatedTime) : INDEX_NONE;
 
-        if (CachedFrameIndex != LastCachedFrame)
-        {
+        if (CachedFrameIndex != LastCachedFrame) {
             OnFrameIndexChanged.Broadcast(Proxy.GetKeyFrameChecked(CachedFrameIndex));
         }
     }
-}
+} // namespace Simple2D

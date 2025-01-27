@@ -31,7 +31,8 @@ AActiveSide::AActiveSide() {
 
 UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScriptInterface<IBattle> Battle,
                                                                            TArray<TScriptInterface<IPokemon>> Pokemon,
-                                                                           bool ShowBackSprites, FForceLatentCoroutine) {
+                                                                           bool ShowBackSprites,
+                                                                           FForceLatentCoroutine) {
     InternalId = FGuid::NewGuid();
     OwningBattle = Battle;
     SideSize = 1;
@@ -58,8 +59,8 @@ UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScri
 
 UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScriptInterface<IBattle> Battle,
                                                                            TScriptInterface<ITrainer> Trainer,
-                                                                           uint8 PokemonCount,
-                                                                           bool ShowBackSprites, FForceLatentCoroutine) {
+                                                                           uint8 PokemonCount, bool ShowBackSprites,
+                                                                           FForceLatentCoroutine) {
     InternalId = FGuid::NewGuid();
     OwningBattle = Battle;
     SideSize = PokemonCount;
@@ -74,7 +75,8 @@ UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScri
     for (uint8 i = 0; i < Party.Num(); i++) {
         auto SpawnPosition = i < PokemonCount ? GetBattlerSpawnPosition(i) : GetTransform();
         auto Battler = GetWorld()->SpawnActor<AActor>(LoadedBattlerClass, SpawnPosition);
-        co_await BattleParty.Emplace_GetRef(Battler)->Initialize(Side, Party.IsValidIndex(i) ? Party[i] : nullptr, false);
+        co_await BattleParty.Emplace_GetRef(Battler)->Initialize(Side, Party.IsValidIndex(i) ? Party[i] : nullptr,
+                                                                 false);
         Battler->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
     }
 

@@ -8,17 +8,16 @@
 #include "SimpleFlipbookFactory.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class SIMPLE2DEDITOR_API USimpleFlipbookFactory : public UFactory {
     GENERATED_BODY()
 
-public:
+  public:
     USimpleFlipbookFactory();
 
     USimpleFlipbook *FactoryCreateNew(UClass *InClass, UObject *InParent, FName InName, EObjectFlags Flags,
-                                  UObject *Context, FFeedbackContext *Warn) override;
+                                      UObject *Context, FFeedbackContext *Warn) override;
     bool ShouldShowInNewMenu() const override;
-
 };

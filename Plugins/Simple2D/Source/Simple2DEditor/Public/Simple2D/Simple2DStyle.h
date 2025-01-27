@@ -4,10 +4,10 @@
 
 namespace Simple2D {
     /**
-     * 
+     *
      */
     class SIMPLE2DEDITOR_API FSimple2DStyle {
-    public:
+      public:
         static void Initialize();
 
         static void Shutdown();
@@ -15,9 +15,10 @@ namespace Simple2D {
         static TSharedPtr<ISlateStyle> Get();
 
         static FName GetStyleSetName();
-    private:
-        static FString InContent(const FString& RelativePath, const ANSICHAR* Extension);
 
-        static TSharedPtr<FSlateStyleSet > StyleSet;
+      private:
+        static FString InContent(const FString &RelativePath, const ANSICHAR *Extension);
+
+        static TSharedPtr<FSlateStyleSet> StyleSet;
     };
-}
+} // namespace Simple2D

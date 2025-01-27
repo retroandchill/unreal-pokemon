@@ -41,11 +41,13 @@ namespace Retro {
     concept VariantObject = TVariantObjectTraits<T>::IsValid;
 
     template <typename T, typename U>
-    concept ConvertibleVariantObjects = VariantObject<T> && VariantObject<U>
-        && HasOverlappingTypes<typename TVariantObjectTraits<T>::Types, typename TVariantObjectTraits<U>::Types>;
+    concept ConvertibleVariantObjects =
+        VariantObject<T> && VariantObject<U> &&
+        HasOverlappingTypes<typename TVariantObjectTraits<T>::Types, typename TVariantObjectTraits<U>::Types>;
 
     template <VariantObject T, VariantObject U>
-    constexpr auto VariantIndexMapping = MatchingTupleIndexes<typename TVariantObjectTraits<T>::Types, typename TVariantObjectTraits<U>::Types>;
+    constexpr auto VariantIndexMapping =
+        MatchingTupleIndexes<typename TVariantObjectTraits<T>::Types, typename TVariantObjectTraits<U>::Types>;
 
     /**
      * Checks if the given type is a variant object type that has a valid UStruct representation..
@@ -113,11 +115,11 @@ namespace Retro {
             : ContainedObject(Object.GetObject()), TypeIndex(GetTypeIndex(Object.GetObject()).GetValue()) {
         }
 
-    protected:
-        TVariantObject(UObject* InObject, size_t InIndex) : ContainedObject(InObject), TypeIndex(InIndex) {}
+      protected:
+        TVariantObject(UObject *InObject, size_t InIndex) : ContainedObject(InObject), TypeIndex(InIndex) {
+        }
 
-    public:
-
+      public:
         /**
          * Access any of the members on UObject, regardless of the underlying type.
          * @return The underlying object
@@ -135,12 +137,12 @@ namespace Retro {
         }
 
         constexpr friend bool operator==(const TVariantObject &A, const TVariantObject &B) = default;
-        
+
         constexpr friend bool operator==(const TVariantObject &A, const UObject *B) {
             return A.ContainedObject == B;
         }
 
-        constexpr friend bool operator==(const UObject *A, const TVariantObject& B) {
+        constexpr friend bool operator==(const UObject *A, const TVariantObject &B) {
             return A == B.ContainedObject;
         }
 
@@ -180,9 +182,8 @@ namespace Retro {
         constexpr auto Convert() const {
             constexpr auto TypeMapping = Retro::VariantIndexMapping<TVariantObject, U>;
             check(TypeIndex < TypeMapping.size())
-            return TypeMapping[TypeIndex] |
-                Optionals::To<TOptional>() |
-                Optionals::Transform([this](size_t TargetIndex) { return U(ContainedObject, TargetIndex); });
+            return TypeMapping[TypeIndex] | Optionals::To<TOptional>() |
+                   Optionals::Transform([this](size_t TargetIndex) { return U(ContainedObject, TargetIndex); });
         }
 
         /**

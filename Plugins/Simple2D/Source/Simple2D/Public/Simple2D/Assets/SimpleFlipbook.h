@@ -3,8 +3,8 @@
 #pragma once
 
 #include "SpriteDrawCall.h"
-#include "UObject/Object.h"
 #include "SpriteEditorOnlyTypes.h"
+#include "UObject/Object.h"
 
 #include "SimpleFlipbook.generated.h"
 
@@ -30,12 +30,11 @@ USTRUCT(BlueprintType)
 struct SIMPLE2D_API FSimpleFlipbookKeyFrame {
     GENERATED_BODY()
 
-    UPROPERTY(Category=Sprite, EditAnywhere, BlueprintReadOnly, meta=(ClampMin=0))
+    UPROPERTY(Category = Sprite, EditAnywhere, BlueprintReadOnly, meta = (ClampMin = 0))
     int32 Index = 0;
 
-    UPROPERTY(Category=Sprite, EditAnywhere, BlueprintReadOnly, meta=(ClampMin=1))
+    UPROPERTY(Category = Sprite, EditAnywhere, BlueprintReadOnly, meta = (ClampMin = 1))
     int32 FrameRun = 1;
-    
 };
 
 namespace Simple2D {
@@ -43,20 +42,20 @@ namespace Simple2D {
 #if WITH_EDITOR
     class FSimpleFlipbookDetailsCustomization;
 #endif
-}
+} // namespace Simple2D
 
 /**
- * 
+ *
  */
 UCLASS(BlueprintType)
 class SIMPLE2D_API USimpleFlipbook : public UObject {
     GENERATED_BODY()
 
-public:
+  public:
     USimpleFlipbook();
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UTexture2D* GetSourceTexture() const {
+    UTexture2D *GetSourceTexture() const {
         return SourceTexture;
     }
 
@@ -78,33 +77,37 @@ public:
         return FramesPerSecond;
     }
 
-    UFUNCTION(BlueprintCallable, Category="Sprite")
+    UFUNCTION(BlueprintCallable, Category = "Sprite")
     int32 GetNumKeyFrames() const {
         return KeyFrames.Num();
     }
 
-    UFUNCTION(BlueprintCallable, Category="Sprite")
+    UFUNCTION(BlueprintCallable, Category = "Sprite")
     float GetTotalDuration() const;
 
-    UFUNCTION(BlueprintCallable, Category="Sprite")
+    UFUNCTION(BlueprintCallable, Category = "Sprite")
     int32 GetKeyFrameIndexAtTime(float Time, bool bClampToEnds = false) const;
 
-    UFUNCTION(BlueprintCallable, Category="Sprite")
+    UFUNCTION(BlueprintCallable, Category = "Sprite")
     const FSimpleFlipbookKeyFrame &GetKeyFrameChecked(int32 Index) const {
         return KeyFrames[Index];
     }
 
-    UFUNCTION(BlueprintCallable, Category="Sprite")
+    UFUNCTION(BlueprintCallable, Category = "Sprite")
     bool IsValidKeyFrameIndex(int32 Index) const {
         return KeyFrames.IsValidIndex(Index);
     }
 
     FBoxSphereBounds GetRenderBounds() const;
 
-    float GetPixelsPerUnrealUnit() const { return PixelsPerUnrealUnit; }
+    float GetPixelsPerUnrealUnit() const {
+        return PixelsPerUnrealUnit;
+    }
 
     // Return the scaling factor between Unreal units (cm) and pixels
-    float GetUnrealUnitsPerPixel() const { return 1.0f / PixelsPerUnrealUnit; }
+    float GetUnrealUnitsPerPixel() const {
+        return 1.0f / PixelsPerUnrealUnit;
+    }
 
     // Returns the raw pivot position (ignoring pixel snapping)
     FVector2D GetRawPivotPosition() const;
@@ -113,7 +116,7 @@ public:
     FVector2D GetPivotPosition() const;
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UMaterialInterface* GetDefaultMaterial() const {
+    UMaterialInterface *GetDefaultMaterial() const {
         return DefaultMaterial;
     }
 
@@ -128,58 +131,60 @@ public:
     void InvalidateCachedData();
 
 #if WITH_EDITOR
-    void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+    void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
 
     void RebuildRenderData();
 
     FVector2D ConvertTextureSpaceToPivotSpace(FVector2D Input) const;
-    
-    void CreatePolygonFromBoundingBox(FSpriteGeometryCollection& GeomOwner) const;
+
+    void CreatePolygonFromBoundingBox(FSpriteGeometryCollection &GeomOwner) const;
 #endif
 
-private:
+  private:
 #if WITH_EDITOR
     friend Simple2D::FSimpleFlipbookDetailsCustomization;
 #endif
     friend Simple2D::FScopedSimpleFlipbookMutator;
     friend class USimpleFlipbookThumbnailRenderer;
-    
+
     UPROPERTY(EditAnywhere, BlueprintGetter = GetSourceTexture, Category = Sprite)
     TObjectPtr<UTexture2D> SourceTexture;
 
-    UPROPERTY(Category=Sprite, EditAnywhere, AssetRegistrySearchable, meta=(DisplayName="Additional Textures"))
+    UPROPERTY(Category = Sprite, EditAnywhere, AssetRegistrySearchable, meta = (DisplayName = "Additional Textures"))
     TArray<TObjectPtr<UTexture>> AdditionalSourceTextures;
 
     UPROPERTY(EditAnywhere, Category = Sprite, meta = (ClamMin = 1, UIMin = 1))
     TArray<FSimpleFlipbookKeyFrame> KeyFrames;
-    
+
     UPROPERTY(EditAnywhere, BlueprintGetter = GetRows, Category = Sprite, meta = (ClamMin = 1, UIMin = 1))
     int32 Rows = 1;
 
     UPROPERTY(EditAnywhere, BlueprintGetter = GetColumns, Category = Sprite, meta = (ClamMin = 1, UIMin = 1))
     int32 Columns = 1;
 
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetFramesPerSecond, Category = Sprite, meta=(ClampMin=0, ClampMax=1000))
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetFramesPerSecond, Category = Sprite,
+              meta = (ClampMin = 0, ClampMax = 1000))
     float FramesPerSecond = 15.f;
-    
+
     UPROPERTY(EditAnywhere, BlueprintGetter = GetDefaultMaterial, Category = Sprite)
     TObjectPtr<UMaterialInterface> DefaultMaterial;
 
-    // The scaling factor between pixels and Unreal units (cm) (e.g., 0.64 would make a 64 pixel wide sprite take up 100 cm)
-    UPROPERTY(Category=Sprite, EditAnywhere, meta = (DisplayName = "Pixels per unit"))
+    // The scaling factor between pixels and Unreal units (cm) (e.g., 0.64 would make a 64 pixel wide sprite take up 100
+    // cm)
+    UPROPERTY(Category = Sprite, EditAnywhere, meta = (DisplayName = "Pixels per unit"))
     float PixelsPerUnrealUnit = 1.f;
 
 #if WITH_EDITORONLY_DATA
     // Pivot mode
-    UPROPERTY(Category=Sprite, EditAnywhere)
+    UPROPERTY(Category = Sprite, EditAnywhere)
     TEnumAsByte<ESpritePivotMode::Type> PivotMode = ESpritePivotMode::Center_Center;
 
     // Custom pivot point (relative to the sprite rectangle)
-    UPROPERTY(Category=Sprite, EditAnywhere)
+    UPROPERTY(Category = Sprite, EditAnywhere)
     FVector2D CustomPivotPoint;
 
     // Should the pivot be snapped to a pixel boundary?
-    UPROPERTY(Category=Sprite, EditAnywhere, AdvancedDisplay)
+    UPROPERTY(Category = Sprite, EditAnywhere, AdvancedDisplay)
     bool bSnapPivotToPixelGrid = true;
 
     UPROPERTY()
@@ -195,42 +200,35 @@ private:
     //   There should always be a multiple of three elements in this array
     UPROPERTY()
     TArray<FVector4> BakedRenderData;
-
 };
 
 namespace Simple2D {
-    class FScopedSimpleFlipbookMutator
-    {
-    public:
-        float& FramesPerSecond;
-        TArray<FSimpleFlipbookKeyFrame>& KeyFrames;
+    class FScopedSimpleFlipbookMutator {
+      public:
+        float &FramesPerSecond;
+        TArray<FSimpleFlipbookKeyFrame> &KeyFrames;
 
-    private:
-        USimpleFlipbook* SourceFlipbook;
+      private:
+        USimpleFlipbook *SourceFlipbook;
 
-    public:
-        explicit FScopedSimpleFlipbookMutator(USimpleFlipbook* InFlipbook)
-            : FramesPerSecond(InFlipbook->FramesPerSecond)
-            , KeyFrames(InFlipbook->KeyFrames)
-            , SourceFlipbook(InFlipbook)
-        {
+      public:
+        explicit FScopedSimpleFlipbookMutator(USimpleFlipbook *InFlipbook)
+            : FramesPerSecond(InFlipbook->FramesPerSecond), KeyFrames(InFlipbook->KeyFrames),
+              SourceFlipbook(InFlipbook) {
         }
 
-        ~FScopedSimpleFlipbookMutator()
-        {
+        ~FScopedSimpleFlipbookMutator() {
             InvalidateCachedData();
         }
 
         UE_NONCOPYABLE(FScopedSimpleFlipbookMutator)
 
-        void InvalidateCachedData()
-        {
+        void InvalidateCachedData() {
             SourceFlipbook->InvalidateCachedData();
         }
 
-        USimpleFlipbook* GetSourceFlipbook() const
-        {
+        USimpleFlipbook *GetSourceFlipbook() const {
             return SourceFlipbook;
         }
     };
-}
+} // namespace Simple2D

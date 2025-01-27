@@ -5,7 +5,6 @@
 #include "PaperSprite.h"
 #include "SpriteDrawCall.h"
 
-
 namespace Simple2D {
     /** A Paper2D sprite vertex. */
     struct SIMPLE2D_API FSimpleFlipbookTangents {
@@ -17,7 +16,7 @@ namespace Simple2D {
             return PackedNormalZ;
         }
 
-    private:
+      private:
         friend class FSimple2DModule;
 
         static void SetTangentsFromPaperAxes();
@@ -27,7 +26,7 @@ namespace Simple2D {
     };
 
     /**
-     * 
+     *
      */
     struct SIMPLE2D_API FFlipbookRenderSection {
         UMaterialInterface *Material = nullptr;
@@ -61,8 +60,8 @@ namespace Simple2D {
             Vertices.Reserve(Vertices.Num() + NumVertsToCopy);
 
             const FColor VertColor(Record.Color);
-            for (int32 VertexIndex = StartIndexWithinRecord; VertexIndex < StartIndexWithinRecord + NumVertsToCopy; ++
-                 VertexIndex) {
+            for (int32 VertexIndex = StartIndexWithinRecord; VertexIndex < StartIndexWithinRecord + NumVertsToCopy;
+                 ++VertexIndex) {
                 const FVector4 &SourceVert = Record.RenderVerts[VertexIndex];
 
                 const FVector Pos((PaperAxisX * SourceVert.X) + (PaperAxisY * SourceVert.Y) + Record.Destination);
@@ -93,4 +92,4 @@ namespace Simple2D {
             ++NumVertices;
         }
     };
-}
+} // namespace Simple2D

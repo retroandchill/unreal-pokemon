@@ -1,14 +1,13 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Simple2D/Components/SimpleFlipbookComponent.h"
-#include "PaperFlipbook.h"
-#include "PaperSprite.h"
-#include "Simple2D.h"
 #include "Misc/MapErrors.h"
 #include "Misc/UObjectToken.h"
 #include "Net/UnrealNetwork.h"
+#include "PaperFlipbook.h"
+#include "PaperSprite.h"
 #include "PhysicsEngine/BodySetup.h"
+#include "Simple2D.h"
 #include "Simple2D/Assets/SimpleFlipbook.h"
 #include "Simple2D/Rendering/SimpleFlipbookSceneProxy.h"
 
@@ -182,9 +181,8 @@ void USimpleFlipbookComponent::OnRep_SourceFlipbook(USimpleFlipbook *OldFlipbook
 
 void USimpleFlipbookComponent::CalculateCurrentFrame() {
     const int32 LastCachedFrame = CachedFrameIndex;
-    CachedFrameIndex = (SourceFlipbook != nullptr)
-                           ? SourceFlipbook->GetKeyFrameIndexAtTime(AccumulatedTime)
-                           : INDEX_NONE;
+    CachedFrameIndex =
+        (SourceFlipbook != nullptr) ? SourceFlipbook->GetKeyFrameIndexAtTime(AccumulatedTime) : INDEX_NONE;
 
     if (CachedFrameIndex != LastCachedFrame) {
         // Update children transforms in case we have anything attached to an animated socket
@@ -278,14 +276,13 @@ void USimpleFlipbookComponent::TickComponent(float DeltaTime, enum ELevelTick Ti
 
 void USimpleFlipbookComponent::SendRenderDynamicData_Concurrent() {
     if (SceneProxy != nullptr) {
-        auto DrawCall = SourceFlipbook != nullptr ? SourceFlipbook->CreateDrawCallRecord(CachedFrameIndex) : FSimpleFlipbookDrawCall();
+        auto DrawCall = SourceFlipbook != nullptr ? SourceFlipbook->CreateDrawCallRecord(CachedFrameIndex)
+                                                  : FSimpleFlipbookDrawCall();
         DrawCall.Color = SpriteColor.ToFColor(false);
 
         auto InSceneProxy = static_cast<Simple2D::FSimpleFlipbookSceneProxy *>(SceneProxy);
-        ENQUEUE_RENDER_COMMAND(FSendPaperRenderComponentDynamicData)(
-            [InSceneProxy, DrawCall](FRHICommandListImmediate &) {
-                InSceneProxy->SetFlipbookBounds(DrawCall);
-            });
+        ENQUEUE_RENDER_COMMAND(FSendPaperRenderComponentDynamicData)
+        ([InSceneProxy, DrawCall](FRHICommandListImmediate &) { InSceneProxy->SetFlipbookBounds(DrawCall); });
     }
 }
 
@@ -302,14 +299,15 @@ void USimpleFlipbookComponent::CheckForErrors() {
     for (int32 MaterialIndex = 0; MaterialIndex < GetNumMaterials(); ++MaterialIndex) {
         if (UMaterialInterface *Material = GetMaterial(MaterialIndex)) {
             if (!Material->IsTwoSided()) {
-                FMessageLog("MapCheck").Warning()
-                                       ->AddToken(FUObjectToken::Create(Owner))
-                                       ->AddToken(FTextToken::Create(NSLOCTEXT(
-                                           "Simple2D", "MapCheck_Message_SimpleFlipbookMaterialNotTwoSided",
-                                           "The material applied to the flipbook component is not marked as two-sided, which may cause lighting artifacts.")))
-                                       ->AddToken(FUObjectToken::Create(Material))
-                                       ->AddToken(FMapErrorToken::Create(
-                                           FName(TEXT("PaperFlipbookMaterialNotTwoSided"))));
+                FMessageLog("MapCheck")
+                    .Warning()
+                    ->AddToken(FUObjectToken::Create(Owner))
+                    ->AddToken(
+                        FTextToken::Create(NSLOCTEXT("Simple2D", "MapCheck_Message_SimpleFlipbookMaterialNotTwoSided",
+                                                     "The material applied to the flipbook component is not marked as "
+                                                     "two-sided, which may cause lighting artifacts.")))
+                    ->AddToken(FUObjectToken::Create(Material))
+                    ->AddToken(FMapErrorToken::Create(FName(TEXT("PaperFlipbookMaterialNotTwoSided"))));
             }
         }
     }
@@ -322,14 +320,13 @@ FPrimitiveSceneProxy *USimpleFlipbookComponent::CreateSceneProxy() {
     CalculateCurrentFrame();
     const int32 SplitIndex = SourceFlipbook != nullptr ? SourceFlipbook->GetAlternateMaterialSplitIndex() : INDEX_NONE;
 
-    auto DrawCall = SourceFlipbook != nullptr ? SourceFlipbook->CreateDrawCallRecord(CachedFrameIndex) : FSimpleFlipbookDrawCall();
+    auto DrawCall =
+        SourceFlipbook != nullptr ? SourceFlipbook->CreateDrawCallRecord(CachedFrameIndex) : FSimpleFlipbookDrawCall();
     DrawCall.Color = SpriteColor.ToFColor(false);
 
     auto InSceneProxy = NewProxy.Get();
-    ENQUEUE_RENDER_COMMAND(FCreatePaperFlipbookProxy_SetSprite)(
-        [InSceneProxy, DrawCall](FRHICommandListImmediate &) {
-            InSceneProxy->SetFlipbookBounds(DrawCall);
-        });
+    ENQUEUE_RENDER_COMMAND(FCreatePaperFlipbookProxy_SetSprite)
+    ([InSceneProxy, DrawCall](FRHICommandListImmediate &) { InSceneProxy->SetFlipbookBounds(DrawCall); });
     return NewProxy.Release();
 }
 
@@ -337,14 +334,14 @@ FBoxSphereBounds USimpleFlipbookComponent::CalcBounds(const FTransform &LocalToW
     if (SourceFlipbook != nullptr) {
         // Graphics bounds.
         FBoxSphereBounds NewBounds = SourceFlipbook->GetRenderBounds().TransformBy(LocalToWorld);
-        
+
         // Apply bounds scale
         NewBounds.BoxExtent *= BoundsScale;
         NewBounds.SphereRadius *= BoundsScale;
 
         return NewBounds;
     }
-    
+
     return FBoxSphereBounds(LocalToWorld.GetLocation(), FVector::ZeroVector, 0.f);
 }
 

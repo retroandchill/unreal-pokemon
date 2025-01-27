@@ -211,7 +211,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execConvertVariantObject) {
     P_GET_OPAQUE_STRUCT(SourceProp, SourcePtr)
     P_GET_OPAQUE_STRUCT(DestProp, DestPtr)
     P_FINISH
-    
+
     try {
         Retro::ValidateStructProperty(SourceProp, SourcePtr);
         Retro::ValidateStructProperty(DestProp, DestPtr);
@@ -233,7 +233,7 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execConvertSoftVariantObject) {
     P_GET_OPAQUE_STRUCT(SourceProp, SourcePtr)
     P_GET_OPAQUE_STRUCT(DestProp, DestPtr)
     P_FINISH
-    
+
     try {
         Retro::ValidateStructProperty(SourceProp, SourcePtr);
         Retro::ValidateStructProperty(DestProp, DestPtr);

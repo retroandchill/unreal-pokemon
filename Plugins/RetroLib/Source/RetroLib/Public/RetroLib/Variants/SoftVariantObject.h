@@ -49,7 +49,7 @@ namespace Retro {
     RETROLIB_EXPORT template <VariantObject T>
     struct TSoftVariantObject {
         using FHardReference = T;
-        
+
         static constexpr bool bHasIntrusiveUnsetOptionalState = true;
         using IntrusiveUnsetOptionalStateType = TSoftVariantObject;
 
@@ -72,17 +72,14 @@ namespace Retro {
             : Ptr(&Object.Get()), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue()) {
         }
 
-    protected:
-        TSoftVariantObject(const TSoftObjectPtr<>& Object, size_t Index) : Ptr(Object), TypeIndex(Index) {
-            
-        }
-        
-        TSoftVariantObject(TSoftObjectPtr<>&& Object, size_t Index) : Ptr(std::move(Object)), TypeIndex(Index) {
-            
+      protected:
+        TSoftVariantObject(const TSoftObjectPtr<> &Object, size_t Index) : Ptr(Object), TypeIndex(Index) {
         }
 
-    public:
+        TSoftVariantObject(TSoftObjectPtr<> &&Object, size_t Index) : Ptr(std::move(Object)), TypeIndex(Index) {
+        }
 
+      public:
         constexpr uint64 GetTypeIndex() const {
             return TypeIndex;
         }
@@ -244,9 +241,8 @@ namespace Retro {
         constexpr auto Convert() const & {
             constexpr auto TypeMapping = Retro::VariantIndexMapping<T, typename U::FHardReference>;
             check(TypeIndex < TypeMapping.size())
-            return TypeMapping[TypeIndex] |
-                Optionals::To<TOptional>() |
-                Optionals::Transform([this](size_t TargetIndex) { return U(Ptr, TargetIndex); });
+            return TypeMapping[TypeIndex] | Optionals::To<TOptional>() |
+                   Optionals::Transform([this](size_t TargetIndex) { return U(Ptr, TargetIndex); });
         }
 
         template <SoftVariantObject U>
@@ -254,12 +250,11 @@ namespace Retro {
         constexpr auto Convert() && noexcept {
             constexpr auto TypeMapping = Retro::VariantIndexMapping<T, typename U::FHardReference>;
             check(TypeIndex < TypeMapping.size())
-            return TypeMapping[TypeIndex] |
-                Optionals::To<TOptional>() |
-                Optionals::Transform([this](size_t TargetIndex) {
-                    TypeIndex = T::template GetTypeIndex<std::nullptr_t>();
-                    return U(std::move(Ptr), TargetIndex);
-                });
+            return TypeMapping[TypeIndex] | Optionals::To<TOptional>() |
+                   Optionals::Transform([this](size_t TargetIndex) {
+                       TypeIndex = T::template GetTypeIndex<std::nullptr_t>();
+                       return U(std::move(Ptr), TargetIndex);
+                   });
         }
 
       private:

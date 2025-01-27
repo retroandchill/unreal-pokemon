@@ -30,7 +30,7 @@ Retro::IVariantRegistration &Retro::GetVariantRegistration(const FStructProperty
     return *StructInfo;
 }
 
-Retro::IVariantConversion & Retro::GetVariantConversion(const FStructProperty &From, const FStructProperty &To) {
+Retro::IVariantConversion &Retro::GetVariantConversion(const FStructProperty &From, const FStructProperty &To) {
     static auto &Registry = FVariantObjectStructRegistry::Get();
     auto ConversionInfo = Registry.GetVariantStructConversion(*From.Struct, *To.Struct);
     if (!ConversionInfo.IsSet()) {

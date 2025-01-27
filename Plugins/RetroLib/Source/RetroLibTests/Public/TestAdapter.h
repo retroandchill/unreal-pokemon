@@ -11,15 +11,16 @@
 #include "Tests/TestHarnessAdapter.h"
 
 #if !WITH_LOW_LEVEL_TESTS
-#define CORO_FUNCTIONS() \
-    template <typename F> \
-        requires std::invocable<F> && std::convertible_to<std::invoke_result_t<F>, UE5Coro::TCoroutine<>> \
-    void CoroIt(const FString& InDescription, F &&Functor) { \
-            LatentIt(InDescription, [this, Functor = std::forward<F>(Functor)](FDoneDelegate Delegate) -> UE5Coro::TCoroutine<> { \
-                co_await std::invoke(std::move(Functor)); \
-                Delegate.ExecuteIfBound(); \
-            }); \
-        }
+#define CORO_FUNCTIONS()                                                                                               \
+    template <typename F>                                                                                              \
+        requires std::invocable<F> && std::convertible_to<std::invoke_result_t<F>, UE5Coro::TCoroutine<>>              \
+    void CoroIt(const FString &InDescription, F &&Functor) {                                                           \
+        LatentIt(InDescription,                                                                                        \
+                 [this, Functor = std::forward<F>(Functor)](FDoneDelegate Delegate) -> UE5Coro::TCoroutine<> {         \
+                     co_await std::invoke(std::move(Functor));                                                         \
+                     Delegate.ExecuteIfBound();                                                                        \
+                 });                                                                                                   \
+    }
 
 #define CHECK_THROWS_AS(Expression, Exception)                                                                         \
     try {                                                                                                              \

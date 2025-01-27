@@ -2,48 +2,44 @@
 
 #pragma once
 
-#include "RetroLib/RetroLibMacros.h"
 #include "RetroLib/Functional/Delegates.h"
+#include "RetroLib/RetroLibMacros.h"
 #include "Simple2D/Proxies/FlipbookProxy.h"
 
 namespace Simple2D {
-    
+
     /**
-     * 
+     *
      */
     class SIMPLE2D_API FFlipbookTicker {
         DECLARE_MULTICAST_DELEGATE_OneParam(FOnFrameIndexChanged, std::any)
-        
-    public:
-        FFlipbookTicker() = default;
+
+            public : FFlipbookTicker() = default;
 
         template <Flipbook T>
         explicit FFlipbookTicker(T *Object) : Proxy(Object) {
         }
 
         void TickFlipbook(float DeltaTime);
-        
+
         FFlipbookProxy &GetFlipbook() {
             return Proxy;
         }
 
         template <Flipbook T>
         bool SetFlipbook(T *NewFlipbook) {
-            if (NewFlipbook != Proxy)
-            {
+            if (NewFlipbook != Proxy) {
                 Proxy = NewFlipbook;
 
                 // We need to also reset the frame and time also
                 AccumulatedTime = 0.0f;
                 CalculateCurrentFrame();
 
-                    
                 return true;
             }
 
             return false;
         }
-
 
         void Play();
 
@@ -82,14 +78,13 @@ namespace Simple2D {
         int32 GetFlipbookLengthInFrames() const;
 
         float GetFlipbookFramerate() const;
-        
+
         void CalculateCurrentFrame();
 
         RETRO_MULTICAST_DELEGATE_MEMBER(FOnFrameIndexChanged, OnFrameIndexChanged)
         RETRO_MULTICAST_DELEGATE_MEMBER(FSimpleMulticastDelegate, OnFinishedPlaying)
-        
-        
-    private:
+
+      private:
         FFlipbookProxy Proxy;
 
         float PlayRate = 1.0;
@@ -101,4 +96,4 @@ namespace Simple2D {
 
         int32 CachedFrameIndex = INDEX_NONE;
     };
-}
+} // namespace Simple2D

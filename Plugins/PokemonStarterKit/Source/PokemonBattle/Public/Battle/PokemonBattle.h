@@ -66,7 +66,8 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     APokemonBattle();
 
     TScriptInterface<IBattle> Initialize(TArray<TScriptInterface<IBattleSide>> &&SidesIn) override;
-    UE5Coro::TCoroutine<TScriptInterface<IBattle>> Initialize(FBattleInfo BattleInfo, FForceLatentCoroutine = {}) override;
+    UE5Coro::TCoroutine<TScriptInterface<IBattle>> Initialize(FBattleInfo BattleInfo,
+                                                              FForceLatentCoroutine = {}) override;
 
   protected:
     void BeginPlay() override;

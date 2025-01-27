@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "RetroLib/Variants/K2Node_CastSoftVariantToSoftVariant.h"
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "BlueprintNodeSpawner.h"
@@ -34,46 +33,47 @@ FText UK2Node_CastSoftVariantToSoftVariant::GetTooltipText() const {
 
 void UK2Node_CastSoftVariantToSoftVariant::CreateInputAndOutputPins() {
     CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Struct, InputType != nullptr ? InputType.Get() : nullptr,
-        Retro::PN_SoftReference);
+              Retro::PN_SoftReference);
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct, OutputType != nullptr ? OutputType.Get() : nullptr,
               UEdGraphSchema_K2::PN_ReturnValue);
 }
 
 void UK2Node_CastSoftVariantToSoftVariant::AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
-    Retro::IVariantRegistration &Registration) const {
-        using FCustomizeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate;
-        auto CustomizeCallback = [](UEdGraphNode *Node, bool, UScriptStruct *Input, UScriptStruct *Output) {
-            auto TypedNode = CastChecked<UK2Node_CastSoftVariantToSoftVariant>(Node);
-            TypedNode->Initialize(Input, Output);
-        };
+                                                                   Retro::IVariantRegistration &Registration) const {
+    using FCustomizeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate;
+    auto CustomizeCallback = [](UEdGraphNode *Node, bool, UScriptStruct *Input, UScriptStruct *Output) {
+        auto TypedNode = CastChecked<UK2Node_CastSoftVariantToSoftVariant>(Node);
+        TypedNode->Initialize(Input, Output);
+    };
 
-        auto ActionKey = GetClass();
-        auto SourceStruct = Registration.GetSoftStructType();
-        TSet<UScriptStruct *> Seen;
-        for (auto& Conversion : Registration.GetAllConversions()) {
-            auto DestStruct = Conversion.GetDestSoftStructType();
-            if (Seen.Contains(DestStruct)) {
-                continue;
-            }
-
-            Seen.Add(DestStruct);
-            auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
-            check(Spawner != nullptr)
-            Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateLambda(CustomizeCallback, SourceStruct, DestStruct);
-            ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
+    auto ActionKey = GetClass();
+    auto SourceStruct = Registration.GetSoftStructType();
+    TSet<UScriptStruct *> Seen;
+    for (auto &Conversion : Registration.GetAllConversions()) {
+        auto DestStruct = Conversion.GetDestSoftStructType();
+        if (Seen.Contains(DestStruct)) {
+            continue;
         }
+
+        Seen.Add(DestStruct);
+        auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
+        check(Spawner != nullptr)
+        Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateLambda(CustomizeCallback, SourceStruct, DestStruct);
+        ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
+    }
 }
 
-UEdGraphPin * UK2Node_CastSoftVariantToSoftVariant::GetInputPin() const {
+UEdGraphPin *UK2Node_CastSoftVariantToSoftVariant::GetInputPin() const {
     return FindPin(Retro::PN_SoftReference);
 }
 
-UEdGraphPin * UK2Node_CastSoftVariantToSoftVariant::GetOutputPin() const {
+UEdGraphPin *UK2Node_CastSoftVariantToSoftVariant::GetOutputPin() const {
     return FindPin(UEdGraphSchema_K2::PN_ReturnValue);
 }
 
-UK2Node_VariantCastBase::FCastFunctionInfo UK2Node_CastSoftVariantToSoftVariant::GetPerformCastNode(
-    FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
+UK2Node_VariantCastBase::FCastFunctionInfo
+UK2Node_CastSoftVariantToSoftVariant::GetPerformCastNode(FKismetCompilerContext &CompilerContext,
+                                                         UEdGraph *SourceGraph) {
     const FName FunctionName = GET_FUNCTION_NAME_CHECKED(UVariantObjectUtilities, ConvertSoftVariantObject);
     auto CallCreateVariant = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
     CallCreateVariant->FunctionReference.SetExternalMember(FunctionName, UVariantObjectUtilities::StaticClass());

@@ -18,9 +18,9 @@ class POKEMONBATTLE_API FWildBattleOpponentInfo : public IBattleOpponentInfo {
      */
     explicit FWildBattleOpponentInfo(const TSharedRef<FPokemonDTO> &PokemonInfo);
 
-    UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> CreateOpposingSide(TScriptInterface<IBattle> Battle,
-                                                                          TSubclassOf<AActor> SideClass, const FTransform &Transform,
-                                                                          int32 ActivePokemonCount = 1, FForceLatentCoroutine = {}) override;
+    UE5Coro::TCoroutine<TScriptInterface<IBattleSide>>
+    CreateOpposingSide(TScriptInterface<IBattle> Battle, TSubclassOf<AActor> SideClass, const FTransform &Transform,
+                       int32 ActivePokemonCount = 1, FForceLatentCoroutine = {}) override;
 
   private:
     /**

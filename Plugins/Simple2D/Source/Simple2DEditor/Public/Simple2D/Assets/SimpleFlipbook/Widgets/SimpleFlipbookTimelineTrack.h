@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SimpleFlipbookTimeline.h"
-#include "Simple2D/Assets/SimpleFlipbook.h"
-#include "Widgets/SCompoundWidget.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
+#include "Simple2D/Assets/SimpleFlipbook.h"
+#include "SimpleFlipbookTimeline.h"
+#include "Widgets/SCompoundWidget.h"
 
 namespace Simple2D {
     namespace Flipbooks {
@@ -14,15 +14,18 @@ namespace Simple2D {
         constexpr float FrameHeight = 48;
         constexpr float HeightBeforeFrames = 16;
         const FMargin FramePadding(0.0f, 7.0f, 0.0f, 7.0f);
-    }
+    } // namespace Flipbooks
 
     class FKeyFrameDragDropOp : public FDragDropOperation {
         struct FInitTag {};
-        
 
-    public:
-        explicit FKeyFrameDragDropOp(FInitTag, FSimpleFlipbookKeyFrame KeyFrameData, int32 SourceFrameIndex, USimpleFlipbook* SourceFlipbook, float WidgetWidth) : WidgetWidth(WidgetWidth), KeyFrameData(KeyFrameData), SourceFrameIndex(SourceFrameIndex), SourceFlipbook(SourceFlipbook) {}
-        
+      public:
+        explicit FKeyFrameDragDropOp(FInitTag, FSimpleFlipbookKeyFrame KeyFrameData, int32 SourceFrameIndex,
+                                     USimpleFlipbook *SourceFlipbook, float WidgetWidth)
+            : WidgetWidth(WidgetWidth), KeyFrameData(KeyFrameData), SourceFrameIndex(SourceFrameIndex),
+              SourceFlipbook(SourceFlipbook) {
+        }
+
         DRAG_DROP_OPERATOR_TYPE(FKeyFrameDragDropOp, FDragDropOperation)
 
         float WidgetWidth;
@@ -51,76 +54,72 @@ namespace Simple2D {
     };
 
     class SSimpleFlipbookKeyframeWidget : public SCompoundWidget {
-    public:
-        SLATE_BEGIN_ARGS(SSimpleFlipbookKeyframeWidget)
-                : _SlateUnitsPerFrame(1)
-                  , _FlipbookBeingEdited(nullptr) {
+      public:
+        SLATE_BEGIN_ARGS(SSimpleFlipbookKeyframeWidget) : _SlateUnitsPerFrame(1), _FlipbookBeingEdited(nullptr) {
             }
 
             SLATE_ATTRIBUTE(float, SlateUnitsPerFrame)
-            SLATE_ATTRIBUTE(USimpleFlipbook*, FlipbookBeingEdited)
+            SLATE_ATTRIBUTE(USimpleFlipbook *, FlipbookBeingEdited)
             SLATE_EVENT(FOnKeyframeSelectionChanged, OnSelectionChanged)
 
-        SLATE_END_ARGS()
+            SLATE_END_ARGS()
 
-        void Construct(const FArguments& InArgs, int32 InFrameIndex);
+            void Construct(const FArguments &InArgs, int32 InFrameIndex);
 
-        // SWidget interface
-        virtual FReply OnMouseButtonDown(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) override;
-        virtual FReply OnDragDetected(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) override;
-        virtual FReply OnDrop(const FGeometry &MyGeometry, const FDragDropEvent &DragDropEvent) override;
-        // End of SWidget interface
+            // SWidget interface
+            virtual FReply OnMouseButtonDown(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) override;
+            virtual FReply OnDragDetected(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) override;
+            virtual FReply OnDrop(const FGeometry &MyGeometry, const FDragDropEvent &DragDropEvent) override;
+            // End of SWidget interface
 
-    protected:
-        FReply KeyframeOnMouseButtonUp(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent);
+          protected:
+            FReply KeyframeOnMouseButtonUp(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent);
 
-        FText GetKeyframeText() const;
-        FText GetKeyframeTooltip() const;
+            FText GetKeyframeText() const;
+            FText GetKeyframeTooltip() const;
 
-        TSharedRef<SWidget> GenerateContextMenu();
+            TSharedRef<SWidget> GenerateContextMenu();
 
-        FOptionalSize GetFrameWidth() const;
+            FOptionalSize GetFrameWidth() const;
 
-        // Can return null
-        TOptional<const FSimpleFlipbookKeyFrame &> GetKeyFrameData() const;
+            // Can return null
+            TOptional<const FSimpleFlipbookKeyFrame &> GetKeyFrameData() const;
 
-    private:
-        int32 FrameIndex = 0;
-        TAttribute<float> SlateUnitsPerFrame;
-        TAttribute<USimpleFlipbook *> FlipbookBeingEdited;
-        FOnKeyframeSelectionChanged OnSelectionChanged;
-        TSharedPtr<FUICommandList> CommandList;
-    };
+          private:
+            int32 FrameIndex = 0;
+            TAttribute<float> SlateUnitsPerFrame;
+            TAttribute<USimpleFlipbook *> FlipbookBeingEdited;
+            FOnKeyframeSelectionChanged OnSelectionChanged;
+            TSharedPtr<FUICommandList> CommandList;
+        };
 
-    /**
-     * 
-     */
-    class SIMPLE2DEDITOR_API SSimpleFlipbookTimelineTrack : public SCompoundWidget {
-    public:
-        SLATE_BEGIN_ARGS(SSimpleFlipbookTimelineTrack)
-                : _SlateUnitsPerFrame(1)
-                  , _FlipbookBeingEdited(nullptr) {
-            }
+        /**
+         *
+         */
+        class SIMPLE2DEDITOR_API SSimpleFlipbookTimelineTrack : public SCompoundWidget {
+          public:
+            SLATE_BEGIN_ARGS(SSimpleFlipbookTimelineTrack) : _SlateUnitsPerFrame(1), _FlipbookBeingEdited(nullptr) {
+                }
 
-            SLATE_ATTRIBUTE(float, SlateUnitsPerFrame)
-            SLATE_ATTRIBUTE(USimpleFlipbook*, FlipbookBeingEdited)
-            SLATE_EVENT(FOnKeyframeSelectionChanged, OnSelectionChanged)
+                SLATE_ATTRIBUTE(float, SlateUnitsPerFrame)
+                SLATE_ATTRIBUTE(USimpleFlipbook *, FlipbookBeingEdited)
+                SLATE_EVENT(FOnKeyframeSelectionChanged, OnSelectionChanged)
 
-        SLATE_END_ARGS()
+                SLATE_END_ARGS()
 
-        void Construct(const FArguments &InArgs, const TSharedPtr<FUICommandList> &InCommandList);
+                void Construct(const FArguments &InArgs, const TSharedPtr<FUICommandList> &InCommandList);
 
-        void Rebuild();
+                void Rebuild();
 
-    private:
-        TAttribute<float> SlateUnitsPerFrame;
-        TAttribute<USimpleFlipbook *> FlipbookBeingEdited;
+              private:
+                TAttribute<float> SlateUnitsPerFrame;
+                TAttribute<USimpleFlipbook *> FlipbookBeingEdited;
 
-        TSharedPtr<SHorizontalBox> MainBoxPtr;
+                TSharedPtr<SHorizontalBox> MainBoxPtr;
 
-        float HandleWidth;
+                float HandleWidth;
 
-        FOnKeyframeSelectionChanged OnSelectionChanged;
-        TSharedPtr<FUICommandList> CommandList;
-    };
-}
+                FOnKeyframeSelectionChanged OnSelectionChanged;
+                TSharedPtr<FUICommandList> CommandList;
+            };
+        }
