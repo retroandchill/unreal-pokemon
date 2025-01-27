@@ -21,5 +21,20 @@ namespace Retro {
         return GetVariantStructData(From) |
                Optionals::AndThen(BindBack<&IVariantRegistration::GetConversion>(std::ref(To)));
     }
+    
+#if RETROLIB_WITH_UE5CORO
+    UE5Coro::TCoroutine<IVariantRegistration *> FVariantObjectStructRegistry::AsyncGetVariantStructData(
+        const UScriptStruct &Struct) {
+        if (auto StructData = RegisteredStructs.Find(Struct.GetFName()); StructData != nullptr) {
+            co_return &StructData->Get();
+        }
+
+        while (true) {
+            if (auto [Name, Registration] = co_await OnRegistered; Registration.GetStructType() == &Struct || Registration.GetSoftStructType() == &Struct) {
+                co_return &Registration;
+            }
+        }
+    }
+#endif
 } // namespace Retro
 #endif

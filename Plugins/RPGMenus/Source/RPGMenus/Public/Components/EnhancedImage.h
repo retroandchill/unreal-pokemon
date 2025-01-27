@@ -47,13 +47,13 @@ class RPGMENUS_API UEnhancedImage : public UCommonLazyImage, public FTickableGam
     virtual void SetBrushFromImageAsset(const FImageAsset &ImageAsset, bool bMatchSize = false);
 
     UFUNCTION(BlueprintCallable, Category = LazyImage)
-    void SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook, bool bMatchSize = false);
+    FVoidCoroutine SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook, bool bMatchSize = false, FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
 
     UFUNCTION(BlueprintCallable, Category = LazyImage)
-    void SetBrushFromLazySimpleFlipbook(const TSoftObjectPtr<USimpleFlipbook> &LazyFlipbook, bool bMatchSize = false);
+    FVoidCoroutine SetBrushFromLazySimpleFlipbook(const TSoftObjectPtr<USimpleFlipbook> &LazyFlipbook, bool bMatchSize = false, FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
 
     UFUNCTION(BlueprintCallable, Category = LazyImage)
-    void SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize = false);
+    FVoidCoroutine SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize = false, FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
 
     void Tick(float DeltaTime) override;
     virtual TStatId GetStatId() const override;

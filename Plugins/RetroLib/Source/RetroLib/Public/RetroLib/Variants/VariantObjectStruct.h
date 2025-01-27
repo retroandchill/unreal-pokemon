@@ -13,6 +13,10 @@
 #include "RetroLib/Utils/SoftObjectRef.h"
 #include "VariantObject.h"
 
+#if RETROLIB_WITH_UE5CORO
+#include "UE5Coro.h"
+#endif
+
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
 #endif
@@ -133,10 +137,10 @@ namespace Retro {
                                 const FStructProperty &DestProperty, uint8 *DestValue) const final {
             ValidateStructsMatch(SourceProperty, GetSourceSoftStructType());
             ValidateStructsMatch(DestProperty, GetDestSoftStructType());
-            auto SourcePtr = std::bit_cast<const T *>(SourceValue);
-            auto DestPtr = std::bit_cast<U *>(DestValue);
+            auto SourcePtr = std::bit_cast<const typename T::SoftPtrType *>(SourceValue);
+            auto DestPtr = std::bit_cast<typename U::SoftPtrType *>(DestValue);
 
-            if (TOptional<U> Converted = SourcePtr->template Convert<U>(); Converted.IsSet()) {
+            if (auto Converted = SourcePtr->template Convert<typename U::SoftPtrType>(); Converted.IsSet()) {
                 *DestPtr = std::move(Converted.GetValue());
                 return true;
             }
@@ -405,6 +409,8 @@ namespace Retro {
      * Static registry for a variant struct object.
      */
     class RETROLIB_API FVariantObjectStructRegistry {
+        DECLARE_MULTICAST_DELEGATE_TwoParams(FOnRegistrationComplete, FName, IVariantRegistration&);
+        
         FVariantObjectStructRegistry() = default;
         ~FVariantObjectStructRegistry() = default;
 
@@ -439,10 +445,12 @@ namespace Retro {
                 // class
                 auto SoftStruct = GetScriptStruct<typename T::SoftPtrType>();
                 Instance.RegisteredStructs.Emplace(SoftStruct->GetFName(), Registered);
+                Instance.OnRegistered.Broadcast(SoftStruct->GetFName(), Registered.Get());
             });
             return true;
         }
 
+#if RETROLIB_WITH_UE5CORO
         /**
          * Registers a variant conversion between two struct types for the variant object system.
          * This function defers the registration until the `OnPostEngineInit` event is triggered.
@@ -455,20 +463,23 @@ namespace Retro {
          */
         template <VariantObjectStruct T, VariantObjectStruct U>
         static bool RegisterVariantConversion() {
-            FCoreDelegates::OnPostEngineInit | Delegates::Add([] {
+            []() -> UE5Coro::TCoroutine<> {
+                co_await FCoreDelegates::OnPostEngineInit;
                 auto &Instance = Get();
                 auto SourceStruct = GetScriptStruct<T>();
-                auto &DestRegistration = Instance.RegisteredStructs.FindChecked(SourceStruct->GetFName());
+                auto DestStruct = GetScriptStruct<U>();
+                auto DestRegistration = co_await Instance.AsyncGetVariantStructData(*SourceStruct);
                 auto &DestMap = DestRegistration->GetMutableConversions();
-                auto &Registered = DestMap.Emplace(SourceStruct->GetFName(),
+                auto &Registered = DestMap.Emplace(DestStruct->GetFName(),
                                                    MakeShared<TVariantConversionImpl<T, U>>());
                 // We're using a shared pointer to avoid double allocating identical registration info for the same
                 // class
-                auto SoftSource = GetScriptStruct<typename T::SoftPtrType>();
-                DestMap.Emplace(SoftSource->GetFName(), Registered);
-            });
+                auto SoftDest = GetScriptStruct<typename U::SoftPtrType>();
+                DestMap.Emplace(SoftDest->GetFName(), Registered);
+            }();
             return true;
         }
+#endif
 
         /**
          * Get the variant struct data for the given struct type.
@@ -521,7 +532,12 @@ namespace Retro {
         }
 
     private:
+#if RETROLIB_WITH_UE5CORO
+        UE5Coro::TCoroutine<IVariantRegistration *> AsyncGetVariantStructData(const UScriptStruct &Struct);
+#endif
+        
         TMap<FName, TSharedRef<IVariantRegistration>> RegisteredStructs;
+        FOnRegistrationComplete OnRegistered;
     };
 } // namespace Retro
 #endif

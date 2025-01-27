@@ -171,12 +171,12 @@ namespace Retro {
 
     template <size_t I, typename A, typename T>
     consteval std::optional<size_t> GetIndexOfType() {
-        if constexpr (I < std::tuple_size_v<T>) {
+        if constexpr (I >= std::tuple_size_v<T>) {
             return std::nullopt;
         } else if constexpr(std::same_as<A, std::tuple_element_t<I,T>>){
             return I;
         } else {
-            return GetIndexOfType<I+1, A, T>();
+            return GetIndexOfType<I + 1, A, T>();
         }
     }
 

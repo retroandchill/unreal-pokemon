@@ -69,6 +69,7 @@ void UEnhancedImage::SetBrushFromAtlasInterface(TScriptInterface<ISlateTextureAt
 
 void UEnhancedImage::SetBrushFromPaperFlipbook(UPaperFlipbook *Flipbook, bool bMatchSize) {
     Super::SetBrushFromAtlasInterface(Flipbook != nullptr ? Flipbook->GetSpriteAtFrame(0) : nullptr, bMatchSize);
+    FlipbookTicker.SetFlipbook(Flipbook);
     SourceImage.Set(Flipbook);
     bManualSize = !bMatchSize;
 }
@@ -82,13 +83,19 @@ void UEnhancedImage::SetBrushFromSimpleFlipbook(USimpleFlipbook* Flipbook, bool 
     } else {
         Super::SetBrushFromMaterial(nullptr);
     }
-    
+
+    FlipbookTicker.SetFlipbook(Flipbook);
     SourceImage.Set(Flipbook);
     bManualSize = !bMatchSize;
+
+    if (bMatchSize) {
+        if (auto Texture = Flipbook->GetSourceTexture(); !bManualSize && Texture != nullptr) {
+            SetDesiredSizeOverride(FVector2D(Texture->GetSizeX() / Flipbook->GetColumns(), Texture->GetSizeY() / Flipbook->GetRows()));
+        }
+    }
 }
 
 void UEnhancedImage::SetBrushFromImageAsset(const FImageAsset &ImageAsset, bool bMatchSize) {
-    SourceImage = ImageAsset;
     switch (ImageAsset.GetTypeIndex()) {
     case FImageAsset::GetTypeIndex<UTexture2D>():
         SetBrushFromTexture(&ImageAsset.Get<UTexture2D>(), bMatchSize);
@@ -106,7 +113,7 @@ void UEnhancedImage::SetBrushFromImageAsset(const FImageAsset &ImageAsset, bool 
         SetBrushFromPaperFlipbook(&ImageAsset.Get<UPaperFlipbook>(), bMatchSize);
         break;
     case FImageAsset::GetTypeIndex<USimpleFlipbook>():
-        SetBrushFromLazySimpleFlipbook(&ImageAsset.Get<USimpleFlipbook>(), bMatchSize);
+        SetBrushFromSimpleFlipbook(&ImageAsset.Get<USimpleFlipbook>(), bMatchSize);
         break;
     default:
         SetBrushFromAsset(nullptr);
@@ -114,43 +121,37 @@ void UEnhancedImage::SetBrushFromImageAsset(const FImageAsset &ImageAsset, bool 
     }
 }
 
-void UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook,
-                                                   bool bMatchSize) {
+FVoidCoroutine UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook,
+                                                             bool bMatchSize, FForceLatentCoroutine) {
     if (!LazyFlipbook.IsNull()) {
-        RequestAsyncLoad(LazyFlipbook, FStreamableDelegate::CreateWeakLambda(this, [this, LazyFlipbook, bMatchSize] {
-                             ensureMsgf(LazyFlipbook.Get(), TEXT("Failed to load %s"),
-                                        *LazyFlipbook.ToSoftObjectPath().ToString());
-                             SetBrushFromPaperFlipbook(LazyFlipbook.Get(), bMatchSize);
-                         }));
+        auto LoadedAsset = co_await UE5Coro::Latent::AsyncLoadObject(LazyFlipbook);
+        ensureMsgf(LoadedAsset != nullptr, TEXT("Failed to load %s"), *LazyFlipbook.ToSoftObjectPath().ToString());
+        SetBrushFromPaperFlipbook(LoadedAsset, bMatchSize);
     } else {
         // Hack to get into the private method that is inaccessible
         SetBrushFromLazyDisplayAsset(LazyFlipbook, bMatchSize);
     }
 }
 
-void UEnhancedImage::SetBrushFromLazySimpleFlipbook(const TSoftObjectPtr<USimpleFlipbook> &LazyFlipbook,
-    bool bMatchSize) {
+FVoidCoroutine UEnhancedImage::SetBrushFromLazySimpleFlipbook(const TSoftObjectPtr<USimpleFlipbook> &LazyFlipbook,
+                                                              bool bMatchSize, FForceLatentCoroutine) {
     if (!LazyFlipbook.IsNull()) {
-        RequestAsyncLoad(LazyFlipbook, FStreamableDelegate::CreateWeakLambda(this, [this, LazyFlipbook, bMatchSize] {
-                             ensureMsgf(LazyFlipbook.Get(), TEXT("Failed to load %s"),
-                                        *LazyFlipbook.ToSoftObjectPath().ToString());
-                             SetBrushFromLazySimpleFlipbook(LazyFlipbook.Get(), bMatchSize);
-                         }));
+        auto LoadedAsset = co_await UE5Coro::Latent::AsyncLoadObject(LazyFlipbook);
+        ensureMsgf(LoadedAsset != nullptr, TEXT("Failed to load %s"), *LazyFlipbook.ToSoftObjectPath().ToString());
+        SetBrushFromSimpleFlipbook(LoadedAsset, bMatchSize);
     } else {
         // Hack to get into the private method that is inaccessible
         SetBrushFromLazyDisplayAsset(LazyFlipbook, bMatchSize);
     }
 }
 
-void UEnhancedImage::SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize) {
+FVoidCoroutine UEnhancedImage::SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize, FForceLatentCoroutine) {
     if (auto &SoftPointer = LazyImage.ToSoftObjectPtr(); !SoftPointer.IsNull()) {
-        RequestAsyncLoad(SoftPointer, FStreamableDelegate::CreateWeakLambda(this, [this, LazyImage, bMatchSize] {
-                             ensureMsgf(LazyImage.IsValid(), TEXT("Failed to load %s"),
+        auto LoadedAsset = co_await LazyImage.LoadAsync();
+        ensureMsgf(LazyImage.IsValid(), TEXT("Failed to load %s"),
                                         *LazyImage.ToSoftObjectPath().ToString());
-                             auto FoundAsset = LazyImage.LoadSynchronous();
-                             check(FoundAsset.IsSet())
-                             SetBrushFromImageAsset(FoundAsset.GetValue(), bMatchSize);
-                         }));
+        check(LoadedAsset.IsSet())
+        SetBrushFromImageAsset(LoadedAsset.GetValue(), bMatchSize);
     } else {
         // Hack to get into the private method that is inaccessible
         SetBrushFromLazyDisplayAsset(SoftPointer, bMatchSize);

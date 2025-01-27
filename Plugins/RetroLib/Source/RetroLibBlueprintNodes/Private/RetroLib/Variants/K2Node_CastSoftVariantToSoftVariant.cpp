@@ -49,8 +49,14 @@ void UK2Node_CastSoftVariantToSoftVariant::AddMenuOptionsForStruct(FBlueprintAct
 
         auto ActionKey = GetClass();
         auto SourceStruct = Registration.GetSoftStructType();
+        TSet<UScriptStruct *> Seen;
         for (auto& Conversion : Registration.GetAllConversions()) {
             auto DestStruct = Conversion.GetDestSoftStructType();
+            if (Seen.Contains(DestStruct)) {
+                continue;
+            }
+
+            Seen.Add(DestStruct);
             auto Spawner = UBlueprintNodeSpawner::Create(ActionKey);
             check(Spawner != nullptr)
             Spawner->CustomizeNodeDelegate = FCustomizeDelegate::CreateLambda(CustomizeCallback, SourceStruct, DestStruct);

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "PaperFlipbook.h"
 #include "PaperSprite.h"
+#include "Simple2D/Assets/SimpleFlipbook.h"
 #include "RetroLib/Variants/SoftVariantObject.h"
 
 #if WITH_PAPERZD
@@ -14,7 +15,7 @@
 #include "BattleRender.generated.h"
 
 
-#define BATTLE_RENDER_BASE_TYPES USkeletalMesh, UStaticMesh, UPaperSprite, UPaperFlipbook
+#define BATTLE_RENDER_BASE_TYPES USkeletalMesh, UStaticMesh, UPaperSprite, UPaperFlipbook, USimpleFlipbook
 #if WITH_PAPERZD
 #define BATTLE_RENDER_TYPES BATTLE_RENDER_BASE_TYPES, UPaperZDAnimSequence
 #else

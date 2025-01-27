@@ -175,6 +175,7 @@ namespace Retro {
             requires ConvertibleVariantObjects<TVariantObject, U>
         constexpr auto Convert() const {
             constexpr auto TypeMapping = Retro::VariantIndexMapping<TVariantObject, U>;
+            check(TypeIndex < TypeMapping.size())
             return TypeMapping[TypeIndex] |
                 Optionals::To<TOptional>() |
                 Optionals::Transform([this](size_t TargetIndex) { return U(ContainedObject, TargetIndex); });

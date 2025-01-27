@@ -243,6 +243,7 @@ namespace Retro {
             requires ConvertibleVariantObjects<T, typename U::FHardReference>
         constexpr auto Convert() const & {
             constexpr auto TypeMapping = Retro::VariantIndexMapping<T, typename U::FHardReference>;
+            check(TypeIndex < TypeMapping.size())
             return TypeMapping[TypeIndex] |
                 Optionals::To<TOptional>() |
                 Optionals::Transform([this](size_t TargetIndex) { return U(Ptr, TargetIndex); });
@@ -252,6 +253,7 @@ namespace Retro {
             requires ConvertibleVariantObjects<T, typename U::FHardReference>
         constexpr auto Convert() && noexcept {
             constexpr auto TypeMapping = Retro::VariantIndexMapping<T, typename U::FHardReference>;
+            check(TypeIndex < TypeMapping.size())
             return TypeMapping[TypeIndex] |
                 Optionals::To<TOptional>() |
                 Optionals::Transform([this](size_t TargetIndex) {
