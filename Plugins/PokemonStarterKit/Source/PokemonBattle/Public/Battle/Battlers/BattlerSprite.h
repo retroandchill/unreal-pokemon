@@ -28,7 +28,7 @@ class POKEMONBATTLE_API IBattlerSprite {
      * Set the battle sprite to the given material
      * @param Render The material to use for the battle sprite
      */
-    UFUNCTION(BlueprintImplementableEvent, Category = "Battle|Visuals")
+    UFUNCTION(BlueprintNativeEvent, Category = "Battle|Visuals")
     void SetBattleSprite(const FBattleRender &Render);
 
     /**

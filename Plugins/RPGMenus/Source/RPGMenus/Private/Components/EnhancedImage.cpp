@@ -184,11 +184,13 @@ bool UEnhancedImage::IsTickableInEditor() const {
 void UEnhancedImage::SynchronizeProperties() {
     Super::SynchronizeProperties();
 
-    SourceImage.Visit([this]<typename T>(T *Flipbook) {
+    if (SourceImage != nullptr) {
+        SourceImage.Visit([this]<typename T>(T *Flipbook) {
             if constexpr (Simple2D::Flipbook<T>) {
                 FlipbookTicker.SetFlipbook(Flipbook);
             }
         });
+    }
     FlipbookTicker.SetPlayRate(PlayRate);
     FlipbookTicker.SetLooping(bLooping);
     if (bAutoPlay) {

@@ -134,22 +134,26 @@ namespace Retro {
             return *ContainedObject;
         }
 
+        constexpr friend bool operator==(const TVariantObject &A, const TVariantObject &B) = default;
+        
+        constexpr friend bool operator==(const TVariantObject &A, const UObject *B) {
+            return A.ContainedObject == B;
+        }
+
+        constexpr friend bool operator==(const UObject *A, const TVariantObject& B) {
+            return A == B.ContainedObject;
+        }
+
         /**
          * Equality operator against a null value.
          * @return Is the variant null?
          */
-        constexpr bool operator==(std::nullptr_t) const {
-            return IsValid();
+        constexpr friend bool operator==(const TVariantObject &A, std::nullptr_t) {
+            return !A.IsValid();
         }
 
-        friend bool operator==(const TVariantObject &A, const TVariantObject &B) = default;
-        
-        friend bool operator==(const TVariantObject &A, const UObject *B) {
-            return A.ContainedObject == B;
-        }
-
-        friend bool operator==(const UObject *A, const TVariantObject& B) {
-            return A == B.ContainedObject;
+        constexpr friend bool operator==(std::nullptr_t, const TVariantObject &B) {
+            return !B.IsValid();
         }
 
         /**
