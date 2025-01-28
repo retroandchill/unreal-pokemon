@@ -159,6 +159,7 @@ def compile_sprites_into_directional_flipbooks(source_texture: Texture2D, sprite
 
     return flipbooks
 
+
 def compile_texture_into_flipbook(source_texture: Texture2D, material: MaterialInterface,
                                   rows: int, columns: int,
                                   frame_rate: float, frame_order: Optional[list[tuple[int, int]]] = None,
@@ -190,6 +191,7 @@ def compile_texture_into_flipbook(source_texture: Texture2D, material: MaterialI
     new_flipbook.set_editor_property('frames_per_second', frame_rate)
     new_flipbook.set_editor_property('pivot_mode', pivot_mode)
     return new_flipbook
+
 
 def place_flipbooks_in_animation_source(source_texture: Texture2D, flipbooks: list[PaperFlipbook],
                                         animation_source: PaperZDAnimationSource) -> PaperZDAnimSequence:
