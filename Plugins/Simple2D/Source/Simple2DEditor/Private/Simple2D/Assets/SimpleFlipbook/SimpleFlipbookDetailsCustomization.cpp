@@ -106,7 +106,7 @@ namespace Simple2D {
         auto &TextureRow = ChildrenBuilder.AddProperty(PropertyHandle);
 
         FText ExtraText;
-        if (FText *ExtraTextPtr = AdditionalTextureLabels.Find(ArrayIndex); ExtraTextPtr != nullptr) {
+        if (const auto *ExtraTextPtr = AdditionalTextureLabels.Find(ArrayIndex); ExtraTextPtr != nullptr) {
             ExtraText = *ExtraTextPtr;
         }
 

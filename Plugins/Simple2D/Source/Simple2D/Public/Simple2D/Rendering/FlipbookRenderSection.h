@@ -65,31 +65,12 @@ namespace Simple2D {
                 const FVector4 &SourceVert = Record.RenderVerts[VertexIndex];
 
                 const FVector Pos((PaperAxisX * SourceVert.X) + (PaperAxisY * SourceVert.Y) + Record.Destination);
-                const FVector2f UV(SourceVert.Z, SourceVert.W); // LWC_TODO: Precision loss
+                const FVector2f UV(static_cast<float>(SourceVert.Z), static_cast<float>(SourceVert.W));
 
-                Vertices.Emplace((FVector3f)Pos, FSimpleFlipbookTangents::GetPackedNormalX().ToFVector3f(),
+                Vertices.Emplace(static_cast<FVector3f>(Pos), FSimpleFlipbookTangents::GetPackedNormalX().ToFVector3f(),
                                  FSimpleFlipbookTangents::GetPackedNormalZ().ToFVector3f(), UV, VertColor);
             }
         }
 
-        template <typename T>
-        void AddVertex(float X, float Y, float U, float V, const FVector &Origin, const FColor &Color,
-                       TArray<FDynamicMeshVertex, T> &Vertices) {
-            const FVector Pos((PaperAxisX * X) + (PaperAxisY * Y) + Origin);
-
-            Vertices.Emplace(FVector3f(Pos), FSimpleFlipbookTangents::GetPackedNormalX().ToFVector3f(),
-                             FSimpleFlipbookTangents::GetPackedNormalZ().ToFVector3f(), FVector2f(U, V), Color);
-            ++NumVertices;
-        }
-
-        template <typename T>
-        void AddVertex(float X, float Y, float U, float V, const FVector &Origin, const FColor &Color,
-                       const FPackedNormal &TangentX, const FPackedNormal &TangentZ,
-                       TArray<FDynamicMeshVertex, T> &Vertices) {
-            const FVector Pos((PaperAxisX * X) + (PaperAxisY * Y) + Origin);
-
-            Vertices.Emplace(FVector3f(Pos), TangentX.ToFVector3f(), TangentZ.ToFVector3f(), FVector2f(U, V), Color);
-            ++NumVertices;
-        }
     };
 } // namespace Simple2D

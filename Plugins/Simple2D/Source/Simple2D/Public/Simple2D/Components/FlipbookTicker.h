@@ -22,6 +22,11 @@ namespace Simple2D {
 
         void TickFlipbook(float DeltaTime);
 
+    private:
+        void ProcessPlaying(float DeltaTime, bool &bIsFinished);
+        
+    public:
+
         FFlipbookProxy &GetFlipbook() {
             return Proxy;
         }
@@ -55,7 +60,7 @@ namespace Simple2D {
 
         bool IsReversing() const;
 
-        void SetPlaybackPositionInFrames(int32 NewFramePosition, bool bFireEvents);
+        void SetPlaybackPositionInFrames(int32 NewFramePosition);
 
         int32 GetPlaybackPositionInFrames() const;
 

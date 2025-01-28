@@ -3,66 +3,72 @@
 #include "Simple2D/Components/FlipbookTicker.h"
 
 namespace Simple2D {
+
     void FFlipbookTicker::TickFlipbook(float DeltaTime) {
         bool bIsFinished = false;
 
         if (bPlaying) {
-            const float TimelineLength = GetFlipbookLength();
-            const float EffectiveDeltaTime = DeltaTime * (bReversePlayback ? (-PlayRate) : (PlayRate));
-
-            float NewPosition = AccumulatedTime + EffectiveDeltaTime;
-
-            if (EffectiveDeltaTime > 0.0f) {
-                if (NewPosition > TimelineLength) {
-                    if (bLooping) {
-                        // If looping, play to end, jump to start, and set target to somewhere near the beginning.
-                        SetPlaybackPosition(TimelineLength);
-                        SetPlaybackPosition(0.0f);
-
-                        if (TimelineLength > 0.0f) {
-                            while (NewPosition > TimelineLength) {
-                                NewPosition -= TimelineLength;
-                            }
-                        } else {
-                            NewPosition = 0.0f;
-                        }
-                    } else {
-                        // If not looping, snap to end and stop playing.
-                        NewPosition = TimelineLength;
-                        Stop();
-                        bIsFinished = true;
-                    }
-                }
-            } else {
-                if (NewPosition < 0.0f) {
-                    if (bLooping) {
-                        // If looping, play to start, jump to end, and set target to somewhere near the end.
-                        SetPlaybackPosition(0.0f);
-                        SetPlaybackPosition(TimelineLength);
-
-                        if (TimelineLength > 0.0f) {
-                            while (NewPosition < 0.0f) {
-                                NewPosition += TimelineLength;
-                            }
-                        } else {
-                            NewPosition = 0.0f;
-                        }
-                    } else {
-                        // If not looping, snap to start and stop playing.
-                        NewPosition = 0.0f;
-                        Stop();
-                        bIsFinished = true;
-                    }
-                }
-            }
-
-            SetPlaybackPosition(NewPosition);
+            ProcessPlaying(DeltaTime, bIsFinished);
         }
 
         // Notify user that the flipbook finished playing
         if (bIsFinished) {
             OnFinishedPlaying.Broadcast();
         }
+    }
+
+    
+    void FFlipbookTicker::ProcessPlaying(float DeltaTime, bool &bIsFinished) {
+        const float TimelineLength = GetFlipbookLength();
+        const float EffectiveDeltaTime = DeltaTime * (bReversePlayback ? (-PlayRate) : (PlayRate));
+
+        float NewPosition = AccumulatedTime + EffectiveDeltaTime;
+
+        if (EffectiveDeltaTime > 0.0f) {
+            if (NewPosition > TimelineLength) {
+                if (bLooping) {
+                    // If looping, play to end, jump to start, and set target to somewhere near the beginning.
+                    SetPlaybackPosition(TimelineLength);
+                    SetPlaybackPosition(0.0f);
+
+                    if (TimelineLength > 0.0f) {
+                        while (NewPosition > TimelineLength) {
+                            NewPosition -= TimelineLength;
+                        }
+                    } else {
+                        NewPosition = 0.0f;
+                    }
+                } else {
+                    // If not looping, snap to end and stop playing.
+                    NewPosition = TimelineLength;
+                    Stop();
+                    bIsFinished = true;
+                }
+            }
+        } else {
+            if (NewPosition < 0.0f) {
+                if (bLooping) {
+                    // If looping, play to start, jump to end, and set target to somewhere near the end.
+                    SetPlaybackPosition(0.0f);
+                    SetPlaybackPosition(TimelineLength);
+
+                    if (TimelineLength > 0.0f) {
+                        while (NewPosition < 0.0f) {
+                            NewPosition += TimelineLength;
+                        }
+                    } else {
+                        NewPosition = 0.0f;
+                    }
+                } else {
+                    // If not looping, snap to start and stop playing.
+                    NewPosition = 0.0f;
+                    Stop();
+                    bIsFinished = true;
+                }
+            }
+        }
+
+        SetPlaybackPosition(NewPosition);
     }
 
     void FFlipbookTicker::Play() {
@@ -97,9 +103,9 @@ namespace Simple2D {
         return bPlaying && bReversePlayback;
     }
 
-    void FFlipbookTicker::SetPlaybackPositionInFrames(int32 NewFramePosition, bool bFireEvents) {
+    void FFlipbookTicker::SetPlaybackPositionInFrames(int32 NewFramePosition) {
         const float Framerate = GetFlipbookFramerate();
-        const float NewTime = Framerate > 0.0f ? (NewFramePosition / Framerate) : 0.0f;
+        const float NewTime = Framerate > 0.0f ? static_cast<float>(NewFramePosition) / Framerate : 0.0f;
         SetPlaybackPosition(NewTime);
     }
 

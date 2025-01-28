@@ -22,11 +22,11 @@ namespace Simple2D {
 
     FSimpleFlipbookSceneProxy::FSimpleFlipbookSceneProxy(const UMeshComponent *InComponent)
         : FPrimitiveSceneProxy(InComponent), VertexFactory(InComponent->GetWorld()->GetFeatureLevel()),
-          Owner(InComponent->GetOwner()), bCastShadow(InComponent->CastShadow),
+          Owner(InComponent->GetOwner()), bDrawTwoSided(CVarDrawSpritesAsTwoSided.GetValueOnAnyThread() != 0),
+          bCastShadow(InComponent->CastShadow),
+          bSpritesUseVertexBufferPath(CVarDrawSpritesUsingPrebuiltVertexBuffers.GetValueOnAnyThread() != 0),
           MaterialRelevance(InComponent->GetMaterialRelevance(GetScene().GetFeatureLevel())),
           CollisionResponse(InComponent->GetCollisionResponseToChannels()),
-          bDrawTwoSided(CVarDrawSpritesAsTwoSided.GetValueOnAnyThread() != 0),
-          bSpritesUseVertexBufferPath(CVarDrawSpritesUsingPrebuiltVertexBuffers.GetValueOnAnyThread() != 0),
           Material(InComponent->GetMaterial(0)), AlternateMaterial(InComponent->GetMaterial(1)) {
         SetWireframeColor(FLinearColor::White);
 
@@ -50,7 +50,7 @@ namespace Simple2D {
     }
 
     void FSimpleFlipbookSceneProxy::SetFlipbookBounds(const FSimpleFlipbookDrawCall &NewDynamicData) {
-        SCOPE_CYCLE_COUNTER(STAT_PaperRender_SetSpriteRT);
+        SCOPE_CYCLE_COUNTER(STAT_PaperRender_SetSpriteRT)
 
         BatchedSections.Reset();
         Vertices.Reset();
@@ -68,12 +68,9 @@ namespace Simple2D {
     void FSimpleFlipbookSceneProxy::GetDynamicMeshElements(const TArray<const FSceneView *> &Views,
                                                            const FSceneViewFamily &ViewFamily, uint32 VisibilityMap,
                                                            FMeshElementCollector &Collector) const {
-        SCOPE_CYCLE_COUNTER(STAT_Simple2DRenderSceneProxy_GetDynamicMeshElements);
+        SCOPE_CYCLE_COUNTER(STAT_Simple2DRenderSceneProxy_GetDynamicMeshElements)
 
         const FEngineShowFlags &EngineShowFlags = ViewFamily.EngineShowFlags;
-
-        // Draw simple collision as wireframe if 'show collision', collision is enabled
-        const bool bDrawWireframeCollision = EngineShowFlags.Collision && IsCollisionEnabled();
 
         for (int32 ViewIndex = 0; ViewIndex < Views.Num(); ViewIndex++) {
             if (VisibilityMap & (1 << ViewIndex)) {
@@ -84,16 +81,13 @@ namespace Simple2D {
         }
 
         for (int32 ViewIndex = 0; ViewIndex < Views.Num(); ViewIndex++) {
-            if (VisibilityMap & (1 << ViewIndex)) {
-
-                // Draw bounds
 #if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
-                if (EngineShowFlags.Paper2DSprites) {
-                    RenderBounds(Collector.GetPDI(ViewIndex), EngineShowFlags, GetBounds(),
-                                 (Owner == nullptr) || IsSelected());
-                }
-#endif
+            if (VisibilityMap & 1 << ViewIndex && EngineShowFlags.Paper2DSprites) {
+                // Draw bounds
+                RenderBounds(Collector.GetPDI(ViewIndex), EngineShowFlags, GetBounds(),
+                             (Owner == nullptr) || IsSelected());
             }
+#endif
         }
     }
 
@@ -125,7 +119,7 @@ namespace Simple2D {
     }
 
     uint32 FSimpleFlipbookSceneProxy::GetMemoryFootprint() const {
-        return sizeof(*this) + GetAllocatedSize();
+        return sizeof(*this) + static_cast<uint32>(GetAllocatedSize());
     }
 
     bool FSimpleFlipbookSceneProxy::CanBeOccluded() const {
@@ -173,8 +167,7 @@ namespace Simple2D {
         check(bSpritesUseVertexBufferPath);
         check(SectionIndex < BatchedSections.Num());
 
-        const auto &Section = BatchedSections[SectionIndex];
-        if (Section.IsValid()) {
+        if (const auto &Section = BatchedSections[SectionIndex]; Section.IsValid()) {
             checkSlow(VertexBuffer.IsFullyInitialized() && VertexFactory.IsFullyInitialized());
 
             OutMeshBatch.bCanApplyViewModeOverrides = true;
@@ -212,13 +205,13 @@ namespace Simple2D {
             return;
         }
 
-        SCOPE_CYCLE_COUNTER(STAT_Simple2DRender_GetNewBatchMeshes);
+        SCOPE_CYCLE_COUNTER(STAT_Simple2DRender_GetNewBatchMeshes)
 
-        const uint8 DPG = GetDepthPriorityGroup(View);
+        auto DPG = GetDepthPriorityGroup(View);
         const bool bIsWireframeView = View->Family->EngineShowFlags.Wireframe;
 
-        int32 SectionIndex = 0;
         if (Vertices.Num()) {
+            int32 SectionIndex = 0;
             FDynamicMeshBuilder DynamicMeshBuilder(View->GetFeatureLevel());
             DynamicMeshBuilder.AddVertices(Vertices);
             DynamicMeshBuilder.ReserveTriangles(Vertices.Num() / 3);
@@ -274,7 +267,7 @@ namespace Simple2D {
 
     void FSimpleFlipbookSceneProxy::GetNewBatchMeshesPrebuilt(const FSceneView *View, int32 ViewIndex,
                                                               FMeshElementCollector &Collector) const {
-        const uint8 DPG = GetDepthPriorityGroup(View);
+        const auto DPG = static_cast<uint8>(GetDepthPriorityGroup(View));
         const bool bIsWireframeView = View->Family->EngineShowFlags.Wireframe;
 
         // Go for each section, creating a batch and collecting it
@@ -311,7 +304,7 @@ namespace Simple2D {
 
     void FSimpleFlipbookSceneProxy::RecreateCachedRenderData(FRHICommandListBase &RHICmdList) {
         int32 BatchIndex = 0;
-        for (auto &Proxy : MaterialTextureOverrideProxies) {
+        for (const auto &Proxy : MaterialTextureOverrideProxies) {
             if ((Proxy != nullptr) && BatchedSections.IsValidIndex(BatchIndex)) {
                 const auto &Section = BatchedSections[BatchIndex];
                 Proxy->Reinitialize(Section.Material->GetRenderProxy(), Section.BaseTexture, Section.AdditionalTextures,

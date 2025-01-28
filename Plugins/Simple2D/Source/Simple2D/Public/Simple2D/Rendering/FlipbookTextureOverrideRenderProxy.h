@@ -55,6 +55,6 @@ namespace Simple2D {
 #endif
 
         // Used to track if we need to rebuild our texture param setting proxy
-        int32 ParentMaterialSerialNumber;
+        int32 ParentMaterialSerialNumber = INDEX_NONE;
     };
 } // namespace Simple2D

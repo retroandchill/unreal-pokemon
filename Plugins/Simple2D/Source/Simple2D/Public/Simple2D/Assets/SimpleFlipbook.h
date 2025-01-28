@@ -207,11 +207,8 @@ namespace Simple2D {
       public:
         float &FramesPerSecond;
         TArray<FSimpleFlipbookKeyFrame> &KeyFrames;
-
-      private:
         USimpleFlipbook *SourceFlipbook;
 
-      public:
         explicit FScopedSimpleFlipbookMutator(USimpleFlipbook *InFlipbook)
             : FramesPerSecond(InFlipbook->FramesPerSecond), KeyFrames(InFlipbook->KeyFrames),
               SourceFlipbook(InFlipbook) {

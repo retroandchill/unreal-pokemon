@@ -108,16 +108,15 @@ bool USimpleFlipbookComponent::IsReversing() const {
     return bPlaying && bReversePlayback;
 }
 
-void USimpleFlipbookComponent::SetPlaybackPositionInFrames(int32 NewFramePosition, bool bFireEvents) {
+void USimpleFlipbookComponent::SetPlaybackPositionInFrames(int32 NewFramePosition) {
     const float Framerate = GetFlipbookFramerate();
-    const float NewTime = (Framerate > 0.0f) ? (NewFramePosition / Framerate) : 0.0f;
+    const float NewTime = (Framerate > 0.0f) ? (static_cast<float>(NewFramePosition) / Framerate) : 0.0f;
     SetPlaybackPosition(NewTime);
 }
 
 int32 USimpleFlipbookComponent::GetPlaybackPositionInFrames() const {
     const float Framerate = GetFlipbookFramerate();
-    const int32 NumFrames = GetFlipbookLengthInFrames();
-    if (NumFrames > 0) {
+    if (const int32 NumFrames = GetFlipbookLengthInFrames(); NumFrames > 0) {
         return FMath::Clamp<int32>(FMath::TruncToInt(AccumulatedTime * Framerate), 0, NumFrames - 1);
     }
 
@@ -197,62 +196,66 @@ void USimpleFlipbookComponent::TickFlipbook(float DeltaTime) {
     bool bIsFinished = false;
 
     if (bPlaying) {
-        const float TimelineLength = GetFlipbookLength();
-        const float EffectiveDeltaTime = DeltaTime * (bReversePlayback ? (-PlayRate) : (PlayRate));
-
-        float NewPosition = AccumulatedTime + EffectiveDeltaTime;
-
-        if (EffectiveDeltaTime > 0.0f) {
-            if (NewPosition > TimelineLength) {
-                if (bLooping) {
-                    // If looping, play to end, jump to start, and set target to somewhere near the beginning.
-                    SetPlaybackPosition(TimelineLength);
-                    SetPlaybackPosition(0.0f);
-
-                    if (TimelineLength > 0.0f) {
-                        while (NewPosition > TimelineLength) {
-                            NewPosition -= TimelineLength;
-                        }
-                    } else {
-                        NewPosition = 0.0f;
-                    }
-                } else {
-                    // If not looping, snap to end and stop playing.
-                    NewPosition = TimelineLength;
-                    Stop();
-                    bIsFinished = true;
-                }
-            }
-        } else {
-            if (NewPosition < 0.0f) {
-                if (bLooping) {
-                    // If looping, play to start, jump to end, and set target to somewhere near the end.
-                    SetPlaybackPosition(0.0f);
-                    SetPlaybackPosition(TimelineLength);
-
-                    if (TimelineLength > 0.0f) {
-                        while (NewPosition < 0.0f) {
-                            NewPosition += TimelineLength;
-                        }
-                    } else {
-                        NewPosition = 0.0f;
-                    }
-                } else {
-                    // If not looping, snap to start and stop playing.
-                    NewPosition = 0.0f;
-                    Stop();
-                    bIsFinished = true;
-                }
-            }
-        }
-
-        SetPlaybackPosition(NewPosition);
+        ProcessPlaying(DeltaTime, bIsFinished);
     }
 
     // Notify user that the flipbook finished playing
     if (bIsFinished) {
         OnFinishedPlaying.Broadcast();
     }
+}
+
+void USimpleFlipbookComponent::ProcessPlaying(float DeltaTime, bool &bIsFinished) {
+    const float TimelineLength = GetFlipbookLength();
+    const float EffectiveDeltaTime = DeltaTime * (bReversePlayback ? -PlayRate : PlayRate);
+
+    float NewPosition = AccumulatedTime + EffectiveDeltaTime;
+
+    if (EffectiveDeltaTime > 0.0f) {
+        if (NewPosition > TimelineLength) {
+            if (bLooping) {
+                // If looping, play to end, jump to start, and set target to somewhere near the beginning.
+                SetPlaybackPosition(TimelineLength);
+                SetPlaybackPosition(0.0f);
+
+                if (TimelineLength > 0.0f) {
+                    while (NewPosition > TimelineLength) {
+                        NewPosition -= TimelineLength;
+                    }
+                } else {
+                    NewPosition = 0.0f;
+                }
+            } else {
+                // If not looping, snap to end and stop playing.
+                NewPosition = TimelineLength;
+                Stop();
+                bIsFinished = true;
+            }
+        }
+    } else {
+        if (NewPosition < 0.0f) {
+            if (bLooping) {
+                // If looping, play to start, jump to end, and set target to somewhere near the end.
+                SetPlaybackPosition(0.0f);
+                SetPlaybackPosition(TimelineLength);
+
+                if (TimelineLength > 0.0f) {
+                    while (NewPosition < 0.0f) {
+                        NewPosition += TimelineLength;
+                    }
+                } else {
+                    NewPosition = 0.0f;
+                }
+            } else {
+                // If not looping, snap to start and stop playing.
+                NewPosition = 0.0f;
+                Stop();
+                bIsFinished = true;
+            }
+        }
+    }
+
+    SetPlaybackPosition(NewPosition);
 }
 
 void USimpleFlipbookComponent::FlipbookChangedPhysicsState() {
@@ -265,7 +268,7 @@ void USimpleFlipbookComponent::FlipbookChangedPhysicsState() {
 
 void USimpleFlipbookComponent::TickComponent(float DeltaTime, enum ELevelTick TickType,
                                              FActorComponentTickFunction *ThisTickFunction) {
-    SCOPE_CYCLE_COUNTER(STAT_TickSimpleFlipbook);
+    SCOPE_CYCLE_COUNTER(STAT_TickSimpleFlipbook)
 
     // Advance time
     TickFlipbook(DeltaTime);
@@ -297,18 +300,16 @@ void USimpleFlipbookComponent::CheckForErrors() {
     AActor *Owner = GetOwner();
 
     for (int32 MaterialIndex = 0; MaterialIndex < GetNumMaterials(); ++MaterialIndex) {
-        if (UMaterialInterface *Material = GetMaterial(MaterialIndex)) {
-            if (!Material->IsTwoSided()) {
-                FMessageLog("MapCheck")
-                    .Warning()
-                    ->AddToken(FUObjectToken::Create(Owner))
-                    ->AddToken(
-                        FTextToken::Create(NSLOCTEXT("Simple2D", "MapCheck_Message_SimpleFlipbookMaterialNotTwoSided",
-                                                     "The material applied to the flipbook component is not marked as "
-                                                     "two-sided, which may cause lighting artifacts.")))
-                    ->AddToken(FUObjectToken::Create(Material))
-                    ->AddToken(FMapErrorToken::Create(FName(TEXT("PaperFlipbookMaterialNotTwoSided"))));
-            }
+        if (auto Material = GetMaterial(MaterialIndex); Material != nullptr && !Material->IsTwoSided()) {
+            FMessageLog("MapCheck")
+                .Warning()
+                ->AddToken(FUObjectToken::Create(Owner))
+                ->AddToken(
+                    FTextToken::Create(NSLOCTEXT("Simple2D", "MapCheck_Message_SimpleFlipbookMaterialNotTwoSided",
+                                                 "The material applied to the flipbook component is not marked as "
+                                                 "two-sided, which may cause lighting artifacts.")))
+                ->AddToken(FUObjectToken::Create(Material))
+                ->AddToken(FMapErrorToken::Create(FName(TEXT("PaperFlipbookMaterialNotTwoSided"))));
         }
     }
 }
@@ -318,7 +319,6 @@ FPrimitiveSceneProxy *USimpleFlipbookComponent::CreateSceneProxy() {
     auto NewProxy = MakeUnique<Simple2D::FSimpleFlipbookSceneProxy>(this);
 
     CalculateCurrentFrame();
-    const int32 SplitIndex = SourceFlipbook != nullptr ? SourceFlipbook->GetAlternateMaterialSplitIndex() : INDEX_NONE;
 
     auto DrawCall =
         SourceFlipbook != nullptr ? SourceFlipbook->CreateDrawCallRecord(CachedFrameIndex) : FSimpleFlipbookDrawCall();

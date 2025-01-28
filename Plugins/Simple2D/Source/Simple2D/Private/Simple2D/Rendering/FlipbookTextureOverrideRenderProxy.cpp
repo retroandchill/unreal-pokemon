@@ -17,12 +17,12 @@ namespace Simple2D {
         FAdditionalSpriteTextureArray InAdditionalTextures, int32 Rows, int32 Columns, int32 FrameNumber)
 #endif
         : FMaterialRenderProxy(InParent ? InParent->GetMaterialName() : TEXT("FSpriteTextureOverrideRenderProxy")),
-          Parent(InParent), BaseTexture(InBaseTexture), AdditionalTextures(InAdditionalTextures), Rows(Rows),
-          Columns(Columns), FrameNumber(FrameNumber),
+          Parent(InParent), BaseTexture(InBaseTexture), AdditionalTextures(std::move(InAdditionalTextures)), Rows(Rows),
+          Columns(Columns), FrameNumber(FrameNumber)
 #if WITH_EDITOR
-          TextureOverrideList(InTextureOverrideList),
+          , TextureOverrideList(InTextureOverrideList)
 #endif
-          ParentMaterialSerialNumber(INDEX_NONE) {
+           {
     }
 
     bool FFlipbookTextureOverrideRenderProxy::CheckValidity(const FMaterialRenderProxy *InCurrentParent) {
@@ -48,7 +48,7 @@ namespace Simple2D {
         if ((InParent != Parent) || (InBaseTexture != BaseTexture) || (InAdditionalTextures != AdditionalTextures)) {
             Parent = InParent;
             BaseTexture = InBaseTexture;
-            AdditionalTextures = InAdditionalTextures;
+            AdditionalTextures = std::move(InAdditionalTextures);
             ParentMaterialSerialNumber = INDEX_NONE;
             Rows = NewRows;
             Columns = NewColumns;

@@ -61,7 +61,7 @@ class RPGMENUS_API UEnhancedImage : public UCommonLazyImage, public FTickableGam
                                               FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
 
     void Tick(float DeltaTime) override;
-    virtual TStatId GetStatId() const override;
+    TStatId GetStatId() const override;
     bool IsTickable() const override;
     bool IsTickableInEditor() const override;
 

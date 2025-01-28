@@ -49,7 +49,7 @@ void UK2Node_CastVariantToVariant::AddMenuOptionsForStruct(FBlueprintActionDatab
     auto ActionKey = GetClass();
     auto SourceStruct = Registration.GetStructType();
     TSet<UScriptStruct *> Seen;
-    for (auto &Conversion : Registration.GetAllConversions()) {
+    for (const auto &Conversion : Registration.GetAllConversions()) {
         auto DestStruct = Conversion.GetDestStructType();
         if (Seen.Contains(DestStruct)) {
             continue;

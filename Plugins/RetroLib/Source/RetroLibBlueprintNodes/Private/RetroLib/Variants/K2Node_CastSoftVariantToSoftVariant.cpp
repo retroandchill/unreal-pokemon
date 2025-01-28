@@ -49,7 +49,7 @@ void UK2Node_CastSoftVariantToSoftVariant::AddMenuOptionsForStruct(FBlueprintAct
     auto ActionKey = GetClass();
     auto SourceStruct = Registration.GetSoftStructType();
     TSet<UScriptStruct *> Seen;
-    for (auto &Conversion : Registration.GetAllConversions()) {
+    for (const auto &Conversion : Registration.GetAllConversions()) {
         auto DestStruct = Conversion.GetDestSoftStructType();
         if (Seen.Contains(DestStruct)) {
             continue;

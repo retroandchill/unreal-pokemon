@@ -67,7 +67,7 @@ class SIMPLE2D_API USimpleFlipbookComponent : public UMeshComponent {
     /** Jump to a position in the flipbook (expressed in frames). If bFireEvents is true, event functions will fire,
      * otherwise they will not. */
     UFUNCTION(BlueprintCallable, Category = "Components|Flipbook")
-    void SetPlaybackPositionInFrames(int32 NewFramePosition, bool bFireEvents);
+    void SetPlaybackPositionInFrames(int32 NewFramePosition);
 
     /** Get the current playback position (in frames) of the flipbook */
     UFUNCTION(BlueprintCallable, Category = "Components|Flipbook")
@@ -121,6 +121,7 @@ class SIMPLE2D_API USimpleFlipbookComponent : public UMeshComponent {
     void CalculateCurrentFrame();
 
     void TickFlipbook(float DeltaTime);
+    void ProcessPlaying(float DeltaTime, bool &bIsFinished);
     void FlipbookChangedPhysicsState();
 
   private:

@@ -11,7 +11,7 @@ void USimpleFlipbookThumbnailRenderer::Draw(UObject *Object, int32 X, int32 Y, u
     if (auto *Flipbook = Cast<USimpleFlipbook>(Object); Flipbook != nullptr) {
         const double DeltaTime = FApp::GetCurrentTime() - GStartTime;
         const double TotalDuration = Flipbook->GetTotalDuration();
-        const float PlayTime = (TotalDuration > 0.0f) ? FMath::Fmod(DeltaTime, TotalDuration) : 0.0f;
+        const float PlayTime = TotalDuration > 0.0f ? static_cast<float>(FMath::Fmod(DeltaTime, TotalDuration)) : 0.0f;
 
         if (const int32 KeyFrameIndex = Flipbook->GetKeyFrameIndexAtTime(PlayTime);
             Flipbook->IsValidKeyFrameIndex(KeyFrameIndex)) {
@@ -26,9 +26,9 @@ void USimpleFlipbookThumbnailRenderer::Draw(UObject *Object, int32 X, int32 Y, u
         if (TotalDuration == 0.0f) {
             // Warning text for no frames
             const FText ErrorText = NSLOCTEXT("SimpleFlipbookEditorApp", "ThumbnailWarningNoFrames", "No frames");
-            FCanvasTextItem TextItem(FVector2D(5.0f, 5.0f), ErrorText, GEngine->GetLargeFont(), FLinearColor::Red);
+            FCanvasTextItem TextItem(FVector2D(5.0f, 5.0f), ErrorText, UEngine::GetLargeFont(), FLinearColor::Red);
             TextItem.EnableShadow(FLinearColor::Black);
-            TextItem.Scale = FVector2D(Width / 128.0f, Height / 128.0f);
+            TextItem.Scale = FVector2D(static_cast<float>(Width) / 128.0f, static_cast<float>(Height) / 128.0f);
             TextItem.Draw(Canvas);
         }
     }
@@ -77,11 +77,11 @@ void USimpleFlipbookThumbnailRenderer::DrawFrame(USimpleFlipbook *Flipbook, int3
         const FVector2D MaxPoint(FVector::DotProduct(MaxPoint3D, PaperAxisX),
                                  FVector::DotProduct(MaxPoint3D, PaperAxisY));
 
-        const float UnscaledWidth = MaxPoint.X - MinPoint.X;
-        const float UnscaledHeight = MaxPoint.Y - MinPoint.Y;
+        const auto UnscaledWidth = MaxPoint.X - MinPoint.X;
+        const auto UnscaledHeight = MaxPoint.Y - MinPoint.Y;
         const FVector2D Origin(X + Width * 0.5f, Y + Height * 0.5f);
         const bool bIsWider = (UnscaledWidth > 0.0f) && (UnscaledHeight > 0.0f) && (UnscaledWidth > UnscaledHeight);
-        const float ScaleFactor = bIsWider ? (Width / UnscaledWidth) : (Height / UnscaledHeight);
+        const auto ScaleFactor = bIsWider ? (Width / UnscaledWidth) : (Height / UnscaledHeight);
 
         // Scale and recenter
         const FVector2D CanvasPositionCenter = (MaxPoint + MinPoint) * 0.5f;

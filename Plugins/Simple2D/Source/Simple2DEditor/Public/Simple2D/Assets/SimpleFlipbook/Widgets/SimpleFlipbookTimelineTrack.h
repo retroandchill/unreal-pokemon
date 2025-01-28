@@ -35,12 +35,10 @@ namespace Simple2D {
         TWeakObjectPtr<USimpleFlipbook> SourceFlipbook;
         FScopedTransaction Transaction = NSLOCTEXT("Simple2D", "MovedFramesInTimeline", "Reorder key frames");
 
-        // FDragDropOperation interface
-        virtual TSharedPtr<SWidget> GetDefaultDecorator() const override;
-        virtual void OnDragged(const class FDragDropEvent &DragDropEvent) override;
-        virtual void Construct() override;
-        virtual void OnDrop(bool bDropWasHandled, const FPointerEvent &MouseEvent) override;
-        // End of FDragDropOperation interface
+        TSharedPtr<SWidget> GetDefaultDecorator() const override;
+        void OnDragged(const class FDragDropEvent &DragDropEvent) override;
+        void Construct() override;
+        void OnDrop(bool bDropWasHandled, const FPointerEvent &MouseEvent) override;
 
         void AppendToFlipbook(USimpleFlipbook *DestinationFlipbook);
 
@@ -66,11 +64,9 @@ namespace Simple2D {
 
             void Construct(const FArguments &InArgs, int32 InFrameIndex);
 
-            // SWidget interface
-            virtual FReply OnMouseButtonDown(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) override;
-            virtual FReply OnDragDetected(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) override;
-            virtual FReply OnDrop(const FGeometry &MyGeometry, const FDragDropEvent &DragDropEvent) override;
-            // End of SWidget interface
+            FReply OnMouseButtonDown(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) override;
+            FReply OnDragDetected(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) override;
+            FReply OnDrop(const FGeometry &MyGeometry, const FDragDropEvent &DragDropEvent) override;
 
           protected:
             FReply KeyframeOnMouseButtonUp(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent);
@@ -116,8 +112,6 @@ namespace Simple2D {
                 TAttribute<USimpleFlipbook *> FlipbookBeingEdited;
 
                 TSharedPtr<SHorizontalBox> MainBoxPtr;
-
-                float HandleWidth;
 
                 FOnKeyframeSelectionChanged OnSelectionChanged;
                 TSharedPtr<FUICommandList> CommandList;

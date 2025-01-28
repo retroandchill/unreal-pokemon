@@ -163,7 +163,7 @@ void UEnhancedImage::Tick(float DeltaTime) {
         return;
     }
 
-    SCOPE_CYCLE_COUNTER(STAT_TickEnhancedImage);
+    SCOPE_CYCLE_COUNTER(STAT_TickEnhancedImage)
 
     FlipbookTicker.TickFlipbook(DeltaTime);
     FlipbookTicker.CalculateCurrentFrame();

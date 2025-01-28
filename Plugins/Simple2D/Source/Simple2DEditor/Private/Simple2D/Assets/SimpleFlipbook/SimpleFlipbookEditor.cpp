@@ -212,7 +212,7 @@ namespace Simple2D {
              + SVerticalBox::Slot().Padding(0, 8, 0, 0).AutoHeight()[ScrubControl]];
     }
 
-    TSharedRef<SDockTab> FSimpleFlipbookEditor::SpawnTab_Details(const FSpawnTabArgs &Args) {
+    TSharedRef<SDockTab> FSimpleFlipbookEditor::SpawnTab_Details(const FSpawnTabArgs &) {
         auto FlipbookEditorPtr = SharedThis(this);
 
         // Spawn the tab
@@ -278,7 +278,7 @@ namespace Simple2D {
 
         FScopedSimpleFlipbookMutator EditLock(FlipbookBeingEdited);
 
-        auto &NewFrame = *new (EditLock.KeyFrames) FSimpleFlipbookKeyFrame();
+        new (EditLock.KeyFrames) FSimpleFlipbookKeyFrame();
     }
 
     void FSimpleFlipbookEditor::AddNewKeyFrameBefore() {
@@ -317,9 +317,7 @@ namespace Simple2D {
         auto *PreviewComponent = GetPreviewComponent();
 
         const bool bIsReverse = PreviewComponent->IsReversing();
-        const bool bIsPlaying = PreviewComponent->IsPlaying();
-
-        if (bIsReverse && bIsPlaying) {
+        if (const bool bIsPlaying = PreviewComponent->IsPlaying(); bIsReverse && bIsPlaying) {
             // Play forwards instead of backwards
             PreviewComponent->Play();
         } else if (bIsPlaying) {
@@ -411,7 +409,7 @@ namespace Simple2D {
     }
 
     EPlaybackMode::Type FSimpleFlipbookEditor::GetPlaybackMode() const {
-        if (auto *PreviewComponent = GetPreviewComponent(); PreviewComponent->IsPlaying()) {
+        if (const auto *PreviewComponent = GetPreviewComponent(); PreviewComponent->IsPlaying()) {
             return PreviewComponent->IsReversing() ? EPlaybackMode::PlayingReverse : EPlaybackMode::PlayingForward;
         }
 

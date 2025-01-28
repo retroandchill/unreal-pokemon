@@ -37,7 +37,7 @@ int32 USimpleFlipbook::GetKeyFrameIndexAtTime(float Time, bool bClampToEnds) con
         float SumTime = 0.0f;
 
         for (int32 KeyFrameIndex = 0; KeyFrameIndex < KeyFrames.Num(); ++KeyFrameIndex) {
-            SumTime += KeyFrames[KeyFrameIndex].FrameRun / FramesPerSecond;
+            SumTime += static_cast<float>(KeyFrames[KeyFrameIndex].FrameRun) / FramesPerSecond;
 
             if (Time <= SumTime) {
                 return KeyFrameIndex;
@@ -163,57 +163,11 @@ void USimpleFlipbook::RebuildRenderData() {
         EffectiveTexture->ConditionalPostLoad();
         TextureSize = FVector2D(EffectiveTexture->GetImportedSize());
     }
-    const float InverseWidth = static_cast<float>(Columns) / TextureSize.X;
-    const float InverseHeight = static_cast<float>(Rows) / TextureSize.Y;
+    double InverseWidth = static_cast<double>(Columns) / TextureSize.X;
+    double InverseHeight = static_cast<double>(Rows) / TextureSize.Y;
 
     // Adjust for the pivot and store in the baked geometry buffer
     const float UnitsPerPixel = GetUnrealUnitsPerPixel();
-
-    if ((RenderGeometry.GeometryType == ESpritePolygonMode::Diced) && (EffectiveTexture != nullptr)) {
-        const int32 AlphaThresholdInt = FMath::Clamp<int32>(RenderGeometry.AlphaThreshold * 255, 0, 255);
-        FAlphaBitmap SourceBitmap(EffectiveTexture);
-        SourceBitmap.ThresholdImageBothWays(AlphaThresholdInt, 255);
-
-        bool bSeparateOpaqueSections = true;
-
-        // Dice up the source geometry and sort into translucent and opaque sections
-        RenderGeometry.Shapes.Empty();
-
-        const int32 X0 = 0;
-        const int32 Y0 = 0;
-        const int32 X1 = SourceTexture != nullptr ? SourceTexture->GetSizeX() / Columns : 0;
-        const int32 Y1 = SourceTexture != nullptr ? SourceTexture->GetSizeY() / Rows : 0;
-
-        for (int32 Y = Y0; Y < Y1; Y += RenderGeometry.PixelsPerSubdivisionY) {
-            const int32 TileHeight = FMath::Min(RenderGeometry.PixelsPerSubdivisionY, Y1 - Y);
-
-            for (int32 X = X0; X < X1; X += RenderGeometry.PixelsPerSubdivisionX) {
-                const int32 TileWidth = FMath::Min(RenderGeometry.PixelsPerSubdivisionX, X1 - X);
-
-                if (!SourceBitmap.IsRegionEmpty(X, Y, X + TileWidth - 1, Y + TileHeight - 1)) {
-                    FIntPoint Origin(X, Y);
-                    FIntPoint Dimension(TileWidth, TileHeight);
-
-                    SourceBitmap.TightenBounds(Origin, Dimension);
-
-                    bool bOpaqueSection = false;
-                    if (bSeparateOpaqueSections) {
-                        if (SourceBitmap.IsRegionEqual(Origin.X, Origin.Y, Origin.X + Dimension.X - 1,
-                                                       Origin.Y + Dimension.Y - 1, 255)) {
-                            bOpaqueSection = true;
-                        }
-                    }
-
-                    const FVector2D BoxCenter = FVector2D(Origin) + (FVector2D(Dimension) * 0.5f);
-                    if (bOpaqueSection) {
-                        AlternateGeometry.AddRectangleShape(BoxCenter, Dimension);
-                    } else {
-                        RenderGeometry.AddRectangleShape(BoxCenter, Dimension);
-                    }
-                }
-            }
-        }
-    }
 
     // Triangulate the render geometry
     TArray<FVector2D> TriangluatedPoints;
@@ -243,7 +197,7 @@ void USimpleFlipbook::RebuildRenderData() {
                                        UV.X * InverseWidth, UV.Y * InverseHeight);
     }
 
-    check((BakedRenderData.Num() % 3) == 0);
+    check(BakedRenderData.Num() % 3 == 0);
 
     // Swap the generated vertices so they end up in counterclockwise order
     for (int32 SVT = 0; SVT < TriangluatedPoints.Num(); SVT += 3) {
