@@ -46,8 +46,7 @@ class POKEMONBATTLE_API UBattleItemEffect : public UUE5CoroGameplayAbility {
      * @param
      * @return Was the effect successfully applied? If none of these checks return true, this item will not be consumed.
      */
-    virtual UE5Coro::TCoroutine<bool> ApplyGlobalEffect(TScriptInterface<IBattler> User,
-                                                        FForceLatentCoroutine = {});
+    virtual UE5Coro::TCoroutine<bool> ApplyGlobalEffect(TScriptInterface<IBattler> User, FForceLatentCoroutine = {});
 
     /**
      * Apply the effect of the item to an individual target.
@@ -56,9 +55,8 @@ class POKEMONBATTLE_API UBattleItemEffect : public UUE5CoroGameplayAbility {
      * @param
      * @return Was the effect successfully applied? If none of these checks return true, this item will not be consumed.
      */
-    virtual UE5Coro::TCoroutine<bool> ApplyEffectToTarget(TScriptInterface<IBattler> User,
-                                                          TScriptInterface<IBattler> Target,
-                                                          FForceLatentCoroutine = {});
+    virtual UE5Coro::TCoroutine<bool>
+    ApplyEffectToTarget(TScriptInterface<IBattler> User, TScriptInterface<IBattler> Target, FForceLatentCoroutine = {});
 
     /**
      * Check if an individual target for the item is valid
@@ -66,8 +64,7 @@ class POKEMONBATTLE_API UBattleItemEffect : public UUE5CoroGameplayAbility {
      * @param
      * @return Is this a valid target for the move.
      */
-    virtual UE5Coro::TCoroutine<bool> IsTargetValid(TScriptInterface<IBattler> Battler,
-                                                    FForceLatentCoroutine = {});
+    virtual UE5Coro::TCoroutine<bool> IsTargetValid(TScriptInterface<IBattler> Battler, FForceLatentCoroutine = {});
 
   private:
     FName ItemID;

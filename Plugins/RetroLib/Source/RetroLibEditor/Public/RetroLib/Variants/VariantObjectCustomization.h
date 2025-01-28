@@ -51,15 +51,15 @@ namespace Retro {
             // No child customization
         }
 
-    private:
-        T& GetVariantObject() const {
+      private:
+        T &GetVariantObject() const {
             void *StructData;
             const auto Result = VariantObjectPropertyHandle->GetValueData(StructData);
             check(Result == FPropertyAccess::Success)
             check(StructData != nullptr)
             return *static_cast<T *>(StructData);
         }
-        
+
         FString GetCurrentAssetPath() const {
             // clang-format off
             return GetVariantObject().TryGet() |
@@ -68,12 +68,14 @@ namespace Retro {
             // clang-format on
         }
 
-        bool IsValidClass(const FAssetData& Asset) const {
+        bool IsValidClass(const FAssetData &Asset) const {
             return !T::IsValidType(Asset.GetClass(EResolveClass::Yes));
         }
 
-        void OnAssetSelected( const FAssetData& InAsset ) const {
+        void OnAssetSelected(const FAssetData &InAsset) const {
+            VariantObjectPropertyHandle->NotifyPreChange();
             GetVariantObject().Set(InAsset.GetAsset());
+            VariantObjectPropertyHandle->NotifyPostChange(EPropertyChangeType::ValueSet);
         }
 
         TSharedPtr<IPropertyHandle> VariantObjectPropertyHandle;

@@ -625,8 +625,8 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyGeneralEffect(TScriptInterfa
 }
 
 UE5Coro::TCoroutine<TArray<TScriptInterface<IBattler>>>
-UBattleMoveFunctionCode::FaintCheck(TScriptInterface<IBattler> User,
-                                    const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine) {
+UBattleMoveFunctionCode::FaintCheck(TScriptInterface<IBattler> User, const TArray<TScriptInterface<IBattler>> &Targets,
+                                    FForceLatentCoroutine) {
     using FAnim = TScriptInterface<IBattleAnimation>;
     constexpr auto GetFaintAnimation = &UBattleAnimationGetter::GetFaintAnimation;
 

@@ -1,5 +1,4 @@
 ﻿#include "Asserts.h"
-#include "TestAdapter.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
@@ -12,6 +11,7 @@
 #include "Mocks/MockBattleSide.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
+#include "TestAdapter.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestBattlerActor.h"
 

@@ -205,4 +205,48 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execLoadSynchronous) {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ConvertException(Exception));
     }
 }
+
+CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::ConvertVariantObject, const uint8 &, uint8 &)
+DEFINE_FUNCTION(UVariantObjectUtilities::execConvertVariantObject) {
+    P_GET_OPAQUE_STRUCT(SourceProp, SourcePtr)
+    P_GET_OPAQUE_STRUCT(DestProp, DestPtr)
+    P_FINISH
+
+    try {
+        Retro::ValidateStructProperty(SourceProp, SourcePtr);
+        Retro::ValidateStructProperty(DestProp, DestPtr);
+        const auto &StructInfo = Retro::GetVariantConversion(*SourceProp, *DestProp);
+        bool bConverted;
+        P_NATIVE_BEGIN
+        bConverted = StructInfo.ConvertVariant(*SourceProp, SourcePtr, *DestProp, DestPtr);
+        P_NATIVE_END
+
+        P_GET_RESULT(bool, Result);
+        Result = bConverted;
+    } catch (const Retro::FBlueprintException &Exception) {
+        FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ConvertException(Exception));
+    }
+}
+
+CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::ConvertSoftVariantObject, const uint8 &, uint8 &)
+DEFINE_FUNCTION(UVariantObjectUtilities::execConvertSoftVariantObject) {
+    P_GET_OPAQUE_STRUCT(SourceProp, SourcePtr)
+    P_GET_OPAQUE_STRUCT(DestProp, DestPtr)
+    P_FINISH
+
+    try {
+        Retro::ValidateStructProperty(SourceProp, SourcePtr);
+        Retro::ValidateStructProperty(DestProp, DestPtr);
+        const auto &StructInfo = Retro::GetVariantConversion(*SourceProp, *DestProp);
+        bool bConverted;
+        P_NATIVE_BEGIN
+        bConverted = StructInfo.ConvertSoftVariant(*SourceProp, SourcePtr, *DestProp, DestPtr);
+        P_NATIVE_END
+
+        P_GET_RESULT(bool, Result);
+        Result = bConverted;
+    } catch (const Retro::FBlueprintException &Exception) {
+        FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ConvertException(Exception));
+    }
+}
 #endif

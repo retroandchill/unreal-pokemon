@@ -16,8 +16,7 @@ class POKEMONBATTLEITEMS_API UBattleItemEffect_CureStatusEffect : public UBattle
     GENERATED_BODY()
 
   protected:
-    UE5Coro::TCoroutine<bool> ApplyEffectToTarget(TScriptInterface<IBattler> User,
-                                                  TScriptInterface<IBattler> Target,
+    UE5Coro::TCoroutine<bool> ApplyEffectToTarget(TScriptInterface<IBattler> User, TScriptInterface<IBattler> Target,
                                                   FForceLatentCoroutine) override;
 
   private:

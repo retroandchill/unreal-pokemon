@@ -9,9 +9,9 @@ public class PokemonBattle : ModuleRules {
                            "DeveloperSettings", "DynamicAssetLoader", "PokemonAssets", "UE5Coro", "UE5CoroGAS" });
 
         PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore",
-                                                             "UnrealInjector", "PokemonAssets", "Paper2D",
-                                                             "RetroLib" });
-        
+                                                             "UnrealInjector", "PokemonAssets", "Paper2D", "RetroLib",
+                                                             "Simple2D" });
+
         if (!string.IsNullOrEmpty(GetModuleDirectory("PaperZD"))) {
             PublicDependencyModuleNames.Add("PaperZD");
         }

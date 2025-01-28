@@ -29,4 +29,14 @@ Retro::IVariantRegistration &Retro::GetVariantRegistration(const FStructProperty
 
     return *StructInfo;
 }
+
+Retro::IVariantConversion &Retro::GetVariantConversion(const FStructProperty &From, const FStructProperty &To) {
+    static auto &Registry = FVariantObjectStructRegistry::Get();
+    auto ConversionInfo = Registry.GetVariantStructConversion(*From.Struct, *To.Struct);
+    if (!ConversionInfo.IsSet()) {
+        throw FVariantException("Incompatible struct types; the supplied structs do not have a registered conversion.");
+    }
+
+    return *ConversionInfo;
+}
 #endif

@@ -64,8 +64,7 @@ UE5Coro::GAS::FAbilityCoroutine UBattleItemEffect::ExecuteAbility(FGameplayAbili
     }
 }
 
-UE5Coro::TCoroutine<bool> UBattleItemEffect::ApplyGlobalEffect(TScriptInterface<IBattler> User,
-                                                               FForceLatentCoroutine) {
+UE5Coro::TCoroutine<bool> UBattleItemEffect::ApplyGlobalEffect(TScriptInterface<IBattler> User, FForceLatentCoroutine) {
     co_return false;
 }
 
@@ -75,7 +74,6 @@ UE5Coro::TCoroutine<bool> UBattleItemEffect::ApplyEffectToTarget(TScriptInterfac
     co_return false;
 }
 
-UE5Coro::TCoroutine<bool> UBattleItemEffect::IsTargetValid(TScriptInterface<IBattler> Battler,
-                                                           FForceLatentCoroutine) {
+UE5Coro::TCoroutine<bool> UBattleItemEffect::IsTargetValid(TScriptInterface<IBattler> Battler, FForceLatentCoroutine) {
     co_return true;
 }

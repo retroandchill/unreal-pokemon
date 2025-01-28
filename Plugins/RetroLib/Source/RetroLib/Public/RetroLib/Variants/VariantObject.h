@@ -1,5 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #pragma once
+#include "RetroLib/Concepts/Tuples.h"
+#include "RetroLib/Optionals/To.h"
+#include "RetroLib/Optionals/Transform.h"
+#include "RetroLib/Utils/Construct.h"
 
 #ifdef __UNREAL__
 #include "RetroLib/Casting/UClassCasts.h"
@@ -22,17 +26,28 @@ namespace Retro {
     struct TVariantObject;
 
     template <typename>
-    struct TIsVariantObject : std::false_type {};
+    struct TVariantObjectTraits : FInvalidType {};
 
     template <typename... T>
-    struct TIsVariantObject<TVariantObject<T...>> : std::true_type {};
+    struct TVariantObjectTraits<TVariantObject<T...>> : FValidType {
+        using Types = std::tuple<std::nullptr_t, T...>;
+    };
 
     /**
      * Checks if the given type is a variant object.
      * @tparam T The type to check
      */
     template <typename T>
-    concept VariantObject = TIsVariantObject<T>::value;
+    concept VariantObject = TVariantObjectTraits<T>::IsValid;
+
+    template <typename T, typename U>
+    concept ConvertibleVariantObjects =
+        VariantObject<T> && VariantObject<U> &&
+        HasOverlappingTypes<typename TVariantObjectTraits<T>::Types, typename TVariantObjectTraits<U>::Types>;
+
+    template <VariantObject T, VariantObject U>
+    constexpr auto VariantIndexMapping =
+        MatchingTupleIndexes<typename TVariantObjectTraits<T>::Types, typename TVariantObjectTraits<U>::Types>;
 
     /**
      * Checks if the given type is a variant object type that has a valid UStruct representation..
@@ -100,6 +115,11 @@ namespace Retro {
             : ContainedObject(Object.GetObject()), TypeIndex(GetTypeIndex(Object.GetObject()).GetValue()) {
         }
 
+      protected:
+        TVariantObject(UObject *InObject, size_t InIndex) : ContainedObject(InObject), TypeIndex(InIndex) {
+        }
+
+      public:
         /**
          * Access any of the members on UObject, regardless of the underlying type.
          * @return The underlying object
@@ -116,12 +136,26 @@ namespace Retro {
             return *ContainedObject;
         }
 
+        constexpr friend bool operator==(const TVariantObject &A, const TVariantObject &B) = default;
+
+        constexpr friend bool operator==(const TVariantObject &A, const UObject *B) {
+            return A.ContainedObject == B;
+        }
+
+        constexpr friend bool operator==(const UObject *A, const TVariantObject &B) {
+            return A == B.ContainedObject;
+        }
+
         /**
          * Equality operator against a null value.
          * @return Is the variant null?
          */
-        constexpr bool operator==(std::nullptr_t) const {
-            return IsValid();
+        constexpr friend bool operator==(const TVariantObject &A, std::nullptr_t) {
+            return !A.IsValid();
+        }
+
+        constexpr friend bool operator==(std::nullptr_t, const TVariantObject &B) {
+            return !B.IsValid();
         }
 
         /**
@@ -141,6 +175,15 @@ namespace Retro {
          */
         constexpr bool IsValid() const {
             return !IsType<std::nullptr_t>() && ContainedObject != nullptr;
+        }
+
+        template <VariantObject U>
+            requires ConvertibleVariantObjects<TVariantObject, U>
+        constexpr auto Convert() const {
+            constexpr auto TypeMapping = Retro::VariantIndexMapping<TVariantObject, U>;
+            check(TypeIndex < TypeMapping.size())
+            return TypeMapping[TypeIndex] | Optionals::To<TOptional>() |
+                   Optionals::Transform([this](size_t TargetIndex) { return U(ContainedObject, TargetIndex); });
         }
 
         /**
@@ -163,7 +206,7 @@ namespace Retro {
         template <typename U, typename F>
             requires(std::same_as<T, U> || ...) && std::invocable<F, U *>
         static constexpr decltype(auto) VisitSingle(UObject *Object, F &&Functor) {
-            return std::invoke(std::forward<F>(Functor), static_cast<U *>(Object));
+            return std::invoke(std::forward<F>(Functor), std::bit_cast<U *>(Object));
         }
 
       protected:
@@ -443,6 +486,10 @@ namespace Retro {
         template <typename U>
             requires VariantObjectStruct<U>
         friend class TVariantObjectCustomization;
+
+        template <typename... U>
+            requires((std::derived_from<U, UObject> || UnrealInterface<U>) && ...)
+        friend struct TVariantObject;
 
         TObjectPtr<UObject> ContainedObject;
         uint64 TypeIndex = GetTypeIndex<std::nullptr_t>();

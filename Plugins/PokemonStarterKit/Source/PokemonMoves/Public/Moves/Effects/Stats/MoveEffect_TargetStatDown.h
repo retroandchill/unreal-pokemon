@@ -16,15 +16,13 @@ class POKEMONMOVES_API UMoveEffect_TargetStatDown : public UBattleMoveFunctionCo
     GENERATED_BODY()
 
   public:
-    UE5Coro::TCoroutine<bool> FailsAgainstTarget(TScriptInterface<IBattler> User,
-                                                 TScriptInterface<IBattler> Target,
+    UE5Coro::TCoroutine<bool> FailsAgainstTarget(TScriptInterface<IBattler> User, TScriptInterface<IBattler> Target,
                                                  FForceLatentCoroutine) override;
 
     UE5Coro::TCoroutine<> ApplyAdditionalEffect(TScriptInterface<IBattler> User,
                                                 TScriptInterface<IBattler> Target) override;
 
-    UE5Coro::TCoroutine<> ApplyEffectAgainstTarget(TScriptInterface<IBattler> User,
-                                                   TScriptInterface<IBattler> Target,
+    UE5Coro::TCoroutine<> ApplyEffectAgainstTarget(TScriptInterface<IBattler> User, TScriptInterface<IBattler> Target,
                                                    FForceLatentCoroutine) override;
 
   private:

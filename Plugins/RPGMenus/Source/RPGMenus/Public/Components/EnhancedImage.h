@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "CommonLazyImage.h"
 #include "Images/ImageAsset.h"
+#include "Simple2D/Components/FlipbookTicker.h"
 
 #include "EnhancedImage.generated.h"
 
@@ -17,10 +18,12 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFlipbookFinishedPlaying);
  *
  */
 UCLASS()
-class RPGMENUS_API UEnhancedImage : public UCommonLazyImage {
+class RPGMENUS_API UEnhancedImage : public UCommonLazyImage, public FTickableGameObject {
     GENERATED_BODY()
 
   public:
+    UEnhancedImage();
+
     void SetBrush(const FSlateBrush &InBrush) override;
 
   private:
@@ -38,29 +41,46 @@ class RPGMENUS_API UEnhancedImage : public UCommonLazyImage {
     virtual void SetBrushFromPaperFlipbook(UPaperFlipbook *Flipbook, bool bMatchSize = false);
 
     UFUNCTION(BlueprintCallable, Category = Image)
+    virtual void SetBrushFromSimpleFlipbook(USimpleFlipbook *Flipbook, bool bMatchSize = false);
+
+    UFUNCTION(BlueprintCallable, Category = Image)
     virtual void SetBrushFromImageAsset(const FImageAsset &ImageAsset, bool bMatchSize = false);
 
     UFUNCTION(BlueprintCallable, Category = LazyImage)
-    void SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook, bool bMatchSize = false);
+    FVoidCoroutine SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook,
+                                                 bool bMatchSize = false,
+                                                 FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
 
     UFUNCTION(BlueprintCallable, Category = LazyImage)
-    void SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize = false);
+    FVoidCoroutine SetBrushFromLazySimpleFlipbook(const TSoftObjectPtr<USimpleFlipbook> &LazyFlipbook,
+                                                  bool bMatchSize = false,
+                                                  FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
+
+    UFUNCTION(BlueprintCallable, Category = LazyImage)
+    FVoidCoroutine SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize = false,
+                                              FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
+
+    void Tick(float DeltaTime) override;
+    TStatId GetStatId() const override;
+    bool IsTickable() const override;
+    bool IsTickableInEditor() const override;
 
   protected:
-    TSharedRef<SWidget> RebuildImageWidget() override;
     void SynchronizeProperties() override;
-    void ReleaseSlateResources(bool bReleaseChildren) override;
 
 #if WITH_EDITOR
+    void PostLoad() override;
     void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
 #endif
 
   private:
     void SetSourceImageInternal(UObject *Object);
 
-    int32 GetWidgetIndex() const;
+    void CreateSimpleFlipbookMaterialInstance(const USimpleFlipbook &Flipbook);
 
     void OnFlipbookFinishedPlaying() const;
+
+    void OnFrameIndexChanged(std::any KeyFrame);
 
     /**
      * Event called whenever a non-looping flipbook finishes playing (either reaching the beginning or the end,
@@ -74,7 +94,7 @@ class RPGMENUS_API UEnhancedImage : public UCommonLazyImage {
 
     /** Are we currently playing . */
     UPROPERTY(Category = Appearance, EditAnywhere)
-    bool bAutoPlay = true;
+    uint8 bAutoPlay : 1 = true;
 
     /** Current play rate of the flipbook */
     UPROPERTY(Category = Appearance, EditAnywhere)
@@ -82,11 +102,16 @@ class RPGMENUS_API UEnhancedImage : public UCommonLazyImage {
 
     /** Whether the flipbook should loop when it reaches the end, or stop */
     UPROPERTY(Category = Appearance, EditAnywhere)
-    bool bLooping = true;
+    uint8 bLooping : 1 = true;
 
     UPROPERTY(Category = Appearance, EditAnywhere)
-    bool bManualSize = false;
+    uint8 bManualSize : 1 = false;
 
-    TSharedPtr<SWidgetSwitcher> Switcher;
-    TSharedPtr<SPaperFlipbookWidget> FlipbookWidget;
+    Simple2D::FFlipbookTicker FlipbookTicker;
+
+    UPROPERTY(Category = Appearance, EditAnywhere)
+    TObjectPtr<UMaterialInterface> SimpleFlipbookBaseMaterial;
+
+    UPROPERTY(Transient)
+    TObjectPtr<UMaterialInstanceDynamic> SimpleFlipbookMaterialInstance;
 };

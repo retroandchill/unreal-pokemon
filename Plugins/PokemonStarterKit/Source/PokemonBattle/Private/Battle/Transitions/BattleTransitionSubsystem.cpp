@@ -44,8 +44,8 @@ UBattleTransitionSubsystem::InitiateBattle(FBattleInfo Info, TSubclassOf<ABattle
     }
 
     bool bSuccess;
-    ULevelStreamingDynamic* Battlefield = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(this, BattleMap, BattleLevelOffset,
-                                                                           FRotator(), bSuccess);
+    ULevelStreamingDynamic *Battlefield = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(
+        this, BattleMap, BattleLevelOffset, FRotator(), bSuccess);
     check(bSuccess)
     if (Battlefield->IsLevelVisible()) {
         co_await ABattleTransitionActor::Execute(CurrentTransition);
@@ -63,7 +63,9 @@ UBattleTransitionSubsystem::InitiateBattle(FBattleInfo Info, TSubclassOf<ABattle
     co_return Result;
 }
 
-UE5Coro::TCoroutine<> UBattleTransitionSubsystem::ExitBattle(ULevelStreamingDynamic* Battlefield, const TArray<FLevelStreamingVolumeState>& StreamingStates, FForceLatentCoroutine) const {
+UE5Coro::TCoroutine<> UBattleTransitionSubsystem::ExitBattle(ULevelStreamingDynamic *Battlefield,
+                                                             const TArray<FLevelStreamingVolumeState> &StreamingStates,
+                                                             FForceLatentCoroutine) const {
     check(Battlefield != nullptr)
     FLatentActionInfo LatentActionInfo;
     UGameplayStatics::UnloadStreamLevelBySoftObjectPtr(this, Battlefield->GetWorldAsset(), LatentActionInfo, false);

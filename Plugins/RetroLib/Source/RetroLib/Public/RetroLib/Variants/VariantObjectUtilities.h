@@ -66,4 +66,14 @@ class RETROLIB_API UVariantObjectUtilities : public UBlueprintFunctionLibrary {
               meta = (CustomStructureParam = "SoftVariant,Variant", ExpandBoolAsExecs = "ReturnValue"))
     static bool LoadSynchronous(const uint8 &SoftVariant, uint8 &Variant);
     DECLARE_FUNCTION(execLoadSynchronous);
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, CustomThunk, Category = Variants,
+              meta = (CustomStructureParam = "From,To"))
+    static bool ConvertVariantObject(const uint8 &From, uint8 &To);
+    DECLARE_FUNCTION(execConvertVariantObject);
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, CustomThunk, Category = Variants,
+              meta = (CustomStructureParam = "From,To"))
+    static bool ConvertSoftVariantObject(const uint8 &From, uint8 &To);
+    DECLARE_FUNCTION(execConvertSoftVariantObject);
 };

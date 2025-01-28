@@ -32,11 +32,12 @@ class POKEMONBATTLE_API AActiveSide : public AActor, public IBattleSide {
 
     UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> Initialize(TScriptInterface<IBattle> Battle,
                                                                   TArray<TScriptInterface<IPokemon>> Pokemon,
-                                                                  bool ShowBackSprites, FForceLatentCoroutine = {}) override;
+                                                                  bool ShowBackSprites,
+                                                                  FForceLatentCoroutine = {}) override;
     UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> Initialize(TScriptInterface<IBattle> Battle,
                                                                   TScriptInterface<ITrainer> Trainer,
-                                                                  uint8 PokemonCount,
-                                                                  bool ShowBackSprites, FForceLatentCoroutine = {}) override;
+                                                                  uint8 PokemonCount, bool ShowBackSprites,
+                                                                  FForceLatentCoroutine = {}) override;
 
   protected:
     void BeginPlay() override;

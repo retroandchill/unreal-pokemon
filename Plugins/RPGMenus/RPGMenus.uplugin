@@ -64,6 +64,10 @@
 		{
 			"Name": "DynamicAssetLoader",
 			"Enabled": true
+		},
+		{
+			"Name": "Simple2D",
+			"Enabled": true
 		}
 	]
 }

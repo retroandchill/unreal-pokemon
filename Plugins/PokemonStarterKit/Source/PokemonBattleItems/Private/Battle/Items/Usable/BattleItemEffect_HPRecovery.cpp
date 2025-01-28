@@ -8,8 +8,7 @@
 #include "RetroLib/Optionals/OrElseGet.h"
 
 UE5Coro::TCoroutine<bool>
-UBattleItemEffect_HPRecovery::ApplyEffectToTarget(TScriptInterface<IBattler> User,
-                                                  TScriptInterface<IBattler> Target,
+UBattleItemEffect_HPRecovery::ApplyEffectToTarget(TScriptInterface<IBattler> User, TScriptInterface<IBattler> Target,
                                                   FForceLatentCoroutine ForceLatentCoroutine) {
     return UBattlerHelpers::ApplyHPRecoveryEffect(Target, HPRecovery, this);
 }

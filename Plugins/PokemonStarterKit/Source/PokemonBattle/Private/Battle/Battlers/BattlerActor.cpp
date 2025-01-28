@@ -378,7 +378,7 @@ void ABattlerActor::ShowSprite(const FVector &Offset) const {
     if (Sprite == nullptr) {
         return;
     }
-    
+
     Sprite->SetActorLocation(Sprite->GetActorLocation() + Offset);
     Sprite->SetActorHiddenInGame(false);
 }
@@ -387,7 +387,7 @@ void ABattlerActor::HideSprite() const {
     if (Sprite == nullptr) {
         return;
     }
-    
+
     Sprite->SetActorHiddenInGame(true);
 }
 
@@ -434,9 +434,11 @@ void ABattlerActor::UpdateHPValue(const FOnAttributeChangeData &Data) const {
 }
 
 UE5Coro::TCoroutine<> ABattlerActor::SpawnSpriteActor(bool ShouldShow) {
-    Sprite = GetWorld()->SpawnActor<AActor>(co_await UE5Coro::Latent::AsyncLoadClass(BattlerSpriteClass), GetSpriteTransform());
+    Sprite = GetWorld()->SpawnActor<AActor>(co_await UE5Coro::Latent::AsyncLoadClass(BattlerSpriteClass),
+                                            GetSpriteTransform());
     Sprite->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
-    
-    IBattlerSprite::Execute_SetBattleSprite(Sprite, co_await USpriteLoader::AsyncGetPokemonBattleSprite(WrappedPokemon, OwningSide->ShowBackSprites()));
+
+    IBattlerSprite::Execute_SetBattleSprite(
+        Sprite, co_await USpriteLoader::AsyncGetPokemonBattleSprite(WrappedPokemon, OwningSide->ShowBackSprites()));
     Sprite->SetActorHiddenInGame(!ShouldShow);
 }

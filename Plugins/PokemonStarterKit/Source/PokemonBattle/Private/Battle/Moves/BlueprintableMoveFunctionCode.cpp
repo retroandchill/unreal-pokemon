@@ -23,8 +23,9 @@ UE5Coro::TCoroutine<bool> UBlueprintableMoveFunctionCode::FailsAgainstTarget(TSc
     co_return co_await TFuture<bool>(CoroutineFutureState);
 }
 
-UE5Coro::TCoroutine<> UBlueprintableMoveFunctionCode::ApplyEffectWhenDealingDamage(
-    TScriptInterface<IBattler> User, TScriptInterface<IBattler> Target, FForceLatentCoroutine) {
+UE5Coro::TCoroutine<> UBlueprintableMoveFunctionCode::ApplyEffectWhenDealingDamage(TScriptInterface<IBattler> User,
+                                                                                   TScriptInterface<IBattler> Target,
+                                                                                   FForceLatentCoroutine) {
     if (CoroutineFutureState->IsComplete()) {
         CoroutineFutureState = MakeShared<TFutureState<bool>>();
     }

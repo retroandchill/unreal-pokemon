@@ -6,12 +6,12 @@
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
+#include "TestAdapter.h"
 #include "Utilities/TemporarySeed.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestActiveSide.h"
 #include "UtilityClasses/BattleActors/TestBattlerActor.h"
 #include "UtilityClasses/BattleActors/TestPokemonBattle.h"
-#include "TestAdapter.h"
 
 BEGIN_DEFINE_SPEC(FTestDamageCalculation, "Unit Tests.Battle.Moves.TestDamageCalculation",
                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
@@ -22,13 +22,13 @@ END_DEFINE_SPEC(FTestDamageCalculation);
 void FTestDamageCalculation::Define() {
     CoroIt("PhysicalWeakNoCrit", [this]() -> UE5Coro::TCoroutine<> {
         auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-        auto Pokemon1 =
-            UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("GLACEON"),
-                                                                                     .Level = 75,
-                                                                                     .IVs = {{"ATTACK", 31}},
-                                                                                     .EVs = {{"ATTACK", 104}},
-                                                                                     .Nature = FName("TIMID"),
-                                                                                     .Moves = {{.Move = TEXT("ICEFANG")}}});
+        auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+            World.Get(), FPokemonDTO{.Species = TEXT("GLACEON"),
+                                     .Level = 75,
+                                     .IVs = {{"ATTACK", 31}},
+                                     .EVs = {{"ATTACK", 104}},
+                                     .Nature = FName("TIMID"),
+                                     .Moves = {{.Move = TEXT("ICEFANG")}}});
         auto Pokemon2 =
             UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("GARCHOMP"),
                                                                                      .Level = 65,
@@ -55,14 +55,14 @@ void FTestDamageCalculation::Define() {
 
     CoroIt("PhysicalWeakWithCrit", [this]() -> UE5Coro::TCoroutine<> {
         auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-        auto Pokemon1 =
-            UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("GLACEON"),
-                                                                                     .Level = 75,
-                                                                                     .IVs = {{"ATTACK", 31}},
-                                                                                     .EVs = {{"ATTACK", 104}},
-                                                                                     .Nature = FName("TIMID"),
-                                                                                     .Item = FName("MUSCLEBAND"),
-                                                                                     .Moves = {{.Move = TEXT("ICEFANG")}}});
+        auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+            World.Get(), FPokemonDTO{.Species = TEXT("GLACEON"),
+                                     .Level = 75,
+                                     .IVs = {{"ATTACK", 31}},
+                                     .EVs = {{"ATTACK", 104}},
+                                     .Nature = FName("TIMID"),
+                                     .Item = FName("MUSCLEBAND"),
+                                     .Moves = {{.Move = TEXT("ICEFANG")}}});
         auto Pokemon2 =
             UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("GARCHOMP"),
                                                                                      .Level = 65,
@@ -84,9 +84,11 @@ void FTestDamageCalculation::Define() {
         Battle->Initialize({Side1, Side2});
 
         auto Battler1 = Side1->GetBattlers()[0];
-        Battler1->GetAbilityComponent()->SetNumericAttributeBase(UStatStagesAttributeSet::GetAttackStagesAttribute(), -2.f);
+        Battler1->GetAbilityComponent()->SetNumericAttributeBase(UStatStagesAttributeSet::GetAttackStagesAttribute(),
+                                                                 -2.f);
         auto Battler2 = Side2->GetBattlers()[0];
-        Battler2->GetAbilityComponent()->SetNumericAttributeBase(UStatStagesAttributeSet::GetDefenseStagesAttribute(), 2.f);
+        Battler2->GetAbilityComponent()->SetNumericAttributeBase(UStatStagesAttributeSet::GetDefenseStagesAttribute(),
+                                                                 2.f);
 
         FBattleActionUseMove Action(Battler1, Battler1->GetMoves()[0], {FTargetWithIndex(Battler2)});
         AddExpectedMessage(TEXT("Critical hit against Garchomp!"), ELogVerbosity::Display);

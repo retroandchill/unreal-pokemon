@@ -1,6 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+#include "RetroLib/Ranges/Views/Generator.h"
 
 #ifdef __UNREAL__
 #include "RetroLib/Blueprints/BlueprintRuntimeUtils.h"
@@ -12,17 +13,148 @@
 #include "RetroLib/Utils/SoftObjectRef.h"
 #include "VariantObject.h"
 
+#if RETROLIB_WITH_UE5CORO
+#include "UE5Coro.h"
+#endif
+
 #ifndef RETROLIB_EXPORT
 #define RETROLIB_EXPORT
 #endif
 
 namespace Retro {
+    RETROLIB_EXPORT class FVariantObjectStructRegistry;
+
+    /**
+     * Interface for converting data between different variant struct types.
+     * Implementations of this interface define the logic for translating data
+     * from one struct type to another, supporting both standard and 'soft' variants.
+     */
+    RETROLIB_EXPORT class RETROLIB_API IVariantConversion {
+      public:
+        virtual ~IVariantConversion() = default;
+
+        /**
+         * Retrieves the source UScriptStruct type for the conversion process.
+         * The returned struct type represents the input structure that this
+         * conversion interface operates on.
+         *
+         * @return The source struct type as a UScriptStruct pointer.
+         */
+        virtual UScriptStruct *GetSourceStructType() const = 0;
+
+        /**
+         * Retrieves the source 'soft' UScriptStruct type for the conversion process.
+         * This represents a variant of the source struct type used for conversions
+         * involving 'soft' variants, allowing flexibility in the struct type handling.
+         *
+         * @return The source soft struct type as a UScriptStruct pointer.
+         */
+        virtual UScriptStruct *GetSourceSoftStructType() const = 0;
+
+        /**
+         * Retrieves the destination UScriptStruct type for the conversion process.
+         * The returned struct type represents the output structure that this
+         * conversion interface produces as a result of the conversion.
+         *
+         * @return The destination struct type as a UScriptStruct pointer.
+         */
+        virtual UScriptStruct *GetDestStructType() const = 0;
+
+        /**
+         * Retrieves the destination 'soft' UScriptStruct type for the conversion process.
+         * This represents a variant of the destination struct type used for conversions
+         * involving 'soft' variants, providing flexibility in handling the output structure.
+         *
+         * @return The destination soft struct type as a UScriptStruct pointer.
+         */
+        virtual UScriptStruct *GetDestSoftStructType() const = 0;
+
+        /**
+         * Converts data between two variant struct types.
+         * This method defines the logic for translating data from a source struct type to a destination struct type.
+         * The conversion can involve both standard and 'soft' variants, ensuring data integrity and type compatibility.
+         *
+         * @param SourceProperty A reference to the source struct property used in the conversion.
+         * @param SourceValue A pointer to the source struct property value.
+         * @param DestProperty A reference to the destination struct property where the data will be converted.
+         * @param DestValue A pointer to the destination struct property value to store the converted data.
+         * @return True if the conversion is successful, otherwise false.
+         */
+        virtual bool ConvertVariant(const FStructProperty &SourceProperty, const uint8 *SourceValue,
+                                    const FStructProperty &DestProperty, uint8 *DestValue) const = 0;
+
+        /**
+         * Converts data specifically between 'soft' variant struct types.
+         * This method defines the logic for translating data when handling
+         * 'soft' variant types, ensuring compatibility and data integrity
+         * between the source and destination properties.
+         *
+         * @param SourceProperty A reference to the source struct property used in the conversion.
+         * @param SourceValue A pointer to the source struct property's value.
+         * @param DestProperty A reference to the destination struct property for the conversion target.
+         * @param DestValue A pointer to the destination struct property's value to store the converted data.
+         * @return True if the conversion is successful, otherwise false.
+         */
+        virtual bool ConvertSoftVariant(const FStructProperty &SourceProperty, const uint8 *SourceValue,
+                                        const FStructProperty &DestProperty, uint8 *DestValue) const = 0;
+    };
+
+    template <VariantObjectStruct T, VariantObjectStruct U>
+    class TVariantConversionImpl : public IVariantConversion {
+      public:
+        UScriptStruct *GetSourceStructType() const final {
+            return GetScriptStruct<T>();
+        }
+
+        UScriptStruct *GetSourceSoftStructType() const final {
+            return GetScriptStruct<typename T::SoftPtrType>();
+        }
+
+        UScriptStruct *GetDestStructType() const final {
+            return GetScriptStruct<U>();
+        }
+
+        UScriptStruct *GetDestSoftStructType() const final {
+            return GetScriptStruct<typename U::SoftPtrType>();
+        }
+
+        bool ConvertVariant(const FStructProperty &SourceProperty, const uint8 *SourceValue,
+                            const FStructProperty &DestProperty, uint8 *DestValue) const final {
+            ValidateStructsMatch(SourceProperty, GetSourceStructType());
+            ValidateStructsMatch(DestProperty, GetDestStructType());
+            auto SourcePtr = std::bit_cast<const T *>(SourceValue);
+            auto DestPtr = std::bit_cast<U *>(DestValue);
+
+            if (TOptional<U> Converted = SourcePtr->template Convert<U>(); Converted.IsSet()) {
+                *DestPtr = Converted.GetValue();
+                return true;
+            }
+
+            return false;
+        }
+
+        bool ConvertSoftVariant(const FStructProperty &SourceProperty, const uint8 *SourceValue,
+                                const FStructProperty &DestProperty, uint8 *DestValue) const final {
+            ValidateStructsMatch(SourceProperty, GetSourceSoftStructType());
+            ValidateStructsMatch(DestProperty, GetDestSoftStructType());
+            auto SourcePtr = std::bit_cast<const typename T::SoftPtrType *>(SourceValue);
+            auto DestPtr = std::bit_cast<typename U::SoftPtrType *>(DestValue);
+
+            if (auto Converted = SourcePtr->template Convert<typename U::SoftPtrType>(); Converted.IsSet()) {
+                *DestPtr = std::move(Converted.GetValue());
+                return true;
+            }
+
+            return false;
+        }
+    };
+
     /**
      * Abstract declaration of the definition of a registered variant struct type. This is meant to only really be used
      * in blueprints as several of this methods throw exception that are intended to be handled by a CustomThunk
      * function that will then trigger an actual blueprint exception.
      */
-    class RETROLIB_API IVariantRegistration {
+    RETROLIB_EXPORT class RETROLIB_API IVariantRegistration {
       public:
         virtual ~IVariantRegistration() = default;
 
@@ -120,6 +252,53 @@ namespace Retro {
          * @return The span of classes
          */
         virtual TArray<UClass *> GetValidClasses() const = 0;
+
+        /**
+         * Attempts to retrieve a conversion interface for transforming data to the specified target struct type.
+         * Implementations may provide a specialized conversion logic for handling variant struct data.
+         *
+         * @param To The target UScriptStruct type to which the data should be converted.
+         * @return An optional reference to an IVariantConversion object if a valid conversion exists, or an empty
+         * optional otherwise.
+         */
+        virtual TOptional<IVariantConversion &> GetConversion(const UScriptStruct &To) const = 0;
+
+        /**
+         * Retrieves all available variant conversions.
+         * Combines multiple data processing views to extract and transform conversion objects
+         * into their appropriate shared reference variant type.
+         */
+        auto GetAllConversions() const {
+            return Conversions | Ranges::Views::Values | Ranges::Views::Transform(&TSharedRef<IVariantConversion>::Get);
+        }
+
+      protected:
+        /**
+         * Retrieves the map of variant conversions.
+         * This map associates FName keys with shared references to IVariantConversion,
+         * enabling the management and retrieval of conversion logic between variant types.
+         *
+         * @return A reference to the map containing variant conversions.
+         */
+        TMap<FName, TSharedRef<IVariantConversion>> &GetMutableConversions() {
+            return Conversions;
+        }
+
+        /**
+         * Retrieves the map of variant conversions.
+         * This map associates FName keys with shared references to IVariantConversion,
+         * enabling the management and retrieval of conversion logic between variant types.
+         *
+         * @return A reference to the map containing variant conversions.
+         */
+        const TMap<FName, TSharedRef<IVariantConversion>> &GetConversions() const {
+            return Conversions;
+        }
+
+      private:
+        friend class FVariantObjectStructRegistry;
+
+        TMap<FName, TSharedRef<IVariantConversion>> Conversions;
     };
 
     /**
@@ -153,8 +332,7 @@ namespace Retro {
 
         void SetStructValue(UObject *SourceObject, const FStructProperty &Property, uint8 *StructValue) const final {
             ValidateStructsMatch(Property, GetStructType());
-            void *VariantPtr = StructValue;
-            auto Variant = static_cast<T *>(VariantPtr);
+            auto Variant = std::bit_cast<T *>(StructValue);
             if (auto TypeIndex = T::GetTypeIndex(SourceObject);
                 !TypeIndex.IsSet() || TypeIndex.GetValue() == T::template GetTypeIndex<std::nullptr_t>()) {
                 throw FVariantException("Incompatible object parameter; the supplied object is not of a "
@@ -166,8 +344,7 @@ namespace Retro {
 
         TOptional<UObject &> GetValue(const FStructProperty &Property, uint8 *StructValue) const final {
             ValidateStructsMatch(Property, GetStructType());
-            void *VariantPtr = StructValue;
-            auto Variant = static_cast<T *>(VariantPtr);
+            auto Variant = std::bit_cast<T *>(StructValue);
             return Variant->TryGet();
         }
 
@@ -175,11 +352,8 @@ namespace Retro {
                            const FStructProperty &SoftProperty, uint8 *SoftStructValue) const final {
             ValidateStructsMatch(Property, GetStructType());
             ValidateStructsMatch(SoftProperty, GetSoftStructType());
-            const void *VariantPtr = StructValue;
-            auto Variant = static_cast<const T *>(VariantPtr);
-
-            void *SoftVariantPtr = SoftStructValue;
-            auto SoftVariant = static_cast<typename T::SoftPtrType *>(SoftVariantPtr);
+            auto Variant = std::bit_cast<const T *>(StructValue);
+            auto SoftVariant = std::bit_cast<typename T::SoftPtrType *>(SoftStructValue);
 
             SoftVariant->Set(*Variant);
         }
@@ -187,16 +361,14 @@ namespace Retro {
         void MakeSoftValue(const TSoftObjectPtr<> &Path, const FStructProperty &SoftProperty,
                            uint8 *SoftStructValue) const final {
             ValidateStructsMatch(SoftProperty, GetSoftStructType());
-            void *SoftVariantPtr = SoftStructValue;
-            auto SoftVariant = static_cast<typename T::SoftPtrType *>(SoftVariantPtr);
+            auto SoftVariant = std::bit_cast<typename T::SoftPtrType *>(SoftStructValue);
             SoftVariant->Set(Path);
         }
 
         TOptional<TSoftObjectRef<>> TryGetSoftValue(const UClass *Class, const FStructProperty &SoftProperty,
                                                     uint8 *SoftStructValue) const final {
             ValidateStructsMatch(SoftProperty, GetSoftStructType());
-            const void *SoftVariantPtr = SoftStructValue;
-            auto SoftVariant = static_cast<const typename T::SoftPtrType *>(SoftVariantPtr);
+            auto SoftVariant = std::bit_cast<const typename T::SoftPtrType *>(SoftStructValue);
             if (auto ClassIndex = T::GetTypeIndexForClass(Class);
                 !ClassIndex.IsSet() || *ClassIndex != SoftVariant->GetTypeIndex()) {
                 return TOptional<TSoftObjectRef<>>();
@@ -209,11 +381,8 @@ namespace Retro {
                              const FStructProperty &Property, uint8 *StructValue) const final {
             ValidateStructsMatch(Property, GetStructType());
             ValidateStructsMatch(SoftProperty, GetSoftStructType());
-            void *VariantPtr = StructValue;
-            auto Variant = static_cast<T *>(VariantPtr);
-
-            const void *SoftVariantPtr = SoftStructValue;
-            auto SoftVariant = static_cast<const typename T::SoftPtrType *>(SoftVariantPtr);
+            auto Variant = std::bit_cast<T *>(StructValue);
+            auto SoftVariant = std::bit_cast<const typename T::SoftPtrType *>(SoftStructValue);
 
             auto Result = SoftVariant->LoadSynchronous();
             if (!Result.IsSet()) {
@@ -227,12 +396,19 @@ namespace Retro {
         TArray<UClass *> GetValidClasses() const final {
             return T::GetTypeClasses();
         }
+
+        TOptional<IVariantConversion &> GetConversion(const UScriptStruct &To) const final {
+            return Optionals::OfNullable(GetConversions().Find(To.GetFName())) |
+                   Optionals::Transform(&TSharedRef<IVariantConversion>::Get);
+        }
     };
 
     /**
      * Static registry for a variant struct object.
      */
-    RETROLIB_EXPORT class RETROLIB_API FVariantObjectStructRegistry {
+    class RETROLIB_API FVariantObjectStructRegistry {
+        DECLARE_MULTICAST_DELEGATE_TwoParams(FOnRegistrationComplete, FName, IVariantRegistration &);
+
         FVariantObjectStructRegistry() = default;
         ~FVariantObjectStructRegistry() = default;
 
@@ -267,9 +443,40 @@ namespace Retro {
                 // class
                 auto SoftStruct = GetScriptStruct<typename T::SoftPtrType>();
                 Instance.RegisteredStructs.Emplace(SoftStruct->GetFName(), Registered);
+                Instance.OnRegistered.Broadcast(SoftStruct->GetFName(), Registered.Get());
             });
             return true;
         }
+
+#if RETROLIB_WITH_UE5CORO
+        /**
+         * Registers a variant conversion between two struct types for the variant object system.
+         * This function defers the registration until the `OnPostEngineInit` event is triggered.
+         *
+         * It ensures that both direct and 'soft' variant conversions for a given struct are properly
+         * added to the registry. The function is typically used at compile-time for setting up
+         * conversions between specific struct types.
+         *
+         * @return True if the registration process completes successfully (always returns true).
+         */
+        template <VariantObjectStruct T, VariantObjectStruct U>
+        static bool RegisterVariantConversion() {
+            []() -> UE5Coro::TCoroutine<> {
+                co_await FCoreDelegates::OnPostEngineInit;
+                auto &Instance = Get();
+                auto SourceStruct = GetScriptStruct<T>();
+                auto DestStruct = GetScriptStruct<U>();
+                auto DestRegistration = co_await Instance.AsyncGetVariantStructData(*SourceStruct);
+                auto &DestMap = DestRegistration->GetMutableConversions();
+                auto &Registered = DestMap.Emplace(DestStruct->GetFName(), MakeShared<TVariantConversionImpl<T, U>>());
+                // We're using a shared pointer to avoid double allocating identical registration info for the same
+                // class
+                auto SoftDest = GetScriptStruct<typename U::SoftPtrType>();
+                DestMap.Emplace(SoftDest->GetFName(), Registered);
+            }();
+            return true;
+        }
+#endif
 
         /**
          * Get the variant struct data for the given struct type.
@@ -279,16 +486,57 @@ namespace Retro {
         TOptional<IVariantRegistration &> GetVariantStructData(const UScriptStruct &Struct);
 
         /**
+         * Retrieves a variant struct conversion interface for converting data between two specified UScriptStructs.
+         * This method attempts to find a conversion that can translate data from one struct type to another
+         * within the registry of variant object structures.
+         *
+         * @param From The source UScriptStruct type to convert from.
+         * @param To The target UScriptStruct type to convert to.
+         * @return An optional conversion interface capable of handling the transformation, or an empty optional if no
+         * conversion is available.
+         */
+        TOptional<IVariantConversion &> GetVariantStructConversion(const UScriptStruct &From, const UScriptStruct &To);
+
+        /**
          * Get the range of all registered structs.
          * @return The iterable range of all the registered structs.
          */
         auto GetAllRegisteredStructs() const {
-            return RegisteredStructs | Ranges::Views::Values |
+            // clang-format off
+            return RegisteredStructs |
+                   Ranges::Views::Values |
                    Ranges::Views::Transform(&TSharedRef<IVariantRegistration>::operator*);
+            // clang-format on
+        }
+
+        /**
+         * Retrieves all registered variant conversions from the registry.
+         * This method aggregates all the variant conversions defined for the registered
+         * structs and returns a collection of shared references to the conversion interfaces.
+         *
+         * The pipeline combines multiple operations such as aggregating conversions,
+         * flattening nested collections, extracting values, and dereferencing shared references.
+         *
+         * @return A range containing all the registered variant conversion interfaces as dereferenced shared
+         * references.
+         */
+        auto GetAllRegisteredConversions() const {
+            // clang-format off
+            return GetAllRegisteredStructs() |
+                   Ranges::Views::Transform(&IVariantRegistration::GetMutableConversions) |
+                   Ranges::Views::Join |
+                   Ranges::Views::Values |
+                   Ranges::Views::Transform(&TSharedRef<IVariantConversion>::operator*);
+            // clang-format on
         }
 
       private:
+#if RETROLIB_WITH_UE5CORO
+        UE5Coro::TCoroutine<IVariantRegistration *> AsyncGetVariantStructData(const UScriptStruct &Struct);
+#endif
+
         TMap<FName, TSharedRef<IVariantRegistration>> RegisteredStructs;
+        FOnRegistrationComplete OnRegistered;
     };
 } // namespace Retro
 #endif

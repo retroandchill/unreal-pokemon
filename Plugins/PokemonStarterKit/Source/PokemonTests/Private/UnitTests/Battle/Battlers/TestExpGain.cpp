@@ -1,5 +1,4 @@
 ﻿#include "Asserts.h"
-#include "TestAdapter.h"
 #include "Battle/Attributes/PokemonCoreAttributeSet.h"
 #include "Battle/Battlers/Battler.h"
 #include "Battle/Battlers/BattlerAbilityComponent.h"
@@ -7,25 +6,27 @@
 #include "Misc/AutomationTest.h"
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/PokemonDTO.h"
+#include "TestAdapter.h"
 #include "Utilities/TrainerHelpers.h"
 #include "Utilities/WidgetTestUtilities.h"
 #include "UtilityClasses/BattleActors/TestActiveSide.h"
 #include "UtilityClasses/BattleActors/TestPokemonBattle.h"
 
-BEGIN_DEFINE_SPEC(FTestExpGain, "Unit Tests.Battle.Battlers.TestExpGain", EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
+BEGIN_DEFINE_SPEC(FTestExpGain, "Unit Tests.Battle.Battlers.TestExpGain",
+                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter);
 CORO_FUNCTIONS()
 END_DEFINE_SPEC(FTestExpGain);
 
 void FTestExpGain::Define() {
     CoroIt("GainsExpAtEndOfBattle", [this]() -> UE5Coro::TCoroutine<> {
         auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
-        auto Pokemon1 =
-            UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = TEXT("GLACEON"),
-                                                                                     .Level = 75,
-                                                                                     .IVs = {{"ATTACK", 31}},
-                                                                                     .EVs = {{"ATTACK", 104}},
-                                                                                     .Nature = FName("TIMID"),
-                                                                                     .Moves = {{.Move = TEXT("ICEFANG")}}});
+        auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
+            World.Get(), FPokemonDTO{.Species = TEXT("GLACEON"),
+                                     .Level = 75,
+                                     .IVs = {{"ATTACK", 31}},
+                                     .EVs = {{"ATTACK", 104}},
+                                     .Nature = FName("TIMID"),
+                                     .Moves = {{.Move = TEXT("ICEFANG")}}});
         auto &PlayerCharacter = UTrainerHelpers::GetPlayerCharacter(World.Get());
         PlayerCharacter->AddPokemonToParty(Pokemon1);
 

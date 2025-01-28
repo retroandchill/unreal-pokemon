@@ -35,7 +35,8 @@ class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
 
     UE5Coro::TCoroutine<TScriptInterface<IBattler>> Initialize(TScriptInterface<IBattleSide> Side,
                                                                TScriptInterface<IPokemon> Pokemon,
-                                                               bool ShowImmediately = false, FForceLatentCoroutine = {}) override;
+                                                               bool ShowImmediately = false,
+                                                               FForceLatentCoroutine = {}) override;
 
   protected:
     void BeginPlay() override;
