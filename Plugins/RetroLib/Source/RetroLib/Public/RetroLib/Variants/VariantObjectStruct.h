@@ -381,7 +381,7 @@ namespace Retro {
                              const FStructProperty &Property, uint8 *StructValue) const final {
             ValidateStructsMatch(Property, GetStructType());
             ValidateStructsMatch(SoftProperty, GetSoftStructType());
-            auto Variant = std::bit_cast<T *>(SoftStructValue);
+            auto Variant = std::bit_cast<T *>(StructValue);
             auto SoftVariant = std::bit_cast<const typename T::SoftPtrType *>(SoftStructValue);
 
             auto Result = SoftVariant->LoadSynchronous();

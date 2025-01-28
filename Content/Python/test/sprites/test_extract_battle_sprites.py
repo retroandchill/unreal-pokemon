@@ -1,7 +1,7 @@
 import unittest
 
 from coverage_helpers import run_test_with_coverage
-from unreal import EditorAssetLibrary
+from unreal import EditorAssetLibrary, MaterialInterface
 
 import pokemon_battle_sprite_creator
 import os.path
@@ -12,7 +12,8 @@ class TestExtractBattleSprites(unittest.TestCase):
     def test_extract_sprites(self):
         manifest_file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
                                                           'resources', 'sprite_data.csv'))
-        pokemon_battle_sprite_creator.execute('/Game/Python/test/resources', manifest_file_path, 12)
+        material = EditorAssetLibrary.load_asset('/Simple2D/Materials/MaskedUnlitFlipbookMaterial')
+        pokemon_battle_sprite_creator.execute('/Game/Python/test/resources', manifest_file_path, material)
         self.assertTrue(EditorAssetLibrary.does_asset_exist('/Game/Python/test/resources/Front/ABOMASNOW.ABOMASNOW'))
         self.assertTrue(EditorAssetLibrary.does_asset_exist('/Game/Python/test/resources/Front/ABRA.ABRA'))
         self.assertTrue(EditorAssetLibrary.does_asset_exist('/Game/Python/test/resources/Front/ABSOL.ABSOL'))
