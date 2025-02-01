@@ -46,10 +46,6 @@
 			"Optional": true
 		},
 		{
-			"Name": "CommonGame",
-			"Enabled": true
-		},
-		{
 			"Name": "RetroLib",
 			"Enabled": true
 		},

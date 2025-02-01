@@ -22,7 +22,7 @@ public class AutomationTestHelpers : ModuleRules {
 
         PrivateDependencyModuleNames.AddRange(new string[] {
             "CoreUObject", "Engine", "Slate", "SlateCore", "InputCore", "EditorSubsystem", "MessageLog", "UnrealEd",
-            "GoogleTest", "CommonGame", "CommonUI", "EngineSettings", "FunctionalTesting"
+            "GoogleTest", "CommonUI", "EngineSettings", "FunctionalTesting"
             // ... add private dependencies that you statically link with here ...
         });
 
