@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CommonActivatableWidget.h"
 #include "CommonUserWidget.h"
 #include "GameplayTagContainer.h"
 #include "UE5Coro.h"
@@ -11,8 +12,6 @@
 
 #include "PrimaryGameLayout.generated.h"
 
-class UCommonActivatableWidget;
-class UCommonActivatableWidgetContainerBase;
 /**
  *
  */
@@ -34,8 +33,7 @@ class RPGMENUS_API UPrimaryGameLayout : public UCommonUserWidget {
     template <std::derived_from<UCommonActivatableWidget> T = UCommonActivatableWidget>
     UE5Coro::TCoroutine<T *> PushWidgetToLayerStackAsync(FGameplayTag LayerName,
                                                          TSoftClassPtr<T> ActivatableWidgetClass,
-                                                         bool bSuspendUntilInputComplete,
-                                                         FForceLatentCoroutine = {}) {
+                                                         bool bSuspendUntilInputComplete, FForceLatentCoroutine = {}) {
         static const FName PushingToWidgetLayer = "PushingWidgetToLayer";
         const FName SuspendInputToken =
             bSuspendUntilInputComplete

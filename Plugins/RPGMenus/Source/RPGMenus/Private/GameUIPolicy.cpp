@@ -115,7 +115,7 @@ TSubclassOf<UPrimaryGameLayout> UGameUIPolicy::GetLayoutWidgetClass(URPGLocalPla
 }
 
 void UGameUIPolicy::NotifyPlayerAdded(URPGLocalPlayer *LocalPlayer) {
-    LocalPlayer->BindToOnPlayerControllerSet(this, [this](URPGLocalPlayer *Self, APlayerController *PlayerController) {
+    LocalPlayer->BindToOnPlayerControllerSet(this, [this](URPGLocalPlayer *Self, APlayerController *) {
         NotifyPlayerRemoved(Self);
 
         if (FRootViewportLayoutInfo *LayoutInfo = RootViewportLayouts.FindByKey(Self)) {

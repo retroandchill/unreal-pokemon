@@ -95,9 +95,9 @@ class RPGMENUS_API UGameUIPolicy : public UObject {
     void AddLayoutToViewport(URPGLocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
     void RemoveLayoutFromViewport(URPGLocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
 
-    void OnRootLayoutAddedToViewport(URPGLocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
-    void OnRootLayoutRemovedFromViewport(URPGLocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
-    void OnRootLayoutReleased(URPGLocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
+    static void OnRootLayoutAddedToViewport(URPGLocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
+    static void OnRootLayoutRemovedFromViewport(URPGLocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
+    static void OnRootLayoutReleased(URPGLocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
 
     void CreateLayoutWidget(URPGLocalPlayer *LocalPlayer);
     TSubclassOf<UPrimaryGameLayout> GetLayoutWidgetClass(URPGLocalPlayer *LocalPlayer);

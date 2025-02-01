@@ -20,9 +20,10 @@ FName UCommonUIExtensions::SuspendInputForPlayer(const ULocalPlayer *LocalPlayer
     auto SuspendToken = SuspendReason;
     SuspendToken.SetNumber(InputSuspensions);
 
-    CommonInputSubsystem->SetInputTypeFilter(ECommonInputType::MouseAndKeyboard, SuspendToken, true);
-    CommonInputSubsystem->SetInputTypeFilter(ECommonInputType::Gamepad, SuspendToken, true);
-    CommonInputSubsystem->SetInputTypeFilter(ECommonInputType::Touch, SuspendToken, true);
+    using enum ECommonInputType;
+    CommonInputSubsystem->SetInputTypeFilter(MouseAndKeyboard, SuspendToken, true);
+    CommonInputSubsystem->SetInputTypeFilter(Gamepad, SuspendToken, true);
+    CommonInputSubsystem->SetInputTypeFilter(Touch, SuspendToken, true);
 
     return SuspendToken;
 }
@@ -37,8 +38,9 @@ void UCommonUIExtensions::ResumeInputForPlayer(const ULocalPlayer *LocalPlayer, 
     }
 
     if (auto CommonInputSubsystem = UCommonInputSubsystem::Get(LocalPlayer); CommonInputSubsystem != nullptr) {
-        CommonInputSubsystem->SetInputTypeFilter(ECommonInputType::MouseAndKeyboard, SuspendToken, false);
-        CommonInputSubsystem->SetInputTypeFilter(ECommonInputType::Gamepad, SuspendToken, false);
-        CommonInputSubsystem->SetInputTypeFilter(ECommonInputType::Touch, SuspendToken, false);
+        using enum ECommonInputType;
+        CommonInputSubsystem->SetInputTypeFilter(MouseAndKeyboard, SuspendToken, false);
+        CommonInputSubsystem->SetInputTypeFilter(Gamepad, SuspendToken, false);
+        CommonInputSubsystem->SetInputTypeFilter(Touch, SuspendToken, false);
     }
 }
