@@ -20,16 +20,20 @@ class RPGMENUS_API URPGUIManagerSubsystem : public UGameInstanceSubsystem {
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
     void Deinitialize() override;
-    bool ShouldCreateSubsystem(UObject* Outer) const override;
+    bool ShouldCreateSubsystem(UObject *Outer) const override;
 
     static URPGUIManagerSubsystem &Get(const UObject *WorldContext);
 
-    const UGameUIPolicy* GetCurrentUIPolicy() const { return CurrentPolicy; }
-    UGameUIPolicy* GetCurrentUIPolicy() { return CurrentPolicy; }
+    const UGameUIPolicy *GetCurrentUIPolicy() const {
+        return CurrentPolicy;
+    }
+    UGameUIPolicy *GetCurrentUIPolicy() {
+        return CurrentPolicy;
+    }
 
-    void NotifyPlayerAdded(URPGLocalPlayer* LocalPlayer);
-    void NotifyPlayerRemoved(URPGLocalPlayer* LocalPlayer);
-    void NotifyPlayerDestroyed(URPGLocalPlayer* LocalPlayer);
+    void NotifyPlayerAdded(URPGLocalPlayer *LocalPlayer);
+    void NotifyPlayerRemoved(URPGLocalPlayer *LocalPlayer);
+    void NotifyPlayerDestroyed(URPGLocalPlayer *LocalPlayer);
 
     UFUNCTION(BlueprintPure, Category = Screens)
     UScreen *GetTopScreenOfStack() const;
@@ -41,16 +45,16 @@ class RPGMENUS_API URPGUIManagerSubsystem : public UGameInstanceSubsystem {
 
     void OnScreenDeactivated(UScreen *Screen);
 
-protected:
-    void SwitchToPolicy(UGameUIPolicy* InPolicy);
-    
+  protected:
+    void SwitchToPolicy(UGameUIPolicy *InPolicy);
+
   private:
     UPROPERTY(Transient)
     TObjectPtr<UGameUIPolicy> CurrentPolicy;
 
     UPROPERTY(Config, EditAnywhere)
     TSoftClassPtr<UGameUIPolicy> DefaultUIPolicyClass;
-    
+
     UPROPERTY()
     TObjectPtr<UInputMappingContext> MenuMappingContext;
 
@@ -61,16 +65,16 @@ namespace RPG::Menus {
     struct FGetCurrentUIPolicyInvoker {
         template <typename T>
             requires std::same_as<std::remove_const_t<T>, URPGUIManagerSubsystem>
-        constexpr auto operator()(T& Manager) const {
+        constexpr auto operator()(T &Manager) const {
             return Manager.GetCurrentUIPolicy();
         }
 
         template <typename T>
             requires std::same_as<std::remove_const_t<T>, URPGUIManagerSubsystem>
-        constexpr auto operator()(T* Manager) const {
+        constexpr auto operator()(T *Manager) const {
             return Manager->GetCurrentUIPolicy();
         }
     };
 
     constexpr FGetCurrentUIPolicyInvoker GetCurrentUIPolicy;
-}
+} // namespace RPG::Menus

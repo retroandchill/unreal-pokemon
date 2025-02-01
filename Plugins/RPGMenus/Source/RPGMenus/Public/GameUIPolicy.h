@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+
 #include "GameUIPolicy.generated.h"
 
 class URPGLocalPlayer;
@@ -11,11 +12,10 @@ class UPrimaryGameLayout;
 class URPGUIManagerSubsystem;
 
 /**
- * 
+ *
  */
 UENUM()
-enum class ELocalMultiplayerInteractionMode : uint8
-{
+enum class ELocalMultiplayerInteractionMode : uint8 {
     // Fullscreen viewport for the primary player only, regardless of the other player's existence
     PrimaryOnly,
 
@@ -29,7 +29,7 @@ enum class ELocalMultiplayerInteractionMode : uint8
 USTRUCT()
 struct FRootViewportLayoutInfo {
     GENERATED_BODY()
-    
+
     UPROPERTY(Transient)
     TObjectPtr<ULocalPlayer> LocalPlayer;
 
@@ -40,14 +40,14 @@ struct FRootViewportLayoutInfo {
     bool bAddedToViewport = false;
 
     FRootViewportLayoutInfo() = default;
-    
-    FRootViewportLayoutInfo(ULocalPlayer* InLocalPlayer, UPrimaryGameLayout* InRootLayout, bool bIsInViewport)
-        : LocalPlayer(InLocalPlayer)
-        , RootLayout(InRootLayout)
-        , bAddedToViewport(bIsInViewport)
-    {}
 
-    bool operator==(const ULocalPlayer* OtherLocalPlayer) const { return LocalPlayer == OtherLocalPlayer; }
+    FRootViewportLayoutInfo(ULocalPlayer *InLocalPlayer, UPrimaryGameLayout *InRootLayout, bool bIsInViewport)
+        : LocalPlayer(InLocalPlayer), RootLayout(InRootLayout), bAddedToViewport(bIsInViewport) {
+    }
+
+    bool operator==(const ULocalPlayer *OtherLocalPlayer) const {
+        return LocalPlayer == OtherLocalPlayer;
+    }
 };
 
 /**
@@ -69,9 +69,9 @@ UCLASS(Abstract, Blueprintable, Within = RPGUIManagerSubsystem)
 class RPGMENUS_API UGameUIPolicy : public UObject {
     GENERATED_BODY()
 
-public:
+  public:
     template <std::derived_from<UGameUIPolicy> T>
-    static T* Get(const UObject* WorldContextObject) {
+    static T *Get(const UObject *WorldContextObject) {
         if constexpr (std::same_as<T, UGameUIPolicy>) {
             return Get(WorldContextObject);
         } else {
@@ -79,36 +79,38 @@ public:
         }
     }
 
-    static UGameUIPolicy* Get(const UObject* WorldContextObject);
+    static UGameUIPolicy *Get(const UObject *WorldContextObject);
 
-    UWorld* GetWorld() const override;
-    URPGUIManagerSubsystem* GetOwningUIManager() const;
-    UPrimaryGameLayout* GetRootLayout(const URPGLocalPlayer* LocalPlayer) const;
+    UWorld *GetWorld() const override;
+    URPGUIManagerSubsystem *GetOwningUIManager() const;
+    UPrimaryGameLayout *GetRootLayout(const URPGLocalPlayer *LocalPlayer) const;
 
-    ELocalMultiplayerInteractionMode GetLocalMultiplayerInteractionMode() const { return LocalMultiplayerInteractionMode; }
+    ELocalMultiplayerInteractionMode GetLocalMultiplayerInteractionMode() const {
+        return LocalMultiplayerInteractionMode;
+    }
 
-    void RequestPrimaryControl(UPrimaryGameLayout* Layout);
+    void RequestPrimaryControl(UPrimaryGameLayout *Layout);
 
-protected:
-    void AddLayoutToViewport(URPGLocalPlayer* LocalPlayer, UPrimaryGameLayout* Layout);
-    void RemoveLayoutFromViewport(URPGLocalPlayer* LocalPlayer, UPrimaryGameLayout* Layout);
+  protected:
+    void AddLayoutToViewport(URPGLocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
+    void RemoveLayoutFromViewport(URPGLocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
 
-    void OnRootLayoutAddedToViewport(URPGLocalPlayer* LocalPlayer, UPrimaryGameLayout* Layout);
-    void OnRootLayoutRemovedFromViewport(URPGLocalPlayer* LocalPlayer, UPrimaryGameLayout* Layout);
-    void OnRootLayoutReleased(URPGLocalPlayer* LocalPlayer, UPrimaryGameLayout* Layout);
+    void OnRootLayoutAddedToViewport(URPGLocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
+    void OnRootLayoutRemovedFromViewport(URPGLocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
+    void OnRootLayoutReleased(URPGLocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
 
-    void CreateLayoutWidget(URPGLocalPlayer* LocalPlayer);
-    TSubclassOf<UPrimaryGameLayout> GetLayoutWidgetClass(URPGLocalPlayer* LocalPlayer);
+    void CreateLayoutWidget(URPGLocalPlayer *LocalPlayer);
+    TSubclassOf<UPrimaryGameLayout> GetLayoutWidgetClass(URPGLocalPlayer *LocalPlayer);
 
-private:
+  private:
     ELocalMultiplayerInteractionMode LocalMultiplayerInteractionMode = ELocalMultiplayerInteractionMode::PrimaryOnly;
-    
+
     friend class URPGUIManagerSubsystem;
-    
-    void NotifyPlayerAdded(URPGLocalPlayer* LocalPlayer);
-    void NotifyPlayerRemoved(URPGLocalPlayer* LocalPlayer);
-    void NotifyPlayerDestroyed(URPGLocalPlayer* LocalPlayer);
-    
+
+    void NotifyPlayerAdded(URPGLocalPlayer *LocalPlayer);
+    void NotifyPlayerRemoved(URPGLocalPlayer *LocalPlayer);
+    void NotifyPlayerDestroyed(URPGLocalPlayer *LocalPlayer);
+
     UPROPERTY(EditAnywhere)
     TSoftClassPtr<UPrimaryGameLayout> LayoutClass;
 

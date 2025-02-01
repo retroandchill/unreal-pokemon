@@ -26,8 +26,8 @@ namespace Simple2D {
           bCastShadow(InComponent->CastShadow),
           bSpritesUseVertexBufferPath(CVarDrawSpritesUsingPrebuiltVertexBuffers.GetValueOnAnyThread() != 0),
           MaterialRelevance(InComponent->GetMaterialRelevance(GetScene().GetFeatureLevel())),
-          CollisionResponse(InComponent->GetCollisionResponseToChannels()),
-          Material(InComponent->GetMaterial(0)), AlternateMaterial(InComponent->GetMaterial(1)) {
+          CollisionResponse(InComponent->GetCollisionResponseToChannels()), Material(InComponent->GetMaterial(0)),
+          AlternateMaterial(InComponent->GetMaterial(1)) {
         SetWireframeColor(FLinearColor::White);
 
         if (Material == nullptr) {

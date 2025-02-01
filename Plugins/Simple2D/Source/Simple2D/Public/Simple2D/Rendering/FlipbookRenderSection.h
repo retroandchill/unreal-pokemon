@@ -71,6 +71,5 @@ namespace Simple2D {
                                  FSimpleFlipbookTangents::GetPackedNormalZ().ToFVector3f(), UV, VertColor);
             }
         }
-
     };
 } // namespace Simple2D

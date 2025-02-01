@@ -39,7 +39,7 @@ namespace Simple2D {
             return FBox(ForceInitToZero);
         }
 
-    private:
+      private:
         TArray<FViewportSelectionRectangle> SelectionRectangles;
 
         TObjectPtr<UTexture2D> CheckerboardTexture;

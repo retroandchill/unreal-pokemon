@@ -1,15 +1,14 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "GameUIPolicy.h"
-#include "PrimaryGameLayout.h"
-#include "RPGMenus.h"
-#include "RPGUIManagerSubsystem.h"
 #include "Player/RPGLocalPlayer.h"
+#include "PrimaryGameLayout.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
 #include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Utils/WorldUtils.h"
+#include "RPGMenus.h"
+#include "RPGUIManagerSubsystem.h"
 
 UGameUIPolicy *UGameUIPolicy::Get(const UObject *WorldContextObject) {
     // clang-format off
@@ -71,9 +70,9 @@ void UGameUIPolicy::RemoveLayoutFromViewport(URPGLocalPlayer *LocalPlayer, UPrim
     Layout->RemoveFromParent();
     if (LayoutSlateWidget.IsValid()) {
         UE_LOG(LogRPGMenus, Log,
-               TEXT(
-                   "Player [%s]'s root layout [%s] has been removed from the viewport, but other references to its underlying Slate widget still exist. Noting in case we leak it."
-               ), *GetNameSafe(LocalPlayer), *GetNameSafe(Layout));
+               TEXT("Player [%s]'s root layout [%s] has been removed from the viewport, but other references to its "
+                    "underlying Slate widget still exist. Noting in case we leak it."),
+               *GetNameSafe(LocalPlayer), *GetNameSafe(Layout));
     }
 
     OnRootLayoutRemovedFromViewport(LocalPlayer, Layout);
@@ -102,8 +101,8 @@ void UGameUIPolicy::CreateLayoutWidget(URPGLocalPlayer *LocalPlayer) {
         return;
     }
 
-    if (auto LayoutWidgetClass = GetLayoutWidgetClass(LocalPlayer); ensure(
-        LayoutWidgetClass != nullptr && !LayoutWidgetClass->HasAnyClassFlags(CLASS_Abstract))) {
+    if (auto LayoutWidgetClass = GetLayoutWidgetClass(LocalPlayer);
+        ensure(LayoutWidgetClass != nullptr && !LayoutWidgetClass->HasAnyClassFlags(CLASS_Abstract))) {
         UPrimaryGameLayout *NewLayoutObject = CreateWidget<UPrimaryGameLayout>(PlayerController, LayoutWidgetClass);
         RootViewportLayouts.Emplace(LocalPlayer, NewLayoutObject, true);
 
@@ -143,8 +142,8 @@ void UGameUIPolicy::NotifyPlayerRemoved(URPGLocalPlayer *LocalPlayer) {
     RemoveLayoutFromViewport(LocalPlayer, LayoutInfo->RootLayout);
     LayoutInfo->bAddedToViewport = false;
 
-    if (LocalMultiplayerInteractionMode != ELocalMultiplayerInteractionMode::SingleToggle || LocalPlayer->
-        IsPrimaryPlayer()) {
+    if (LocalMultiplayerInteractionMode != ELocalMultiplayerInteractionMode::SingleToggle ||
+        LocalPlayer->IsPrimaryPlayer()) {
         return;
     }
 
@@ -153,7 +152,8 @@ void UGameUIPolicy::NotifyPlayerRemoved(URPGLocalPlayer *LocalPlayer) {
         return;
     }
 
-    // We're removing a secondary player's root while it's in control - transfer control back to the primary player's root
+    // We're removing a secondary player's root while it's in control - transfer control back to the primary player's
+    // root
     RootLayout->SetIsDormant(true);
     for (const FRootViewportLayoutInfo &RootLayoutInfo : RootViewportLayouts) {
         if (!RootLayoutInfo.LocalPlayer->IsPrimaryPlayer()) {

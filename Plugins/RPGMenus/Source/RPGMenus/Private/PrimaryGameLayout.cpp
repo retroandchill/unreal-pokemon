@@ -1,16 +1,15 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "PrimaryGameLayout.h"
 #include "GameUIPolicy.h"
-#include "RPGMenus.h"
-#include "RPGUIManagerSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/RPGLocalPlayer.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
 #include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/Transform.h"
+#include "RPGMenus.h"
+#include "RPGUIManagerSubsystem.h"
 
 UPrimaryGameLayout *UPrimaryGameLayout::Get(const UObject *WorldContextObject) {
     auto GameInstance = UGameplayStatics::GetGameInstance(WorldContextObject);
@@ -86,11 +85,10 @@ void UPrimaryGameLayout::OnIsDormantChanged() {
     // Currently no processing
 }
 
-void UPrimaryGameLayout::OnWidgetStackTransitioning(UCommonActivatableWidgetContainerBase *,
-                                                    bool bIsTransitioning) {
+void UPrimaryGameLayout::OnWidgetStackTransitioning(UCommonActivatableWidgetContainerBase *, bool bIsTransitioning) {
     if (bIsTransitioning) {
-        const FName SuspendToken = UCommonUIExtensions::SuspendInputForPlayer(
-            GetOwningLocalPlayer(), TEXT("GlobalStackTransion"));
+        const FName SuspendToken =
+            UCommonUIExtensions::SuspendInputForPlayer(GetOwningLocalPlayer(), TEXT("GlobalStackTransion"));
         SuspendInputTokens.Add(SuspendToken);
     } else {
         if (ensure(SuspendInputTokens.Num() > 0)) {

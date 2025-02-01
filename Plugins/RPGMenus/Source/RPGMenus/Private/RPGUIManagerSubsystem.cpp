@@ -17,7 +17,7 @@ void URPGUIManagerSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
         TSubclassOf<UGameUIPolicy> PolicyClass = DefaultUIPolicyClass.LoadSynchronous();
         SwitchToPolicy(NewObject<UGameUIPolicy>(this, PolicyClass));
     }
-    
+
     MenuMappingContext =
         CastChecked<UInputMappingContext>(GetDefault<URPGMenusSettings>()->MenuMappingContext.TryLoad());
 }
@@ -29,7 +29,7 @@ void URPGUIManagerSubsystem::Deinitialize() {
 
 bool URPGUIManagerSubsystem::ShouldCreateSubsystem(UObject *Outer) const {
     if (!CastChecked<UGameInstance>(Outer)->IsDedicatedServerInstance()) {
-        TArray<UClass*> ChildClasses;
+        TArray<UClass *> ChildClasses;
         GetDerivedClasses(GetClass(), ChildClasses, false);
 
         // Only create an instance if there is no override implementation defined elsewhere

@@ -1,13 +1,12 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Player/RPGLocalPlayer.h"
 #include "GameUIPolicy.h"
-#include "RPGUIManagerSubsystem.h"
+#include "PrimaryGameLayout.h"
 #include "RetroLib/Optionals/OptionalOperations.h"
 #include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/Transform.h"
-#include "PrimaryGameLayout.h"
+#include "RPGUIManagerSubsystem.h"
 
 FDelegateHandle URPGLocalPlayer::RegisterOnPlayerControllerSet(FPlayerControllerSetDelegate::FDelegate Delegate) {
     if (auto Controller = GetPlayerController(GetWorld()); Controller != nullptr) {

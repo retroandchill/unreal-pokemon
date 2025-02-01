@@ -20,9 +20,10 @@ namespace Simple2D {
           Parent(InParent), BaseTexture(InBaseTexture), AdditionalTextures(std::move(InAdditionalTextures)), Rows(Rows),
           Columns(Columns), FrameNumber(FrameNumber)
 #if WITH_EDITOR
-          , TextureOverrideList(InTextureOverrideList)
+          ,
+          TextureOverrideList(InTextureOverrideList)
 #endif
-           {
+    {
     }
 
     bool FFlipbookTextureOverrideRenderProxy::CheckValidity(const FMaterialRenderProxy *InCurrentParent) {
