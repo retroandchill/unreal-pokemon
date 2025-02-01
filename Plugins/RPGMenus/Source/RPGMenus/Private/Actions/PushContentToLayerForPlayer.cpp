@@ -27,15 +27,15 @@ UPushContentToLayerForPlayer::PushContentToLayerForPlayer(APlayerController *Own
 }
 
 void UPushContentToLayerForPlayer::Activate() {
-    [this](UE5Coro::TLatentContext<APlayerController> Context) -> UE5Coro::TCoroutine<> {
-        if (auto RootLayer = UPrimaryGameLayout::Get(Context.Target); RootLayer != nullptr) {
-            Coroutine.Emplace(PushToLayer(RootLayer));
-            auto Result = co_await *Coroutine;
-            AfterPush.Broadcast(Result);
+    [](UE5Coro::TLatentContext<UPushContentToLayerForPlayer> Context) -> UE5Coro::TCoroutine<> {
+        if (auto RootLayer = UPrimaryGameLayout::Get(Context.Target->OwningPlayerPtr.Get()); RootLayer != nullptr) {
+            Context.Target->Coroutine.Emplace(Context.Target->PushToLayer(RootLayer));
+            auto Result = co_await *Context.Target->Coroutine;
+            Context.Target->AfterPush.Broadcast(Result);
         }
 
-        SetReadyToDestroy();
-    }(OwningPlayerPtr.Get());
+        Context.Target->SetReadyToDestroy();
+    }(this);
 }
 
 void UPushContentToLayerForPlayer::Cancel() {
@@ -45,6 +45,10 @@ void UPushContentToLayerForPlayer::Cancel() {
         Coroutine->Cancel();
         Coroutine.Reset();
     }
+}
+
+UWorld * UPushContentToLayerForPlayer::GetWorld() const {
+    return OwningPlayerPtr.IsValid() ? OwningPlayerPtr->GetWorld() : nullptr;
 }
 
 UE5Coro::TCoroutine<UCommonActivatableWidget *>

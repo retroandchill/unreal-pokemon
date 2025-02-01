@@ -42,6 +42,8 @@ class RPGMENUS_API UPushContentToLayerForPlayer : public UCancellableAsyncAction
 
     void Cancel() override;
 
+    UWorld* GetWorld() const override;
+
   private:
     UE5Coro::TCoroutine<UCommonActivatableWidget *> PushToLayer(UE5Coro::TLatentContext<UPrimaryGameLayout> Context);
 
