@@ -97,11 +97,6 @@
 			"Enabled": true
 		},
 		{
-			"Name": "PaperFlipbookWidget",
-			"Enabled": true,
-			"MarketplaceURL": "https://unrealengineresources.com/plugins"
-		},
-		{
 			"Name": "GeometryScripting",
 			"Enabled": true
 		}

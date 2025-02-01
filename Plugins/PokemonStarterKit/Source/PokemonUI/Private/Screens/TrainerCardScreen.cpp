@@ -2,7 +2,6 @@
 
 #include "Screens/TrainerCardScreen.h"
 #include "Managers/PokemonSubsystem.h"
-#include "PaperFlipbookUserWidget.h"
 #include "Utilities/RPGMenuUtilities.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(UTrainerCardScreen)
