@@ -34,7 +34,8 @@ class RPGMENUS_API UPrimaryGameLayout : public UCommonUserWidget {
     template <std::derived_from<UCommonActivatableWidget> T = UCommonActivatableWidget>
     UE5Coro::TCoroutine<T *> PushWidgetToLayerStackAsync(FGameplayTag LayerName,
                                                          TSoftClassPtr<T> ActivatableWidgetClass,
-                                                         bool bSuspendUntilInputComplete) {
+                                                         bool bSuspendUntilInputComplete,
+                                                         FForceLatentCoroutine = {}) {
         static const FName PushingToWidgetLayer = "PushingWidgetToLayer";
         const FName SuspendInputToken =
             bSuspendUntilInputComplete
