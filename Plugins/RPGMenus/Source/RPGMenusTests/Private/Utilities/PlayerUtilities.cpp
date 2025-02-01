@@ -6,7 +6,7 @@
 #include "RPGMenus/Private/Player/RPGPlayerController.h"
 
 std::pair<FPlayerPtr, APawn *> UPlayerUtilities::CreateTestPlayer(UWorld &World, const TSubclassOf<APawn> &PawnClass) {
-    auto PlayerController = World.SpawnActor<ARPGPlayerController>(PawnClass);
+    auto PlayerController = World.SpawnActor<ARPGPlayerController>();
     auto Pawn = World.SpawnActor<APawn>(PawnClass);
     FPlayerPtr Player(NewObject<URPGLocalPlayer>(GEngine));
     World.GetGameInstance()->AddLocalPlayer(Player.Get(), FPlatformUserId::CreateFromInternalId(0));
