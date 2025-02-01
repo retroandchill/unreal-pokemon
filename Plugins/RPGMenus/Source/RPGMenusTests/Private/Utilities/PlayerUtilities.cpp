@@ -1,14 +1,13 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/PlayerUtilities.h"
-#include "CommonLocalPlayer.h"
-#include "CommonPlayerController.h"
 #include "GameFramework/PlayerState.h"
+#include "Player/RPGLocalPlayer.h"
 
 std::pair<FPlayerPtr, APawn *> UPlayerUtilities::CreateTestPlayer(UWorld &World, const TSubclassOf<APawn> &PawnClass) {
-    auto PlayerController = World.SpawnActor<ACommonPlayerController>();
+    auto PlayerController = World.SpawnActor<APlayerController>(PawnClass);
     auto Pawn = World.SpawnActor<APawn>(PawnClass);
-    FPlayerPtr Player(NewObject<UCommonLocalPlayer>(GEngine));
+    FPlayerPtr Player(NewObject<URPGLocalPlayer>(GEngine));
     World.GetGameInstance()->AddLocalPlayer(Player.Get(), FPlatformUserId::CreateFromInternalId(0));
     PlayerController->SetPlayer(Player.Get());
     PlayerController->Possess(Pawn);

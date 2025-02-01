@@ -23,4 +23,5 @@
 #include "RetroLib/Utils/ScopedTimeDilationFactor.h"
 #include "RetroLib/Utils/SoftObjectRef.h"
 #include "RetroLib/Utils/StringUtilities.h"
+#include "RetroLib/Utils/WorldUtils.h"
 #endif

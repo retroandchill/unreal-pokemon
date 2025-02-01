@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "RAII.h"
+#include "Utilities/RAII.h"
 
 #include "PlayerUtilities.generated.h"
 
@@ -12,7 +12,7 @@
  * Blueprint function library for utilities that revolve around player operations.
  */
 UCLASS()
-class AUTOMATIONTESTHELPERS_API UPlayerUtilities : public UBlueprintFunctionLibrary {
+class RPGMENUSTESTS_API UPlayerUtilities : public UBlueprintFunctionLibrary {
     GENERATED_BODY()
 
   public:

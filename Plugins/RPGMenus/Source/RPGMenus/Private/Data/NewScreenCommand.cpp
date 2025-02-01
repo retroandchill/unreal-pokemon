@@ -5,6 +5,5 @@
 #include "Screens/Screen.h"
 
 void UNewScreenCommand::ExecuteCommand_Implementation(APlayerController *Controller) {
-    UPrimaryGameLayout::GetPrimaryGameLayout(Controller)
-        ->PushWidgetToLayerStack(RPG::Menus::PrimaryMenuLayerTag, NextScreen);
+    UPrimaryGameLayout::Get(Controller)->PushWidgetToLayerStack(RPG::Menus::PrimaryMenuLayerTag, NextScreen);
 }

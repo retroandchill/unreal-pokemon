@@ -5,7 +5,7 @@
 #include "Screens/Screen.h"
 
 UScreen *URPGMenuUtilities::RemoveTopScreenFromStackLayer(const UObject *WorldContextObject, FGameplayTag Tag) {
-    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
+    auto Layout = UPrimaryGameLayout::Get(WorldContextObject);
     if (Layout == nullptr) {
         return nullptr;
     }

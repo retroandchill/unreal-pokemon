@@ -24,7 +24,7 @@ class RPGMENUS_API URPGMenuUtilities : public UBlueprintFunctionLibrary {
         requires RPG::Menus::InjectableScreen<T>
     static TOptional<T &> InjectScreenToLayer(const UObject *WorldContextObject, const FGameplayTag &LayerTag,
                                               A &&...Args) {
-        auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
+        auto Layout = UPrimaryGameLayout::Get(WorldContextObject);
 
         if (auto Layer = Layout->GetLayerWidget(LayerTag); Layer != nullptr) {
             auto Widget = UnrealInjector::NewInjectedDependency<T, A...>(Layer, std::forward<A>(Args)...);

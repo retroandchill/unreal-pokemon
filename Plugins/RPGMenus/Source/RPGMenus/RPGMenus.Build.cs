@@ -16,6 +16,7 @@ public class RPGMenus : ModuleRules {
             "Slate",
             "SlateCore",
             "DeveloperSettings",
+            "CommonInput"
         });
     }
 }

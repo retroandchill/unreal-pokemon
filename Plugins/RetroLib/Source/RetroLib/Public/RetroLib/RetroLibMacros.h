@@ -178,6 +178,10 @@
     }                                                                                                                  \
     void RemoveFrom##MemberName(FDelegateHandle Handle) {                                                              \
         MemberName.Remove(Handle);                                                                                     \
+    } \
+    template <typename T> \
+    void RemoveAllFrom##MemberName(T* Value) { \
+        MemberName.RemoveAll(Value); \
     }
 
 #if WITH_EDITOR
