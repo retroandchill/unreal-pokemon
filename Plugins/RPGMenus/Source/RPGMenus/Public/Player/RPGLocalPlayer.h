@@ -39,5 +39,6 @@ public:
     UPrimaryGameLayout* GetRootUILayout() const;
 
 private:
+    friend class ARPGPlayerController;
     bool bIsPlayerViewEnabled = true;
 };
