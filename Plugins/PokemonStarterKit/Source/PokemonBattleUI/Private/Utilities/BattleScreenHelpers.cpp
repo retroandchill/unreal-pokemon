@@ -7,7 +7,7 @@
 #include "Screens/PokemonBattleScreen.h"
 
 UPokemonBattleScreen *UBattleScreenHelpers::FindBattleScreen(const UObject *WorldContextObject) {
-    auto PrimaryLayout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(WorldContextObject);
+    auto PrimaryLayout = UPrimaryGameLayout::Get(WorldContextObject);
     if (PrimaryLayout == nullptr) {
         UE_LOG(LogBattleUI, Warning, TEXT("No layout found, can't update battle HUD."))
         return nullptr;

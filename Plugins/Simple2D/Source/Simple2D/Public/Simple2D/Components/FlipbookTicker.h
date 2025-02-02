@@ -22,11 +22,10 @@ namespace Simple2D {
 
         void TickFlipbook(float DeltaTime);
 
-    private:
+      private:
         void ProcessPlaying(float DeltaTime, bool &bIsFinished);
-        
-    public:
 
+      public:
         FFlipbookProxy &GetFlipbook() {
             return Proxy;
         }

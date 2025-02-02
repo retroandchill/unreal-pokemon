@@ -29,7 +29,6 @@ public class PokemonTests : ModuleRules {
                                                              "GameplayTags",
                                                              "GameplayTasks",
                                                              "CommonUI",
-                                                             "CommonGame",
                                                              "DeveloperSettings",
                                                              "EnhancedInput",
                                                              "PokemonEncounters",

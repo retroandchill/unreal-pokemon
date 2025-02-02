@@ -25,7 +25,7 @@ UE5Coro::TCoroutine<> UPokemonCoroutineDispatcherImpl::DisplayMessage(FText Mess
         co_return;
     }
 
-    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(this);
+    auto Layout = UPrimaryGameLayout::Get(this);
     if (Layout == nullptr) {
         co_return;
     }
@@ -40,7 +40,7 @@ UE5Coro::TCoroutine<> UPokemonCoroutineDispatcherImpl::DisplayMessage(FText Mess
 IPokemonCoroutineDispatcher::TMultiCoroutine<int, FName>
 UPokemonCoroutineDispatcherImpl::DisplayMessageWithChoices(FText Message, const TArray<FText> &Choices,
                                                            FForceLatentCoroutine) const {
-    auto Layout = UPrimaryGameLayout::GetPrimaryGameLayoutForPrimaryPlayer(this);
+    auto Layout = UPrimaryGameLayout::Get(this);
     auto Screen = Cast<UTextDisplayScreen>(Layout->GetLayerWidget(RPG::Menus::OverlayMenuLayerTag)->GetActiveWidget());
     if (Screen == nullptr) {
         Screen = UTextDisplayScreen::AddTextDisplayScreenToOverlay(this);

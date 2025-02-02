@@ -17,7 +17,6 @@ namespace Simple2D {
         }
     }
 
-    
     void FFlipbookTicker::ProcessPlaying(float DeltaTime, bool &bIsFinished) {
         const float TimelineLength = GetFlipbookLength();
         const float EffectiveDeltaTime = DeltaTime * (bReversePlayback ? (-PlayRate) : (PlayRate));

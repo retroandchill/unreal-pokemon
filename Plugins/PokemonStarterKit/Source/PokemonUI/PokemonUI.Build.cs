@@ -7,9 +7,9 @@ public class PokemonUI : ModuleRules {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "PokemonData", "PokemonCore", "RPGMenus",
-                                                            "PokemonAssets", "CommonUI", "CommonGame", "GameplayTags",
+                                                            "PokemonAssets", "CommonUI", "GameplayTags",
                                                             "EnhancedInput", "DeveloperSettings", "PokemonItems",
-                                                            "PaperFlipbookWidget", "UE5Coro", "RetroLib" });
+                                                            "UE5Coro", "RetroLib" });
 
         PrivateDependencyModuleNames.AddRange(new string[] {
             "CoreUObject",

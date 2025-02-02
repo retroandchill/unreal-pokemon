@@ -80,10 +80,6 @@
 			"Enabled": true
 		},
 		{
-			"Name": "CommonGame",
-			"Enabled": true
-		},
-		{
 			"Name": "PaperZD",
 			"Enabled": true,
 			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/c4b43502026047d89296cd7bffd92828"
@@ -99,11 +95,6 @@
 		{
 			"Name": "RetroLib",
 			"Enabled": true
-		},
-		{
-			"Name": "PaperFlipbookWidget",
-			"Enabled": true,
-			"MarketplaceURL": "https://unrealengineresources.com/plugins"
 		},
 		{
 			"Name": "GeometryScripting",

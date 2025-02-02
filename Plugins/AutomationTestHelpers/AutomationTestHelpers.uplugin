@@ -25,10 +25,6 @@
 		{
 			"Name": "CommonUI",
 			"Enabled": true
-		},
-		{
-			"Name": "CommonGame",
-			"Enabled": true
 		}
 	]
 }
