@@ -43,7 +43,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           ./ci/set-sonar-variables.ps1
-          & $env:SONAR_SCANNER_HOME/bin/sonar-scanner.bat --define sonar.cfamily.build-wrapper-output=bw-output -D sonar.host.url=https://sonarcloud.io -D sonar.cfamily.cobertura.reportPaths=cpp-coverage.xml -D sonar.python.coverage.reportPaths=coverage-reports/*.xml -D sonar.cfamily.threads=4
+          $Location = $(Get-Location)
+          & $env:SONAR_SCANNER_HOME/bin/sonar-scanner.bat --define sonar.cfamily.build-wrapper-output=bw-output -D sonar.host.url=https://sonarcloud.io -D sonar.cfamily.cobertura.reportPaths=cpp-coverage.xml -D sonar.python.coverage.reportPaths=coverage-reports/*.xml -D sonar.projectBaseDir="${Location}" -D sonar.cfamily.threads=4
           
       - name: Archive code coverage results
         if: always()
