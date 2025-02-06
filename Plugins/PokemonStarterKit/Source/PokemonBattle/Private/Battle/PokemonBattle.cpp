@@ -22,6 +22,7 @@
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Views/Concat.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
+#include "GameFramework/PlayerController.h"
 
 APokemonBattle::APokemonBattle() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleAbilitySystemComponent>(FName("AbilitySystemComponent"));

@@ -8,6 +8,8 @@
 #include "GridBased2DSettings.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "RetroLib/Utils/BlueprintMathUtils.h"
+#include "Components/StaticMeshComponent.h"
+#include "Engine/World.h"
 
 bool UGridBasedCharacterUtilities::InvalidFloor(ACharacter *Character, const FVector &TargetSquare,
                                                 const UPrimitiveComponent *HitComponent) {

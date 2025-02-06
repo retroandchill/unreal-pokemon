@@ -2,6 +2,9 @@
 
 #include "Saving/Serialization/SaveSerializationUtils.h"
 #include "Serialization/ObjectAndNameAsStringProxyArchive.h"
+#include "Serialization/MemoryWriter.h"
+#include "Serialization/MemoryReader.h"
+#include "UObject/Package.h"
 
 FObjectData FObjectData::SerializeObject(UObject *Object) {
     if (!IsValid(Object)) {

@@ -37,6 +37,7 @@
 #include <variant>
 #include "UE5Coro/Promise.h"
 #include "Tickable.h"
+#include "Animation/AnimInstance.h"
 #include "UE5CoroAnimCallbackTarget.generated.h"
 
 UCLASS(Hidden, MinimalAPI)

@@ -7,6 +7,8 @@
 #include "RPGMenus.h"
 #include "Simple2D/Rendering/MaterialSettings.h"
 #include "Slate/SlateBrushAsset.h"
+#include "UObject/ConstructorHelpers.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 DECLARE_CYCLE_STAT(TEXT("Tick Enhanced Image"), STAT_TickEnhancedImage, STATGROUP_RPGMenus);
 

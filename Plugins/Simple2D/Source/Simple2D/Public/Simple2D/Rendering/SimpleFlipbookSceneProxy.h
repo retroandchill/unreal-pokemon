@@ -10,6 +10,7 @@
 
 struct FSimpleFlipbookDrawCall;
 struct FSpriteDrawCallRecord;
+class UMeshComponent;
 
 namespace Simple2D {
     /**

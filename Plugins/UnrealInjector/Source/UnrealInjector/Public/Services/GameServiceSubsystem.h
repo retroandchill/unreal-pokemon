@@ -16,6 +16,7 @@
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "Service.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "Engine/GameInstance.h"
 
 #include "GameServiceSubsystem.generated.h"
 

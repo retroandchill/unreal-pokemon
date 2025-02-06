@@ -12,6 +12,7 @@
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "RetroLib/Utils/SoftObjectRef.h"
 #include "VariantObject.h"
+#include "Misc/CoreDelegates.h"
 
 #if RETROLIB_WITH_UE5CORO
 #include "UE5Coro.h"

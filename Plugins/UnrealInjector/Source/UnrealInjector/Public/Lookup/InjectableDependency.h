@@ -10,6 +10,7 @@
 #include "RetroLib/Ranges/Algorithm/FindFirst.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "UObject/Interface.h"
+#include "Misc/CoreDelegates.h"
 
 namespace UnrealInjector {
 

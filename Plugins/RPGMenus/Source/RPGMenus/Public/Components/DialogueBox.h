@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CommonUserWidget.h"
+#include "Framework/Text/IRun.h"
 
 #include "DialogueBox.generated.h"
 

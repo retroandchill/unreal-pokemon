@@ -7,6 +7,8 @@
 #include "PaperSprite.h"
 #include "RetroLib/Variants/SoftVariantObject.h"
 #include "Simple2D/Assets/SimpleFlipbook.h"
+#include "Engine/StaticMesh.h"
+#include "Engine/SkeletalMesh.h"
 
 #if WITH_PAPERZD
 #include "AnimSequences/PaperZDAnimSequence.h"

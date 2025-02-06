@@ -29,6 +29,7 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include "Engine.h"
 #include "UE5Coro/LatentAwaiter.h"
 #include <optional>
 

@@ -9,6 +9,7 @@
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "TerrainTags/Terrain.h"
+#include "Engine/World.h"
 
 constexpr float CapsuleOffset = 5.f;
 

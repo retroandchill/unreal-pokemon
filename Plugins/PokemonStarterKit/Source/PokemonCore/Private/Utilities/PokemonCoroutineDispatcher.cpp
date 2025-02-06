@@ -3,6 +3,7 @@
 #include "Utilities/PokemonCoroutineDispatcher.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
+#include "Engine/GameInstance.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(IPokemonCoroutineDispatcher)
 

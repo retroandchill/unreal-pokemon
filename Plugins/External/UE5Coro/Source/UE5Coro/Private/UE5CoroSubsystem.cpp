@@ -31,6 +31,7 @@
 
 #include "UE5Coro/UE5CoroSubsystem.h"
 #include "UE5CoroChainCallbackTarget.h"
+#include "Engine/World.h"
 
 using namespace UE5Coro::Private;
 

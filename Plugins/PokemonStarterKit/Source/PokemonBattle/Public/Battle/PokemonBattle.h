@@ -9,6 +9,8 @@
 #include "RetroLib/Ranges/Views/AnyView.h"
 #include "RetroLib/Ranges/Views/Generator.h"
 #include "UObject/Object.h"
+#include "Templates/UniquePtr.h"
+#include "Containers/Queue.h"
 
 #include "PokemonBattle.generated.h"
 

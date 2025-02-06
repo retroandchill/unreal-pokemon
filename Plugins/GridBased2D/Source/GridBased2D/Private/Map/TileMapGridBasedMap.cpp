@@ -4,6 +4,7 @@
 #include "GridUtils.h"
 #include "PaperTileMap.h"
 #include "Replacement/TileReplacerComponent.h"
+#include "Engine/DataTable.h"
 
 // Sets default values
 ATileMapGridBasedMap::ATileMapGridBasedMap() {

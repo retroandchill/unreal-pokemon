@@ -1,6 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Simple2D/Rendering/FlipbookRenderSection.h"
+#include "RenderMath.h"
+#include "TextureResource.h"
 
 namespace Simple2D {
     FPackedNormal FSimpleFlipbookTangents::PackedNormalX(FVector(1.0f, 0.0f, 0.0f));

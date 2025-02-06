@@ -4,6 +4,10 @@
 #include "Paper2DModule.h"
 #include "PaperSprite.h"
 #include "SpriteDrawCall.h"
+#include "PackedNormal.h"
+#include "DynamicMeshBuilder.h"
+
+class FTexture;
 
 namespace Simple2D {
     /** A Paper2D sprite vertex. */

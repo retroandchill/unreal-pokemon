@@ -14,6 +14,7 @@
 #include "Settings/PokemonStorageSystemSettings.h"
 #include "Storage/StorageSystem.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
+#include "Engine/GameInstance.h"
 
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);

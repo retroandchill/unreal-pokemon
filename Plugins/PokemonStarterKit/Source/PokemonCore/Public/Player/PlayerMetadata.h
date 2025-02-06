@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Tickable.h"
 #include "UObject/Object.h"
 
 #include "PlayerMetadata.generated.h"

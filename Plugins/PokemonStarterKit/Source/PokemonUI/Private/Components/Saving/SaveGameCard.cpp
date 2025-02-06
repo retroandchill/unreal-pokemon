@@ -5,6 +5,8 @@
 #include "CommonTextBlock.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"
+#include "Engine/GameInstance.h"
+#include "TimerManager.h"
 
 void USaveGameCard::NativeConstruct() {
     Super::NativeConstruct();

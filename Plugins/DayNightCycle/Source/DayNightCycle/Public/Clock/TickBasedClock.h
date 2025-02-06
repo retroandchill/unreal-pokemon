@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameClock.h"
+#include "Tickable.h"
 #include "UObject/Object.h"
 
 #include "TickBasedClock.generated.h"

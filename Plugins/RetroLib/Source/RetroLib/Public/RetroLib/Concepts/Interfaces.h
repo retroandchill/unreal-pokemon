@@ -5,6 +5,7 @@
 #ifdef __UNREAL__
 #if !RETROLIB_WITH_MODULES
 #include "UObject/Object.h"
+#include "UObject/Interface.h"
 #endif
 
 #ifndef RETROLIB_EXPORT

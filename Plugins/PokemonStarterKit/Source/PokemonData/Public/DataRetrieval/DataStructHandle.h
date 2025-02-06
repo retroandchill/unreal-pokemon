@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "IndexedTableRow.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
 #include "RetroLib/Concepts/Structs.h"
 #include <memory>
 

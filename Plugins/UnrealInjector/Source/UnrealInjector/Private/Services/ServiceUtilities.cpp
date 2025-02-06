@@ -9,6 +9,7 @@
 #include "RetroLib/Ranges/Views/ClassView.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "Services/Service.h"
+#include "Engine/Blueprint.h"
 
 Retro::TGenerator<TSubclassOf<UService>> UnrealInjector::GetAllServices() {
     TSet<UClass *> Visited;

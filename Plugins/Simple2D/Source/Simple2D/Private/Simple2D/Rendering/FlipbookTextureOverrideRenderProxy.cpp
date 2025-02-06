@@ -2,6 +2,7 @@
 
 #include "Simple2D/Rendering/FlipbookTextureOverrideRenderProxy.h"
 #include "Simple2D/Rendering/MaterialSettings.h"
+#include "MaterialTypes.h"
 
 namespace Simple2D {
 

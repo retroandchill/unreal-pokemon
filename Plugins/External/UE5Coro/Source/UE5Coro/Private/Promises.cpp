@@ -33,6 +33,7 @@
 #include "LatentExitReason.h"
 #include "UE5Coro/LatentAwaiter.h"
 #include "UE5Coro/Promise.h"
+#include "Async/Async.h"
 
 using namespace UE5Coro::Private;
 

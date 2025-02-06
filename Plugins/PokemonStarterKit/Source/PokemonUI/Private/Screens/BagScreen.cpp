@@ -11,6 +11,7 @@
 #include "Player/Bag.h"
 #include "Utilities/RPGMenuUtilities.h"
 #include "Utilities/TrainerHelpers.h"
+#include "Engine/GameInstance.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(UBagScreen)
 

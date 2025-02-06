@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/DataTable.h"
 #include "PaperTileLayer.h"
+#include "Templates/SubclassOf.h"
 
 #include "TileReplacement.generated.h"
 

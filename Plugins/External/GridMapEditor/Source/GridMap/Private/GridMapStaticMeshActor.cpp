@@ -3,6 +3,7 @@
 #include "GridMapStaticMeshActor.h"
 
 #include "TileSet.h"
+#include "Components/StaticMeshComponent.h"
 #include "RetroLib/Functional/BindMethod.h"
 #include "RetroLib/Optionals/Transform.h"
 #include "RetroLib/Optionals/OrElseValue.h"

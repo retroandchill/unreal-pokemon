@@ -9,6 +9,7 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/RetroLibMacros.h"
+#include "UObject/ScriptInterface.h"
 #include <optional>
 
 #ifdef __cpp_lib_expected

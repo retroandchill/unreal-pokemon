@@ -2,6 +2,7 @@
 
 #pragma once
 #include "Engine/AssetManager.h"
+#include "AssetRegistry/AssetData.h"
 
 #ifdef __UNREAL__
 #include "RetroLib/Variants/VariantObject.h"

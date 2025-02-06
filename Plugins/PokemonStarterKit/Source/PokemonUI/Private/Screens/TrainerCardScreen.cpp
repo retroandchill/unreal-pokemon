@@ -3,6 +3,7 @@
 #include "Screens/TrainerCardScreen.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Utilities/RPGMenuUtilities.h"
+#include "Engine/GameInstance.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(UTrainerCardScreen)
 
