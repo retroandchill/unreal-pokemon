@@ -16,11 +16,9 @@
 #endif
 #endif
 
-#include "GeometryCollection/GeometryCollectionParticlesData.h"
 #include "RetroLib/TypeTraits.h"
 #include "RetroLib/Utils/ForwardLike.h"
 #include "Templates/NonNullSubclassOf.h"
-#include "WorldPartition/WorldPartitionBuilder.h"
 
 #ifdef __UNREAL__
 #include "RetroLib/Concepts/Interfaces.h"

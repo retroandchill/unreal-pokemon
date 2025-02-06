@@ -15,7 +15,7 @@ Retro::FBlueprintException::FBlueprintException(std::string &&Message, EBlueprin
     : Message(std::move(Message)), Type(Type) {
 }
 
-const char *Retro::FBlueprintException::what() const {
+const char *Retro::FBlueprintException::what() const noexcept {
     return Message.data();
 }
 #endif
