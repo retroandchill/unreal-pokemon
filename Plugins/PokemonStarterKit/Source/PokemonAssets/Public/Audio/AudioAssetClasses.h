@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Sound/SoundBase.h"
 #include "Assets/AssetClass.h"
+#include "Sound/SoundBase.h"
 
 /**
  * Namespace for anything related to audio assets.

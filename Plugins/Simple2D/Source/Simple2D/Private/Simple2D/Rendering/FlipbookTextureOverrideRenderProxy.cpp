@@ -1,8 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Simple2D/Rendering/FlipbookTextureOverrideRenderProxy.h"
-#include "Simple2D/Rendering/MaterialSettings.h"
 #include "MaterialTypes.h"
+#include "Simple2D/Rendering/MaterialSettings.h"
 
 namespace Simple2D {
 

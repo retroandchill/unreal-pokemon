@@ -2,10 +2,10 @@
 
 #include "Simple2D/Assets/SimpleFlipbook.h"
 #include "AlphaBitmap.h"
+#include "Materials/MaterialInterface.h"
 #include "Paper2DModule.h"
 #include "PaperSprite.h"
 #include "UObject/ConstructorHelpers.h"
-#include "Materials/MaterialInterface.h"
 
 USimpleFlipbook::USimpleFlipbook() {
     static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaskedMaterialRef(

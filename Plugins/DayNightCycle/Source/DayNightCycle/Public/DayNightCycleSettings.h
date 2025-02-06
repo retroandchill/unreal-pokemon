@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Clock/RealTimeClock.h"
-#include "Templates/SubclassOf.h"
 #include "Engine/DeveloperSettings.h"
+#include "Templates/SubclassOf.h"
 
 #include "DayNightCycleSettings.generated.h"
 

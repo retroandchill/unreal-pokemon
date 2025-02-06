@@ -2,9 +2,9 @@
 
 #include "Battle/Stats/RefreshStatsOnTagChangeGameplayEffectComponent.h"
 #include "AbilitySystemComponent.h"
+#include "Algo/Find.h"
 #include "GameplayEffect.h"
 #include "PokemonBattleModule.h"
-#include "Algo/Find.h"
 
 bool URefreshStatsOnTagChangeGameplayEffectComponent::OnActiveGameplayEffectAdded(
     FActiveGameplayEffectsContainer &ActiveGEContainer, FActiveGameplayEffect &ActiveGE) const {

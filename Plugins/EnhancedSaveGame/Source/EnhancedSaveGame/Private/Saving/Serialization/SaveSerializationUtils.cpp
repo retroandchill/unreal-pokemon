@@ -1,9 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Saving/Serialization/SaveSerializationUtils.h"
-#include "Serialization/ObjectAndNameAsStringProxyArchive.h"
-#include "Serialization/MemoryWriter.h"
 #include "Serialization/MemoryReader.h"
+#include "Serialization/MemoryWriter.h"
+#include "Serialization/ObjectAndNameAsStringProxyArchive.h"
 #include "UObject/Package.h"
 
 FObjectData FObjectData::SerializeObject(UObject *Object) {

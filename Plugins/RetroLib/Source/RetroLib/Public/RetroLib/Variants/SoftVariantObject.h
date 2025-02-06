@@ -1,8 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-#include "Engine/AssetManager.h"
 #include "AssetRegistry/AssetData.h"
+#include "Engine/AssetManager.h"
 
 #ifdef __UNREAL__
 #include "RetroLib/Variants/VariantObject.h"

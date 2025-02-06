@@ -6,10 +6,10 @@
 #include "Engine/Texture2D.h"
 #include "Engine/Texture2DDynamic.h"
 #include "Materials/MaterialInterface.h"
-#include "Slate/SlateTextureAtlasInterface.h"
 #include "PaperFlipbook.h"
 #include "RetroLib/Variants/SoftVariantObject.h"
 #include "Simple2D/Assets/SimpleFlipbook.h"
+#include "Slate/SlateTextureAtlasInterface.h"
 
 #include "ImageAsset.generated.h"
 

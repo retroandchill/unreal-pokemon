@@ -4,6 +4,7 @@
 #include "Components/Bag/ItemSelectionWindow.h"
 #include "Components/Bag/PocketTabWidget.h"
 #include "DataManager.h"
+#include "Engine/GameInstance.h"
 #include "Field/FieldItemEffectDirect.h"
 #include "Field/FieldItemEffectUseOnPokemon.h"
 #include "ItemEffectLookup.h"
@@ -11,7 +12,6 @@
 #include "Player/Bag.h"
 #include "Utilities/RPGMenuUtilities.h"
 #include "Utilities/TrainerHelpers.h"
-#include "Engine/GameInstance.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(UBagScreen)
 

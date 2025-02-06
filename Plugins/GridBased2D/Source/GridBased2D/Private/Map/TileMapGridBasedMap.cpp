@@ -1,10 +1,10 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Map/TileMapGridBasedMap.h"
+#include "Engine/DataTable.h"
 #include "GridBased2DSettings.h"
 #include "GridUtils.h"
 #include "PaperTileMap.h"
 #include "Replacement/TileReplacerComponent.h"
-#include "Engine/DataTable.h"
 
 // Sets default values
 ATileMapGridBasedMap::ATileMapGridBasedMap() {

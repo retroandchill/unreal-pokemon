@@ -4,6 +4,7 @@
 #include "RetroLib/Ranges/Views/Generator.h"
 
 #ifdef __UNREAL__
+#include "Misc/CoreDelegates.h"
 #include "RetroLib/Blueprints/BlueprintRuntimeUtils.h"
 #include "RetroLib/Exceptions/VariantException.h"
 #include "RetroLib/Functional/Delegates.h"
@@ -12,7 +13,6 @@
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "RetroLib/Utils/SoftObjectRef.h"
 #include "VariantObject.h"
-#include "Misc/CoreDelegates.h"
 
 #if RETROLIB_WITH_UE5CORO
 #include "UE5Coro.h"

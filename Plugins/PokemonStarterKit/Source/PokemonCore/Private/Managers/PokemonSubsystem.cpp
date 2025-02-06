@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Managers/PokemonSubsystem.h"
+#include "Engine/GameInstance.h"
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 #include "Lookup/InjectionUtilities.h"
@@ -14,7 +15,6 @@
 #include "Settings/PokemonStorageSystemSettings.h"
 #include "Storage/StorageSystem.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
-#include "Engine/GameInstance.h"
 
 void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
     Super::Initialize(Collection);

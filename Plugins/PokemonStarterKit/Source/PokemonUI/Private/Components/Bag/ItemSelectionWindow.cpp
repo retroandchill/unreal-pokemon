@@ -6,11 +6,11 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/Bag/ItemOption.h"
 #include "DataManager.h"
+#include "Engine/GameInstance.h"
 #include "Input/CommonUIInputTypes.h"
 #include "Memory/CursorMemorySubsystem.h"
 #include "Player/Bag.h"
 #include <functional>
-#include "Engine/GameInstance.h"
 
 UItemSelectionWindow::UItemSelectionWindow(const FObjectInitializer &ObjectInitializer)
     : USelectableWidget(ObjectInitializer) {

@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Replacement/TileReplacerComponent.h"
+#include "Engine/World.h"
 #include "PaperTileLayer.h"
 #include "PaperTileMap.h"
 #include "PaperTileMapComponent.h"
@@ -8,7 +9,6 @@
 #include "Replacement/PaperTileReplacement.h"
 #include "Replacement/TileReplacement.h"
 #include "TileReplacerSettings.h"
-#include "Engine/World.h"
 
 #define TRIPLE_LOOP(VarA, SizeA, VarB, SizeB, VarC, SizeC)                                                             \
     for (decltype(SizeA) VarA = 0; VarA < SizeA; VarA++)                                                               \

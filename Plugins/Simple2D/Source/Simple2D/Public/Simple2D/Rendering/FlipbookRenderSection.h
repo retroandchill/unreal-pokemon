@@ -1,11 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #pragma once
+#include "DynamicMeshBuilder.h"
+#include "PackedNormal.h"
 #include "Paper2DModule.h"
 #include "PaperSprite.h"
 #include "SpriteDrawCall.h"
-#include "PackedNormal.h"
-#include "DynamicMeshBuilder.h"
 
 class FTexture;
 

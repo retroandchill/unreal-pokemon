@@ -1,18 +1,18 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Simple2D/Rendering/SimpleFlipbookSceneProxy.h"
+#include "Components/MeshComponent.h"
 #include "DynamicMeshBuilder.h"
+#include "Engine.h"
 #include "MaterialDomain.h"
+#include "Materials/Material.h"
 #include "Materials/MaterialRenderProxy.h"
 #include "Paper2DModule.h"
+#include "SceneInterface.h"
 #include "Simple2D.h"
 #include "Simple2D/Assets/SimpleFlipbook.h"
 #include "Simple2D/Rendering/FlipbookTextureOverrideRenderProxy.h"
-#include "SceneInterface.h"
-#include "Materials/Material.h"
-#include "Components/MeshComponent.h"
 #include <bit>
-#include "Engine.h"
 
 DECLARE_CYCLE_STAT(TEXT("Get New Batch Meshes"), STAT_Simple2DRender_GetNewBatchMeshes, STATGROUP_Simple2D);
 DECLARE_CYCLE_STAT(TEXT("SpriteProxy GDME"), STAT_Simple2DRenderSceneProxy_GetDynamicMeshElements, STATGROUP_Simple2D);

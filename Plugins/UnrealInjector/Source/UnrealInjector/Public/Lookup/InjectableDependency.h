@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "DependencyInjectionSettings.h"
+#include "Misc/CoreDelegates.h"
 #include "RetroLib/Casting/UClassCasts.h"
 #include "RetroLib/Concepts/Interfaces.h"
 #include "RetroLib/Optionals/OrElseGet.h"
 #include "RetroLib/Ranges/Algorithm/FindFirst.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "UObject/Interface.h"
-#include "Misc/CoreDelegates.h"
 
 namespace UnrealInjector {
 

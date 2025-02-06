@@ -2,9 +2,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Kismet/BlueprintFunctionLibrary.h"
 #include "Characters/FacingDirection.h"
 #include "EngineUtils.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
 
 #include "GridUtils.generated.h"
 

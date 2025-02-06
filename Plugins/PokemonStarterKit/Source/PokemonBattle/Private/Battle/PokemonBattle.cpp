@@ -15,6 +15,7 @@
 #include "Battle/Tags.h"
 #include "Battle/Transitions/BattleInfo.h"
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
+#include "GameFramework/PlayerController.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Optionals/IfPresent.h"
 #include "RetroLib/Optionals/Transform.h"
@@ -22,7 +23,6 @@
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Ranges/Views/Concat.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
-#include "GameFramework/PlayerController.h"
 
 APokemonBattle::APokemonBattle() {
     AbilitySystemComponent = CreateDefaultSubobject<UBattleAbilitySystemComponent>(FName("AbilitySystemComponent"));

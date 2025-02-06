@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/EnhancedImage.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "PaperSprite.h"
 #include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/Transform.h"
@@ -8,7 +9,6 @@
 #include "Simple2D/Rendering/MaterialSettings.h"
 #include "Slate/SlateBrushAsset.h"
 #include "UObject/ConstructorHelpers.h"
-#include "Materials/MaterialInstanceDynamic.h"
 
 DECLARE_CYCLE_STAT(TEXT("Tick Enhanced Image"), STAT_TickEnhancedImage, STATGROUP_RPGMenus);
 

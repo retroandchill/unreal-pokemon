@@ -2,6 +2,7 @@
 
 #include "Services/ServiceUtilities.h"
 #include "DependencyInjectionSettings.h"
+#include "Engine/Blueprint.h"
 #include "Engine/ObjectLibrary.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Casting/UClassCasts.h"
@@ -9,7 +10,6 @@
 #include "RetroLib/Ranges/Views/ClassView.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "Services/Service.h"
-#include "Engine/Blueprint.h"
 
 Retro::TGenerator<TSubclassOf<UService>> UnrealInjector::GetAllServices() {
     TSet<UClass *> Visited;

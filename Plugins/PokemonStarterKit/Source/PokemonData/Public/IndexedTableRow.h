@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
+
 #include "IndexedTableRow.generated.h"
 
 /**

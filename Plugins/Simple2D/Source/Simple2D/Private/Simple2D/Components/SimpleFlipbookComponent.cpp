@@ -1,6 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Simple2D/Components/SimpleFlipbookComponent.h"
+#include "ContentStreaming.h"
+#include "Engine/CollisionProfile.h"
 #include "Misc/MapErrors.h"
 #include "Misc/UObjectToken.h"
 #include "Net/UnrealNetwork.h"
@@ -10,8 +12,6 @@
 #include "Simple2D.h"
 #include "Simple2D/Assets/SimpleFlipbook.h"
 #include "Simple2D/Rendering/SimpleFlipbookSceneProxy.h"
-#include "ContentStreaming.h"
-#include "Engine/CollisionProfile.h"
 
 DECLARE_CYCLE_STAT(TEXT("Tick Simple Flipbook"), STAT_TickSimpleFlipbook, STATGROUP_Simple2D);
 

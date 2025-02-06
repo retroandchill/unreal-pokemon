@@ -47,7 +47,7 @@ void UPushContentToLayerForPlayer::Cancel() {
     }
 }
 
-UWorld * UPushContentToLayerForPlayer::GetWorld() const {
+UWorld *UPushContentToLayerForPlayer::GetWorld() const {
     return OwningPlayerPtr.IsValid() ? OwningPlayerPtr->GetWorld() : nullptr;
 }
 

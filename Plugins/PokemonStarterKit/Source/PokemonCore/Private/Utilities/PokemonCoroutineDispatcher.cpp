@@ -1,9 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Utilities/PokemonCoroutineDispatcher.h"
+#include "Engine/GameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
-#include "Engine/GameInstance.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(IPokemonCoroutineDispatcher)
 

@@ -2,14 +2,14 @@
 
 #include "Utilities/GridBasedCharacterUtilities.h"
 #include "CharacterMovementComponentAsync.h"
+#include "Components/StaticMeshComponent.h"
 #include "Engine/OverlapResult.h"
+#include "Engine/World.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GridBased2DSettings.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "RetroLib/Utils/BlueprintMathUtils.h"
-#include "Components/StaticMeshComponent.h"
-#include "Engine/World.h"
 
 bool UGridBasedCharacterUtilities::InvalidFloor(ACharacter *Character, const FVector &TargetSquare,
                                                 const UPrimitiveComponent *HitComponent) {
