@@ -33,7 +33,8 @@
 		},
 		{
 			"Name": "TileReplacer",
-			"Enabled": true
+			"Enabled": true,
+			"PluginType": "Provided"
 		},
 		{
 			"Name": "EnhancedInput",
@@ -41,16 +42,19 @@
 		},
 		{
 			"Name": "RetroLib",
-			"Enabled": true
+			"Enabled": true,
+			"PluginType": "Provided"
 		},
 		{
 			"Name": "AudioPlaybackManager",
-			"Enabled": true
+			"Enabled": true,
+			"PluginType": "Provided"
 		},
 		{
 			"Name": "AutomationTestHelpers",
 			"Enabled": true,
-			"Optional": true
+			"Optional": true,
+			"PluginType": "Provided"
 		}
 	]
 }

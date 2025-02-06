@@ -30,7 +30,8 @@
 		{
 			"Name": "AutomationTestHelpers",
 			"Enabled": true,
-			"Optional": true
+			"Optional": true,
+			"PluginType": "Provided"
 		}
 	]
 }

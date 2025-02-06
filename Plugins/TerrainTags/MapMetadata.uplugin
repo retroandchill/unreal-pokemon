@@ -1,7 +1,7 @@
 ﻿{
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.0",
+	"VersionName": "0.1.0",
 	"FriendlyName": "MapMetadata",
 	"Description": "",
 	"Category": "Other",
@@ -23,7 +23,8 @@
 	"Plugins": [
 		{
 			"Name": "RetroLib",
-			"Enabled": true
+			"Enabled": true,
+			"PluginType": "Provided"
 		}
 	]
 }
