@@ -8,6 +8,8 @@
 
 #include "TrainerType.generated.h"
 
+class USoundBase;
+
 /**
  * The data for the TrainerType class
  */

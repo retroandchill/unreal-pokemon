@@ -2,6 +2,7 @@
 
 #include "Battle/Animations/BattleAnimationGetter.h"
 #include "Battle/BattleSubsystem.h"
+#include "Engine/GameInstance.h"
 #include "Kismet/GameplayStatics.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(UBattleAnimationGetter)

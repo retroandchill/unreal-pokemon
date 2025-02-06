@@ -38,5 +38,7 @@ public class RetroLib : ModuleRules {
         } else {
             PublicDefinitions.Add("RETROLIB_WITH_UE5CORO=0");
         }
+
+        bEnableExceptions = true;
     }
 }

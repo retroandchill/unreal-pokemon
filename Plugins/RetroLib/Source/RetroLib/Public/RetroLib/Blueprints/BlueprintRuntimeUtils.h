@@ -4,6 +4,10 @@
 
 #ifdef __UNREAL__
 #include "RetroLib/Exceptions/InvalidArgumentException.h"
+#include "UObject/Class.h"
+#include "UObject/Script.h"
+#include "UObject/Stack.h"
+#include "UObject/UnrealType.h"
 
 #if !RETROLIB_WITH_MODULES
 #include <bit>

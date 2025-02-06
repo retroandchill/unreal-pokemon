@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "RetroLib/Ranges/Views/Generator.h"
+#include "Templates/SubclassOf.h"
 
 class UService;
 

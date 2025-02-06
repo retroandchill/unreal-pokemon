@@ -6,6 +6,7 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/Bag/ItemOption.h"
 #include "DataManager.h"
+#include "Engine/GameInstance.h"
 #include "Input/CommonUIInputTypes.h"
 #include "Memory/CursorMemorySubsystem.h"
 #include "Player/Bag.h"

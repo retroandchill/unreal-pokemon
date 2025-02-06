@@ -35,6 +35,7 @@
 #include "UE5Coro/Definition.h"
 #include "UE5Coro/Private.h"
 #include "UE5Coro/Promise.h"
+#include "Misc/ScopeExit.h"
 
 namespace UE5Coro
 {

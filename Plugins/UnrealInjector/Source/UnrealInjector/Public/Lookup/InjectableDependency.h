@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DependencyInjectionSettings.h"
+#include "Misc/CoreDelegates.h"
 #include "RetroLib/Casting/UClassCasts.h"
 #include "RetroLib/Concepts/Interfaces.h"
 #include "RetroLib/Optionals/OrElseGet.h"

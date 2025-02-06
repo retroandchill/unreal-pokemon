@@ -9,6 +9,7 @@
 
 #if !RETROLIB_WITH_MODULES
 #include "RetroLib/RetroLibMacros.h"
+#include "UObject/ScriptInterface.h"
 #include <optional>
 
 #ifdef __cpp_lib_expected
@@ -16,11 +17,9 @@
 #endif
 #endif
 
-#include "GeometryCollection/GeometryCollectionParticlesData.h"
 #include "RetroLib/TypeTraits.h"
 #include "RetroLib/Utils/ForwardLike.h"
 #include "Templates/NonNullSubclassOf.h"
-#include "WorldPartition/WorldPartitionBuilder.h"
 
 #ifdef __UNREAL__
 #include "RetroLib/Concepts/Interfaces.h"

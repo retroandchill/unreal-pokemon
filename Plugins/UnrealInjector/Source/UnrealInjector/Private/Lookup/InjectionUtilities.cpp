@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Lookup/InjectionUtilities.h"
+#include "UObject/UObjectIterator.h"
 
 TOptional<UClass &> UnrealInjector::GetFirstInjectableObject(const UClass *Class) {
 

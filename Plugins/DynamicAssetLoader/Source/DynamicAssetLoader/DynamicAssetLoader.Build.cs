@@ -34,5 +34,7 @@ public class DynamicAssetLoader : ModuleRules {
         } else {
             PublicDefinitions.Add("DYN_ASSETS_WITH_UE5CORO=0");
         }
+
+        bEnableExceptions = true;
     }
 }

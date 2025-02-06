@@ -43,7 +43,8 @@
 		},
 		{
 			"Name": "RetroLib",
-			"Enabled": true
+			"Enabled": true,
+			"PluginType": "Provided"
 		}
 	],
 	"SupportURL": ""

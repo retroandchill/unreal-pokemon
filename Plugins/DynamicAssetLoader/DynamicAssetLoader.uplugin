@@ -1,7 +1,7 @@
 ﻿{
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.0",
+	"VersionName": "0.1.0",
 	"FriendlyName": "DynamicAssetLoader",
 	"Description": "",
 	"Category": "Other",
@@ -33,12 +33,14 @@
 	"Plugins": [
 		{
 			"Name": "RetroLib",
-			"Enabled": true
+			"Enabled": true,
+			"PluginType": "Provided"
 		},
 		{
 			"Name": "UE5Coro",
 			"Enabled": true,
-			"Optional": true
+			"Optional": true,
+			"PluginType": "Provided"
 		}
 	]
 }

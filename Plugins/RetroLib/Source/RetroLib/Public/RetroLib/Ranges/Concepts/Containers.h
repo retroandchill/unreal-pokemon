@@ -7,6 +7,7 @@
  */
 #pragma once
 
+#include "RetroLib/Concepts/Tuples.h"
 #include "RetroLib/Ranges/FeatureBridge.h"
 #include "RetroLib/TypeTraits.h"
 
@@ -735,6 +736,7 @@ constexpr auto end(I &Range) {
         Range.end());
 }
 
+#if !UE_BUILD_SHIPPING
 RETROLIB_EXPORT template <typename T, typename A>
     requires(!std::input_iterator<decltype(std::declval<TArray<T, A>>().begin())>)
 constexpr auto begin(TArray<T, A> &Array) {
@@ -790,6 +792,7 @@ RETROLIB_EXPORT constexpr auto end(const FString &String) {
         return Retro::Ranges::TArrayIterator(String.GetCharArray().GetData() + String.Len(), String);
     }
 }
+#endif
 
 RETROLIB_EXPORT template <typename T, typename A>
 constexpr T *data(TArray<T, A> &Array) {

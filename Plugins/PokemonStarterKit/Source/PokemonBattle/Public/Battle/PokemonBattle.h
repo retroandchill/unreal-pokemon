@@ -5,9 +5,11 @@
 #include "CoreMinimal.h"
 #include "Battle.h"
 #include "Battle/Actions/BattleAction.h"
+#include "Containers/Queue.h"
 #include "Effects/TurnBasedGameplayEffect.h"
 #include "RetroLib/Ranges/Views/AnyView.h"
 #include "RetroLib/Ranges/Views/Generator.h"
+#include "Templates/UniquePtr.h"
 #include "UObject/Object.h"
 
 #include "PokemonBattle.generated.h"

@@ -34,6 +34,7 @@
 #include "CoreMinimal.h"
 #include "UE5Coro/Definition.h"
 #include "UE5Coro/Private.h"
+#include "HAL/Thread.h"
 
 namespace UE5Coro::Private
 {

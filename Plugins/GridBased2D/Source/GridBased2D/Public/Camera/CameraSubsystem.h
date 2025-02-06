@@ -7,6 +7,8 @@
 
 #include "CameraSubsystem.generated.h"
 
+class APlayerCameraManager;
+
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnCameraAngleChanged, const FVector2D &);
 
 /**

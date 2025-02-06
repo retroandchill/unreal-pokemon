@@ -3,6 +3,7 @@
 #include "TerrainTags/TerrainTagUtilities.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/OverlapResult.h"
+#include "Engine/World.h"
 #include "GameFramework/Character.h"
 #include "RetroLib/Casting/InstanceOf.h"
 #include "RetroLib/Casting/UClassCasts.h"

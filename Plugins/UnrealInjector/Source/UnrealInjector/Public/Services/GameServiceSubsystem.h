@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/GameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Casting/InstanceOf.h"

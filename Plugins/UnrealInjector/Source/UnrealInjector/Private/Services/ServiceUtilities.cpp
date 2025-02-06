@@ -2,6 +2,7 @@
 
 #include "Services/ServiceUtilities.h"
 #include "DependencyInjectionSettings.h"
+#include "Engine/Blueprint.h"
 #include "Engine/ObjectLibrary.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Casting/UClassCasts.h"

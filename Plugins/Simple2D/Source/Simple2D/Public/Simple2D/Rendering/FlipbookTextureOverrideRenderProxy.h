@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Materials/MaterialRenderProxy.h"
 #include "PaperSprite.h"
+#include "SceneManagement.h"
 
 namespace Simple2D {
     using FFlipbookRenderSceneProxyTextureOverrideMap = TMap<const UTexture *, const UTexture *>;

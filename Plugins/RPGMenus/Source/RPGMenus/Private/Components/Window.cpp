@@ -1,6 +1,8 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Components/Window.h"
 #include "Data/Windowskin.h"
+#include "Engine/Texture2D.h"
+#include "Widgets/Images/SImage.h"
 
 UWindow::UWindow(const FObjectInitializer &ObjectInitializer) : UWidget(ObjectInitializer) {
     Brush.DrawAs = ESlateBrushDrawType::Box;

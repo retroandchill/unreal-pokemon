@@ -4,8 +4,10 @@
 #include "Battle/Battle.h"
 #include "Battle/Settings/PokemonBattleSettings.h"
 #include "Battle/Transitions/BattleTransitionActor.h"
+#include "Engine/GameInstance.h"
 #include "Engine/LevelStreamingDynamic.h"
 #include "Engine/LevelStreamingVolume.h"
+#include "GameFramework/Pawn.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
 

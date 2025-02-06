@@ -4,6 +4,7 @@
 #include "Components/Bag/ItemSelectionWindow.h"
 #include "Components/Bag/PocketTabWidget.h"
 #include "DataManager.h"
+#include "Engine/GameInstance.h"
 #include "Field/FieldItemEffectDirect.h"
 #include "Field/FieldItemEffectUseOnPokemon.h"
 #include "ItemEffectLookup.h"

@@ -1,6 +1,10 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Camera/CameraSubsystem.h"
+#include "Camera/PlayerCameraManager.h"
+#include "Engine/GameInstance.h"
+#include "Engine/LocalPlayer.h"
+#include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "RetroLib/Optionals/IfPresent.h"
 #include "RetroLib/Optionals/Transform.h"

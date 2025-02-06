@@ -109,11 +109,13 @@ class SIMPLE2D_API USimpleFlipbook : public UObject {
         return 1.0f / PixelsPerUnrealUnit;
     }
 
+#if WITH_EDITOR
     // Returns the raw pivot position (ignoring pixel snapping)
     FVector2D GetRawPivotPosition() const;
 
     // Returns the current pivot position in texture space
     FVector2D GetPivotPosition() const;
+#endif
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
     UMaterialInterface *GetDefaultMaterial() const {

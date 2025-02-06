@@ -15,6 +15,7 @@
 #include "Battle/Tags.h"
 #include "Battle/Transitions/BattleInfo.h"
 #include "Battle/Transitions/BattleTransitionSubsystem.h"
+#include "GameFramework/PlayerController.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Optionals/IfPresent.h"
 #include "RetroLib/Optionals/Transform.h"

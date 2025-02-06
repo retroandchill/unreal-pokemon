@@ -3,8 +3,10 @@
 #include "Components/Saving/SaveGameCard.h"
 #include "Blueprint/WidgetTree.h"
 #include "CommonTextBlock.h"
+#include "Engine/GameInstance.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/PlayerMetadata.h"
+#include "TimerManager.h"
 
 void USaveGameCard::NativeConstruct() {
     Super::NativeConstruct();

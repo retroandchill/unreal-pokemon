@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/SkeletalMesh.h"
+#include "Engine/StaticMesh.h"
 #include "PaperFlipbook.h"
 #include "PaperSprite.h"
 #include "RetroLib/Variants/SoftVariantObject.h"

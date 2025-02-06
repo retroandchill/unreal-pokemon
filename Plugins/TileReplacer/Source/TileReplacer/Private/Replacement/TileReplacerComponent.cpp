@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Replacement/TileReplacerComponent.h"
+#include "Engine/World.h"
 #include "PaperTileLayer.h"
 #include "PaperTileMap.h"
 #include "PaperTileMapComponent.h"

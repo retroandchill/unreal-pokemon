@@ -2,6 +2,7 @@
 
 #include "Components/DialogueTextBlock.h"
 #include "Framework/Text/RichTextLayoutMarshaller.h"
+#include "Styling/SlateStyle.h"
 #include "Widgets/Text/SRichTextBlock.h"
 
 TSharedRef<SWidget> UDialogueTextBlock::RebuildWidget() {
@@ -25,8 +26,8 @@ TSharedRef<SWidget> UDialogueTextBlock::RebuildWidget() {
 }
 
 TSharedRef<FRichTextLayoutMarshaller>
-UDialogueTextBlock::CreateMarshaller(const TArray<TSharedRef<ITextDecorator>> &CreatedDecorators) {
-    return FRichTextLayoutMarshaller::Create(CreateMarkupParser(), CreateMarkupWriter(), CreatedDecorators,
+UDialogueTextBlock::CreateMarshaller(TArray<TSharedRef<ITextDecorator>> CreatedDecorators) {
+    return FRichTextLayoutMarshaller::Create(CreateMarkupParser(), CreateMarkupWriter(), std::move(CreatedDecorators),
                                              StyleInstance.Get());
 }
 

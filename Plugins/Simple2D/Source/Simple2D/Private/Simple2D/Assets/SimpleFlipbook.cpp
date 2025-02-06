@@ -2,8 +2,10 @@
 
 #include "Simple2D/Assets/SimpleFlipbook.h"
 #include "AlphaBitmap.h"
+#include "Materials/MaterialInterface.h"
 #include "Paper2DModule.h"
 #include "PaperSprite.h"
+#include "UObject/ConstructorHelpers.h"
 
 USimpleFlipbook::USimpleFlipbook() {
     static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaskedMaterialRef(
@@ -68,6 +70,7 @@ FBoxSphereBounds USimpleFlipbook::GetRenderBounds() const {
     return FBoxSphereBounds(BoundingBox);
 }
 
+#if WITH_EDITOR
 FVector2D USimpleFlipbook::GetRawPivotPosition() const {
     FVector2D TopLeftUV = FVector2D::ZeroVector;
     FVector2D Dimension = SourceTexture != nullptr
@@ -108,6 +111,7 @@ FVector2D USimpleFlipbook::GetPivotPosition() const {
 
     return RawPivot;
 }
+#endif
 
 FAdditionalSpriteTextureArray USimpleFlipbook::GetBakedAdditionalSourceTextures() const {
     return FAdditionalSpriteTextureArray(AdditionalSourceTextures);

@@ -1,5 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
-
+#if WITH_EDITOR
 #include "Saving/SaveGameManager/InMemorySaveGameSystem.h"
 #include "EnhancedSaveGameModule.h"
 #include "RetroLib/Optionals/IfPresent.h"
@@ -72,3 +72,4 @@ bool FInMemorySaveGameSystem::DeleteGame(bool bAttemptToUseUI, const TCHAR *Name
         Retro::Optionals::OrElseValue(false);
     // clang-format on
 }
+#endif

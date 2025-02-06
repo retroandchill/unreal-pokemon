@@ -4,6 +4,7 @@
 #include "RetroLib/Ranges/Views/Generator.h"
 
 #ifdef __UNREAL__
+#include "Misc/CoreDelegates.h"
 #include "RetroLib/Blueprints/BlueprintRuntimeUtils.h"
 #include "RetroLib/Exceptions/VariantException.h"
 #include "RetroLib/Functional/Delegates.h"

@@ -4,6 +4,8 @@
 #include "CoreMinimal.h"
 #include "DataRetrieval/DataTableProxy.h"
 #include "IndexedTableRow.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
+#include "Templates/SubclassOf.h"
 #include "UObject/Object.h"
 
 #include "Status.generated.h"

@@ -12,6 +12,7 @@ class IGridMovable;
 class AGameCharacter;
 class UTileReplacerComponent;
 class IWithinMap;
+class UDataTable;
 
 /**
  * Actor that contains the basic information about the map

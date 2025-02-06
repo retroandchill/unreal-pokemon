@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "Characters/FacingDirection.h"
 #include "EngineUtils.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
 
 #include "GridUtils.generated.h"
 

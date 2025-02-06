@@ -1,6 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Simple2D/Components/SimpleFlipbookComponent.h"
+#include "ContentStreaming.h"
+#include "Engine/CollisionProfile.h"
 #include "Misc/MapErrors.h"
 #include "Misc/UObjectToken.h"
 #include "Net/UnrealNetwork.h"

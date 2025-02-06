@@ -43,23 +43,28 @@
 		{
 			"Name": "AutomationTestHelpers",
 			"Enabled": true,
-			"Optional": true
+			"Optional": true,
+			"PluginType": "Provided"
 		},
 		{
 			"Name": "RetroLib",
-			"Enabled": true
+			"Enabled": true,
+			"PluginType": "Provided"
 		},
 		{
 			"Name": "UnrealInjector",
-			"Enabled": true
+			"Enabled": true,
+			"PluginType": "Provided"
 		},
 		{
 			"Name": "DynamicAssetLoader",
-			"Enabled": true
+			"Enabled": true,
+			"PluginType": "Provided"
 		},
 		{
 			"Name": "Simple2D",
-			"Enabled": true
+			"Enabled": true,
+			"PluginType": "Provided"
 		}
 	]
 }

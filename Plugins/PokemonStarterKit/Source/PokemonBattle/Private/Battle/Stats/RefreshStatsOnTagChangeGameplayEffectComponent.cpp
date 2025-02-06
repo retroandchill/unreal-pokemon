@@ -2,6 +2,7 @@
 
 #include "Battle/Stats/RefreshStatsOnTagChangeGameplayEffectComponent.h"
 #include "AbilitySystemComponent.h"
+#include "Algo/Find.h"
 #include "GameplayEffect.h"
 #include "PokemonBattleModule.h"
 

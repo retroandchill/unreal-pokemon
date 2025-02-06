@@ -31,6 +31,7 @@
 
 #include "UE5Coro/AsyncAwaiter.h"
 #include "UE5Coro/TaskAwaiter.h"
+#include "HAL/Runnable.h"
 #include "UE5CoroDelegateCallbackTarget.h"
 
 using namespace UE5Coro;

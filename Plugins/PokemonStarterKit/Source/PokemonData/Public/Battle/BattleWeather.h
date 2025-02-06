@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "IndexedTableRow.h"
+#include "Templates/SubclassOf.h"
 #include "UObject/Object.h"
 
 #include "BattleWeather.generated.h"

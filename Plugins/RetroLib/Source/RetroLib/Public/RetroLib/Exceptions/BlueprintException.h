@@ -27,7 +27,7 @@ namespace Retro {
         explicit FBlueprintException(std::string &&Message,
                                      EBlueprintExceptionType::Type Type = EBlueprintExceptionType::AccessViolation);
 
-        [[nodiscard]] const char *what() const override;
+        [[nodiscard]] const char *what() const noexcept override;
 
         EBlueprintExceptionType::Type GetType() const {
             return Type;

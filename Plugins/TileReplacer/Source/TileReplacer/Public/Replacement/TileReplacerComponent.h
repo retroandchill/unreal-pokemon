@@ -10,6 +10,7 @@
 
 class ATileReplacementActor;
 class UPaperTileMapComponent;
+class UDataTable;
 
 /**
  * Actor component used for replacing specific tiles in a tilemap with an animated actor instead.

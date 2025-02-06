@@ -29,7 +29,7 @@ class RPGMENUS_API UDialogueTextBlock : public UCommonRichTextBlock {
     TSharedRef<SWidget> RebuildWidget() override;
 
     virtual TSharedRef<FRichTextLayoutMarshaller>
-    CreateMarshaller(const TArray<TSharedRef<ITextDecorator>> &CreatedDecorators);
+    CreateMarshaller(TArray<TSharedRef<ITextDecorator>> CreatedDecorators);
     virtual TSharedRef<FSlateTextLayout> CreateLayout(SWidget *InOwner, const FTextBlockStyle &InDefaultTextStyle);
 
   private:

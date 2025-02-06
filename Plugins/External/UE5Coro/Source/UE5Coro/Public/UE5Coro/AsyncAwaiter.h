@@ -34,6 +34,7 @@
 #include "CoreMinimal.h"
 #include "UE5Coro/Definition.h"
 #include <tuple>
+#include "Async/Async.h"
 #include "Async/Future.h"
 #include "Async/TaskGraphInterfaces.h"
 #include "Misc/IQueuedWork.h"

@@ -4,6 +4,7 @@
 
 #ifdef __UNREAL__
 #if !RETROLIB_WITH_MODULES
+#include "AssetRegistry/AssetData.h"
 #include "Engine/AssetManager.h"
 
 #if RETROLIB_WITH_UE5CORO

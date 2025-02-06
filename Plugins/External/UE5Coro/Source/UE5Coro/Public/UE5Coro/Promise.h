@@ -36,6 +36,7 @@
 #include <coroutine>
 #include <functional>
 #include "Engine/LatentActionManager.h"
+#include "HAL/Event.h"
 #define UE5CORO_PRIVATE_SUPPRESS_COROUTINE_INL
 #include "UE5Coro/Coroutine.h"
 #include "UE5Coro/Private.h"

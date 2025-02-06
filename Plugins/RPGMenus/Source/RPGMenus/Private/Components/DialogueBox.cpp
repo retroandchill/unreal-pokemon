@@ -5,6 +5,7 @@
 #include "Framework/Text/ILayoutBlock.h"
 #include "Framework/Text/RichTextLayoutMarshaller.h"
 #include "Framework/Text/SlateTextLayout.h"
+#include "TimerManager.h"
 
 void UDialogueBox::PlayLine(const FText &InLine) {
     check(GetWorld() != nullptr)

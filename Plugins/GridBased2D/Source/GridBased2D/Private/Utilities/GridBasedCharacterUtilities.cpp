@@ -2,7 +2,9 @@
 
 #include "Utilities/GridBasedCharacterUtilities.h"
 #include "CharacterMovementComponentAsync.h"
+#include "Components/StaticMeshComponent.h"
 #include "Engine/OverlapResult.h"
+#include "Engine/World.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GridBased2DSettings.h"

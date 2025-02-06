@@ -5,6 +5,7 @@
 #include "CommonActionWidget.h"
 #include "Components/Bag/ItemSelectionWindow.h"
 #include "Components/Bag/PocketButton.h"
+#include "Engine/GameInstance.h"
 #include "Groups/CommonButtonGroupBase.h"
 #include "Input/CommonUIInputTypes.h"
 #include "Memory/CursorMemorySubsystem.h"

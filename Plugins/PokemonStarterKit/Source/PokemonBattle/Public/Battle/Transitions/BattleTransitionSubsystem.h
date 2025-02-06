@@ -12,6 +12,7 @@
 
 class ABattleTransitionActor;
 class ULevelStreamingDynamic;
+class ALevelStreamingVolume;
 class IBattle;
 
 USTRUCT()

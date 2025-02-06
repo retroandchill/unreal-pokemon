@@ -1,6 +1,7 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Managers/PokemonSubsystem.h"
+#include "Engine/GameInstance.h"
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 #include "Lookup/InjectionUtilities.h"
