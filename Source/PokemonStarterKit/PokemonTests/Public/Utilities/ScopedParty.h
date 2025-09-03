@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Pokemon/PokemonDTO.h"
-#include "RetroLib/Ranges/Algorithm/NameAliases.h"
+#include "RetroLib/Ranges/Algorithm/To.h"
 #include "Trainers/Trainer.h"
 #include "Utilities/PartyManagementHelpers.h"
 #include "Utilities/TrainerHelpers.h"

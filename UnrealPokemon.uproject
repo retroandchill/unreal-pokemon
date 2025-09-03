@@ -18,7 +18,77 @@
 			"Name": "PaperZDHelpers",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
-		}
+		},
+        {
+            "Name": "PokemonData",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "PokemonAssets",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "PokemonCore",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "PokemonUI",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "PokemonBlueprintNodes",
+            "Type": "UncookedOnly",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "PokemonEditorTools",
+            "Type": "Editor",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "PokemonTests",
+            "Type": "Editor",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "PokemonBattle",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "PokemonBattleUI",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "PokemonEncounters",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "PokemonOverworld",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "PokemonItems",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "PokemonMoves",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "PokemonBattleItems",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        }
 	],
 	"Plugins": [
 		{
