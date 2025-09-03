@@ -1,12 +1,3 @@
-[submodule "Plugins/UnrealRanges/Deps/range-v3"]
-	path = Plugins/UnrealRanges/Deps/range-v3
-	url = https://github.com/ericniebler/range-v3.git
-[submodule "Plugins/PokemonStarterKit/Source/PokemonUtilities/External/bimap"]
-	path = Plugins/PokemonStarterKit/Source/PokemonUtilities/Public/External/bimap
-	url = https://github.com/LarsHagemann/bimap.git
-[submodule "Plugins/UnrealRanges/Deps/FunctionTraits"]
-	path = Plugins/UnrealRanges/Deps/FunctionTraits
-	url = https://github.com/HexadigmSystems/FunctionTraits.git
 [submodule "Plugins/UnrealSharp/UnrealSharp"]
 	path = Plugins/UnrealSharp/UnrealSharp
 	url = https://github.com/retroandchill/UnrealSharp.git
