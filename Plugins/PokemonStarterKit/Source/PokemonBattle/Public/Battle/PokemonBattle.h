@@ -272,7 +272,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
      */
     TMap<FGuid, uint8> ExpectedActionCount;
 
-    TUniquePtr<TPromise<int32>> ActionsCompletePromise = MakeUnique<TPromise<int32>>();
+    TUniquePtr<TPromise<int32>> ActionsCompletePromise;
 
     /**
      * The actual queue of actions to be executed
@@ -302,7 +302,7 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     /**
      * Delegate that is invoked when the battle ends
      */
-    TPromise<EBattleResult> OnBattleEnd;
+    TUniquePtr<TPromise<EBattleResult>> OnBattleEnd;
 
     int32 RunAttempts = 0;
 

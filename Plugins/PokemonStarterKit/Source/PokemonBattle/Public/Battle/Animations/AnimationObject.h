@@ -35,5 +35,5 @@ class POKEMONBATTLE_API UAnimationObject : public UObject, public IBattleAnimati
     /**
      * Called when the animation is complete
      */
-    TPromise<int32> OnBattleAnimationComplete;
+    TUniquePtr<TPromise<int32>> OnBattleAnimationComplete;
 };

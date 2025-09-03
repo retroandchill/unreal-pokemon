@@ -78,6 +78,7 @@ UE5Coro::TCoroutine<> APokemonBattle::DisplaySideSendOutAnimation(int32 Index) {
 }
 
 UE5Coro::TCoroutine<EBattleResult> APokemonBattle::MainBattleLoop() {
+    OnBattleEnd = MakeUnique<TPromise<EBattleResult>>();
     TOptional<int32> Result;
     while (true) {
         Result = co_await ProcessTurn();
@@ -106,7 +107,7 @@ UE5Coro::TCoroutine<EBattleResult> APokemonBattle::ConductBattle(APlayerControll
 
     auto MainLoop = MainBattleLoop();
     auto Interrupt = [](UE5Coro::TLatentContext<APokemonBattle> This) -> UE5Coro::TCoroutine<EBattleResult> {
-        co_return co_await This->OnBattleEnd.GetFuture();
+        co_return co_await This->OnBattleEnd->GetFuture();
     }(this);
     auto Result = co_await Race(MainLoop, Interrupt) == 0 ? MainLoop.GetResult() : Interrupt.GetResult();
 
@@ -265,7 +266,7 @@ void APokemonBattle::RefreshBattleHUD() {
 }
 
 void APokemonBattle::EndBattle_Implementation(EBattleResult Result) {
-    OnBattleEnd.EmplaceValue(Result);
+    OnBattleEnd->EmplaceValue(Result);
 }
 
 void APokemonBattle::ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger) {

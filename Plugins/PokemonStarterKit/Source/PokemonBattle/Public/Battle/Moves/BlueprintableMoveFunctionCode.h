@@ -75,5 +75,5 @@ class POKEMONBATTLE_API UBlueprintableMoveFunctionCode : public UBattleMoveFunct
     void CompleteApplyGeneralEffect();
 
   private:
-    TUniquePtr<TPromise<bool>> CoroutineFutureState = MakeUnique<TPromise<bool>>();
+    TUniquePtr<TPromise<bool>> CoroutineFutureState;
 };

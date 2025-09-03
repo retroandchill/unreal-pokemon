@@ -32,5 +32,5 @@ class POKEMONBATTLE_API AAnimationActor : public AActor, public IBattleAnimation
     /**
      * Called when the animation is complete
      */
-    TPromise<int32> OnBattleAnimationComplete;
+    TUniquePtr<TPromise<int32>> OnBattleAnimationComplete;
 };

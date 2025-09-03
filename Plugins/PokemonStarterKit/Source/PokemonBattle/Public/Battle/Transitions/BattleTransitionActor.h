@@ -28,5 +28,5 @@ class POKEMONBATTLE_API ABattleTransitionActor : public AActor {
     void CompleteTransition();
 
   private:
-    TPromise<int32> OnBattleTransitionComplete;
+    TUniquePtr<TPromise<int32>> OnBattleTransitionComplete;
 };

@@ -3,10 +3,11 @@
 #include "Battle/Animations/AnimationObject.h"
 
 UE5Coro::TCoroutine<> UAnimationObject::PlayAnimation() {
+    OnBattleAnimationComplete = MakeUnique<TPromise<int32>>();
     Play();
-    co_await OnBattleAnimationComplete.GetFuture();
+    co_await OnBattleAnimationComplete->GetFuture();
 }
 
 void UAnimationObject::AnimationComplete() {
-    OnBattleAnimationComplete.EmplaceValue(0);
+    OnBattleAnimationComplete->EmplaceValue(0);
 }

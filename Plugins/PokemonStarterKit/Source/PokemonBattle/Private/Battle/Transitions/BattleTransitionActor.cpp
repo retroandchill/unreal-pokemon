@@ -3,8 +3,9 @@
 #include "Battle/Transitions/BattleTransitionActor.h"
 
 UE5Coro::TCoroutine<> ABattleTransitionActor::Execute() {
+    OnBattleTransitionComplete = MakeUnique<TPromise<int32>>();
     TransitionToBattle();
-    co_await OnBattleTransitionComplete.GetFuture();
+    co_await OnBattleTransitionComplete->GetFuture();
     Destroy();
 }
 
@@ -15,5 +16,5 @@ UE5Coro::TCoroutine<> ABattleTransitionActor::Execute(ABattleTransitionActor *Tr
 }
 
 void ABattleTransitionActor::CompleteTransition() {
-    OnBattleTransitionComplete.EmplaceValue(0);
+    OnBattleTransitionComplete->EmplaceValue(0);
 }

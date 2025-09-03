@@ -39,5 +39,5 @@ class POKEMONBATTLE_API UBlueprintableBattleItemEffect : public UBattleItemEffec
     void CompleteIsTargetValidCheck(bool bResult);
 
   private:
-    TUniquePtr<TPromise<bool>> StageCompleteState = MakeUnique<TPromise<bool>>();
+    TUniquePtr<TPromise<bool>> StageCompleteState;
 };

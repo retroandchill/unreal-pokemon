@@ -100,3 +100,5 @@ TestResults
 **/Script/**/obj
 **/Script/**/Properties/launchSettings.json
 **/Script/*.Glue/**/*.generated.cs
+Script/UnrealPokemon.Glue/TraceChannel.cs
+Script/UnrealPokemon.Glue/GameplayTags.cs
