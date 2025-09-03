@@ -95,3 +95,8 @@ cpp-coverage.xml
 *.profdata
 coverage.txt
 TestResults
+
+**/Script/**/bin
+**/Script/**/obj
+**/Script/**/Properties/launchSettings.json
+**/Script/*.Glue/**/*.generated.cs
