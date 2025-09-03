@@ -29,84 +29,70 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "UE5Coro/Threading.h"
+#include "UE5Coro/CoroutineAwaiter.h"
 
 using namespace UE5Coro;
 using namespace UE5Coro::Private;
 
 namespace
 {
-struct FAwaitingPromise
+bool ShouldResumeLatentCoroutine(void* State, bool bCleanup)
 {
-	FPromise* Promise;
-	FAwaitingPromise* Next;
-};
-}
-
-FAwaitableSemaphore::FAwaitableSemaphore(int Capacity, int InitialCount)
-	: Capacity(Capacity), Count(InitialCount)
-{
-	checkf(Capacity > 0 && InitialCount >= 0 && InitialCount <= Capacity,
-	       TEXT("Initial semaphore values out of range"));
-}
-
-#if UE5CORO_DEBUG
-FAwaitableSemaphore::~FAwaitableSemaphore()
-{
-	ensureMsgf(!Awaiters,
-	           TEXT("Destroyed early, remaining awaiters will never resume!"));
-}
-#endif
-
-void FAwaitableSemaphore::Unlock(int InCount)
-{
-	checkf(InCount > 0, TEXT("Invalid count"));
-	Lock.lock();
-	verifyf((Count += InCount) <= Capacity,
-	        TEXT("Semaphore unlocked above maximum"));
-	TryResumeAll();
-}
-
-FSemaphoreAwaiter FAwaitableSemaphore::operator co_await()
-{
-	return FSemaphoreAwaiter(*this);
-}
-
-void FAwaitableSemaphore::TryResumeAll()
-{
-	checkf(!Lock.try_lock(), TEXT("Internal error: resuming without lock held"));
-	while (Awaiters && Count > 0)
+	auto* This = static_cast<TCoroutine<>*>(State);
+	if (bCleanup) [[unlikely]]
 	{
-		auto* Node = static_cast<FAwaitingPromise*>(std::exchange(
-			Awaiters, static_cast<FAwaitingPromise*>(Awaiters)->Next));
-		verifyf(--Count >= 0, TEXT("Internal error: semaphore went negative"));
-		Lock.unlock();
-		Node->Promise->Resume();
-		delete Node;
-		Lock.lock();
-	}
-	Lock.unlock();
-}
-
-bool FSemaphoreAwaiter::await_ready()
-{
-	Semaphore.Lock.lock();
-	if (Semaphore.Count > 0)
-	{
-		verifyf(--Semaphore.Count >= 0,
-		        TEXT("Internal error: semaphore went negative"));
-		Semaphore.Lock.unlock();
-		return true;
-	}
-	else // Leave it locked
+		delete This;
 		return false;
+	}
+	return This->IsDone();
+}
 }
 
-void FSemaphoreAwaiter::Suspend(FPromise& Promise)
+FAsyncCoroutineAwaiter::FAsyncCoroutineAwaiter(TCoroutine<>&& Antecedent)
+	: TCancelableAwaiter(&Cancel), Antecedent(std::move(Antecedent))
 {
-	checkf(!Semaphore.Lock.try_lock(),
-	       TEXT("Internal error: suspension without lock"));
-	Semaphore.Awaiters = new FAwaitingPromise(
-		&Promise, static_cast<FAwaitingPromise*>(Semaphore.Awaiters));
-	Semaphore.Lock.unlock();
+}
+
+bool FAsyncCoroutineAwaiter::await_ready()
+{
+	return Antecedent.IsDone();
+}
+
+void FAsyncCoroutineAwaiter::Suspend(FPromise& Promise)
+{
+	checkf(!State, TEXT("Internal error: unexpected awaiter reuse"));
+	UE::TUniqueLock L(Promise.GetLock());
+	if (Promise.RegisterCancelableAwaiter(this))
+	{
+		State = new FTwoLives; // This must be created while the lock is held
+		Antecedent.ContinueWith([&Promise, State = State]
+		{
+			// Call Release() first, it might indicate that the promise is gone.
+			// If cancellation arrives right after Release() returns, it will
+			// win UnregisterCancelableAwaiter(), and call the second Release().
+			if (State->Release() && Promise.UnregisterCancelableAwaiter<true>())
+			{
+				State->Release();
+				Promise.Resume();
+			}
+		});
+	}
+	else
+		FAsyncYieldAwaiter::Suspend(Promise);
+}
+
+void FAsyncCoroutineAwaiter::Cancel(void* This, FPromise& Promise)
+{
+	if (Promise.UnregisterCancelableAwaiter<false>())
+	{
+		auto* Awaiter = static_cast<FAsyncCoroutineAwaiter*>(This);
+		Awaiter->State->Release(); // Disarm the continuation
+		FAsyncYieldAwaiter::Suspend(Promise);
+	}
+}
+
+FLatentCoroutineAwaiter::FLatentCoroutineAwaiter(TCoroutine<>&& Antecedent)
+	: FLatentAwaiter(new TCoroutine<>(std::move(Antecedent)),
+	                 &ShouldResumeLatentCoroutine, std::false_type())
+{
 }

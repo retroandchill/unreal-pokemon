@@ -44,3 +44,5 @@ static_assert(sizeof(void*) == 8, "UE5Coro only supports 64-bit platforms");
 #if defined(_MSC_VER) && !defined(__clang__) && _MSC_VER < 1941
 #error UE5Coro requires MSVC v14.41 or newer
 #endif
+
+#include "UE5Coro/Debug.h"

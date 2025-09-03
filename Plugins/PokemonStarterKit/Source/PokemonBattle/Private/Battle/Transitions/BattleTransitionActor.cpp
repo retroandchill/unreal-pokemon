@@ -4,7 +4,7 @@
 
 UE5Coro::TCoroutine<> ABattleTransitionActor::Execute() {
     TransitionToBattle();
-    co_await TFuture<void>(OnBattleTransitionComplete);
+    co_await OnBattleTransitionComplete.GetFuture();
     Destroy();
 }
 
@@ -15,5 +15,5 @@ UE5Coro::TCoroutine<> ABattleTransitionActor::Execute(ABattleTransitionActor *Tr
 }
 
 void ABattleTransitionActor::CompleteTransition() {
-    OnBattleTransitionComplete->EmplaceResult(0);
+    OnBattleTransitionComplete.EmplaceValue(0);
 }

@@ -172,7 +172,7 @@ namespace Simple2D {
         check(SectionIndex < BatchedSections.Num());
 
         if (const auto &Section = BatchedSections[SectionIndex]; Section.IsValid()) {
-            checkSlow(VertexBuffer.IsFullyInitialized() && VertexFactory.IsFullyInitialized());
+            checkSlow(VertexBuffer.IsFullyInitialized() && VertexFactory.IsInitialized());
 
             OutMeshBatch.bCanApplyViewModeOverrides = true;
             OutMeshBatch.bUseWireframeSelectionColoring = bIsSelected;

@@ -33,8 +33,8 @@
 
 #include "CoreMinimal.h"
 #include "UE5Coro/Definition.h"
+#include <mutex>
 #include "UE5Coro/Private.h"
-#include "HAL/Thread.h"
 
 namespace UE5Coro::Private
 {
@@ -44,14 +44,14 @@ class UE5CORO_API FTimerThread final
 	static FTimerThread* Instance;
 
 	FEvent* Event;
-	FMutex Lock;
+	UE::FMutex Lock;
 	TArray<FAsyncTimeAwaiter*> Queue;
 	FThread Thread; // This one must come last
 
 public:
 	static FTimerThread& Get();
 	void Register(FAsyncTimeAwaiter*);
-	void TryUnregister(FAsyncTimeAwaiter*);
+	bool TryUnregister(FAsyncTimeAwaiter*);
 
 private:
 	explicit FTimerThread();

@@ -16,9 +16,16 @@ await, before the coroutine would normally resume.
 When such a type is awaited from an async coroutine, a latent action is created
 and registered behind the scenes to handle the awaiter, which incurs additional
 overhead.
-When this happens, the GWorld global variable is read, and it must be valid at
-the time of the co_await (which is usually the case on the game thread).
-Latent coroutines do not have this limitation and do not access GWorld.
+When this happens, the GWorld global variable is read, and it must be valid
+throughout the co_await (which is usually the case on the game thread).
+
+Some latent awaiters are world sensitive.
+These have an additional requirement that the world must remain the same from
+calling their functions to the end of the co_await, instead of just being valid.
+This is guarded by an ensure() on Tick.
+
+Latent coroutines (as opposed to latent awaiters) do not have this limitation,
+and they do not access GWorld.
 The functions from this namespace may still do.
 
 ### auto NextTick()
@@ -72,6 +79,9 @@ It's roughly equivalent to `while (!Function()) co_await NextTick();`, but the
 provided function is internally called on a fast path, without repeatedly
 resuming and suspending the coroutine.
 
+This function assumes that `Function` is not world-sensitive.
+If it uses GWorld, make sure it can handle it changing, or prevent world changes.
+
 Example:
 ```cpp
 using namespace UE5Coro::Latent;
@@ -82,62 +92,6 @@ FVoidCoroutine Example(FLatentActionInfo LatentInfo)
     co_await Until([&] { return bProceedWithExample; });
     Done();
 }
-```
-
-### auto UntilCoroutine(TCoroutine<> Coroutine)
-
-This wrapper forces awaits of TCoroutines to be performed in latent mode,
-even if the caller coroutine is async.
-Normally, the implementation is chosen based on the _awaiting_ coroutine's
-execution mode, with async coroutines using a callback-based approach that is
-optimized for no CPU overhead until the awaited coroutine completes.
-The _awaited_ coroutine's execution mode doesn't matter.
-
-Forcing latent mode can improve responsiveness to cancellations of the awaiting
-coroutine, at the price of the added runtime overhead of creating and ticking a
-backing latent action for the await.
-It also requires the await to happen on the game thread.
-
-Using this wrapper has no effect in a latent coroutine.
-It already has a latent action, which gets reused.
-
-Example:
-```cpp
-using namespace UE5Coro;
-using namespace UE5Coro::Latent;
-
-TCoroutine<> Example();
-
-TCoroutine<> Async()
-{
-    co_await UntilCoroutine(Example()); // The await is latent
-    co_await Example(); // The await is async
-}
-
-TCoroutine<> Latent(UWorld*, FLatentActionInfo)
-{
-    co_await UntilCoroutine(Example()); // Pointless force to latent
-    co_await Example(); // The await is naturally latent already
-}
-```
-
-### auto UntilDelegate(T& Delegate)
-
-This function provides a safer alternative to
-[awaiting a delegate directly](Implicit.md#delegates).
-It is recommended to be used from latent coroutines if the delegate might not
-get invoked.
-Cancellation is handled promptly, however, parameters are not provided to the
-coroutine.
-The delegate itself may still have parameters and/or a return value (which will
-be default constructed).
-
-Example:
-```cpp
-using namespace UE5Coro::Latent;
-
-// Instead of co_await ExampleDelegate;
-co_await UntilDelegate(ExampleDelegate);
 ```
 
 ### auto Seconds(double Seconds)
@@ -176,6 +130,7 @@ FVoidCoroutine CountDown(int Value, FLatentActionInfo LatentInfo)
 
 Waiting for a negative amount of time will `ensure` and finish immediately.
 
+These functions return world-sensitive awaiters.
 See UE5Coro::Async::PlatformSeconds for a thread-safe alternative to RealSeconds
 that does not require a world.
 
@@ -194,4 +149,35 @@ For example, `UntilTime(GWorld->GetTimeSeconds() + 10)` is equivalent to
 
 For more details, see the Seconds family of functions right above this section.
 
+These functions return world-sensitive awaiters.
 The async counterpart of UntilRealTime is UE5Coro::Async::UntilPlatformTime.
+
+### auto SecondsForActor(AActor* Actor, double Seconds)
+### auto UnpausedSecondsForActor(AActor* Actor, double Seconds)
+
+These behave similarly to Seconds and UnpausedSeconds, respectively, but they
+also take the actor's custom time dilation into account.
+
+The result of their await expressions is true if the actor is still alive and
+the provided amount of time has elapsed, false if the actor was destroyed and
+the delay was cut short as a result.
+
+These functions return world-sensitive awaiters.
+
+Example:
+```cpp
+using namespace UE5Coro::Latent;
+
+FVoidCoroutine Example(AActor* Actor, FLatentActionInfo LatentInfo)
+{
+    bool bCompleted = co_await SecondsForActor(Actor, 1);
+}
+```
+
+### auto WhenAny(TLatentContext\<const UObject\> LatentContext, TAwaitable auto&&... Awaitables)
+
+Documented [here](Aggregate.md#auto-latentwhenanytlatentcontextconst-uobject-latentcontext-tawaitable-auto-awaitables).
+
+### auto WhenAll(TLatentContext\<const UObject\> LatentContext, TAwaitable auto&&... Awaitables)
+
+Documented [here](Aggregate.md#auto-latentwhenalltlatentcontextconst-uobject-latentcontext-tawaitable-auto-awaitables).

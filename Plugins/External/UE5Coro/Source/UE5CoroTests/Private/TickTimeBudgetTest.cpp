@@ -104,7 +104,7 @@ void DoTest(FAutomationTestBase& Test)
 bool FTickTimeBudgetAsyncTest::RunTest(const FString& Parameters)
 {
 	DoTest<>(*this);
-    return true;
+	return true;
 }
 
 bool FTickTimeBudgetLatentTest::RunTest(const FString& Parameters)

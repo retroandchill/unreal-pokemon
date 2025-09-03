@@ -32,7 +32,6 @@
 #include "UE5Coro/LatentAwaiter.h"
 #include "Engine/World.h"
 #include "UE5Coro/CoroutineAwaiter.h"
-#include "UE5CoroDelegateCallbackTarget.h"
 
 using namespace UE5Coro;
 using namespace UE5Coro::Private;
@@ -92,42 +91,71 @@ FLatentAwaiter GenericUntil(double Time)
 	// Definition.h validates that a double fits into a void*
 	void* State = nullptr;
 	reinterpret_cast<double&>(State) = Time;
-	return FLatentAwaiter(State, &WaitUntilTime<GetTime>);
+	return FLatentAwaiter(State, &WaitUntilTime<GetTime>, std::true_type());
 }
 
-class [[nodiscard]] FUntilDelegateState final
-	: public std::enable_shared_from_this<FUntilDelegateState>
+struct FCustomTimeDilationAwaiterState
 {
-	TStrongObjectPtr<UUE5CoroDelegateCallbackTarget> Target;
-	// This object is on the game thread, but the delegate might not be
-	std::atomic<bool> bExecuted = false;
+	TWeakObjectPtr<AActor> Actor;
+	double Remaining;
+	double PreviousTime;
+};
+}
 
-public:
-	explicit FUntilDelegateState(UUE5CoroDelegateCallbackTarget* Target)
-		: Target(Target) { }
-
-	void Init()
+template<auto GetTime>
+struct FCustomTimeDilationAwaiter::TState : FCustomTimeDilationAwaiterState
+{
+	explicit TState(AActor* InActor, double InRemaining)
 	{
-		Target->Init([Weak = weak_from_this()](void*)
+#if ENABLE_NAN_DIAGNOSTIC
+		if (FMath::IsNaN(Remaining))
 		{
-			if (auto Strong = Weak.lock())
-				Strong->bExecuted = true;
-		});
+			logOrEnsureNanError(TEXT("Latent wait started with NaN time"));
+		}
+#endif
+		checkf(IsInGameThread(),
+		       TEXT("Latent awaiters may only be used on the game thread"));
+		checkf(::IsValid(GWorld),
+		       TEXT("This awaiter may only be used in the context of a valid world"));
+		Actor = InActor;
+		Remaining = InRemaining;
+		PreviousTime = (GWorld->*GetTime)();
 	}
 
 	static bool ShouldResume(void* State, bool bCleanup)
 	{
-		auto& This = *static_cast<std::shared_ptr<FUntilDelegateState>*>(State);
+		auto* This = static_cast<TState*>(State);
 		if (bCleanup) [[unlikely]]
 		{
-			if (This->Target.IsValid())
-				This->Target->MarkAsGarbage();
-			delete &This;
+			delete This;
 			return false;
 		}
-		return This->bExecuted;
+
+		auto* Actor = This->Actor.Get();
+		if (!Actor)
+			return true;
+
+		checkf(::IsValid(GWorld),
+		       TEXT("Internal error: latent poll outside of a valid world"));
+		auto Time = (GWorld->*GetTime)();
+		auto DeltaSeconds = Time - std::exchange(This->PreviousTime, Time);
+		DeltaSeconds *= Actor->CustomTimeDilation;
+		This->Remaining -= DeltaSeconds;
+		return This->Remaining <= 0;
 	}
 };
+
+template<auto GetTime>
+FCustomTimeDilationAwaiter::FCustomTimeDilationAwaiter(TState<GetTime>* State)
+	: FLatentAwaiter(State, &TState<GetTime>::ShouldResume, std::true_type())
+{
+}
+
+bool FCustomTimeDilationAwaiter::await_resume()
+{
+	checkf(IsInGameThread(),
+	       TEXT("Internal error: expected resumption on the game thread"));
+	return static_cast<FCustomTimeDilationAwaiterState*>(State)->Actor.IsValid();
 }
 
 FLatentAwaiter Latent::NextTick()
@@ -139,36 +167,35 @@ FLatentAwaiter Latent::Ticks(int64 Ticks)
 {
 	ensureMsgf(Ticks >= 0, TEXT("Invalid number of ticks %lld"), Ticks);
 	uint64 Target = GFrameCounter + Ticks;
-	return FLatentAwaiter(reinterpret_cast<void*>(Target), &WaitUntilFrame);
+	return FLatentAwaiter(reinterpret_cast<void*>(Target), &WaitUntilFrame,
+	                      std::false_type());
 }
 
 FLatentAwaiter Latent::Until(std::function<bool()> Function)
 {
 	checkf(Function, TEXT("Provided function is empty"));
 	return FLatentAwaiter(new std::function(std::move(Function)),
-	                      &WaitUntilPredicate);
-}
-
-auto Latent::UntilCoroutine(TCoroutine<> Coroutine)
-	-> TLatentCoroutineAwaiter<void, false>
-{
-	return TLatentCoroutineAwaiter<void, false>(std::move(Coroutine));
-}
-
-std::tuple<FLatentAwaiter, UObject*> Private::UntilDelegateCore()
-{
-	checkf(IsInGameThread(), TEXT("")
-	       "Awaiting delegates this way is only available on the game thread. "
-	       "Awaiting delegates directly works on any thread.");
-	auto* Target = NewObject<UUE5CoroDelegateCallbackTarget>();
-	auto* State = new auto(std::make_shared<FUntilDelegateState>(Target));
-	(*State)->Init();
-	return {FLatentAwaiter(State, &FUntilDelegateState::ShouldResume), Target};
+	                      &WaitUntilPredicate, std::false_type());
 }
 
 FLatentAwaiter Latent::Seconds(double Seconds)
 {
 	return GenericUntil<&UWorld::GetTimeSeconds, true>(Seconds);
+}
+
+FCustomTimeDilationAwaiter Latent::SecondsForActor(AActor* Actor, double Seconds)
+{
+	return FCustomTimeDilationAwaiter(
+		new FCustomTimeDilationAwaiter::TState<&UWorld::GetTimeSeconds>(
+			Actor, Seconds));
+}
+
+FCustomTimeDilationAwaiter Latent::UnpausedSecondsForActor(AActor* Actor,
+                                                           double Seconds)
+{
+	return FCustomTimeDilationAwaiter(
+		new FCustomTimeDilationAwaiter::TState<&UWorld::GetUnpausedTimeSeconds>(
+			Actor, Seconds));
 }
 
 FLatentAwaiter Latent::UnpausedSeconds(double Seconds)

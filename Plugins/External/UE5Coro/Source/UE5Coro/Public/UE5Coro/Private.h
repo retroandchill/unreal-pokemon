@@ -34,8 +34,7 @@
 #include "CoreMinimal.h"
 #include "UE5Coro/Definition.h"
 #include <concepts>
-#include <mutex>
-#include <shared_mutex>
+#include <memory>
 #include <type_traits>
 #include <utility>
 #include "Delegates/DelegateBase.h"
@@ -74,17 +73,20 @@ struct TAwaitTransform
 };
 
 extern thread_local bool GDestroyedEarly;
-UE5CORO_API std::tuple<class FLatentAwaiter, UObject*> UntilDelegateCore();
 enum class ELatentExitReason : uint8;
 class FAllAwaiter;
 class FAnyAwaiter;
 class FAsyncAwaiter;
+struct FAsyncPreloadAwaiter;
 class FAsyncTimeAwaiter;
 class FAsyncYieldAwaiter;
 class FCancellationAwaiter;
+struct FCustomTimeDilationAwaiter;
 class FEventAwaiter;
 class FHttpAwaiter;
 class FLatentChainAwaiter;
+class FLatentAnyAwaiter;
+class FLatentAwaiter;
 class FLatentPromise;
 class FNewThreadAwaiter;
 struct FPackageLoadAwaiter;
@@ -95,14 +97,17 @@ class FSemaphoreAwaiter;
 class FTaskAwaiter;
 class FThreadPoolAwaiter;
 class FTwoLives;
+struct FNonCancelable;
 namespace Test { class FTestHelper; }
 template<typename> struct TAnimAwaiter;
 template<typename, int> struct TAsyncLoadAwaiter;
 template<typename> struct TAsyncQueryAwaiter;
 template<typename> struct TAsyncQueryAwaiterRV;
+template<typename> class TCancelableAwaiter;
 template<typename, typename> class TCoroutinePromise;
-template<typename, typename...> class TDelegateAwaiter;
-template<typename, typename...> class TDynamicDelegateAwaiter;
+template<bool, typename, typename, typename...> class TDelegateAwaiter;
+template<bool, typename, typename> struct TDelegateAwaiterFor;
+template<bool, typename, typename, typename...> class TDynamicDelegateAwaiter;
 template<typename> class TFutureAwaiter;
 template<typename> class TGeneratorPromise;
 template<typename> class TTaskAwaiter;
@@ -110,14 +115,9 @@ template<typename> class TTaskAwaiter;
 template<typename>
 constexpr bool bFalse = false;
 
-// On Windows, both std::mutex and std::shared_mutex are SRWLOCKs, but mutex
-// has extra padding for ABI compatibility. Prefer shared_mutex for now.
-#ifdef _MSVC_STL_VERSION
-using FMutex = std::conditional_t<sizeof(std::shared_mutex) < sizeof(std::mutex),
-                                  std::shared_mutex, std::mutex>;
-#else
-using FMutex = std::mutex;
-#endif
+template<typename T>
+using TForwardRef = std::conditional_t<std::is_lvalue_reference_v<T>,
+	std::reference_wrapper<std::remove_reference_t<T>>, T&&>;
 
 template<typename T>
 concept TIsSparseDelegate = std::derived_from<T, FSparseDelegate>;
@@ -142,6 +142,10 @@ concept TIsDelegate =
 	std::derived_from<T, FDefaultDelegateUserPolicy::FDelegateExtras> ||
 	std::derived_from<T, FDefaultTSDelegateUserPolicy::FDelegateExtras> ||
 	TIsDynamicDelegate<T> || TIsMulticastDelegate<T>;
+
+template<typename T>
+concept TIsDelegateOrPointer = TIsDelegate<std::remove_reference_t<T>> ||
+                               TIsDelegate<std::remove_pointer_t<T>>;
 
 template<typename T>
 concept TIsUObjectPtr = std::convertible_to<T, const UObject*> &&

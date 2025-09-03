@@ -9,7 +9,7 @@
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable)
-class URefreshable : public UInterface {
+class RPGMENUS_API URefreshable : public UInterface {
     GENERATED_BODY()
 };
 

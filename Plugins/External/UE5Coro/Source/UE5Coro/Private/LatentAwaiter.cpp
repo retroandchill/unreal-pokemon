@@ -46,9 +46,8 @@ class [[nodiscard]] FPendingAsyncCoroutine final : public FPendingLatentAction
 public:
 	FPendingAsyncCoroutine(FAsyncPromise& Promise,
 	                       const FLatentAwaiter& InAwaiter)
-		: Promise(&Promise), Awaiter(nullptr, nullptr)
+		: Promise(&Promise), Awaiter(InAwaiter)
 	{
-		std::memcpy(&Awaiter, &InAwaiter, sizeof(FLatentAwaiter));
 	}
 
 	UE_NONCOPYABLE(FPendingAsyncCoroutine);
@@ -60,7 +59,10 @@ public:
 			return;
 		// This class doesn't own the coroutine (its Latent counterpart does),
 		// no need for special forced cancellation to propagate destruction
-		Promise->Cancel();
+		{
+			UE::TUniqueLock Lock(Promise->GetLock());
+			Promise->Cancel(false);
+		}
 		Promise->Resume(); // The latent action ended, which is a kind of result
 	}
 
@@ -80,16 +82,27 @@ public:
 };
 }
 
-FLatentAwaiter::FLatentAwaiter(void* State, bool (*Resume)(void*, bool)) noexcept
+FLatentAwaiter::FLatentAwaiter(void* State, bool (*Resume)(void*, bool),
+                               auto WorldSensitive) noexcept(!UE5CORO_DEBUG)
 	: State(State), Resume(Resume)
+#if UE5CORO_DEBUG
+	, OriginalWorld(WorldSensitive.value ? GWorld : nullptr)
+#endif
 {
 	checkf(IsInGameThread(),
 	       TEXT("Latent awaiters may only be created on the game thread"));
 }
+template UE5CORO_API FLatentAwaiter::FLatentAwaiter(
+	void*, bool (*)(void*, bool), std::false_type) noexcept(!UE5CORO_DEBUG);
+template UE5CORO_API FLatentAwaiter::FLatentAwaiter(
+	void*, bool (*)(void*, bool), std::true_type) noexcept(!UE5CORO_DEBUG);
 
 FLatentAwaiter::FLatentAwaiter(FLatentAwaiter&& Other) noexcept
 	: State(std::exchange(Other.State, nullptr))
 	, Resume(std::exchange(Other.Resume, nullptr))
+#if UE5CORO_DEBUG
+	, OriginalWorld(Other.OriginalWorld)
+#endif
 {
 	checkf(IsInGameThread(),
 	       TEXT("Latent awaiters may only be moved on the game thread"));
@@ -104,6 +117,7 @@ FLatentAwaiter::~FLatentAwaiter()
 #if UE5CORO_DEBUG
 	State = reinterpret_cast<void*>(0xEEEEEEEEEEEEEEEE);
 	Resume = reinterpret_cast<bool (*)(void*, bool)>(0xEEEEEEEEEEEEEEEE);
+	OriginalWorld = reinterpret_cast<UWorld*>(0xEEEEEEEEEEEEEEEE);
 #endif
 }
 
@@ -111,7 +125,16 @@ bool FLatentAwaiter::ShouldResume()
 {
 	checkf(IsInGameThread(),
 	       TEXT("Latent awaiters may only be used on the game thread"));
-	checkf(State, TEXT("Attempting to poll invalid latent awaiter"));
+	checkf(IsValid(), TEXT("Attempting to poll invalid latent awaiter"));
+#if UE5CORO_DEBUG
+	checkf(Resume != reinterpret_cast<bool (*)(void*, bool)>(0xEEEEEEEEEEEEEEEE),
+	       TEXT("Latent awaiter use after free"));
+	// If you hit this ensure, the awaiter will probably misbehave.
+	// Use an async awaiter instead (if possible), or ensure that the co_await
+	// finishes before changing worlds by, e.g., canceling its coroutine.
+	ensureMsgf(!OriginalWorld || OriginalWorld == GWorld,
+	           TEXT("World changed since awaiter creation"));
+#endif
 	return (*Resume)(State, false);
 }
 

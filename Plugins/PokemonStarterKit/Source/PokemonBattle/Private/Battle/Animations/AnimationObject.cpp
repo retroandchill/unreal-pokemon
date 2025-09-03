@@ -4,9 +4,9 @@
 
 UE5Coro::TCoroutine<> UAnimationObject::PlayAnimation() {
     Play();
-    co_await TFuture<void>(OnBattleAnimationComplete);
+    co_await OnBattleAnimationComplete.GetFuture();
 }
 
-void UAnimationObject::AnimationComplete() const {
-    OnBattleAnimationComplete->EmplaceResult(0);
+void UAnimationObject::AnimationComplete() {
+    OnBattleAnimationComplete.EmplaceValue(0);
 }

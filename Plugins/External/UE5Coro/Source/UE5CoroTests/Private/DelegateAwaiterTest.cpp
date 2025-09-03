@@ -57,50 +57,13 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FDelegateTestLatent, "UE5Coro.Delegate.Latent",
 
 namespace
 {
-template<bool bDynamic, bool bMulticast>
-struct TDelegateForTest;
-
-template<>
-struct TDelegateForTest<false, false>
-{
-	using FVoid = TDelegate<void()>;
-	using FParams = TDelegate<void(int, int&)>;
-	using FRetVal = TDelegate<FUE5CoroTestConstructionChecker()>;
-	using FAll = TDelegate<FUE5CoroTestConstructionChecker(int, int&)>;
-};
-
-template<>
-struct TDelegateForTest<false, true>
-{
-	using FVoid = TMulticastDelegate<void()>;
-	using FParams = TMulticastDelegate<void(int, int&)>;
-	using FRetVal = TMulticastDelegate<FUE5CoroTestConstructionChecker()>;
-	using FAll = TMulticastDelegate<FUE5CoroTestConstructionChecker(int, int&)>;
-};
-
-template<>
-struct TDelegateForTest<true, false>
-{
-	using FVoid = FUE5CoroTestDynamicVoidDelegate;
-	using FParams = FUE5CoroTestDynamicParamsDelegate;
-	using FRetVal = FUE5CoroTestDynamicRetvalDelegate;
-	using FAll = FUE5CoroTestDynamicAllDelegate;
-};
-
-template<>
-struct TDelegateForTest<true, true>
-{
-	using FVoid = FUE5CoroTestDynamicMulticastVoidDelegate;
-	using FParams = FUE5CoroTestDynamicMulticastParamsDelegate;
-};
-
 struct alignas(4096) FHighlyAlignedByte
 {
 	uint8 Value;
 	operator uint8() const { return Value; }
 };
 
-template<bool bDynamic, bool bMulticast, bool bLatentWrapper, typename... T>
+template<bool bDynamic, bool bMulticast, typename... T>
 void DoTest(FAutomationTestBase& Test)
 {
 	FTestWorld World;
@@ -118,17 +81,12 @@ void DoTest(FAutomationTestBase& Test)
 		typename TDelegateForTest<bDynamic, bMulticast>::FVoid Delegate;
 		World.Run(CORO
 		{
-			if constexpr (bLatentWrapper)
-				co_await UntilDelegate(Delegate);
-			else
-				co_await Delegate;
+			co_await Delegate;
 			bDone = true;
 		});
 		World.EndTick();
 		Test.TestFalse("Not done yet", bDone);
 		Invoke(Delegate);
-		if constexpr (bLatentWrapper)
-			World.Tick();
 		Test.TestTrue("Done", bDone);
 	}
 
@@ -137,27 +95,19 @@ void DoTest(FAutomationTestBase& Test)
 		typename TDelegateForTest<bDynamic, bMulticast>::FParams Delegate;
 		World.Run(CORO
 		{
-			if constexpr (bLatentWrapper)
-				co_await UntilDelegate(Delegate);
-			else
-			{
-				auto&& [A, B] = co_await Delegate;
-				static_assert(!std::is_reference_v<decltype(A)>);
-				static_assert(std::is_lvalue_reference_v<decltype(B)>);
-				Test.TestEqual("Param 1", A, 1);
-				Test.TestEqual("Param 2", B, 2);
-				B = 3;
-			}
+			auto&& [A, B] = co_await Delegate;
+			static_assert(!std::is_reference_v<decltype(A)>);
+			static_assert(std::is_lvalue_reference_v<decltype(B)>);
+			Test.TestEqual("Param 1", A, 1);
+			Test.TestEqual("Param 2", B, 2);
+			B = 3;
 			bDone = true;
 		});
 		World.EndTick();
 		Test.TestFalse("Not done yet", bDone);
 		int Value = 2;
 		Invoke(Delegate, 1, Value);
-		if constexpr (bLatentWrapper)
-			World.Tick();
-		else
-			Test.TestEqual("Reference writes back", Value, 3);
+		Test.TestEqual("Reference writes back", Value, 3);
 		Test.TestTrue("Done", bDone);
 	}
 
@@ -167,21 +117,15 @@ void DoTest(FAutomationTestBase& Test)
 		typename TDelegateForTest<bDynamic, bMulticast>::FRetVal Delegate;
 		World.Run(CORO
 		{
-			if constexpr (bLatentWrapper)
-				co_await UntilDelegate(Delegate);
-			else
-				co_await Delegate;
+			co_await Delegate;
 			bDone = true;
 			FUE5CoroTestConstructionChecker::bConstructed = false;
 		});
 		World.EndTick();
 		Test.TestFalse("Not done yet", bDone);
 		Invoke(Delegate);
-		if constexpr (bLatentWrapper)
-			World.Tick();
-		else
-			Test.TestTrue("Return value",
-			              FUE5CoroTestConstructionChecker::bConstructed);
+		Test.TestTrue("Return value",
+		              FUE5CoroTestConstructionChecker::bConstructed);
 		Test.TestTrue("Done", bDone);
 	}
 
@@ -191,17 +135,12 @@ void DoTest(FAutomationTestBase& Test)
 		typename TDelegateForTest<bDynamic, bMulticast>::FAll Delegate;
 		World.Run(CORO
 		{
-			if constexpr (bLatentWrapper)
-				co_await UntilDelegate(Delegate);
-			else
-			{
-				auto&& [A, B] = co_await Delegate;
-				static_assert(!std::is_reference_v<decltype(A)>);
-				static_assert(std::is_lvalue_reference_v<decltype(B)>);
-				Test.TestEqual("Param 1", A, 1);
-				Test.TestEqual("Param 2", B, 2);
-				B = 3;
-			}
+			auto&& [A, B] = co_await Delegate;
+			static_assert(!std::is_reference_v<decltype(A)>);
+			static_assert(std::is_lvalue_reference_v<decltype(B)>);
+			Test.TestEqual("Param 1", A, 1);
+			Test.TestEqual("Param 2", B, 2);
+			B = 3;
 			bDone = true;
 			FUE5CoroTestConstructionChecker::bConstructed = false;
 		});
@@ -211,10 +150,7 @@ void DoTest(FAutomationTestBase& Test)
 		Invoke(Delegate, 1, Value);
 		Test.TestTrue("Return value",
 		              FUE5CoroTestConstructionChecker::bConstructed);
-		if constexpr (bLatentWrapper)
-			World.Tick();
-		else
-			Test.TestEqual("Reference writes back", Value, 3);
+		Test.TestEqual("Reference writes back", Value, 3);
 		Test.TestTrue("Done", bDone);
 	}
 
@@ -225,18 +161,13 @@ void DoTest(FAutomationTestBase& Test)
 		auto* Object = NewObject<UUE5CoroTestObject>(World);
 		World.Run(CORO
 		{
-			if constexpr (bLatentWrapper)
-				co_await UntilDelegate(Object->SparseDelegate);
-			else
-				co_await Object->SparseDelegate;
+			co_await Object->SparseDelegate;
 			bDone = true;
 		});
 		World.EndTick();
 		Test.TestFalse("Not done yet", bDone);
 		Invoke(Object->SparseDelegate);
 		Object->SparseDelegate.Broadcast();
-		if constexpr (bLatentWrapper)
-			World.Tick();
 		Test.TestTrue("Done", bDone);
 	}
 
@@ -246,39 +177,29 @@ void DoTest(FAutomationTestBase& Test)
 		auto* Object = NewObject<UUE5CoroTestObject>(World);
 		World.Run(CORO
 		{
-			if constexpr (bLatentWrapper)
-				co_await UntilDelegate(Object->SparseParamsDelegate);
-			else
-			{
-				auto&& [A, B] = co_await Object->SparseParamsDelegate;
-				static_assert(!std::is_reference_v<decltype(A)>);
-				static_assert(std::is_lvalue_reference_v<decltype(B)>);
-				Test.TestEqual("Param 1", A, 1);
-				Test.TestEqual("Param 2", B, 2);
-				B = 3;
-			}
+			auto&& [A, B] = co_await Object->SparseParamsDelegate;
+			static_assert(!std::is_reference_v<decltype(A)>);
+			static_assert(std::is_lvalue_reference_v<decltype(B)>);
+			Test.TestEqual("Param 1", A, 1);
+			Test.TestEqual("Param 2", B, 2);
+			B = 3;
 			bDone = true;
 		});
 		World.EndTick();
 		Test.TestFalse("Not done yet", bDone);
 		int Value = 2;
 		Object->SparseParamsDelegate.Broadcast<int, int&>(1, Value);
-		if constexpr (bLatentWrapper)
-			World.Tick();
-		else
-			Test.TestEqual("Reference writes back", Value, 3);
+		Test.TestEqual("Reference writes back", Value, 3);
 		Test.TestTrue("Done", bDone);
 	}
 }
 
-template<int N, typename... T>
-void DoTests(FAutomationTestBase& Test)
+template<typename... T> void DoTests(FAutomationTestBase& Test)
 {
-	if constexpr (N <= 7)
-	{
-		DoTest<(N & 1) != 0, (N & 2) != 0, (N & 4) != 0, T...>(Test);
-		DoTests<N + 1, T...>(Test);
-	}
+	DoTest<false, false, T...>(Test);
+	DoTest<false, true , T...>(Test);
+	DoTest<true , false, T...>(Test);
+	DoTest<true , true , T...>(Test);
 }
 }
 
@@ -338,12 +259,12 @@ bool FDelegateTestCore::RunTest(const FString& Parameters)
 
 bool FDelegateTestAsync::RunTest(const FString& Parameters)
 {
-	DoTests<0>(*this);
+	DoTests<>(*this);
 	return true;
 }
 
 bool FDelegateTestLatent::RunTest(const FString& Parameters)
 {
-	DoTests<0, FLatentActionInfo>(*this);
+	DoTests<FLatentActionInfo>(*this);
 	return true;
 }

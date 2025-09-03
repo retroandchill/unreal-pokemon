@@ -37,8 +37,6 @@
 #include "UE5CoroGAS/AbilityPromise.h"
 #include "UE5CoroGameplayAbility.generated.h"
 
-namespace UE5CoroGAS::Private { struct FStrictPredictionKey; }
-
 /** Usage summary:
  *  - Override ExecuteAbility with a coroutine instead of ActivateAbility
  *  - Call CommitAbility like usual, but do *NOT* call EndAbility
@@ -48,12 +46,16 @@ UCLASS(Abstract, NotBlueprintable)
 class UE5COROGAS_API UUE5CoroGameplayAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
+	friend class UUE5CoroTaskCallbackTarget;
 	friend UE5Coro::Private::TAbilityPromise<ThisClass>;
 
 	// One shared per class to support every instancing policy including derived
 	// classes changing their minds at runtime. The real one is on the CDO.
-	TMap<UE5CoroGAS::Private::FStrictPredictionKey,
+	TMap<UE5Coro::Private::GAS::FActivationKey,
 	     UE5Coro::Private::TAbilityPromise<ThisClass>*>* Activations;
+
+	UPROPERTY()
+	TSet<TObjectPtr<UUE5CoroTaskCallbackTarget>> Tasks;
 
 public:
 	UUE5CoroGameplayAbility();
@@ -78,8 +80,8 @@ protected:
 		PURE_VIRTUAL(UUE5CoroGameplayAbility::ExecuteAbility, co_return;);
 
 	/** Given a UObject* with a single BlueprintAssignable UPROPERTY,
-	 *  the return value of this function lets you co_await that delegate safely,
-	 *  handling cancellations even if its delegate never Broadcasts.
+	 *  awaiting the return value of this function will resume the coroutine
+	 *  when that delegate is Broadcast().
 	 *  If the parameter is a UGameplayTask or UBlueprintAsyncActionBase, it
 	 *  will be activated before returning by default. */
 	auto Task(UObject*, bool bAutoActivate = true)

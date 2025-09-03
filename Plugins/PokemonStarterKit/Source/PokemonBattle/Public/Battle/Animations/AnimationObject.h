@@ -29,11 +29,11 @@ class POKEMONBATTLE_API UAnimationObject : public UObject, public IBattleAnimati
      * Signal that the animation is complete
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Battle|Animations")
-    void AnimationComplete() const;
+    void AnimationComplete();
 
   private:
     /**
      * Called when the animation is complete
      */
-    TSharedRef<TFutureState<int32>> OnBattleAnimationComplete = MakeShared<TFutureState<int32>>();
+    TPromise<int32> OnBattleAnimationComplete;
 };

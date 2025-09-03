@@ -52,7 +52,7 @@ UBattleTransitionSubsystem::InitiateBattle(FBattleInfo Info, TSubclassOf<ABattle
     if (Battlefield->IsLevelVisible()) {
         co_await ABattleTransitionActor::Execute(CurrentTransition);
     } else {
-        co_await WhenAll(UE5Coro::Latent::UntilDelegate(Battlefield->OnLevelShown),
+        co_await WhenAll(Battlefield->OnLevelShown,
                          ABattleTransitionActor::Execute(CurrentTransition));
     }
 

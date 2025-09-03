@@ -45,17 +45,17 @@ UE5Coro::TCoroutine<int32> UAsyncAbilityComponent::HandleGameplayEventAsync(FGam
 UE5Coro::TCoroutine<bool> UAsyncAbilityComponent::TriggerAbilityFromGameplayEventAsync(
     FGameplayAbilitySpecHandle AbilityToTrigger, FGameplayAbilityActorInfo *ActorInfo, FGameplayTag Tag,
     const FGameplayEventData *Payload, UAbilitySystemComponent &Component) {
-    auto FutureState = MakeShared<TFutureState<int32>>();
+    TPromise<int32> FutureState;
     Retro::Delegates::TScopedBinding Binding(OnAbilityEnded,
                                              [&FutureState, AbilityToTrigger](const FAbilityEndedData &Data) {
                                                  if (Data.AbilitySpecHandle == AbilityToTrigger) {
-                                                     FutureState->EmplaceResult(0);
+                                                     FutureState.EmplaceValue(0);
                                                  }
                                              });
     if (!TriggerAbilityFromGameplayEvent(AbilityToTrigger, ActorInfo, Tag, Payload, Component)) {
         co_return false;
     }
 
-    co_await TFuture<void>(FutureState);
+    co_await FutureState.GetFuture();
     co_return true;
 }

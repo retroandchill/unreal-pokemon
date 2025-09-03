@@ -197,7 +197,7 @@ bool FLatentCompletionTest::RunTest(const FString& Parameters)
 		});
 		Coro.ContinueWith([&]
 		{
-			TestTrue(TEXT("Continuing on the game thread"), IsInGameThread());
+			TestTrue("Continuing on the game thread", IsInGameThread());
 			bDone = true;
 		});
 		CoroToTest->Wait();
@@ -206,7 +206,7 @@ bool FLatentCompletionTest::RunTest(const FString& Parameters)
 		// ContinueWith is expected to run on the game thread
 		FTestHelper::PumpGameThread(World, [&] { return bDone; });
 		// The cancellation is not processed before final_suspend is reached
-		TestTrue(TEXT("Successful completion"), Coro.WasSuccessful());
+		TestTrue("Successful completion", Coro.WasSuccessful());
 	}
 
 	return true;

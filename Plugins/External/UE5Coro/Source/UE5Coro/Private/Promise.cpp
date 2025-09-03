@@ -34,21 +34,24 @@
 
 using namespace UE5Coro::Private;
 
-#if UE5CORO_DEBUG
-std::atomic<int> UE5Coro::Private::GLastDebugID = -1; // -1 = no coroutines yet
-#endif
-
 thread_local FPromise* UE5Coro::Private::GCurrentPromise = nullptr;
 thread_local bool UE5Coro::Private::GDestroyedEarly = false;
+
+FCoroutineScope::FCoroutineScope(FPromise* Promise)
+	: Promise(Promise),
+	  PreviousPromise(std::exchange(GCurrentPromise, Promise))
+{
+}
+
+FCoroutineScope::~FCoroutineScope()
+{
+	verifyf(std::exchange(GCurrentPromise, PreviousPromise) == Promise,
+	        TEXT("Internal error: coroutine tracking derailed"));
+}
 
 bool FPromiseExtras::IsComplete() const
 {
 	return Completed->Wait(0, true);
-}
-
-bool FCancellationTracker::ShouldCancel(bool bBypassHolds) const
-{
-	return bCanceled && (bBypassHolds || CancellationHolds == 0);
 }
 
 FPromise::FPromise(std::shared_ptr<FPromiseExtras> InExtras,
@@ -56,15 +59,21 @@ FPromise::FPromise(std::shared_ptr<FPromiseExtras> InExtras,
 	: Extras(std::move(InExtras))
 {
 #if UE5CORO_DEBUG
-	Extras->DebugID = ++GLastDebugID;
+	verifyf(++Debug::GActiveCoroutines > 0,
+	        TEXT("Internal error: promise tracking derailed"));
+	Extras->DebugID = ++Debug::GLastDebugID;
 	Extras->DebugPromiseType = PromiseType;
 #endif
 }
 
 FPromise::~FPromise()
 {
+#if UE5CORO_DEBUG
+	verifyf(--Debug::GActiveCoroutines >= 0,
+	        TEXT("Internal error: promise tracking derailed"));
+#endif
 	// Expecting the lock to be taken by a derived destructor
-	checkf(!Extras->Lock.try_lock(), TEXT("Internal error: lock not held"));
+	checkf(Extras->Lock.IsLocked(), TEXT("Internal error: lock not held"));
 	checkf(!Extras->IsComplete(),
 	       TEXT("Internal error: unexpected late/double coroutine destruction"));
 #if PLATFORM_EXCEPTIONS_DISABLED
@@ -75,12 +84,12 @@ FPromise::~FPromise()
 	GDestroyedEarly = false;
 
 	// The coroutine is considered completed NOW
+	auto* ReturnValuePtr = std::exchange(Extras->ReturnValuePtr, nullptr);
 	Extras->Completed->Trigger();
-	Extras->Lock.unlock();
+	Extras->Lock.Unlock();
 
 	for (auto& Fn : OnCompleted)
-		Fn(Extras->ReturnValuePtr);
-	Extras->ReturnValuePtr = nullptr;
+		Fn(ReturnValuePtr);
 }
 
 void FPromise::ResumeInternal(bool bBypassCancellationHolds)
@@ -88,27 +97,30 @@ void FPromise::ResumeInternal(bool bBypassCancellationHolds)
 	checkf(this, TEXT("Corruption")); // UB, but still useful on some compilers
 	checkf(!Extras->IsComplete(),
 	       TEXT("Attempting to resume completed coroutine"));
-	auto* CallerPromise = std::exchange(GCurrentPromise, this);
-	ON_SCOPE_EXIT
-	{
-		// Coroutine resumption might result in `this` having been freed already
-		checkf(GCurrentPromise == this,
-		       TEXT("Internal error: coroutine resume tracking derailed"));
-		GCurrentPromise = CallerPromise;
-	};
+	checkCode(
+		UE::TUniqueLock Lock(Extras->Lock);
+		checkf(!CancelableAwaiter,
+		       TEXT("Internal error: resumed with a registered awaiter"));
+	);
 
 	// Self-destruct instead of resuming if a cancellation was received
 	if (ShouldCancel(bBypassCancellationHolds)) [[unlikely]]
 		ThreadSafeDestroy();
 	else
+	{
+		FCoroutineScope Scope(this);
 		std::coroutine_handle<FPromise>::from_promise(*this).resume();
+	}
 }
 
 void FPromise::ThreadSafeDestroy()
 {
 	auto Handle = std::coroutine_handle<FPromise>::from_promise(*this);
 	GDestroyedEarly = IsEarlyDestroy();
-	Handle.destroy(); // counts as delete this;
+	{
+		FCoroutineScope Scope(this);
+		Handle.destroy(); // counts as delete this;
+	}
 	checkf(!GDestroyedEarly,
 	       TEXT("Internal error: early destroy flag not reset"));
 }
@@ -120,9 +132,52 @@ FPromise& FPromise::Current()
 	return *GCurrentPromise;
 }
 
-void FPromise::Cancel()
+UE::FMutex& FPromise::GetLock()
 {
+	return Extras->Lock;
+}
+
+bool FPromise::RegisterCancelableAwaiter(void* Awaiter)
+{
+	checkf(Extras->Lock.IsLocked(),
+	       TEXT("Internal error: unguarded awaiter registration"));
+	checkf(!CancelableAwaiter,
+	       TEXT("Internal error: overlapping awaiter registration"));
+	if (ShouldCancel(false))
+		return false;
+	else
+	{
+		CancelableAwaiter = Awaiter;
+		return true;
+	}
+}
+
+template<bool bLock>
+bool FPromise::UnregisterCancelableAwaiter()
+{
+	if constexpr (bLock)
+	{
+		UE::TUniqueLock Lock(Extras->Lock);
+		return std::exchange(CancelableAwaiter, nullptr) != nullptr;
+	}
+	else
+	{
+		checkf(Extras->Lock.IsLocked(),
+		       TEXT("Internal error: unguarded awaiter registration"));
+		return std::exchange(CancelableAwaiter, nullptr) != nullptr;
+	}
+}
+template UE5CORO_API bool FPromise::UnregisterCancelableAwaiter<false>();
+template UE5CORO_API bool FPromise::UnregisterCancelableAwaiter<true>();
+
+void FPromise::Cancel(bool bBypassCancellationHolds)
+{
+	checkf(Extras->Lock.IsLocked(),
+	       TEXT("Internal error: unguarded cancellation"));
 	CancellationTracker.Cancel();
+	if (CancelableAwaiter && ShouldCancel(bBypassCancellationHolds))
+		(**static_cast<void (**)(void*, FPromise&)>(CancelableAwaiter))(
+			CancelableAwaiter, *this);
 }
 
 bool FPromise::ShouldCancel(bool bBypassCancellationHolds) const
@@ -147,19 +202,20 @@ void FPromise::Resume()
 
 void FPromise::ResumeFast()
 {
-	checkf(!Extras->IsComplete() && !ShouldCancel(true),
+	checkf(!Extras->IsComplete() && !Extras->Lock.IsLocked() &&
+	       !CancelableAwaiter && !ShouldCancel(true),
 	       TEXT("Internal error: fast resume preconditions not met"));
 	// If this is a FLatentPromise, !LF_Detached is also assumed
-	auto* CallerPromise = GCurrentPromise;
-	GCurrentPromise = this;
-	ON_SCOPE_EXIT { GCurrentPromise = CallerPromise; };
+
+	checkf(GCurrentPromise == this,
+	       TEXT("Internal error: expected to run inside a coroutine scope"));
 	std::coroutine_handle<FPromise>::from_promise(*this).resume();
 }
 
 void FPromise::AddContinuation(std::function<void(void*)> Fn)
 {
 	// Expecting a non-empty function and the lock to be held by the caller
-	checkf(!Extras->Lock.try_lock(), TEXT("Internal error: lock not held"));
+	checkf(Extras->Lock.IsLocked(), TEXT("Internal error: lock not held"));
 	checkf(Fn, TEXT("Internal error: adding empty function as continuation"));
 
 	OnCompleted.Add(std::move(Fn));
@@ -178,3 +234,22 @@ void FPromise::unhandled_exception()
 	throw;
 #endif
 }
+
+#if UE5CORO_PRIVATE_USE_DEBUG_ALLOCATOR
+#include "Windows/WindowsHWrapper.h"
+
+void* FPromise::operator new(size_t Size)
+{
+	auto* Memory = VirtualAlloc(nullptr, Size, MEM_COMMIT | MEM_RESERVE,
+	                            PAGE_READWRITE);
+	checkf(Memory, TEXT("VirtualAlloc failed"));
+	memset(Memory, 0xAA, Size);
+	return Memory;
+}
+
+void FPromise::operator delete(void* Memory)
+{
+	// Keep the memory reserved, so that future promises don't recycle addresses
+	verifyf(VirtualFree(Memory, 0, MEM_DECOMMIT), TEXT("VirtualFree failed"));
+}
+#endif

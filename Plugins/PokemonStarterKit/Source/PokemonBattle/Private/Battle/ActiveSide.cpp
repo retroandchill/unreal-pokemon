@@ -88,7 +88,7 @@ UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScri
         auto &Battler = BattleParty[i];
         check(!Battler->IsFainted())
         if (i < PokemonCount) {
-            Battlers.Emplace_GetRef(Battler);
+            Battlers.Emplace(Battler);
         }
     }
 

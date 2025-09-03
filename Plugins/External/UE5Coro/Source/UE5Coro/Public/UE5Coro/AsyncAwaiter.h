@@ -34,7 +34,6 @@
 #include "CoreMinimal.h"
 #include "UE5Coro/Definition.h"
 #include <tuple>
-#include "Async/Async.h"
 #include "Async/Future.h"
 #include "Async/TaskGraphInterfaces.h"
 #include "Misc/IQueuedWork.h"
@@ -44,6 +43,21 @@
 
 namespace UE5Coro::Async
 {
+/** co_await Chain(...) calls the function with a delegate bound to one of its
+ *  parameters, resumes the coroutine when that delegate is triggered.
+ *  The result of the await expression is the same as if the delegate was
+ *  awaited directly. Do not call without immediately co_awaiting the result. */
+template<typename... FnParams>
+auto Chain(auto (*Function)(FnParams...), auto&&... Args);
+
+/** co_await Chain(...) calls the method on the provided object with a delegate
+ *  bound to one of its parameters, resumes the coroutine when that delegate is
+ *  triggered.
+ *  The result of the await expression is the same as if the delegate was
+ *  awaited directly. Do not call without immediately co_awaiting the result. */
+template<typename Class, typename... FnParams>
+auto Chain(Class* Object, auto (Class::*Function)(FnParams...), auto&&... Args);
+
 /** Returns an object that, when co_awaited, suspends the calling coroutine and
  *  resumes it on the provided named thread.
  *
@@ -89,8 +103,8 @@ UE5CORO_API auto MoveToTask(const TCHAR* DebugName = nullptr)
  *  Repeated co_awaits will keep moving back to the same thread pool at the
  *  originally-provided priority. */
 UE5CORO_API auto MoveToThreadPool(
-    FQueuedThreadPool& ThreadPool = *GThreadPool,
-    EQueuedWorkPriority Priority = EQueuedWorkPriority::Normal)
+	FQueuedThreadPool& ThreadPool = *GThreadPool,
+	EQueuedWorkPriority Priority = EQueuedWorkPriority::Normal)
 	-> Private::FThreadPoolAwaiter;
 
 /** Returns an object that, when co_awaited, unconditionally suspends its caller
@@ -168,11 +182,11 @@ public:
 };
 
 class [[nodiscard]] UE5CORO_API FAsyncTimeAwaiter
-	: public TAwaiter<FAsyncTimeAwaiter>
+	: public TCancelableAwaiter<FAsyncTimeAwaiter>
 {
 	friend class FTimerThread;
 
-	const double TargetTime;
+	double TargetTime;
 	union
 	{
 		bool bAnyThread; // Before suspension
@@ -182,7 +196,8 @@ class [[nodiscard]] UE5CORO_API FAsyncTimeAwaiter
 
 public:
 	explicit FAsyncTimeAwaiter(double TargetTime, bool bAnyThread) noexcept
-		: TargetTime(TargetTime), bAnyThread(bAnyThread) { }
+		: TCancelableAwaiter(&Cancel), TargetTime(TargetTime),
+		  bAnyThread(bAnyThread) { }
 	FAsyncTimeAwaiter(const FAsyncTimeAwaiter&);
 	~FAsyncTimeAwaiter();
 
@@ -190,6 +205,7 @@ public:
 	void Suspend(FPromise&);
 
 private:
+	static void Cancel(void*, FPromise&);
 	void Resume();
 
 	[[nodiscard]] auto operator<=>(const FAsyncTimeAwaiter& Other) const noexcept
@@ -202,7 +218,7 @@ class [[nodiscard]] UE5CORO_API FAsyncYieldAwaiter
 	: public TAwaiter<FAsyncYieldAwaiter>
 {
 public:
-	void Suspend(FPromise&);
+	static void Suspend(FPromise&);
 };
 
 template<typename T>
@@ -236,21 +252,27 @@ public:
 
 			if constexpr (std::is_lvalue_reference_v<T>)
 			{
-				// The type of Get() is T* in 5.3 and T*& in 5.4
-				static_assert(std::is_pointer_v<
-				              std::remove_reference_t<decltype(InFuture.Get())>>);
-				Result = InFuture.Get();
+				// The return type of TFuture<T&>::Get() is T*, T*&, or T&,
+				// depending on the version of Unreal...
+				if constexpr (std::is_pointer_v<
+				              std::remove_reference_t<decltype(InFuture.Get())>>)
+					Result = InFuture.Get();
+				else
+					Result = &InFuture.Get();
 				Promise.Resume();
 			}
-			else
+			else if constexpr (!std::is_void_v<T>)
 			{
-				// If T is void, Get() returns an int (5.3) or int& (5.4), which
-				// is harmless to process; await_resume will ignore it.
-
 				// It's normally dangerous to expose a pointer to a local, but
 				auto Value = InFuture.Get(); // This will be alive while...
 				Result = &Value;
 				Promise.Resume(); // ...await_resume moves from it here
+			}
+			else
+			{
+				// await_resume expects a non-null pointer from Then
+				Result = reinterpret_cast<decltype(Result)>(-1);
+				Promise.Resume();
 			}
 		});
 	}
@@ -290,38 +312,33 @@ struct TAwaitTransform<P, TFuture<T>>
 	TFutureAwaiter<T> operator()(TFuture<T>&) = delete;
 };
 
-template <typename T>
-struct TDelegateTraitsBase {
-    using CallMethodSignature = decltype(&T::Execute);
-};
-    
-template <TIsMulticastDelegate T>
-    requires (!TIsSparseDelegate<T>)
-struct TDelegateTraitsBase<T> {
-    using CallMethodSignature = decltype(&T::Broadcast);
-};
-
-template <TIsSparseDelegate T>
-struct TDelegateTraitsBase<T> {
-    using Ptr = decltype(std::declval<T>().GetShared().Get());
-    using CallMethodSignature = decltype(&std::remove_pointer_t<Ptr>::Broadcast);
-};
-
-template<typename>
-struct TDelegateAwaiterFor;
-template<typename T, typename R, typename... A>
-struct TDelegateAwaiterFor<R (T::*)(A...) const>
+template<bool bCancelable, typename D, typename T, typename R, typename... A>
+struct TDelegateAwaiterFor<bCancelable, D, R (T::*)(A...) const>
 {
-	using type = std::conditional_t<TIsDynamicDelegate<T>,
-	                                TDynamicDelegateAwaiter<R, A...>,
-	                                TDelegateAwaiter<R, A...>>;
+	static_assert(TIsDynamicDelegate<D> == TIsDynamicDelegate<T>);
+	using type = std::conditional_t<TIsDynamicDelegate<D>,
+		TDynamicDelegateAwaiter<bCancelable, D, R, A...>,
+		TDelegateAwaiter<bCancelable, D, R, A...>>;
 };
 
 template<typename P, TIsDelegate T>
 struct TAwaitTransform<P, T>
 {
 	static_assert(!std::is_reference_v<T>);
-	using FAwaiter = typename TDelegateAwaiterFor<typename TDelegateTraitsBase<T>::CallMethodSignature>::type;
+	static consteval auto ExecutePtr()
+	{
+		if constexpr (TIsSparseDelegate<T>)
+		{
+			using Ptr = decltype(std::declval<T>().GetShared().Get());
+			return &std::remove_pointer_t<Ptr>::Broadcast;
+		}
+		else if constexpr (TIsMulticastDelegate<T>)
+			return &T::Broadcast;
+		else
+			return &T::Execute;
+	}
+	using FAwaiter = typename TDelegateAwaiterFor<
+		!std::is_same_v<P, FNonCancelable>, T, decltype(ExecutePtr())>::type;
 
 	FAwaiter operator()(T& Delegate) { return FAwaiter(Delegate); }
 
@@ -381,54 +398,58 @@ public:
 	TType<N>& get() { return this->Values.template Get<N>(); }
 };
 
+template<bool bCancelable>
 class [[nodiscard]] UE5CORO_API FDelegateAwaiter
-	: public TAwaiter<FDelegateAwaiter>
+	: public std::conditional_t<bCancelable,
+	                            TCancelableAwaiter<FDelegateAwaiter<bCancelable>>,
+	                            TAwaiter<FDelegateAwaiter<bCancelable>>>
 {
+	static void Cancel(void*, FPromise&) requires bCancelable;
+
 protected:
-	FPromise* Promise = nullptr;
+	std::atomic<FPromise*> Promise = nullptr;
 	std::function<void()> Cleanup;
-	void TryResumeOnce();
+
+	FDelegateAwaiter();
+	void Resume();
 	UObject* SetupCallbackTarget(std::function<void(void*)>);
 
 public:
+	UE_NONCOPYABLE(FDelegateAwaiter);
+#if UE5CORO_DEBUG
 	~FDelegateAwaiter();
+#endif
 	void Suspend(FPromise& InPromise);
 };
 
-template<typename R, typename... A>
-class [[nodiscard]] TDelegateAwaiter : public FDelegateAwaiter
+template<bool bCancelable, typename D, typename R, typename... A>
+class [[nodiscard]] TDelegateAwaiter : public FDelegateAwaiter<bCancelable>
 {
+	static_assert(!TIsDynamicDelegate<D>);
 	using ThisClass = TDelegateAwaiter;
 	using FResult = std::conditional_t<sizeof...(A) != 0, TTuple<A...>, void>;
+	D& Delegate;
 	TTuple<A...>* Result = nullptr;
 
 public:
-	template<typename T>
-	explicit TDelegateAwaiter(T& Delegate)
+	explicit TDelegateAwaiter(D& Delegate) : Delegate(Delegate) { }
+	UE_NONCOPYABLE(TDelegateAwaiter);
+
+	template<typename P>
+	void await_suspend(std::coroutine_handle<P> Coro)
 	{
-		static_assert(!TIsDynamicDelegate<T>);
-		if constexpr (TIsMulticastDelegate<T>)
+		if constexpr (TIsMulticastDelegate<D>)
 		{
 			auto Handle = Delegate.AddRaw(this,
 			                              &ThisClass::template ResumeWith<A...>);
-			Cleanup = [Handle, &Delegate] { Delegate.Remove(Handle); };
+			this->Cleanup = [this, Handle] { Delegate.Remove(Handle); };
 		}
 		else
 		{
 			Delegate.BindRaw(this, &ThisClass::template ResumeWith<A...>);
-			Cleanup = [&Delegate] { Delegate.Unbind(); };
+			this->Cleanup = [this] { Delegate.Unbind(); };
 		}
-	}
-	UE_NONCOPYABLE(TDelegateAwaiter);
-
-	template<typename... T>
-	R ResumeWith(T... Args)
-	{
-		TTuple<T...> Values(std::forward<T>(Args)...);
-		Result = &Values; // This exposes a pointer to a local, but...
-		TryResumeOnce(); // ...it's only read by await_resume, right here
-		// The coroutine might have completed, destroying this object
-		return R();
+		FDelegateAwaiter<bCancelable>::await_suspend(Coro);
 	}
 
 	FResult await_resume()
@@ -437,43 +458,59 @@ public:
 		if constexpr (sizeof...(A) != 0)
 			return std::move(*Result);
 	}
+
+private:
+	template<typename... T>
+	R ResumeWith(T... Args) // Intentionally not T&&
+	{
+		TTuple<T...> Values(std::forward<T>(Args)...);
+		Result = &Values; // This exposes a pointer to a local, but...
+		this->Resume(); // ...it's only read by await_resume, right here
+		// The coroutine might have completed, destroying this object
+		return R();
+	}
 };
 
-template<typename R, typename... A>
-class [[nodiscard]] TDynamicDelegateAwaiter : public FDelegateAwaiter
+template<bool bCancelable, typename D, typename R, typename... A>
+class [[nodiscard]] TDynamicDelegateAwaiter
+	: public FDelegateAwaiter<bCancelable>
 {
+	static_assert(TIsDynamicDelegate<D>);
 	using FResult = std::conditional_t<sizeof...(A) != 0,
 	                                   TDecayedPayload<A...>&, void>;
 	using FPayload = std::conditional_t<std::is_void_v<R>, TDecayedPayload<A...>,
 	                                    TDecayedPayload<A..., R>>;
-	TDecayedPayload<A...>* Result; // Missing R, for the coroutine
+	D& Delegate;
+	TDecayedPayload<A...>* Result = nullptr; // Missing R, for the coroutine
 
 public:
-	template<typename T>
-	explicit TDynamicDelegateAwaiter(T& InDelegate)
+	explicit TDynamicDelegateAwaiter(D& Delegate) : Delegate(Delegate) { }
+	UE_NONCOPYABLE(TDynamicDelegateAwaiter);
+
+	template<typename P>
+	void await_suspend(std::coroutine_handle<P> Handle)
 	{
-		static_assert(TIsDynamicDelegate<T>);
 		// SetupCallbackTarget sets Cleanup and ties Target's lifetime to this
-		auto* Target = SetupCallbackTarget([this](void* Params)
+		auto* Target = this->SetupCallbackTarget([this](void* Params)
 		{
 			// This matches the hack in TBaseUFunctionDelegateInstance::Execute
 			Result = static_cast<TDecayedPayload<A...>*>(Params);
-			TryResumeOnce();
+			this->Resume();
 			// The coroutine might have completed, deleting the awaiter
 			if constexpr (!std::is_void_v<R>)
 				static_cast<FPayload*>(Params)->template get<sizeof...(A)>() = R();
 		});
 
-		if constexpr (TIsMulticastDelegate<T>)
+		if constexpr (TIsMulticastDelegate<D>)
 		{
-			FScriptDelegate Delegate;
-			Delegate.BindUFunction(Target, NAME_Core);
-			InDelegate.Add(Delegate);
+			FScriptDelegate ScriptDelegate;
+			ScriptDelegate.BindUFunction(Target, NAME_Core);
+			Delegate.Add(ScriptDelegate);
 		}
 		else
-			InDelegate.BindUFunction(Target, NAME_Core);
+			Delegate.BindUFunction(Target, NAME_Core);
+		FDelegateAwaiter<bCancelable>::await_suspend(Handle);
 	}
-	UE_NONCOPYABLE(TDynamicDelegateAwaiter);
 
 	FResult await_resume()
 	{
@@ -497,4 +534,6 @@ struct std::tuple_element<N, UE5Coro::Private::TDecayedPayload<T...>>
 {
 	using type = std::tuple_element_t<N, std::tuple<T...>>;
 };
+
+#include "AsyncChain.inl"
 #pragma endregion

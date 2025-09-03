@@ -77,8 +77,8 @@ protected:
 	                         const FGameplayEventData*);
 
 public:
-    GAS::FAbilityCoroutine get_return_object() noexcept {
-        return static_cast<GAS::FAbilityCoroutine&&>(Super::get_return_object());
+    UE5Coro::GAS::FAbilityCoroutine get_return_object() noexcept {
+        return static_cast<UE5Coro::GAS::FAbilityCoroutine&&>(Super::get_return_object());
     }
 };
 

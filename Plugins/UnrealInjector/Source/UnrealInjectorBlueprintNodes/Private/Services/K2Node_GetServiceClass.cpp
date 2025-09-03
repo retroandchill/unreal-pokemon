@@ -34,11 +34,15 @@ void UK2Node_GetServiceClass::AllocateDefaultPins() {
     Super::AllocateDefaultPins();
 }
 
+static FText ConvertFromStringView(FStringView View) {
+    return FText::FromStringView(View);
+}
+
 FText UK2Node_GetServiceClass::GetNodeTitle(ENodeTitleType::Type TitleType) const {
     // clang-format off
     auto Name = Retro::Optionals::OfNullable(ServiceClass) |
                 Retro::Optionals::Transform([](const TNonNullSubclassOf<UService>& Class) { return Class->GetDisplayNameText(); }) |
-                Retro::Optionals::OrElseGet(Retro::BindBack(&FText::FromStringView, TEXT("???")));
+                Retro::Optionals::OrElseGet(Retro::BindBack(&ConvertFromStringView, TEXT("???")));
     // clang-format on
     return FText::FormatOrdered(NSLOCTEXT("UK2Node_GetServiceClass", "GetNodeTitle", "Get {0}"), Name);
 }
@@ -47,7 +51,7 @@ FText UK2Node_GetServiceClass::GetTooltipText() const {
     // clang-format off
     return Retro::Optionals::OfNullable(ServiceClass) |
            Retro::Optionals::Transform([](const TNonNullSubclassOf<UService>& Class) { return Class->GetToolTipText(); }) |
-           Retro::Optionals::OrElseGet(Retro::BindBack(&FText::FromStringView, TEXT("???")));
+           Retro::Optionals::OrElseGet(Retro::BindBack(&ConvertFromStringView, TEXT("???")));
     // clang-format on
 }
 
@@ -55,7 +59,7 @@ FText UK2Node_GetServiceClass::GetCompactNodeTitle() const {
     // clang-format off
     return Retro::Optionals::OfNullable(ServiceClass) |
            Retro::Optionals::Transform([](const TNonNullSubclassOf<UService>& Class) { return Class->GetDisplayNameText(); }) |
-           Retro::Optionals::OrElseGet(Retro::BindBack<&FText::FromStringView>(TEXT("???")));
+           Retro::Optionals::OrElseGet(Retro::BindBack<&ConvertFromStringView>(TEXT("???")));
     // clang-format on
 }
 

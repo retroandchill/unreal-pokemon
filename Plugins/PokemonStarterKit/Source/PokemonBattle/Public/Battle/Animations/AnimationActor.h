@@ -32,5 +32,5 @@ class POKEMONBATTLE_API AAnimationActor : public AActor, public IBattleAnimation
     /**
      * Called when the animation is complete
      */
-    TSharedRef<TFutureState<int32>> OnBattleAnimationComplete = MakeShared<TFutureState<int32>>();
+    TPromise<int32> OnBattleAnimationComplete;
 };

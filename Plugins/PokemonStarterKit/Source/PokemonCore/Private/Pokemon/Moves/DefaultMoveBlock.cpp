@@ -26,7 +26,7 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterfac
 
     // We want to get the last possible level a move can be learned at for our purposes
     Algo::Reverse(KnowableMoves);
-    Algo::UniqueBy(KnowableMoves, [](const FLevelUpMove &Move) { return Move.Move; });
+    auto Unique = Algo::UniqueBy(KnowableMoves, [](const FLevelUpMove &Move) { return Move.Move; });
     Algo::Reverse(KnowableMoves);
 
     const auto &Settings = *GetDefault<UPokemonDataSettings>();

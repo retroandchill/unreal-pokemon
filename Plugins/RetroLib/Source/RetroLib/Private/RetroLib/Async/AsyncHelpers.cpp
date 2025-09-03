@@ -5,14 +5,15 @@
 #include "SaveGameSystem.h"
 
 namespace Retro {
+    
     UE5Coro::TCoroutine<bool> SaveGameToSlotAsync(USaveGame *SaveGameObject, const FString &SlotName,
                                                   const int32 UserIndex) {
-        auto SuccessState = MakeShared<TFutureState<bool>>();
-        TFuture<bool> FutureSuccess(SuccessState);
+        TPromise<bool> SuccessState;
+        auto FutureSuccess = SuccessState.GetFuture();
         UGameplayStatics::AsyncSaveGameToSlot(
             SaveGameObject, SlotName, UserIndex,
             Delegates::Create<FAsyncSaveGameToSlotDelegate>(
-                [SuccessState](const FString &, int32, bool bSuccess) { SuccessState->EmplaceResult(bSuccess); }));
+                [&SuccessState](const FString &, int32, const bool bSuccess) { SuccessState.SetValue(bSuccess); }));
         co_return co_await std::move(FutureSuccess);
     }
 } // namespace Retro

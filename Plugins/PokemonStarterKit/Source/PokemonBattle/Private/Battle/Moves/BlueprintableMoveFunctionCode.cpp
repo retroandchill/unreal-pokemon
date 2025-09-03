@@ -5,64 +5,47 @@
 UE5Coro::TCoroutine<bool> UBlueprintableMoveFunctionCode::MoveFailed(TScriptInterface<IBattler> User,
                                                                      const TArray<TScriptInterface<IBattler>> &Targets,
                                                                      FForceLatentCoroutine) {
-    if (CoroutineFutureState->IsComplete()) {
-        CoroutineFutureState = MakeShared<TFutureState<bool>>();
-    }
+    CoroutineFutureState = MakeUnique<TPromise<bool>>();
     StartMoveFailedCheck(User, Targets);
-    co_return co_await TFuture<bool>(CoroutineFutureState);
+    co_return co_await CoroutineFutureState->GetFuture();
 }
 
 UE5Coro::TCoroutine<bool> UBlueprintableMoveFunctionCode::FailsAgainstTarget(TScriptInterface<IBattler> User,
                                                                              TScriptInterface<IBattler> Target,
                                                                              FForceLatentCoroutine) {
-    if (CoroutineFutureState->IsComplete()) {
-        CoroutineFutureState = MakeShared<TFutureState<bool>>();
-    }
-
+    CoroutineFutureState = MakeUnique<TPromise<bool>>();
     StartFailsAgainstTargetCheck(User, Target);
-    co_return co_await TFuture<bool>(CoroutineFutureState);
+    co_return co_await CoroutineFutureState->GetFuture();
 }
 
 UE5Coro::TCoroutine<> UBlueprintableMoveFunctionCode::ApplyEffectWhenDealingDamage(TScriptInterface<IBattler> User,
                                                                                    TScriptInterface<IBattler> Target,
                                                                                    FForceLatentCoroutine) {
-    if (CoroutineFutureState->IsComplete()) {
-        CoroutineFutureState = MakeShared<TFutureState<bool>>();
-    }
-
+    CoroutineFutureState = MakeUnique<TPromise<bool>>();
     StartApplyEffectWhenDealingDamage(User, Target);
-    co_await TFuture<bool>(CoroutineFutureState);
+    co_await CoroutineFutureState->GetFuture();
 }
 
 UE5Coro::TCoroutine<> UBlueprintableMoveFunctionCode::ApplyAdditionalEffect(TScriptInterface<IBattler> User,
                                                                             TScriptInterface<IBattler> Target) {
-    if (CoroutineFutureState->IsComplete()) {
-        CoroutineFutureState = MakeShared<TFutureState<bool>>();
-    }
-
+    CoroutineFutureState = MakeUnique<TPromise<bool>>();
     StartApplyAdditionalEffect(User, Target);
-    co_await TFuture<bool>(CoroutineFutureState);
+    co_await CoroutineFutureState->GetFuture();
 }
 
 UE5Coro::TCoroutine<> UBlueprintableMoveFunctionCode::ApplyEffectAgainstTarget(TScriptInterface<IBattler> User,
                                                                                TScriptInterface<IBattler> Target,
                                                                                FForceLatentCoroutine) {
-    if (CoroutineFutureState->IsComplete()) {
-        CoroutineFutureState = MakeShared<TFutureState<bool>>();
-    }
-
+    CoroutineFutureState = MakeUnique<TPromise<bool>>();
     StartApplyEffectAgainstTarget(User, Target);
-    co_await TFuture<bool>(CoroutineFutureState);
+    co_await CoroutineFutureState->GetFuture();
 }
 
 UE5Coro::TCoroutine<> UBlueprintableMoveFunctionCode::ApplyGeneralEffect(TScriptInterface<IBattler> User,
                                                                          FForceLatentCoroutine) {
-    if (CoroutineFutureState->IsComplete()) {
-        CoroutineFutureState = MakeShared<TFutureState<bool>>();
-    }
-
+    CoroutineFutureState = MakeUnique<TPromise<bool>>();
     StartApplyGeneralEffect(User);
-    co_await TFuture<bool>(CoroutineFutureState);
+    co_await CoroutineFutureState->GetFuture();
 }
 
 void UBlueprintableMoveFunctionCode::StartMoveFailedCheck_Implementation(
@@ -71,7 +54,7 @@ void UBlueprintableMoveFunctionCode::StartMoveFailedCheck_Implementation(
 }
 
 void UBlueprintableMoveFunctionCode::CompleteMoveFailedCheck(bool bFailed) {
-    CoroutineFutureState->EmplaceResult(bFailed);
+    CoroutineFutureState->EmplaceValue(bFailed);
 }
 
 void UBlueprintableMoveFunctionCode::StartFailsAgainstTargetCheck_Implementation(
@@ -80,7 +63,7 @@ void UBlueprintableMoveFunctionCode::StartFailsAgainstTargetCheck_Implementation
 }
 
 void UBlueprintableMoveFunctionCode::CompleteFailsAgainstTargetCheck(bool bFailed) {
-    CoroutineFutureState->EmplaceResult(bFailed);
+    CoroutineFutureState->EmplaceValue(bFailed);
 }
 
 void UBlueprintableMoveFunctionCode::StartApplyEffectWhenDealingDamage_Implementation(
@@ -89,7 +72,7 @@ void UBlueprintableMoveFunctionCode::StartApplyEffectWhenDealingDamage_Implement
 }
 
 void UBlueprintableMoveFunctionCode::CompleteApplyEffectWhenDealingDamage() {
-    CoroutineFutureState->EmplaceResult(true);
+    CoroutineFutureState->EmplaceValue(true);
 }
 
 void UBlueprintableMoveFunctionCode::StartApplyAdditionalEffect_Implementation(
@@ -98,7 +81,7 @@ void UBlueprintableMoveFunctionCode::StartApplyAdditionalEffect_Implementation(
 }
 
 void UBlueprintableMoveFunctionCode::CompleteApplyAdditionalEffect() {
-    CoroutineFutureState->EmplaceResult(true);
+    CoroutineFutureState->EmplaceValue(true);
 }
 
 void UBlueprintableMoveFunctionCode::StartApplyEffectAgainstTarget_Implementation(
@@ -107,7 +90,7 @@ void UBlueprintableMoveFunctionCode::StartApplyEffectAgainstTarget_Implementatio
 }
 
 void UBlueprintableMoveFunctionCode::CompleteApplyEffectAgainstTarget() {
-    CoroutineFutureState->EmplaceResult(true);
+    CoroutineFutureState->EmplaceValue(true);
 }
 
 void UBlueprintableMoveFunctionCode::StartApplyGeneralEffect_Implementation(const TScriptInterface<IBattler> &User) {
@@ -115,5 +98,5 @@ void UBlueprintableMoveFunctionCode::StartApplyGeneralEffect_Implementation(cons
 }
 
 void UBlueprintableMoveFunctionCode::CompleteApplyGeneralEffect() {
-    CoroutineFutureState->EmplaceResult(true);
+    CoroutineFutureState->EmplaceValue(true);
 }

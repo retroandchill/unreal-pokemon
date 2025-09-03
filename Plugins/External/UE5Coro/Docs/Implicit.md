@@ -15,8 +15,7 @@ Awaiting one from an async or latent coroutine results in different behavior:
 
 * Async coroutines will immediately resume when the coroutine completes, on the
   same thread that it completed on.
-* Latent coroutines can only await other coroutines on the game thread, but they
-  will react to cancellations within one tick, as usual.
+* Latent coroutines can only await other coroutines on the game thread.
 
 In either case, awaiting a coroutine that has already completed is instant, and
 synchronously continues on the caller thread.
@@ -67,6 +66,9 @@ TCoroutine<> Example(TTask<int> Task)
 
 ### TFuture\<T\>
 
+> [!WARNING]
+> TFuture's API is unstable in the engine itself; it is not recommended for use.
+
 Awaiting a TFuture consumes it, and resumes the coroutine once it has completed
 on the same thread that would be used by TFuture::Then or Next.
 The coroutine will continue synchronously on its current thread if the future
@@ -103,6 +105,10 @@ or Broadcast().
 Doing so Binds or Adds to the delegate, and Unbinds/Removes the binding when the
 coroutine resumes.
 
+> [!NOTE]
+> To await an engine function that expects an already-bound delegate, use
+> [Async::Chain](AsyncChain.md).
+
 The following engine delegates are supported, including any number of parameters,
 with or without return values:
 * TDelegate (DECLARE_DELEGATE, ~~DECLARE_TS_DELEGATE~~[^ts])
@@ -120,20 +126,28 @@ Return types must be _DefaultConstructible_ or void.
 More than nine parameters are supported, and interacting with DYNAMIC delegates
 this way does not require a UFUNCTION or even a UCLASS at all.
 
-Thread safety and synchronization is the coroutine's responsibility: there are
-no checks or other measures taken against data races when the await expression
-starts (Bind/Add) or finishes (Unbind/Remove).
+> [!CAUTION]
+> Thread safety and synchronization is your responsibility: there are no checks
+> or other measures taken against data races when the await expression starts
+> (Bind/Add) or finishes (Unbind/Remove/UObject invalidation).
+>
+> The coroutine being resumed again after it has unbound from the delegate is
+> undefined behavior.
+> This can occur if something copies a non-DYNAMIC delegate while it's bound,
+> then uses the copy.
+>
+> Similarly, coroutine cancellation itself is thread safe, but most Unreal
+> delegates are not.
+> A coroutine awaiting a delegate will unbind on the thread that triggered the
+> delegate, or the thread that cancels the coroutine, whichever occurs first.
 
 The delegate will directly and synchronously call into the coroutine.
 If the delegate is destroyed or isn't ever invoked, the coroutine will not be
 resumed, which could result in a memory leak.
+A delegate getting destroyed while it's being awaited is undefined behavior.
 
-To explicitly handle delegates that might not ever be invoked, there are safer,
-more limited wrappers available, such as UE5Coro::Latent::UntilDelegate, or
-UUE5CoroGameplayAbility::Task.
-UE5Coro::FAwaitableEvent can also be used to manually resume coroutines from a
-delegate handler as well as at the time of the delegate's destruction, to make
-sure that the coroutine can finish.
+Awaiting delegates supports expedited cancellation.
+Canceling the TCoroutine will prevent the memory leak.
 
 The await expression results in an unspecified type that may be used with
 structured bindings to optionally receive the delegate's parameters.
@@ -185,4 +199,89 @@ public:
         UE_LOGFMT(LogTemp, Display, "Fourth");
     }
 };
+```
+
+#### Generic workarounds
+
+To work with callback-based functions that aren't supported by
+[Async::Chain](AsyncChain.md), or the delegate co_await feature described above,
+or when the suitability or safety of these is in doubt,
+[FAwaitableEvent](Threading.md#fawaitableevent) can be used as part of a
+generic, thread-safe workaround.
+
+If it is being awaited when the callback is invoked, `Trigger()` will call back
+into the coroutine synchronously; otherwise, it will let the coroutine through
+synchronously if the callback has already happened.
+
+The following technique should work for nearly everything that supports lambdas:
+
+```c++
+using namespace UE5Coro;
+
+TCoroutine<> Example()
+{
+    FAwaitableEvent Event;
+
+    int Data1, Data2;
+    imaginary_library_delegate_t<int, int> Delegate([&](int Param1, int Param2)
+    {
+        Data1 = Param1; // FAwaitableEvent itself is thread safe,
+        Data2 = Param2; // but you're still responsible for these two!
+        Event.Trigger();
+    });
+    some_imaginary_library_function(Delegate);
+    // Directly-passed lambdas are more or less the same:
+    // another_imaginary_library_function([&](int Param1, int Param2){...});
+    co_await Event;
+    // Data1 and Data2 are known to be valid here
+}
+```
+
+This complex example demonstrates using `shared_ptr` with an interface-like type
+that needs to be subclassed, and the `co_await` being optional:
+
+```c++
+using namespace UE5Coro;
+
+TCoroutine<> Example()
+{
+    struct FMyListener final : imaginary_library_listener_t
+    {
+        std::shared_ptr<FAwaitableEvent> Event;
+        virtual void execute_callback() override { Event->Trigger(); }
+    };
+
+    // FAwaitableEvent is immovable and non-copyable, but shared_ptr isn't
+    std::shared_ptr<FAwaitableEvent> Event = std::make_shared<FAwaitableEvent>();
+    FMyListener Listener;
+    Listener.Event = Event;
+    some_imaginary_library_function(std::move(Listener));
+
+    if (bSomething)
+        co_await *Event;
+
+    // Even if !bSomething, the shared_ptr keeps the event alive here, but
+    // depending on the semantics of some_imaginary_library_function, Listener
+    // going out of scope when this coroutine ends might need explicit handling.
+}
+```
+
+Many C libraries take raw function pointers, precluding lambda captures, but
+they often support specifying a custom `void*` that will be passed back to it:
+
+```c++
+using namespace UE5Coro;
+
+TCoroutine<> Example()
+{
+    FAwaitableEvent Event;
+    void (*Fn)(void*) = [](void* UserData)
+    {
+        static_cast<FAwaitableEvent*>(UserData)->Trigger();
+    };
+
+    some_imaginary_c_library_function(Fn, &Event);
+    co_await Event; // The unconditional co_await keeps &Event valid here
+    // Unregister the function pointer from the C library here, if required
+}
 ```

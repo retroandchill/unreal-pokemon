@@ -75,5 +75,5 @@ class POKEMONBATTLE_API UBlueprintableMoveFunctionCode : public UBattleMoveFunct
     void CompleteApplyGeneralEffect();
 
   private:
-    TSharedRef<TFutureState<bool>> CoroutineFutureState = MakeShared<TFutureState<bool>>();
+    TUniquePtr<TPromise<bool>> CoroutineFutureState = MakeUnique<TPromise<bool>>();
 };

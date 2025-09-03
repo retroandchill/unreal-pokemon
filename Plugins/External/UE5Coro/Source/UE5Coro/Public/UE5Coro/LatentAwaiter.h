@@ -58,25 +58,6 @@ UE5CORO_API auto Until(std::function<bool()> Function)
 
 #pragma endregion
 
-/** Resumes the coroutine after the provided other coroutine completes, but the
- *  wait itself is forced to latent mode regardless of the awaiting coroutine's
- *  execution mode. For advanced usage.
- *  TCoroutines are directly co_awaitable without using this wrapper.
- *
- *  Forcing latent mode can improve responsiveness to cancellations in async
- *  coroutines.
- *  Using this wrapper is pointless if the awaiting coroutine is latent. */
-UE5CORO_API auto UntilCoroutine(TCoroutine<> Coroutine)
-	-> Private::TLatentCoroutineAwaiter<void, false>;
-
-/** Resumes the coroutine after the delegate executes.
- *  Delegate parameters are ignored, a return value is not provided.
- *
- *  Delegates are also co_awaitable without this wrapper.
- *  See the documentation for details on the differences in behavior. */
-auto UntilDelegate(Private::TIsDelegate auto& Delegate)
-	-> Private::FLatentAwaiter;
-
 #pragma region Time
 
 /** Resumes the coroutine the specified amount of seconds later.
@@ -84,8 +65,20 @@ auto UntilDelegate(Private::TIsDelegate auto& Delegate)
 UE5CORO_API auto Seconds(double Seconds) -> Private::FLatentAwaiter;
 
 /** Resumes the coroutine the specified amount of seconds later.
+ *  The provided actor's custom time dilation is taken into account.
+ *  Affected by pause. */
+UE5CORO_API auto SecondsForActor(AActor* Actor, double Seconds)
+	-> Private::FCustomTimeDilationAwaiter;
+
+/** Resumes the coroutine the specified amount of seconds later.
  *  This is affected by time dilation only, NOT pause. */
 UE5CORO_API auto UnpausedSeconds(double Seconds) -> Private::FLatentAwaiter;
+
+/** Resumes the coroutine the specified amount of seconds later.
+ *  The provided actor's custom time dilation is taken into account.
+ *  Unaffected by pause. */
+UE5CORO_API auto UnpausedSecondsForActor(AActor* Actor, double Seconds)
+	-> Private::FCustomTimeDilationAwaiter;
 
 /** Resumes the coroutine the specified amount of seconds later.
  *  This is not affected by pause or time dilation. */
@@ -166,6 +159,16 @@ auto AsyncLoadObjects(const TArray<TSoftObjectPtr<T>>&,
 UE5CORO_API auto AsyncLoadObjects(TArray<FSoftObjectPath>,
 	TAsyncLoadPriority = FStreamableManager::DefaultAsyncLoadPriority)
 	-> Private::FLatentAwaiter;
+
+/** Asynchronously starts preloading the assets at the given paths, resumes once
+ *  they're preloaded. The await expression results in the same TSharedPtr that
+ *  the UAssetManager function returns.
+ *  This must be stored, or the assets might get unloaded. */
+UE5CORO_API auto AsyncPreloadPrimaryAssets(
+	const TArray<FPrimaryAssetId>& AssetsToLoad,
+	const TArray<FName>& LoadBundles, bool bLoadRecursive,
+	TAsyncLoadPriority Priority = FStreamableManager::DefaultAsyncLoadPriority)
+	-> Private::FAsyncPreloadAwaiter;
 
 /** Asynchronously starts loading the primary asset with any bundles specified,
  *  resumes once they're loaded.
@@ -332,12 +335,20 @@ class [[nodiscard]] UE5CORO_API FLatentAwaiter // not TAwaiter
 	[[nodiscard]] bool IsValid() const noexcept { return Resume != nullptr; }
 	[[nodiscard]] bool ShouldResume();
 
+	// Copying is for internal use only
+	FLatentAwaiter(const FLatentAwaiter&) = default;
+	FLatentAwaiter& operator=(const FLatentAwaiter&) = default;
+
 protected:
 	void* State;
 	bool (*Resume)(void* State, bool bCleanup);
+#if UE5CORO_DEBUG
+	UWorld* OriginalWorld;
+#endif
 
 public:
-	explicit FLatentAwaiter(void* State, bool (*Resume)(void*, bool)) noexcept;
+	explicit FLatentAwaiter(void* State, bool (*Resume)(void*, bool),
+	                        auto WorldSensitive) noexcept(!UE5CORO_DEBUG);
 	FLatentAwaiter(FLatentAwaiter&&) noexcept;
 	~FLatentAwaiter();
 
@@ -352,11 +363,31 @@ public:
 	void await_resume() noexcept { }
 };
 
+static_assert(std::is_standard_layout_v<FLatentAwaiter>);
+
+struct [[nodiscard]] UE5CORO_API FCustomTimeDilationAwaiter final : FLatentAwaiter
+{
+	template<auto> struct TState;
+	template<auto T> explicit FCustomTimeDilationAwaiter(TState<T>*);
+	bool await_resume();
+};
+
 namespace AsyncLoad
 {
 template<int> // Switches between non-exported types
 UE5CORO_API TArray<UObject*> InternalResume(void*);
 }
+
+struct [[nodiscard]] UE5CORO_API FAsyncPreloadAwaiter final : FLatentAwaiter
+{
+	explicit FAsyncPreloadAwaiter(TSharedPtr<FStreamableHandle>*);
+	FAsyncPreloadAwaiter(FAsyncPreloadAwaiter&&) = default;
+	[[nodiscard]] TSharedPtr<FStreamableHandle> await_resume();
+
+private:
+	static bool ShouldResume(void*, bool);
+};
+static_assert(sizeof(FAsyncPreloadAwaiter) == sizeof(FLatentAwaiter));
 
 template<typename T, int HiddenType>
 struct [[nodiscard]] TAsyncLoadAwaiter final : FLatentAwaiter
@@ -419,7 +450,6 @@ struct [[nodiscard]] UE5CORO_API TAsyncQueryAwaiter : FLatentAwaiter
 	                            auto&&...);
 
 	// Workaround for not being able to rvalue overload await_resume
-	TAsyncQueryAwaiter& operator co_await() & { return *this; }
 	TAsyncQueryAwaiterRV<T>& operator co_await() &&;
 
 	const TArray<T>& await_resume();
@@ -437,30 +467,6 @@ struct [[nodiscard]] UE5CORO_API TAsyncQueryAwaiterRV : TAsyncQueryAwaiter<T>
 static_assert(sizeof(TAsyncQueryAwaiterRV<FHitResult>) == sizeof(FLatentAwaiter));
 static_assert(sizeof(TAsyncQueryAwaiterRV<FOverlapResult>) ==
               sizeof(FLatentAwaiter));
-}
-
-auto UE5Coro::Latent::UntilDelegate(Private::TIsDelegate auto& Delegate)
-	-> Private::FLatentAwaiter
-{
-	using namespace UE5Coro::Private;
-	auto [Awaiter, Target] = UntilDelegateCore();
-
-	using FDelegate = std::remove_reference_t<decltype(Delegate)>;
-	if constexpr (TIsMulticastDelegate<FDelegate>)
-	{
-		if constexpr (TIsDynamicDelegate<FDelegate>)
-		{
-			FScriptDelegate D;
-			D.BindUFunction(Target, NAME_Core);
-			Delegate.Add(D);
-		}
-		else
-			Delegate.AddUFunction(Target, NAME_Core);
-	}
-	else
-		Delegate.BindUFunction(Target, NAME_Core);
-
-	return std::move(Awaiter);
 }
 
 template<std::derived_from<UObject> T>

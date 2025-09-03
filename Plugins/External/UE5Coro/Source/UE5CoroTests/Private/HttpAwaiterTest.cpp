@@ -124,7 +124,7 @@ void DoTest(FAutomationTestBase& Test)
 		FPlatformMisc::MemoryBarrier();
 		bDone = true;
 	});
-	FTestHelper::PumpGameThread(World, [&bDone] { return bDone.load(); });
+	FTestHelper::PumpGameThread(World, [&] { return bDone.load(); });
 #endif
 }
 }

@@ -84,7 +84,7 @@ namespace Retro {
         // Create a new local execution stack.
         FFrame NewStack(GetOptionsCDO, GetOptionsFunction, Frame, nullptr, GetOptionsFunction->ChildProperties);
 
-        checkSlow(NewStack.Locals || Function->ParmsSize == 0);
+        checkSlow(NewStack.Locals || GetOptionsFunction->ParmsSize == 0);
 
         for (auto LocalProp = GetOptionsFunction->FirstPropertyToInit; LocalProp != nullptr;
              LocalProp = LocalProp->PostConstructLinkNext) {

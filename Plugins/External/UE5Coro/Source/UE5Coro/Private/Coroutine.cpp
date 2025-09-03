@@ -41,10 +41,10 @@ const TCoroutine<> TCoroutine<>::CompletedCoroutine = []() -> TCoroutine
 
 void TCoroutine<>::Cancel()
 {
-	std::scoped_lock _(Extras->Lock);
+	UE::TUniqueLock Lock(Extras->Lock);
 	// Holding the lock guarantees that Promise is active in the union
 	if (Extras->Promise)
-		Extras->Promise->Cancel();
+		Extras->Promise->Cancel(false);
 }
 
 bool TCoroutine<>::Wait(uint32 WaitTimeMilliseconds,

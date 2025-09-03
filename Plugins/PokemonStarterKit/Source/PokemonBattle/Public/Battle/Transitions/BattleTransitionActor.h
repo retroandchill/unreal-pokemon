@@ -28,5 +28,5 @@ class POKEMONBATTLE_API ABattleTransitionActor : public AActor {
     void CompleteTransition();
 
   private:
-    TSharedRef<TFutureState<int32>> OnBattleTransitionComplete = MakeShared<TFutureState<int32>>();
+    TPromise<int32> OnBattleTransitionComplete;
 };

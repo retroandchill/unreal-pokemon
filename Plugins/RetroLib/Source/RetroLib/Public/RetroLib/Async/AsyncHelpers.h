@@ -31,10 +31,10 @@ namespace Retro {
     template <Delegates::NativeDelegate D, typename F>
         requires std::invocable<F> && (std::tuple_size_v<Delegates::TDelegateTuple<D>> == 0)
     UE5Coro::TCoroutine<> BindToDelegateDispatch(D &Delegate, F &&Functor) {
-        auto State = MakeShared<TFutureState<int32>>();
-        Delegates::TScopedBinding Binding(Delegate, [&State](auto &&...) { State->EmplaceResult(0); });
+        TPromise<int32> State;
+        Delegates::TScopedBinding Binding(Delegate, [&State](auto &&...) { State.EmplaceValue(0); });
         std::invoke(std::forward<F>(Functor));
-        co_await TFuture<void>(State);
+        co_await State.GetFuture();
     }
 
     /**
@@ -48,11 +48,11 @@ namespace Retro {
     template <Delegates::NativeDelegate D, typename F>
         requires std::invocable<F> && (std::tuple_size_v<Delegates::TDelegateTuple<D>> > 0)
     UE5Coro::TCoroutine<Delegates::TDelegateTuple<D>> BindToDelegateDispatch(D &Delegate, F &&Functor) {
-        auto State = MakeShared<TFutureState<Delegates::TDelegateTuple<D>>>();
+        TPromise<Delegates::TDelegateTuple<D>> State;
         Delegates::TScopedBinding Binding(
-            Delegate, [&State]<typename... A>(A &&...Args) { State->EmplaceResult(std::forward<A>(Args)...); });
+            Delegate, [&State]<typename... A>(A &&...Args) { State.EmplaceValue(std::forward<A>(Args)...); });
         std::invoke(std::forward<F>(Functor));
-        co_return co_await TFuture<Delegates::TDelegateTuple<D>>(State);
+        co_return co_await State.GetFuture();
     }
 } // namespace Retro
 #endif

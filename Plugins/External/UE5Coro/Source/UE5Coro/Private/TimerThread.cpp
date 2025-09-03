@@ -45,19 +45,20 @@ FTimerThread& FTimerThread::Get()
 
 void FTimerThread::Register(FAsyncTimeAwaiter* Awaiter)
 {
-	std::scoped_lock _(Lock);
+	UE::TUniqueLock L(Lock);
 	Queue.HeapPush(Awaiter, &Less);
 	Event->Trigger();
 }
 
-void FTimerThread::TryUnregister(FAsyncTimeAwaiter* Awaiter)
+bool FTimerThread::TryUnregister(FAsyncTimeAwaiter* Awaiter)
 {
-	std::scoped_lock _(Lock);
-	// Slow, but this function is called extremely rarely
+	UE::TUniqueLock L(Lock);
+	// Slow, but this function is called relatively rarely
 	auto Idx = Queue.Find(Awaiter);
 	if (Idx == INDEX_NONE)
-		return;
+		return false;
 	Queue.HeapRemoveAt(Idx, &Less);
+	return true;
 }
 
 FTimerThread::FTimerThread()
@@ -76,7 +77,7 @@ void FTimerThread::RunOnce()
 {
 	auto Wait = FTimespan::MaxValue();
 	{
-		std::scoped_lock _(Lock);
+		UE::TUniqueLock L(Lock);
 		if (Queue.Num() > 0)
 		{
 			auto Remaining = FTimespan::FromSeconds(
@@ -85,7 +86,7 @@ void FTimerThread::RunOnce()
 		}
 	}
 	Event->Wait(Wait);
-	std::scoped_lock _(Lock);
+	UE::TUniqueLock L(Lock);
 	auto Now = FPlatformTime::Seconds();
 	while (Queue.Num() > 0)
 		if (auto& Next = Queue.HeapTop(); Next->TargetTime <= Now)

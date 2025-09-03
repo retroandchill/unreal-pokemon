@@ -43,7 +43,7 @@ bool WaitForNextFrame(void* State, bool)
 }
 
 FTickTimeBudget::FTickTimeBudget(double SecondsPerTick)
-	: FLatentAwaiter(nullptr, &WaitForNextFrame)
+	: FLatentAwaiter(nullptr, &WaitForNextFrame, std::false_type())
 {
 	// Check undefined conversion behavior before it occurs
 	checkf(SecondsPerTick / FPlatformTime::GetSecondsPerCycle() <
@@ -88,7 +88,7 @@ bool FTickTimeBudget::await_ready()
 void FTickTimeBudget::await_resume()
 {
 	// Reset the clock if and only if the coroutine was actually suspended
-	if (GFrameCounter == reinterpret_cast<uint64>(State) + 1) [[unlikely]]
+	if (State) [[unlikely]]
 	{
 		State = nullptr;
 		Start = FPlatformTime::Cycles();

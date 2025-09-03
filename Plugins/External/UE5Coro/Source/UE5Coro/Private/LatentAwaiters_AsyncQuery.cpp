@@ -29,7 +29,6 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "Engine.h"
 #include "UE5Coro/LatentAwaiter.h"
 #include <optional>
 
@@ -90,7 +89,7 @@ TAsyncQueryAwaiter<T>::TAsyncQueryAwaiter(UWorld* World,
                                           FTraceHandle (UWorld::*Fn)(P...),
                                           auto&&... Params)
 	: FLatentAwaiter(new typename TQueryResult<T>::FPtr(new TQueryResult<T>),
-	                 &TQueryResult<T>::ShouldResume)
+	                 &TQueryResult<T>::ShouldResume, std::false_type())
 {
 	checkf(IsInGameThread(),
 	       TEXT("Async queries may only be started from the game thread"));

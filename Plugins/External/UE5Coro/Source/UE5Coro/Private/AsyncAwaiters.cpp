@@ -31,7 +31,6 @@
 
 #include "UE5Coro/AsyncAwaiter.h"
 #include "UE5Coro/TaskAwaiter.h"
-#include "HAL/Runnable.h"
 #include "UE5CoroDelegateCallbackTarget.h"
 
 using namespace UE5Coro;
@@ -170,24 +169,87 @@ void FNewThreadAwaiter::Suspend(FPromise& Promise)
 	new FAutoStartResumeRunnable(Promise, Priority, Affinity, Flags);
 }
 
-FDelegateAwaiter::~FDelegateAwaiter()
+template<>
+FDelegateAwaiter<false>::FDelegateAwaiter()
 {
-	Cleanup();
 }
 
-void FDelegateAwaiter::Suspend(FPromise& InPromise)
+template<>
+FDelegateAwaiter<true>::FDelegateAwaiter()
+	: TCancelableAwaiter(&Cancel)
+{
+}
+
+#if UE5CORO_DEBUG
+template<bool bCancelable>
+FDelegateAwaiter<bCancelable>::~FDelegateAwaiter()
+{
+	checkf(!Promise, TEXT("Internal error: destroying active awaiter"));
+}
+#endif
+
+template<>
+void FDelegateAwaiter<false>::Suspend(FPromise& InPromise)
 {
 	checkf(!Promise, TEXT("Internal error: unexpected double suspend"));
+	checkf(Cleanup, TEXT("Internal error: awaiter was not set up"));
 	Promise = &InPromise;
 }
 
-void FDelegateAwaiter::TryResumeOnce()
+template<>
+void FDelegateAwaiter<true>::Suspend(FPromise& InPromise)
 {
-	if (Promise)
-		std::exchange(Promise, nullptr)->Resume();
+	checkf(!Promise, TEXT("Internal error: unexpected double suspend"));
+	checkf(Cleanup, TEXT("Internal error: awaiter not set up"));
+	UE::TUniqueLock Lock(InPromise.GetLock());
+	if (InPromise.RegisterCancelableAwaiter(this))
+		Promise = &InPromise;
+	else
+	{
+		Cleanup();
+		FAsyncYieldAwaiter::Suspend(InPromise);
+	}
 }
 
-UObject* FDelegateAwaiter::SetupCallbackTarget(std::function<void(void*)> Fn)
+template<bool bCancelable>
+void FDelegateAwaiter<bCancelable>::Cancel(void* This, FPromise& Promise)
+	requires bCancelable
+{
+	if (Promise.UnregisterCancelableAwaiter<false>())
+	{
+		auto* Awaiter = static_cast<FDelegateAwaiter*>(This);
+		verifyf(Awaiter->Promise.exchange(nullptr) == &Promise,
+		        TEXT("Internal error: expected active awaiter"));
+		checkf(Awaiter->Cleanup, TEXT("Internal error: awaiter not set up"));
+		Awaiter->Cleanup();
+		FAsyncYieldAwaiter::Suspend(Promise);
+	}
+}
+
+template<>
+void FDelegateAwaiter<false>::Resume()
+{
+	checkf(Cleanup, TEXT("Internal error: awaiter not set up"));
+	Cleanup();
+	if (auto* P = Promise.exchange(nullptr))
+		P->Resume();
+}
+
+template<>
+void FDelegateAwaiter<true>::Resume()
+{
+	checkf(Cleanup, TEXT("Internal error: awaiter not set up"));
+	if (auto* P = Promise.exchange(nullptr);
+	    P->UnregisterCancelableAwaiter<true>())
+	{
+		Cleanup();
+		P->Resume();
+	}
+}
+
+template<bool bCancelable>
+UObject* FDelegateAwaiter<bCancelable>::SetupCallbackTarget(
+	std::function<void(void*)> Fn)
 {
 	FGCScopeGuard _;
 	auto* Target = NewObject<UUE5CoroDelegateCallbackTarget>();
@@ -201,4 +263,10 @@ UObject* FDelegateAwaiter::SetupCallbackTarget(std::function<void(void*)> Fn)
 		Target->MarkAsGarbage();
 	};
 	return Target;
+}
+
+namespace UE5Coro::Private
+{
+template class FDelegateAwaiter<false>;
+template class FDelegateAwaiter<true>;
 }

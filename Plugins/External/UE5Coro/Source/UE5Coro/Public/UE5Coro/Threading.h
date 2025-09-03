@@ -33,6 +33,7 @@
 
 #include "CoreMinimal.h"
 #include "UE5Coro/Definition.h"
+#include <forward_list>
 #include "UE5Coro/Private.h"
 #include "UE5Coro/Promise.h"
 
@@ -44,11 +45,12 @@ namespace UE5Coro
 class UE5CORO_API FAwaitableEvent final
 {
 	friend Private::FEventAwaiter;
+	friend Private::Test::FTestHelper;
 
-	Private::FMutex Lock;
-	const EEventMode Mode;
+	UE::FMutex Lock;
 	bool bActive;
-	void* Awaiters = nullptr; // FAwaitingPromise*
+	const EEventMode Mode;
+	std::forward_list<Private::FPromise*> AwaitingPromises;
 
 public:
 	/** Initializes this event to be in the given mode and state. */
@@ -69,7 +71,7 @@ public:
 	auto operator co_await() -> Private::FEventAwaiter;
 
 private:
-	void ResumeOne();
+	[[nodiscard]] bool TryResumeOne();
 	void TryResumeAll();
 };
 
@@ -79,11 +81,12 @@ private:
 class UE5CORO_API FAwaitableSemaphore final
 {
 	friend Private::FSemaphoreAwaiter;
+	friend Private::Test::FTestHelper;
 
-	Private::FMutex Lock;
+	UE::FMutex Lock;
 	const int Capacity;
 	int Count;
-	void* Awaiters = nullptr; // FAwaitingPromise*
+	std::forward_list<Private::FPromise*> AwaitingPromises;
 
 public:
 	/** Initializes the semaphore to the given capacity and initial count.
@@ -108,30 +111,37 @@ private:
 namespace UE5Coro::Private
 {
 class [[nodiscard]] UE5CORO_API FEventAwaiter final
-	: public TAwaiter<FEventAwaiter>
+	: public TCancelableAwaiter<FEventAwaiter>
 {
 	FAwaitableEvent& Event;
 
 public:
-	explicit FEventAwaiter(FAwaitableEvent& Event) : Event(Event) { }
+	explicit FEventAwaiter(FAwaitableEvent& Event)
+		: TCancelableAwaiter(&Cancel), Event(Event) { }
 
 	[[nodiscard]] bool await_ready() noexcept;
 	void Suspend(FPromise&);
 	void await_resume() noexcept { }
+
+private:
+	static void Cancel(void*, FPromise&);
 };
 
 class [[nodiscard]] UE5CORO_API FSemaphoreAwaiter final
-	: public TAwaiter<FSemaphoreAwaiter>
+	: public TCancelableAwaiter<FSemaphoreAwaiter>
 {
 	FAwaitableSemaphore& Semaphore;
 
 public:
 	explicit FSemaphoreAwaiter(FAwaitableSemaphore& Semaphore)
-		: Semaphore(Semaphore) { }
+		: TCancelableAwaiter(&Cancel), Semaphore(Semaphore) { }
 
 	[[nodiscard]] bool await_ready();
 	void Suspend(FPromise&);
 	void await_resume() noexcept { }
+
+private:
+	static void Cancel(void*, FPromise&);
 };
 }
 #pragma endregion

@@ -31,7 +31,6 @@
 
 #include "UE5CoroAnimCallbackTarget.h"
 #include "UE5Coro/AnimationAwaiter.h"
-#include "Animation/AnimMontage.h"
 
 using namespace UE5Coro::Private;
 

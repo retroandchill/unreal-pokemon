@@ -12,7 +12,7 @@ class USelectableWidget;
 
 // This class does not need to be modified.
 UINTERFACE()
-class USelectablePanel : public UInterface {
+class USelectablePanel : public URefreshable {
     GENERATED_BODY()
 };
 

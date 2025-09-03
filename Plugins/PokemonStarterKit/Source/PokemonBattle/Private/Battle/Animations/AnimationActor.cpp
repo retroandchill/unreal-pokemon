@@ -4,10 +4,10 @@
 
 UE5Coro::TCoroutine<> AAnimationActor::PlayAnimation() {
     Play();
-    co_await TFuture<void>(OnBattleAnimationComplete);
+    co_await OnBattleAnimationComplete.GetFuture();
     Destroy();
 }
 
 void AAnimationActor::AnimationComplete() {
-    OnBattleAnimationComplete->EmplaceResult(0);
+    OnBattleAnimationComplete.EmplaceValue(0);
 }

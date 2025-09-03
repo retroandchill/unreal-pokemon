@@ -33,7 +33,6 @@
 
 #include "CoreMinimal.h"
 #include "UE5Coro/Definition.h"
-#include "Tickable.h"
 #include "UE5CoroChainCallbackTarget.generated.h"
 
 namespace UE5Coro::Private

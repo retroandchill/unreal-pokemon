@@ -36,7 +36,6 @@
 #include <coroutine>
 #include <functional>
 #include "Engine/LatentActionManager.h"
-#include "HAL/Event.h"
 #define UE5CORO_PRIVATE_SUPPRESS_COROUTINE_INL
 #include "UE5Coro/Coroutine.h"
 #include "UE5Coro/Private.h"
@@ -59,6 +58,15 @@ concept TAwaitable = requires
  *  internal, but important implementation detail on the public API. */
 template<typename T>
 concept TLatentAwaiter = std::derived_from<T, Private::FLatentAwaiter>;
+
+/** Types that are not TLatentAwaiters, but support expedited cancellation.
+ *  This concept is mainly provided for documentation purposes. */
+template<typename T>
+concept TCancelableAwaiter =
+	std::derived_from<T, Private::TCancelableAwaiter<T>> ||
+	requires(T t) { { t.operator co_await() } -> std::derived_from<
+		Private::TCancelableAwaiter<decltype(t.operator co_await())>>; };
+	// TAwaitTransform is not handled by this concept
 }
 
 #pragma region Private
@@ -80,6 +88,33 @@ struct [[nodiscard]] TAwaiter
 	void await_resume() noexcept { }
 };
 
+template<typename T>
+class [[nodiscard]] TCancelableAwaiter : public TAwaiter<T>
+{
+	void (*fn_)(void*, FPromise&);
+
+protected:
+	explicit TCancelableAwaiter(void (*Cancel)(void*, FPromise&))
+		: fn_(Cancel) { }
+
+public:
+	template<std::derived_from<FPromise> P>
+	void await_suspend(std::coroutine_handle<P> Handle)
+	{
+		static_assert(STRUCT_OFFSET(T, fn_) == 0, "Unexpected object layout");
+		TAwaiter<T>::await_suspend(Handle);
+	}
+};
+
+struct UE5CORO_API FCoroutineScope final
+{
+	FPromise* Promise;
+	FPromise* PreviousPromise;
+
+	explicit FCoroutineScope(FPromise*);
+	~FCoroutineScope();
+};
+
 struct FInitialSuspend final
 {
 	enum EAction
@@ -93,6 +128,7 @@ struct FInitialSuspend final
 	template<std::derived_from<FPromise> P>
 	void await_suspend(std::coroutine_handle<P> Handle)
 	{
+		FCoroutineScope Scope(&Handle.promise());
 		switch (Action)
 		{
 			case Resume: Handle.promise().ResumeFast(); break;
@@ -133,7 +169,7 @@ struct [[nodiscard]] UE5CORO_API FPromiseExtras
 	// This could be read from another thread
 	std::atomic<bool> bWasSuccessful = false;
 
-	FMutex Lock; // Used for the union below and by FLatentPromise
+	UE::FMutex Lock; // Used for the union below and by FLatentPromise
 	union
 	{
 		FPromise* Promise; // nullptr once destroyed
@@ -160,7 +196,7 @@ struct [[nodiscard]] TPromiseExtras final : FPromiseExtras
 		: FPromiseExtras(InPromise) { }
 };
 
-class [[nodiscard]] UE5CORO_API FCancellationTracker
+class [[nodiscard]] FCancellationTracker
 {
 	std::atomic<bool> bCanceled = false;
 	std::atomic<int> CancellationHolds = 0;
@@ -169,12 +205,11 @@ public:
 	void Cancel() { bCanceled = true; }
 	void Hold() { verify(++CancellationHolds >= 0); }
 	void Release() { verify(--CancellationHolds >= 0); }
-	bool ShouldCancel(bool bBypassHolds) const;
+	bool ShouldCancel(bool bBypassHolds) const
+	{
+		return bCanceled && (bBypassHolds || CancellationHolds == 0);
+	}
 };
-
-#if UE5CORO_DEBUG
-extern std::atomic<int> GLastDebugID;
-#endif
 
 extern thread_local FPromise* GCurrentPromise;
 
@@ -185,6 +220,8 @@ class [[nodiscard]] UE5CORO_API FPromise
 	FCancellationTracker CancellationTracker;
 
 protected:
+	void* CancelableAwaiter = nullptr;
+
 	std::shared_ptr<FPromiseExtras> Extras;
 	TArray<std::function<void(void*)>> OnCompleted;
 #if !PLATFORM_EXCEPTIONS_DISABLED
@@ -200,8 +237,11 @@ protected:
 
 public:
 	static FPromise& Current();
+	UE::FMutex& GetLock();
 
-	void Cancel();
+	[[nodiscard]] bool RegisterCancelableAwaiter(void*);
+	template<bool bLock> [[nodiscard]] bool UnregisterCancelableAwaiter();
+	void Cancel(bool bBypassCancellationHolds);
 	bool ShouldCancel(bool bBypassCancellationHolds) const;
 	void HoldCancellation();
 	void ReleaseCancellation();
@@ -213,6 +253,11 @@ public:
 
 	// co_yield is not allowed in these types of coroutines
 	std::suspend_never yield_value(auto&&) = delete;
+
+#if UE5CORO_PRIVATE_USE_DEBUG_ALLOCATOR
+	void* operator new(size_t);
+	void operator delete(void*);
+#endif
 };
 
 class [[nodiscard]] UE5CORO_API FAsyncPromise : public FPromise
@@ -263,7 +308,7 @@ protected:
 	explicit FLatentPromise(std::shared_ptr<FPromiseExtras>, const auto&...);
 	virtual ~FLatentPromise() override;
 	virtual bool IsEarlyDestroy() const override;
-	virtual void ThreadSafeDestroy() override;
+	virtual void ThreadSafeDestroy() final override;
 
 public:
 	virtual void Resume() override;
@@ -300,7 +345,7 @@ public:
 	~TCoroutinePromise()
 	{
 		auto* ExtrasT = static_cast<TPromiseExtras<T>*>(this->Extras.get());
-		ExtrasT->Lock.lock(); // This will be held until the end of ~FPromise
+		ExtrasT->Lock.Lock(); // This will be held until the end of ~FPromise
 		checkf(ExtrasT->Promise, TEXT("Unexpected double promise destruction"));
 		ExtrasT->ReturnValuePtr = &ExtrasT->ReturnValue;
 	}
@@ -308,7 +353,7 @@ public:
 	void return_value(T Value)
 	{
 		auto* ExtrasT = static_cast<TPromiseExtras<T>*>(this->Extras.get());
-		std::scoped_lock _(ExtrasT->Lock);
+		UE::TUniqueLock Lock(ExtrasT->Lock);
 		check(!ExtrasT->IsComplete()); // Completion is after a value is returned
 		ExtrasT->ReturnValue = std::move(Value);
 	}
@@ -330,7 +375,7 @@ public:
 	~TCoroutinePromise()
 	{
 		// This will be held until the end of ~FPromise
-		this->Extras->Lock.lock();
+		this->Extras->Lock.Lock();
 		checkf(this->Extras->Promise,
 		       TEXT("Unexpected double promise destruction"));
 		this->Extras->ReturnValuePtr = nullptr;
@@ -347,10 +392,10 @@ public:
 template<typename T>
 void FPromiseExtras::ContinueWith(auto Fn)
 {
-	std::unique_lock UniqueLock(Lock);
+	UE::TDynamicUniqueLock L(Lock);
 	if (IsComplete()) // Already completed?
 	{
-		UniqueLock.unlock();
+		L.Unlock();
 		if constexpr (std::is_void_v<T>)
 			Fn();
 		else // T is controlled by TCoroutine<T>, safe to cast

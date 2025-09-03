@@ -106,7 +106,7 @@ UE5Coro::TCoroutine<EBattleResult> APokemonBattle::ConductBattle(APlayerControll
 
     auto MainLoop = MainBattleLoop();
     auto Interrupt = [](UE5Coro::TLatentContext<APokemonBattle> This) -> UE5Coro::TCoroutine<EBattleResult> {
-        co_return co_await TFuture<EBattleResult>(This->OnBattleEnd);
+        co_return co_await This->OnBattleEnd.GetFuture();
     }(this);
     auto Result = co_await Race(MainLoop, Interrupt) == 0 ? MainLoop.GetResult() : Interrupt.GetResult();
 
@@ -160,7 +160,7 @@ void APokemonBattle::QueueAction(TUniquePtr<IBattleAction> &&Action) {
     SelectedActions.Add(std::move(Action));
     ActionCount++;
     if (ActionSelectionFinished()) {
-        ActionsCompletePromise->EmplaceResult(ActionCount);
+        ActionsCompletePromise->EmplaceValue(ActionCount);
     }
 }
 
@@ -265,9 +265,7 @@ void APokemonBattle::RefreshBattleHUD() {
 }
 
 void APokemonBattle::EndBattle_Implementation(EBattleResult Result) {
-    if (!OnBattleEnd->IsComplete()) {
-        OnBattleEnd->EmplaceResult(Result);
-    }
+    OnBattleEnd.EmplaceValue(Result);
 }
 
 void APokemonBattle::ProcessTurnDurationTrigger(ETurnDurationTrigger Trigger) {
@@ -289,7 +287,7 @@ UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::ProcessTurn() {
 
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
-    ActionsCompletePromise = MakeShared<TFutureState<int32>>();
+    ActionsCompletePromise = MakeUnique<TPromise<int32>>();
 
     for (auto Battler : GetActiveBattlers()) {
         auto BattlerId = Battler->GetInternalId();
@@ -298,7 +296,7 @@ UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::ProcessTurn() {
         Battler->SelectActions();
     }
 
-    co_await TFuture<void>(ActionsCompletePromise);
+    co_await ActionsCompletePromise->GetFuture();
 
     co_await ActionProcessing();
 
@@ -310,7 +308,7 @@ UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::EndTurn() {
     bool bRequiresSwaps = false;
     ExpectedActionCount.Reset();
     CurrentActionCount.Reset();
-    ActionsCompletePromise = MakeShared<TFutureState<int32>>();
+    ActionsCompletePromise = MakeUnique<TPromise<int32>>();
     for (int32 i = 0; i < Sides.Num(); i++) {
         if (!Sides[i]->CanBattle()) {
             co_return i;
@@ -329,7 +327,7 @@ UE5Coro::TCoroutine<TOptional<int32>> APokemonBattle::EndTurn() {
 
     if (bRequiresSwaps) {
         bSwitchPrompting = true;
-        co_await TFuture<void>(ActionsCompletePromise);
+        co_await ActionsCompletePromise->GetFuture();
         co_await ActionProcessing();
     }
 
