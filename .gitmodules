@@ -7,3 +7,6 @@
 [submodule "Plugins/UnrealRanges/Deps/FunctionTraits"]
 	path = Plugins/UnrealRanges/Deps/FunctionTraits
 	url = https://github.com/HexadigmSystems/FunctionTraits.git
+[submodule "Plugins/UnrealSharp/UnrealSharp"]
+	path = Plugins/UnrealSharp/UnrealSharp
+	url = https://github.com/retroandchill/UnrealSharp.git
