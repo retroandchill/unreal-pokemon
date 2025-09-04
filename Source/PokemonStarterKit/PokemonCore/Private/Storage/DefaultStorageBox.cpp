@@ -56,8 +56,8 @@ const FText &UDefaultStorageBox::GetDisplayName() const {
     return DisplayName;
 }
 
-void UDefaultStorageBox::SetDisplayName(const FText &NewName) {
-    DisplayName = NewName;
+void UDefaultStorageBox::SetDisplayName(FText NewName) {
+    DisplayName = std::move(NewName);
 }
 
 int32 UDefaultStorageBox::GetCapacity() const {

@@ -103,3 +103,4 @@ TestResults
 Script/UnrealPokemon.Glue/AssetIds.cs
 Script/UnrealPokemon.Glue/TraceChannel.cs
 Script/UnrealPokemon.Glue/GameplayTags.cs
+*.DotSettings.user

@@ -28,7 +28,7 @@ class POKEMONCORE_API UDefaultStorageBox : public UObject, public IStorageBox {
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = "Storage|Information",
               meta = (AutoCreateRefTerm = NewName))
-    void SetDisplayName(const FText &NewName) override;
+    void SetDisplayName(FText NewName) override;
 
     UFUNCTION(BlueprintCallable, Category = "Storage|Information")
     int32 GetCapacity() const override;

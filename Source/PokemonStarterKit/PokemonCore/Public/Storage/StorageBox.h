@@ -46,8 +46,8 @@ class POKEMONCORE_API IStorageBox {
      * Set the display name for the box.
      * @param NewName The new name for the box
      */
-    UFUNCTION(BlueprintCallable, Category = "Storage|Information", meta = (AutoCreateRefTerm = NewName))
-    virtual void SetDisplayName(const FText &NewName) = 0;
+    UFUNCTION(BlueprintCallable, Category = "Storage|Information")
+    virtual void SetDisplayName(FText NewName) = 0;
 
     /**
      * Get the capacity of the box.
