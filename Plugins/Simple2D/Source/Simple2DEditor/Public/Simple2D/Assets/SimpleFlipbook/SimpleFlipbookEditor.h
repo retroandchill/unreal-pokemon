@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "Editor/Experimental/EditorInteractiveToolsFramework/Public/Behaviors/2DViewportBehaviorTargets.h"
 #include "ITransportControl.h"
 #include "Simple2D/Assets/SimpleFlipbook.h"
 #include "Toolkits/AssetEditorToolkit.h"

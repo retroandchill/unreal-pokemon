@@ -1,0 +1,54 @@
+#nullable enable
+using UnrealSharp;
+using UnrealSharp.Core;
+using UnrealSharp.Core.Marshallers;
+using UnrealSharp.CoreUObject;
+using UnrealSharp.Interop;
+using GameDataAccessTools.Core;
+
+namespace {{Namespace}};
+
+public static class {{EngineName}}ViewExtensions
+{
+    extension(StructView<{{ClassName}} structView) 
+    {
+        {{#Properties}}
+        public {{Type}} {{Name}}
+        {
+            get
+            {
+                {{#MarshallerInstanced}}
+                {{Name}}_Marshaller ??= new {{MarshallerInfo.Name}}({{Name}}_NativeProperty, {{MarshallerInfo.ChildMarshallerType}}.ToNative, {{MarshallerInfo.ChildMarshallerType}}.FromNative{{#MarshallerHasValue}}, {{MarshallerInfo.ValueMarshallerType}}.ToNative, {{MarshallerInfo.ValueMarshallerType}}.FromNative{{/MarshallerHasValue}});
+                IntPtr {{Name}}_NativeBuffer = IntPtr.Add(structView.NativePtr, {{Name}}_Offset);
+                return {{Name}}_Marshaller.FromNative({{Name}}_NativeBuffer, 0);
+                {{/MarshallerInstanced}}
+                {{^MarshallerInstanced}}
+                return {{MarshallerInfo.Name}}.FromNative(IntPtr.Add(structView.NativePtr, {{Name}}_Offset), 0);
+                {{/MarshallerInstanced}}
+            }
+        }
+        
+        {{/Properties}}
+    }
+
+    private static readonly IntPtr NativeClassPtr;
+    public static int NativeDataSize { get; }
+
+    {{#Properties}}
+    private static int {{Name}}_Offset;
+    {{#MarshallerInstanced}}
+    private static IntPtr {{Name}}_NativeProperty;
+    private static {{MarshallerInfo.Name}}? {{Name}}_Marshaller = null;
+    {{/MarshallerInstanced}}
+    {{/Properties}}
+
+    static {{EngineName}}ViewExtensions()
+    {
+        NativeClassPtr = UCoreUObjectExporter.CallGetNativeStructFromName(typeof({{ClassName}}).GetAssemblyName(), "{{Namespace}}", "{{EngineName}}");
+        {{#Properties}}
+        {{^MarshallerInstanced}}IntPtr {{/MarshallerInstanced}}{{Name}}_NativeProperty = FPropertyExporter.CallGetNativePropertyFromName(NativeClassPtr, "{{Name}}");
+        {{Name}}_Offset = FPropertyExporter.CallGetPropertyOffset({{Name}}_NativeProperty);
+        {{/Properties}}
+        NativeDataSize = UScriptStructExporter.CallGetNativeStructSize(NativeClassPtr);
+    }
+}

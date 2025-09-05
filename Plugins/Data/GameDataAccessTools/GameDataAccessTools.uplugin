@@ -1,0 +1,42 @@
+﻿{
+    "FileVersion": 3,
+    "Version": 1,
+    "VersionName": "1.0",
+    "FriendlyName": "GameDataAccessTools",
+    "Description": "",
+    "Category": "Other",
+    "CreatedBy": "",
+    "CreatedByURL": "",
+    "DocsURL": "",
+    "MarketplaceURL": "",
+    "CanContainContent": true,
+    "IsBetaVersion": false,
+    "IsExperimentalVersion": false,
+    "Installed": false,
+    "Modules": [
+        {
+            "Name": "GameDataAccessTools",
+            "Type": "Runtime",
+            "LoadingPhase": "Default"
+        },
+        {
+            "Name": "GameDataAccessToolsEditor",
+            "Type": "Editor",
+            "LoadingPhase": "Default"
+        }
+    ],
+    "Plugins": [
+        {
+            "Name": "UnrealSharp",
+            "Enabled": true
+        },
+        {
+            "Name": "GameplayTagsEditor",
+            "Enabled": true
+        },
+        {
+            "Name": "CommonUtilities",
+            "Enabled": true
+        }
+    ]
+}

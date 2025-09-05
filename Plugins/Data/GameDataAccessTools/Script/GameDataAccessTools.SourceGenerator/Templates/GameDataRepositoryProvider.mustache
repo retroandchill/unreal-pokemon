@@ -1,0 +1,64 @@
+#nullable enable
+using System.Diagnostics.CodeAnalysis;
+using UnrealSharp;
+using UnrealSharp.Engine;
+using UnrealSharp.Attributes;
+using UnrealSharp.Attributes.MetaTags;
+using UnrealSharp.CoreUObject;
+using UnrealSharp.DeveloperSettings;
+using UnrealSharp.GameplayTags;
+using UnrealSharp.StaticVars;
+using GameDataAccessTools.Core.DataRetrieval;
+
+namespace {{Namespace}};
+
+[UClass(ClassFlags.DefaultConfig, {{#HasDisplayName}}DisplayName = "{{DisplayName}}", {{/HasDisplayName}}ConfigCategory = "Game")]
+public partial class U{{ClassName}}Settings : UDeveloperSettings 
+{
+
+    {{#Repositories}}
+    [UProperty(PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config{{#HasCategory}}, Category = "{{Category}}"{{/HasCategory}})]
+    [AllowedClasses("UnrealSharp.{{RepositoryClassName}}_C")]
+    public FSoftObjectPath {{Name}} { get; }
+    {{/Repositories}}
+
+}
+
+public sealed partial class {{ClassName}} 
+{
+    private static readonly FGameStaticVar<{{ClassName}}> StaticInstance = new();
+
+    private static {{ClassName}} Instance => StaticInstance.Value ?? (StaticInstance.Value = new {{ClassName}}());
+
+    {{#Repositories}}
+    private readonly TStrongObjectPtr<{{Type}}> _{{Name}};
+    public static partial {{Type}} {{Name}} => Instance._{{Name}}.Value ?? throw new InvalidOperationException("{{Name}} not initialized");
+    {{/Repositories}}
+
+    private {{ClassName}}() 
+    {
+        var settings = UObject.GetDefault<U{{ClassName}}Settings>();
+        {{#Repositories}}
+        _{{Name}} = ((TSoftObjectPtr<UObject>)settings.{{Name}}).LoadSynchronous() as {{Type}};
+        {{/Repositories}}
+    }
+
+}
+
+[UClass]
+public class U{{ClassName}}BlueprintLibrary : UBlueprintFunctionLibrary
+{
+    {{#Repositories}}
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "{{ClassName}}|{{Name}}")]
+    public static IReadOnlyList<{{EntryType}}> Get{{Name}}()
+    {
+        return {{../ClassName}}.{{Name}}.AllEntries;
+    }
+
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "{{ClassName}}|{{Name}}")]
+    public static bool Get{{SingularName}}({{#HasCategories}}[UMetaData("Categories", "{{Categories}}")] {{/HasCategories}}FGameplayTag id, [NotNullWhen(true)] out {{EntryType}}? entry)
+    {
+        return {{../ClassName}}.{{Name}}.TryGetEntry(id, out entry);
+    }
+    {{/Repositories}}
+}

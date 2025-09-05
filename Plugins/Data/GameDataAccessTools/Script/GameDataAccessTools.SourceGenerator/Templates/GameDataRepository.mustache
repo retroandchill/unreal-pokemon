@@ -1,0 +1,67 @@
+#nullable enable
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
+using UnrealSharp;
+using UnrealSharp.Attributes;
+using UnrealSharp.CoreUObject;
+using UnrealSharp.GameDataAccessTools;
+using UnrealSharp.GameplayTags;
+using GameDataAccessTools.Core.DataRetrieval;
+
+namespace {{Namespace}};
+
+[UClass]
+public partial class {{AssetClassName}} : UGameDataRepository, IGameDataRepository<{{EntryName}}> {
+    public TSubclassOf<{{EntryName}}> EntryClass { get; } = new(typeof({{EntryName}}));
+
+    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.Instanced)]
+    private TArray<{{EntryName}}> DataEntries { get; set; }
+
+    private ImmutableDictionary<FGameplayTag, {{EntryName}}> _entries = ImmutableDictionary<FGameplayTag, {{EntryName}}>.Empty;
+    public IReadOnlyDictionary<FGameplayTag, {{EntryName}}> Entries => _entries;
+
+    IEnumerable<{{EntryName}}> IDataRepository<FGameplayTag, {{EntryName}}>.AllEntries => DataEntries;
+
+    public IReadOnlyList<{{EntryName}}> AllEntries => DataEntries;
+
+    public int NumEntries => DataEntries.Count;
+
+    public IEnumerable<FGameplayTag> EntryKeys => DataEntries.Select(x => x.Id);
+
+    public sealed override TSubclassOf<UObject> GetEntryClass() 
+    {
+        return EntryClass.As<UObject>();
+    }
+
+    public {{EntryName}} GetEntry(FGameplayTag key) 
+    {
+        return _entries[key];
+    }
+
+    public {{EntryName}} GetEntry(int index) 
+    {
+        return DataEntries[index];
+    }
+
+    public bool TryGetEntry(FGameplayTag key, [NotNullWhen(true)] out {{EntryName}}? entry) 
+    {
+        return _entries.TryGetValue(key, out entry);
+    }
+
+    public bool TryGetEntry(int index, [NotNullWhen(true)] out {{EntryName}}? entry) 
+    {
+        if (index < 0 || index >= DataEntries.Count) 
+        {
+            entry = null;
+            return false;
+        }
+
+        entry = DataEntries[index];
+        return true;
+    }
+
+    public override void Refresh() 
+    {
+        _entries = DataEntries.ToImmutableDictionary(x => x.Id);
+    }
+}
