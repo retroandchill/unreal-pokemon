@@ -44,17 +44,18 @@ public:
 
     
 
-    TArray<FGameDataEntrySerializerPtr> GetAvailableSerializers(TSubclassOf<UGameDataRepository> RepositoryClass) const override
+    TArray<TObjectPtr<const UGameDataEntrySerializer>> GetAvailableSerializers(TSubclassOf<UGameDataRepository> RepositoryClass) const override
     {
-        TArray<FGameDataEntrySerializerPtr> Serializers;
+        TArray<TObjectPtr<const UGameDataEntrySerializer>> Serializers;
         for (TObjectIterator<UClass> It; It; ++It)
         {
-            if (It->HasAnyClassFlags(CLASS_Abstract) || !It->ImplementsInterface(UGameDataEntrySerializer::StaticClass()))
+            if (It->HasAnyClassFlags(CLASS_Abstract) || !It->IsChildOf(UGameDataEntrySerializer::StaticClass()))
             {
                 continue;
             }
 
-            if (auto *CDO = It->GetDefaultObject(); IGameDataEntrySerializer::Execute_Supports(CDO, RepositoryClass))
+            if (auto *CDO = CastChecked<UGameDataEntrySerializer>(It->GetDefaultObject());
+            	CDO->Supports(RepositoryClass))
             {
                 Serializers.Emplace(CDO);       
             }

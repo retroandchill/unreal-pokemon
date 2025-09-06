@@ -4,8 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
-#include "GameDataRepositoryDataAccessor.h"
 
+struct FEntryRowData
+{
+	int32 Index;
+	FName Id;
+	TSharedPtr<FStructOnScope> Entry;
+
+	FEntryRowData(const int32 InIndex, const FName InName, TSharedPtr<FStructOnScope> InEntry)
+		: Index(InIndex), Id(InName), Entry(MoveTemp(InEntry))
+	{
+	}
+
+	bool operator==(const FEntryRowData& Other) const = default;
+};
 
 class SWrapBox;
 

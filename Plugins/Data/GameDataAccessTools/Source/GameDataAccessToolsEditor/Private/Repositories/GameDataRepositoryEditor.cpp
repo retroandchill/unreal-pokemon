@@ -18,7 +18,8 @@ void FGameDataRepositoryEditor::Initialize(const EToolkitMode::Type Mode,
                                            const TSharedPtr<IToolkitHost>& InitToolkitHost,
                                            UGameDataRepository* Asset)
 {
-    PropertyAccessor = MakeUnique<FGameDataRepositoryDataAccessor>(Asset);
+	GameDataRepository = Asset;
+	
     const auto Layout = FTabManager::NewLayout("GameDataRepositoryEditor_Layout")
         ->AddArea
         (
@@ -76,8 +77,9 @@ void FGameDataRepositoryEditor::RegisterTabSpawners(const TSharedRef<FTabManager
     DetailsViewArgs.NameAreaSettings = FDetailsViewArgs::HideNameArea;
     FStructureDetailsViewArgs DetailsViewArgsStruct;
 
-    auto CurrentEntry = PropertyAccessor->GetFirstEntry();
-    DetailsView = PropertyEditorModule.CreateStructureDetailView(DetailsViewArgs, DetailsViewArgsStruct, CurrentEntry);
+    auto *CurrentEntry = GameDataRepository->GetMutableEntryAtIndex(0);
+	const auto EntryStruct = CurrentEntry != nullptr ? MakeShared<FStructOnScope>(GameDataRepository->GetEntryStruct(), CurrentEntry) : TSharedPtr<FStructOnScope>();
+    DetailsView = PropertyEditorModule.CreateStructureDetailView(DetailsViewArgs, DetailsViewArgsStruct, EntryStruct);
     DetailsView->GetOnFinishedChangingPropertiesDelegate().AddRaw(this, &FGameDataRepositoryEditor::OnPropertyChanged);
     InTabManager->RegisterTabSpawner("EntryEditTab", FOnSpawnTab::CreateLambda([this](const FSpawnTabArgs&)
                 {
@@ -189,14 +191,14 @@ TSharedRef<SWidget> FGameDataRepositoryEditor::ImportMenuEntries()
 
     for (const auto& Serializer : Serializers)
     {
-        const auto FormatName = Serializer.GetFormatName();
+        const auto FormatName = Serializer->GetFormatName();
         // Add your dynamic import actions here
         MenuBuilder.AddMenuEntry(
             FText::Format(NSLOCTEXT("GameDataRepository", "ImportFile", "Import from {0}"), FormatName),
             FText::Format(
                 NSLOCTEXT("GameDataRepository", "ImportTooltip", "Import entries from a {0} file"), FormatName),
             FSlateIcon(),
-            FUIAction(FExecuteAction::CreateSP(this, &FGameDataRepositoryEditor::ImportGameDataRepository, Serializer))
+            FUIAction(FExecuteAction::CreateSP(this, &FGameDataRepositoryEditor::ImportGameDataRepository, Serializer.Get()))
         );
     }
 
@@ -204,7 +206,7 @@ TSharedRef<SWidget> FGameDataRepositoryEditor::ImportMenuEntries()
     return MenuBuilder.MakeWidget();
 }
 
-void FGameDataRepositoryEditor::ImportGameDataRepository(const FGameDataEntrySerializerPtr Serializer) const {
+void FGameDataRepositoryEditor::ImportGameDataRepository(const UGameDataEntrySerializer* Serializer) const {
     if (IDesktopPlatform* DesktopPlatform = FDesktopPlatformModule::Get(); DesktopPlatform != nullptr)
     {
         const void* ParentWindowWindowHandle = FSlateApplication::Get().FindBestParentWindowHandleForDialogs(nullptr);
@@ -214,7 +216,7 @@ void FGameDataRepositoryEditor::ImportGameDataRepository(const FGameDataEntrySer
             NSLOCTEXT("GameDataRepository", "Select file to import from", "Select file to import from...").ToString(),
             *FEditorDirectories::Get().GetLastDirectory(ELastDirectory::UNR),
             TEXT(""),
-            Serializer.GetFileExtensionText(),
+            Serializer->GetFileExtensionText(),
             EFileDialogFlags::None,
             FileNames))
         {
@@ -226,7 +228,7 @@ void FGameDataRepositoryEditor::ImportGameDataRepository(const FGameDataEntrySer
 
         FScopedSlowTask SlowTask(0, NSLOCTEXT("GameDataRepository", "Importing", "Importing..."));
         SlowTask.MakeDialog(false);
-        if (FString ErrorMessage; Serializer.Deserialize(FileName, PropertyAccessor->GetGameDataRepository(), ErrorMessage))
+        if (FString ErrorMessage; Serializer->Deserialize(FileName, GameDataRepository, ErrorMessage))
         {
             RefreshList();
             FMessageDialog::Open(EAppMsgType::Ok, NSLOCTEXT("GameDataRepository", "ImportSuccessful", "Import was successful!"));
@@ -288,15 +290,23 @@ void FGameDataRepositoryEditor::OnEntrySelected(const TSharedPtr<FEntryRowData>&
 
 TArray<TSharedPtr<FEntryRowData>> FGameDataRepositoryEditor::OnGetEntries() const
 {
-    return PropertyAccessor->GetEntries();
+	TArray<TSharedPtr<FEntryRowData>> Entries;
+	for (int32 i = 0; i < GameDataRepository->GetNumEntries(); i++)
+	{
+        
+		auto *Entry = GameDataRepository->GetMutableEntryAtIndex(i);
+		const auto ID = GameDataRepository->IDProperty->GetPropertyValue_InContainer(Entry);
+		Entries.Emplace(MakeShared<FEntryRowData>(i, ID, MakeShared<FStructOnScope>(GameDataRepository->GetEntryStruct(), Entry)));
+	}
+	return Entries;
 }
 
 void FGameDataRepositoryEditor::OnAddEntry() const
 {
-    auto RowName = PropertyAccessor->GenerateUniqueRowName();
+    auto RowName = GameDataRepository->GenerateUniqueRowName();
     if (!RowName.IsSet()) return;
 
-    PropertyAccessor->AddEntry(*RowName);
+    GameDataRepository->AddNewEntry(*RowName);
     RefreshList();
 }
 
@@ -304,16 +314,17 @@ void FGameDataRepositoryEditor::OnDeleteEntry()
 {
     check(CurrentRow.IsSet());
     const auto& Entry = CurrentRow.GetValue();
-    PropertyAccessor->RemoveEntry(Entry.Index);
-    if (PropertyAccessor->GetNumEntries() == 0)
+    GameDataRepository->RemoveEntryAtIndex(Entry.Index);
+    if (GameDataRepository->GetNumEntries() == 0)
     {
         CurrentRow.Reset();
     }
-    else if (Entry.Index <= PropertyAccessor->GetNumEntries())
+    else if (Entry.Index <= GameDataRepository->GetNumEntries())
     {
-        int32 NewIndex = PropertyAccessor->GetNumEntries() - 1;
+        int32 NewIndex = GameDataRepository->GetNumEntries() - 1;
 
-        CurrentRow.Emplace(NewIndex, PropertyAccessor->GetID(NewIndex));
+    	const auto* CurrentEntry = GameDataRepository->GetMutableEntryAtIndex(NewIndex);
+        CurrentRow.Emplace(NewIndex, GameDataRepository->IDProperty->GetPropertyValue_InContainer(CurrentEntry));
     }
     RefreshList();
 }
@@ -322,8 +333,9 @@ void FGameDataRepositoryEditor::OnMoveEntryUp()
 {
     check(CurrentRow.IsSet());
     const auto& Entry = CurrentRow.GetValue();
-    PropertyAccessor->SwapEntries(Entry.Index, Entry.Index - 1);
-    CurrentRow.Emplace(Entry.Index - 1, PropertyAccessor->GetID(Entry.Index - 1));
+    GameDataRepository->SwapEntries(Entry.Index, Entry.Index - 1);
+	const auto* CurrentEntry = GameDataRepository->GetMutableEntryAtIndex(Entry.Index - 1);
+    CurrentRow.Emplace(Entry.Index - 1, GameDataRepository->IDProperty->GetPropertyValue_InContainer(CurrentEntry));
     RefreshList();
 }
 
@@ -331,14 +343,14 @@ void FGameDataRepositoryEditor::OnMoveEntryDown()
 {
     check(CurrentRow.IsSet());
     const auto& Entry = CurrentRow.GetValue();
-    PropertyAccessor->SwapEntries(Entry.Index, Entry.Index + 1);
-    CurrentRow.Emplace(Entry.Index + 1, PropertyAccessor->GetID(Entry.Index + 1));
+    GameDataRepository->SwapEntries(Entry.Index, Entry.Index + 1);
+	const auto* CurrentEntry = GameDataRepository->GetMutableEntryAtIndex(Entry.Index + 1);
+    CurrentRow.Emplace(Entry.Index + 1, GameDataRepository->IDProperty->GetPropertyValue_InContainer(CurrentEntry));
     RefreshList();
 }
 
 void FGameDataRepositoryEditor::RefreshList() const
 {
-    PropertyAccessor->RefreshRows();
     EntrySelector->RefreshList();
     if (CurrentRow.IsSet())
     {
@@ -348,7 +360,7 @@ void FGameDataRepositoryEditor::RefreshList() const
 
 void FGameDataRepositoryEditor::OnPropertyChanged(const FPropertyChangedEvent& PropertyChangedEvent)
 {
-    if (PropertyChangedEvent.GetPropertyName() != "Id")
+    if (PropertyChangedEvent.GetPropertyName() != UGameDataRepositoryBase::EntryIDProperty)
     {
         return;
     }
@@ -357,10 +369,19 @@ void FGameDataRepositoryEditor::OnPropertyChanged(const FPropertyChangedEvent& P
     {
         return;
     }
+
+	
     auto& [Index, CurrentName] = CurrentRow.GetValue();
-    if (const auto Id = PropertyAccessor->GetID(Index); !Id.IsValid() || !PropertyAccessor->VerifyRowNameUnique(Id))
+	auto *Entry = GameDataRepository->GetMutableEntryAtIndex(Index);
+    if (const auto Id = GameDataRepository->IDProperty->GetPropertyValue_InContainer(Entry); !Id.IsValid() || !GameDataRepository->VerifyRowNameUnique(Id))
     {
-        PropertyAccessor->SetID(Index, CurrentName);
+    	GameDataRepository->IDProperty->SetValue_InContainer(Entry, Id);
+	    if (auto *Key = GameDataRepository->RowIndices.FindKey(Index); ensureMsgf(Key != nullptr, TEXT("Failed to find key for index %d"), Index))
+    	{
+    		GameDataRepository->RowIndices.Remove(*Key);
+    	}
+
+    	GameDataRepository->RowIndices.Add(Id, Index);
     }
     RefreshList();
 }

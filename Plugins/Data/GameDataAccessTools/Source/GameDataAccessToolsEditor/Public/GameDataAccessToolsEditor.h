@@ -12,5 +12,5 @@ class GAMEDATAACCESSTOOLSEDITOR_API IGameDataAccessToolsEditorModule : public IM
 public:
     static IGameDataAccessToolsEditorModule& Get();
 
-    virtual TArray<FGameDataEntrySerializerPtr> GetAvailableSerializers(TSubclassOf<UGameDataRepository> RepositoryClass) const = 0;
+    virtual TArray<TObjectPtr<const UGameDataEntrySerializer>> GetAvailableSerializers(TSubclassOf<UGameDataRepository> RepositoryClass) const = 0;
 };

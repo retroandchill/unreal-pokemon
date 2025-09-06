@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameDataRepository.h"
-#include "GameDataRepositoryDataAccessor.h"
 #include "GameDataRepositoryEntrySelector.h"
 #include "Serialization/GameDataEntrySerializer.h"
 
@@ -42,7 +41,7 @@ private:
 	void FillToolbar(FToolBarBuilder& ToolbarBuilder);
 
 	TSharedRef<SWidget> ImportMenuEntries();
-	void ImportGameDataRepository(FGameDataEntrySerializerPtr Serializer) const;
+	void ImportGameDataRepository(const UGameDataEntrySerializer* Serializer) const;
 
 	bool CanAddEntry() const;
 	bool CanMoveEntryUp() const;
@@ -57,10 +56,10 @@ private:
 	void OnMoveEntryDown();
 	void RefreshList() const;
 	void OnPropertyChanged(const FPropertyChangedEvent& PropertyChangedEvent);
-
+	
+	TObjectPtr<UGameDataRepository> GameDataRepository;
 	TSharedPtr<SGameDataRepositoryEntrySelector> EntrySelector;
 	TSharedPtr<IStructureDetailsView> DetailsView;
-	TUniquePtr<FGameDataRepositoryDataAccessor> PropertyAccessor;
 	TOptional<FSelectedRow> CurrentRow;
-	TArray<FGameDataEntrySerializerPtr> Serializers;
+	TArray<TObjectPtr<const UGameDataEntrySerializer>> Serializers;
 };

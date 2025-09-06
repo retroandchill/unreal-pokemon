@@ -59,20 +59,20 @@ void FGameDataRepositoryActions::AddSerializationActions(FMenuBuilder& SubMenuBu
     for (auto Repository = CastChecked<UGameDataRepository>(InObject);
          auto& Serializer : IGameDataAccessToolsEditorModule::Get().GetAvailableSerializers(Repository->GetClass()))
     {
-        const auto FormatText = Serializer.GetFormatName();
+        const auto FormatText = Serializer->GetFormatName();
         SubMenuBuilder.AddMenuEntry(
             FText::Format(NSLOCTEXT("AssetTypeActions", "Asset_ExportToFormat", "Export as {0}"), FormatText),
             FText::Format(NSLOCTEXT("AssetTypeActions", "Asset_ExportToFormatToolTip", "Export the asset to the {0} format"), FormatText),
             FSlateIcon(),
             FUIAction(
-                FExecuteAction::CreateStatic(&FGameDataRepositoryActions::ExportAsset, Repository, Serializer)
+                FExecuteAction::CreateStatic(&FGameDataRepositoryActions::ExportAsset, Repository, Serializer.Get())
             )
         );
     }
 }
 
 void FGameDataRepositoryActions::ExportAsset(const UGameDataRepository* Repository,
-                                             FGameDataEntrySerializerPtr Serializer)
+                                             const UGameDataEntrySerializer* Serializer)
 {
     if (IDesktopPlatform* DesktopPlatform = FDesktopPlatformModule::Get(); DesktopPlatform != nullptr)
     {
@@ -83,7 +83,7 @@ void FGameDataRepositoryActions::ExportAsset(const UGameDataRepository* Reposito
             NSLOCTEXT("GameDataRepository", "Select file to export to", "Select file to export to...").ToString(),
             *FEditorDirectories::Get().GetLastDirectory(ELastDirectory::UNR),
             TEXT(""),
-            Serializer.GetFileExtensionText(),
+            Serializer->GetFileExtensionText(),
             EFileDialogFlags::None,
             FileNames))
         {
@@ -94,7 +94,7 @@ void FGameDataRepositoryActions::ExportAsset(const UGameDataRepository* Reposito
         FEditorDirectories::Get().SetLastDirectory(ELastDirectory::UNR, *FPaths::GetPath(FileName));
         FScopedSlowTask SlowTask(0, NSLOCTEXT("GameDataRepository", "Exporting", "Exporting..."));
         SlowTask.MakeDialog(false);
-        if (FString ErrorMessage; Serializer.Serialize(FileName, Repository, ErrorMessage))
+        if (FString ErrorMessage; Serializer->Serialize(FileName, Repository, ErrorMessage))
         {
             FMessageDialog::Open(EAppMsgType::Ok, NSLOCTEXT("GameDataRepository", "ExportSuccessful", "Export was successful!"));
         }

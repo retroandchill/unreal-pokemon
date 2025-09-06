@@ -2,6 +2,7 @@
 
 #include "AssetTypeActions_Base.h"
 #include "CSManagedGCHandle.h"
+#include "Serialization/GameDataEntrySerializer.h"
 
 
 class FGameDataEntrySerializerPtr;
@@ -32,5 +33,5 @@ public:
 
 private:
     static void AddSerializationActions(FMenuBuilder& SubMenuBuilder, const UObject* InObject);
-    static void ExportAsset(const UGameDataRepository* Repository, FGameDataEntrySerializerPtr Serializer);
+    static void ExportAsset(const UGameDataRepository* Repository, const UGameDataEntrySerializer* Serializer);
 };

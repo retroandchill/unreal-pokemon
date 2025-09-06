@@ -4,7 +4,6 @@
 #include "Serialization/GameDataEntryJsonSerializer.h"
 #include "GameDataRepository.h"
 #include "JsonObjectConverter.h"
-#include "Repositories/GameDataRepositoryDataAccessor.h"
 
 struct FScopedArrayDeleter
 {
@@ -43,13 +42,14 @@ bool UGameDataEntryJsonSerializer::Serialize_Implementation(const FString &FileP
                                                             const UGameDataRepository *Repository,
                                                             FString &ErrorMessage) const
 {
-    FGameDataRepositoryDataAccessor DataAccessor(const_cast<UGameDataRepository *>(Repository));
+    auto &GameDataEntries = GetGameDataEntries(Repository);
 
     TArray<TSharedPtr<FJsonValue>> JsonValues;
-    for (auto Row : DataAccessor.GetEntries())
+    for (int32 i = 0; i < GameDataEntries.Num(); i++)
     {
+    	const auto Row = GameDataEntries.GetElementPtr(i);
         auto JsonObject = MakeShared<FJsonObject>();
-        if (!FJsonObjectConverter::UStructToJsonObject(Row->Entry->GetStruct(), Row->Entry->GetStructMemory(), JsonObject))
+        if (!FJsonObjectConverter::UStructToJsonObject(Repository->GetEntryStruct(), Row, JsonObject))
         {
             ErrorMessage = TEXT("Failed to serialize entry");
             return false;
@@ -92,12 +92,12 @@ bool UGameDataEntryJsonSerializer::Deserialize_Implementation(const FString &Fil
         return false; 
     }
 
-    
-    FGameDataRepositoryDataAccessor DataAccessor(Repository);
+
+    const auto *DataEntriesProperty = GetGameDataEntriesProperty(Repository);
     FScriptArray StagingArray;
-    FScriptArrayHelper ArrayHelper(DataAccessor.GetGameDataEntriesProperty(), &StagingArray);
+    FScriptArrayHelper ArrayHelper(DataEntriesProperty, &StagingArray);
     FScopedArrayDeleter Deleter(ArrayHelper);
-    auto *StructType = DataAccessor.GetGameDataRepository()->GetEntryStruct();
+    auto *StructType = Repository->GetEntryStruct();
 
     for (const auto &JsonValue : JsonValues)
     {
@@ -115,6 +115,6 @@ bool UGameDataEntryJsonSerializer::Deserialize_Implementation(const FString &Fil
         }
     }
 
-    DataAccessor.MoveEntries(StagingArray);
+    MoveEntries(Repository, StagingArray);
     return true;
 }

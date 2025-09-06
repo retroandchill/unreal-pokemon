@@ -11,7 +11,7 @@
  * 
  */
 UCLASS()
-class GAMEDATAACCESSTOOLSEDITOR_API UGameDataEntryJsonSerializer : public UObject, public IGameDataEntrySerializer
+class GAMEDATAACCESSTOOLSEDITOR_API UGameDataEntryJsonSerializer : public UGameDataEntrySerializer
 {
     GENERATED_BODY()
 
