@@ -6,6 +6,7 @@
     <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableDynamicLoading>true</EnableDynamicLoading>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
@@ -16,6 +17,12 @@
       <HintPath>..\..\..\Plugins\UnrealSharp\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
     </Reference>
     <Analyzer Include="..\..\..\Plugins\UnrealSharp\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
+    <ProjectReference Include="..\..\..\Plugins\Data\GameDataAccessTools\Script\GameDataAccessTools.Core\GameDataAccessTools.Core.csproj" />
+    <ProjectReference
+      Include="..\..\..\Plugins\Data\GameDataAccessTools\Script\GameDataAccessTools.SourceGenerator\GameDataAccessTools.SourceGenerator.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false"
+    />
     <ProjectReference Include="..\..\UnrealPokemon.Glue\UnrealPokemon.Glue.csproj" />
   </ItemGroup>
 </Project>

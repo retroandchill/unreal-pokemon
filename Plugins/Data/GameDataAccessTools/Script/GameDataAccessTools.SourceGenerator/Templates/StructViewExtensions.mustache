@@ -5,20 +5,27 @@ using UnrealSharp.Core.Marshallers;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.Interop;
 using GameDataAccessTools.Core;
+using GameDataAccessTools.Core.Views;
+using GameDataAccessTools.Core.Marshallers;
 
 namespace {{Namespace}};
 
 public static class {{EngineName}}ViewExtensions
 {
-    extension(StructView<{{ClassName}} structView) 
+    extension(StructView<{{StructName}}> structView) 
     {
         {{#Properties}}
-        public {{Type}} {{Name}}
+        {{Access}}{{Type}} {{Name}}
         {
             get
             {
                 {{#MarshallerInstanced}}
-                {{Name}}_Marshaller ??= new {{MarshallerInfo.Name}}({{Name}}_NativeProperty, {{MarshallerInfo.ChildMarshallerType}}.ToNative, {{MarshallerInfo.ChildMarshallerType}}.FromNative{{#MarshallerHasValue}}, {{MarshallerInfo.ValueMarshallerType}}.ToNative, {{MarshallerInfo.ValueMarshallerType}}.FromNative{{/MarshallerHasValue}});
+                {{#MarshallerIsView}}
+                {{Name}}_Marshaller ??= new {{MarshallerInfo.Name}}({{MarshallerInfo.ChildMarshallerType}}.FromNative);
+                {{/MarshallerIsView}}  
+                {{^MarshallerIsView}}
+                {{Name}}_Marshaller ??= new {{MarshallerInfo.Name}}({{Name}}_NativeProperty, {{MarshallerInfo.ChildMarshallerType}}.ToNative, {{MarshallerInfo.ChildMarshallerType}}.FromNative{{#MarshallerHasValue}}, {{MarshallerInfo.ValueMarshallerType}}.ToNative, {{MarshallerInfo.ValueMarshallerType}}.FromNative{{/MarshallerHasValue}});    
+                {{/MarshallerIsView}}
                 IntPtr {{Name}}_NativeBuffer = IntPtr.Add(structView.NativePtr, {{Name}}_Offset);
                 return {{Name}}_Marshaller.FromNative({{Name}}_NativeBuffer, 0);
                 {{/MarshallerInstanced}}
@@ -44,7 +51,7 @@ public static class {{EngineName}}ViewExtensions
 
     static {{EngineName}}ViewExtensions()
     {
-        NativeClassPtr = UCoreUObjectExporter.CallGetNativeStructFromName(typeof({{ClassName}}).GetAssemblyName(), "{{Namespace}}", "{{EngineName}}");
+        NativeClassPtr = UCoreUObjectExporter.CallGetNativeStructFromName(typeof({{StructName}}).GetAssemblyName(), "{{Namespace}}", "{{EngineName}}");
         {{#Properties}}
         {{^MarshallerInstanced}}IntPtr {{/MarshallerInstanced}}{{Name}}_NativeProperty = FPropertyExporter.CallGetNativePropertyFromName(NativeClassPtr, "{{Name}}");
         {{Name}}_Offset = FPropertyExporter.CallGetPropertyOffset({{Name}}_NativeProperty);

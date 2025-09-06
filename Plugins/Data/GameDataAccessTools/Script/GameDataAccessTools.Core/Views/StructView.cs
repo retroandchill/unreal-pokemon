@@ -3,7 +3,7 @@ using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.Interop;
 
-namespace GameDataAccessTools.Core;
+namespace GameDataAccessTools.Core.Views;
 
 public readonly ref struct StructView<T>(IntPtr nativePtr)
     where T : struct, MarshalledStruct<T>, allows ref struct

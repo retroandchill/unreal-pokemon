@@ -445,7 +445,7 @@ internal class GameDataRepositoryGenerator : IIncrementalGenerator
 
         context.AddSource(
             $"{templateParams.EngineName}Initializer.g.cs",
-            handlebars.Compile(SourceTemplates.GameDataEntrInitializerTemplate)(templateParams)
+            handlebars.Compile(SourceTemplates.StructViewExtensionsTemplate)(templateParams)
         );
     }
 

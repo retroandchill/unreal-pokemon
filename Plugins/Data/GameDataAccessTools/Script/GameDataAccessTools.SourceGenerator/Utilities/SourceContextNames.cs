@@ -11,6 +11,7 @@ public static class SourceContextNames
         "GameDataAccessTools.Core.DataRetrieval.IGameDataRepository<T>";
 
     public const string UClassAttribute = "UnrealSharp.Attributes.UClassAttribute";
+    public const string UStructAttribute = "UnrealSharp.Attributes.UStructAttribute";
     public const string UPropertyAttribute = "UnrealSharp.Attributes.UPropertyAttribute";
     public const string UMetaDataAttribute = "UnrealSharp.Attributes.UMetaDataAttribute";
 

@@ -7,6 +7,7 @@ using RhoMicro.CodeAnalysis;
 
 namespace GameAccessTools.SourceGenerator.Attributes;
 
+[AttributeUsage(AttributeTargets.Class)]
 #if GAME_DATA_ACCESS_TOOLS_GENERATOR
 [IncludeFile]
 #endif

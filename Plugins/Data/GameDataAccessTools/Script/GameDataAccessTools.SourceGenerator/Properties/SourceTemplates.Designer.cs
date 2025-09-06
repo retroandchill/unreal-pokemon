@@ -61,34 +61,6 @@ namespace GameAccessTools.SourceGenerator.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to #nullable enable
-        ///using UnrealSharp;
-        ///using UnrealSharp.Core;
-        ///using UnrealSharp.Core.Marshallers;
-        ///using UnrealSharp.CoreUObject;
-        ///using UnrealSharp.Interop;
-        ///using GameDataAccessTools.Core;
-        ///
-        ///namespace {{Namespace}};
-        ///
-        ///public static class {{EngineName}}ViewExtensions
-        ///{
-        ///    extension(StructView&lt;{{ClassName}} structView) 
-        ///    {
-        ///        public {{Type}} {{Name}}
-        ///        {
-        ///            get
-        ///            {
-        ///                {{#MarshallerInstanced}}
-        ///                {{Name}}_Marshaller ??= new {{MarshallerI [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GameDataEntrInitializerTemplate {
-            get {
-                return ResourceManager.GetString("GameDataEntrInitializerTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to #nullable enable
         ///using System.Diagnostics.CodeAnalysis;
         ///using UnrealSharp;
         ///using UnrealSharp.Engine;
@@ -130,6 +102,35 @@ namespace GameAccessTools.SourceGenerator.Properties {
         internal static string GameDataRepositoryTemplate {
             get {
                 return ResourceManager.GetString("GameDataRepositoryTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #nullable enable
+        ///using UnrealSharp;
+        ///using UnrealSharp.Core;
+        ///using UnrealSharp.Core.Marshallers;
+        ///using UnrealSharp.CoreUObject;
+        ///using UnrealSharp.Interop;
+        ///using GameDataAccessTools.Core;
+        ///using GameDataAccessTools.Core.Views;
+        ///using GameDataAccessTools.Core.Marshallers;
+        ///
+        ///namespace {{Namespace}};
+        ///
+        ///public static class {{EngineName}}ViewExtensions
+        ///{
+        ///    extension(StructView&lt;{{StructName}}&gt; structView) 
+        ///    {
+        ///        {{#Properties}}
+        ///        public {{Type}} {{Name}}
+        ///        {
+        ///            get
+        ///    [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string StructViewExtensionsTemplate {
+            get {
+                return ResourceManager.GetString("StructViewExtensionsTemplate", resourceCulture);
             }
         }
     }
