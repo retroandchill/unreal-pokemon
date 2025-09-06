@@ -8,7 +8,7 @@
 #include "GameDataRepository.generated.h"
 
 UCLASS(Abstract, NotBlueprintable)
-class GAMEDATAACCESSTOOLS_API UGameDataRepositoryBase : public UObject
+class GAMEDATAACCESSTOOLS_API UGameDataRepository : public UObject
 {
     GENERATED_BODY()
 
@@ -27,6 +27,12 @@ class GAMEDATAACCESSTOOLS_API UGameDataRepositoryBase : public UObject
     int32 GetNumEntries() const
     {
         return GameDataEntries->Num();
+    }
+
+    const uint8 *GetEntryByID(const FName ID) const
+    {
+        auto Index = GetRowIndex(ID);
+        return Index.IsSet() ? GameDataEntries->GetElementPtr(Index.GetValue()) : nullptr;
     }
 
     const uint8 *GetEntryAtIndex(const int32 Index) const
@@ -52,16 +58,25 @@ class GAMEDATAACCESSTOOLS_API UGameDataRepositoryBase : public UObject
 
     void RebuildIndices();
 
-  private:
+    FNameProperty *GetIDProperty() const
+    {
+        return IDProperty;
+    }
+
+    TOptional<int32> GetRowIndex(FName ID) const;
+
     bool VerifyRowNameUnique(FName Name) const;
 
+  private:
     TOptional<FName> GenerateUniqueRowName() const;
 
 #if WITH_EDITOR
     friend class FGameDataRepositoryEditor;
     friend class UGameDataEntrySerializer;
 #endif
+    friend class UGameDataRepositoryExporter;
 
+    const FScriptArray *DataArray = nullptr;
     TUniquePtr<FScriptArrayHelper> GameDataEntries;
     FArrayProperty *GameDataEntriesProperty = nullptr;
     FStructProperty *StructProperty = nullptr;
@@ -74,9 +89,25 @@ class GAMEDATAACCESSTOOLS_API UGameDataRepositoryBase : public UObject
  *
  */
 UCLASS(Abstract)
-class GAMEDATAACCESSTOOLS_API UGameDataRepository : public UGameDataRepositoryBase
+class GAMEDATAACCESSTOOLS_API UAssetGameDataRepository : public UGameDataRepository
 {
     GENERATED_BODY()
 
   public:
+};
+
+UCLASS(Abstract)
+class GAMEDATAACCESSTOOLS_API UStaticGameDataRepository : public UGameDataRepository
+{
+    GENERATED_BODY()
+
+  protected:
+    UFUNCTION(CustomThunk, meta = (ScriptMethod, CustomStructureParam = DataStruct))
+    bool TryRegisterEntryInternal(const int32 &DataStruct);
+
+    DECLARE_FUNCTION(execTryRegisterEntryInternal);
+
+  public:
+    UFUNCTION(meta = (ScriptMethod))
+    bool TryUnregisterEntry(FName ID);
 };

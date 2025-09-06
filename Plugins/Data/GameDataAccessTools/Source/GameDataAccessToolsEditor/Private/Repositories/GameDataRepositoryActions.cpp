@@ -18,7 +18,7 @@ FColor FGameDataRepositoryActions::GetTypeColor() const
 
 UClass *FGameDataRepositoryActions::GetSupportedClass() const
 {
-    return UGameDataRepository::StaticClass();
+    return UAssetGameDataRepository::StaticClass();
 }
 
 uint32 FGameDataRepositoryActions::GetCategories()
@@ -45,7 +45,7 @@ void FGameDataRepositoryActions::OpenAssetEditor(const TArray<UObject *> &InObje
 {
     for (UObject *Object : InObjects)
     {
-        if (const auto Asset = Cast<UGameDataRepository>(Object); Asset != nullptr)
+        if (const auto Asset = Cast<UAssetGameDataRepository>(Object); Asset != nullptr)
         {
             const auto NewEditor = MakeShared<FGameDataRepositoryEditor>();
             NewEditor->Initialize(EToolkitMode::Standalone, EditWithinLevelEditor, Asset);
@@ -55,7 +55,7 @@ void FGameDataRepositoryActions::OpenAssetEditor(const TArray<UObject *> &InObje
 
 void FGameDataRepositoryActions::AddSerializationActions(FMenuBuilder &SubMenuBuilder, const UObject *InObject)
 {
-    for (auto Repository = CastChecked<UGameDataRepository>(InObject);
+    for (auto Repository = CastChecked<UAssetGameDataRepository>(InObject);
          auto &Serializer : IGameDataAccessToolsEditorModule::Get().GetAvailableSerializers(Repository->GetClass()))
     {
         const auto FormatText = Serializer->GetFormatName();
@@ -70,7 +70,7 @@ void FGameDataRepositoryActions::AddSerializationActions(FMenuBuilder &SubMenuBu
     }
 }
 
-void FGameDataRepositoryActions::ExportAsset(const UGameDataRepository *Repository,
+void FGameDataRepositoryActions::ExportAsset(const UAssetGameDataRepository *Repository,
                                              const UGameDataEntrySerializer *Serializer)
 {
     if (IDesktopPlatform *DesktopPlatform = FDesktopPlatformModule::Get(); DesktopPlatform != nullptr)

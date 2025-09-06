@@ -1,13 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using GameAccessTools.SourceGenerator.Attributes;
+using Microsoft.CodeAnalysis;
+using Retro.SourceGeneratorUtilities.Utilities.Attributes;
 
 namespace GameAccessTools.SourceGenerator.Model;
 
-public readonly record struct GameDataRepositoryInfo(
-    INamedTypeSymbol EntryType,
-    string AssetClassName
-)
-{
-    public INamespaceSymbol? Namespace => EntryType.ContainingNamespace;
-
-    public string EntryName => EntryType.Name;
-}
+[AttributeInfoType(typeof(GameDataRepositoryAttribute<>))]
+public readonly record struct GameDataRepositoryInfo(ITypeSymbol EntryType);

@@ -5,7 +5,7 @@
 #include "Serialization/GameDataEntrySerializer.h"
 
 class FGameDataEntrySerializerPtr;
-class UGameDataRepository;
+class UAssetGameDataRepository;
 class IGameDataEntrySerializer;
 DECLARE_DELEGATE_OneParam(FOnFileAction, const FString &)
 
@@ -32,5 +32,5 @@ class FGameDataRepositoryActions final : public FAssetTypeActions_Base
 
   private:
     static void AddSerializationActions(FMenuBuilder &SubMenuBuilder, const UObject *InObject);
-    static void ExportAsset(const UGameDataRepository *Repository, const UGameDataEntrySerializer *Serializer);
+    static void ExportAsset(const UAssetGameDataRepository *Repository, const UGameDataEntrySerializer *Serializer);
 };

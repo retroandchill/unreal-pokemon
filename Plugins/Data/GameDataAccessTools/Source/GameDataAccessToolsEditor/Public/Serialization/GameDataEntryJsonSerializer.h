@@ -17,11 +17,11 @@ class GAMEDATAACCESSTOOLSEDITOR_API UGameDataEntryJsonSerializer : public UGameD
     GENERATED_BODY()
 
   public:
-    bool Supports_Implementation(TSubclassOf<UGameDataRepository> RepositoryClass) override;
+    bool Supports_Implementation(TSubclassOf<UAssetGameDataRepository> RepositoryClass) override;
     FString GetFileExtensionText_Implementation() const override;
     FText GetFormatName_Implementation() const override;
-    bool Serialize_Implementation(const FString &FilePath, const UGameDataRepository *Repository,
+    bool Serialize_Implementation(const FString &FilePath, const UAssetGameDataRepository *Repository,
                                   FString &ErrorMessage) const override;
-    bool Deserialize_Implementation(const FString &FilePath, UGameDataRepository *Repository,
+    bool Deserialize_Implementation(const FString &FilePath, UAssetGameDataRepository *Repository,
                                     FString &ErrorMessage) const override;
 };

@@ -41,7 +41,7 @@ class FGameDataAccessToolsEditorModule final : public IGameDataAccessToolsEditor
     }
 
     TArray<TObjectPtr<const UGameDataEntrySerializer>> GetAvailableSerializers(
-        TSubclassOf<UGameDataRepository> RepositoryClass) const override
+        TSubclassOf<UAssetGameDataRepository> RepositoryClass) const override
     {
         TArray<TObjectPtr<const UGameDataEntrySerializer>> Serializers;
         for (TObjectIterator<UClass> It; It; ++It)

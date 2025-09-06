@@ -1,67 +1,74 @@
 #nullable enable
-using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 using UnrealSharp;
 using UnrealSharp.Attributes;
-using UnrealSharp.CoreUObject;
-using UnrealSharp.GameDataAccessTools;
-using UnrealSharp.GameplayTags;
-using GameDataAccessTools.Core.DataRetrieval;
+using GameDataAccessTools.Core;
+using GameDataAccessTools.Core.Interop;
+using GameDataAccessTools.Core.Marshallers;
+using GameDataAccessTools.Core.Views;
 
 namespace {{Namespace}};
 
-[UClass]
-public partial class {{AssetClassName}} : UGameDataRepository, IGameDataRepository<{{EntryName}}> {
-    public TSubclassOf<{{EntryName}}> EntryClass { get; } = new(typeof({{EntryName}}));
+partial class {{AssetClassName}} : {{#IsStatic}}IStaticGameDataRepository{{/IsStatic}}{{^IsStatic}}IGameDataRepository{{/IsStatic}}<{{EntryName}}> 
+{
+    [UProperty]
+    private TArray<{{EntryName}}> DataEntries { get; }
 
-    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.Instanced)]
-    private TArray<{{EntryName}}> DataEntries { get; set; }
-
-    private ImmutableDictionary<FGameplayTag, {{EntryName}}> _entries = ImmutableDictionary<FGameplayTag, {{EntryName}}>.Empty;
-    public IReadOnlyDictionary<FGameplayTag, {{EntryName}}> Entries => _entries;
-
-    IEnumerable<{{EntryName}}> IDataRepository<FGameplayTag, {{EntryName}}>.AllEntries => DataEntries;
-
-    public IReadOnlyList<{{EntryName}}> AllEntries => DataEntries;
-
-    public int NumEntries => DataEntries.Count;
-
-    public IEnumerable<FGameplayTag> EntryKeys => DataEntries.Select(x => x.Id);
-
-    public sealed override TSubclassOf<UObject> GetEntryClass() 
+    private static ArrayViewMarshaller<StructView<{{EntryName}}>>? _entriesMarshaller;
+    public ArrayView<StructView<{{EntryName}}>> Entries
     {
-        return EntryClass.As<UObject>();
-    }
-
-    public {{EntryName}} GetEntry(FGameplayTag key) 
-    {
-        return _entries[key];
-    }
-
-    public {{EntryName}} GetEntry(int index) 
-    {
-        return DataEntries[index];
-    }
-
-    public bool TryGetEntry(FGameplayTag key, [NotNullWhen(true)] out {{EntryName}}? entry) 
-    {
-        return _entries.TryGetValue(key, out entry);
-    }
-
-    public bool TryGetEntry(int index, [NotNullWhen(true)] out {{EntryName}}? entry) 
-    {
-        if (index < 0 || index >= DataEntries.Count) 
+        get
         {
-            entry = null;
+            _entriesMarshaller ??= new ArrayViewMarshaller<StructView<{{EntryName}}>>(StructViewMarshaller<{{EntryName}}>.FromNative);
+            var nativeArray = GameDataRepositoryExporter.CallGetEntries(NativeObject);
+            return _entriesMarshaller.FromNative(nativeArray, 0);
+        }
+    }
+
+    public StructView<{{EntryName}}> GetEntry(FName id)
+    {
+        return TryGetEntry(id, out var entry) ? entry : throw new KeyNotFoundException();
+    }
+
+    public StructView<{{EntryName}}> GetEntry(int index)
+    {
+        return TryGetEntry(index, out var entry) ? entry : throw new KeyNotFoundException();
+    }
+
+    public bool TryGetEntry(FName id, out StructView<{{EntryName}}> entry)
+    {
+        var nativeEntry = GameDataRepositoryExporter.CallGetEntryByID(NativeObject, id);
+        if (nativeEntry == IntPtr.Zero)
+        {
+            entry = default;
             return false;
         }
-
-        entry = DataEntries[index];
+        
+        entry = StructViewMarshaller<{{EntryName}}>.FromNative(nativeEntry, 0);
         return true;
     }
 
-    public override void Refresh() 
+    public bool TryGetEntry(int index, out StructView<{{EntryName}}> entry)
     {
-        _entries = DataEntries.ToImmutableDictionary(x => x.Id);
+        var nativeEntry = GameDataRepositoryExporter.CallGetEntryByIndex(NativeObject, index);
+        if (nativeEntry == IntPtr.Zero)
+        {
+            entry = default;
+            return false;
+        }
+        
+        entry = StructViewMarshaller<{{EntryName}}>.FromNative(nativeEntry, 0);
+        return true;
+    }   
+
+    {{#IsStatic}}
+    public void RegisterEntry({{EntryName}} entry)
+    {
+        RegisterEntryInternal(entry);
     }
+
+    public bool TryRegisterEntry({{EntryName}} entry)
+    {
+        return TryRegisterEntryInternal(entry);
+    }
+    {{/IsStatic}} 
 }

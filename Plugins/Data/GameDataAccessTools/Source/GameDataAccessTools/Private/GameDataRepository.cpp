@@ -1,7 +1,7 @@
 ﻿#include "GameDataRepository.h"
 #include "LogGameDataAccessTools.h"
 
-void UGameDataRepositoryBase::PostLoad()
+void UGameDataRepository::PostLoad()
 {
     UObject::PostLoad();
     GameDataEntriesProperty = CastField<FArrayProperty>(GetClass()->FindPropertyByName(FName(DataEntriesProperty)));
@@ -18,8 +18,8 @@ void UGameDataRepositoryBase::PostLoad()
                *GameDataEntriesProperty->GetName());
     }
 
-    auto &Array = GameDataEntriesProperty->GetPropertyValue_InContainer(this);
-    GameDataEntries = MakeUnique<FScriptArrayHelper>(GameDataEntriesProperty, &Array);
+    DataArray = &GameDataEntriesProperty->GetPropertyValue_InContainer(this);
+    GameDataEntries = MakeUnique<FScriptArrayHelper>(GameDataEntriesProperty, &DataArray);
 
     IDProperty = CastFieldChecked<FNameProperty>(StructProperty->Struct->FindPropertyByName(FName(EntryIDProperty)));
     if (IDProperty == nullptr)
@@ -39,7 +39,7 @@ void UGameDataRepositoryBase::PostLoad()
     RebuildIndices();
 }
 
-uint8 *UGameDataRepositoryBase::AddNewEntry(const FName ID)
+uint8 *UGameDataRepository::AddNewEntry(const FName ID)
 {
     if (!ensureMsgf(!ID.IsNone(), TEXT("ID for a row may not be empty")))
     {
@@ -60,7 +60,7 @@ uint8 *UGameDataRepositoryBase::AddNewEntry(const FName ID)
     return Entry;
 }
 
-void UGameDataRepositoryBase::RemoveEntryAtIndex(const int32 Index)
+void UGameDataRepository::RemoveEntryAtIndex(const int32 Index)
 {
     if (!ensureMsgf(GameDataEntries->IsValidIndex(Index), TEXT("Invalid index %d"), Index))
     {
@@ -79,7 +79,7 @@ void UGameDataRepositoryBase::RemoveEntryAtIndex(const int32 Index)
     }
 }
 
-void UGameDataRepositoryBase::SwapEntries(const int32 Index1, const int32 Index2)
+void UGameDataRepository::SwapEntries(const int32 Index1, const int32 Index2)
 {
     if (!ensureMsgf(GameDataEntries->IsValidIndex(Index1) && GameDataEntries->IsValidIndex(Index2),
                     TEXT("Invalid index %d or %d"), Index1, Index2))
@@ -98,7 +98,7 @@ void UGameDataRepositoryBase::SwapEntries(const int32 Index1, const int32 Index2
     RowIndices[IDProperty->GetPropertyValue_InContainer(Entry2)] = Index1;
 }
 
-void UGameDataRepositoryBase::RebuildIndices()
+void UGameDataRepository::RebuildIndices()
 {
     RowIndices.Empty();
     for (int32 i = 0; i < GameDataEntries->Num(); i++)
@@ -109,7 +109,13 @@ void UGameDataRepositoryBase::RebuildIndices()
     }
 }
 
-bool UGameDataRepositoryBase::VerifyRowNameUnique(const FName Name) const
+TOptional<int32> UGameDataRepository::GetRowIndex(const FName ID) const
+{
+    auto *Index = RowIndices.Find(ID);
+    return Index != nullptr ? *Index : TOptional<int32>();
+}
+
+bool UGameDataRepository::VerifyRowNameUnique(const FName Name) const
 {
     bool bFirstInstance = false;
     for (int32 i = 0; i < GameDataEntries->Num(); i++)
@@ -129,7 +135,7 @@ bool UGameDataRepositoryBase::VerifyRowNameUnique(const FName Name) const
     return true;
 }
 
-TOptional<FName> UGameDataRepositoryBase::GenerateUniqueRowName() const
+TOptional<FName> UGameDataRepository::GenerateUniqueRowName() const
 {
     TSet<FName> UsedNames;
     for (int32 i = 0; i < GameDataEntries->Num(); i++)
@@ -153,4 +159,54 @@ TOptional<FName> UGameDataRepositoryBase::GenerateUniqueRowName() const
     }
 
     return NewName;
+}
+
+// ReSharper disable once CppMemberFunctionMayBeStatic
+bool UStaticGameDataRepository::TryRegisterEntryInternal(const int32 &)
+{
+    checkf(false, TEXT("This should never get called"));
+    return false;
+}
+
+DEFINE_FUNCTION(UStaticGameDataRepository::execTryRegisterEntryInternal)
+{
+    auto *Self = CastChecked<UStaticGameDataRepository>(Context);
+    Stack.StepCompiledIn<FStructProperty>(nullptr);
+    const auto DataStructProperty = CastFieldChecked<FStructProperty>(Stack.MostRecentProperty);
+    const auto *DataStructStruct = Stack.MostRecentPropertyAddress;
+
+    if (DataStructProperty->Struct != Self->GetEntryStruct())
+    {
+        UE_LOG(LogGameDataAccessTools, Fatal, TEXT("Provided struct type does not match the struct of the class"));
+    }
+
+    P_FINISH;
+
+    P_NATIVE_BEGIN
+
+    const auto ID = Self->GetIDProperty()->GetPropertyValue_InContainer(DataStructStruct);
+    if (!Self->VerifyRowNameUnique(ID))
+    {
+        UE_LOG(LogGameDataAccessTools, Error, TEXT("Cannot use ID '%s', as it is already in use"), *ID.ToString())
+        *static_cast<bool *>(RESULT_PARAM) = false;
+        return;
+    }
+
+    auto *NewEntry = Self->AddNewEntry(ID);
+    Self->GetEntryStruct()->CopyScriptStruct(NewEntry, DataStructStruct);
+    *static_cast<bool *>(RESULT_PARAM) = true;
+
+    P_NATIVE_END
+}
+
+bool UStaticGameDataRepository::TryUnregisterEntry(const FName ID)
+{
+    auto Index = GetRowIndex(ID);
+    if (!Index.IsSet())
+    {
+        return false;
+    }
+
+    RemoveEntryAtIndex(Index.GetValue());
+    return true;
 }

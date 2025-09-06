@@ -12,7 +12,7 @@ class FGameDataRepositoryFilter final : public IClassViewerFilter
     bool IsClassAllowed(const FClassViewerInitializationOptions &InInitOptions, const UClass *InClass,
                         const TSharedRef<FClassViewerFilterFuncs> InFilterFuncs) override
     {
-        if (!InClass->IsChildOf<UGameDataRepository>() || InClass->HasAnyClassFlags(CLASS_Abstract))
+        if (!InClass->IsChildOf<UAssetGameDataRepository>() || InClass->HasAnyClassFlags(CLASS_Abstract))
         {
             return false;
         }
@@ -39,7 +39,7 @@ UGameDataRepositoryFactory::UGameDataRepositoryFactory()
 {
     bCreateNew = true;
     bEditAfterNew = true;
-    SupportedClass = UGameDataRepository::StaticClass();
+    SupportedClass = UAssetGameDataRepository::StaticClass();
 }
 
 bool UGameDataRepositoryFactory::ConfigureProperties()
@@ -57,7 +57,7 @@ bool UGameDataRepositoryFactory::ConfigureProperties()
     const FText TitleText =
         NSLOCTEXT("GameDataRepositoryFactory", "CreateGameDataRepositoryOptions", "Pick Game Data Asset Class");
     if (UClass *ChosenClass = nullptr;
-        SClassPickerDialog::PickClass(TitleText, Options, ChosenClass, UGameDataRepository::StaticClass()))
+        SClassPickerDialog::PickClass(TitleText, Options, ChosenClass, UAssetGameDataRepository::StaticClass()))
     {
         AssetClass = ChosenClass;
         return true;
@@ -70,5 +70,5 @@ UObject *UGameDataRepositoryFactory::FactoryCreateNew(UClass *InClass, UObject *
                                                       const EObjectFlags Flags, UObject *Context,
                                                       FFeedbackContext *Warn)
 {
-    return NewObject<UGameDataRepository>(InParent, AssetClass, InName, Flags);
+    return NewObject<UAssetGameDataRepository>(InParent, AssetClass, InName, Flags);
 }

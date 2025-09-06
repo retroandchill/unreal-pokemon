@@ -65,7 +65,7 @@ public class StructViewGenerator : IIncrementalGenerator
             context.ReportDiagnostic(
                 Diagnostic.Create(
                     new DiagnosticDescriptor(
-                        "GDA0001",
+                        "GDA1001",
                         "Struct reference holder must be annotated with UStruct",
                         "{0} must be annotated with UStruct",
                         "GameDataAccessTools",

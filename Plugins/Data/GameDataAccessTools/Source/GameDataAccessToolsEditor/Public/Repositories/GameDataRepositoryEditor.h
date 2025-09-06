@@ -8,7 +8,7 @@
 #include "Serialization/GameDataEntrySerializer.h"
 
 class IGameDataEntrySerializer;
-class UGameDataRepository;
+class UAssetGameDataRepository;
 
 struct FSelectedRow
 {
@@ -27,7 +27,7 @@ class GAMEDATAACCESSTOOLSEDITOR_API FGameDataRepositoryEditor final : public FAs
 {
   public:
     void Initialize(const EToolkitMode::Type Mode, const TSharedPtr<IToolkitHost> &InitToolkitHost,
-                    UGameDataRepository *Asset);
+                    UAssetGameDataRepository *Asset);
     void RegisterTabSpawners(const TSharedRef<FTabManager> &InTabManager) override;
     void UnregisterTabSpawners(const TSharedRef<FTabManager> &InTabManager) override;
 
@@ -56,7 +56,7 @@ class GAMEDATAACCESSTOOLSEDITOR_API FGameDataRepositoryEditor final : public FAs
     void RefreshList() const;
     void OnPropertyChanged(const FPropertyChangedEvent &PropertyChangedEvent);
 
-    TObjectPtr<UGameDataRepository> GameDataRepository;
+    TObjectPtr<UAssetGameDataRepository> GameDataRepository;
     TSharedPtr<SGameDataRepositoryEntrySelector> EntrySelector;
     TSharedPtr<IStructureDetailsView> DetailsView;
     TOptional<FSelectedRow> CurrentRow;

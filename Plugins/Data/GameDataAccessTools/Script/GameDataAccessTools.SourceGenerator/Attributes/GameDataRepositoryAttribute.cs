@@ -1,8 +1,7 @@
 ﻿#if GAME_DATA_ACCESS_TOOLS_GENERATOR
 using RhoMicro.CodeAnalysis;
-
 #else
-#nullable enable
+using UnrealSharp;
 #endif
 
 namespace GameAccessTools.SourceGenerator.Attributes;
@@ -11,7 +10,9 @@ namespace GameAccessTools.SourceGenerator.Attributes;
 #if GAME_DATA_ACCESS_TOOLS_GENERATOR
 [IncludeFile]
 #endif
-internal class GameDataRepositoryProviderAttribute : Attribute
-{
-    public string? SettingsDisplayName { get; init; }
-}
+public class GameDataRepositoryAttribute<T> : Attribute
+#if GAME_DATA_ACCESS_TOOLS_GENERATOR
+    where T : struct;
+#else
+    where T : struct, MarshalledStruct<T>;
+#endif

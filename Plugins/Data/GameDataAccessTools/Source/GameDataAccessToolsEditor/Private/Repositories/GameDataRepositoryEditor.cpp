@@ -12,7 +12,8 @@
 class IDesktopPlatform;
 
 void FGameDataRepositoryEditor::Initialize(const EToolkitMode::Type Mode,
-                                           const TSharedPtr<IToolkitHost> &InitToolkitHost, UGameDataRepository *Asset)
+                                           const TSharedPtr<IToolkitHost> &InitToolkitHost,
+                                           UAssetGameDataRepository *Asset)
 {
     GameDataRepository = Asset;
 
@@ -323,7 +324,7 @@ void FGameDataRepositoryEditor::RefreshList() const
 
 void FGameDataRepositoryEditor::OnPropertyChanged(const FPropertyChangedEvent &PropertyChangedEvent)
 {
-    if (PropertyChangedEvent.GetPropertyName() != UGameDataRepositoryBase::EntryIDProperty)
+    if (PropertyChangedEvent.GetPropertyName() != UGameDataRepository::EntryIDProperty)
     {
         return;
     }
