@@ -13,7 +13,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
 
     /**
      * @brief Checks if a given pointer is valid (non-null).
@@ -26,7 +27,8 @@ namespace Retro {
      * @return True if the pointer is valid (not null), otherwise false.
      */
     RETROLIB_EXPORT template <PointerType T>
-    constexpr bool IsValidPtr(T &&Ptr) {
+    constexpr bool IsValidPtr(T &&Ptr)
+    {
         return std::forward<T>(Ptr) != nullptr;
     }
 
@@ -37,9 +39,11 @@ namespace Retro {
      * The ValidPtr struct provides a function call operator that determines
      * if a given pointer is valid, utilizing the is_valid_ptr function.
      */
-    struct FValidPtrFunction {
+    struct FValidPtrFunction
+    {
         template <PointerType T>
-        constexpr bool operator()(T &&Ptr) const {
+        constexpr bool operator()(T &&Ptr) const
+        {
             return IsValidPtr(std::forward<T>(Ptr));
         }
 
@@ -53,27 +57,32 @@ namespace Retro {
          * @param ptr A nullptr to be checked.
          * @return Returns false as nullptr is always considered invalid.
          */
-        constexpr bool operator()(std::nullptr_t) const {
+        constexpr bool operator()(std::nullptr_t) const
+        {
             return false;
         }
 
 #ifdef __UNREAL__
         template <std::derived_from<UObject> T>
-        constexpr bool operator()(const T *Ptr) const {
+        constexpr bool operator()(const T *Ptr) const
+        {
             return IsValid(Ptr);
         }
 
         template <std::derived_from<UObject> T>
-        constexpr bool operator()(TObjectPtr<T> Ptr) const {
+        constexpr bool operator()(TObjectPtr<T> Ptr) const
+        {
             return IsValid(Ptr);
         }
 
         template <std::derived_from<UObject> T>
-        constexpr bool operator()(TObjectPtr<const T> Ptr) const {
+        constexpr bool operator()(TObjectPtr<const T> Ptr) const
+        {
             return IsValid(Ptr);
         }
 
-        bool operator()(const FScriptInterface &Ptr) const {
+        bool operator()(const FScriptInterface &Ptr) const
+        {
             return IsValid(Ptr.GetObject());
         }
 #endif
@@ -96,7 +105,8 @@ namespace Retro {
      * if a given pointer is invalid, utilizing the is_valid_ptr function by
      * negating its result.
      */
-    struct FInvalidPtrFunction {
+    struct FInvalidPtrFunction
+    {
         template <PointerType T>
         /**
          * @brief Function call operator that checks the invalidity of a pointer.
@@ -108,7 +118,8 @@ namespace Retro {
          * reference to handle both lvalue and rvalue pointers.
          * @return Returns true if the pointer is invalid, false otherwise.
          */
-        constexpr bool operator()(T &&ptr) const {
+        constexpr bool operator()(T &&ptr) const
+        {
             return !IsValidPtr(std::forward<T>(ptr));
         }
 
@@ -122,7 +133,8 @@ namespace Retro {
          * @param nullptr_t A null pointer of type std::nullptr_t.
          * @return A boolean value indicating the validity of the null pointer, always true.
          */
-        constexpr bool operator()(std::nullptr_t) const {
+        constexpr bool operator()(std::nullptr_t) const
+        {
             return true;
         }
     };

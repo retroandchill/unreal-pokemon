@@ -13,14 +13,16 @@ class IBagSorter;
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
-class POKEMONCORE_API UBag : public UInterface {
+class POKEMONCORE_API UBag : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Declaration of the player's bag.
  */
-class POKEMONCORE_API IBag {
+class POKEMONCORE_API IBag
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

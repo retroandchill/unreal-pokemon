@@ -6,7 +6,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestTickBasedClock, "Unit Tests.Clock.TestTickBasedClock",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestTickBasedClock::RunTest(const FString &Parameters) {
+bool TestTickBasedClock::RunTest(const FString &Parameters)
+{
     auto Clock = NewObject<UTickBasedClock>();
     auto StartTime = IGameClock::Execute_GetCurrentTime(Clock);
     auto DayLength = UReflectionUtils::GetPropertyValue<float>(Clock, "DayLength");

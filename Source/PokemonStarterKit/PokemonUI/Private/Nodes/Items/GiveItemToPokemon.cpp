@@ -4,8 +4,8 @@
 #include "Utilities/PokemonCoroutineDispatcher.h"
 
 UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldContextObject, FItemHandle Item,
-                                                          const TScriptInterface<IPokemon> &Pokemon,
-                                                          int32 PokemonIndex) {
+                                                          const TScriptInterface<IPokemon> &Pokemon, int32 PokemonIndex)
+{
     auto Node = NewObject<UGiveItemToPokemon>();
     Node->SetWorldContext(WorldContextObject);
     Node->Item = Item;
@@ -14,7 +14,8 @@ UGiveItemToPokemon *UGiveItemToPokemon::GiveItemToPokemon(const UObject *WorldCo
     return Node;
 }
 
-UE5Coro::TCoroutine<> UGiveItemToPokemon::ExecuteCoroutine(FForceLatentCoroutine) {
+UE5Coro::TCoroutine<> UGiveItemToPokemon::ExecuteCoroutine(FForceLatentCoroutine)
+{
     auto &Dispatcher = IPokemonCoroutineDispatcher::Get(GetWorldContext());
     auto bGiven = co_await Dispatcher.GiveItemToPokemon(Item, Pokemon, PokemonIndex);
     bGiven ? ItemGiven.Broadcast() : ItemRejected.Broadcast();

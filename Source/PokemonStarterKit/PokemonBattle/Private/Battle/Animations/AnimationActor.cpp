@@ -2,13 +2,15 @@
 
 #include "Battle/Animations/AnimationActor.h"
 
-UE5Coro::TCoroutine<> AAnimationActor::PlayAnimation() {
+UE5Coro::TCoroutine<> AAnimationActor::PlayAnimation()
+{
     OnBattleAnimationComplete = MakeUnique<TPromise<int32>>();
     Play();
     co_await OnBattleAnimationComplete->GetFuture();
     Destroy();
 }
 
-void AAnimationActor::AnimationComplete() {
+void AAnimationActor::AnimationComplete()
+{
     OnBattleAnimationComplete->EmplaceValue(0);
 }

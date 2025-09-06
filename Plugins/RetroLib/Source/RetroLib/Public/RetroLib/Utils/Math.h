@@ -10,7 +10,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * The number of seconds in a minute.
      */
@@ -28,11 +29,12 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename A, typename B, typename C, typename D>
         requires std::is_arithmetic_v<A> && std::is_arithmetic_v<B> && std::is_arithmetic_v<C> &&
-                     std::is_arithmetic_v<D> &&
-                     (std::is_floating_point_v<A> || std::is_floating_point_v<B> || std::is_floating_point_v<C> ||
-                      std::is_floating_point_v<D>)
-    constexpr auto LinearInterpolation(A StartValue, B EndValue, C Duration,
-                                       D Delta) -> decltype(StartValue * EndValue * Duration * Delta) {
+                 std::is_arithmetic_v<D> &&
+                 (std::is_floating_point_v<A> || std::is_floating_point_v<B> || std::is_floating_point_v<C> ||
+                  std::is_floating_point_v<D>)
+    constexpr auto LinearInterpolation(A StartValue, B EndValue, C Duration, D Delta)
+        -> decltype(StartValue * EndValue * Duration * Delta)
+    {
         if (Duration <= 0)
             return EndValue;
 
@@ -52,7 +54,8 @@ namespace Retro {
      * @param Exponent The exponent of the operation
      * @return The result of the exponentiation
      */
-    RETROLIB_EXPORT inline int Pow(int Base, int Exponent) {
+    RETROLIB_EXPORT inline int Pow(int Base, int Exponent)
+    {
         return static_cast<int>(std::pow(Base, Exponent));
     }
 } // namespace Retro

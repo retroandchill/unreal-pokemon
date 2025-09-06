@@ -12,7 +12,8 @@ class ITrainer;
  * The payload sent when switching Pokémon
  */
 UCLASS()
-class POKEMONBATTLE_API USwitchPokemonPayload : public UObject {
+class POKEMONBATTLE_API USwitchPokemonPayload : public UObject
+{
     GENERATED_BODY()
 
   public:

@@ -3,7 +3,8 @@
 #include "DataManager.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 
-TArray<FName> UStatusEffectHelper::GetStatusEffectNames() {
+TArray<FName> UStatusEffectHelper::GetStatusEffectNames()
+{
     static auto &Table = FDataManager::GetInstance().GetDataTable<FStatus>();
     auto Rows = Table.GetAllRows();
     // clang-format off
@@ -13,10 +14,12 @@ TArray<FName> UStatusEffectHelper::GetStatusEffectNames() {
     // clang-format on
 }
 
-FName UStatusEffectHelper::ConvertStatusHandleToName(const FStatusHandle &Struct) {
+FName UStatusEffectHelper::ConvertStatusHandleToName(const FStatusHandle &Struct)
+{
     return Struct;
 }
 
-FStatusHandle UStatusEffectHelper::ConvertNameToStatusHandle(FName Name) {
+FStatusHandle UStatusEffectHelper::ConvertNameToStatusHandle(FName Name)
+{
     return Name;
 }

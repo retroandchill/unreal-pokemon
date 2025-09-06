@@ -12,7 +12,8 @@
  * The information for a stage of stat alteration.
  */
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FStatStageInfo {
+struct POKEMONBATTLE_API FStatStageInfo
+{
     GENERATED_BODY()
 
     /**
@@ -46,7 +47,8 @@ struct POKEMONBATTLE_API FStatStageInfo {
  * Struct that contains information for Gameplay Tags that are applied when HP dips below a certain amount.
  */
 USTRUCT(BlueprintType, DisplayName = "HP State Tag")
-struct POKEMONBATTLE_API FHPStateTag {
+struct POKEMONBATTLE_API FHPStateTag
+{
     GENERATED_BODY()
 
     /**
@@ -67,7 +69,8 @@ struct POKEMONBATTLE_API FHPStateTag {
  *
  */
 UCLASS(Config = Game, DefaultConfig, DisplayName = "Battle System")
-class POKEMONBATTLE_API UPokemonBattleSettings : public UDeveloperSettings {
+class POKEMONBATTLE_API UPokemonBattleSettings : public UDeveloperSettings
+{
     GENERATED_BODY()
 
   public:

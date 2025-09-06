@@ -11,7 +11,8 @@
  * The data related with how a Pokémon evolves
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FEvolutionData : public FIndexedTableRow {
+struct POKEMONDATA_API FEvolutionData : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -25,7 +26,8 @@ struct POKEMONDATA_API FEvolutionData : public FIndexedTableRow {
  * Blueprint function library for getting evolution data out.
  */
 UCLASS()
-class POKEMONDATA_API UEvolutionHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UEvolutionHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

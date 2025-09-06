@@ -15,7 +15,8 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnCameraAngleChanged, const FVector2D &);
  * Subsystem for handling the camera angle among other aspects of the system.
  */
 UCLASS()
-class GRIDBASED2D_API UCameraSubsystem : public UTickableWorldSubsystem {
+class GRIDBASED2D_API UCameraSubsystem : public UTickableWorldSubsystem
+{
     GENERATED_BODY()
 
   public:

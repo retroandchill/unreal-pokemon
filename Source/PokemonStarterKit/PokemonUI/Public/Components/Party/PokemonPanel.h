@@ -21,7 +21,8 @@ class IPokemon;
  * Widget for housing a single panel of a Pokémon
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONUI_API UPokemonPanel : public UCommonButtonBase, public ISelectablePanel {
+class POKEMONUI_API UPokemonPanel : public UCommonButtonBase, public ISelectablePanel
+{
     GENERATED_BODY()
 
   public:

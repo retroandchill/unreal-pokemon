@@ -5,11 +5,13 @@ DEFINE_LOG_CATEGORY(LogPokemonUI)
 
 constexpr auto GLoctextNamespace = "FPokemonUIModule";
 
-void FPokemonUIModule::StartupModule() {
+void FPokemonUIModule::StartupModule()
+{
     // No special startup needed
 }
 
-void FPokemonUIModule::ShutdownModule() {
+void FPokemonUIModule::ShutdownModule()
+{
     // No special shutdown needed
 }
 

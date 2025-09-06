@@ -11,7 +11,8 @@
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "Utilities/TrainerHelpers.h"
 
-void UExpGainPane::SetBattle(const TScriptInterface<IBattle> &Battle) {
+void UExpGainPane::SetBattle(const TScriptInterface<IBattle> &Battle)
+{
     OwningBattle = Battle;
 
     check(PanelClass != nullptr)
@@ -25,10 +26,12 @@ void UExpGainPane::SetBattle(const TScriptInterface<IBattle> &Battle) {
     // clang-format on
 }
 
-void UExpGainPane::GainExp(TArray<FExpGainInfo> &&GainInfosIn) {
+void UExpGainPane::GainExp(TArray<FExpGainInfo> &&GainInfosIn)
+{
     GainInfos = std::move(GainInfosIn);
     check(Panels.Num() == GainInfos.Num())
-    for (int32 i = 0; i < Panels.Num(); i++) {
+    for (int32 i = 0; i < Panels.Num(); i++)
+    {
         const auto &Panel = Panels[i];
         auto &GainInfo = GainInfos[i];
         Panel->SetBattler(GainInfo.GainingBattler, GainInfo.StatChanges.LevelChange.Before,
@@ -37,22 +40,26 @@ void UExpGainPane::GainExp(TArray<FExpGainInfo> &&GainInfosIn) {
     }
 }
 
-void UExpGainPane::PlayExpGain(float MaxDuration) {
+void UExpGainPane::PlayExpGain(float MaxDuration)
+{
     AnimationsComplete = 0;
     Panels | Retro::Ranges::ForEach(Retro::BindBack<&UBattlerExpPanel::AnimateGain>(MaxDuration));
 }
 
-const TArray<FExpGainInfo> &UExpGainPane::GetGainInfos() const {
+const TArray<FExpGainInfo> &UExpGainPane::GetGainInfos() const
+{
     return GainInfos;
 }
 
-UBattlerExpPanel *UExpGainPane::CreateBattlerPanel(const TScriptInterface<IBattler> &Battler) {
+UBattlerExpPanel *UExpGainPane::CreateBattlerPanel(const TScriptInterface<IBattler> &Battler)
+{
     auto Panel = WidgetTree->ConstructWidget(PanelClass);
     Panel->SetBattler(Battler);
     SlotBattlerPanel(Panel);
     Panel->BindOnAnimationComplete(FSimpleDelegate::CreateWeakLambda(this, [this] {
         AnimationsComplete++;
-        if (AnimationsComplete == Panels.Num()) {
+        if (AnimationsComplete == Panels.Num())
+        {
             OnExpGainComplete.Broadcast();
         }
     }));

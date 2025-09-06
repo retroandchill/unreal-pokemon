@@ -10,7 +10,8 @@
 #include "StorageSystem.generated.h"
 
 USTRUCT(BlueprintType)
-struct FDepositResult {
+struct FDepositResult
+{
     GENERATED_BODY()
 
     UPROPERTY(BlueprintReadWrite)
@@ -27,14 +28,16 @@ struct FDepositResult {
 class IStorageBox;
 // This class does not need to be modified.
 UINTERFACE(BlueprintType, NotBlueprintable)
-class UStorageSystem : public UInterface {
+class UStorageSystem : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * The base implementation for the storage system.
  */
-class POKEMONCORE_API IStorageSystem {
+class POKEMONCORE_API IStorageSystem
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

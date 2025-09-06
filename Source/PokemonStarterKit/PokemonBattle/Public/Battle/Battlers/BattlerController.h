@@ -15,14 +15,16 @@ DECLARE_DELEGATE_OneParam(FActionReady, TUniquePtr<IBattleAction> &&);
 
 // This class does not need to be modified.
 UINTERFACE()
-class UBattlerController : public UInterface {
+class UBattlerController : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * The base controller interface for handling how battlers select their actions.
  */
-class POKEMONBATTLE_API IBattlerController {
+class POKEMONBATTLE_API IBattlerController
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

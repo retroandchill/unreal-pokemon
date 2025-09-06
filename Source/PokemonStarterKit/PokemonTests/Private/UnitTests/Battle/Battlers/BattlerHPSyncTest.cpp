@@ -21,7 +21,8 @@ CORO_FUNCTIONS()
 
 END_DEFINE_SPEC(FBattlerHPSyncTest);
 
-void FBattlerHPSyncTest::Define() {
+void FBattlerHPSyncTest::Define()
+{
     CoroIt("BattleHPSync", [this]() -> UE5Coro::TCoroutine<> {
         auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
         auto Pokemon = UnrealInjector::NewInjectedDependency<IPokemon>(

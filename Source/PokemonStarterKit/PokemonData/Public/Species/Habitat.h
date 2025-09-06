@@ -10,7 +10,8 @@
  * Represents the Body Shape of a Pokémon. Used when searching in the Pokédex.
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FHabitat : public FIndexedTableRow {
+struct POKEMONDATA_API FHabitat : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -24,7 +25,8 @@ struct POKEMONDATA_API FHabitat : public FIndexedTableRow {
  * Blueprint function library for getting habitat data out.
  */
 UCLASS()
-class POKEMONDATA_API UHabitatHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UHabitatHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

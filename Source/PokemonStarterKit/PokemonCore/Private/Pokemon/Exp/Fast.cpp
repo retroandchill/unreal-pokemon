@@ -2,7 +2,8 @@
 #include "Pokemon/Exp/Fast.h"
 #include "RetroLib/Utils/Math.h"
 
-int32 Exp::FFast::ExpForLevel(int32 Level) const {
+int32 Exp::FFast::ExpForLevel(int32 Level) const
+{
     check(Level > 0)
 
     if (Level == 1)

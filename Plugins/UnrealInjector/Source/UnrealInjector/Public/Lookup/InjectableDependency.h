@@ -12,14 +12,17 @@
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "UObject/Interface.h"
 
-namespace UnrealInjector {
+namespace UnrealInjector
+{
 
     template <typename T>
     concept CanInject = std::derived_from<T, UObject> || Retro::UnrealInterface<T>;
 
     template <typename T>
         requires CanInject<T>
-    class TInjectionSettings {};
+    class TInjectionSettings
+    {
+    };
 
     template <typename T>
         requires CanInject<T>
@@ -38,9 +41,11 @@ namespace UnrealInjector {
 
     template <typename T>
         requires CanInject<T>
-    class TInjectableDependency {
+    class TInjectableDependency
+    {
       public:
-        TInjectableDependency() {
+        TInjectableDependency()
+        {
             FCoreDelegates::OnPostEngineInit.Add(
                 FSimpleDelegate::CreateRaw(this, &TInjectableDependency::SetUpInjection));
         }
@@ -53,16 +58,19 @@ namespace UnrealInjector {
 
         template <typename... A>
             requires CanInitialize<T, A...>
-        auto Inject(UObject *Outer, A &&...Args) const {
+        auto Inject(UObject *Outer, A &&...Args) const
+        {
             auto CreatedObject = CreateInjection(Outer, ClassPtr.LoadSynchronous());
-            if constexpr (InitializableFrom<T, A...>) {
+            if constexpr (InitializableFrom<T, A...>)
+            {
                 CreatedObject->Initialize(std::forward<A>(Args)...);
             }
             return CreatedObject;
         }
 
       private:
-        void SetUpInjection() {
+        void SetUpInjection()
+        {
             auto Setting = GetMutableDefault<UDependencyInjectionSettings>();
             // clang-format off
             auto& Result = Setting->TargetInjections |
@@ -78,10 +86,14 @@ namespace UnrealInjector {
 #endif
         }
 
-        static auto CreateInjection(UObject *Outer, const UClass *InjectedClass) {
-            if constexpr (std::derived_from<T, UObject>) {
+        static auto CreateInjection(UObject *Outer, const UClass *InjectedClass)
+        {
+            if constexpr (std::derived_from<T, UObject>)
+            {
                 return NewObject<T>(Outer, InjectedClass);
-            } else {
+            }
+            else
+            {
                 return TScriptInterface<T>(NewObject<UObject>(Outer, InjectedClass));
             }
         }
@@ -92,9 +104,11 @@ namespace UnrealInjector {
 } // namespace UnrealInjector
 
 #define DECLARE_INJECTABLE_DEPENDENCY(Export, Type)                                                                    \
-    namespace UnrealInjector {                                                                                         \
+    namespace UnrealInjector                                                                                           \
+    {                                                                                                                  \
         template <>                                                                                                    \
-        class Export TInjectionSettings<Type> {                                                                        \
+        class Export TInjectionSettings<Type>                                                                          \
+        {                                                                                                              \
           public:                                                                                                      \
             static const TInjectableDependency<Type> &Get();                                                           \
                                                                                                                        \
@@ -104,9 +118,11 @@ namespace UnrealInjector {
     }
 
 #define DEFINE_INJECTABLE_DEPENDENCY(Type)                                                                             \
-    namespace UnrealInjector {                                                                                         \
+    namespace UnrealInjector                                                                                           \
+    {                                                                                                                  \
         TInjectableDependency<Type> TInjectionSettings<Type>::InjectedDependency;                                      \
-        const TInjectableDependency<Type> &TInjectionSettings<Type>::Get() {                                           \
+        const TInjectableDependency<Type> &TInjectionSettings<Type>::Get()                                             \
+        {                                                                                                              \
             return InjectedDependency;                                                                                 \
         }                                                                                                              \
     }

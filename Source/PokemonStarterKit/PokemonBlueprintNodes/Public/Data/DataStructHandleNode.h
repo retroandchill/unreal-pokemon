@@ -9,14 +9,16 @@
 
 // This class does not need to be modified.
 UINTERFACE()
-class POKEMONBLUEPRINTNODES_API UDataStructHandleNode : public UInterface {
+class POKEMONBLUEPRINTNODES_API UDataStructHandleNode : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  *
  */
-class POKEMONBLUEPRINTNODES_API IDataStructHandleNode {
+class POKEMONBLUEPRINTNODES_API IDataStructHandleNode
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

@@ -13,11 +13,13 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(USaveScreen)
 
-USaveScreen *USaveScreen::AddSaveScreenToStack(const UObject *WorldContextObject) {
+USaveScreen *USaveScreen::AddSaveScreenToStack(const UObject *WorldContextObject)
+{
     return URPGMenuUtilities::InjectScreenToStack<USaveScreen>(WorldContextObject).GetPtrOrNull();
 }
 
-void USaveScreen::NativeOnActivated() {
+void USaveScreen::NativeOnActivated()
+{
     Super::NativeOnActivated();
     auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
     UGameplayStatics::AsyncLoadGameFromSlot(
@@ -29,18 +31,23 @@ void USaveScreen::NativeOnActivated() {
         }));
 }
 
-void USaveScreen::SetSaveGame(UEnhancedSaveGame *SaveGame) {
+void USaveScreen::SetSaveGame(UEnhancedSaveGame *SaveGame)
+{
     CurrentSaveGame = SaveGame;
-    if (SaveGame != nullptr) {
+    if (SaveGame != nullptr)
+    {
         auto PokemonSaveData = SaveGame->LoadObjectFromSaveGame<UPokemonSaveGame>(Pokemon::Saving::PokemonCoreSaveData);
         check(PokemonSaveData.IsSet())
         OnSaveGameSet(PokemonSaveData.GetPtrOrNull());
-    } else {
+    }
+    else
+    {
         OnFirstSaveAttempt();
     }
 }
 
-UE5Coro::TCoroutine<bool> USaveScreen::SaveGame() {
+UE5Coro::TCoroutine<bool> USaveScreen::SaveGame()
+{
     UE_LOG(LogPokemonUI, Display, TEXT("Creating the save game!"));
     auto SavedGame = co_await AsyncThread([this] {
         auto SaveGame = UEnhancedSaveGameSubsystem::Get(this).CreateSaveGame();
@@ -50,19 +57,22 @@ UE5Coro::TCoroutine<bool> USaveScreen::SaveGame() {
     auto &Settings = *GetDefault<UPokemonSaveGameSettings>();
     bool bSuccess =
         co_await Retro::SaveGameToSlotAsync(SavedGame, Settings.PrimarySaveSlotName, Settings.PrimarySaveIndex);
-    if (bSuccess) {
+    if (bSuccess)
+    {
         SetSaveGame(SavedGame);
     }
 
     co_return bSuccess;
 }
 
-UE5Coro::TCoroutine<bool> USaveScreen::UntilSaveComplete() {
+UE5Coro::TCoroutine<bool> USaveScreen::UntilSaveComplete()
+{
     auto [Result] = co_await OnExitSaveScreen;
     co_return Result;
 }
 
-void USaveScreen::ExitSaveScreen(bool bSuccess) {
+void USaveScreen::ExitSaveScreen(bool bSuccess)
+{
     CloseScreen();
     OnExitSaveScreen.Broadcast(bSuccess);
 }

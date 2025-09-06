@@ -12,7 +12,8 @@ class ITrainer;
  * The owner information for a given Pokémon
  */
 USTRUCT(BlueprintType)
-struct POKEMONCORE_API FOwnerInfo {
+struct POKEMONCORE_API FOwnerInfo
+{
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category = "Pokémon|Original Trainer")

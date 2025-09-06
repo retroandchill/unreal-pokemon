@@ -8,11 +8,13 @@
 #endif
 
 #ifdef __UNREAL__
-namespace Retro {
+namespace Retro
+{
     /**
      *
      */
-    RETROLIB_EXPORT class RETROLIB_API FTypeException : public FBlueprintException {
+    RETROLIB_EXPORT class RETROLIB_API FTypeException : public FBlueprintException
+    {
       public:
         using FBlueprintException::FBlueprintException;
     };

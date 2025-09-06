@@ -6,8 +6,10 @@
 #include "Serialization/ObjectAndNameAsStringProxyArchive.h"
 #include "UObject/Package.h"
 
-FObjectData FObjectData::SerializeObject(UObject *Object) {
-    if (!IsValid(Object)) {
+FObjectData FObjectData::SerializeObject(UObject *Object)
+{
+    if (!IsValid(Object))
+    {
         return FObjectData();
     }
 
@@ -19,8 +21,10 @@ FObjectData FObjectData::SerializeObject(UObject *Object) {
     return Data;
 }
 
-UObject *FObjectData::DeserializeObject() const {
-    if (!IsValid(ObjectClass) || Data.Num() <= 0) {
+UObject *FObjectData::DeserializeObject() const
+{
+    if (!IsValid(ObjectClass) || Data.Num() <= 0)
+    {
         return nullptr;
     }
     auto Object = NewObject<UObject>(GetTransientPackage(), ObjectClass);
@@ -28,8 +32,10 @@ UObject *FObjectData::DeserializeObject() const {
     return Object;
 }
 
-void FObjectData::DeserializeObject(UObject *Object) const {
-    if (!IsValid(ObjectClass) || Data.Num() <= 0) {
+void FObjectData::DeserializeObject(UObject *Object) const
+{
+    if (!IsValid(ObjectClass) || Data.Num() <= 0)
+    {
         return;
     }
     FMemoryReader Reader(Data, true);
@@ -39,10 +45,12 @@ void FObjectData::DeserializeObject(UObject *Object) const {
     Object->Serialize(Archive);
 }
 
-FObjectData USaveSerializationUtils::SerializeObject(UObject *Object) {
+FObjectData USaveSerializationUtils::SerializeObject(UObject *Object)
+{
     return FObjectData::SerializeObject(Object);
 }
 
-UObject *USaveSerializationUtils::DeserializeObject(const FObjectData &SerializedData) {
+UObject *USaveSerializationUtils::DeserializeObject(const FObjectData &SerializedData)
+{
     return SerializedData.DeserializeObject();
 }

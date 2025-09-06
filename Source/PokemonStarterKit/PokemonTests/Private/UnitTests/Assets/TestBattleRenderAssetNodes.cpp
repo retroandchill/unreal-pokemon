@@ -22,21 +22,26 @@ TObjectPtr<UScriptStruct> SoftStructType;
 TOptional<Retro::IVariantRegistration &> Registration;
 
 template <bool bIsCompact = false>
-FORCEINLINE void AssertValidNode(UK2Node *Node) {
+FORCEINLINE void AssertValidNode(UK2Node *Node)
+{
     UE_CHECK_FALSE(Node->GetNodeTitle(ENodeTitleType::MenuTitle).IsEmpty());
     UE_CHECK_FALSE(Node->GetTooltipText().IsEmpty());
     UE_CHECK_FALSE(Node->GetMenuCategory().IsEmpty());
-    if constexpr (bIsCompact) {
+    if constexpr (bIsCompact)
+    {
         UE_CHECK_TRUE(Node->ShouldDrawCompact());
         UE_CHECK_FALSE(Node->GetCompactNodeTitle().IsEmpty());
-    } else {
+    }
+    else
+    {
         UE_CHECK_FALSE(Node->ShouldDrawCompact());
     }
 }
 
 END_DEFINE_SPEC(FTestBattleRenderAssetNodes);
 
-void FTestBattleRenderAssetNodes::Define() {
+void FTestBattleRenderAssetNodes::Define()
+{
     Describe("Test Battle Render Blueprint Nodes", [this] {
         BeforeEach([this] {
             auto &Registry = Retro::FVariantObjectStructRegistry::Get();
@@ -110,7 +115,8 @@ void FTestBattleRenderAssetNodes::Define() {
 
             auto Classes = Registration->GetValidClasses();
             FString Message;
-            for (auto Class : Classes) {
+            for (auto Class : Classes)
+            {
                 MakeTestPin(DummyInput, Pins, ValidPin, UEdGraphSchema_K2::PC_Object, EGPD_Output);
                 ValidPin->PinType.PinSubCategoryObject = Class;
                 UE_CHECK_FALSE(Node->IsConnectionDisallowed(InputPin, ValidPin, Message));
@@ -156,7 +162,8 @@ void FTestBattleRenderAssetNodes::Define() {
 
             auto Classes = Registration->GetValidClasses();
             FString Message;
-            for (auto Class : Classes) {
+            for (auto Class : Classes)
+            {
                 MakeTestPin(DummyInput, Pins, ValidPin, UEdGraphSchema_K2::PC_SoftObject, EGPD_Output);
                 ValidPin->PinType.PinSubCategoryObject = Class;
                 UE_CHECK_FALSE(Node->IsConnectionDisallowed(InputPin, ValidPin, Message));
@@ -186,7 +193,8 @@ void FTestBattleRenderAssetNodes::Define() {
         });
 
         It("Test cast node can toggle visibility", [this] {
-            for (auto Classes = Registration->GetValidClasses(); auto Class : Classes) {
+            for (auto Classes = Registration->GetValidClasses(); auto Class : Classes)
+            {
                 auto Node = NewObject<UK2Node_GetVariantValue>(TestGraph.Get());
                 Node->Initialize(StructType, Class);
                 TestGraph->AddNode(Node);

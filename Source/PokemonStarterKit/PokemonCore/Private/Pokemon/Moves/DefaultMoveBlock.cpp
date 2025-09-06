@@ -14,7 +14,8 @@
 #include "Utilities/PokemonCoroutineDispatcher.h"
 
 TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterface<IPokemon> &Pokemon,
-                                                           const FPokemonDTO &DTO) {
+                                                           const FPokemonDTO &DTO)
+{
     Owner = Pokemon;
     auto Species = FDataManager::GetInstance().GetDataTable<FSpeciesData>().GetData(DTO.Species);
     check(Species != nullptr)
@@ -31,9 +32,11 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterfac
 
     const auto &Settings = *GetDefault<UPokemonDataSettings>();
     int32 MaxMoves = Settings.MaxMoves;
-    if (DTO.Moves.Num() > 0) {
+    if (DTO.Moves.Num() > 0)
+    {
         int32 MoveMax = FMath::Min(MaxMoves, DTO.Moves.Num());
-        for (int32 i = 0; i < MoveMax; i++) {
+        for (int32 i = 0; i < MoveMax; i++)
+        {
             auto &Move = DTO.Moves[i];
             Moves.Emplace(NewObject<UDefaultMove>(this)->Initialize(Move));
 
@@ -41,9 +44,12 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterfac
             // so we need to add them manually here.
             MoveMemory.Add(Move.Move);
         }
-    } else {
+    }
+    else
+    {
         int32 MoveMax = FMath::Min(MaxMoves, KnowableMoves.Num());
-        for (int32 i = KnowableMoves.Num() - MoveMax; i < KnowableMoves.Num(); i++) {
+        for (int32 i = KnowableMoves.Num() - MoveMax; i < KnowableMoves.Num(); i++)
+        {
             Moves.Emplace(CreateNewMove({.Move = KnowableMoves[i].Move}));
         }
     }
@@ -51,25 +57,30 @@ TScriptInterface<IMoveBlock> UDefaultMoveBlock::Initialize(const TScriptInterfac
     return this;
 }
 
-const TArray<TScriptInterface<IMove>> &UDefaultMoveBlock::GetMoves() const {
+const TArray<TScriptInterface<IMove>> &UDefaultMoveBlock::GetMoves() const
+{
     return Moves;
 }
 
-bool UDefaultMoveBlock::HasOpenMoveSlot() const {
+bool UDefaultMoveBlock::HasOpenMoveSlot() const
+{
     return Moves.Num() < GetDefault<UPokemonDataSettings>()->MaxMoves;
 }
 
-void UDefaultMoveBlock::PlaceMoveInOpenSlot(FMoveHandle Move) {
+void UDefaultMoveBlock::PlaceMoveInOpenSlot(FMoveHandle Move)
+{
     check(HasOpenMoveSlot())
     Moves.Emplace(CreateNewMove({.Move = Move}));
 }
 
-void UDefaultMoveBlock::OverwriteMoveSlot(FMoveHandle Move, int32 SlotIndex) {
+void UDefaultMoveBlock::OverwriteMoveSlot(FMoveHandle Move, int32 SlotIndex)
+{
     check(Moves.IsValidIndex(SlotIndex))
     Moves[SlotIndex] = CreateNewMove({.Move = Move});
 }
 
-Retro::TGenerator<FMoveHandle> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const {
+Retro::TGenerator<FMoveHandle> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialLevel, int32 CurrentLevel) const
+{
     auto &Species = Owner->GetSpecies();
 
     auto MoveLevelInRange = [InitialLevel, CurrentLevel](const FLevelUpMove &Move) {
@@ -89,14 +100,17 @@ Retro::TGenerator<FMoveHandle> UDefaultMoveBlock::GetLevelUpMoves(int32 InitialL
     // clang-format on
 }
 
-UE5Coro::TCoroutine<bool> UDefaultMoveBlock::LearnMove(FMoveHandle Move, FForceLatentCoroutine) {
+UE5Coro::TCoroutine<bool> UDefaultMoveBlock::LearnMove(FMoveHandle Move, FForceLatentCoroutine)
+{
     return IPokemonCoroutineDispatcher::Get(this).LearnMove(this, Move);
 }
 
-TScriptInterface<IMove> UDefaultMoveBlock::CreateNewMove(const FMoveDTO &MoveID) {
+TScriptInterface<IMove> UDefaultMoveBlock::CreateNewMove(const FMoveDTO &MoveID)
+{
     return NewObject<UDefaultMove>(this)->Initialize(MoveID);
 }
 
-const TSet<FName> &UDefaultMoveBlock::GetMoveMemory() const {
+const TSet<FName> &UDefaultMoveBlock::GetMoveMemory() const
+{
     return MoveMemory;
 }

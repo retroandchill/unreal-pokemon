@@ -13,7 +13,8 @@ class UScreen;
  * Command class to handle transfering to a new screen
  */
 UCLASS()
-class RPGMENUS_API UNewScreenCommand : public UCommand {
+class RPGMENUS_API UNewScreenCommand : public UCommand
+{
     GENERATED_BODY()
 
   public:

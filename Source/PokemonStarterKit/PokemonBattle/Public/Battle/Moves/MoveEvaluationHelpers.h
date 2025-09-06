@@ -16,7 +16,8 @@ class UCriticalHitRateCalculationPayload;
  * Helper library for move related evaluation.
  */
 UCLASS()
-class POKEMONBATTLE_API UMoveEvaluationHelpers : public UBlueprintFunctionLibrary {
+class POKEMONBATTLE_API UMoveEvaluationHelpers : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

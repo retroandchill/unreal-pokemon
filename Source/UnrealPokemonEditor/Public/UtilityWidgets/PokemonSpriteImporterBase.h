@@ -11,7 +11,8 @@
  *
  */
 UCLASS()
-class UNREALPOKEMONEDITOR_API UPokemonSpriteImporterBase : public UEditorUtilityWidget {
+class UNREALPOKEMONEDITOR_API UPokemonSpriteImporterBase : public UEditorUtilityWidget
+{
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = InputData, meta = (AllowPrivateAccess, ContentDir))

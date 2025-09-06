@@ -3,11 +3,13 @@
 
 DEFINE_LOG_CATEGORY(LogGridBased2D)
 
-void FGridBased2DModule::StartupModule() {
+void FGridBased2DModule::StartupModule()
+{
     // No special startup required
 }
 
-void FGridBased2DModule::ShutdownModule() {
+void FGridBased2DModule::ShutdownModule()
+{
     // No special shutdown required
 }
 

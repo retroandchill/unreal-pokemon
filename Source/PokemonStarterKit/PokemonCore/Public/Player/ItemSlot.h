@@ -11,7 +11,8 @@
  * Struct for a single item in the player's inventory.
  */
 USTRUCT(BlueprintType)
-struct POKEMONCORE_API FItemSlot {
+struct POKEMONCORE_API FItemSlot
+{
     GENERATED_BODY()
 
     /**

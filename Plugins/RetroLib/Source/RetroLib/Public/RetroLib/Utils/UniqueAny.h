@@ -23,7 +23,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
 
     /**
      * @class FUniqueAny
@@ -35,7 +36,8 @@ namespace Retro {
      * It leverages small object optimization to store small objects directly inside the UniqueAny instance, and
      * dynamically allocates memory for larger objects.
      */
-    RETROLIB_EXPORT class FUniqueAny final {
+    RETROLIB_EXPORT class FUniqueAny final
+    {
         template <typename T>
         static constexpr bool FitsInSmallBuffer = sizeof(T) <= DEFAULT_SMALL_STORAGE_SIZE;
 
@@ -70,7 +72,8 @@ namespace Retro {
         template <typename T>
             requires(!std::same_as<std::decay_t<T>, FUniqueAny>)
         explicit(false) FUniqueAny(T &&Value) noexcept
-            : Storage(std::forward<T>(Value)), Vtable(&GetVtableForType<std::decay_t<T>>()) {
+            : Storage(std::forward<T>(Value)), Vtable(&GetVtableForType<std::decay_t<T>>())
+        {
         }
 
         /**
@@ -87,10 +90,14 @@ namespace Retro {
          */
         template <typename T, typename... A>
             requires std::constructible_from<T, A...>
-        explicit FUniqueAny(std::in_place_type_t<T>, A &&...Args) noexcept : Vtable(&GetVtableForType<T>()) {
-            if constexpr (FitsInSmallBuffer<T>) {
+        explicit FUniqueAny(std::in_place_type_t<T>, A &&...Args) noexcept : Vtable(&GetVtableForType<T>())
+        {
+            if constexpr (FitsInSmallBuffer<T>)
+            {
                 new (std::bit_cast<T *>(Storage.SmallStorage.data())) T(std::forward<A>(Args)...);
-            } else {
+            }
+            else
+            {
                 Storage.LargeStorage = new T(std::forward<A>(Args)...);
             }
         }
@@ -106,7 +113,8 @@ namespace Retro {
          * @param Other The UniqueAny instance to move from. The state of Other will be invalidated.
          * @return An UniqueAny instance that takes ownership of the value from the Other instance.
          */
-        FUniqueAny(FUniqueAny &&Other) noexcept : Vtable(Other.Vtable) {
+        FUniqueAny(FUniqueAny &&Other) noexcept : Vtable(Other.Vtable)
+        {
             Vtable->Move(Other.Storage, Storage);
             Other.Vtable = nullptr;
         }
@@ -117,8 +125,10 @@ namespace Retro {
          * Cleans up the stored value, if any, by invoking the appropriate destruction logic through the virtual table.
          * Ensures that the dynamically allocated memory, if any, is properly deallocated.
          */
-        ~FUniqueAny() {
-            if (Vtable != nullptr) {
+        ~FUniqueAny()
+        {
+            if (Vtable != nullptr)
+            {
                 Vtable->Destroy(Storage);
             }
         }
@@ -135,7 +145,8 @@ namespace Retro {
          * @param Other The right-hand side UniqueAny instance from which the value is assigned.
          * @return A reference to the current UniqueAny instance after the assignment.
          */
-        FUniqueAny &operator=(FUniqueAny &&Other) noexcept {
+        FUniqueAny &operator=(FUniqueAny &&Other) noexcept
+        {
             Vtable = Other.Vtable;
             Vtable->Move(Other.Storage, Storage);
             Other.Vtable = nullptr;
@@ -152,7 +163,8 @@ namespace Retro {
          * @return A reference to this instance after assignment.
          */
         template <typename T>
-        FUniqueAny &operator=(T &&Other) noexcept {
+        FUniqueAny &operator=(T &&Other) noexcept
+        {
             Emplace<std::decay_t<T>>(std::forward<T>(Other));
             return *this;
         }
@@ -169,8 +181,10 @@ namespace Retro {
          * @return A reference to the stored value of type T.
          */
         template <typename T>
-        T &Get() {
-            if (GetType() != typeid(T)) {
+        T &Get()
+        {
+            if (GetType() != typeid(T))
+            {
                 throw std::bad_any_cast();
             }
 
@@ -189,8 +203,10 @@ namespace Retro {
          * @return A reference to the stored value of type T.
          */
         template <typename T>
-        const T &Get() const {
-            if (GetType() != typeid(T)) {
+        const T &Get() const
+        {
+            if (GetType() != typeid(T))
+            {
                 throw std::bad_any_cast();
             }
 
@@ -208,8 +224,10 @@ namespace Retro {
          * TOptional.
          */
         template <typename T>
-        TOptionalType<T &> TryGet() {
-            if (GetType() != typeid(T)) {
+        TOptionalType<T &> TryGet()
+        {
+            if (GetType() != typeid(T))
+            {
                 return TOptionalType<T &>();
             }
 
@@ -227,8 +245,10 @@ namespace Retro {
          * TOptional.
          */
         template <typename T>
-        TOptionalType<const T &> TryGet() const {
-            if (GetType() != typeid(T)) {
+        TOptionalType<const T &> TryGet() const
+        {
+            if (GetType() != typeid(T))
+            {
                 return TOptionalType<const T &>();
             }
 
@@ -244,14 +264,19 @@ namespace Retro {
          * @param Args Arguments to construct the new object with.
          */
         template <typename T, typename... A>
-        void Emplace(A &&...Args) {
-            if (HasValue()) {
+        void Emplace(A &&...Args)
+        {
+            if (HasValue())
+            {
                 Vtable->Destroy(Storage);
             }
 
-            if constexpr (FitsInSmallBuffer<std::decay_t<T>>) {
+            if constexpr (FitsInSmallBuffer<std::decay_t<T>>)
+            {
                 new (std::bit_cast<T *>(Storage.SmallStorage.data())) std::decay_t<T>(std::forward<A>(Args)...);
-            } else {
+            }
+            else
+            {
                 Storage.LargeStorage = new std::decay_t<T>(std::forward<A>(Args)...);
             }
             Vtable = &GetVtableForType<std::decay_t<T>>();
@@ -264,8 +289,10 @@ namespace Retro {
          *  it invokes the `Destroy` method from the virtual table pointer (`VTable`) to clean up
          *  the stored object, and then sets the `VTable` pointer to `nullptr`, effectively resetting the state.
          */
-        void Reset() noexcept {
-            if (HasValue()) {
+        void Reset() noexcept
+        {
+            if (HasValue())
+            {
                 Vtable->Destroy(Storage);
                 Vtable = nullptr;
             }
@@ -279,7 +306,8 @@ namespace Retro {
          *
          * @return True if the object holds a value, false otherwise.
          */
-        bool HasValue() const {
+        bool HasValue() const
+        {
             return Vtable != nullptr;
         }
 
@@ -291,25 +319,34 @@ namespace Retro {
          *
          * @return The type information of the stored value or void if no value is present.
          */
-        const std::type_info &GetType() const noexcept {
+        const std::type_info &GetType() const noexcept
+        {
             return HasValue() ? *Vtable->Type : typeid(void);
         }
 
       private:
         template <typename T>
-        constexpr T &GetUnchecked() {
-            if constexpr (FitsInSmallBuffer<T>) {
+        constexpr T &GetUnchecked()
+        {
+            if constexpr (FitsInSmallBuffer<T>)
+            {
                 return *std::bit_cast<T *>(Storage.SmallStorage.data());
-            } else {
+            }
+            else
+            {
                 return *static_cast<T *>(Storage.LargeStorage);
             }
         }
 
         template <typename T>
-        constexpr const T &GetUnchecked() const {
-            if constexpr (FitsInSmallBuffer<T>) {
+        constexpr const T &GetUnchecked() const
+        {
+            if constexpr (FitsInSmallBuffer<T>)
+            {
                 return *std::bit_cast<const T *>(Storage.SmallStorage.data());
-            } else {
+            }
+            else
+            {
                 return *static_cast<const T *>(Storage.LargeStorage);
             }
         }
@@ -318,27 +355,32 @@ namespace Retro {
             std::array<std::byte, DEFAULT_SMALL_STORAGE_SIZE> SmallStorage;
             void *LargeStorage;
 
-            FValueStorage() : LargeStorage(nullptr) {
+            FValueStorage() : LargeStorage(nullptr)
+            {
             }
 
             template <typename T>
                 requires FitsInSmallBuffer<std::decay_t<T>> && (!std::same_as<std::decay_t<T>, FValueStorage>)
-            explicit FValueStorage(T &&Data) noexcept {
+            explicit FValueStorage(T &&Data) noexcept
+            {
                 new (std::bit_cast<std::decay_t<T> *>(SmallStorage.data())) std::decay_t<T>(std::forward<T>(Data));
             }
 
             template <typename T>
                 requires(!FitsInSmallBuffer<std::decay_t<T>>) && (!std::same_as<std::decay_t<T>, FValueStorage>)
-            explicit FValueStorage(T &&Data) noexcept : LargeStorage(new std::decay_t<T>(std::forward<T>(Data))) {
+            explicit FValueStorage(T &&Data) noexcept : LargeStorage(new std::decay_t<T>(std::forward<T>(Data)))
+            {
             }
 
             template <typename T>
                 requires(!FitsInSmallBuffer<std::decay_t<T>>)
-            explicit FValueStorage(T *Data) noexcept : LargeStorage(Data) {
+            explicit FValueStorage(T *Data) noexcept : LargeStorage(Data)
+            {
             }
         };
 
-        struct FVTable {
+        struct FVTable
+        {
             const std::type_info *Type;
             bool IsLarge = false;
             void (*Destroy)(FValueStorage &Storage);
@@ -346,19 +388,28 @@ namespace Retro {
         };
 
         template <typename T>
-        struct VTableImpl {
-            static void Destroy(FValueStorage &Storage) noexcept {
-                if constexpr (FitsInSmallBuffer<T>) {
+        struct VTableImpl
+        {
+            static void Destroy(FValueStorage &Storage) noexcept
+            {
+                if constexpr (FitsInSmallBuffer<T>)
+                {
                     std::bit_cast<T *>(Storage.SmallStorage.data())->~T();
-                } else {
+                }
+                else
+                {
                     delete static_cast<T *>(Storage.LargeStorage);
                 }
             }
 
-            static void Move(FValueStorage &Source, FValueStorage &Dest) noexcept {
-                if constexpr (FitsInSmallBuffer<T>) {
+            static void Move(FValueStorage &Source, FValueStorage &Dest) noexcept
+            {
+                if constexpr (FitsInSmallBuffer<T>)
+                {
                     std::memcpy(&Dest.SmallStorage, &Source.SmallStorage, sizeof(T));
-                } else {
+                }
+                else
+                {
                     Dest.LargeStorage = Source.LargeStorage;
                     Source.LargeStorage = nullptr;
                 }
@@ -366,7 +417,8 @@ namespace Retro {
         };
 
         template <typename T>
-        static FVTable &GetVtableForType() {
+        static FVTable &GetVtableForType()
+        {
             // clang-format off
             static FVTable Vtable = {
                 .Type = &typeid(T),

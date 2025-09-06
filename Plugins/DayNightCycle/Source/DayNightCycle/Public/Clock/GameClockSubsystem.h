@@ -13,7 +13,8 @@ class IGameClock;
  * Subsystem used for managing the game's clock and emitting events related to the time change.
  */
 UCLASS()
-class DAYNIGHTCYCLE_API UGameClockSubsystem : public UGameInstanceSubsystem {
+class DAYNIGHTCYCLE_API UGameClockSubsystem : public UGameInstanceSubsystem
+{
     GENERATED_BODY()
 
   public:

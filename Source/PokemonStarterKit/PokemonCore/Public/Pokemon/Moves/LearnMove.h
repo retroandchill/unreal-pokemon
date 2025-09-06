@@ -20,7 +20,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAfterMoveLearn);
  * Teach a move to a specific Pokémon
  */
 UCLASS(meta = (HideThen))
-class POKEMONCORE_API ULearnMove : public UBlueprintCoroutineActionBase {
+class POKEMONCORE_API ULearnMove : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

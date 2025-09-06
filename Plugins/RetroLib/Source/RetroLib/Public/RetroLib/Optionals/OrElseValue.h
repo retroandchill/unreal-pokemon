@@ -14,8 +14,10 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Optionals {
-    struct FOrElseValueInvoker {
+namespace Retro::Optionals
+{
+    struct FOrElseValueInvoker
+    {
 
         /**
          * Functional call operator that returns the value of the provided optional object
@@ -29,8 +31,10 @@ namespace Retro::Optionals {
             requires std::convertible_to<TCommonReference<O>, T> &&
                      (!std::is_lvalue_reference_v<TCommonReference<O>> ||
                       !SpecializationOf<std::decay_t<T>, std::reference_wrapper>)
-        constexpr auto operator()(O &&Optional, T &&Val) const {
-            if (HasValue(Optional)) {
+        constexpr auto operator()(O &&Optional, T &&Val) const
+        {
+            if (HasValue(Optional))
+            {
                 return static_cast<T>(Get(std::forward<O>(Optional)));
             }
 
@@ -49,8 +53,10 @@ namespace Retro::Optionals {
             requires std::convertible_to<T, TValueType<O>> && (!std::convertible_to<TCommonReference<O>, T>) &&
                      (!std::is_lvalue_reference_v<TCommonReference<O>> ||
                       !SpecializationOf<std::decay_t<T>, std::reference_wrapper>)
-        constexpr V operator()(O &&Optional, T &&Val) const {
-            if (HasValue(Optional)) {
+        constexpr V operator()(O &&Optional, T &&Val) const
+        {
+            if (HasValue(Optional))
+            {
                 return Get(std::forward<O>(Optional));
             }
 
@@ -70,8 +76,10 @@ namespace Retro::Optionals {
          */
         template <OptionalType O, typename T>
             requires std::convertible_to<TCommonReference<O>, T &> && std::is_lvalue_reference_v<TCommonReference<O>>
-        constexpr T &operator()(O &&Optional, T &Val) const {
-            if (HasValue(Optional)) {
+        constexpr T &operator()(O &&Optional, T &Val) const
+        {
+            if (HasValue(Optional))
+            {
                 return Get(std::forward<O>(Optional));
             }
 
@@ -91,8 +99,10 @@ namespace Retro::Optionals {
          */
         template <OptionalType O, typename T>
             requires std::convertible_to<TCommonReference<O>, T &> && std::is_lvalue_reference_v<TCommonReference<O>>
-        constexpr T &operator()(O &&Optional, const std::reference_wrapper<T> &Val) const {
-            if (HasValue(Optional)) {
+        constexpr T &operator()(O &&Optional, const std::reference_wrapper<T> &Val) const
+        {
+            if (HasValue(Optional))
+            {
                 return Get(std::forward<O>(Optional));
             }
 
@@ -101,8 +111,10 @@ namespace Retro::Optionals {
 
         template <OptionalType O>
             requires std::is_pointer_v<TValueType<O>>
-        constexpr auto operator()(O &&Optional, std::nullptr_t) const {
-            if (HasValue(Optional)) {
+        constexpr auto operator()(O &&Optional, std::nullptr_t) const
+        {
+            if (HasValue(Optional))
+            {
                 return Get(std::forward<O>(Optional));
             }
 

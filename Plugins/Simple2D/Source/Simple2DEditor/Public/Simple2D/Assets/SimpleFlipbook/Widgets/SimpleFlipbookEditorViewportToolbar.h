@@ -6,13 +6,16 @@
 #include "SCommonEditorViewportToolbarBase.h"
 #include "Widgets/SCompoundWidget.h"
 
-namespace Simple2D {
+namespace Simple2D
+{
     /**
      *
      */
-    class SIMPLE2DEDITOR_API SSimpleFlipbookEditorViewportToolbar : public SCommonEditorViewportToolbarBase {
+    class SIMPLE2DEDITOR_API SSimpleFlipbookEditorViewportToolbar : public SCommonEditorViewportToolbarBase
+    {
       public:
-        SLATE_BEGIN_ARGS(SSimpleFlipbookEditorViewportToolbar) {
+        SLATE_BEGIN_ARGS(SSimpleFlipbookEditorViewportToolbar)
+            {
             }
 
             SLATE_END_ARGS()

@@ -9,7 +9,8 @@ using namespace StatUtils;
 
 constexpr int32 IV_MAX = 31;
 
-POKEMONCORE_API TMap<FName, int32> StatUtils::RandomizeIVs() {
+POKEMONCORE_API TMap<FName, int32> StatUtils::RandomizeIVs()
+{
     const auto &DataSubsystem = FDataManager::GetInstance();
     auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 
@@ -24,11 +25,13 @@ POKEMONCORE_API TMap<FName, int32> StatUtils::RandomizeIVs() {
     return Ret;
 }
 
-int32 StatUtils::RandomizeIV() {
+int32 StatUtils::RandomizeIV()
+{
     return FMath::RandRange(0, IV_MAX);
 }
 
-POKEMONCORE_API TMap<FName, int32> StatUtils::DefaultEVs() {
+POKEMONCORE_API TMap<FName, int32> StatUtils::DefaultEVs()
+{
     const auto &DataSubsystem = FDataManager::GetInstance();
     auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 
@@ -43,11 +46,13 @@ POKEMONCORE_API TMap<FName, int32> StatUtils::DefaultEVs() {
     return Ret;
 }
 
-POKEMONCORE_API TUniquePtr<Exp::IGrowthRate> StatUtils::CreateGrowthRate(FName GrowthRate) {
+POKEMONCORE_API TUniquePtr<Exp::IGrowthRate> StatUtils::CreateGrowthRate(FName GrowthRate)
+{
     return Exp::FGrowthRateRegistry::GetInstance().Construct(GrowthRate);
 }
 
-POKEMONCORE_API int32 StatUtils::GetMaxLevel() {
+POKEMONCORE_API int32 StatUtils::GetMaxLevel()
+{
     // TODO: Allow this to be configurable
     return 100;
 }

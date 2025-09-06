@@ -2,26 +2,33 @@
 
 #include "Components/RPGButtonBase.h"
 
-URPGButtonBase::URPGButtonBase() {
+URPGButtonBase::URPGButtonBase()
+{
     SetIsSelectable(true);
 }
 
-void URPGButtonBase::NativePreConstruct() {
+void URPGButtonBase::NativePreConstruct()
+{
     Super::NativePreConstruct();
     UpdateVisibility();
 }
 
-void URPGButtonBase::UpdateVisibility() {
+void URPGButtonBase::UpdateVisibility()
+{
 #if WITH_EDITOR
-    if (IsDesignTime()) {
+    if (IsDesignTime())
+    {
         return;
     }
 #endif
 
     if ((!bIsVisible && !bIsVisibleDelegate.IsBound()) ||
-        (bIsVisibleDelegate.IsBound() && !bIsVisibleDelegate.Execute())) {
+        (bIsVisibleDelegate.IsBound() && !bIsVisibleDelegate.Execute()))
+    {
         SetVisibility(DisabledVisibility);
-    } else {
+    }
+    else
+    {
         SetVisibility(EnabledVisibility);
     }
 }

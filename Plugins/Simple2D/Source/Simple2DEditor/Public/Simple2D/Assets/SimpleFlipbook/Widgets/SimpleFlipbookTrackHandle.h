@@ -7,14 +7,16 @@
 
 class USimpleFlipbook;
 
-namespace Simple2D {
+namespace Simple2D
+{
     /**
      *
      */
-    class SIMPLE2DEDITOR_API SSimpleFlipbookTrackHandle : public SImage {
+    class SIMPLE2DEDITOR_API SSimpleFlipbookTrackHandle : public SImage
+    {
       public:
-        SLATE_BEGIN_ARGS(SSimpleFlipbookTrackHandle)
-                : _SlateUnitsPerFrame(1), _FlipbookBeingEdited(nullptr), _KeyFrameIdx(INDEX_NONE) {
+        SLATE_BEGIN_ARGS(SSimpleFlipbookTrackHandle) : _SlateUnitsPerFrame(1), _FlipbookBeingEdited(nullptr), _KeyFrameIdx(INDEX_NONE)
+            {
             }
 
             SLATE_ATTRIBUTE(float, SlateUnitsPerFrame)

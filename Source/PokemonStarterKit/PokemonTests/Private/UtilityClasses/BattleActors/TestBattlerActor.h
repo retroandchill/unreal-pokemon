@@ -8,7 +8,8 @@
 #include "TestBattlerActor.generated.h"
 
 UCLASS(BlueprintInternalUseOnly)
-class POKEMONTESTS_API ATestBattlerActor : public ABattlerActor {
+class POKEMONTESTS_API ATestBattlerActor : public ABattlerActor
+{
     GENERATED_BODY()
 
   public:

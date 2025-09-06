@@ -10,7 +10,8 @@ class UPokemonSettings;
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(CaughtPokeBallTest, "Unit Tests.Core.Pokemon.CaughtPokeBallTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool CaughtPokeBallTest::RunTest(const FString &Parameters) {
+bool CaughtPokeBallTest::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(World.Get(), FPokemonDTO{.Species = "PORYGON"});
     auto &Settings = *GetDefault<UPokemonDataSettings>();

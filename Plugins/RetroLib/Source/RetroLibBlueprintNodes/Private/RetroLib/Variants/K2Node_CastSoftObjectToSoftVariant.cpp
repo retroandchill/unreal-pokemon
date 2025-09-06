@@ -9,18 +9,21 @@
 #include "RetroLib/Variants/VariantObjectStruct.h"
 #include "RetroLib/Variants/VariantObjectUtilities.h"
 
-void UK2Node_CastSoftObjectToSoftVariant::Initialize(UScriptStruct *Output) {
+void UK2Node_CastSoftObjectToSoftVariant::Initialize(UScriptStruct *Output)
+{
     OutputType = Output;
 }
 
-FText UK2Node_CastSoftObjectToSoftVariant::GetNodeTitle(ENodeTitleType::Type TitleType) const {
+FText UK2Node_CastSoftObjectToSoftVariant::GetNodeTitle(ENodeTitleType::Type TitleType) const
+{
     auto StructName =
         OutputType != nullptr ? OutputType->GetDisplayNameText() : FText::FromStringView(TEXT("<<INVALID>>"));
     return FText::FormatNamed(NSLOCTEXT("K2Node", "CastObjectToVariant_GetNodeTitle", "Cast to {Output}"),
                               TEXT("Output"), StructName);
 }
 
-FText UK2Node_CastSoftObjectToSoftVariant::GetTooltipText() const {
+FText UK2Node_CastSoftObjectToSoftVariant::GetTooltipText() const
+{
     auto StructName =
         OutputType != nullptr ? OutputType->GetDisplayNameText() : FText::FromStringView(TEXT("<<INVALID>>"));
     return FText::FormatNamed(
@@ -28,14 +31,16 @@ FText UK2Node_CastSoftObjectToSoftVariant::GetTooltipText() const {
         TEXT("Output"), StructName);
 }
 
-void UK2Node_CastSoftObjectToSoftVariant::CreateInputAndOutputPins() {
+void UK2Node_CastSoftObjectToSoftVariant::CreateInputAndOutputPins()
+{
     CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_SoftObject, UObject::StaticClass(), Retro::PN_SoftReference);
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct, OutputType != nullptr ? OutputType.Get() : nullptr,
               UEdGraphSchema_K2::PN_ReturnValue);
 }
 
 void UK2Node_CastSoftObjectToSoftVariant::AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
-                                                                  Retro::IVariantRegistration &Registration) const {
+                                                                  Retro::IVariantRegistration &Registration) const
+{
     using FCustomizeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate;
     auto CustomizeCallback = [](UEdGraphNode *Node, bool, UScriptStruct *Output) {
         auto TypedNode = CastChecked<UK2Node_CastSoftObjectToSoftVariant>(Node);
@@ -50,17 +55,19 @@ void UK2Node_CastSoftObjectToSoftVariant::AddMenuOptionsForStruct(FBlueprintActi
     ActionRegistrar.AddBlueprintAction(ActionKey, Spawner);
 }
 
-UEdGraphPin *UK2Node_CastSoftObjectToSoftVariant::GetInputPin() const {
+UEdGraphPin *UK2Node_CastSoftObjectToSoftVariant::GetInputPin() const
+{
     return FindPin(Retro::PN_SoftReference);
 }
 
-UEdGraphPin *UK2Node_CastSoftObjectToSoftVariant::GetOutputPin() const {
+UEdGraphPin *UK2Node_CastSoftObjectToSoftVariant::GetOutputPin() const
+{
     return FindPin(UEdGraphSchema_K2::PN_ReturnValue);
 }
 
-UK2Node_VariantCastBase::FCastFunctionInfo
-UK2Node_CastSoftObjectToSoftVariant::GetPerformCastNode(FKismetCompilerContext &CompilerContext,
-                                                        UEdGraph *SourceGraph) {
+UK2Node_VariantCastBase::FCastFunctionInfo UK2Node_CastSoftObjectToSoftVariant::GetPerformCastNode(
+    FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph)
+{
     const FName FunctionName = GET_FUNCTION_NAME_CHECKED(UVariantObjectUtilities, MakeSoftVariantFromSoftObjectChecked);
     auto CallCreateVariant = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
     CallCreateVariant->FunctionReference.SetExternalMember(FunctionName, UVariantObjectUtilities::StaticClass());

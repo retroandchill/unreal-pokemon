@@ -1,12 +1,14 @@
 ﻿#include "PokemonBlueprintNodes.h"
 #include "Data/PokemonDataGraphPinFactory.h"
 
-void FPokemonBlueprintNodesModule::StartupModule() {
+void FPokemonBlueprintNodesModule::StartupModule()
+{
     auto PinFactory = MakeShared<FPokemonDataGraphPinFactory>();
     FEdGraphUtilities::RegisterVisualPinFactory(PinFactory);
 }
 
-void FPokemonBlueprintNodesModule::ShutdownModule() {
+void FPokemonBlueprintNodesModule::ShutdownModule()
+{
     // No shutdown procedure
 }
 

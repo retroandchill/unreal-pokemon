@@ -16,7 +16,8 @@ class UStorageBoxWindow;
  * The screen for managing depositing and withdrawing Pokémon from the boxes.
  */
 UCLASS(Abstract)
-class POKEMONUI_API UPokemonStorageScreen : public UScreen {
+class POKEMONUI_API UPokemonStorageScreen : public UScreen
+{
     GENERATED_BODY()
 
   public:
@@ -32,12 +33,14 @@ class POKEMONUI_API UPokemonStorageScreen : public UScreen {
      * @return The window that displays the contents of the current box
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UStorageBoxWindow *GetStorageBoxWindow() const {
+    UStorageBoxWindow *GetStorageBoxWindow() const
+    {
         return StorageBoxWindow;
     }
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UStorageInfoPanel *GetStorageInfoPanel() const {
+    UStorageInfoPanel *GetStorageInfoPanel() const
+    {
         return StorageInfoPanel;
     }
 

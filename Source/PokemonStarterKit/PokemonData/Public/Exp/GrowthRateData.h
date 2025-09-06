@@ -11,7 +11,8 @@
  * Represents the data row used to retrieve the exp growth curves
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FGrowthRateData : public FIndexedTableRow {
+struct POKEMONDATA_API FGrowthRateData : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -25,7 +26,8 @@ struct POKEMONDATA_API FGrowthRateData : public FIndexedTableRow {
  * Blueprint function library for getting growth rate data out.
  */
 UCLASS()
-class POKEMONDATA_API UGrowthRateHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UGrowthRateHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

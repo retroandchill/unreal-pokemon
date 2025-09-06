@@ -8,13 +8,12 @@
 
 // This class does not need to be modified.
 UINTERFACE()
-class UMessageNode : public UInterface {
+class UMessageNode : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Marker interface used to denote a node that contains a message.
  */
-class POKEMONBLUEPRINTNODES_API IMessageNode {
-    GENERATED_BODY()
-};
+class POKEMONBLUEPRINTNODES_API IMessageNode{GENERATED_BODY()};

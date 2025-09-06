@@ -2,7 +2,8 @@
 
 #include "Battle/Tags.h"
 
-namespace Pokemon::Battle {
+namespace Pokemon::Battle
+{
 
     const UE_DEFINE_GAMEPLAY_TAG(HoldForComplete, "Battle.HoldForComplete");
     const UE_DEFINE_GAMEPLAY_TAG(StartAction, "Battle.Phase.Actions.StartAction");

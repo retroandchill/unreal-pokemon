@@ -15,7 +15,8 @@ class UPaperFlipbook;
  *
  */
 UCLASS()
-class PAPERZDHELPERS_API UPaperZDFlipbookHelpers : public UBlueprintFunctionLibrary {
+class PAPERZDHELPERS_API UPaperZDFlipbookHelpers : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

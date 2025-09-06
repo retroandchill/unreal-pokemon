@@ -9,7 +9,8 @@
 /**
  * The battle action for using a move
  */
-class POKEMONBATTLE_API FBattleActionUseMove : public FBattleActionBase {
+class POKEMONBATTLE_API FBattleActionUseMove : public FBattleActionBase
+{
   public:
     /**
      * Construct a new action with the given battler using the selected move

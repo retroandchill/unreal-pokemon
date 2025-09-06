@@ -6,7 +6,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetBattleStatsFromTable, "Unit Tests.Editor.TestGetBattleStatsFromTable",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestGetBattleStatsFromTable::RunTest(const FString &Parameters) {
+bool TestGetBattleStatsFromTable::RunTest(const FString &Parameters)
+{
     auto Stats = UStatHelper::GetBattleStatNames();
 
     UE_ASSERT_EQUAL(Stats.Num(), 7);

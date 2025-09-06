@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 
 /**
- * 
+ *
  */
 class GAMEDATAACCESSTOOLSEDITOR_API FDataHandlePropertyIdentifier final : public IPropertyTypeIdentifier
 {
-public:
-    bool IsPropertyTypeCustomized(const IPropertyHandle& PropertyHandle) const override;
+  public:
+    bool IsPropertyTypeCustomized(const IPropertyHandle &PropertyHandle) const override;
 };

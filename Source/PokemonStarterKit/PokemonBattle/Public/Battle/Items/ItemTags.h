@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "NativeGameplayTags.h"
 
-namespace Pokemon::Battle::Items {
+namespace Pokemon::Battle::Items
+{
 
     /**
      * Tag applied to a battler while they're using an item

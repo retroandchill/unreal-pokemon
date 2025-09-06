@@ -5,13 +5,16 @@
 #include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookEditorCommands.h"
 #include "SlateOptMacros.h"
 
-namespace Simple2D {
+namespace Simple2D
+{
     void SSimpleFlipbookEditorViewportToolbar::Construct(
-        const FArguments &, const TSharedPtr<ICommonEditorViewportToolbarInfoProvider> &InInfoProvider) {
+        const FArguments &, const TSharedPtr<ICommonEditorViewportToolbarInfoProvider> &InInfoProvider)
+    {
         SCommonEditorViewportToolbarBase::Construct(SCommonEditorViewportToolbarBase::FArguments(), InInfoProvider);
     }
 
-    TSharedRef<SWidget> SSimpleFlipbookEditorViewportToolbar::GenerateShowMenu() const {
+    TSharedRef<SWidget> SSimpleFlipbookEditorViewportToolbar::GenerateShowMenu() const
+    {
         GetInfoProvider().OnFloatingButtonClicked();
 
         TSharedRef<SEditorViewport> ViewportRef = GetInfoProvider().GetViewportWidget();

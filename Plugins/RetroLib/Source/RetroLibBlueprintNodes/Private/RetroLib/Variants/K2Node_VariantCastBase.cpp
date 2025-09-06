@@ -5,8 +5,10 @@
 #include "KismetCompiler.h"
 #include "RetroLib/Blueprints/BlueprintPins.h"
 
-void UK2Node_VariantCastBase::AllocateDefaultPins() {
-    if (!bIsPure) {
+void UK2Node_VariantCastBase::AllocateDefaultPins()
+{
+    if (!bIsPure)
+    {
         CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Exec, UEdGraphSchema_K2::PN_Execute);
         CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, UEdGraphSchema_K2::PN_Then);
         CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, UEdGraphSchema_K2::PN_CastFailed);
@@ -14,28 +16,34 @@ void UK2Node_VariantCastBase::AllocateDefaultPins() {
 
     CreateInputAndOutputPins();
 
-    if (bIsPure) {
+    if (bIsPure)
+    {
         CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Boolean, Retro::PN_CastSucceeded);
     }
 }
 
-bool UK2Node_VariantCastBase::IsNodePure() const {
+bool UK2Node_VariantCastBase::IsNodePure() const
+{
     return bIsPure;
 }
 
-FLinearColor UK2Node_VariantCastBase::GetNodeTitleColor() const {
+FLinearColor UK2Node_VariantCastBase::GetNodeTitleColor() const
+{
     return FLinearColor(0.0f, 0.55f, 0.62f);
 }
 
-FSlateIcon UK2Node_VariantCastBase::GetIconAndTint(FLinearColor &OutColor) const {
+FSlateIcon UK2Node_VariantCastBase::GetIconAndTint(FLinearColor &OutColor) const
+{
     static FSlateIcon Icon(FAppStyle::GetAppStyleSetName(), "GraphEditor.Cast_16x");
     return Icon;
 }
 
-void UK2Node_VariantCastBase::GetNodeContextMenuActions(UToolMenu *Menu, UGraphNodeContextMenuContext *Context) const {
+void UK2Node_VariantCastBase::GetNodeContextMenuActions(UToolMenu *Menu, UGraphNodeContextMenuContext *Context) const
+{
     Super::GetNodeContextMenuActions(Menu, Context);
 
-    if (Context->bIsDebugging) {
+    if (Context->bIsDebugging)
+    {
         return;
     }
 
@@ -47,7 +55,8 @@ void UK2Node_VariantCastBase::GetNodeContextMenuActions(UToolMenu *Menu, UGraphN
     bool bCanTogglePurity = true;
     auto CanExecutePurityToggle = [](bool const bInCanTogglePurity) { return bInCanTogglePurity; };
 
-    if (IsNodePure()) {
+    if (IsNodePure())
+    {
         MenuEntryTitle = NSLOCTEXT("UK2Node_VariantCastBase", "MakeImpureTitle", "Convert to impure cast");
         MenuEntryTooltip = NSLOCTEXT(
             "UK2Node_VariantCastBase", "MakeImpureTooltip",
@@ -57,7 +66,8 @@ void UK2Node_VariantCastBase::GetNodeContextMenuActions(UToolMenu *Menu, UGraphN
         check(K2Schema != nullptr)
 
         bCanTogglePurity = K2Schema->DoesGraphSupportImpureFunctions(GetGraph());
-        if (!bCanTogglePurity) {
+        if (!bCanTogglePurity)
+        {
             MenuEntryTooltip = NSLOCTEXT("UK2Node_VariantCastBase", "CannotMakeImpureTooltip",
                                          "This graph does not support impure calls (and you should therefore test the "
                                          "cast's result for validity).");
@@ -73,7 +83,8 @@ void UK2Node_VariantCastBase::GetNodeContextMenuActions(UToolMenu *Menu, UGraphN
                                    FIsActionChecked()));
 }
 
-void UK2Node_VariantCastBase::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
+void UK2Node_VariantCastBase::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph)
+{
     Super::ExpandNode(CompilerContext, SourceGraph);
 
     // FUNCTION NODE
@@ -93,7 +104,8 @@ void UK2Node_VariantCastBase::ExpandNode(FKismetCompilerContext &CompilerContext
 
     MakeAdditionalPinLinks(*CallPerformCast);
 
-    if (!bIsPure) {
+    if (!bIsPure)
+    {
         auto ExecPin = GetExecPin();
         auto ThenPin = GetThenPin();
         auto CastFailedPin = GetCastFailedPin();
@@ -104,26 +116,32 @@ void UK2Node_VariantCastBase::ExpandNode(FKismetCompilerContext &CompilerContext
         CompilerContext.MovePinLinksToIntermediate(*ExecPin, *BranchNode->GetExecPin());
         CompilerContext.MovePinLinksToIntermediate(*ThenPin, *BranchNode->GetThenPin());
         CompilerContext.MovePinLinksToIntermediate(*CastFailedPin, *BranchNode->GetElsePin());
-    } else {
+    }
+    else
+    {
         CompilerContext.MovePinLinksToIntermediate(*GetCastSucceededPin(), *CallCastResultPin);
     }
 
     BreakAllNodeLinks();
 }
 
-UEdGraphPin *UK2Node_VariantCastBase::GetCastFailedPin() const {
+UEdGraphPin *UK2Node_VariantCastBase::GetCastFailedPin() const
+{
     return FindPin(UEdGraphSchema_K2::PN_CastFailed);
 }
 
-void UK2Node_VariantCastBase::MakeAdditionalPinLinks(UK2Node &CallPerformCast) const {
+void UK2Node_VariantCastBase::MakeAdditionalPinLinks(UK2Node &CallPerformCast) const
+{
     // In the base class this is a no-op
 }
 
-UEdGraphPin *UK2Node_VariantCastBase::GetCastSucceededPin() const {
+UEdGraphPin *UK2Node_VariantCastBase::GetCastSucceededPin() const
+{
     return FindPin(Retro::PN_CastSucceeded);
 }
 
-void UK2Node_VariantCastBase::TogglePurity() {
+void UK2Node_VariantCastBase::TogglePurity()
+{
     const bool bIsNodePure = IsNodePure();
     const FText TransactionTitle =
         bIsNodePure ? NSLOCTEXT("UK2Node_VariantCastBase", "TogglePurityToImpure", "Convert to Impure Cast")
@@ -133,13 +151,16 @@ void UK2Node_VariantCastBase::TogglePurity() {
     SetPurity(!bIsNodePure);
 }
 
-void UK2Node_VariantCastBase::SetPurity(bool bPurity) {
-    if (bPurity == bIsPure) {
+void UK2Node_VariantCastBase::SetPurity(bool bPurity)
+{
+    if (bPurity == bIsPure)
+    {
         return;
     }
 
     bIsPure = bPurity;
-    if (Pins.Num() > 0) {
+    if (Pins.Num() > 0)
+    {
         ReconstructNode();
     }
 }

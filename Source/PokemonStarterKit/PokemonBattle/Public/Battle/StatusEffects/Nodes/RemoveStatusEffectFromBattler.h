@@ -15,7 +15,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatusEffectRemoved, bool, ReturnVa
  *
  */
 UCLASS(meta = (HideThen))
-class POKEMONBATTLE_API URemoveStatusEffectFromBattler : public UBlueprintCoroutineActionBase {
+class POKEMONBATTLE_API URemoveStatusEffectFromBattler : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

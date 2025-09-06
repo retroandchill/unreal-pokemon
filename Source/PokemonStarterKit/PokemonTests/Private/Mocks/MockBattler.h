@@ -12,7 +12,8 @@ THIRD_PARTY_INCLUDES_START
 #include <gmock/gmock.h>
 THIRD_PARTY_INCLUDES_END
 
-class FMockBattler : public IBattler {
+class FMockBattler : public IBattler
+{
     DECLARE_MOCK_INTERFACE(FMockBattler)
 
   public:

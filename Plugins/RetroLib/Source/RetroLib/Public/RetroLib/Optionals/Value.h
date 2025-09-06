@@ -14,12 +14,15 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Optionals {
+namespace Retro::Optionals
+{
 
-    struct FValueInvoker {
+    struct FValueInvoker
+    {
 
         template <OptionalType O>
-        constexpr decltype(auto) operator()(O &&Optional) const {
+        constexpr decltype(auto) operator()(O &&Optional) const
+        {
             RETROLIB_ASSERT(HasValue(std::forward<O>(Optional)));
             return Get(std::forward<O>(Optional));
         }

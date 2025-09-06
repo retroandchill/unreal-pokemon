@@ -9,9 +9,11 @@
 #include "Widgets/Colors/SColorBlock.h"
 #include <array>
 
-namespace Simple2D {
+namespace Simple2D
+{
 
-    void SSimpleFlipbookTimeline::Construct(const FArguments &InArgs, TSharedPtr<FUICommandList> InCommandList) {
+    void SSimpleFlipbookTimeline::Construct(const FArguments &InArgs, TSharedPtr<FUICommandList> InCommandList)
+    {
         FlipbookBeingEdited = InArgs._FlipbookBeingEdited;
         PlayTime = InArgs._PlayTime;
         OnSelectionChanged = InArgs._OnSelectionChanged;
@@ -67,45 +69,55 @@ namespace Simple2D {
         RebuildPerFrameBG();
     }
 
-    void SSimpleFlipbookTimeline::OnDragEnter(const FGeometry &MyGeometry, const FDragDropEvent &DragDropEvent) {
+    void SSimpleFlipbookTimeline::OnDragEnter(const FGeometry &MyGeometry, const FDragDropEvent &DragDropEvent)
+    {
         SCompoundWidget::OnDragEnter(MyGeometry, DragDropEvent);
 
         auto Operation = DragDropEvent.GetOperation();
-        if (!Operation.IsValid()) {
+        if (!Operation.IsValid())
+        {
             return;
         }
 
-        if (Operation->IsOfType<FKeyFrameDragDropOp>()) {
+        if (Operation->IsOfType<FKeyFrameDragDropOp>())
+        {
             const auto &FrameDragDropOp = StaticCastSharedPtr<FKeyFrameDragDropOp>(Operation);
             FrameDragDropOp->SetCanDropHere(true);
         }
     }
 
-    void SSimpleFlipbookTimeline::OnDragLeave(const FDragDropEvent &DragDropEvent) {
+    void SSimpleFlipbookTimeline::OnDragLeave(const FDragDropEvent &DragDropEvent)
+    {
         SCompoundWidget::OnDragLeave(DragDropEvent);
 
         auto Operation = DragDropEvent.GetOperation();
-        if (!Operation.IsValid()) {
+        if (!Operation.IsValid())
+        {
             return;
         }
 
-        if (Operation->IsOfType<FKeyFrameDragDropOp>()) {
+        if (Operation->IsOfType<FKeyFrameDragDropOp>())
+        {
             const auto &FrameDragDropOp = StaticCastSharedPtr<FKeyFrameDragDropOp>(Operation);
             FrameDragDropOp->SetCanDropHere(false);
         }
     }
 
-    FReply SSimpleFlipbookTimeline::OnDrop(const FGeometry &MyGeometry, const FDragDropEvent &DragDropEvent) {
+    FReply SSimpleFlipbookTimeline::OnDrop(const FGeometry &MyGeometry, const FDragDropEvent &DragDropEvent)
+    {
         bool bWasDropHandled = false;
 
         TSharedPtr<FDragDropOperation> Operation = DragDropEvent.GetOperation();
-        if (!Operation.IsValid()) {
+        if (!Operation.IsValid())
+        {
             return FReply::Unhandled();
         }
 
-        if (Operation->IsOfType<FKeyFrameDragDropOp>()) {
+        if (Operation->IsOfType<FKeyFrameDragDropOp>())
+        {
             const auto &FrameDragDropOp = StaticCastSharedPtr<FKeyFrameDragDropOp>(Operation);
-            if (auto *ThisFlipbook = FlipbookBeingEdited.Get(); ThisFlipbook != nullptr) {
+            if (auto *ThisFlipbook = FlipbookBeingEdited.Get(); ThisFlipbook != nullptr)
+            {
                 FrameDragDropOp->AppendToFlipbook(ThisFlipbook);
                 bWasDropHandled = true;
             }
@@ -116,8 +128,8 @@ namespace Simple2D {
 
     int32 SSimpleFlipbookTimeline::OnPaint(const FPaintArgs &Args, const FGeometry &AllottedGeometry,
                                            const FSlateRect &MyCullingRect, FSlateWindowElementList &OutDrawElements,
-                                           int32 LayerId, const FWidgetStyle &InWidgetStyle,
-                                           bool bParentEnabled) const {
+                                           int32 LayerId, const FWidgetStyle &InWidgetStyle, bool bParentEnabled) const
+    {
         LayerId = SCompoundWidget::OnPaint(Args, AllottedGeometry, MyCullingRect, OutDrawElements, LayerId,
                                            InWidgetStyle, bParentEnabled);
 
@@ -144,8 +156,10 @@ namespace Simple2D {
         return LayerId;
     }
 
-    FReply SSimpleFlipbookTimeline::OnMouseWheel(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) {
-        if (MouseEvent.IsControlDown()) {
+    FReply SSimpleFlipbookTimeline::OnMouseWheel(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent)
+    {
+        if (MouseEvent.IsControlDown())
+        {
             constexpr float DirectionScale = 0.08f;
             constexpr float MinFrameSize = 16.0f;
             const float Direction = MouseEvent.GetWheelDelta();
@@ -161,8 +175,10 @@ namespace Simple2D {
         return FReply::Unhandled();
     }
 
-    FReply SSimpleFlipbookTimeline::OnMouseButtonUp(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) {
-        if (MouseEvent.GetEffectingButton() == EKeys::RightMouseButton) {
+    FReply SSimpleFlipbookTimeline::OnMouseButtonUp(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent)
+    {
+        if (MouseEvent.GetEffectingButton() == EKeys::RightMouseButton)
+        {
             auto MenuContents = GenerateContextMenu();
             auto WidgetPath = MouseEvent.GetEventPath() != nullptr ? *MouseEvent.GetEventPath() : FWidgetPath();
             FSlateApplication::Get().PushMenu(AsShared(), WidgetPath, MenuContents, MouseEvent.GetScreenSpacePosition(),
@@ -175,16 +191,19 @@ namespace Simple2D {
     }
 
     void SSimpleFlipbookTimeline::Tick(const FGeometry &AllottedGeometry, const double InCurrentTime,
-                                       const float InDeltaTime) {
+                                       const float InDeltaTime)
+    {
         CheckForRebuild();
     }
 
-    void SSimpleFlipbookTimeline::RebuildPerFrameBG() {
+    void SSimpleFlipbookTimeline::RebuildPerFrameBG()
+    {
         constexpr std::array BackgroundColors = {FLinearColor(1.0f, 1.0f, 1.0f, 0.05f),
                                                  FLinearColor(0.0f, 0.0f, 0.0f, 0.05f)};
 
         BackgroundPerFrameSlices->ClearChildren();
-        for (int32 FrameIndex = 0; FrameIndex < NumFramesFromLastRebuild; ++FrameIndex) {
+        for (int32 FrameIndex = 0; FrameIndex < NumFramesFromLastRebuild; ++FrameIndex)
+        {
             const FLinearColor &BackgroundColorForFrameIndex = BackgroundColors[FrameIndex & 1];
 
             BackgroundPerFrameSlices->AddSlot().AutoWidth()[SNew(SBox).WidthOverride(
@@ -192,7 +211,8 @@ namespace Simple2D {
         }
     }
 
-    TSharedRef<SWidget> SSimpleFlipbookTimeline::GenerateContextMenu() {
+    TSharedRef<SWidget> SSimpleFlipbookTimeline::GenerateContextMenu()
+    {
         FMenuBuilder MenuBuilder(true, CommandList);
         MenuBuilder.BeginSection("KeyframeActions",
                                  NSLOCTEXT("Simple2D", "KeyframeActionsSectionHeader", "Keyframe Actions"));
@@ -204,30 +224,35 @@ namespace Simple2D {
         return MenuBuilder.MakeWidget();
     }
 
-    EVisibility SSimpleFlipbookTimeline::NoFramesWarningVisibility() const {
+    EVisibility SSimpleFlipbookTimeline::NoFramesWarningVisibility() const
+    {
         auto *Flipbook = FlipbookBeingEdited.Get();
         const int32 TotalNumFrames = Flipbook != nullptr ? Flipbook->GetNumFrames() : 0;
         return TotalNumFrames == 0 ? EVisibility::Visible : EVisibility::Collapsed;
     }
 
-    void SSimpleFlipbookTimeline::CheckForRebuild(bool bRebuildAll) {
+    void SSimpleFlipbookTimeline::CheckForRebuild(bool bRebuildAll)
+    {
         auto *Flipbook = FlipbookBeingEdited.Get();
 
         const int32 NewNumKeyframes = (Flipbook != nullptr) ? Flipbook->GetNumKeyFrames() : 0;
-        if ((NewNumKeyframes != NumKeyFramesFromLastRebuild) || bRebuildAll) {
+        if ((NewNumKeyframes != NumKeyFramesFromLastRebuild) || bRebuildAll)
+        {
             NumKeyFramesFromLastRebuild = NewNumKeyframes;
             TimelineTrack->Rebuild();
         }
 
         if (const int32 NewNumFrames = Flipbook != nullptr ? Flipbook->GetNumFrames() : 0;
-            NewNumFrames != NumFramesFromLastRebuild || bRebuildAll) {
+            NewNumFrames != NumFramesFromLastRebuild || bRebuildAll)
+        {
             NumFramesFromLastRebuild = NewNumFrames;
             TimelineHeader->Rebuild();
             RebuildPerFrameBG();
         }
     }
 
-    void SSimpleFlipbookTimeline::AnimationScrollBar_OnUserScrolled(float ScrollOffset) {
+    void SSimpleFlipbookTimeline::AnimationScrollBar_OnUserScrolled(float ScrollOffset)
+    {
         AnimationScrollBarPosition = ScrollOffset;
     }
 } // namespace Simple2D

@@ -12,7 +12,8 @@
  * failure upon the end of play.
  */
 UCLASS(Abstract)
-class AUTOMATIONTESTHELPERS_API ADestructionAssertTest : public AFunctionalTest {
+class AUTOMATIONTESTHELPERS_API ADestructionAssertTest : public AFunctionalTest
+{
     GENERATED_BODY()
 
   public:

@@ -12,6 +12,7 @@
  * The ability system component used by the battle actor.
  */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class POKEMONBATTLE_API UBattleAbilitySystemComponent : public UAsyncAbilityComponent {
+class POKEMONBATTLE_API UBattleAbilitySystemComponent : public UAsyncAbilityComponent
+{
     GENERATED_BODY()
 };

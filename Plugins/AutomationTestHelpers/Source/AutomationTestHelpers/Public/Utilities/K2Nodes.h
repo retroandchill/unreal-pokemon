@@ -3,8 +3,10 @@
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Kismet2/KismetEditorUtilities.h"
 
-struct FBlueprintDeleter {
-    void operator()(UBlueprint *TestBP) const {
+struct FBlueprintDeleter
+{
+    void operator()(UBlueprint *TestBP) const
+    {
         if (TestBP == nullptr)
             return;
 
@@ -13,8 +15,10 @@ struct FBlueprintDeleter {
     }
 };
 
-struct FGraphDeleter {
-    void operator()(UEdGraph *TestGraph) const {
+struct FGraphDeleter
+{
+    void operator()(UEdGraph *TestGraph) const
+    {
         if (TestGraph == nullptr)
             return;
 
@@ -93,4 +97,6 @@ struct FGraphDeleter {
     MakeTestPin(OwningNode, OutArray, QuatOutPin, UEdGraphSchema_K2::PC_Struct, EGPD_Output);                          \
     QuatOutPin->PinType.PinSubCategoryObject = TBaseStructure<FQuat>::Get()
 
-namespace K2::Nodes {}
+namespace K2::Nodes
+{
+}

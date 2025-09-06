@@ -11,22 +11,31 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Ranges {
+namespace Retro::Ranges
+{
 
     RETROLIB_EXPORT template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T>
-    class TClassView {
-        struct FIterator {
+    class TClassView
+    {
+        struct FIterator
+        {
             using value_type = std::conditional_t<std::derived_from<T, UObject>, TSubclassOf<T>, UClass *>;
             using difference_type = std::ptrdiff_t;
 
-            FIterator() {
-                if constexpr (UnrealInterface<T>) {
-                    while (Source && !Source->ImplementsInterface(T::UClassType::StaticClass())) {
+            FIterator()
+            {
+                if constexpr (UnrealInterface<T>)
+                {
+                    while (Source && !Source->ImplementsInterface(T::UClassType::StaticClass()))
+                    {
                         ++Source;
                     }
-                } else {
-                    while (Source && !Source->IsChildOf<T>()) {
+                }
+                else
+                {
+                    while (Source && !Source->IsChildOf<T>())
+                    {
                         ++Source;
                     }
                 }
@@ -52,20 +61,24 @@ namespace Retro::Ranges {
                 return *Source;
             }
 
-            UClass *operator->() const {
+            UClass *operator->() const
+            {
                 return *Source;
             }
 
-            bool operator==(const std::default_sentinel_t &) const {
+            bool operator==(const std::default_sentinel_t &) const
+            {
                 return !Source;
             }
 
             FIterator &operator++()
                 requires std::derived_from<T, UObject>
             {
-                while (true) {
+                while (true)
+                {
                     ++Source;
-                    if (!Source || Source->IsChildOf<T>()) {
+                    if (!Source || Source->IsChildOf<T>())
+                    {
                         break;
                     }
                 }
@@ -76,9 +89,11 @@ namespace Retro::Ranges {
             FIterator &operator++()
                 requires UnrealInterface<T>
             {
-                while (true) {
+                while (true)
+                {
                     ++Source;
-                    if (!Source || Source->ImplementsInterface(T::UClassType::StaticClass())) {
+                    if (!Source || Source->ImplementsInterface(T::UClassType::StaticClass()))
+                    {
                         break;
                     }
                 }
@@ -86,7 +101,8 @@ namespace Retro::Ranges {
                 return *this;
             }
 
-            void operator++(int) {
+            void operator++(int)
+            {
                 ++*this;
             }
 
@@ -97,11 +113,13 @@ namespace Retro::Ranges {
       public:
         TClassView() = default;
 
-        FIterator begin() const {
+        FIterator begin() const
+        {
             return FIterator();
         }
 
-        std::default_sentinel_t end() const {
+        std::default_sentinel_t end() const
+        {
             return std::default_sentinel_t();
         }
     };

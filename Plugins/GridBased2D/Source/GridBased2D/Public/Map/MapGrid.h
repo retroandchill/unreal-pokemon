@@ -13,14 +13,16 @@ class IGridMovable;
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable)
-class UMapGrid : public UInterface {
+class UMapGrid : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Interface used to define a basic map grid that is used by characters to determine movement.
  */
-class GRIDBASED2D_API IMapGrid {
+class GRIDBASED2D_API IMapGrid
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

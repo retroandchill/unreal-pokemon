@@ -14,7 +14,8 @@ struct FGameplayTag;
  * Utility functions for handling terrain tag related operations.
  */
 UCLASS()
-class MAPMETADATA_API UTerrainTagUtilities : public UBlueprintFunctionLibrary {
+class MAPMETADATA_API UTerrainTagUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

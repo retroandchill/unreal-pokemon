@@ -4,7 +4,8 @@
 
 #include "Modules/ModuleManager.h"
 
-class FRetroLibModule : public IModuleInterface {
+class FRetroLibModule : public IModuleInterface
+{
   public:
     /** IModuleInterface implementation */
     void StartupModule() override;

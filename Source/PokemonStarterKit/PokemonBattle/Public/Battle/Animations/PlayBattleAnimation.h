@@ -15,7 +15,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBattleAnimationComplete);
  * Play a battle animation and wait for it to complete
  */
 UCLASS(meta = (HideThen))
-class POKEMONBATTLE_API UPlayBattleAnimation : public UBlueprintCoroutineActionBase {
+class POKEMONBATTLE_API UPlayBattleAnimation : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

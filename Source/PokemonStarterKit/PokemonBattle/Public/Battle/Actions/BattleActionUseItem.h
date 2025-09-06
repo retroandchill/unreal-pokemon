@@ -8,7 +8,8 @@
 
 class IBattleMove;
 
-struct POKEMONBATTLE_API FItemTarget {
+struct POKEMONBATTLE_API FItemTarget
+{
     TVariant<TWeakInterfacePtr<IBattler>, TWeakInterfacePtr<IBattleMove>, FTargetWithIndex> Data;
 
     explicit FItemTarget(TWeakInterfacePtr<IBattler> &&Battler);
@@ -19,7 +20,8 @@ struct POKEMONBATTLE_API FItemTarget {
 /**
  *
  */
-class POKEMONBATTLE_API FBattleActionUseItem : public FBattleActionBase {
+class POKEMONBATTLE_API FBattleActionUseItem : public FBattleActionBase
+{
   public:
     FBattleActionUseItem(const TScriptInterface<IBattler> &Battler, FName ItemID, FItemTarget &&ItemTarget);
     FString GetReferencerName() const override;

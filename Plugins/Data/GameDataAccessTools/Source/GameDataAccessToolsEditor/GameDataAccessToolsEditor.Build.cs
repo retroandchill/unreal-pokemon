@@ -8,12 +8,12 @@ public class GameDataAccessToolsEditor : ModuleRules
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(
-	        ["Core", "UnrealSharpCore", "UnrealEd", "GameDataAccessTools"]
+            ["Core", "UnrealSharpCore", "UnrealEd", "GameDataAccessTools"]
         );
 
         PrivateDependencyModuleNames.AddRange(
-	        [
-		        "CoreUObject",
+            [
+                "CoreUObject",
                 "UnrealSharpBinds",
                 "Engine",
                 "Slate",
@@ -26,9 +26,9 @@ public class GameDataAccessToolsEditor : ModuleRules
                 "ToolWidgets",
                 "GameplayTags",
                 "GameplayTagsEditor",
-		        "Json",
-		        "JsonUtilities"
-	        ]
+                "Json",
+                "JsonUtilities",
+            ]
         );
     }
 }

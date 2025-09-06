@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "InjectableDependency.h"
 
-namespace UnrealInjector {
+namespace UnrealInjector
+{
 
     /**
      * Lookup the first injectable object type for the given type
@@ -14,7 +15,8 @@ namespace UnrealInjector {
      */
     template <typename T>
         requires Retro::UnrealInterface<T>
-    TOptional<UClass &> GetFirstInjectableObject() {
+    TOptional<UClass &> GetFirstInjectableObject()
+    {
         return GetFirstInjectableObject(T::UClassType::StaticClass());
     }
 
@@ -35,7 +37,8 @@ namespace UnrealInjector {
      */
     template <typename T, typename... A>
         requires Injectable<T> && CanInitialize<T, A...>
-    auto NewInjectedDependency(UObject *Outer, A &&...Args) {
+    auto NewInjectedDependency(UObject *Outer, A &&...Args)
+    {
         return TInjectionSettings<T>::Get().template Inject<A...>(Outer, std::forward<A>(Args)...);
     }
 

@@ -7,7 +7,8 @@
 /**
  * Editor module for the RPG Menus module
  */
-class FRPGMenusEditorModule : public IModuleInterface {
+class FRPGMenusEditorModule : public IModuleInterface
+{
   public:
     void StartupModule() override;
 

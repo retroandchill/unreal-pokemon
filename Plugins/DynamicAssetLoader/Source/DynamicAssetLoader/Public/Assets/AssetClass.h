@@ -9,7 +9,8 @@
 #include "RetroLib/Exceptions/TypeException.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 
-namespace UE::Assets {
+namespace UE::Assets
+{
 
     template <typename T>
     concept AssetKey = std::is_same_v<std::remove_cvref_t<T>, FName> || std::is_convertible_v<T, FStringView>;
@@ -22,13 +23,15 @@ namespace UE::Assets {
      */
     template <typename T>
         requires AssetClassType<T>
-    class TAssetClass {
+    class TAssetClass
+    {
       public:
         template <typename U>
         static constexpr bool ValidTemplateParam = (std::is_base_of_v<T, U> && std::is_base_of_v<UObject, T>) ||
                                                    (std::same_as<T, U> && Retro::VariantObjectStruct<T>);
 
-        const FName &GetKey() const {
+        const FName &GetKey() const
+        {
             return Key;
         }
 
@@ -38,7 +41,8 @@ namespace UE::Assets {
          * @param DefaultPath The default path to the asset, should be a valid game directory
          * @param DefaultPrefix The default prefix for the asset type
          */
-        explicit TAssetClass(FName Key, FStringView DefaultPath, FStringView DefaultPrefix = TEXT("")) : Key(Key) {
+        explicit TAssetClass(FName Key, FStringView DefaultPath, FStringView DefaultPrefix = TEXT("")) : Key(Key)
+        {
             FCoreDelegates::OnPostEngineInit.AddRaw(this, &TAssetClass::OnPostEngineInit, DefaultPath, DefaultPrefix);
         }
 
@@ -49,13 +53,17 @@ namespace UE::Assets {
          */
         template <typename U = T>
             requires ValidTemplateParam<U>
-        auto LoadAsset(FStringView AssetName) const {
+        auto LoadAsset(FStringView AssetName) const
+        {
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
             auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetClassData.AssetPrefix.Get(TEXT("")));
-            if constexpr (std::is_base_of_v<UObject, T>) {
+            if constexpr (std::is_base_of_v<UObject, T>)
+            {
                 return UAssetLoader::FindAssetByName<U>(AssetClassData.RootDirectory, FullName);
-            } else {
+            }
+            else
+            {
                 static_assert(Retro::VariantObjectStruct<T>);
                 return UAssetLoader::FindAssetByName(AssetClassData.RootDirectory, FullName) |
                        Retro::Optionals::Transform([](UObject &Object) { return T(&Object); });
@@ -69,20 +77,25 @@ namespace UE::Assets {
          */
         template <typename U = T>
             requires ValidTemplateParam<U>
-        auto LoadAsset(FName AssetName) const {
+        auto LoadAsset(FName AssetName) const
+        {
             return LoadAsset<U>(AssetName.ToString());
         }
 
         template <typename U = T>
             requires ValidTemplateParam<U>
-        auto LookupAsset(FStringView AssetName) const {
+        auto LookupAsset(FStringView AssetName) const
+        {
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
             auto FullName = UAssetUtilities::GetFullAssetName(AssetName, AssetClassData.AssetPrefix.Get(TEXT("")));
 
-            if constexpr (std::is_base_of_v<UObject, U>) {
+            if constexpr (std::is_base_of_v<UObject, U>)
+            {
                 return UAssetLoader::LookupAssetByName<T>(AssetClassData.RootDirectory, FullName);
-            } else {
+            }
+            else
+            {
                 static_assert(Retro::VariantObjectStruct<U>);
                 return UAssetLoader::LookupAssetByName(AssetClassData.RootDirectory, FullName) |
                        Retro::Optionals::Transform([](const TSoftObjectRef<> &Object) {
@@ -93,14 +106,16 @@ namespace UE::Assets {
 
         template <typename U = T>
             requires ValidTemplateParam<U>
-        auto LookupAsset(FName AssetName) const {
+        auto LookupAsset(FName AssetName) const
+        {
             return LookupAsset<U>(AssetName.ToString());
         }
 
         template <typename U = T, typename R>
             requires ValidTemplateParam<U> && std::ranges::input_range<R> &&
                      std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
-        auto ResolveAsset(R &&Assets) const {
+        auto ResolveAsset(R &&Assets) const
+        {
             using ElementType = Retro::TRangeCommonReference<R>;
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
@@ -111,9 +126,12 @@ namespace UE::Assets {
                                  return UAssetUtilities::GetFullAssetName(AssetName, Prefix);
                              });
             // clang-format on
-            if constexpr (std::is_base_of_v<UObject, T>) {
+            if constexpr (std::is_base_of_v<UObject, T>)
+            {
                 return UAssetLoader::ResolveAsset<U>(AssetClassData.RootDirectory, FullNames);
-            } else {
+            }
+            else
+            {
                 static_assert(Retro::VariantObjectStruct<T>);
                 return UAssetLoader::ResolveAsset(AssetClassData.RootDirectory, FullNames) |
                        Retro::Optionals::Transform([](UObject &Object) { return T(&Object); });
@@ -123,7 +141,8 @@ namespace UE::Assets {
         template <typename U = T, typename R>
             requires ValidTemplateParam<U> && std::ranges::input_range<R> &&
                      std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
-        auto ResolveSoftAsset(R &&Assets) const {
+        auto ResolveSoftAsset(R &&Assets) const
+        {
             using ElementType = Retro::TRangeCommonReference<R>;
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->AssetClasses.FindChecked(Key);
@@ -134,9 +153,12 @@ namespace UE::Assets {
                                  return UAssetUtilities::GetFullAssetName(AssetName, Prefix);
                              });
             // clang-format on
-            if constexpr (std::is_base_of_v<UObject, U>) {
+            if constexpr (std::is_base_of_v<UObject, U>)
+            {
                 return UAssetLoader::ResolveSoftAsset<U>(AssetClassData.RootDirectory, FullNames);
-            } else {
+            }
+            else
+            {
                 static_assert(Retro::VariantObjectStruct<U>);
                 return UAssetLoader::ResolveSoftAsset(AssetClassData.RootDirectory, FullNames) |
                        Retro::Optionals::Transform([](const TSoftObjectRef<> &Object) {
@@ -147,7 +169,8 @@ namespace UE::Assets {
 
         template <typename U = T, typename R>
             requires ValidTemplateParam<U> && std::ranges::input_range<R> && AssetKey<Retro::TRangeCommonReference<R>>
-        auto LoadAssets(R &&Assets) const {
+        auto LoadAssets(R &&Assets) const
+        {
             using ElementType = Retro::TRangeCommonReference<R>;
             // clang-format off
             return Assets |
@@ -160,7 +183,8 @@ namespace UE::Assets {
 
         template <typename U = T, typename R>
             requires ValidTemplateParam<U> && std::ranges::input_range<R> && AssetKey<Retro::TRangeCommonReference<R>>
-        auto LookupAssets(R &&Assets) const {
+        auto LookupAssets(R &&Assets) const
+        {
             using ElementType = Retro::TRangeCommonReference<R>;
             // clang-format off
             return Assets |
@@ -172,22 +196,30 @@ namespace UE::Assets {
         }
 
       private:
-        void OnPostEngineInit(FStringView DefaultAssetPath, FStringView DefaultPrefix) {
+        void OnPostEngineInit(FStringView DefaultAssetPath, FStringView DefaultPrefix)
+        {
             auto Settings = GetMutableDefault<UAssetLoadingSettings>();
-            if (Settings->AssetClasses.Contains(Key)) {
+            if (Settings->AssetClasses.Contains(Key))
+            {
                 auto &AssetClass = Settings->AssetClasses[Key];
-                if constexpr (std::is_base_of_v<UObject, T>) {
+                if constexpr (std::is_base_of_v<UObject, T>)
+                {
                     AssetClass.AssetClass.Set(T::StaticClass());
-                } else if constexpr (Retro::VariantObjectStruct<T>) {
+                }
+                else if constexpr (Retro::VariantObjectStruct<T>)
+                {
                     AssetClass.AssetClass.Set(Retro::GetScriptStruct<T>());
                 }
                 return;
             }
 
-            if constexpr (std::is_base_of_v<UObject, T>) {
+            if constexpr (std::is_base_of_v<UObject, T>)
+            {
                 Settings->AssetClasses.Emplace(
                     Key, FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, T::StaticClass()));
-            } else if constexpr (Retro::VariantObjectStruct<T>) {
+            }
+            else if constexpr (Retro::VariantObjectStruct<T>)
+            {
                 Settings->AssetClasses.Emplace(
                     Key, FAssetLoadingEntry(Key, DefaultAssetPath, DefaultPrefix, Retro::GetScriptStruct<T>()));
             }
@@ -198,7 +230,8 @@ namespace UE::Assets {
 
     template <typename T>
         requires std::is_base_of_v<UObject, T>
-    class TBlueprintClass {
+    class TBlueprintClass
+    {
       public:
         /**
          * Construct a new asset object using this loader
@@ -206,7 +239,8 @@ namespace UE::Assets {
          * @param DefaultPath The default path to the asset, should be a valid game directory
          * @param DefaultPrefix The default prefix for the asset type
          */
-        explicit TBlueprintClass(FName Key, FStringView DefaultPath, FStringView DefaultPrefix = TEXT("")) : Key(Key) {
+        explicit TBlueprintClass(FName Key, FStringView DefaultPath, FStringView DefaultPrefix = TEXT("")) : Key(Key)
+        {
             FCoreDelegates::OnPostEngineInit.AddRaw(this, &TBlueprintClass::OnPostEngineInit, DefaultPath,
                                                     DefaultPrefix);
         }
@@ -218,7 +252,8 @@ namespace UE::Assets {
          */
         template <typename U = T>
             requires std::is_base_of_v<T, U>
-        TOptional<TNonNullSubclassOf<U>> LoadClass(FStringView ClassName) const {
+        TOptional<TNonNullSubclassOf<U>> LoadClass(FStringView ClassName) const
+        {
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->BlueprintClasses.FindChecked(Key);
             auto FullName = UAssetUtilities::GetFullAssetName(ClassName, AssetClassData.AssetPrefix.Get(TEXT("")));
@@ -232,8 +267,10 @@ namespace UE::Assets {
          */
         template <typename U = T>
             requires std::is_base_of_v<T, U>
-        TOptional<TNonNullSubclassOf<U>> LoadClass(FName ClassName) const {
-            if (ClassName.IsNone()) {
+        TOptional<TNonNullSubclassOf<U>> LoadClass(FName ClassName) const
+        {
+            if (ClassName.IsNone())
+            {
                 return TOptional<TNonNullSubclassOf<U>>();
             }
             return LoadClass<U>(ClassName.ToString());
@@ -242,7 +279,8 @@ namespace UE::Assets {
         template <typename U = T, typename R>
             requires std::is_base_of_v<T, U> && std::ranges::input_range<R> &&
                      std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
-        TOptional<TNonNullSubclassOf<U>> ResolveClass(R &&Assets) const {
+        TOptional<TNonNullSubclassOf<U>> ResolveClass(R &&Assets) const
+        {
             using ElementType = Retro::TRangeCommonReference<R>;
             auto Settings = GetDefault<UAssetLoadingSettings>();
             auto AssetClassData = Settings->BlueprintClasses.FindChecked(Key);
@@ -258,7 +296,8 @@ namespace UE::Assets {
 
         template <typename U = T, typename R>
             requires std::is_base_of_v<U, T> && std::ranges::input_range<R> && AssetKey<Retro::TRangeCommonReference<R>>
-        TArray<TOptional<TNonNullSubclassOf<U>>> LoadClasses(R &&Classes) const {
+        TArray<TOptional<TNonNullSubclassOf<U>>> LoadClasses(R &&Classes) const
+        {
             using ElementType = Retro::TRangeCommonReference<R>;
             // clang-format off
             return Classes |
@@ -270,9 +309,11 @@ namespace UE::Assets {
         }
 
       private:
-        void OnPostEngineInit(FStringView DefaultAssetPath, FStringView DefaultPrefix) {
+        void OnPostEngineInit(FStringView DefaultAssetPath, FStringView DefaultPrefix)
+        {
             auto Settings = GetMutableDefault<UAssetLoadingSettings>();
-            if (Settings->BlueprintClasses.Contains(Key)) {
+            if (Settings->BlueprintClasses.Contains(Key))
+            {
                 Settings->BlueprintClasses[Key].AssetClass.Set(T::StaticClass());
                 return;
             }
@@ -287,7 +328,8 @@ namespace UE::Assets {
     /**
      * Opaque registration information for an asset class.
      */
-    class IAssetClassRegistration {
+    class IAssetClassRegistration
+    {
       public:
         virtual ~IAssetClassRegistration() = default;
 
@@ -314,20 +356,26 @@ namespace UE::Assets {
 
     template <typename T>
         requires AssetClassType<T>
-    class TAssetClassRegistrationImpl : public IAssetClassRegistration {
+    class TAssetClassRegistrationImpl : public IAssetClassRegistration
+    {
       public:
-        explicit TAssetClassRegistrationImpl(const TAssetClass<T> &AssetClass) : AssetClass(AssetClass) {
+        explicit TAssetClassRegistrationImpl(const TAssetClass<T> &AssetClass) : AssetClass(AssetClass)
+        {
         }
 
-        bool LoadAsset(FStringView AssetName, const FProperty &Property, uint8 *Data) const override {
+        bool LoadAsset(FStringView AssetName, const FProperty &Property, uint8 *Data) const override
+        {
             auto Result = AssetClass.LoadAsset(AssetName);
-            if (!Result.IsSet()) {
+            if (!Result.IsSet())
+            {
                 return false;
             }
 
-            if constexpr (Retro::VariantObjectStruct<T>) {
+            if constexpr (Retro::VariantObjectStruct<T>)
+            {
                 if (auto StructProperty = CastField<FStructProperty>(&Property);
-                    StructProperty == nullptr || StructProperty->Struct.Get() != Retro::GetScriptStruct<T>()) {
+                    StructProperty == nullptr || StructProperty->Struct.Get() != Retro::GetScriptStruct<T>())
+                {
                     throw Retro::FTypeException(
                         "Incompatible output parameter; the supplied struct does not have the same layout as "
                         "what is expected for a variant object struct.");
@@ -336,10 +384,13 @@ namespace UE::Assets {
                 void *StructPtr = Data;
                 auto &Struct = *static_cast<T *>(StructPtr);
                 Struct = *Result;
-            } else {
+            }
+            else
+            {
                 static_assert(std::derived_from<T, UObject>);
                 auto ObjectProperty = CastField<FObjectProperty>(&Property);
-                if (ObjectProperty == nullptr || !ObjectProperty->PropertyClass->IsChildOf<T>()) {
+                if (ObjectProperty == nullptr || !ObjectProperty->PropertyClass->IsChildOf<T>())
+                {
                     throw Retro::FTypeException("Incompatible output parameter; the supplied object does is "
                                                 "not of the correct type for this object.");
                 }
@@ -350,16 +401,20 @@ namespace UE::Assets {
             return true;
         }
 
-        bool LookupAsset(FStringView AssetName, const FProperty &Property, uint8 *Data) const override {
+        bool LookupAsset(FStringView AssetName, const FProperty &Property, uint8 *Data) const override
+        {
             auto Result = AssetClass.LookupAsset(AssetName);
-            if (!Result.IsSet()) {
+            if (!Result.IsSet())
+            {
                 return false;
             }
 
-            if constexpr (Retro::VariantObjectStruct<T>) {
+            if constexpr (Retro::VariantObjectStruct<T>)
+            {
                 if (auto StructProperty = CastField<FStructProperty>(&Property);
                     StructProperty == nullptr ||
-                    StructProperty->Struct.Get() != Retro::GetScriptStruct<typename T::SoftPtrType>()) {
+                    StructProperty->Struct.Get() != Retro::GetScriptStruct<typename T::SoftPtrType>())
+                {
                     throw Retro::FTypeException(
                         "Incompatible output parameter; the supplied struct does not have the same layout as "
                         "what is expected for a variant object struct.");
@@ -368,10 +423,13 @@ namespace UE::Assets {
                 void *StructPtr = Data;
                 auto &Struct = *static_cast<typename T::SoftPtrType *>(StructPtr);
                 Struct = *Result;
-            } else {
+            }
+            else
+            {
                 static_assert(std::derived_from<T, UObject>);
                 auto ObjectProperty = CastField<FSoftObjectProperty>(&Property);
-                if (ObjectProperty == nullptr || ObjectProperty->PropertyClass->IsChildOf<T>()) {
+                if (ObjectProperty == nullptr || ObjectProperty->PropertyClass->IsChildOf<T>())
+                {
                     throw Retro::FTypeException("Incompatible output parameter; the supplied object does is "
                                                 "not of the correct type for this object.");
                 }
@@ -386,7 +444,8 @@ namespace UE::Assets {
         const TAssetClass<T> AssetClass;
     };
 
-    class DYNAMICASSETLOADER_API FAssetClassRegistry {
+    class DYNAMICASSETLOADER_API FAssetClassRegistry
+    {
         FAssetClassRegistry() = default;
         ~FAssetClassRegistry() = default;
 
@@ -400,10 +459,12 @@ namespace UE::Assets {
 
         template <typename T>
             requires AssetClassType<T>
-        bool RegisterAssetClass(const TAssetClass<T> &Registration) {
+        bool RegisterAssetClass(const TAssetClass<T> &Registration)
+        {
             FCoreDelegates::OnPostEngineInit | Retro::Delegates::Add([this, &Registration] {
                 auto Key = Registration.GetKey();
-                if (AssetClassRegistry.Contains(Key)) {
+                if (AssetClassRegistry.Contains(Key))
+                {
                     return;
                 }
 

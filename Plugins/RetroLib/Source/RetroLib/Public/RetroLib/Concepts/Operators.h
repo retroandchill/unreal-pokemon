@@ -15,7 +15,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * Checks if the two types have the equality (==) operator.
      *

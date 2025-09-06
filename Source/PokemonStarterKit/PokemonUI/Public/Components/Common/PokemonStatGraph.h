@@ -23,9 +23,11 @@ class IPokemon;
  * Main functionalities include setting stat values, updating the graph,
  * and drawing the stat graph on the screen.
  */
-class POKEMONUI_API SPokemonStatGraph : public SCompoundWidget {
+class POKEMONUI_API SPokemonStatGraph : public SCompoundWidget
+{
   public:
-    SLATE_BEGIN_ARGS(SPokemonStatGraph) : _DefaultAngleOffset(0.f), _MinimumDesiredSize(FVector2D(250)) {
+    SLATE_BEGIN_ARGS(SPokemonStatGraph) : _DefaultAngleOffset(0.f), _MinimumDesiredSize(FVector2D(250))
+        {
         }
 
         SLATE_ARGUMENT(TArray<FMainStatHandle>, StatNames)
@@ -68,7 +70,8 @@ class POKEMONUI_API SPokemonStatGraph : public SCompoundWidget {
          * @return A constant reference to a TWeakInterfacePtr object representing
          *         a weak pointer to the IPokemon interface.
          */
-        const TWeakInterfacePtr<IPokemon> &GetPokemon() const {
+        const TWeakInterfacePtr<IPokemon> &GetPokemon() const
+        {
             return Pokemon;
         }
 
@@ -81,7 +84,8 @@ class POKEMONUI_API SPokemonStatGraph : public SCompoundWidget {
          *
          * @param InPokemon The Pokémon object to be set.
          */
-        void SetPokemon(const TScriptInterface<IPokemon> &InPokemon) {
+        void SetPokemon(const TScriptInterface<IPokemon> &InPokemon)
+        {
             Pokemon = InPokemon;
         }
 
@@ -95,7 +99,8 @@ class POKEMONUI_API SPokemonStatGraph : public SCompoundWidget {
          *
          * @return A reference to the FLinearColor object representing the grid lines color.
          */
-        const FLinearColor &GetGridLinesColor() const {
+        const FLinearColor &GetGridLinesColor() const
+        {
             return GridLinesColor;
         }
 
@@ -108,7 +113,8 @@ class POKEMONUI_API SPokemonStatGraph : public SCompoundWidget {
          *
          * @param InGridLinesColor The new color to be used for the grid lines.
          */
-        void SetGridLinesColor(const FLinearColor &InGridLinesColor) {
+        void SetGridLinesColor(const FLinearColor &InGridLinesColor)
+        {
             GridLinesColor = InGridLinesColor;
         }
 
@@ -122,7 +128,8 @@ class POKEMONUI_API SPokemonStatGraph : public SCompoundWidget {
          *
          * @return A reference to the FLinearColor object representing the node lines color.
          */
-        const FLinearColor &GetNodeLinesColor() const {
+        const FLinearColor &GetNodeLinesColor() const
+        {
             return NodeLinesColor;
         }
 
@@ -134,7 +141,8 @@ class POKEMONUI_API SPokemonStatGraph : public SCompoundWidget {
          *
          * @param InNodeLinesColor The new color to be used for the node lines.
          */
-        void SetNodeLinesColor(const FLinearColor &InNodeLinesColor) {
+        void SetNodeLinesColor(const FLinearColor &InNodeLinesColor)
+        {
             NodeLinesColor = InNodeLinesColor;
         }
 
@@ -147,7 +155,8 @@ class POKEMONUI_API SPokemonStatGraph : public SCompoundWidget {
          * @return A reference to the TAttribute<FVector2D> object representing
          * the minimum desired size of the stat graph.
          */
-        const TAttribute<FVector2D> &GetMinimumDesiredSize() const {
+        const TAttribute<FVector2D> &GetMinimumDesiredSize() const
+        {
             return MinimumDesiredSize;
         }
 
@@ -160,7 +169,8 @@ class POKEMONUI_API SPokemonStatGraph : public SCompoundWidget {
          * @param InMinimumDesiredSize The attribute containing the new minimum desired size
          *        for the stat graph.
          */
-        void SetMinimumDesiredSize(const TAttribute<FVector2D> &InMinimumDesiredSize) {
+        void SetMinimumDesiredSize(const TAttribute<FVector2D> &InMinimumDesiredSize)
+        {
             MinimumDesiredSize = InMinimumDesiredSize;
         }
 

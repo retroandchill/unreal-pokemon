@@ -20,7 +20,8 @@ class UImage;
  * Screen for displaying a Pokémon's summary.
  */
 UCLASS(Abstract)
-class POKEMONUI_API UPokemonSummaryScreen : public UScreen {
+class POKEMONUI_API UPokemonSummaryScreen : public UScreen
+{
     GENERATED_BODY()
 
   public:

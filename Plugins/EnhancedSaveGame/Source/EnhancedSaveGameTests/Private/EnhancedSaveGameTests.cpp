@@ -1,10 +1,12 @@
 ﻿#include "EnhancedSaveGameTests.h"
 
-void FEnhancedSaveGameTestsModule::StartupModule() {
+void FEnhancedSaveGameTestsModule::StartupModule()
+{
     // No implementation
 }
 
-void FEnhancedSaveGameTestsModule::ShutdownModule() {
+void FEnhancedSaveGameTestsModule::ShutdownModule()
+{
     // No implementation
 }
 

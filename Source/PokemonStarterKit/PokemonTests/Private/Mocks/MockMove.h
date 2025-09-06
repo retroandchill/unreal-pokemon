@@ -12,7 +12,8 @@ THIRD_PARTY_INCLUDES_START
 #include <gmock/gmock.h>
 THIRD_PARTY_INCLUDES_END
 
-class FMockMove : public IMove {
+class FMockMove : public IMove
+{
     DECLARE_MOCK_INTERFACE(FMockMove)
 
   public:

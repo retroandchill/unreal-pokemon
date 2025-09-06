@@ -2,8 +2,10 @@
 
 #include "Saving/Serialization/EnhancedSaveGame.h"
 
-bool UEnhancedSaveGame::AddObjectToSaveGame(const FGameplayTag &Tag, const TScriptInterface<ISerializable> &Object) {
-    if (Data.Contains(Tag)) {
+bool UEnhancedSaveGame::AddObjectToSaveGame(const FGameplayTag &Tag, const TScriptInterface<ISerializable> &Object)
+{
+    if (Data.Contains(Tag))
+    {
         return false;
     }
 
@@ -11,13 +13,16 @@ bool UEnhancedSaveGame::AddObjectToSaveGame(const FGameplayTag &Tag, const TScri
     return true;
 }
 
-UObject *UEnhancedSaveGame::LoadObjectFromSaveGame(const TSubclassOf<UObject> &Class, const FGameplayTag &Tag) const {
+UObject *UEnhancedSaveGame::LoadObjectFromSaveGame(const TSubclassOf<UObject> &Class, const FGameplayTag &Tag) const
+{
     auto SerializedObject = Data.Find(Tag);
-    if (SerializedObject == nullptr) {
+    if (SerializedObject == nullptr)
+    {
         return nullptr;
     }
 
-    if (!Class->IsChildOf(SerializedObject->ObjectClass)) {
+    if (!Class->IsChildOf(SerializedObject->ObjectClass))
+    {
         return nullptr;
     }
 
@@ -25,13 +30,16 @@ UObject *UEnhancedSaveGame::LoadObjectFromSaveGame(const TSubclassOf<UObject> &C
 }
 
 bool UEnhancedSaveGame::LoadDataIntoObject(const FGameplayTag &Tag,
-                                           const TScriptInterface<ISerializable> &TargetObject) const {
+                                           const TScriptInterface<ISerializable> &TargetObject) const
+{
     auto SerializedObject = Data.Find(Tag);
-    if (!IsValid(TargetObject.GetObject()) || SerializedObject == nullptr) {
+    if (!IsValid(TargetObject.GetObject()) || SerializedObject == nullptr)
+    {
         return false;
     }
 
-    if (!TargetObject.GetObject()->IsA(SerializedObject->ObjectClass)) {
+    if (!TargetObject.GetObject()->IsA(SerializedObject->ObjectClass))
+    {
         return false;
     }
 

@@ -16,7 +16,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemSelected, FName, ItemID, int
  * Selection pane used to select items for usage in battle.
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UBattleItemSelectPane : public USelectableWidget {
+class POKEMONBATTLEUI_API UBattleItemSelectPane : public USelectableWidget
+{
     GENERATED_BODY()
 
   public:

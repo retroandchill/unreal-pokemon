@@ -8,7 +8,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDataStructHandle, "Unit Tests.Data.TestDataStructHandle",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestDataStructHandle::RunTest(const FString &Parameters) {
+bool TestDataStructHandle::RunTest(const FString &Parameters)
+{
     Pokemon::Data::FStructWrapper WrappedStruct(FSpeciesHandle::StaticStruct());
 
     UE_ASSERT_TRUE(WrappedStruct.GetStruct() == FSpeciesHandle::StaticStruct());

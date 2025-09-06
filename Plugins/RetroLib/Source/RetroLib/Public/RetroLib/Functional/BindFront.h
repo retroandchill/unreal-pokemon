@@ -19,7 +19,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * @brief A structure that binds a set of arguments (ArgsTuple) to the front of a functor, enabling calls with
      * additional arguments.
@@ -36,7 +37,8 @@ namespace Retro {
      */
     template <auto Functor, typename... A>
         requires(IsValidFunctorObject(Functor))
-    struct TBindFrontConstInvoker {
+    struct TBindFrontConstInvoker
+    {
         using F = decltype(Functor);
         using ArgsTuple = std::tuple<A...>;
 
@@ -56,7 +58,8 @@ namespace Retro {
          */
         template <typename... T>
             requires std::constructible_from<ArgsTuple, T...> && (!PackSameAs<TBindFrontConstInvoker, T...>)
-        constexpr explicit TBindFrontConstInvoker(T &&...Args) : args(std::forward<T>(Args)...) {
+        constexpr explicit TBindFrontConstInvoker(T &&...Args) : args(std::forward<T>(Args)...)
+        {
         }
 
         /**
@@ -77,7 +80,8 @@ namespace Retro {
          */
         template <typename... T>
             requires std::invocable<F, A &..., T...>
-        constexpr decltype(auto) operator()(T &&...CallArgs) & noexcept(std::is_nothrow_invocable_v<F, A &..., T...>) {
+        constexpr decltype(auto) operator()(T &&...CallArgs) & noexcept(std::is_nothrow_invocable_v<F, A &..., T...>)
+        {
             return std::apply(
                 [&]<typename... U>(U &&...FinalArgs) -> decltype(auto) {
                     return std::invoke(Functor, std::forward<U>(FinalArgs)..., std::forward<T>(CallArgs)...);
@@ -103,8 +107,9 @@ namespace Retro {
          */
         template <typename... T>
             requires std::invocable<F, const A &..., T...>
-        constexpr decltype(auto)
-        operator()(T &&...CallArgs) const & noexcept(std::is_nothrow_invocable_v<F, const A &..., T...>) {
+        constexpr decltype(auto) operator()(T &&...CallArgs) const & noexcept(
+            std::is_nothrow_invocable_v<F, const A &..., T...>)
+        {
             return std::apply(
                 [&]<typename... U>(U &&...FinalArgs) -> decltype(auto) {
                     return std::invoke(Functor, std::forward<U>(FinalArgs)..., std::forward<T>(CallArgs)...);
@@ -130,7 +135,8 @@ namespace Retro {
          */
         template <typename... T>
             requires std::invocable<F, A..., T...>
-        constexpr decltype(auto) operator()(T &&...CallArgs) && noexcept(std::is_nothrow_invocable_v<F, A..., T...>) {
+        constexpr decltype(auto) operator()(T &&...CallArgs) && noexcept(std::is_nothrow_invocable_v<F, A..., T...>)
+        {
             return std::apply(
                 [&]<typename... U>(U &&...FinalArgs) -> decltype(auto) {
                     return std::invoke(Functor, std::forward<U>(FinalArgs)..., std::forward<T>(CallArgs)...);
@@ -160,7 +166,8 @@ namespace Retro {
      */
     template <auto Functor, typename A>
         requires(IsValidFunctorObject(Functor))
-    struct TBindFrontConstInvoker<Functor, A> {
+    struct TBindFrontConstInvoker<Functor, A>
+    {
         using F = decltype(Functor);
 
         /**
@@ -182,7 +189,8 @@ namespace Retro {
          */
         template <typename T>
             requires std::convertible_to<T, A> && (!std::same_as<std::decay_t<T>, TBindFrontConstInvoker>)
-        constexpr explicit TBindFrontConstInvoker(T &&Arg) : Arg(std::forward<T>(Arg)) {
+        constexpr explicit TBindFrontConstInvoker(T &&Arg) : Arg(std::forward<T>(Arg))
+        {
         }
 
         /**
@@ -203,7 +211,8 @@ namespace Retro {
          */
         template <typename... T>
             requires std::invocable<F, A &, T...>
-        constexpr decltype(auto) operator()(T &&...CallArgs) & noexcept(std::is_nothrow_invocable_v<F, A &, T...>) {
+        constexpr decltype(auto) operator()(T &&...CallArgs) & noexcept(std::is_nothrow_invocable_v<F, A &, T...>)
+        {
             return std::invoke(Functor, Arg, std::forward<T>(CallArgs)...);
         }
 
@@ -225,8 +234,9 @@ namespace Retro {
          */
         template <typename... T>
             requires std::invocable<F, const A &, T...>
-        constexpr decltype(auto)
-        operator()(T &&...CallArgs) const & noexcept(std::is_nothrow_invocable_v<F, const A &, T...>) {
+        constexpr decltype(auto) operator()(T &&...CallArgs) const & noexcept(
+            std::is_nothrow_invocable_v<F, const A &, T...>)
+        {
             return std::invoke(Functor, Arg, std::forward<T>(CallArgs)...);
         }
 
@@ -248,7 +258,8 @@ namespace Retro {
          */
         template <typename... T>
             requires std::invocable<F, A, T...>
-        constexpr decltype(auto) operator()(T &&...CallArgs) && noexcept(std::is_nothrow_invocable_v<F, A, T...>) {
+        constexpr decltype(auto) operator()(T &&...CallArgs) && noexcept(std::is_nothrow_invocable_v<F, A, T...>)
+        {
             return std::invoke(Functor, std::move(Arg), std::forward<T>(CallArgs)...);
         }
 
@@ -280,7 +291,8 @@ namespace Retro {
      */
     template <auto Functor, typename A, typename B>
         requires(IsValidFunctorObject(Functor))
-    struct TBindFrontConstInvoker<Functor, A, B> {
+    struct TBindFrontConstInvoker<Functor, A, B>
+    {
         using F = decltype(Functor);
 
         /**
@@ -301,8 +313,8 @@ namespace Retro {
          */
         template <typename T, typename U>
             requires std::convertible_to<T, A> && std::convertible_to<U, B>
-        constexpr TBindFrontConstInvoker(T &&Arg1, U &&Arg2)
-            : Arg1(std::forward<T>(Arg1)), Arg2(std::forward<U>(Arg2)) {
+        constexpr TBindFrontConstInvoker(T &&Arg1, U &&Arg2) : Arg1(std::forward<T>(Arg1)), Arg2(std::forward<U>(Arg2))
+        {
         }
 
         /**
@@ -323,8 +335,8 @@ namespace Retro {
          */
         template <typename... T>
             requires std::invocable<F, A &, B &, T...>
-        constexpr decltype(auto)
-        operator()(T &&...CallArgs) & noexcept(std::is_nothrow_invocable_v<F, A &, B &, T...>) {
+        constexpr decltype(auto) operator()(T &&...CallArgs) & noexcept(std::is_nothrow_invocable_v<F, A &, B &, T...>)
+        {
             return std::invoke(Functor, Arg1, Arg2, std::forward<T>(CallArgs)...);
         }
 
@@ -346,8 +358,9 @@ namespace Retro {
          */
         template <typename... T>
             requires std::invocable<F, const A &, const B &, T...>
-        constexpr decltype(auto)
-        operator()(T &&...CallArgs) const & noexcept(std::is_nothrow_invocable_v<F, const A &, const B &, T...>) {
+        constexpr decltype(auto) operator()(T &&...CallArgs) const & noexcept(
+            std::is_nothrow_invocable_v<F, const A &, const B &, T...>)
+        {
             return std::invoke(Functor, Arg1, Arg2, std::forward<T>(CallArgs)...);
         }
 
@@ -369,7 +382,8 @@ namespace Retro {
          */
         template <typename... T>
             requires std::invocable<F, A, B, T...>
-        constexpr decltype(auto) operator()(T &&...CallArgs) && noexcept(std::is_nothrow_invocable_v<F, A, B, T...>) {
+        constexpr decltype(auto) operator()(T &&...CallArgs) && noexcept(std::is_nothrow_invocable_v<F, A, B, T...>)
+        {
             return std::invoke(Functor, std::move(Arg1), std::move(Arg2), std::forward<T>(CallArgs)...);
         }
 
@@ -397,7 +411,8 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <auto Functor, typename... A>
         requires(IsValidFunctorObject(Functor))
-    constexpr auto BindFront(A &&...Args) {
+    constexpr auto BindFront(A &&...Args)
+    {
         return TBindFrontConstInvoker<Functor, std::decay_t<A>...>(std::forward<A>(Args)...);
     }
 } // namespace Retro

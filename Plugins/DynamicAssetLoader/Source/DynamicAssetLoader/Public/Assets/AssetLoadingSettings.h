@@ -10,7 +10,8 @@
 
 #include "AssetLoadingSettings.generated.h"
 
-namespace UE::Assets {
+namespace UE::Assets
+{
     template <typename T>
     concept AssetClassType = std::is_base_of_v<UObject, T> || Retro::VariantObjectStruct<T>;
 
@@ -28,7 +29,8 @@ struct FSoftAssetClassType;
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FAssetClassType
 #if CPP
-    : Retro::TVariantObject<UClass, UScriptStruct> {
+    : Retro::TVariantObject<UClass, UScriptStruct>
+{
 #else
 {
 #endif
@@ -49,7 +51,8 @@ RETRO_DECLARE_VARIANT_OBJECT_STRUCT(FAssetClassType);
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FSoftAssetClassType
 #if CPP
-    : Retro::TSoftVariantObject<FAssetClassType> {
+    : Retro::TSoftVariantObject<FAssetClassType>
+{
 #else
 {
 #endif
@@ -68,12 +71,14 @@ struct FSoftAssetClassType
 RETRO_DECLARE_SOFT_VARIANT_OBJECT_STRUCT(FSoftAssetClassType);
 
 template <>
-struct DYNAMICASSETLOADER_API TBaseStructure<FAssetClassType> {
+struct DYNAMICASSETLOADER_API TBaseStructure<FAssetClassType>
+{
     static UScriptStruct *Get();
 };
 
 template <>
-struct DYNAMICASSETLOADER_API TBaseStructure<FSoftAssetClassType> {
+struct DYNAMICASSETLOADER_API TBaseStructure<FSoftAssetClassType>
+{
     static UScriptStruct *Get();
 };
 
@@ -84,7 +89,8 @@ struct DYNAMICASSETLOADER_API TBaseStructure<FSoftAssetClassType> {
  * in the asset management process.
  */
 USTRUCT(BlueprintType)
-struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
+struct DYNAMICASSETLOADER_API FAssetLoadingEntry
+{
     GENERATED_BODY()
 
     /**
@@ -150,7 +156,8 @@ struct DYNAMICASSETLOADER_API FAssetLoadingEntry {
  * Settings related to the dynamic loading of assets by the game.
  */
 UCLASS(Config = Game, DefaultConfig, DisplayName = "Asset Loading")
-class DYNAMICASSETLOADER_API UAssetLoadingSettings : public UDeveloperSettings {
+class DYNAMICASSETLOADER_API UAssetLoadingSettings : public UDeveloperSettings
+{
     GENERATED_BODY()
 
   public:

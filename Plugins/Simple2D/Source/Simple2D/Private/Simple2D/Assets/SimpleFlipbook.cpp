@@ -7,41 +7,51 @@
 #include "PaperSprite.h"
 #include "UObject/ConstructorHelpers.h"
 
-USimpleFlipbook::USimpleFlipbook() {
+USimpleFlipbook::USimpleFlipbook()
+{
     static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaskedMaterialRef(
         TEXT("/Simple2D/Materials/MaskedUnlitFlipbookMaterial"));
     DefaultMaterial = MaskedMaterialRef.Object;
 }
 
-int32 USimpleFlipbook::GetNumFrames() const {
+int32 USimpleFlipbook::GetNumFrames() const
+{
     int32 SumFrames = 0;
-    for (int32 KeyFrameIndex = 0; KeyFrameIndex < KeyFrames.Num(); ++KeyFrameIndex) {
+    for (int32 KeyFrameIndex = 0; KeyFrameIndex < KeyFrames.Num(); ++KeyFrameIndex)
+    {
         SumFrames += KeyFrames[KeyFrameIndex].FrameRun;
     }
 
     return SumFrames;
 }
 
-float USimpleFlipbook::GetTotalDuration() const {
-    if (FramesPerSecond != 0) {
+float USimpleFlipbook::GetTotalDuration() const
+{
+    if (FramesPerSecond != 0)
+    {
         return static_cast<float>(GetNumFrames()) / FramesPerSecond;
     }
 
     return 0.0f;
 }
 
-int32 USimpleFlipbook::GetKeyFrameIndexAtTime(float Time, bool bClampToEnds) const {
-    if (Time < 0.0f && !bClampToEnds) {
+int32 USimpleFlipbook::GetKeyFrameIndexAtTime(float Time, bool bClampToEnds) const
+{
+    if (Time < 0.0f && !bClampToEnds)
+    {
         return INDEX_NONE;
     }
 
-    if (FramesPerSecond > 0.0f) {
+    if (FramesPerSecond > 0.0f)
+    {
         float SumTime = 0.0f;
 
-        for (int32 KeyFrameIndex = 0; KeyFrameIndex < KeyFrames.Num(); ++KeyFrameIndex) {
+        for (int32 KeyFrameIndex = 0; KeyFrameIndex < KeyFrames.Num(); ++KeyFrameIndex)
+        {
             SumTime += static_cast<float>(KeyFrames[KeyFrameIndex].FrameRun) / FramesPerSecond;
 
-            if (Time <= SumTime) {
+            if (Time <= SumTime)
+            {
                 return KeyFrameIndex;
             }
         }
@@ -53,10 +63,12 @@ int32 USimpleFlipbook::GetKeyFrameIndexAtTime(float Time, bool bClampToEnds) con
     return KeyFrames.Num() > 0 ? 0 : INDEX_NONE;
 }
 
-FBoxSphereBounds USimpleFlipbook::GetRenderBounds() const {
+FBoxSphereBounds USimpleFlipbook::GetRenderBounds() const
+{
     FBox BoundingBox(ForceInit);
 
-    for (int32 VertexIndex = 0; VertexIndex < BakedRenderData.Num(); ++VertexIndex) {
+    for (int32 VertexIndex = 0; VertexIndex < BakedRenderData.Num(); ++VertexIndex)
+    {
         const FVector4 &VertXYUV = BakedRenderData[VertexIndex];
         const FVector Vert((PaperAxisX * VertXYUV.X) + (PaperAxisY * VertXYUV.Y));
         BoundingBox += Vert;
@@ -71,12 +83,14 @@ FBoxSphereBounds USimpleFlipbook::GetRenderBounds() const {
 }
 
 #if WITH_EDITOR
-FVector2D USimpleFlipbook::GetRawPivotPosition() const {
+FVector2D USimpleFlipbook::GetRawPivotPosition() const
+{
     FVector2D TopLeftUV = FVector2D::ZeroVector;
     FVector2D Dimension = SourceTexture != nullptr
                               ? FVector2D(SourceTexture->GetSizeX() / Columns, SourceTexture->GetSizeY() / Rows)
                               : FVector2D::ZeroVector;
-    switch (PivotMode) {
+    switch (PivotMode)
+    {
     case ESpritePivotMode::Top_Left:
         return TopLeftUV;
     case ESpritePivotMode::Top_Center:
@@ -101,10 +115,12 @@ FVector2D USimpleFlipbook::GetRawPivotPosition() const {
     }
 }
 
-FVector2D USimpleFlipbook::GetPivotPosition() const {
+FVector2D USimpleFlipbook::GetPivotPosition() const
+{
     FVector2D RawPivot = GetRawPivotPosition();
 
-    if (bSnapPivotToPixelGrid) {
+    if (bSnapPivotToPixelGrid)
+    {
         RawPivot.X = FMath::RoundToFloat(RawPivot.X);
         RawPivot.Y = FMath::RoundToFloat(RawPivot.Y);
     }
@@ -113,11 +129,13 @@ FVector2D USimpleFlipbook::GetPivotPosition() const {
 }
 #endif
 
-FAdditionalSpriteTextureArray USimpleFlipbook::GetBakedAdditionalSourceTextures() const {
+FAdditionalSpriteTextureArray USimpleFlipbook::GetBakedAdditionalSourceTextures() const
+{
     return FAdditionalSpriteTextureArray(AdditionalSourceTextures);
 }
 
-FSimpleFlipbookDrawCall USimpleFlipbook::CreateDrawCallRecord(int32 FrameIndex) const {
+FSimpleFlipbookDrawCall USimpleFlipbook::CreateDrawCallRecord(int32 FrameIndex) const
+{
     FSimpleFlipbookDrawCall DrawCall;
 
     DrawCall.Destination = FVector::ZeroVector;
@@ -132,18 +150,22 @@ FSimpleFlipbookDrawCall USimpleFlipbook::CreateDrawCallRecord(int32 FrameIndex) 
     return DrawCall;
 }
 
-void USimpleFlipbook::InvalidateCachedData() {
+void USimpleFlipbook::InvalidateCachedData()
+{
     // No cached data yet, but the functions that currently have to iterate over all frames can use cached data in the
     // future
 }
 
 #if WITH_EDITOR
-void USimpleFlipbook::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
-    if (PixelsPerUnrealUnit <= 0.0f) {
+void USimpleFlipbook::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent)
+{
+    if (PixelsPerUnrealUnit <= 0.0f)
+    {
         PixelsPerUnrealUnit = 1.0f;
     }
 
-    if (FramesPerSecond < 0.0f) {
+    if (FramesPerSecond < 0.0f)
+    {
         FramesPerSecond = 0.0f;
     }
 
@@ -154,7 +176,8 @@ void USimpleFlipbook::PostEditChangeProperty(FPropertyChangedEvent &PropertyChan
     RebuildRenderData();
 }
 
-void USimpleFlipbook::RebuildRenderData() {
+void USimpleFlipbook::RebuildRenderData()
+{
     FSpriteGeometryCollection AlternateGeometry;
 
     CreatePolygonFromBoundingBox(RenderGeometry);
@@ -163,7 +186,8 @@ void USimpleFlipbook::RebuildRenderData() {
     UTexture2D *EffectiveTexture = GetSourceTexture();
 
     FVector2D TextureSize(1.0f, 1.0f);
-    if (EffectiveTexture) {
+    if (EffectiveTexture)
+    {
         EffectiveTexture->ConditionalPostLoad();
         TextureSize = FVector2D(EffectiveTexture->GetImportedSize());
     }
@@ -178,20 +202,24 @@ void USimpleFlipbook::RebuildRenderData() {
     RenderGeometry.Triangulate(/*out*/ TriangluatedPoints, /*bIncludeBoxes=*/true);
 
     // Triangulate the alternate render geometry, if present
-    if (AlternateGeometry.Shapes.Num() > 0) {
+    if (AlternateGeometry.Shapes.Num() > 0)
+    {
         TArray<FVector2D> AlternateTriangluatedPoints;
         AlternateGeometry.Triangulate(/*out*/ AlternateTriangluatedPoints, /*bIncludeBoxes=*/true);
 
         AlternateMaterialSplitIndex = TriangluatedPoints.Num();
         TriangluatedPoints.Append(AlternateTriangluatedPoints);
         RenderGeometry.Shapes.Append(AlternateGeometry.Shapes);
-    } else {
+    }
+    else
+    {
         AlternateMaterialSplitIndex = INDEX_NONE;
     }
 
     // Bake the verts
     BakedRenderData.Empty(TriangluatedPoints.Num());
-    for (int32 PointIndex = 0; PointIndex < TriangluatedPoints.Num(); ++PointIndex) {
+    for (int32 PointIndex = 0; PointIndex < TriangluatedPoints.Num(); ++PointIndex)
+    {
         const FVector2D &SourcePos = TriangluatedPoints[PointIndex];
 
         const FVector2D PivotSpacePos = ConvertTextureSpaceToPivotSpace(SourcePos);
@@ -204,12 +232,14 @@ void USimpleFlipbook::RebuildRenderData() {
     check(BakedRenderData.Num() % 3 == 0);
 
     // Swap the generated vertices so they end up in counterclockwise order
-    for (int32 SVT = 0; SVT < TriangluatedPoints.Num(); SVT += 3) {
+    for (int32 SVT = 0; SVT < TriangluatedPoints.Num(); SVT += 3)
+    {
         Swap(BakedRenderData[SVT + 2], BakedRenderData[SVT + 0]);
     }
 }
 
-FVector2D USimpleFlipbook::ConvertTextureSpaceToPivotSpace(FVector2D Input) const {
+FVector2D USimpleFlipbook::ConvertTextureSpaceToPivotSpace(FVector2D Input) const
+{
     const FVector2D Pivot = GetPivotPosition();
 
     const float X = Input.X - Pivot.X;
@@ -218,7 +248,8 @@ FVector2D USimpleFlipbook::ConvertTextureSpaceToPivotSpace(FVector2D Input) cons
     return FVector2D(X, Y);
 }
 
-void USimpleFlipbook::CreatePolygonFromBoundingBox(FSpriteGeometryCollection &GeomOwner) const {
+void USimpleFlipbook::CreatePolygonFromBoundingBox(FSpriteGeometryCollection &GeomOwner) const
+{
     FVector2D BoxSize = SourceTexture != nullptr
                             ? FVector2D(SourceTexture->GetSizeX() / Columns, SourceTexture->GetSizeY() / Rows)
                             : FVector2D(0, 0);

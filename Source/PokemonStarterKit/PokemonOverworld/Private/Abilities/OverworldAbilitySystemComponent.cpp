@@ -3,7 +3,8 @@
 #include "Abilities/OverworldAbilitySystemComponent.h"
 #include "Management/RandomEncounterAttributeSet.h"
 
-void UOverworldAbilitySystemComponent::BeginPlay() {
+void UOverworldAbilitySystemComponent::BeginPlay()
+{
     Super::BeginPlay();
 
     EncounterAttributes = NewObject<URandomEncounterAttributeSet>(GetOwner());

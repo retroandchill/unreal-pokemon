@@ -12,7 +12,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * @class FScopedTimeDilationFactor
      *
@@ -27,7 +28,8 @@ namespace Retro {
      * that the old factor is restored once the instance is destroyed, maintaining the
      * consistency of the time dilation state.
      */
-    class RETROLIB_API FScopedTimeDilationFactor : public FGCObject {
+    class RETROLIB_API FScopedTimeDilationFactor : public FGCObject
+    {
 
       public:
         /**

@@ -17,7 +17,8 @@ class IBattleMove;
  * The struct that holds the actual payload data
  */
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FCriticalHitRateCalculationData {
+struct POKEMONBATTLE_API FCriticalHitRateCalculationData
+{
     GENERATED_BODY()
 
     /**
@@ -72,7 +73,8 @@ struct POKEMONBATTLE_API FCriticalHitRateCalculationData {
  * Event payload object for handling the critical hit calculations.
  */
 UCLASS(BlueprintType)
-class POKEMONBATTLE_API UCriticalHitRateCalculationPayload : public UObject, public ITargetedMoveEventPayload {
+class POKEMONBATTLE_API UCriticalHitRateCalculationPayload : public UObject, public ITargetedMoveEventPayload
+{
     GENERATED_BODY()
 
   public:

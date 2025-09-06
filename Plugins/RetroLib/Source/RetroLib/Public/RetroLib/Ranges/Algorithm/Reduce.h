@@ -16,8 +16,10 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Ranges {
-    struct FReduceInvoker {
+namespace Retro::Ranges
+{
+    struct FReduceInvoker
+    {
         /**
          * @brief Reduces a range of elements into a single value by applying a functor
          * iteratively.
@@ -37,9 +39,11 @@ namespace Retro::Ranges {
         RETROLIB_EXPORT template <std::ranges::input_range R, typename I, HasFunctionCallOperator F>
             requires std::invocable<F, I, TRangeCommonReference<R>> &&
                      std::convertible_to<std::invoke_result_t<F, I, TRangeCommonReference<R>>, I>
-        constexpr auto operator()(R &&Range, I &&Identity, F Functor) const {
+        constexpr auto operator()(R &&Range, I &&Identity, F Functor) const
+        {
             auto Result = std::forward<I>(Identity);
-            for (auto &&Value : std::forward<R>(Range)) {
+            for (auto &&Value : std::forward<R>(Range))
+            {
                 Result = std::invoke(Functor, std::move(Result), std::forward<decltype(Value)>(Value));
             }
             return Result;

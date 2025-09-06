@@ -14,7 +14,8 @@ class IPokemon;
  * Enum for determining if a Pokémon has a status effect or not.
  */
 UENUM(BlueprintType)
-enum class EStatusEffectStatus : uint8 {
+enum class EStatusEffectStatus : uint8
+{
     /**
      * The Pokémon has a status effect
      */
@@ -30,7 +31,8 @@ enum class EStatusEffectStatus : uint8 {
  * Utilities related to Pokémon status effects.
  */
 UCLASS()
-class POKEMONCORE_API UStatusEffectUtilities : public UBlueprintFunctionLibrary {
+class POKEMONCORE_API UStatusEffectUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

@@ -33,14 +33,11 @@ using UnrealBuildTool;
 
 public class UE5CoroGAS : UE5CoroModuleRules
 {
-	public UE5CoroGAS(ReadOnlyTargetRules Target)
-		: base(Target)
-	{
-		PublicDependencyModuleNames.AddRange(new[]
-		{
-			"GameplayAbilities",
-			"GameplayTasks",
-			"UE5Coro",
-		});
-	}
+    public UE5CoroGAS(ReadOnlyTargetRules Target)
+        : base(Target)
+    {
+        PublicDependencyModuleNames.AddRange(
+            new[] { "GameplayAbilities", "GameplayTasks", "UE5Coro" }
+        );
+    }
 }

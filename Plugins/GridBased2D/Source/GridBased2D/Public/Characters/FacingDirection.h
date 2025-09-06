@@ -9,7 +9,8 @@
  * Enum to handle the facing direction of a character
  */
 UENUM(BlueprintType)
-enum class EFacingDirection : uint8 {
+enum class EFacingDirection : uint8
+{
     /**
      * The character is facing down
      */

@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "NativeGameplayTags.h"
 
-namespace Pokemon::Battle::Stats {
+namespace Pokemon::Battle::Stats
+{
 
     /**
      * The gameplay tag used to set the stages
@@ -30,7 +31,8 @@ namespace Pokemon::Battle::Stats {
     /**
      * Singleton class that contains the various tags used for stat calculation
      */
-    class POKEMONBATTLE_API FLookup {
+    class POKEMONBATTLE_API FLookup
+    {
         FLookup();
         ~FLookup();
 
@@ -46,7 +48,8 @@ namespace Pokemon::Battle::Stats {
          * @param Stat The stat to look up the value for
          * @return The tag for ignoring a positive stat change
          */
-        FORCEINLINE FNativeGameplayTag &GetIgnorePositiveTag(FName Stat) const {
+        FORCEINLINE FNativeGameplayTag &GetIgnorePositiveTag(FName Stat) const
+        {
             return *IgnorePositiveTags.FindChecked(Stat);
         }
 
@@ -55,7 +58,8 @@ namespace Pokemon::Battle::Stats {
          * @param Stat The stat to look up the value for
          * @return The tag for ignoring a negative stat change
          */
-        FORCEINLINE FNativeGameplayTag &GetIgnoreNegativeTag(FName Stat) const {
+        FORCEINLINE FNativeGameplayTag &GetIgnoreNegativeTag(FName Stat) const
+        {
             return *IgnoreNegativeTags.FindChecked(Stat);
         }
 
@@ -64,7 +68,8 @@ namespace Pokemon::Battle::Stats {
          * @param Stat The stat to look up the value for
          * @return The tag for the stat change gameplay cue
          */
-        FORCEINLINE FNativeGameplayTag &GetGameplayCueTag(FName Stat) const {
+        FORCEINLINE FNativeGameplayTag &GetGameplayCueTag(FName Stat) const
+        {
             return *GameplayCueTags.FindChecked(Stat);
         }
 

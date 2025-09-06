@@ -21,7 +21,8 @@ CORO_FUNCTIONS()
 
 END_DEFINE_SPEC(FTestAddingAndRemovingStatusEffects);
 
-void FTestAddingAndRemovingStatusEffects::Define() {
+void FTestAddingAndRemovingStatusEffects::Define()
+{
     CoroIt("AddAndRemoveStatusEffects", [this]() -> UE5Coro::TCoroutine<> {
         auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
         auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(

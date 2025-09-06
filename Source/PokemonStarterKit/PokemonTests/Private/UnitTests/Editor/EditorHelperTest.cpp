@@ -24,7 +24,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(EditorHelperTest, "Unit Tests.PokemonData.EditorHelperTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool EditorHelperTest::RunTest(const FString &Parameters) {
+bool EditorHelperTest::RunTest(const FString &Parameters)
+{
     // Make the test pass by returning true, or fail by returning false.
 
     UE_ASSERT_CONTAINS(Item, TEXT("POTION"));

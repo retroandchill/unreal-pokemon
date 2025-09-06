@@ -17,7 +17,8 @@ class UPocketButton;
  * Widget the contains the information about the selected pockets in the bag scene.
  */
 UCLASS(Abstract)
-class POKEMONUI_API UPocketTabWidget : public UCommonUserWidget {
+class POKEMONUI_API UPocketTabWidget : public UCommonUserWidget
+{
     GENERATED_BODY()
 
   public:

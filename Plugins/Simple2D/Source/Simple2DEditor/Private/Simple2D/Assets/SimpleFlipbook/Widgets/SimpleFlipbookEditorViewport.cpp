@@ -5,13 +5,16 @@
 #include "Simple2D/Assets/SimpleFlipbook/Widgets/SimpleFlipbookEditorViewportToolbar.h"
 #include "SlateOptMacros.h"
 
-namespace Simple2D {
-    void SSimpleFlipbookEditorViewport::Construct(const FArguments &InArgs) {
+namespace Simple2D
+{
+    void SSimpleFlipbookEditorViewport::Construct(const FArguments &InArgs)
+    {
         FlipbookBeingEdited = InArgs._FlipbookBeingEdited;
         SEditorViewport::Construct(SEditorViewport::FArguments());
     }
 
-    void SSimpleFlipbookEditorViewport::BindCommands() {
+    void SSimpleFlipbookEditorViewport::BindCommands()
+    {
         SEditorViewport::BindCommands();
 
         auto &Commands = FSimpleFlipbookEditorCommands::Get();
@@ -37,32 +40,39 @@ namespace Simple2D {
                                        &FSimpleFlipbookEditorViewportClient::IsShowPivotChecked));
     }
 
-    TSharedRef<FEditorViewportClient> SSimpleFlipbookEditorViewport::MakeEditorViewportClient() {
+    TSharedRef<FEditorViewportClient> SSimpleFlipbookEditorViewport::MakeEditorViewportClient()
+    {
         EditorViewportClient = MakeShared<FSimpleFlipbookEditorViewportClient>(FlipbookBeingEdited);
         return EditorViewportClient.ToSharedRef();
     }
 
-    TSharedPtr<SWidget> SSimpleFlipbookEditorViewport::MakeViewportToolbar() {
+    TSharedPtr<SWidget> SSimpleFlipbookEditorViewport::MakeViewportToolbar()
+    {
         return SNew(SSimpleFlipbookEditorViewportToolbar, SharedThis(this));
     }
 
-    EVisibility SSimpleFlipbookEditorViewport::GetTransformToolbarVisibility() const {
+    EVisibility SSimpleFlipbookEditorViewport::GetTransformToolbarVisibility() const
+    {
         return EVisibility::Visible;
     }
 
-    void SSimpleFlipbookEditorViewport::OnFocusViewportToSelection() {
+    void SSimpleFlipbookEditorViewport::OnFocusViewportToSelection()
+    {
         EditorViewportClient->RequestFocusOnSelection(false);
     }
 
-    TSharedRef<SEditorViewport> SSimpleFlipbookEditorViewport::GetViewportWidget() {
+    TSharedRef<SEditorViewport> SSimpleFlipbookEditorViewport::GetViewportWidget()
+    {
         return SharedThis(this);
     }
 
-    TSharedPtr<FExtender> SSimpleFlipbookEditorViewport::GetExtenders() const {
+    TSharedPtr<FExtender> SSimpleFlipbookEditorViewport::GetExtenders() const
+    {
         return MakeShared<FExtender>();
     }
 
-    void SSimpleFlipbookEditorViewport::OnFloatingButtonClicked() {
+    void SSimpleFlipbookEditorViewport::OnFloatingButtonClicked()
+    {
         // No action
     }
 } // namespace Simple2D

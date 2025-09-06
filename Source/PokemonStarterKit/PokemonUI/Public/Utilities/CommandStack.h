@@ -12,7 +12,8 @@ class UCommand;
  * Wrapper for the commands in the stack of commands that are added
  */
 USTRUCT(BlueprintInternalUseOnly)
-struct FCommandStackFrame {
+struct FCommandStackFrame
+{
     GENERATED_BODY()
 
     /**

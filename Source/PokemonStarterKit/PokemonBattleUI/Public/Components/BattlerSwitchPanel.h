@@ -13,7 +13,8 @@ class IBattler;
  * Selectable panel used for switching out Pokémon in battle.
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UBattlerSwitchPanel : public UCommonButtonBase {
+class POKEMONBATTLEUI_API UBattlerSwitchPanel : public UCommonButtonBase
+{
     GENERATED_BODY()
 
   public:

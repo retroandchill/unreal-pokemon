@@ -8,14 +8,16 @@
 #include "Battle/StatusEffects/StatusEffectTags.h"
 
 bool UStatusEffectGameplayEffectComponent::CanGameplayEffectApply(
-    const FActiveGameplayEffectsContainer &ActiveGEContainer, const FGameplayEffectSpec &GESpec) const {
+    const FActiveGameplayEffectsContainer &ActiveGEContainer, const FGameplayEffectSpec &GESpec) const
+{
     TScriptInterface<IBattler> Battler = ActiveGEContainer.Owner->GetOwnerActor();
     check(Battler != nullptr)
     return !Battler->GetStatusEffect().IsSet();
 }
 
 bool UStatusEffectGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer &GEContainer,
-                                                                       FActiveGameplayEffect &ActiveGE) const {
+                                                                       FActiveGameplayEffect &ActiveGE) const
+{
     TScriptInterface<IBattler> Battler = GEContainer.Owner->GetOwnerActor();
     check(Battler != nullptr)
     Battler->InflictStatusEffect(StatusEffectID, ActiveGE.Handle);
@@ -27,7 +29,8 @@ bool UStatusEffectGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGa
 }
 
 void UStatusEffectGameplayEffectComponent::OnGameplayEffectRemoved(const FGameplayEffectRemovalInfo &,
-                                                                   TScriptInterface<IBattler> Battler) const {
+                                                                   TScriptInterface<IBattler> Battler) const
+{
     check(Battler->GetStatusEffect().IsSet())
     Battler->CureStatusEffect();
     static auto &Lookup = Pokemon::Battle::StatusEffects::FLookup::GetInstance();

@@ -18,7 +18,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnExpGainComplete);
  *
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UExpGainPane : public UCommonUserWidget {
+class POKEMONBATTLEUI_API UExpGainPane : public UCommonUserWidget
+{
     GENERATED_BODY()
 
   public:

@@ -16,7 +16,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
 
     /**
      * @struct TIndexedElement
@@ -29,7 +30,8 @@ namespace Retro {
      * @tparam T The type of the element being referenced.
      */
     RETROLIB_EXPORT template <typename T, size_t I>
-    struct TIndexedElement {
+    struct TIndexedElement
+    {
       private:
         std::add_pointer_t<T> Ptr;
 
@@ -42,7 +44,8 @@ namespace Retro {
          *
          * @param Ptr A reference to the object to be indexed.
          */
-        constexpr explicit TIndexedElement(T &Ptr) : Ptr(std::addressof(Ptr)) {
+        constexpr explicit TIndexedElement(T &Ptr) : Ptr(std::addressof(Ptr))
+        {
         }
 
         /**
@@ -53,7 +56,8 @@ namespace Retro {
          *
          * @return A reference to the object of type T.
          */
-        constexpr T &Get() const noexcept {
+        constexpr T &Get() const noexcept
+        {
             return *Ptr;
         }
     };
@@ -68,7 +72,8 @@ namespace Retro {
      * @tparam I The type associated with the index.
      */
     RETROLIB_EXPORT template <typename T, size_t I>
-    struct TIndexedElement<T &&, I> {
+    struct TIndexedElement<T &&, I>
+    {
       private:
         T *Ptr;
 
@@ -82,7 +87,8 @@ namespace Retro {
          *
          * @param Ptr An rvalue reference to the object to be indexed.
          */
-        constexpr explicit TIndexedElement(T &&Ptr) : Ptr(std::addressof(Ptr)) {
+        constexpr explicit TIndexedElement(T &&Ptr) : Ptr(std::addressof(Ptr))
+        {
         }
 
         /**
@@ -93,7 +99,8 @@ namespace Retro {
          *
          * @return A rvalue reference to the object of type T.
          */
-        constexpr T &&Get() const noexcept {
+        constexpr T &&Get() const noexcept
+        {
             return std::move(*Ptr);
         }
     };
@@ -108,7 +115,8 @@ namespace Retro {
      * @tparam I The type of the index associated with the void element.
      */
     RETROLIB_EXPORT template <size_t I>
-    struct TIndexedElement<void, I> {
+    struct TIndexedElement<void, I>
+    {
         /**
          * @brief Retrieves a value or performs an operation.
          *
@@ -116,7 +124,8 @@ namespace Retro {
          * any operation. It is designed to be called in constant expressions and
          * guarantees no exceptions will be thrown.
          */
-        constexpr void Get() const noexcept {
+        constexpr void Get() const noexcept
+        {
             // No operation needed for this one
         }
     };
@@ -132,7 +141,8 @@ namespace Retro {
      * @return The result of invoking the visitor with the IndexedElement.
      */
     template <size_t I, typename F, typename V>
-    constexpr decltype(auto) VisitIndexHelper(F &&Visitor, V &&Variant) {
+    constexpr decltype(auto) VisitIndexHelper(F &&Visitor, V &&Variant)
+    {
         return std::invoke(std::forward<F>(Visitor),
                            TIndexedElement<std::variant_alternative_t<I, std::remove_reference_t<V>>, I>(
                                std::get<I>(std::forward<V>(Variant))));
@@ -152,7 +162,8 @@ namespace Retro {
      * @return The result of invoking the visitor on the active alternative of the variant.
      */
     RETROLIB_EXPORT template <typename F, typename V>
-    constexpr decltype(auto) VisitIndex(F &&Visitor, V &&Variant) {
+    constexpr decltype(auto) VisitIndex(F &&Visitor, V &&Variant)
+    {
         constexpr auto N = std::variant_size_v<std::remove_cvref_t<V>>;
         constexpr auto FuncPtrs = []<size_t... I>(std::index_sequence<I...>) {
             return std::array{&VisitIndexHelper<I, F, V>...};
@@ -174,7 +185,8 @@ namespace Retro {
      * @return The result of invoking the visitor on the active alternative of the variant.
      */
     RETROLIB_EXPORT template <typename R, typename F, typename V>
-    constexpr R VisitIndex(F &&Visitor, V &&Variant) {
+    constexpr R VisitIndex(F &&Visitor, V &&Variant)
+    {
         constexpr auto N = std::variant_size_v<std::remove_cvref_t<V>>;
         constexpr auto FuncPtrs = []<size_t... I>(std::index_sequence<I...>) {
             return std::array{&VisitIndexHelper<I, F, V>...};

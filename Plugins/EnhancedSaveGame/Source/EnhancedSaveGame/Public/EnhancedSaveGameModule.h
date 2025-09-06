@@ -9,7 +9,8 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogEnhancedSaveGame, Log, All)
 
-class ENHANCEDSAVEGAME_API FEnhancedSaveGameModule : public ISaveGameSystemModule {
+class ENHANCEDSAVEGAME_API FEnhancedSaveGameModule : public ISaveGameSystemModule
+{
   public:
     /** IModuleInterface implementation */
     void StartupModule() override;

@@ -14,7 +14,8 @@ class IBattleMove;
  * The panel used to select a move from a battler
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UBattleMovePanel : public UCommonButtonBase {
+class POKEMONBATTLEUI_API UBattleMovePanel : public UCommonButtonBase
+{
     GENERATED_BODY()
 
   public:
@@ -23,7 +24,8 @@ class POKEMONBATTLEUI_API UBattleMovePanel : public UCommonButtonBase {
      * @return The move that this panel represents
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Content)
-    const TScriptInterface<IBattleMove> &GetMove() const {
+    const TScriptInterface<IBattleMove> &GetMove() const
+    {
         return Move;
     }
 

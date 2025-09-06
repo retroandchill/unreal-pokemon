@@ -8,7 +8,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestValidateEncounter, "Unit Tests.Encounters.TestValidateEncounter",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestValidateEncounter::RunTest(const FString &Parameters) {
+bool TestValidateEncounter::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto EncounterData = World->SpawnActor<AMapEncounterData>();
 

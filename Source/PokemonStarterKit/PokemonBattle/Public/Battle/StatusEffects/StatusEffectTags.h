@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "NativeGameplayTags.h"
 
-namespace Pokemon::Battle::StatusEffects {
+namespace Pokemon::Battle::StatusEffects
+{
 
     /**
      * The format used for the status effect tags
@@ -20,7 +21,8 @@ namespace Pokemon::Battle::StatusEffects {
     /**
      * Singleton class for looking up status effect tags by their ID
      */
-    class POKEMONBATTLE_API FLookup {
+    class POKEMONBATTLE_API FLookup
+    {
         FLookup();
         ~FLookup();
 
@@ -36,7 +38,8 @@ namespace Pokemon::Battle::StatusEffects {
          * @param ID The ID of the status condition
          * @return The corresponding tag
          */
-        FORCEINLINE const FNativeGameplayTag &GetTag(FName ID) {
+        FORCEINLINE const FNativeGameplayTag &GetTag(FName ID)
+        {
             return *Tags.FindChecked(ID);
         }
 
@@ -45,7 +48,8 @@ namespace Pokemon::Battle::StatusEffects {
          * @param ID The ID of the status condition
          * @return The corresponding tag
          */
-        FORCEINLINE const FNativeGameplayTag &GetImmunityTag(FName ID) {
+        FORCEINLINE const FNativeGameplayTag &GetImmunityTag(FName ID)
+        {
             return *Tags.FindChecked(ID);
         }
 

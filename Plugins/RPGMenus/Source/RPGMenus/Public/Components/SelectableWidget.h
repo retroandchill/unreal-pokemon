@@ -33,7 +33,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FProcessCancel);
  * @brief A base class for selectable widgets in RPG menus.
  */
 UCLASS(BlueprintType)
-class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
+class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget
+{
     GENERATED_BODY()
 
   public:
@@ -140,7 +141,8 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
      * @return A view of the options that will cast to the given type
      */
     template <typename T>
-    auto GetSelectableOptions() const {
+    auto GetSelectableOptions() const
+    {
         // clang-format off
         return SelectableButtons |
                Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<T>);
@@ -154,8 +156,10 @@ class RPGMENUS_API USelectableWidget : public UCommonActivatableWidget {
      * @return The found widget
      */
     template <typename T>
-    T *GetSelectableOption(int32 OptionIndex) const {
-        if (!SelectableButtons.IsValidIndex(OptionIndex)) {
+    T *GetSelectableOption(int32 OptionIndex) const
+    {
+        if (!SelectableButtons.IsValidIndex(OptionIndex))
+        {
             return nullptr;
         }
 

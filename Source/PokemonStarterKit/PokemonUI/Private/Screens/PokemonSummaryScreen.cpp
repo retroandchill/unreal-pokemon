@@ -10,33 +10,40 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(UPokemonSummaryScreen)
 
-UPokemonSummaryScreen *UPokemonSummaryScreen::AddPokemonSummaryScreenToStack(const UObject *WorldContextObject) {
+UPokemonSummaryScreen *UPokemonSummaryScreen::AddPokemonSummaryScreenToStack(const UObject *WorldContextObject)
+{
     return URPGMenuUtilities::InjectScreenToStack<UPokemonSummaryScreen>(WorldContextObject).GetPtrOrNull();
 }
 
-void UPokemonSummaryScreen::NativePreConstruct() {
+void UPokemonSummaryScreen::NativePreConstruct()
+{
     Super::NativePreConstruct();
 
-    if (SummaryTabs != nullptr && SummaryPages != nullptr) {
+    if (SummaryTabs != nullptr && SummaryPages != nullptr)
+    {
         SummaryTabs->SetSummaryPages(SummaryPages);
     }
 }
 
-void UPokemonSummaryScreen::SetInitialPokemon(const TScriptInterface<ITrainer> &Trainer, int32 InitialIndex) {
+void UPokemonSummaryScreen::SetInitialPokemon(const TScriptInterface<ITrainer> &Trainer, int32 InitialIndex)
+{
     SetInitialPokemon(Trainer->GetParty(), InitialIndex);
 }
 
-void UPokemonSummaryScreen::SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>> Party, int32 InitialIndex) {
+void UPokemonSummaryScreen::SetInitialPokemon(TConstArrayView<TScriptInterface<IPokemon>> Party, int32 InitialIndex)
+{
     PokemonSelection->SetPokemonToDisplay(Party);
     PokemonSelection->SetIndex(InitialIndex);
     PokemonSelection->GetSelectedOption()->SetIsSelected(true);
     PokemonSelection->ActivateWidget();
 }
 
-USummaryPages *UPokemonSummaryScreen::GetSummaryPages() const {
+USummaryPages *UPokemonSummaryScreen::GetSummaryPages() const
+{
     return SummaryPages;
 }
 
-UPokemonSelectionPaneBase *UPokemonSummaryScreen::GetPokemonSelection() const {
+UPokemonSelectionPaneBase *UPokemonSummaryScreen::GetPokemonSelection() const
+{
     return PokemonSelection;
 }

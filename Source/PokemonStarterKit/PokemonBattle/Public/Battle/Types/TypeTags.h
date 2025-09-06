@@ -6,7 +6,8 @@
 #include "Battle/Events/TargetedEvents.h"
 #include "NativeGameplayTags.h"
 
-namespace Pokemon::Battle::Types {
+namespace Pokemon::Battle::Types
+{
 
     POKEMONBATTLE_API DECLARE_TARGETED_EVENT_TYPE(SingleTypeModifierEvents);
     POKEMONBATTLE_API DECLARE_TARGETED_EVENT_TYPE(FullTypeMatchUpEvents);
@@ -17,26 +18,31 @@ namespace Pokemon::Battle::Types {
     constexpr auto MoveTypeUserFormat = TEXT("Battle.UsingMove.Type.{0}");
     constexpr auto MoveTypeTargetFormat = TEXT("Battle.MoveTarget.Type.{0}");
 
-    class POKEMONBATTLE_API FLookup {
+    class POKEMONBATTLE_API FLookup
+    {
         FLookup();
         ~FLookup();
 
       public:
         static FLookup &GetInstance();
 
-        FORCEINLINE const FNativeGameplayTag &GetAttackingTag(FName TagName) const {
+        FORCEINLINE const FNativeGameplayTag &GetAttackingTag(FName TagName) const
+        {
             return *AttackingTags.FindChecked(TagName);
         }
 
-        FORCEINLINE const FNativeGameplayTag &GetDefendingTag(FName TagName) const {
+        FORCEINLINE const FNativeGameplayTag &GetDefendingTag(FName TagName) const
+        {
             return *DefendingTags.FindChecked(TagName);
         }
 
-        FORCEINLINE const FNativeGameplayTag &GetMoveTypeUserTag(FName TagName) const {
+        FORCEINLINE const FNativeGameplayTag &GetMoveTypeUserTag(FName TagName) const
+        {
             return *MoveTypeUserTags.FindChecked(TagName);
         }
 
-        FORCEINLINE const FNativeGameplayTag &GetMoveTypeTargetTag(FName TagName) const {
+        FORCEINLINE const FNativeGameplayTag &GetMoveTypeTargetTag(FName TagName) const
+        {
             return *MoveTypeTargetTags.FindChecked(TagName);
         }
 

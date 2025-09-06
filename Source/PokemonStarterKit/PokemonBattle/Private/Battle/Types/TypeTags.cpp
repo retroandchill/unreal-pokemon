@@ -6,18 +6,21 @@
 #include "DataManager.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 
-namespace Pokemon::Battle::Types {
+namespace Pokemon::Battle::Types
+{
 
     DEFINE_TARGETED_EVENT_TYPE(SingleTypeModifierEvents, "Battle.Damage.TypeMatchup.Single");
     DEFINE_TARGETED_EVENT_TYPE(FullTypeMatchUpEvents, "Battle.Damage.TypeMatchup.Full");
     UE_DEFINE_GAMEPLAY_TAG(BattlerTypes, "Battle.Battler.Types")
 
-    FLookup::FLookup() {
+    FLookup::FLookup()
+    {
         auto &DataManager = FDataManager::GetInstance();
         auto &TypeTable = DataManager.GetDataTable<FType>();
         TypeTable.GetAllRows() | Retro::Ranges::ForEach([this](const FType &Type) {
             // Add the tags for the types you attack from and defend from
-            if (!Type.IsPseudoType) {
+            if (!Type.IsPseudoType)
+            {
                 AddDynamicGameplayTag(AttackingTags, AttackingTagsFormat, Type.ID);
                 AddDynamicGameplayTag(DefendingTags, DefendingTagsFormat, Type.ID);
             }
@@ -29,7 +32,8 @@ namespace Pokemon::Battle::Types {
 
     FLookup::~FLookup() = default;
 
-    FLookup &FLookup::GetInstance() {
+    FLookup &FLookup::GetInstance()
+    {
         static FLookup Lookup;
         return Lookup;
     }

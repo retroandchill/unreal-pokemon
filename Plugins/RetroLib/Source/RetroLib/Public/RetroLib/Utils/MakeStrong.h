@@ -6,7 +6,8 @@
 #include "RetroLib/Concepts/Interfaces.h"
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * @brief Utility class for converting weak pointers to strong pointers.
      *
@@ -19,7 +20,8 @@ namespace Retro {
      *                  to ensure the weak pointer being converted is valid.
      */
     template <bool bChecked = false>
-    struct TMakeStrong {
+    struct TMakeStrong
+    {
 
 #ifdef __UNREAL__
         /**
@@ -34,8 +36,10 @@ namespace Retro {
          */
         template <typename T>
             requires std::derived_from<std::decay_t<T>, UObject>
-        constexpr T *operator()(const TWeakObjectPtr<T> &Ptr) const {
-            if constexpr (bChecked) {
+        constexpr T *operator()(const TWeakObjectPtr<T> &Ptr) const
+        {
+            if constexpr (bChecked)
+            {
                 check(ValidPtr(Ptr))
             }
 
@@ -55,8 +59,10 @@ namespace Retro {
          */
         template <typename T>
             requires UnrealInterface<T>
-        constexpr TScriptInterface<T> operator()(const TWeakInterfacePtr<T> &Ptr) const {
-            if constexpr (bChecked) {
+        constexpr TScriptInterface<T> operator()(const TWeakInterfacePtr<T> &Ptr) const
+        {
+            if constexpr (bChecked)
+            {
                 check(ValidPtr(Ptr))
             }
 
@@ -76,10 +82,14 @@ namespace Retro {
          */
         template <typename T, ESPMode M, typename P>
             requires std::same_as<std::decay_t<P>, TWeakPtr<T, M>>
-        constexpr auto operator()(P &&Ptr) const {
-            if constexpr (bChecked) {
+        constexpr auto operator()(P &&Ptr) const
+        {
+            if constexpr (bChecked)
+            {
                 return std::forward<P>(Ptr).Pin().ToSharedRef();
-            } else {
+            }
+            else
+            {
                 return std::forward<P>(Ptr).Pin();
             }
         }
@@ -99,8 +109,10 @@ namespace Retro {
          */
         template <typename T, typename P>
             requires std::same_as<std::decay_t<P>, std::weak_ptr<T>>
-        constexpr std::shared_ptr<T> operator()(P &&Ptr) const {
-            if constexpr (bChecked) {
+        constexpr std::shared_ptr<T> operator()(P &&Ptr) const
+        {
+            if constexpr (bChecked)
+            {
                 check(!Ptr.expired())
             }
 

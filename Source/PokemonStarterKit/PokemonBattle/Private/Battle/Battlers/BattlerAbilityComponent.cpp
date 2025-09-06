@@ -6,7 +6,8 @@
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Attributes/TargetDamageStateAttributeSet.h"
 
-void UBattlerAbilityComponent::BeginPlay() {
+void UBattlerAbilityComponent::BeginPlay()
+{
     Super::BeginPlay();
 
     CoreAttributes = NewObject<UPokemonCoreAttributeSet>(GetOwner());
@@ -22,29 +23,35 @@ void UBattlerAbilityComponent::BeginPlay() {
     AddSpawnedAttribute(ExpAttributeSet);
 }
 
-UPokemonCoreAttributeSet *UBattlerAbilityComponent::GetCoreAttributes() const {
+UPokemonCoreAttributeSet *UBattlerAbilityComponent::GetCoreAttributes() const
+{
     return CoreAttributes;
 }
 
-UStatStagesAttributeSet *UBattlerAbilityComponent::GetStatStages() const {
+UStatStagesAttributeSet *UBattlerAbilityComponent::GetStatStages() const
+{
     return StatStagesAttributeSet;
 }
 
-UTargetDamageStateAttributeSet *UBattlerAbilityComponent::GetTargetDamageStateAttributeSet() const {
+UTargetDamageStateAttributeSet *UBattlerAbilityComponent::GetTargetDamageStateAttributeSet() const
+{
     return TargetDamageStateAttributeSet;
 }
 
-UExpAttributeSet *UBattlerAbilityComponent::GetExpAttributeSet() const {
+UExpAttributeSet *UBattlerAbilityComponent::GetExpAttributeSet() const
+{
     return ExpAttributeSet;
 }
 
-TOptional<FGameplayAbilitySpecHandle>
-UBattlerAbilityComponent::FindAbilityOfClass(TSubclassOf<UGameplayAbility> AbilityClass) const {
+TOptional<FGameplayAbilitySpecHandle> UBattlerAbilityComponent::FindAbilityOfClass(
+    TSubclassOf<UGameplayAbility> AbilityClass) const
+{
     auto AbilitySpec =
         Algo::FindByPredicate(ActivatableAbilities.Items, [AbilityClass](const FGameplayAbilitySpec &Spec) {
             return Spec.Ability->IsA(AbilityClass);
         });
-    if (AbilitySpec == nullptr) {
+    if (AbilitySpec == nullptr)
+    {
         return TOptional<FGameplayAbilitySpecHandle>();
     }
 

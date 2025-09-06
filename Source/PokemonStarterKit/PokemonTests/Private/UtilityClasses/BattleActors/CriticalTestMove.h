@@ -12,7 +12,8 @@
  *
  */
 UCLASS()
-class POKEMONTESTS_API UCriticalTestMove : public UPokemonBattleMove {
+class POKEMONTESTS_API UCriticalTestMove : public UPokemonBattleMove
+{
     GENERATED_BODY()
 
   public:

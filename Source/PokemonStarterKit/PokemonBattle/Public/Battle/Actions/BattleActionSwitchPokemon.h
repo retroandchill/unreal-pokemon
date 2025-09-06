@@ -8,7 +8,8 @@
 /**
  * Battle action for switching Pokémon
  */
-class POKEMONBATTLE_API FBattleActionSwitchPokemon : public FBattleActionBase {
+class POKEMONBATTLE_API FBattleActionSwitchPokemon : public FBattleActionBase
+{
   public:
     /**
      * Construct a new action with the given battler

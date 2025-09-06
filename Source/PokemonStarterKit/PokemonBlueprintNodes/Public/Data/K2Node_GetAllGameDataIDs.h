@@ -10,7 +10,8 @@
  * Custom Blueprint node to get all the IDs from a data table
  */
 UCLASS()
-class POKEMONBLUEPRINTNODES_API UK2Node_GetAllGameDataIDs : public UK2Node {
+class POKEMONBLUEPRINTNODES_API UK2Node_GetAllGameDataIDs : public UK2Node
+{
     GENERATED_BODY()
 
   public:

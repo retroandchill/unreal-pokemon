@@ -12,7 +12,8 @@
  * The basic default implementation details for a trainer
  */
 UCLASS()
-class POKEMONCORE_API UBasicTrainer : public UObject, public ITrainer {
+class POKEMONCORE_API UBasicTrainer : public UObject, public ITrainer
+{
     GENERATED_BODY()
 
   public:

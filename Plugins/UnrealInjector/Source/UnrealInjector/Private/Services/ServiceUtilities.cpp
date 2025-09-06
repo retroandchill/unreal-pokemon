@@ -11,10 +11,13 @@
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "Services/Service.h"
 
-Retro::TGenerator<TSubclassOf<UService>> UnrealInjector::GetAllServices() {
+Retro::TGenerator<TSubclassOf<UService>> UnrealInjector::GetAllServices()
+{
     TSet<UClass *> Visited;
-    for (auto Class : Retro::Ranges::TClassView<UService>()) {
-        if (Class->HasAnyClassFlags(CLASS_Abstract) || !Retro::IsInstantiableClass(Class)) {
+    for (auto Class : Retro::Ranges::TClassView<UService>())
+    {
+        if (Class->HasAnyClassFlags(CLASS_Abstract) || !Retro::IsInstantiableClass(Class))
+        {
             continue;
         }
         co_yield Class;

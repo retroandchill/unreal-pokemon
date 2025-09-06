@@ -18,7 +18,8 @@ class IMove;
  * Basic Pokémon class that holds all of the information for a complete Pokémon
  */
 UCLASS()
-class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon {
+class POKEMONCORE_API UGamePokemon : public UObject, public IPokemon
+{
     GENERATED_BODY()
 
   public:

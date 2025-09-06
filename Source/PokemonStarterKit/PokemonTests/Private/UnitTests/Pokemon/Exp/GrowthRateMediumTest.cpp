@@ -18,11 +18,13 @@ constexpr std::array GMediumGrowthTable = {
 IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateMediumTest, "Unit Tests.Core.Exp.GrowthRateMediumTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-void GrowthRateMediumTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const {
+void GrowthRateMediumTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const
+{
     OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateMediumTest: Level = 1");
     OutTestCommands.Add("1");
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++)
+    {
         auto Fmt = FString::Printf(TEXT("Unit Tests.Core.Exp.GrowthRateMediumTest: Level = 2-99 (Sample %d)"), i + 1);
         OutBeautifiedNames.Add(Fmt);
         OutTestCommands.Add(FString::FromInt(FMath::RandRange(2, 99)));
@@ -32,7 +34,8 @@ void GrowthRateMediumTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<
     OutTestCommands.Add("100");
 }
 
-bool GrowthRateMediumTest::RunTest(const FString &Parameters) {
+bool GrowthRateMediumTest::RunTest(const FString &Parameters)
+{
     const int32 Level = FCString::Atoi(GetData(Parameters));
 
     Exp::FMedium GrowthRate;

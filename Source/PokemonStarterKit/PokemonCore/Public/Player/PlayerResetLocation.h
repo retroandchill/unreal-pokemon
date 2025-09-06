@@ -7,7 +7,8 @@
 /**
  * Structure that contains information about the player's location when they reset after a defeat.
  */
-class POKEMONCORE_API FPlayerResetLocation {
+class POKEMONCORE_API FPlayerResetLocation
+{
   public:
     /**
      * Create a new reset location from the given player character actor.

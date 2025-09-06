@@ -15,8 +15,10 @@ import RetroLib;
 #include <memory>
 #endif
 
-TEST_CASE_NAMED(FValidPtrTest, "Unit Tests::RetroLib::Utils::ValidPtr", "[utils]") {
-    SECTION("Can work with raw pointers") {
+TEST_CASE_NAMED(FValidPtrTest, "Unit Tests::RetroLib::Utils::ValidPtr", "[utils]")
+{
+    SECTION("Can work with raw pointers")
+    {
         int Value = 3;
         int *Ptr = nullptr;
         int *ValidPtr = &Value;
@@ -28,12 +30,14 @@ TEST_CASE_NAMED(FValidPtrTest, "Unit Tests::RetroLib::Utils::ValidPtr", "[utils]
         CHECK_FALSE(Retro::InvalidPtr(ValidPtr));
     }
 
-    SECTION("Handles nullptr literals") {
+    SECTION("Handles nullptr literals")
+    {
         CHECK_FALSE(Retro::ValidPtr(nullptr));
         CHECK(Retro::InvalidPtr(nullptr));
     }
 
-    SECTION("Can work with wrapped pointer types (smart pointers)") {
+    SECTION("Can work with wrapped pointer types (smart pointers)")
+    {
         std::unique_ptr<int> Ptr = nullptr;
         auto ValidPtr = std::make_unique<int>(3);
 

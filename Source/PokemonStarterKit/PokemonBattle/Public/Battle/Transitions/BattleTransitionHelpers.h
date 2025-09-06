@@ -14,7 +14,8 @@
  *
  */
 UCLASS()
-class POKEMONBATTLE_API UBattleTransitionHelpers : public UBlueprintFunctionLibrary {
+class POKEMONBATTLE_API UBattleTransitionHelpers : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

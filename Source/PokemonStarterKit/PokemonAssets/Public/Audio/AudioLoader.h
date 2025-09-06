@@ -16,7 +16,8 @@ class IPokemon;
  * It facilitates the retrieval of specific audio assets related to Pokémon cries.
  */
 UCLASS()
-class POKEMONASSETS_API UAudioLoader : public UBlueprintFunctionLibrary {
+class POKEMONASSETS_API UAudioLoader : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

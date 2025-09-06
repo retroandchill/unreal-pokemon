@@ -13,7 +13,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestSwitchOnDataHandle, "Unit Tests.Nodes.TestSwitchOnDataHandle",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestSwitchOnDataHandle::RunTest(const FString &Parameters) {
+bool TestSwitchOnDataHandle::RunTest(const FString &Parameters)
+{
     using enum ENodeTitleType::Type;
     FBlueprintActionDatabase::Get().RefreshAll();
 
@@ -35,7 +36,8 @@ bool TestSwitchOnDataHandle::RunTest(const FString &Parameters) {
 
     UE_CHECK_EQUAL(UEdGraphSchema_K2::PC_Name, TestNode->GetInnerCaseType().PinCategory);
 
-    for (int32 i = 0; i < 5; i++) {
+    for (int32 i = 0; i < 5; i++)
+    {
         TestNode->AddPinToSwitchNode();
     }
 
@@ -50,7 +52,8 @@ bool TestSwitchOnDataHandle::RunTest(const FString &Parameters) {
 
     UE_ASSERT_EQUAL(5, PinNames.Num());
     auto &AbilityTable = FDataManager::GetInstance().GetDataTable<FAbility>();
-    for (auto RowName : PinNames) {
+    for (auto RowName : PinNames)
+    {
         UE_CHECK_TRUE(AbilityTable.IsRowNameValid(RowName));
     }
 

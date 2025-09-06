@@ -5,7 +5,8 @@
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 
-FDataManager::FDataManager() {
+FDataManager::FDataManager()
+{
     auto Settings = GetDefault<UPokemonDataSettings>();
     // clang-format off
     Settings->DataTables |
@@ -28,27 +29,32 @@ FDataManager::FDataManager() {
 
 FDataManager::~FDataManager() = default;
 
-FDataManager &FDataManager::GetInstance() {
+FDataManager &FDataManager::GetInstance()
+{
     static FDataManager DataManager;
     return DataManager;
 }
 
-const IGameData &FDataManager::GetDataTable(TObjectPtr<const UScriptStruct> StructType) const {
+const IGameData &FDataManager::GetDataTable(TObjectPtr<const UScriptStruct> StructType) const
+{
     check(StructType != nullptr)
     auto StructName = StructType->GetFName();
     check(DataTables.Contains(StructName))
     return *DataTables[StructName];
 }
 
-bool FDataManager::HasDataTable(const UScriptStruct *StructType) const {
+bool FDataManager::HasDataTable(const UScriptStruct *StructType) const
+{
     check(StructType != nullptr)
     auto StructName = StructType->GetFName();
     return DataTables.Contains(StructName);
 }
 
-TArray<UScriptStruct *> FDataManager::GetStructTypes() const {
+TArray<UScriptStruct *> FDataManager::GetStructTypes() const
+{
     TArray<UScriptStruct *> Ret;
-    for (const auto &[Key, Value] : DataTables) {
+    for (const auto &[Key, Value] : DataTables)
+    {
         Ret.Add(Value->GetStructType());
     }
     return Ret;

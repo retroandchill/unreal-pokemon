@@ -16,7 +16,8 @@ struct FGameplayTagContainer;
  * Provides enhanced save game functionality, extending base save game capabilities.
  */
 UCLASS()
-class ENHANCEDSAVEGAME_API UEnhancedSaveGameSubsystem : public UGameInstanceSubsystem {
+class ENHANCEDSAVEGAME_API UEnhancedSaveGameSubsystem : public UGameInstanceSubsystem
+{
     GENERATED_BODY()
 
   public:

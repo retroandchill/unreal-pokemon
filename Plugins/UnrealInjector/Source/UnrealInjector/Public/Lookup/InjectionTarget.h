@@ -12,7 +12,8 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnInjectedClassEdited, const FSoftClassPath
  * Wrapper struct for an injection target. Used for details panel customization.
  */
 USTRUCT()
-struct UNREALINJECTOR_API FInjectionTarget {
+struct UNREALINJECTOR_API FInjectionTarget
+{
     GENERATED_BODY()
 
     /**

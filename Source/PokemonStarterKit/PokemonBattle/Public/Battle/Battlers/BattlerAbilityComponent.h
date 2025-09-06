@@ -15,18 +15,21 @@ class UStatStagesAttributeSet;
 class UPokemonCoreAttributeSet;
 class UExpAttributeSet;
 
-struct FModifierCount {
+struct FModifierCount
+{
     uint8 MultiplierCount = 0;
     uint8 DivisorCount = 0;
 };
 
-struct FModifierInformation {
+struct FModifierInformation
+{
     TMap<FGameplayAttribute, FModifierCount> ModifierCount;
     TMap<TSubclassOf<UGameplayEffect>, TWeakObjectPtr<UGameplayEffect>> Stackables;
 };
 
 UCLASS(ClassGroup = ("Gameplay Abilities"), meta = (BlueprintSpawnableComponent))
-class POKEMONBATTLE_API UBattlerAbilityComponent : public UAsyncAbilityComponent {
+class POKEMONBATTLE_API UBattlerAbilityComponent : public UAsyncAbilityComponent
+{
     GENERATED_BODY()
 
   public:

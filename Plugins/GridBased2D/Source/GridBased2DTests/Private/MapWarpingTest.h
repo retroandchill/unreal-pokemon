@@ -8,7 +8,8 @@
 #include "MapWarpingTest.generated.h"
 
 UCLASS(Abstract)
-class GRIDBASED2DTESTS_API AMapWarpingTest : public AFunctionalTest {
+class GRIDBASED2DTESTS_API AMapWarpingTest : public AFunctionalTest
+{
     GENERATED_BODY()
 
   public:

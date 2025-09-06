@@ -2,6 +2,7 @@
 #include "Species/EggGroup.h"
 #include "DataManager.h"
 
-TArray<FName> UEggGroupHelper::GetEggGroupNames() {
+TArray<FName> UEggGroupHelper::GetEggGroupNames()
+{
     return FDataManager::GetInstance().GetDataTable<FEggGroup>().GetTableRowNames();
 }

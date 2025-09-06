@@ -11,7 +11,8 @@
  *
  */
 UCLASS(Abstract, Blueprintable, DisplayName = "Battle Item Effect HP Recovery")
-class POKEMONBATTLEITEMS_API UBattleItemEffect_HPRecovery : public UBattleItemEffect {
+class POKEMONBATTLEITEMS_API UBattleItemEffect_HPRecovery : public UBattleItemEffect
+{
     GENERATED_BODY()
 
   protected:

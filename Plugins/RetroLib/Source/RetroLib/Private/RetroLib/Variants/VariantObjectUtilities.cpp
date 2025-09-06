@@ -12,76 +12,91 @@
 #include <RetroLib/Optionals/PtrOrNull.h>
 
 CUSTOM_THUNK_STUB(void, UVariantObjectUtilities::CreateVariantFromObject, const UObject *, uint8 &)
-DEFINE_FUNCTION(UVariantObjectUtilities::execCreateVariantFromObject) {
+DEFINE_FUNCTION(UVariantObjectUtilities::execCreateVariantFromObject)
+{
     P_GET_WILDCARD_PARAM(ObjectParam, ObjectData)
     P_GET_OPAQUE_STRUCT(StructProp, VariantPtr)
     P_FINISH
 
-    try {
+    try
+    {
         Retro::ValidateStructProperty(StructProp, VariantPtr);
         const auto &StructInfo = Retro::GetVariantRegistration(*StructProp);
         auto Object = Retro::GetObjectFromProperty(ObjectParam, ObjectData);
         P_NATIVE_BEGIN
         StructInfo.SetStructValue(Object, *StructProp, VariantPtr);
         P_NATIVE_END
-
-    } catch (const Retro::FBlueprintException &Exception) {
+    }
+    catch (const Retro::FBlueprintException &Exception)
+    {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ConvertException(Exception));
     }
 }
 
 CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::CreateVariantFromObjectChecked, TSubclassOf<UObject>, const UObject *,
                   uint8 &)
-DEFINE_FUNCTION(UVariantObjectUtilities::execCreateVariantFromObjectChecked) {
+DEFINE_FUNCTION(UVariantObjectUtilities::execCreateVariantFromObjectChecked)
+{
     P_GET_OBJECT(UClass, Class)
     P_GET_OBJECT(UObject, Object)
     P_GET_OPAQUE_STRUCT(StructProp, VariantPtr)
     P_FINISH
 
-    try {
+    try
+    {
         Retro::ValidateStructProperty(StructProp, VariantPtr);
         const auto &StructInfo = Retro::GetVariantRegistration(*StructProp);
         P_GET_RESULT(bool, Result);
         P_NATIVE_BEGIN
-        if (auto TypeIndex = StructInfo.GetTypeIndex(Object); Object != nullptr && TypeIndex.IsSet()) {
+        if (auto TypeIndex = StructInfo.GetTypeIndex(Object); Object != nullptr && TypeIndex.IsSet())
+        {
             Result = true;
             StructInfo.SetStructValue(Object, *StructProp, VariantPtr);
-        } else {
+        }
+        else
+        {
             Result = false;
         }
         P_NATIVE_END
-
-    } catch (const Retro::FBlueprintException &Exception) {
+    }
+    catch (const Retro::FBlueprintException &Exception)
+    {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ConvertException(Exception));
     }
 }
 
 CUSTOM_THUNK_STUB(UObject *, UVariantObjectUtilities::GetObjectFromVariant, const uint8 &)
-DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariant) {
+DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariant)
+{
     P_GET_OPAQUE_STRUCT(StructProp, VariantPtr)
     P_FINISH
 
-    try {
+    try
+    {
         Retro::ValidateStructProperty(StructProp, VariantPtr);
         const auto &StructInfo = Retro::GetVariantRegistration(*StructProp);
         P_NATIVE_BEGIN
         P_GET_RESULT(UObject *, Object);
         Object = StructInfo.GetValue(*StructProp, VariantPtr).GetPtrOrNull();
         P_NATIVE_END
-    } catch (const Retro::FBlueprintException &Exception) {
+    }
+    catch (const Retro::FBlueprintException &Exception)
+    {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ConvertException(Exception));
     }
 }
 
 CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::GetObjectFromVariantChecked, TSubclassOf<UObject>, const uint8 &,
                   UObject *&)
-DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariantChecked) {
+DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariantChecked)
+{
     P_GET_OBJECT(UClass, Class)
     P_GET_OPAQUE_STRUCT(StructProp, VariantPtr)
     P_GET_WILDCARD_PARAM(ObjectProp, ObjectData)
     P_FINISH
 
-    try {
+    try
+    {
         Retro::ValidateStructProperty(StructProp, VariantPtr);
         const auto &StructInfo = Retro::GetVariantRegistration(*StructProp);
         UObject *Object;
@@ -96,101 +111,127 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execGetObjectFromVariantChecked) {
 
         P_GET_RESULT(bool, Result);
         Result = IsValid(Object);
-    } catch (const Retro::FBlueprintException &Exception) {
+    }
+    catch (const Retro::FBlueprintException &Exception)
+    {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ConvertException(Exception));
     }
 }
 
 CUSTOM_THUNK_STUB(void, UVariantObjectUtilities::MakeSoftVariantFromVariant, const uint8 &, uint8 &)
-DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromVariant) {
+DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromVariant)
+{
     P_GET_OPAQUE_STRUCT(StructProp, VariantPtr)
     P_GET_OPAQUE_STRUCT(SoftStructProp, SoftVariantPtr)
     P_FINISH
 
-    try {
+    try
+    {
         Retro::ValidateStructProperty(StructProp, VariantPtr);
         Retro::ValidateStructProperty(SoftStructProp, SoftVariantPtr);
         const auto &StructInfo = Retro::GetVariantRegistration(*StructProp);
         P_NATIVE_BEGIN
         StructInfo.MakeSoftValue(*StructProp, VariantPtr, *SoftStructProp, SoftVariantPtr);
         P_NATIVE_END
-    } catch (const Retro::FBlueprintException &Exception) {
+    }
+    catch (const Retro::FBlueprintException &Exception)
+    {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ConvertException(Exception));
     }
 }
 
 CUSTOM_THUNK_STUB(void, UVariantObjectUtilities::MakeSoftVariantFromSoftObject, const TSoftObjectPtr<> &, uint8 &)
-DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromSoftObject) {
+DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromSoftObject)
+{
     P_GET_SOFTOBJECT(TSoftObjectPtr<>, SoftObject)
     P_GET_OPAQUE_STRUCT(SoftStructProp, SoftVariantPtr)
     P_FINISH
 
-    try {
+    try
+    {
         Retro::ValidateStructProperty(SoftStructProp, SoftVariantPtr);
         const auto &StructInfo = Retro::GetVariantRegistration(*SoftStructProp);
         P_NATIVE_BEGIN
         StructInfo.MakeSoftValue(SoftObject, *SoftStructProp, SoftVariantPtr);
         P_NATIVE_END
-    } catch (const Retro::FBlueprintException &Exception) {
+    }
+    catch (const Retro::FBlueprintException &Exception)
+    {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ConvertException(Exception));
     }
 }
 
 CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::MakeSoftVariantFromSoftObjectChecked, const TSoftObjectPtr<> &,
                   uint8 &);
-DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromSoftObjectChecked) {
+DEFINE_FUNCTION(UVariantObjectUtilities::execMakeSoftVariantFromSoftObjectChecked)
+{
     P_GET_SOFTOBJECT(TSoftObjectPtr<>, SoftObject)
     P_GET_OPAQUE_STRUCT(SoftStructProp, SoftVariantPtr)
     P_FINISH
 
-    try {
+    try
+    {
         Retro::ValidateStructProperty(SoftStructProp, SoftVariantPtr);
         const auto &StructInfo = Retro::GetVariantRegistration(*SoftStructProp);
         P_NATIVE_BEGIN
         P_GET_RESULT(bool, Result);
-        if (auto TypeIndex = StructInfo.GetTypeIndex(SoftObject); !SoftObject.IsNull() && TypeIndex.IsSet()) {
+        if (auto TypeIndex = StructInfo.GetTypeIndex(SoftObject); !SoftObject.IsNull() && TypeIndex.IsSet())
+        {
             Result = true;
             StructInfo.MakeSoftValue(SoftObject, *SoftStructProp, SoftVariantPtr);
-        } else {
+        }
+        else
+        {
             Result = false;
         }
         P_NATIVE_END
-    } catch (const Retro::FBlueprintException &Exception) {
+    }
+    catch (const Retro::FBlueprintException &Exception)
+    {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ConvertException(Exception));
     }
 }
 
 CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::SoftVariantCast, UClass *, const uint8 &, TSoftObjectPtr<> &);
-DEFINE_FUNCTION(UVariantObjectUtilities::execSoftVariantCast) {
+DEFINE_FUNCTION(UVariantObjectUtilities::execSoftVariantCast)
+{
     P_GET_OBJECT(UClass, Class)
     P_GET_OPAQUE_STRUCT(SoftStructProp, SoftVariantPtr)
     P_GET_SOFTOBJECT_REF(TSoftObjectPtr<>, SoftObject)
     P_FINISH
 
-    try {
+    try
+    {
         Retro::ValidateStructProperty(SoftStructProp, SoftVariantPtr);
         const auto &StructInfo = Retro::GetVariantRegistration(*SoftStructProp);
         P_NATIVE_BEGIN
         P_GET_RESULT(bool, Result);
-        if (auto SoftResult = StructInfo.TryGetSoftValue(Class, *SoftStructProp, SoftVariantPtr); SoftResult.IsSet()) {
+        if (auto SoftResult = StructInfo.TryGetSoftValue(Class, *SoftStructProp, SoftVariantPtr); SoftResult.IsSet())
+        {
             Result = true;
             SoftObject = SoftResult->ToSoftObjectPtr();
-        } else {
+        }
+        else
+        {
             Result = false;
         }
         P_NATIVE_END
-    } catch (const Retro::FBlueprintException &Exception) {
+    }
+    catch (const Retro::FBlueprintException &Exception)
+    {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ConvertException(Exception));
     }
 }
 
 CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::LoadSynchronous, const uint8 &, uint8 &)
-DEFINE_FUNCTION(UVariantObjectUtilities::execLoadSynchronous) {
+DEFINE_FUNCTION(UVariantObjectUtilities::execLoadSynchronous)
+{
     P_GET_OPAQUE_STRUCT(SoftStructProp, SoftVariantPtr)
     P_GET_OPAQUE_STRUCT(StructProp, VariantPtr)
     P_FINISH
 
-    try {
+    try
+    {
         Retro::ValidateStructProperty(SoftStructProp, SoftVariantPtr);
         Retro::ValidateStructProperty(StructProp, VariantPtr);
         const auto &StructInfo = Retro::GetVariantRegistration(*SoftStructProp);
@@ -201,18 +242,22 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execLoadSynchronous) {
 
         P_GET_RESULT(bool, Result);
         Result = bLoaded;
-    } catch (const Retro::FBlueprintException &Exception) {
+    }
+    catch (const Retro::FBlueprintException &Exception)
+    {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ConvertException(Exception));
     }
 }
 
 CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::ConvertVariantObject, const uint8 &, uint8 &)
-DEFINE_FUNCTION(UVariantObjectUtilities::execConvertVariantObject) {
+DEFINE_FUNCTION(UVariantObjectUtilities::execConvertVariantObject)
+{
     P_GET_OPAQUE_STRUCT(SourceProp, SourcePtr)
     P_GET_OPAQUE_STRUCT(DestProp, DestPtr)
     P_FINISH
 
-    try {
+    try
+    {
         Retro::ValidateStructProperty(SourceProp, SourcePtr);
         Retro::ValidateStructProperty(DestProp, DestPtr);
         const auto &StructInfo = Retro::GetVariantConversion(*SourceProp, *DestProp);
@@ -223,18 +268,22 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execConvertVariantObject) {
 
         P_GET_RESULT(bool, Result);
         Result = bConverted;
-    } catch (const Retro::FBlueprintException &Exception) {
+    }
+    catch (const Retro::FBlueprintException &Exception)
+    {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ConvertException(Exception));
     }
 }
 
 CUSTOM_THUNK_STUB(bool, UVariantObjectUtilities::ConvertSoftVariantObject, const uint8 &, uint8 &)
-DEFINE_FUNCTION(UVariantObjectUtilities::execConvertSoftVariantObject) {
+DEFINE_FUNCTION(UVariantObjectUtilities::execConvertSoftVariantObject)
+{
     P_GET_OPAQUE_STRUCT(SourceProp, SourcePtr)
     P_GET_OPAQUE_STRUCT(DestProp, DestPtr)
     P_FINISH
 
-    try {
+    try
+    {
         Retro::ValidateStructProperty(SourceProp, SourcePtr);
         Retro::ValidateStructProperty(DestProp, DestPtr);
         const auto &StructInfo = Retro::GetVariantConversion(*SourceProp, *DestProp);
@@ -245,7 +294,9 @@ DEFINE_FUNCTION(UVariantObjectUtilities::execConvertSoftVariantObject) {
 
         P_GET_RESULT(bool, Result);
         Result = bConverted;
-    } catch (const Retro::FBlueprintException &Exception) {
+    }
+    catch (const Retro::FBlueprintException &Exception)
+    {
         FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ConvertException(Exception));
     }
 }

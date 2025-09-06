@@ -7,6 +7,7 @@ DEFINE_STATIC_REGISTRY(FBagSorterRegistry)
 
 IBagSorter::~IBagSorter() = default;
 
-void IBagSorter::SortPocket(TArrayView<FItemSlot> Pocket) const {
+void IBagSorter::SortPocket(TArrayView<FItemSlot> Pocket) const
+{
     Pocket.Sort(std::bind_front(&IBagSorter::CompareItems, this));
 }

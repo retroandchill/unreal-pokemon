@@ -3,17 +3,22 @@
 #include "Nodes/Items/TakeItemFromPokemon.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
 
-UTakeItemFromPokemon *UTakeItemFromPokemon::TakeItemFromPokemon(const TScriptInterface<IPokemon> &Pokemon) {
+UTakeItemFromPokemon *UTakeItemFromPokemon::TakeItemFromPokemon(const TScriptInterface<IPokemon> &Pokemon)
+{
     auto Node = NewObject<UTakeItemFromPokemon>();
     Node->SetWorldContext(Pokemon.GetObject());
     Node->Pokemon = Pokemon;
     return Node;
 }
 
-UE5Coro::TCoroutine<> UTakeItemFromPokemon::ExecuteCoroutine(FForceLatentCoroutine) {
-    if (co_await IPokemonCoroutineDispatcher::Get(GetWorldContext()).TakeItemFromPokemon(Pokemon)) {
+UE5Coro::TCoroutine<> UTakeItemFromPokemon::ExecuteCoroutine(FForceLatentCoroutine)
+{
+    if (co_await IPokemonCoroutineDispatcher::Get(GetWorldContext()).TakeItemFromPokemon(Pokemon))
+    {
         ItemTaken.Broadcast();
-    } else {
+    }
+    else
+    {
         ItemNotTaken.Broadcast();
     }
 }

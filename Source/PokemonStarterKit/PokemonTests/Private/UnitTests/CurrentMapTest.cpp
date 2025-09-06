@@ -10,7 +10,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(CurrentMapTest, "Unit Tests.Core.CurrentMapTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool CurrentMapTest::RunTest(const FString &Parameters) {
+bool CurrentMapTest::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto &PokemonSubsystem = UPokemonSubsystem::GetInstance(World.Get());
     PokemonSubsystem.SetCurrentLocation(FText::FromStringView(TEXT("Test Map")));

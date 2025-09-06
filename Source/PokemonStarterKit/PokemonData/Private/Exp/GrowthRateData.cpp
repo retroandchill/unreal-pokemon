@@ -2,6 +2,7 @@
 #include "Exp/GrowthRateData.h"
 #include "DataManager.h"
 
-TArray<FName> UGrowthRateHelper::GetGrowthRateNames() {
+TArray<FName> UGrowthRateHelper::GetGrowthRateNames()
+{
     return FDataManager::GetInstance().GetDataTable<FGrowthRateData>().GetTableRowNames();
 }

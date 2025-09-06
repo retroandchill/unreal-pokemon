@@ -12,13 +12,18 @@ class UGameplayStatics;
 class AGridBasedGameModeBase;
 
 UENUM(BlueprintType)
-enum class EValidDirection : uint8 { HasDirection, NoDirection };
+enum class EValidDirection : uint8
+{
+    HasDirection,
+    NoDirection
+};
 
 /**
  * Utility library for functions regarding the Grid system
  */
 UCLASS()
-class GRIDBASED2D_API UGridUtils : public UBlueprintFunctionLibrary {
+class GRIDBASED2D_API UGridUtils : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
   public:
     /**
@@ -60,8 +65,10 @@ class GRIDBASED2D_API UGridUtils : public UBlueprintFunctionLibrary {
      * @param Position The position struct to alter
      */
     template <typename Vector>
-    static void AdjustMovementPosition(EFacingDirection MovementDirection, Vector &Position) {
-        switch (MovementDirection) {
+    static void AdjustMovementPosition(EFacingDirection MovementDirection, Vector &Position)
+    {
+        switch (MovementDirection)
+        {
             using enum EFacingDirection;
         case Down:
             Position.Y += 1;
@@ -94,12 +101,14 @@ class GRIDBASED2D_API UGridUtils : public UBlueprintFunctionLibrary {
      */
     template <typename T>
         requires std::is_base_of_v<AActor, T>
-    static TArray<T *> FindAllActors(const UObject *WorldContext) {
+    static TArray<T *> FindAllActors(const UObject *WorldContext)
+    {
         TArray<T *> Ret;
         auto World = WorldContext->GetWorld();
         check(World != nullptr)
 
-        for (TActorIterator<T> It(World); It; ++It) {
+        for (TActorIterator<T> It(World); It; ++It)
+        {
             Ret.Emplace(*It);
         }
 

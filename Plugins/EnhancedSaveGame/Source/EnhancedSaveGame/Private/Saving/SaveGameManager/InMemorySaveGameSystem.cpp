@@ -8,15 +8,18 @@
 
 using namespace EnhancedSaveGame;
 
-bool FInMemorySaveGameSystem::PlatformHasNativeUI() {
+bool FInMemorySaveGameSystem::PlatformHasNativeUI()
+{
     return false;
 }
 
-bool FInMemorySaveGameSystem::DoesSaveSystemSupportMultipleUsers() {
+bool FInMemorySaveGameSystem::DoesSaveSystemSupportMultipleUsers()
+{
     return false;
 }
 
-bool FInMemorySaveGameSystem::DoesSaveGameExist(const TCHAR *Name, const int32 UserIndex) {
+bool FInMemorySaveGameSystem::DoesSaveGameExist(const TCHAR *Name, const int32 UserIndex)
+{
     // clang-format off
     return Retro::Optionals::OfNullable(SaveGames.Find(Name)) |
            Retro::Optionals::Transform([UserIndex](const TMap<int32, TArray<uint8>> &Map) {
@@ -27,7 +30,8 @@ bool FInMemorySaveGameSystem::DoesSaveGameExist(const TCHAR *Name, const int32 U
 }
 
 ISaveGameSystem::ESaveExistsResult FInMemorySaveGameSystem::DoesSaveGameExistWithResult(const TCHAR *Name,
-                                                                                        const int32 UserIndex) {
+                                                                                        const int32 UserIndex)
+{
     // clang-format off
     return Retro::Optionals::OfNullable(SaveGames.Find(Name)) |
            Retro::Optionals::Transform([UserIndex](const TMap<int32, TArray<uint8>> &Map) {
@@ -41,7 +45,8 @@ ISaveGameSystem::ESaveExistsResult FInMemorySaveGameSystem::DoesSaveGameExistWit
 }
 
 bool FInMemorySaveGameSystem::SaveGame(bool bAttemptToUseUI, const TCHAR *Name, const int32 UserIndex,
-                                       const TArray<uint8> &Data) {
+                                       const TArray<uint8> &Data)
+{
     UE_LOG(LogEnhancedSaveGame, Display, TEXT("Saving to save game '%s' slot %d"), Name, UserIndex)
     auto &Slots = SaveGames.FindOrAdd(Name);
     Slots.Emplace(UserIndex, Data);
@@ -49,7 +54,8 @@ bool FInMemorySaveGameSystem::SaveGame(bool bAttemptToUseUI, const TCHAR *Name, 
 }
 
 bool FInMemorySaveGameSystem::LoadGame(bool bAttemptToUseUI, const TCHAR *Name, const int32 UserIndex,
-                                       TArray<uint8> &Data) {
+                                       TArray<uint8> &Data)
+{
     UE_LOG(LogEnhancedSaveGame, Display, TEXT("Loading save game '%s' slot %d"), Name, UserIndex)
     // clang-format off
     auto DataSlot = Retro::Optionals::OfNullable(SaveGames.Find(Name)) |
@@ -64,7 +70,8 @@ bool FInMemorySaveGameSystem::LoadGame(bool bAttemptToUseUI, const TCHAR *Name, 
     return DataSlot.IsSet();
 }
 
-bool FInMemorySaveGameSystem::DeleteGame(bool bAttemptToUseUI, const TCHAR *Name, const int32 UserIndex) {
+bool FInMemorySaveGameSystem::DeleteGame(bool bAttemptToUseUI, const TCHAR *Name, const int32 UserIndex)
+{
     // clang-format off
     return Retro::Optionals::OfNullable(SaveGames.Find(Name)) |
         Retro::Optionals::Transform([UserIndex](TMap<int32, TArray<uint8>> &Map) { return Map.Remove(UserIndex); }) |

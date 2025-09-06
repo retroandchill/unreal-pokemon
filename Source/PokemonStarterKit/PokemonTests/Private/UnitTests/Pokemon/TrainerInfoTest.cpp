@@ -14,7 +14,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TrainerInfoTest, "Unit Tests.Core.Pokemon.TrainerInfoTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TrainerInfoTest::RunTest(const FString &Parameters) {
+bool TrainerInfoTest::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
     UPokemonSubsystem::GetInstance(World.Get()).StartNewGame();

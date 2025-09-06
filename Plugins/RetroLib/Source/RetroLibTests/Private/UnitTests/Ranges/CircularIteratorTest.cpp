@@ -3,13 +3,16 @@
 #include "TestAdapter.h"
 #include <array>
 
-namespace Retro::Testing {
-    struct FMyTestStruct {
+namespace Retro::Testing
+{
+    struct FMyTestStruct
+    {
         int32 Value;
     };
 } // namespace Retro::Testing
 
-TEST_CASE_NAMED(FCircularIteratorTest, "Unit Tests::RetroLib::Ranges::CircularIterator", "[RetroLib][Ranges]") {
+TEST_CASE_NAMED(FCircularIteratorTest, "Unit Tests::RetroLib::Ranges::CircularIterator", "[RetroLib][Ranges]")
+{
     using namespace Retro::Testing;
     Retro::TCircularIterator<int32> Iterator;
     CHECK_FALSE(Iterator.IsValid());

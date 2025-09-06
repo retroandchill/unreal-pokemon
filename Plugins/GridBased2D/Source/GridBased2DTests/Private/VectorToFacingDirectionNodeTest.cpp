@@ -6,7 +6,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(VectorToFacingDirectionNodeTest,
                                  "Unit Tests.GridBased2D.VectorToFacingDirectionNodeTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool VectorToFacingDirectionNodeTest::RunTest(const FString &Parameters) {
+bool VectorToFacingDirectionNodeTest::RunTest(const FString &Parameters)
+{
     EValidDirection IsValid;
     EFacingDirection Direction;
 

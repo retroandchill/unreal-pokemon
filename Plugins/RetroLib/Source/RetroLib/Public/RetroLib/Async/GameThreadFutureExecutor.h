@@ -9,7 +9,8 @@
 
 #include "RetroLib/Functional/Delegates.h"
 
-namespace Retro {
+namespace Retro
+{
     /**
      * @class TGameThreadFutureExecutor
      *
@@ -25,7 +26,8 @@ namespace Retro {
      * game state.
      */
     template <typename T>
-    class TGameThreadFutureExecutor : public FTickableGameObject {
+    class TGameThreadFutureExecutor : public FTickableGameObject
+    {
       public:
         using FCompleteDelegate = TMulticastDelegate<void(T)>;
 
@@ -37,7 +39,8 @@ namespace Retro {
          * @param Future The future task to be executed on the game thread.
          * @return A TGameThreadFutureExecutor instance configured with the provided future.
          */
-        explicit TGameThreadFutureExecutor(TFuture<T> &&Future) : Future(std::move(Future)) {
+        explicit TGameThreadFutureExecutor(TFuture<T> &&Future) : Future(std::move(Future))
+        {
         }
 
         /**
@@ -51,16 +54,20 @@ namespace Retro {
          */
         template <typename... A>
             requires Delegates::CanAddToDelegate<FCompleteDelegate, A...>
-        FDelegateHandle AddOnCompleteTask(A &&...Args) {
-            if (Value.IsSet()) {
+        FDelegateHandle AddOnCompleteTask(A &&...Args)
+        {
+            if (Value.IsSet())
+            {
                 std::invoke(CreateBinding(std::forward<A>(Args)...), *Value);
             }
 
             return Delegates::Add(OnComplete, std::forward<A>(Args)...);
         }
 
-        void Tick(float DeltaTime) override {
-            if (!Future.IsReady()) {
+        void Tick(float DeltaTime) override
+        {
+            if (!Future.IsReady())
+            {
                 return;
             }
 
@@ -68,7 +75,8 @@ namespace Retro {
             OnComplete.Broadcast(*Value);
         }
 
-        TStatId GetStatId() const override {
+        TStatId GetStatId() const override
+        {
             RETURN_QUICK_DECLARE_CYCLE_STAT(UTickBasedClock, STATGROUP_Tickables);
         }
 

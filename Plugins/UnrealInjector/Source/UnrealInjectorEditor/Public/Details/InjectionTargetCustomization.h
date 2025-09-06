@@ -7,7 +7,8 @@
 /**
  *
  */
-class UNREALINJECTOREDITOR_API FInjectionTargetCustomization : public IPropertyTypeCustomization {
+class UNREALINJECTOREDITOR_API FInjectionTargetCustomization : public IPropertyTypeCustomization
+{
   public:
     static TSharedRef<IPropertyTypeCustomization> MakeInstance();
 

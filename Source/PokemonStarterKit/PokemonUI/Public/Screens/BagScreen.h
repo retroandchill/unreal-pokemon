@@ -27,7 +27,8 @@ class UItemSelectionWindow;
  * The screen that contains the basic outline of the player's bag
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
+class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen
+{
     GENERATED_BODY()
 
   public:
@@ -83,9 +84,11 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen {
   public:
     template <typename T, typename... A>
         requires std::is_base_of_v<UFieldItemEffect, T>
-    UE5Coro::TCoroutine<bool> TryUseItem(const FItem &Item, int32 Quantity, A &&...Args) {
+    UE5Coro::TCoroutine<bool> TryUseItem(const FItem &Item, int32 Quantity, A &&...Args)
+    {
         auto EffectClass = Pokemon::Items::FieldItemEffects.LoadClass<T>(Item.ID);
-        if (!EffectClass.IsSet()) {
+        if (!EffectClass.IsSet())
+        {
             OnItemEffectConclude(false, Item.ID);
             co_return false;
         }

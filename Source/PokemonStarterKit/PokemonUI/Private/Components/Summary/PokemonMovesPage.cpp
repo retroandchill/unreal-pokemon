@@ -3,11 +3,13 @@
 #include "Components/Summary/PokemonMovesPage.h"
 #include "Input/CommonUIInputTypes.h"
 
-void UPokemonMovesPage::NativeConstruct() {
+void UPokemonMovesPage::NativeConstruct()
+{
     Super::NativeConstruct();
 
     FBindUIActionArgs BindArgs(SelectionAction, FSimpleDelegate::CreateWeakLambda(this, [this] {
-                                   if (bIsShown) {
+                                   if (bIsShown)
+                                   {
                                        OnSelected.Broadcast();
                                    }
                                }));
@@ -16,16 +18,19 @@ void UPokemonMovesPage::NativeConstruct() {
     InspectActionHandler = RegisterUIActionBinding(BindArgs);
 }
 
-void UPokemonMovesPage::OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon) {
+void UPokemonMovesPage::OnPokemonSet_Implementation(const TScriptInterface<IPokemon> &NewPokemon)
+{
     DrawPokemonMoves.Broadcast(NewPokemon);
 }
 
-void UPokemonMovesPage::OnPageShown() {
+void UPokemonMovesPage::OnPageShown()
+{
     bIsShown = true;
     InspectActionHandler.SetDisplayInActionBar(true);
 }
 
-void UPokemonMovesPage::OnPageHidden() {
+void UPokemonMovesPage::OnPageHidden()
+{
     bIsShown = false;
     InspectActionHandler.SetDisplayInActionBar(false);
 }

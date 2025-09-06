@@ -8,7 +8,8 @@
 /**
  * Module for handling dependency injection for classes
  */
-class FUnrealInjectorModule : public IModuleInterface {
+class FUnrealInjectorModule : public IModuleInterface
+{
   public:
     void StartupModule() override;
     void ShutdownModule() override;

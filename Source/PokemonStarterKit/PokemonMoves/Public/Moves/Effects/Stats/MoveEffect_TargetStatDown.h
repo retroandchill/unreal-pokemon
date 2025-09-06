@@ -12,7 +12,8 @@
  *
  */
 UCLASS(Abstract, Blueprintable, BlueprintType)
-class POKEMONMOVES_API UMoveEffect_TargetStatDown : public UBattleMoveFunctionCode {
+class POKEMONMOVES_API UMoveEffect_TargetStatDown : public UBattleMoveFunctionCode
+{
     GENERATED_BODY()
 
   public:

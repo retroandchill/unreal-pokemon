@@ -12,7 +12,8 @@
  * additional buttons.
  */
 UCLASS(Abstract)
-class RPGMENUS_API UNamedSlotSelectableWidget : public USelectableWidget {
+class RPGMENUS_API UNamedSlotSelectableWidget : public USelectableWidget
+{
     GENERATED_BODY()
 
   protected:

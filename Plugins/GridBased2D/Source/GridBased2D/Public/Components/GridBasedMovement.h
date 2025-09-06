@@ -10,14 +10,16 @@
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
-class UGridBasedMovement : public UInterface {
+class UGridBasedMovement : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Interface for the Grid-Based Movement Actor component
  */
-class GRIDBASED2D_API IGridBasedMovement {
+class GRIDBASED2D_API IGridBasedMovement
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

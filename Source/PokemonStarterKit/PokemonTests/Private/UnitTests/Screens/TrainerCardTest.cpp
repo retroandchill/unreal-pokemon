@@ -11,7 +11,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TrainerCardTest, "Unit Tests.UI.TrainerCardTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TrainerCardTest::RunTest(const FString &Parameters) {
+bool TrainerCardTest::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UTrainerCardScreen>();
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());

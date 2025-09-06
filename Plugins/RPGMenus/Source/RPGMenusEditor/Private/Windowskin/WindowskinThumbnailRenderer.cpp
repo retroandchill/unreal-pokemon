@@ -3,11 +3,13 @@
 #include "Data/Windowskin.h"
 #include "ThumbnailRendering/ThumbnailManager.h"
 
-EThumbnailRenderFrequency UWindowskinThumbnailRenderer::GetThumbnailRenderFrequency(UObject *Object) const {
+EThumbnailRenderFrequency UWindowskinThumbnailRenderer::GetThumbnailRenderFrequency(UObject *Object) const
+{
     return EThumbnailRenderFrequency::Realtime;
 }
 
-bool UWindowskinThumbnailRenderer::CanVisualizeAsset(UObject *Object) {
+bool UWindowskinThumbnailRenderer::CanVisualizeAsset(UObject *Object)
+{
     auto Windowskin = Cast<UWindowskin>(Object);
     if (Windowskin == nullptr)
         return false;
@@ -16,7 +18,8 @@ bool UWindowskinThumbnailRenderer::CanVisualizeAsset(UObject *Object) {
 }
 
 void UWindowskinThumbnailRenderer::Draw(UObject *Object, int32 X, int32 Y, uint32 Width, uint32 Height,
-                                        FRenderTarget *RenderTarget, FCanvas *Canvas, bool bAdditionalViewFamily) {
+                                        FRenderTarget *RenderTarget, FCanvas *Canvas, bool bAdditionalViewFamily)
+{
     auto Windowskin = Cast<UWindowskin>(Object);
     if (Windowskin == nullptr)
         return;

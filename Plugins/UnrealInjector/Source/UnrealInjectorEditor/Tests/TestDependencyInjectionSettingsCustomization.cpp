@@ -9,7 +9,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDependencyInjectionSettingsCustomization,
                                  "Unit Tests.DependencyInjection.TestDependencyInjectionSettingsCustomization",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestDependencyInjectionSettingsCustomization::RunTest(const FString &Parameters) {
+bool TestDependencyInjectionSettingsCustomization::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto &EditModule = FModuleManager::Get().GetModuleChecked<FPropertyEditorModule>("PropertyEditor");
     FDetailsViewArgs DetailsViewArgs;

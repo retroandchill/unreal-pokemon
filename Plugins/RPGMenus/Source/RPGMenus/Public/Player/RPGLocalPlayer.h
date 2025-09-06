@@ -14,7 +14,8 @@ class UPrimaryGameLayout;
  *
  */
 UCLASS()
-class RPGMENUS_API URPGLocalPlayer : public ULocalPlayer {
+class RPGMENUS_API URPGLocalPlayer : public ULocalPlayer
+{
     GENERATED_BODY()
 
   public:
@@ -36,10 +37,12 @@ class RPGMENUS_API URPGLocalPlayer : public ULocalPlayer {
     bool GetProjectionData(FViewport *Viewport, FSceneViewProjectionData &ProjectionData,
                            int32 StereoViewIndex) const override;
 
-    bool IsPlayerViewEnabled() const {
+    bool IsPlayerViewEnabled() const
+    {
         return bIsPlayerViewEnabled;
     }
-    void SetIsPlayerViewEnabled(bool bInIsPlayerViewEnabled) {
+    void SetIsPlayerViewEnabled(bool bInIsPlayerViewEnabled)
+    {
         bIsPlayerViewEnabled = bInIsPlayerViewEnabled;
     }
 

@@ -10,7 +10,8 @@
 #include "Screens/Screen.h"
 #include "Utilities/PokemonUIUtils.h"
 
-UUpdateHPBar *UUpdateHPBar::UpdateHPBar(UScreen *Screen, const TScriptInterface<IPokemon> &Pokemon, float MaxDuration) {
+UUpdateHPBar *UUpdateHPBar::UpdateHPBar(UScreen *Screen, const TScriptInterface<IPokemon> &Pokemon, float MaxDuration)
+{
     auto Node = NewObject<UUpdateHPBar>();
     Node->SetWorldContext(Screen);
     Node->Screen = Screen;
@@ -19,9 +20,11 @@ UUpdateHPBar *UUpdateHPBar::UpdateHPBar(UScreen *Screen, const TScriptInterface<
     return Node;
 }
 
-UE5Coro::TCoroutine<> UUpdateHPBar::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine) {
+UE5Coro::TCoroutine<> UUpdateHPBar::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine)
+{
     using Pokemon::UI::FSetNewPercent;
-    if (!Screen->Implements<UPartyDisplayScreen>()) {
+    if (!Screen->Implements<UPartyDisplayScreen>())
+    {
         OnAnimationComplete.Broadcast();
         co_return;
     }
@@ -30,7 +33,8 @@ UE5Coro::TCoroutine<> UUpdateHPBar::ExecuteCoroutine(FForceLatentCoroutine Force
     check(IsValid(SelectionPane))
 
     auto Panel = SelectionPane->FindPanelForPokemon(Pokemon).GetPtrOrNull();
-    if (!IsValid(Panel) || !Panel->Implements<UHPBarPanel>()) {
+    if (!IsValid(Panel) || !Panel->Implements<UHPBarPanel>())
+    {
         OnAnimationComplete.Broadcast();
         co_return;
     }

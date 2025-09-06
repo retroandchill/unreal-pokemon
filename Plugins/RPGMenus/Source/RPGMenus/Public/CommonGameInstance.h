@@ -12,7 +12,8 @@
  *
  */
 UCLASS()
-class RPGMENUS_API UCommonGameInstance : public UGameInstance {
+class RPGMENUS_API UCommonGameInstance : public UGameInstance
+{
     GENERATED_BODY()
 
   public:

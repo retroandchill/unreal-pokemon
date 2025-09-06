@@ -14,7 +14,8 @@ class UPaperZDAnimationSource;
  * Animation Source Class.
  */
 UCLASS()
-class UNREALPOKEMONEDITOR_API UCharacterImporterBase : public UEditorUtilityWidget {
+class UNREALPOKEMONEDITOR_API UCharacterImporterBase : public UEditorUtilityWidget
+{
     GENERATED_BODY()
 
   private:

@@ -16,7 +16,8 @@ class UDisplayText;
  * An option that represents and item in the player's inventory.
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONUI_API UItemOption : public UCommonButtonBase {
+class POKEMONUI_API UItemOption : public UCommonButtonBase
+{
     GENERATED_BODY()
 
   public:

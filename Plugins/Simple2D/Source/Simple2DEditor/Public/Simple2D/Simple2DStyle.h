@@ -2,11 +2,13 @@
 
 #pragma once
 
-namespace Simple2D {
+namespace Simple2D
+{
     /**
      *
      */
-    class SIMPLE2DEDITOR_API FSimple2DStyle {
+    class SIMPLE2DEDITOR_API FSimple2DStyle
+    {
       public:
         static void Initialize();
 

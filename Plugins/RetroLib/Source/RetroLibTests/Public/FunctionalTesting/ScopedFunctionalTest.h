@@ -17,7 +17,8 @@
  * for preparing and finishing the test, as well as managing scoped test objects and data.
  */
 UCLASS(Abstract)
-class RETROLIBTESTS_API AScopedFunctionalTest : public AEditorFunctionalTest {
+class RETROLIBTESTS_API AScopedFunctionalTest : public AEditorFunctionalTest
+{
     GENERATED_BODY()
 
   public:
@@ -36,7 +37,8 @@ class RETROLIBTESTS_API AScopedFunctionalTest : public AEditorFunctionalTest {
      */
     template <typename T, typename... A>
         requires std::constructible_from<Retro::FUniqueAny, std::in_place_type_t<T>, A...>
-    void AddScopedData(A &&...Args) {
+    void AddScopedData(A &&...Args)
+    {
         ScopedData.Emplace(std::in_place_type<T>, std::forward<A>(Args)...);
     }
 

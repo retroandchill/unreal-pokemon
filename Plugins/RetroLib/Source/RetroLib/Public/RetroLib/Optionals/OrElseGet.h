@@ -14,9 +14,11 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Optionals {
+namespace Retro::Optionals
+{
 
-    struct FOrElseGetInvoker {
+    struct FOrElseGetInvoker
+    {
         /**
          * Invokes the provided functor or returns the value from the optional object.
          *
@@ -28,8 +30,10 @@ namespace Retro::Optionals {
          */
         template <OptionalType O, typename F>
             requires std::invocable<F> && std::convertible_to<TCommonReference<O>, std::invoke_result_t<F>>
-        constexpr decltype(auto) operator()(O &&Optional, F &&Functor) const {
-            if (HasValue(std::forward<O>(Optional))) {
+        constexpr decltype(auto) operator()(O &&Optional, F &&Functor) const
+        {
+            if (HasValue(std::forward<O>(Optional)))
+            {
                 return static_cast<std::invoke_result_t<F>>(Get(std::forward<O>(Optional)));
             }
 
@@ -40,8 +44,10 @@ namespace Retro::Optionals {
         template <OptionalType O, typename F>
             requires std::invocable<F> && UnrealInterface<TValueType<O>> &&
                      SpecializationOf<std::invoke_result_t<F>, TScriptInterface>
-        constexpr decltype(auto) operator()(O &&Optional, F &&Functor) const {
-            if (HasValue(std::forward<O>(Optional))) {
+        constexpr decltype(auto) operator()(O &&Optional, F &&Functor) const
+        {
+            if (HasValue(std::forward<O>(Optional)))
+            {
                 return static_cast<std::invoke_result_t<F>>(Get(std::forward<O>(Optional))._getUObject());
             }
 

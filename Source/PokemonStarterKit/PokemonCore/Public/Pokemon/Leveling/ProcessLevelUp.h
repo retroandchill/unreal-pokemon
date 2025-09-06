@@ -18,7 +18,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAfterLevelUp);
  *
  */
 UCLASS(meta = (HideThen))
-class POKEMONCORE_API UProcessLevelUp : public UBlueprintCoroutineActionBase {
+class POKEMONCORE_API UProcessLevelUp : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

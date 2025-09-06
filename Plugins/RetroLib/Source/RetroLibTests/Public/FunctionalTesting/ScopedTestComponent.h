@@ -20,7 +20,8 @@ class AScopedFunctionalTest;
  * This class is abstract and requires the implementation of the AddScopedComponent method in derived classes.
  */
 UCLASS(Abstract, ClassGroup = (FunctionalTesting), meta = (BlueprintSpawnableComponent))
-class RETROLIBTESTS_API UScopedTestComponent : public UActorComponent {
+class RETROLIBTESTS_API UScopedTestComponent : public UActorComponent
+{
     GENERATED_BODY()
 
   public:

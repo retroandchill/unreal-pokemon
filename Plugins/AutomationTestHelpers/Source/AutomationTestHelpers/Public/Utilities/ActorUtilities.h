@@ -11,7 +11,8 @@
  * Utility library for actors
  */
 UCLASS()
-class AUTOMATIONTESTHELPERS_API UActorUtilities : public UBlueprintFunctionLibrary {
+class AUTOMATIONTESTHELPERS_API UActorUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
     /**

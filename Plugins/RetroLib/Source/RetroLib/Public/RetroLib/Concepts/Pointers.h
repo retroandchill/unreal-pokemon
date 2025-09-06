@@ -19,7 +19,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * Checks if the given type is a pointer type.
      *
@@ -32,16 +33,20 @@ namespace Retro {
     };
 
     RETROLIB_EXPORT template <typename T>
-    struct TPointerGetter {
-        static constexpr T *Get(T &Value) {
+    struct TPointerGetter
+    {
+        static constexpr T *Get(T &Value)
+        {
             return &Value;
         }
 
-        static constexpr const T *Get(const T &Value) {
+        static constexpr const T *Get(const T &Value)
+        {
             return &Value;
         }
 
-        static constexpr const T *Get([[maybe_unused]] T &&Value) {
+        static constexpr const T *Get([[maybe_unused]] T &&Value)
+        {
             static_assert(false, "Can't apply to an r-value reference");
             Unreachable();
         }
@@ -50,15 +55,18 @@ namespace Retro {
 #ifdef __UNREAL__
     RETROLIB_EXPORT template <typename T>
         requires std::derived_from<T, UObject>
-    struct TPointerGetter<TNonNullSubclassOf<T>> {
-        static constexpr TSubclassOf<T> Get(const TNonNullSubclassOf<T> &Value) {
+    struct TPointerGetter<TNonNullSubclassOf<T>>
+    {
+        static constexpr TSubclassOf<T> Get(const TNonNullSubclassOf<T> &Value)
+        {
             return Value;
         }
     };
 #endif
 
     RETROLIB_EXPORT template <typename T>
-    constexpr auto GetPtrFromRef(T &&Ref) {
+    constexpr auto GetPtrFromRef(T &&Ref)
+    {
         return TPointerGetter<std::remove_cvref_t<T>>::Get(Ref);
     }
 } // namespace Retro

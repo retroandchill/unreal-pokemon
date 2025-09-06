@@ -11,7 +11,8 @@
  * Represents a weather effect that may be present on a map
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FWeather : public FIndexedTableRow {
+struct POKEMONDATA_API FWeather : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**

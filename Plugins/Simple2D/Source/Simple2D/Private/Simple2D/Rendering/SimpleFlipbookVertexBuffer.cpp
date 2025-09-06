@@ -2,13 +2,16 @@
 
 #include "Simple2D/Rendering/SimpleFlipbookVertexBuffer.h"
 
-void Simple2D::FSimpleFlipbookVertexBuffer::SetDynamicUsage(bool bInDynamicUsage) {
+void Simple2D::FSimpleFlipbookVertexBuffer::SetDynamicUsage(bool bInDynamicUsage)
+{
     bDynamicUsage = bInDynamicUsage;
 }
 
-void Simple2D::FSimpleFlipbookVertexBuffer::CreateBuffers(FRHICommandListBase &RHICmdList, int32 NumVertices) {
+void Simple2D::FSimpleFlipbookVertexBuffer::CreateBuffers(FRHICommandListBase &RHICmdList, int32 NumVertices)
+{
     // Make sure we don't have dangling buffers
-    if (NumAllocatedVertices > 0) {
+    if (NumAllocatedVertices > 0)
+    {
         ReleaseBuffers();
     }
 
@@ -21,7 +24,8 @@ void Simple2D::FSimpleFlipbookVertexBuffer::CreateBuffers(FRHICommandListBase &R
     {
         FRHIResourceCreateInfo CreateInfo(TEXT("PaperSpritePositionBuffer"));
         PositionBuffer.VertexBufferRHI = RHICmdList.CreateVertexBuffer(PositionSize, Usage, CreateInfo);
-        if (RHISupportsManualVertexFetch(GMaxRHIShaderPlatform)) {
+        if (RHISupportsManualVertexFetch(GMaxRHIShaderPlatform))
+        {
             PositionBufferSRV =
                 RHICmdList.CreateShaderResourceView(PositionBuffer.VertexBufferRHI, sizeof(float), PF_R32_FLOAT);
         }
@@ -32,7 +36,8 @@ void Simple2D::FSimpleFlipbookVertexBuffer::CreateBuffers(FRHICommandListBase &R
     {
         FRHIResourceCreateInfo CreateInfo(TEXT("PaperSpriteTangentBuffer"));
         TangentBuffer.VertexBufferRHI = RHICmdList.CreateVertexBuffer(TangentSize, Usage, CreateInfo);
-        if (RHISupportsManualVertexFetch(GMaxRHIShaderPlatform)) {
+        if (RHISupportsManualVertexFetch(GMaxRHIShaderPlatform))
+        {
             TangentBufferSRV = RHICmdList.CreateShaderResourceView(TangentBuffer.VertexBufferRHI, sizeof(FPackedNormal),
                                                                    PF_R8G8B8A8_SNORM);
         }
@@ -43,7 +48,8 @@ void Simple2D::FSimpleFlipbookVertexBuffer::CreateBuffers(FRHICommandListBase &R
     {
         FRHIResourceCreateInfo CreateInfo(TEXT("PaperSpriteTexCoordBuffer"));
         TexCoordBuffer.VertexBufferRHI = RHICmdList.CreateVertexBuffer(TexCoordSize, Usage, CreateInfo);
-        if (RHISupportsManualVertexFetch(GMaxRHIShaderPlatform)) {
+        if (RHISupportsManualVertexFetch(GMaxRHIShaderPlatform))
+        {
             TexCoordBufferSRV =
                 RHICmdList.CreateShaderResourceView(TexCoordBuffer.VertexBufferRHI, sizeof(FVector2f), PF_G32R32F);
         }
@@ -54,7 +60,8 @@ void Simple2D::FSimpleFlipbookVertexBuffer::CreateBuffers(FRHICommandListBase &R
     {
         FRHIResourceCreateInfo CreateInfo(TEXT("PaperSpriteColorBuffer"));
         ColorBuffer.VertexBufferRHI = RHICmdList.CreateVertexBuffer(ColorSize, Usage, CreateInfo);
-        if (RHISupportsManualVertexFetch(GMaxRHIShaderPlatform)) {
+        if (RHISupportsManualVertexFetch(GMaxRHIShaderPlatform))
+        {
             ColorBufferSRV =
                 RHICmdList.CreateShaderResourceView(ColorBuffer.VertexBufferRHI, sizeof(FColor), PF_R8G8B8A8);
         }
@@ -68,7 +75,8 @@ void Simple2D::FSimpleFlipbookVertexBuffer::CreateBuffers(FRHICommandListBase &R
     }
 }
 
-void Simple2D::FSimpleFlipbookVertexBuffer::ReleaseBuffers() {
+void Simple2D::FSimpleFlipbookVertexBuffer::ReleaseBuffers()
+{
     PositionBuffer.ReleaseRHI();
     TangentBuffer.ReleaseRHI();
     TexCoordBuffer.ReleaseRHI();
@@ -83,10 +91,13 @@ void Simple2D::FSimpleFlipbookVertexBuffer::ReleaseBuffers() {
     NumAllocatedVertices = 0;
 }
 
-void Simple2D::FSimpleFlipbookVertexBuffer::CommitVertexData(FRHICommandListBase &RHICmdList) {
-    if (Vertices.Num()) {
+void Simple2D::FSimpleFlipbookVertexBuffer::CommitVertexData(FRHICommandListBase &RHICmdList)
+{
+    if (Vertices.Num())
+    {
         // Check if we have to accommodate the buffer size
-        if (NumAllocatedVertices != Vertices.Num()) {
+        if (NumAllocatedVertices != Vertices.Num())
+        {
             CreateBuffers(RHICmdList, Vertices.Num());
         }
 
@@ -127,7 +138,8 @@ void Simple2D::FSimpleFlipbookVertexBuffer::CommitVertexData(FRHICommandListBase
         }
 
         // Fill verts
-        for (int32 i = 0; i < Vertices.Num(); i++) {
+        for (int32 i = 0; i < Vertices.Num(); i++)
+        {
             PositionBufferData[i] = (FVector3f)Vertices[i].Position;
             TangentBufferData[2 * i + 0] = Vertices[i].TangentX;
             TangentBufferData[2 * i + 1] = Vertices[i].TangentZ;
@@ -148,12 +160,14 @@ void Simple2D::FSimpleFlipbookVertexBuffer::CommitVertexData(FRHICommandListBase
     }
 }
 
-void Simple2D::FSimpleFlipbookVertexBuffer::InitRHI(FRHICommandListBase &RHICmdList) {
+void Simple2D::FSimpleFlipbookVertexBuffer::InitRHI(FRHICommandListBase &RHICmdList)
+{
     // Automatically try to create the data and use it
     CommitVertexData(RHICmdList);
 }
 
-void Simple2D::FSimpleFlipbookVertexBuffer::ReleaseRHI() {
+void Simple2D::FSimpleFlipbookVertexBuffer::ReleaseRHI()
+{
     PositionBuffer.ReleaseRHI();
     TangentBuffer.ReleaseRHI();
     TexCoordBuffer.ReleaseRHI();
@@ -166,7 +180,8 @@ void Simple2D::FSimpleFlipbookVertexBuffer::ReleaseRHI() {
     PositionBufferSRV.SafeRelease();
 }
 
-void Simple2D::FSimpleFlipbookVertexBuffer::InitResource(FRHICommandListBase &RHICmdList) {
+void Simple2D::FSimpleFlipbookVertexBuffer::InitResource(FRHICommandListBase &RHICmdList)
+{
     FRenderResource::InitResource(RHICmdList);
     PositionBuffer.InitResource(RHICmdList);
     TangentBuffer.InitResource(RHICmdList);
@@ -175,7 +190,8 @@ void Simple2D::FSimpleFlipbookVertexBuffer::InitResource(FRHICommandListBase &RH
     IndexBuffer.InitResource(RHICmdList);
 }
 
-void Simple2D::FSimpleFlipbookVertexBuffer::ReleaseResource() {
+void Simple2D::FSimpleFlipbookVertexBuffer::ReleaseResource()
+{
     FRenderResource::ReleaseResource();
     PositionBuffer.ReleaseResource();
     TangentBuffer.ReleaseResource();

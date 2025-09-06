@@ -2,6 +2,7 @@
 
 #include "Components/Bag/PocketButton.h"
 
-void UPocketButton::SetPocket(FName PocketIn) {
+void UPocketButton::SetPocket(FName PocketIn)
+{
     Pocket = PocketIn;
 }

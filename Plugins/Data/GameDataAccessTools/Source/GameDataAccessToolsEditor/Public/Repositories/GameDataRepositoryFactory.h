@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Factories/Factory.h"
+
 #include "GameDataRepositoryFactory.generated.h"
 
 /**
@@ -14,15 +15,15 @@ class GAMEDATAACCESSTOOLSEDITOR_API UGameDataRepositoryFactory : public UFactory
 {
     GENERATED_BODY()
 
-public:
+  public:
     UGameDataRepositoryFactory();
 
     bool ConfigureProperties() override;
 
-    UObject* FactoryCreateNew(UClass* InClass, UObject* InParent, FName InName, EObjectFlags Flags,
-                              UObject* Context, FFeedbackContext* Warn) override;
+    UObject *FactoryCreateNew(UClass *InClass, UObject *InParent, FName InName, EObjectFlags Flags, UObject *Context,
+                              FFeedbackContext *Warn) override;
 
-private:
+  private:
     // Store the chosen class
     UPROPERTY()
     TObjectPtr<UClass> AssetClass;

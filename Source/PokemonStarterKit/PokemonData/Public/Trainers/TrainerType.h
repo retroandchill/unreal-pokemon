@@ -14,7 +14,8 @@ class USoundBase;
  * The data for the TrainerType class
  */
 USTRUCT(BlueprintType)
-struct POKEMONDATA_API FTrainerType : public FIndexedTableRow {
+struct POKEMONDATA_API FTrainerType : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**

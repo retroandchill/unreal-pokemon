@@ -13,17 +13,21 @@
 #include "RetroLib/Functional/BindMethod.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 
-UPocketTabWidget::UPocketTabWidget() {
-    for (auto &Pockets = GetDefault<UPokemonDataSettings>()->PocketNames; auto &[ID, Name] : Pockets) {
+UPocketTabWidget::UPocketTabWidget()
+{
+    for (auto &Pockets = GetDefault<UPokemonDataSettings>()->PocketNames; auto &[ID, Name] : Pockets)
+    {
         PocketButtonStyles.Emplace(Name);
     }
 }
 
-void UPocketTabWidget::NativePreConstruct() {
+void UPocketTabWidget::NativePreConstruct()
+{
     Super::NativePreConstruct();
 
 #if WITH_EDITOR
-    if (ButtonClass == nullptr) {
+    if (ButtonClass == nullptr)
+    {
         return;
     }
 #endif
@@ -40,12 +44,14 @@ void UPocketTabWidget::NativePreConstruct() {
     PocketRightActionWidget->SetEnhancedInputAction(PocketRightAction);
 }
 
-void UPocketTabWidget::NativeConstruct() {
+void UPocketTabWidget::NativeConstruct()
+{
     Super::NativeConstruct();
 
     PocketButtonGroup = NewObject<UCommonButtonGroupBase>(this);
 
-    for (int32 i = 0; i < PocketButtons.Num(); i++) {
+    for (int32 i = 0; i < PocketButtons.Num(); i++)
+    {
         auto Button = PocketButtons[i];
         PocketButtonGroup->AddWidget(Button);
         Button->OnClicked().AddUObject(this, &UPocketTabWidget::OnPocketClicked, i);
@@ -65,23 +71,28 @@ void UPocketTabWidget::NativeConstruct() {
     PocketButtons[CurrentPocket.GetIndex()]->SetIsSelected(true);
 }
 
-void UPocketTabWidget::SetItemSelectionWindow(UItemSelectionWindow *Window) {
+void UPocketTabWidget::SetItemSelectionWindow(UItemSelectionWindow *Window)
+{
     ItemSelectionWindow = Window;
     ItemSelectionWindow->SetPocket(*CurrentPocket);
 }
 
-UPocketButton *UPocketTabWidget::CreatePocketButton(FName Pocket) {
+UPocketButton *UPocketTabWidget::CreatePocketButton(FName Pocket)
+{
     auto Button = WidgetTree->ConstructWidget(ButtonClass);
     Button->SetPocket(Pocket);
-    if (auto Style = PocketButtonStyles.FindChecked(Pocket); Style != nullptr) {
+    if (auto Style = PocketButtonStyles.FindChecked(Pocket); Style != nullptr)
+    {
         Button->SetStyle(Style);
     }
     SlotButton(Button);
     return Button;
 }
 
-void UPocketTabWidget::PocketLeft() {
-    if (!ItemSelectionWindow->IsActivated()) {
+void UPocketTabWidget::PocketLeft()
+{
+    if (!ItemSelectionWindow->IsActivated())
+    {
         return;
     }
 
@@ -90,8 +101,10 @@ void UPocketTabWidget::PocketLeft() {
     ItemSelectionWindow->SetPocket(*CurrentPocket);
 }
 
-void UPocketTabWidget::PocketRight() {
-    if (!ItemSelectionWindow->IsActivated()) {
+void UPocketTabWidget::PocketRight()
+{
+    if (!ItemSelectionWindow->IsActivated())
+    {
         return;
     }
 
@@ -100,7 +113,8 @@ void UPocketTabWidget::PocketRight() {
     ItemSelectionWindow->SetPocket(*CurrentPocket);
 }
 
-void UPocketTabWidget::OnPocketClicked(int32 Index) {
+void UPocketTabWidget::OnPocketClicked(int32 Index)
+{
     CurrentPocket.SetIndex(Index);
     PocketButtons[CurrentPocket.GetIndex()]->SetIsSelected(true);
     ItemSelectionWindow->SetPocket(*CurrentPocket);

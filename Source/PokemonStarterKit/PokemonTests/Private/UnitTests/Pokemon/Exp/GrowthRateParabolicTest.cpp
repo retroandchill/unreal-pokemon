@@ -18,11 +18,13 @@ constexpr std::array GParabolicGrowthTable = {
 IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateParabolicTest, "Unit Tests.Core.Exp.GrowthRateParabolicTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-void GrowthRateParabolicTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const {
+void GrowthRateParabolicTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const
+{
     OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateParabolicTest: Level = 1");
     OutTestCommands.Add("1");
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++)
+    {
         auto Fmt =
             FString::Printf(TEXT("Unit Tests.Core.Exp.GrowthRateParabolicTest: Level = 2-99 (Sample %d)"), i + 1);
         OutBeautifiedNames.Add(Fmt);
@@ -33,7 +35,8 @@ void GrowthRateParabolicTest::GetTests(TArray<FString> &OutBeautifiedNames, TArr
     OutTestCommands.Add("100");
 }
 
-bool GrowthRateParabolicTest::RunTest(const FString &Parameters) {
+bool GrowthRateParabolicTest::RunTest(const FString &Parameters)
+{
     const int32 Level = FCString::Atoi(GetData(Parameters));
 
     Exp::FParabolic GrowthRate;

@@ -8,14 +8,16 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * Custom iterator type used to cycle through a sized contiguous range.
      *
      * @tparam T The type of data being stored
      */
     RETROLIB_EXPORT template <typename T>
-    class TCircularIterator {
+    class TCircularIterator
+    {
         using DifferenceType = std::ranges::range_difference_t<TSpan<T>>;
 
       public:
@@ -33,7 +35,8 @@ namespace Retro {
             requires std::ranges::contiguous_range<R> && std::ranges::sized_range<R> &&
                          std::common_reference_with<T &, std::ranges::range_reference_t<R>>
         explicit TCircularIterator(R &&DataIn, size_t InitialIndex = 0)
-            : Data(std::forward<R>(DataIn)), CurrentIndex(InitialIndex) {
+            : Data(std::forward<R>(DataIn)), CurrentIndex(InitialIndex)
+        {
             check(Data.size() > CurrentIndex)
         }
 
@@ -41,7 +44,8 @@ namespace Retro {
          * Dereference the data at the current index.
          * @return A reference to the current index
          */
-        const T &operator*() const {
+        const T &operator*() const
+        {
             check(Data.size() > CurrentIndex)
             return Data[CurrentIndex];
         }
@@ -50,7 +54,8 @@ namespace Retro {
          * Dereference the data at the current index.
          * @return A pointer to the current index
          */
-        const T *operator->() const {
+        const T *operator->() const
+        {
             check(Data.size() > CurrentIndex)
             return &Data[CurrentIndex];
         }
@@ -61,7 +66,8 @@ namespace Retro {
          * @param Amount The number of positions to increment by
          * @return A reference to the incremented iterator
          */
-        TCircularIterator &operator+=(DifferenceType Amount) {
+        TCircularIterator &operator+=(DifferenceType Amount)
+        {
             check(Data.size() > CurrentIndex)
             CurrentIndex =
                 (CurrentIndex + Data.size() + Amount % static_cast<DifferenceType>(Data.size())) % Data.size();
@@ -72,11 +78,15 @@ namespace Retro {
          * Increment the iterator by 1 position, returning to the beginning if the end has been reached.
          * @return A reference to the incremented iterator
          */
-        TCircularIterator &operator++() {
+        TCircularIterator &operator++()
+        {
             check(Data.size() > CurrentIndex)
-            if (CurrentIndex == Data.size() - 1) {
+            if (CurrentIndex == Data.size() - 1)
+            {
                 CurrentIndex = 0;
-            } else {
+            }
+            else
+            {
                 CurrentIndex++;
             }
 
@@ -87,7 +97,8 @@ namespace Retro {
          * Increment the iterator by 1 position, returning to the beginning if the end has been reached.
          * @return A reference to the incremented iterator
          */
-        [[nodiscard]] TCircularIterator operator++(int) {
+        [[nodiscard]] TCircularIterator operator++(int)
+        {
             auto Temp = *this;
             ++*this;
             return Temp;
@@ -99,7 +110,8 @@ namespace Retro {
          * @param Amount The number of positions to increment by
          * @return A reference to the incremented iterator
          */
-        TCircularIterator &operator-=(DifferenceType Amount) {
+        TCircularIterator &operator-=(DifferenceType Amount)
+        {
             return *this += -Amount;
         }
 
@@ -107,11 +119,15 @@ namespace Retro {
          * Decrement the iterator by 1 position, returning to the end if the beginning has been reached.
          * @return A reference to the incremented iterator
          */
-        TCircularIterator &operator--() {
+        TCircularIterator &operator--()
+        {
             check(Data.size() > CurrentIndex)
-            if (CurrentIndex == 0) {
+            if (CurrentIndex == 0)
+            {
                 CurrentIndex = Data.size() - 1;
-            } else {
+            }
+            else
+            {
                 CurrentIndex--;
             }
 
@@ -122,17 +138,20 @@ namespace Retro {
          * Decrement the iterator by 1 position, returning to the end if the beginning has been reached.
          * @return A reference to the incremented iterator
          */
-        [[nodiscard]] TCircularIterator operator--(int) {
+        [[nodiscard]] TCircularIterator operator--(int)
+        {
             auto Temp = *this;
             --*this;
             return Temp;
         }
 
-        int32 GetIndex() const {
+        int32 GetIndex() const
+        {
             return CurrentIndex;
         }
 
-        void SetIndex(size_t Index) {
+        void SetIndex(size_t Index)
+        {
             check(Data.size() > Index)
             CurrentIndex = Index;
         }
@@ -141,7 +160,8 @@ namespace Retro {
          * Return if the iterator in question is valid or not.
          * @return Is the container referenced non-empty.
          */
-        bool IsValid() const {
+        bool IsValid() const
+        {
             return Data.size() > 0;
         }
 
@@ -149,7 +169,8 @@ namespace Retro {
          * Check if there are enough elements for this iterator to cycle.
          * @return Can this iterator cycle
          */
-        bool CanCycle() const {
+        bool CanCycle() const
+        {
             return Data.size() > 1;
         }
 

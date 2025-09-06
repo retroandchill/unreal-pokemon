@@ -14,7 +14,8 @@ class IBattler;
  * Helper class for working with the battle screen and updating parts of it
  */
 UCLASS()
-class POKEMONBATTLEUI_API UBattleScreenHelpers : public UBlueprintFunctionLibrary {
+class POKEMONBATTLEUI_API UBattleScreenHelpers : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

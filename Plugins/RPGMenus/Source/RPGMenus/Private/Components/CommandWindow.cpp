@@ -11,24 +11,29 @@
 #include "Components/UniformGridSlot.h"
 #include "Data/Command.h"
 
-UCommandWindow::UCommandWindow(const FObjectInitializer &ObjectInitializer) : USelectableWidget(ObjectInitializer) {
+UCommandWindow::UCommandWindow(const FObjectInitializer &ObjectInitializer) : USelectableWidget(ObjectInitializer)
+{
 }
 
-void UCommandWindow::NativePreConstruct() {
+void UCommandWindow::NativePreConstruct()
+{
     Super::NativePreConstruct();
     AddCommands();
 }
 
-void UCommandWindow::SetCommands(TArray<TObjectPtr<UCommand>> &&NewCommands) {
+void UCommandWindow::SetCommands(TArray<TObjectPtr<UCommand>> &&NewCommands)
+{
     Commands = std::move(NewCommands);
     AddCommands();
 }
 
-FProcessCommand &UCommandWindow::GetOnCommandSelected() {
+FProcessCommand &UCommandWindow::GetOnCommandSelected()
+{
     return OnCommandSelected;
 }
 
-void UCommandWindow::ProcessConfirm_Implementation(int32 CurrentIndex) {
+void UCommandWindow::ProcessConfirm_Implementation(int32 CurrentIndex)
+{
     if (CurrentIndex >= ActiveCommands.Num())
         return;
 
@@ -36,15 +41,18 @@ void UCommandWindow::ProcessConfirm_Implementation(int32 CurrentIndex) {
     OnCommandSelected.Broadcast(CurrentIndex, CurrentCommand);
 }
 
-void UCommandWindow::AddCommands() {
+void UCommandWindow::AddCommands()
+{
     ActiveCommands.Reset();
-    if (DisplayTextWidgetClass == nullptr) {
+    if (DisplayTextWidgetClass == nullptr)
+    {
         return;
     }
 
     ClearSelectableOptions();
 
-    for (UCommand *const Command : Commands) {
+    for (UCommand *const Command : Commands)
+    {
         if (Command == nullptr || !Command->IsEnabled())
             continue;
 

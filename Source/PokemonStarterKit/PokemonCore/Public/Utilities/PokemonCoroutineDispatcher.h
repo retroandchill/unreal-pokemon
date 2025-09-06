@@ -18,14 +18,16 @@ class IPokemon;
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable)
-class POKEMONCORE_API UPokemonCoroutineDispatcher : public UInterface {
+class POKEMONCORE_API UPokemonCoroutineDispatcher : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  *
  */
-class POKEMONCORE_API IPokemonCoroutineDispatcher {
+class POKEMONCORE_API IPokemonCoroutineDispatcher
+{
     GENERATED_BODY()
 
   protected:
@@ -35,7 +37,8 @@ class POKEMONCORE_API IPokemonCoroutineDispatcher {
   public:
     static IPokemonCoroutineDispatcher &Get(const UObject *WorldContext);
 
-    static IPokemonCoroutineDispatcher &Get(const FScriptInterface &WorldContext) {
+    static IPokemonCoroutineDispatcher &Get(const FScriptInterface &WorldContext)
+    {
         return Get(WorldContext.GetObject());
     }
 
@@ -44,13 +47,12 @@ class POKEMONCORE_API IPokemonCoroutineDispatcher {
     virtual TMultiCoroutine<int32, FName> DisplayMessageWithChoices(FText Message, const TArray<FText> &Choices,
                                                                     FForceLatentCoroutine = {}) const = 0;
 
-    virtual UE5Coro::TCoroutine<bool>
-    DisplayConfirmPrompt(FText Message, FText ConfirmOption = NSLOCTEXT("PokemonUI", "PromptYes", "Yes"),
-                         FText CancelOption = NSLOCTEXT("PokemonUI", "PromptNo", "No"),
-                         FForceLatentCoroutine = {}) const = 0;
+    virtual UE5Coro::TCoroutine<bool> DisplayConfirmPrompt(
+        FText Message, FText ConfirmOption = NSLOCTEXT("PokemonUI", "PromptYes", "Yes"),
+        FText CancelOption = NSLOCTEXT("PokemonUI", "PromptNo", "No"), FForceLatentCoroutine = {}) const = 0;
 
-    virtual UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>>
-        SelectPokemonFromParty(FForceLatentCoroutine = {}) const = 0;
+    virtual UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>> SelectPokemonFromParty(
+        FForceLatentCoroutine = {}) const = 0;
 
     virtual UE5Coro::TCoroutine<TOptional<FSelectedItemHandle>> SelectItemFromBag(const FItemFilter &Filter,
                                                                                   FForceLatentCoroutine = {}) const = 0;

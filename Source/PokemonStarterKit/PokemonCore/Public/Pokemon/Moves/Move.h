@@ -13,14 +13,16 @@ struct FMoveData;
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
-class POKEMONCORE_API UMove : public UInterface {
+class POKEMONCORE_API UMove : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Interface for a basic Pokémon move
  */
-class POKEMONCORE_API IMove {
+class POKEMONCORE_API IMove
+{
     GENERATED_BODY()
 
   public:

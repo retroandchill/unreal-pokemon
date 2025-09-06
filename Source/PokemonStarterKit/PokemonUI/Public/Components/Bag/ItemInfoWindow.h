@@ -16,7 +16,8 @@ struct FItem;
  * Window for displaying the information about an item.
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONUI_API UItemInfoWindow : public UUserWidget {
+class POKEMONUI_API UItemInfoWindow : public UUserWidget
+{
     GENERATED_BODY()
 
   public:

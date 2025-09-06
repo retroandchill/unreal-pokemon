@@ -15,7 +15,8 @@ class IPokemon;
  *
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API UUseItemOnPokemon : public UUseItem {
+class POKEMONUI_API UUseItemOnPokemon : public UUseItem
+{
     GENERATED_BODY()
 
   public:

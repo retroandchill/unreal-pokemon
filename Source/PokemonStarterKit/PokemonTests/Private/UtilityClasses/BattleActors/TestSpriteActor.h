@@ -9,6 +9,7 @@
 #include "TestSpriteActor.generated.h"
 
 UCLASS(BlueprintInternalUseOnly)
-class POKEMONTESTS_API ATestSpriteActor : public AActor, public IBattlerSprite {
+class POKEMONTESTS_API ATestSpriteActor : public AActor, public IBattlerSprite
+{
     GENERATED_BODY()
 };

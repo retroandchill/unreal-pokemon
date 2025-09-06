@@ -5,17 +5,20 @@
 #include "CommonTextBlock.h"
 #include "DataManager.h"
 
-const FItem &UItemOption::GetItem() const {
+const FItem &UItemOption::GetItem() const
+{
     auto ItemData = FDataManager::GetInstance().GetDataTable<FItem>().GetData(CurrentItem);
     check(ItemData != nullptr)
     return *ItemData;
 }
 
-int32 UItemOption::GetQuantity() const {
+int32 UItemOption::GetQuantity() const
+{
     return QuantityHeld;
 }
 
-void UItemOption::SetItem(FName Item, int32 Quantity) {
+void UItemOption::SetItem(FName Item, int32 Quantity)
+{
     CurrentItem = Item;
     QuantityHeld = Quantity;
     OnItemSet(GetItem(), Quantity);

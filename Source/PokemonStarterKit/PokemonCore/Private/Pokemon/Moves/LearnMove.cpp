@@ -4,7 +4,8 @@
 #include "Pokemon/Moves/MoveBlock.h"
 #include "Pokemon/Pokemon.h"
 
-ULearnMove *ULearnMove::LearnMove(const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move) {
+ULearnMove *ULearnMove::LearnMove(const TScriptInterface<IPokemon> &Pokemon, FMoveHandle Move)
+{
     auto Node = NewObject<ULearnMove>();
     Node->SetWorldContext(Pokemon.GetObject());
     Node->Pokemon = Pokemon;
@@ -12,10 +13,14 @@ ULearnMove *ULearnMove::LearnMove(const TScriptInterface<IPokemon> &Pokemon, FMo
     return Node;
 }
 
-UE5Coro::TCoroutine<> ULearnMove::ExecuteCoroutine(FForceLatentCoroutine) {
-    if (co_await Pokemon->GetMoveBlock()->LearnMove(Move)) {
+UE5Coro::TCoroutine<> ULearnMove::ExecuteCoroutine(FForceLatentCoroutine)
+{
+    if (co_await Pokemon->GetMoveBlock()->LearnMove(Move))
+    {
         MoveLearned.Broadcast();
-    } else {
+    }
+    else
+    {
         MoveRejected.Broadcast();
     }
 }

@@ -12,7 +12,8 @@
  * The panel for the cancel options in the window.
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONUI_API UPartySelectCancelPanel : public UCommonButtonBase, public ISelectablePanel {
+class POKEMONUI_API UPartySelectCancelPanel : public UCommonButtonBase, public ISelectablePanel
+{
     GENERATED_BODY()
 
   public:

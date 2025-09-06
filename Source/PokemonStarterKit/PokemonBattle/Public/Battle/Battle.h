@@ -24,7 +24,8 @@ class IBattler;
  * Enum for the result of the battle in question
  */
 UENUM(BlueprintType)
-enum class EBattleResult : uint8 {
+enum class EBattleResult : uint8
+{
     /**
      * The player won the battle in question
      */
@@ -62,14 +63,16 @@ enum class EBattleResult : uint8 {
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnBattleEnd, EBattleResult)
 
     // This class does not need to be modified.
-    UINTERFACE(BlueprintType) class POKEMONBATTLE_API UBattle : public UInterface {
+    UINTERFACE(BlueprintType) class POKEMONBATTLE_API UBattle : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Represents an active battle that is occurring.
  */
-class POKEMONBATTLE_API IBattle {
+class POKEMONBATTLE_API IBattle
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
@@ -105,8 +108,8 @@ class POKEMONBATTLE_API IBattle {
      */
     virtual UE5Coro::TCoroutine<> StartBattle() = 0;
 
-    virtual UE5Coro::TCoroutine<>
-    OnBattlersEnteringBattle(Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) = 0;
+    virtual UE5Coro::TCoroutine<> OnBattlersEnteringBattle(
+        Retro::Ranges::TAnyView<TScriptInterface<IBattler>> Battlers) = 0;
 
     /**
      * Add an action to the pending queue

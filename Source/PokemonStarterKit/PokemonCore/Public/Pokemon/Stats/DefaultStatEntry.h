@@ -11,7 +11,8 @@ class IPokemon;
  * The default setup of a Pokémon's stat calculation as defined in the main series games
  */
 UCLASS(Abstract)
-class POKEMONCORE_API UDefaultStatEntry : public UObject, public IStatEntry {
+class POKEMONCORE_API UDefaultStatEntry : public UObject, public IStatEntry
+{
     GENERATED_BODY()
 
   public:

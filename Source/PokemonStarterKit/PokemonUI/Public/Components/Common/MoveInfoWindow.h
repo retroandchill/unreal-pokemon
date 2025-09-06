@@ -17,7 +17,8 @@ enum class EMoveDamageCategory : uint8;
  * Widget that displays information about a particular move.
  */
 UCLASS(Abstract)
-class POKEMONUI_API UMoveInfoWindow : public UUserWidget {
+class POKEMONUI_API UMoveInfoWindow : public UUserWidget
+{
     GENERATED_BODY()
 
   public:
@@ -28,7 +29,8 @@ class POKEMONUI_API UMoveInfoWindow : public UUserWidget {
      * @return A constant reference to the current move interface.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const TScriptInterface<IMove> &GetMove() const {
+    const TScriptInterface<IMove> &GetMove() const
+    {
         return Move;
     }
 

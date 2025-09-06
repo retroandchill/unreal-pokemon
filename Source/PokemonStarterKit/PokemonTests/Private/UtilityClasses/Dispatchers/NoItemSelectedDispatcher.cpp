@@ -2,6 +2,7 @@
 
 #include "NoItemSelectedDispatcher.h"
 
-void UNoItemSelectedDispatcher::OnReceive() {
+void UNoItemSelectedDispatcher::OnReceive()
+{
     bCalled = true;
 }

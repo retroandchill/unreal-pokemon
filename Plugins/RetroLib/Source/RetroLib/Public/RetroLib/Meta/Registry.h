@@ -10,7 +10,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Meta {
+namespace Retro::Meta
+{
     /**
      * Signifies a generic static registry for different data types. Used to create a static registry that sits below
      * Unreal Engine and doesn't require the classes to be UObjects
@@ -18,7 +19,8 @@ namespace Retro::Meta {
      * @tparam Args The constructor arguments taken in
      */
     RETROLIB_EXPORT template <Class T, bool bShared, typename... Args>
-    class TRegistry {
+    class TRegistry
+    {
       public:
         using Ptr = std::conditional_t<bShared, TSharedRef<T>, TUniquePtr<T>>;
         using FIdentifier = FName;
@@ -32,7 +34,8 @@ namespace Retro::Meta {
          * @param Key The key to use for the registry
          * @param FactoryFunction
          */
-        void RegisterFactory(FName Key, FFactoryFunction FactoryFunction) {
+        void RegisterFactory(FName Key, FFactoryFunction FactoryFunction)
+        {
             RegisteredConstructors.Add(Key, std::move(FactoryFunction));
         }
 
@@ -43,7 +46,8 @@ namespace Retro::Meta {
          */
         template <typename Derived>
             requires std::derived_from<Derived, T>
-        void RegisterClass(FName Key) {
+        void RegisterClass(FName Key)
+        {
             RegisterFactory(Key, ConstructDerived<Derived>);
         }
 
@@ -53,7 +57,8 @@ namespace Retro::Meta {
          * @param Arguments The arguments to pass to the factory function to
          * @return A unique reference to the factory instance
          */
-        Ptr Construct(FName Key, Args... Arguments) const {
+        Ptr Construct(FName Key, Args... Arguments) const
+        {
             check(RegisteredConstructors.Contains(Key))
             return RegisteredConstructors[Key](Arguments...);
         }
@@ -63,7 +68,8 @@ namespace Retro::Meta {
          * @param Key The for the type in question
          * @return Is the type registered?
          */
-        bool IsTypeRegistered(FName Key) const {
+        bool IsTypeRegistered(FName Key) const
+        {
             return RegisteredConstructors.Contains(Key);
         }
 
@@ -71,8 +77,10 @@ namespace Retro::Meta {
          * Get the list of all registered types for this registry.
          * @return The list of all formally registered types.
          */
-        TGenerator<FName> GetAllRegisteredTypes() const {
-            for (auto &[Key, Func] : RegisteredConstructors) {
+        TGenerator<FName> GetAllRegisteredTypes() const
+        {
+            for (auto &[Key, Func] : RegisteredConstructors)
+            {
                 co_yield Key;
             }
         }
@@ -86,10 +94,14 @@ namespace Retro::Meta {
          */
         template <typename Derived>
             requires std::derived_from<Derived, T>
-        static Ptr ConstructDerived(Args... Arguments) {
-            if constexpr (bShared) {
+        static Ptr ConstructDerived(Args... Arguments)
+        {
+            if constexpr (bShared)
+            {
                 return MakeShared<Derived>(Arguments...);
-            } else {
+            }
+            else
+            {
                 return MakeUnique<Derived>(Arguments...);
             }
         }

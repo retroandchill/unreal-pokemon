@@ -17,7 +17,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FExpGainComplete);
  * Calculate and gain exp for the provided battlers who fainted.
  */
 UCLASS(meta = (HideThen))
-class POKEMONBATTLEUI_API UGainExpOnFaint : public UBlueprintCoroutineActionBase {
+class POKEMONBATTLEUI_API UGainExpOnFaint : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

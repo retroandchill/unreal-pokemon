@@ -7,7 +7,8 @@
 
 class UGameplayAbility;
 
-namespace Pokemon::Battle::Abilities {
+namespace Pokemon::Battle::Abilities
+{
     /**
      * Lookup an ability effect by its ID
      * @param ID The ID that's associated with the ability effect

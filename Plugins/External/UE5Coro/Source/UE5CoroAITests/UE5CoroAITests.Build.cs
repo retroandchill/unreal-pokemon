@@ -33,15 +33,11 @@ using UnrealBuildTool;
 
 public class UE5CoroAITests : UE5CoroModuleRules
 {
-	public UE5CoroAITests(ReadOnlyTargetRules Target)
-		: base(Target)
-	{
-		PublicDependencyModuleNames.AddRange(new[]
-		{
-			"NavigationSystem",
-			"UE5Coro",
-			"UE5CoroAI",
-			"UE5CoroTests",
-		});
-	}
+    public UE5CoroAITests(ReadOnlyTargetRules Target)
+        : base(Target)
+    {
+        PublicDependencyModuleNames.AddRange(
+            new[] { "NavigationSystem", "UE5Coro", "UE5CoroAI", "UE5CoroTests" }
+        );
+    }
 }

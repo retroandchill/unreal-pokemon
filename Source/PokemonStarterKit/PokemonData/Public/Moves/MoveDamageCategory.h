@@ -5,7 +5,8 @@
  * Represents one of the three possible damage categories
  */
 UENUM(BlueprintType)
-enum class EMoveDamageCategory : uint8 {
+enum class EMoveDamageCategory : uint8
+{
     /**
      * Uses Attack and Defense to calculate damage
      */

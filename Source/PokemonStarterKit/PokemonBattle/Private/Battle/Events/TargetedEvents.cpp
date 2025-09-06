@@ -18,8 +18,10 @@
 #include "RetroLib/Ranges/Views/Concat.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 
-const FNativeGameplayTag &FTargetedEvent::GetTagForScope(ETargetedEventScope Scope) {
-    switch (Scope) {
+const FNativeGameplayTag &FTargetedEvent::GetTagForScope(ETargetedEventScope Scope)
+{
+    switch (Scope)
+    {
     case ETargetedEventScope::Global:
         return GlobalTag;
     case ETargetedEventScope::User:
@@ -39,7 +41,8 @@ const FNativeGameplayTag &FTargetedEvent::GetTagForScope(ETargetedEventScope Sco
     }
 }
 
-static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side) {
+static auto UnrollBattleSide(const TScriptInterface<IBattleSide> &Side)
+{
     // clang-format off
     auto SideView = Retro::Ranges::Views::Single(Side) |
                     Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>);
@@ -54,14 +57,16 @@ UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutActivationEvent(UAsyncAbil
                                                                       FGameplayAbilitySpecHandle Handle,
                                                                       FGameplayTag Tag,
                                                                       const FGameplayEventData &EventData,
-                                                                      FForceLatentCoroutine) {
+                                                                      FForceLatentCoroutine)
+{
     co_await AbilityComponent->TriggerAbilityFromGameplayEventAsync(Handle, AbilityComponent->AbilityActorInfo.Get(),
                                                                     Tag, &EventData, *AbilityComponent);
 }
 
 UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutBattleEvent(const TScriptInterface<IBattle> &Battle,
                                                                   const UObject *Payload, const FGameplayTag &Tag,
-                                                                  FForceLatentCoroutine) {
+                                                                  FForceLatentCoroutine)
+{
     auto BattleActor = Retro::CastInterfaceChecked<AActor>(Battle);
     FGameplayEventData EventData;
     EventData.Instigator = BattleActor;
@@ -77,7 +82,8 @@ UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutBattleEvent(const TScriptI
 
 UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutMoveEvent(const TScriptInterface<IBattler> &User,
                                                                 const UObject *Payload,
-                                                                const FNativeGameplayTag &EventTag) {
+                                                                const FNativeGameplayTag &EventTag)
+{
     auto UserActor = Retro::CastInterfaceChecked<AActor>(User);
     FGameplayEventData EventData;
     EventData.OptionalObject = Payload;
@@ -90,7 +96,8 @@ UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutMoveEvent(const TScriptInt
 UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutMoveEvents(const TScriptInterface<IBattler> &User,
                                                                  const TScriptInterface<IBattler> &Target,
                                                                  const UObject *Payload,
-                                                                 const FTargetedEvent &EventTags) {
+                                                                 const FTargetedEvent &EventTags)
+{
     auto UserActor = Retro::CastInterfaceChecked<AActor>(User);
     FGameplayEventData EventData;
     EventData.OptionalObject = Payload;
@@ -101,7 +108,8 @@ UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutMoveEvents(const TScriptIn
     co_await SendOutEventForActor(UserActor, EventTags.GlobalTag, EventData);
     co_await SendOutEventForActor(UserActor, EventTags.UserTag, EventData);
     for (auto Ally : User->GetAllies() | Retro::Ranges::Views::Filter(&IBattler::IsNotFainted) |
-                         Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>)) {
+                         Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>))
+    {
         co_await SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
         co_await SendOutEventForActor(Ally, EventTags.UserAllyTag, EventData);
     }
@@ -110,7 +118,8 @@ UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutMoveEvents(const TScriptIn
     co_await SendOutEventForActor(TargetActor, EventTags.GlobalTag, EventData);
     co_await SendOutEventForActor(TargetActor, EventTags.TargetTag, EventData);
     for (auto Ally : Target->GetAllies() | Retro::Ranges::Views::Filter(&IBattler::IsNotFainted) |
-                         Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>)) {
+                         Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<AActor>))
+    {
         co_await SendOutEventForActor(Ally, EventTags.GlobalTag, EventData);
         co_await SendOutEventForActor(Ally, EventTags.TargetAllyTag, EventData);
     }
@@ -125,14 +134,17 @@ UE5Coro::TCoroutine<> Pokemon::Battle::Events::SendOutMoveEvents(const TScriptIn
 
 UE5Coro::TCoroutine<int32> Pokemon::Battle::Events::SendOutEventForActor(AActor *Actor, const FGameplayTag &Tag,
                                                                          FGameplayEventData &EventData,
-                                                                         FForceLatentCoroutine) {
+                                                                         FForceLatentCoroutine)
+{
     EventData.Target = Actor;
-    if (!IsValid(Actor)) {
+    if (!IsValid(Actor))
+    {
         co_return 0;
     }
 
     auto AbilitySystemComponent = Actor->GetComponentByClass<UAsyncAbilityComponent>();
-    if (!IsValid(AbilitySystemComponent)) {
+    if (!IsValid(AbilitySystemComponent))
+    {
         UE_LOG(LogBattle, Error,
                TEXT("Pokemon::Battle::Events::SendOutEventForActor: Invalid ability system component retrieved from "
                     "Actor %s. EventTag was %s"),

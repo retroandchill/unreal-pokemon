@@ -5,12 +5,14 @@
 #include "TestSpriteActor.h"
 #include "Utilities/ReflectionUtils.h"
 
-ATestBattlerActor::ATestBattlerActor() {
+ATestBattlerActor::ATestBattlerActor()
+{
     UReflectionUtils::SetPropertyValue<TSoftClassPtr<AActor>>(this, TEXT("BattlerSpriteClass"),
                                                               ATestSpriteActor::StaticClass());
 }
 
-void ATestBattlerActor::PostActorCreated() {
+void ATestBattlerActor::PostActorCreated()
+{
     Super::PostActorCreated();
 
     // We need to add any Blueprint added effects to ensure that the data gets populated correctly
@@ -33,6 +35,7 @@ void ATestBattlerActor::PostActorCreated() {
     Effects.Emplace(StatStages);
 }
 
-UE5Coro::TCoroutine<> ATestBattlerActor::SpawnSpriteActor(bool ShouldShow) {
+UE5Coro::TCoroutine<> ATestBattlerActor::SpawnSpriteActor(bool ShouldShow)
+{
     co_return;
 }

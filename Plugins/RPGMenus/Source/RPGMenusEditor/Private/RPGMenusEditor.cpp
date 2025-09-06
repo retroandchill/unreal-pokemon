@@ -11,11 +11,13 @@
 
 constexpr auto GLoctextNamespace = "FRPGMenusEditorModule";
 
-void FRPGMenusEditorModule::StartupModule() {
+void FRPGMenusEditorModule::StartupModule()
+{
     FCoreDelegates::OnPostEngineInit.AddRaw(this, &FRPGMenusEditorModule::OnPostEngineInit);
 }
 
-void FRPGMenusEditorModule::OnPostEngineInit() const {
+void FRPGMenusEditorModule::OnPostEngineInit() const
+{
     // Register asset types
     IAssetTools &AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
 
@@ -35,7 +37,8 @@ void FRPGMenusEditorModule::OnPostEngineInit() const {
                                     &Retro::TSoftVariantObjectCustomization<FSoftImageAsset>::MakeInstance));
 }
 
-void FRPGMenusEditorModule::ShutdownModule() {
+void FRPGMenusEditorModule::ShutdownModule()
+{
     // No special shutdown needed
 }
 

@@ -14,7 +14,8 @@ class IPokemon;
  * The icon widget for a stroage box.
  */
 UCLASS(Abstract)
-class POKEMONUI_API UStorageBoxIcon : public UCommonButtonBase {
+class POKEMONUI_API UStorageBoxIcon : public UCommonButtonBase
+{
     GENERATED_BODY()
 
   public:

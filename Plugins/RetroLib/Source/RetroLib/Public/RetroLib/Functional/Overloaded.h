@@ -6,7 +6,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * A variadic template structure that inherits from multiple callback-like types
      * and aggregates their operator() functions.
@@ -21,7 +22,8 @@ namespace Retro {
      *      operator() function.
      */
     RETROLIB_EXPORT template <typename... T>
-    struct TOverloaded : T... {
+    struct TOverloaded : T...
+    {
         using T::operator()...;
     };
 } // namespace Retro

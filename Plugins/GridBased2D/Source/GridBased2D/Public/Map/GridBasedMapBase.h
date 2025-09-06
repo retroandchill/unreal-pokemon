@@ -12,7 +12,8 @@
  * Abstract implementation of grid based maps that contain any common functionality used by all maps
  */
 UCLASS(Abstract, ClassGroup = (Map))
-class GRIDBASED2D_API AGridBasedMapBase : public AActor, public IMapGrid {
+class GRIDBASED2D_API AGridBasedMapBase : public AActor, public IMapGrid
+{
     GENERATED_BODY()
 
   protected:

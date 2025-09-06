@@ -16,7 +16,8 @@ BEGIN_DEFINE_SPEC(FTestStatusRemoveItem, "Unit Tests.Battle.Items.TestStatusRemo
 CORO_FUNCTIONS()
 END_DEFINE_SPEC(FTestStatusRemoveItem);
 
-void FTestStatusRemoveItem::Define() {
+void FTestStatusRemoveItem::Define()
+{
     CoroIt("RemoveStatusEffectWithItem", [this]() -> UE5Coro::TCoroutine<> {
         auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
         auto Pokemon1 =

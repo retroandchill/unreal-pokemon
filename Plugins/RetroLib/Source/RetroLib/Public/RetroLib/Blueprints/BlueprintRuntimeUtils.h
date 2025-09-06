@@ -17,7 +17,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     class IVariantRegistration;
     class IVariantConversion;
     class FTypeException;
@@ -30,8 +31,10 @@ namespace Retro {
      * @throws FInvalidArgumentException If either the property or the struct are nullptr.
      */
     template <typename T>
-    void ValidateStructProperty(const FStructProperty *StructProperty, const T *StructPointer) {
-        if (StructProperty == nullptr || StructPointer == nullptr) {
+    void ValidateStructProperty(const FStructProperty *StructProperty, const T *StructPointer)
+    {
+        if (StructProperty == nullptr || StructPointer == nullptr)
+        {
             throw FInvalidArgumentException("Failed to resolve the struct parameter.");
         }
     }
@@ -63,7 +66,8 @@ namespace Retro {
     RETROLIB_API IVariantConversion &GetVariantConversion(const FStructProperty &From, const FStructProperty &To);
 
     template <typename T>
-    void InvokeFunctionIsolated(UFunction *GetOptionsFunction, T &&Params) {
+    void InvokeFunctionIsolated(UFunction *GetOptionsFunction, T &&Params)
+    {
         auto GetOptionsCDO = GetOptionsFunction->GetOuterUClass()->GetDefaultObject();
 
         auto VirtualStackAllocator = FBlueprintContext::GetThreadSingleton()->GetVirtualStackAllocator();
@@ -72,12 +76,14 @@ namespace Retro {
             VirtualStackAllocator, GetOptionsFunction->PropertiesSize, GetOptionsFunction->GetMinAlignment()));
         // zero the local property memory
         if (auto NonParamsPropertiesSize = GetOptionsFunction->PropertiesSize - GetOptionsFunction->ParmsSize;
-            NonParamsPropertiesSize > 0) {
+            NonParamsPropertiesSize > 0)
+        {
             FMemory::Memzero(Frame + GetOptionsFunction->ParmsSize, NonParamsPropertiesSize);
         }
 
         // initialize the parameter properties
-        if (GetOptionsFunction->ParmsSize > 0) {
+        if (GetOptionsFunction->ParmsSize > 0)
+        {
             FMemory::Memcpy(Frame, &Params, GetOptionsFunction->ParmsSize);
         }
 
@@ -87,7 +93,8 @@ namespace Retro {
         checkSlow(NewStack.Locals || GetOptionsFunction->ParmsSize == 0);
 
         for (auto LocalProp = GetOptionsFunction->FirstPropertyToInit; LocalProp != nullptr;
-             LocalProp = LocalProp->PostConstructLinkNext) {
+             LocalProp = LocalProp->PostConstructLinkNext)
+        {
             LocalProp->InitializeValue_InContainer(NewStack.Locals);
         }
 

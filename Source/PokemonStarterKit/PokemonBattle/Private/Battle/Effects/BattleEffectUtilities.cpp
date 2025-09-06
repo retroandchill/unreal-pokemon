@@ -6,7 +6,8 @@
 
 void UBattleEffectUtilities::ApplyEffectToTargetWithMagnitude(const TScriptInterface<IBattler> &Target,
                                                               const TSoftClassPtr<UGameplayEffect> &EffectClass,
-                                                              const FGameplayTag &DataTag, float Magnitude) {
+                                                              const FGameplayTag &DataTag, float Magnitude)
+{
     auto AbilityComponent = Target->GetAbilityComponent();
     auto Spec =
         AbilityComponent->MakeOutgoingSpec(EffectClass.LoadSynchronous(), 0.f, AbilityComponent->MakeEffectContext());

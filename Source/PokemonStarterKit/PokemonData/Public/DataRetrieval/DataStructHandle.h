@@ -10,7 +10,8 @@
 
 #include "DataStructHandle.generated.h"
 
-namespace Pokemon::Data {
+namespace Pokemon::Data
+{
     /**
      * Concept for a struct that is used for a data proxy.
      * @tparam T The type to verify the struct status against
@@ -36,7 +37,8 @@ namespace Pokemon::Data {
     /**
      * Speciality class to handle the destruction of a struct created using reflection
      */
-    struct POKEMONDATA_API FStructDestructor {
+    struct POKEMONDATA_API FStructDestructor
+    {
 
         /**
          * Default constructor, won't do anything if invoked
@@ -47,7 +49,8 @@ namespace Pokemon::Data {
          * Initialize a destructor for the given struct type.
          * @param StructClass The struct type in question
          */
-        explicit FStructDestructor(UScriptStruct *StructClass) : StructClass(StructClass) {
+        explicit FStructDestructor(UScriptStruct *StructClass) : StructClass(StructClass)
+        {
         }
 
         /**
@@ -55,8 +58,10 @@ namespace Pokemon::Data {
          * @param Struct The struct to free
          */
         template <typename T>
-        void operator()(T *Struct) const {
-            if (Struct != nullptr && StructClass != nullptr) {
+        void operator()(T *Struct) const
+        {
+            if (Struct != nullptr && StructClass != nullptr)
+            {
                 StructClass->DestroyStruct(StructClass);
                 FMemory::Free(Struct);
             }
@@ -66,7 +71,8 @@ namespace Pokemon::Data {
          * Get the struct class that needs to be destroyed
          * @return The struct class that needs to be destroyed
          */
-        UScriptStruct *GetStruct() const {
+        UScriptStruct *GetStruct() const
+        {
             return StructClass;
         }
 
@@ -77,7 +83,8 @@ namespace Pokemon::Data {
     /**
      * Wrapper type for initializing a struct by its underlying type.
      */
-    struct POKEMONDATA_API FStructWrapper {
+    struct POKEMONDATA_API FStructWrapper
+    {
 
         /**
          * Default constructor. Points to nullptr if used.
@@ -89,7 +96,8 @@ namespace Pokemon::Data {
          * @param StructClass The type of struct to initialize
          */
         explicit FStructWrapper(UScriptStruct *StructClass)
-            : Struct(FMemory::Malloc(StructClass->GetStructureSize()), FStructDestructor(StructClass)) {
+            : Struct(FMemory::Malloc(StructClass->GetStructureSize()), FStructDestructor(StructClass))
+        {
             StructClass->InitializeStruct(Struct.get());
         }
 
@@ -99,7 +107,8 @@ namespace Pokemon::Data {
          * @param StructClass The type of struct to initialize
          * @return A reference to this object
          */
-        FStructWrapper &operator=(UScriptStruct *StructClass) {
+        FStructWrapper &operator=(UScriptStruct *StructClass)
+        {
             Struct = std::unique_ptr<void, FStructDestructor>(FMemory::Malloc(StructClass->GetStructureSize()),
                                                               FStructDestructor(StructClass));
             StructClass->InitializeStruct(Struct.get());
@@ -112,7 +121,8 @@ namespace Pokemon::Data {
          */
         template <typename T>
             requires DataStructHandle<T>
-        T *Get() const {
+        T *Get() const
+        {
             return static_cast<T *>(Struct.get());
         }
 
@@ -120,7 +130,8 @@ namespace Pokemon::Data {
          * Get the struct class that is being wrapped
          * @return The struct class that is being wrapped
          */
-        UScriptStruct *GetStruct() const {
+        UScriptStruct *GetStruct() const
+        {
             return Struct.get_deleter().GetStruct();
         }
 
@@ -141,7 +152,8 @@ namespace Pokemon::Data {
 } // namespace Pokemon::Data
 
 USTRUCT(BlueprintType, BlueprintInternalUseOnly)
-struct POKEMONDATA_API FDataStructHandle {
+struct POKEMONDATA_API FDataStructHandle
+{
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere)
@@ -149,7 +161,8 @@ struct POKEMONDATA_API FDataStructHandle {
 };
 
 UCLASS()
-class POKEMONDATA_API UDataStructHandleUtilities : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UDataStructHandleUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:
@@ -162,26 +175,35 @@ class POKEMONDATA_API UDataStructHandleUtilities : public UBlueprintFunctionLibr
   public:                                                                                                              \
     using FValueType = StructType;                                                                                     \
     ClassName() = default;                                                                                             \
-    ClassName(FName RowID) : RowID(RowID) {                                                                            \
+    ClassName(FName RowID) : RowID(RowID)                                                                              \
+    {                                                                                                                  \
     }                                                                                                                  \
-    ClassName(const ANSICHAR *RowID) : RowID(RowID) {                                                                  \
+    ClassName(const ANSICHAR *RowID) : RowID(RowID)                                                                    \
+    {                                                                                                                  \
     }                                                                                                                  \
-    ClassName(const WIDECHAR *RowID) : RowID(RowID) {                                                                  \
+    ClassName(const WIDECHAR *RowID) : RowID(RowID)                                                                    \
+    {                                                                                                                  \
     }                                                                                                                  \
-    ClassName(const UTF8CHAR *RowID) : RowID(RowID) {                                                                  \
+    ClassName(const UTF8CHAR *RowID) : RowID(RowID)                                                                    \
+    {                                                                                                                  \
     }                                                                                                                  \
-    operator FName() const {                                                                                           \
+    operator FName() const                                                                                             \
+    {                                                                                                                  \
         return RowID;                                                                                                  \
     }                                                                                                                  \
-    friend uint32 GetTypeHash(const ClassName &Key) {                                                                  \
+    friend uint32 GetTypeHash(const ClassName &Key)                                                                    \
+    {                                                                                                                  \
         return GetTypeHash(Key.RowID);                                                                                 \
     }                                                                                                                  \
-    friend bool operator==(const ClassName &LHS, const ClassName &RHS) {                                               \
+    friend bool operator==(const ClassName &LHS, const ClassName &RHS)                                                 \
+    {                                                                                                                  \
         return LHS.RowID == RHS.RowID;                                                                                 \
     }                                                                                                                  \
-    friend bool operator==(const ClassName &LHS, const FName &RHS) {                                                   \
+    friend bool operator==(const ClassName &LHS, const FName &RHS)                                                     \
+    {                                                                                                                  \
         return LHS.RowID == RHS;                                                                                       \
     }                                                                                                                  \
-    friend bool operator==(const FName &LHS, const ClassName &RHS) {                                                   \
+    friend bool operator==(const FName &LHS, const ClassName &RHS)                                                     \
+    {                                                                                                                  \
         return LHS == RHS.RowID;                                                                                       \
     }

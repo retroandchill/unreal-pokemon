@@ -12,7 +12,8 @@
 
 class UWidget;
 
-struct FDudWidgets {
+struct FDudWidgets
+{
     TSharedRef<SOverlay> DudOverlay = SNew(SOverlay);
     TSharedRef<SGameLayerManager> GameLayerManager = SNew(SGameLayerManager);
 };
@@ -21,7 +22,8 @@ struct FDudWidgets {
  * Blueprint functions for getting widget children
  */
 UCLASS()
-class AUTOMATIONTESTHELPERS_API UWidgetTestUtilities : public UBlueprintFunctionLibrary {
+class AUTOMATIONTESTHELPERS_API UWidgetTestUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:
@@ -42,13 +44,16 @@ class AUTOMATIONTESTHELPERS_API UWidgetTestUtilities : public UBlueprintFunction
      */
     template <typename T>
         requires std::is_base_of_v<UWidget, T>
-    static TArray<T *> FindAllChildWidgetsOfType(UUserWidget *Parent) {
+    static TArray<T *> FindAllChildWidgetsOfType(UUserWidget *Parent)
+    {
         TArray<UWidget *> AllChildren;
         UWidgetTree::GetChildWidgets(Parent->GetRootWidget(), AllChildren);
 
         TArray<T *> Ret;
-        for (auto Child : AllChildren) {
-            if (Child->IsA<T>()) {
+        for (auto Child : AllChildren)
+        {
+            if (Child->IsA<T>())
+            {
                 Ret.Add(CastChecked<T>(Child));
             }
         }
@@ -70,20 +75,25 @@ class AUTOMATIONTESTHELPERS_API UWidgetTestUtilities : public UBlueprintFunction
      */
     template <typename T>
         requires std::is_base_of_v<SWidget, T>
-    static TSharedPtr<T> FindFirstChildOfType(SWidget &Widget, FName TypeName) {
+    static TSharedPtr<T> FindFirstChildOfType(SWidget &Widget, FName TypeName)
+    {
         auto Children = Widget.GetChildren();
-        if (Children == nullptr) {
+        if (Children == nullptr)
+        {
             return nullptr;
         }
 
-        for (int32 i = 0; i < Children->Num(); i++) {
+        for (int32 i = 0; i < Children->Num(); i++)
+        {
             auto Child = Children->GetChildAt(i);
-            if (Child->GetType() == TypeName) {
+            if (Child->GetType() == TypeName)
+            {
                 return StaticCastSharedRef<T>(Child);
             }
 
             auto FoundChild = FindFirstChildOfType<T>(*Child, TypeName);
-            if (FoundChild != nullptr) {
+            if (FoundChild != nullptr)
+            {
                 return FoundChild;
             }
         }

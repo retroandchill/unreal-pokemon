@@ -21,7 +21,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Ranges {
+namespace Retro::Ranges
+{
 
     /**
      * @brief A concept to check if a range is compatible with a given type.
@@ -57,7 +58,9 @@ namespace Retro::Ranges {
      * argument.
      */
     template <typename>
-    struct TRttiTag {};
+    struct TRttiTag
+    {
+    };
 
     /**
      * @class FAnyRef
@@ -84,7 +87,8 @@ namespace Retro::Ranges {
      * Usage of such a class can be particularly beneficial in scenarios where type erasure is needed, or when dynamic
      * polymorphism or containers storing heterogeneous object types are involved.
      */
-    class FAnyRef {
+    class FAnyRef
+    {
       public:
         /**
          * @brief Default constructor for the AnyRef class.
@@ -118,7 +122,8 @@ namespace Retro::Ranges {
          *       during its execution.
          */
         template <typename T>
-        explicit(false) constexpr FAnyRef(T &Obj) noexcept : Ptr(std::addressof(Obj)), Info(&typeid(TRttiTag<T>)) {
+        explicit(false) constexpr FAnyRef(T &Obj) noexcept : Ptr(std::addressof(Obj)), Info(&typeid(TRttiTag<T>))
+        {
         }
 
         /**
@@ -143,7 +148,8 @@ namespace Retro::Ranges {
          * @post Returns a non-const reference to the stored object, allowing modification if desired.
          */
         template <typename T>
-        T &get() const noexcept {
+        T &get() const noexcept
+        {
             RETROLIB_ASSERT(Ptr != nullptr && Info != nullptr && *Info == typeid(TRttiTag<T>));
             return *const_cast<T *>(static_cast<const volatile T *>(Ptr));
         }
@@ -171,7 +177,8 @@ namespace Retro::Ranges {
      * Typical uses involve creating derived classes that implement specific iteration end conditions for various
      * container types, leveraging type erasure to hide the container's actual type from the users of the interface.
      */
-    class FErasedView {
+    class FErasedView
+    {
       protected:
         ~FErasedView() = default;
 
@@ -208,7 +215,8 @@ namespace Retro::Ranges {
      * in a manner that prevents undefined behavior from accessing a null pointer by ensuring
      * proper initialization with a valid ErasedView reference.
      */
-    RETROLIB_EXPORT class FAnyViewSentinel {
+    RETROLIB_EXPORT class FAnyViewSentinel
+    {
       public:
         /**
          * Default constructor for the AnyViewSentinel class.
@@ -230,7 +238,8 @@ namespace Retro::Ranges {
          *       in constant expressions and preventing implicit conversions, respectively. The `noexcept`
          *       specifier indicates that this constructor is guaranteed not to throw exceptions.
          */
-        constexpr explicit FAnyViewSentinel(FErasedView &View) noexcept : View(&View) {
+        constexpr explicit FAnyViewSentinel(FErasedView &View) noexcept : View(&View)
+        {
         }
 
       private:
@@ -252,7 +261,8 @@ namespace Retro::Ranges {
      * @tparam T The type of elements that the iterator operates over.
      */
     template <typename T>
-    class TAnyViewIteratorInterface {
+    class TAnyViewIteratorInterface
+    {
       public:
         /**
          * @brief Virtual destructor for the AnyViewIteratorInterface.
@@ -331,7 +341,8 @@ namespace Retro::Ranges {
      * - `void next() override`: Advances the iterator to point to the next element in the sequence.
      */
     template <typename I, typename T = std::iter_value_t<I>>
-    class TAnyViewIteratorImpl : public TAnyViewIteratorInterface<T> {
+    class TAnyViewIteratorImpl : public TAnyViewIteratorInterface<T>
+    {
       public:
         /**
          * @brief Constructs an AnyViewIteratorImpl with a specified iterator.
@@ -348,7 +359,8 @@ namespace Retro::Ranges {
          */
         template <typename A>
             requires std::same_as<std::decay_t<A>, I> && (!std::same_as<std::decay_t<A>, TAnyViewIteratorImpl>)
-        constexpr explicit TAnyViewIteratorImpl(A &&Iter) : Iter(std::forward<A>(Iter)) {
+        constexpr explicit TAnyViewIteratorImpl(A &&Iter) : Iter(std::forward<A>(Iter))
+        {
         }
 
         /**
@@ -363,18 +375,22 @@ namespace Retro::Ranges {
          */
         constexpr explicit TAnyViewIteratorImpl(std::nullptr_t)
             requires std::is_pointer_v<I>
-            : Iter(nullptr) {
+            : Iter(nullptr)
+        {
         }
 
-        FAnyRef Iterator() const override {
+        FAnyRef Iterator() const override
+        {
             return FAnyRef(Iter);
         }
 
-        T Read() const override {
+        T Read() const override
+        {
             return *Iter;
         }
 
-        void Next() override {
+        void Next() override
+        {
             ++Iter;
         }
 
@@ -397,7 +413,8 @@ namespace Retro::Ranges {
      * @tparam T The type of elements that the iterator operates over.
      */
     RETROLIB_EXPORT template <typename T>
-    class TAnyViewIterator {
+    class TAnyViewIterator
+    {
       public:
         using difference_type = std::ptrdiff_t;
         using value_type = T;
@@ -425,13 +442,15 @@ namespace Retro::Ranges {
          * @param Iterator An iterator instance to initialize and adapt within this AnyViewIterator.
          */
         constexpr explicit TAnyViewIterator(TUniquePolymorphic<TAnyViewIteratorInterface<T>> &&Iterator)
-            : Delegate(std::move(Iterator)) {
+            : Delegate(std::move(Iterator))
+        {
         }
 
       public:
         template <std::input_iterator I>
             requires std::convertible_to<T, std::iter_value_t<I>>
-        constexpr static TAnyViewIterator Create(I &&Iterator) {
+        constexpr static TAnyViewIterator Create(I &&Iterator)
+        {
             return TAnyViewIterator(TUniquePolymorphic<TAnyViewIteratorInterface<T>>(
                 std::in_place_type<TAnyViewIteratorImpl<std::remove_cvref_t<I>>>, std::forward<I>(Iterator)));
         }
@@ -446,7 +465,8 @@ namespace Retro::Ranges {
          * @param Other The other AnyViewSentinel object to compare against.
          * @return true if the current iterator has reached the end of the view, false otherwise.
          */
-        constexpr bool operator==(const FAnyViewSentinel &Other) const {
+        constexpr bool operator==(const FAnyViewSentinel &Other) const
+        {
             return Other.View->AtEnd(Delegate->Iterator());
         }
 
@@ -459,7 +479,8 @@ namespace Retro::Ranges {
          *
          * @return The element of type T currently pointed to by the iterator.
          */
-        constexpr T operator*() const {
+        constexpr T operator*() const
+        {
             return Delegate->Read();
         }
 
@@ -474,7 +495,8 @@ namespace Retro::Ranges {
          *
          * @return A reference to the incremented AnyViewIterator instance.
          */
-        constexpr TAnyViewIterator &operator++() {
+        constexpr TAnyViewIterator &operator++()
+        {
             Delegate->Next();
             return *this;
         }
@@ -489,7 +511,8 @@ namespace Retro::Ranges {
          *
          * @return A copy of the iterator's state prior to the increment.
          */
-        constexpr TAnyViewIterator operator++(int) {
+        constexpr TAnyViewIterator operator++(int)
+        {
             auto Temp = *this;
             ++*this;
             return Temp;
@@ -520,7 +543,8 @@ namespace Retro::Ranges {
      *   own mechanism for retrieving the starting iterator.
      */
     template <typename T>
-    class TAnyViewInterface : public FErasedView {
+    class TAnyViewInterface : public FErasedView
+    {
       public:
         /**
          * @brief Destructor for AnyViewInterface.
@@ -561,7 +585,8 @@ namespace Retro::Ranges {
      * - Implements the `atEnd` function to check if the iterator has reached the end of the range.
      */
     template <typename R, typename T = std::ranges::range_value_t<R>>
-    class TAnyViewImpl : public TAnyViewInterface<T> {
+    class TAnyViewImpl : public TAnyViewInterface<T>
+    {
       public:
         /**
          * @brief Constructs an AnyViewImpl object with the given range.
@@ -579,7 +604,8 @@ namespace Retro::Ranges {
          */
         template <typename E>
             requires(!std::same_as<std::decay_t<E>, T>) && std::same_as<std::decay_t<E>, R>
-        constexpr explicit TAnyViewImpl(E &&Range) : Range(std::forward<E>(Range)) {
+        constexpr explicit TAnyViewImpl(E &&Range) : Range(std::forward<E>(Range))
+        {
         }
 
         /**
@@ -592,7 +618,8 @@ namespace Retro::Ranges {
          *
          * @return An `AnyViewIterator` object that points to the first element of the range.
          */
-        TAnyViewIterator<T> begin() override {
+        TAnyViewIterator<T> begin() override
+        {
             return TAnyViewIterator<T>::Create(std::ranges::begin(Range));
         }
 
@@ -610,7 +637,8 @@ namespace Retro::Ranges {
          * @return `true` if the iterator has reached the end of the range;
          * `false` otherwise.
          */
-        bool AtEnd(FAnyRef Ref) override {
+        bool AtEnd(FAnyRef Ref) override
+        {
             auto &It = Ref.get<const std::ranges::iterator_t<R>>();
             return It == std::ranges::end(Range);
         }
@@ -644,7 +672,8 @@ namespace Retro::Ranges {
      * a `Polymorphic<AnyViewInterface<T>>` member, initializing with an empty view by default.
      */
     RETROLIB_EXPORT template <typename T>
-    class TAnyView : public std::ranges::view_interface<TAnyView<T>> {
+    class TAnyView : public std::ranges::view_interface<TAnyView<T>>
+    {
 
       public:
         /**
@@ -674,7 +703,8 @@ namespace Retro::Ranges {
         template <typename R>
             requires(!std::same_as<std::decay_t<R>, TAnyView>) && std::ranges::input_range<R> && CompatibleRange<R, T>
         explicit(false) TAnyView(R &&Range)
-            : Data(std::in_place_type<TAnyViewImpl<std::decay_t<R>>>, std::forward<R>(Range)) {
+            : Data(std::in_place_type<TAnyViewImpl<std::decay_t<R>>>, std::forward<R>(Range))
+        {
         }
 
         /**
@@ -697,7 +727,8 @@ namespace Retro::Ranges {
          */
         template <typename R>
             requires(!std::same_as<std::decay_t<R>, TAnyView>) && std::ranges::input_range<R>
-        TAnyView &operator=(R &&Range) {
+        TAnyView &operator=(R &&Range)
+        {
             Data = TAnyViewImpl<std::decay_t<R>>(std::forward<R>(Range));
             return *this;
         }
@@ -711,7 +742,8 @@ namespace Retro::Ranges {
          *
          * @return An `AnyViewIterator` instance pointing to the initial element of the range.
          */
-        TAnyViewIterator<T> begin() {
+        TAnyViewIterator<T> begin()
+        {
             return Data->begin();
         }
 
@@ -724,7 +756,8 @@ namespace Retro::Ranges {
          *
          * @return An `AnyViewSentinel` that signals the end boundary of the range managed by `AnyView`.
          */
-        FAnyViewSentinel end() {
+        FAnyViewSentinel end()
+        {
             return FAnyViewSentinel(*Data);
         }
 

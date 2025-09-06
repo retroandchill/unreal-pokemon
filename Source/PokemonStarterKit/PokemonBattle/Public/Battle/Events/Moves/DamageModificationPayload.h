@@ -13,7 +13,8 @@
  * Information about a move during damage modification
  */
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FDamageCalculationData {
+struct POKEMONBATTLE_API FDamageCalculationData
+{
     GENERATED_BODY()
 
     /**
@@ -91,7 +92,8 @@ struct POKEMONBATTLE_API FDamageCalculationData {
  * The payload used during damage modification.
  */
 UCLASS(BlueprintType)
-class POKEMONBATTLE_API UDamageModificationPayload : public UObject, public ITargetedMoveEventPayload {
+class POKEMONBATTLE_API UDamageModificationPayload : public UObject, public ITargetedMoveEventPayload
+{
     GENERATED_BODY()
 
   public:

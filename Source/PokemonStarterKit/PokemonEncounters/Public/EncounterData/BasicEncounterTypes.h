@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "NativeGameplayTags.h"
 
-namespace Pokemon::Encounters {
+namespace Pokemon::Encounters
+{
 
     POKEMONENCOUNTERS_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(Land);
     POKEMONENCOUNTERS_API const UE_DECLARE_GAMEPLAY_TAG_EXTERN(Cave);

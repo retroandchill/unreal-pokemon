@@ -15,11 +15,13 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(UBagScreen)
 
-UBagScreen *UBagScreen::AddBagScreenToStack(const UObject *WorldContextObject) {
+UBagScreen *UBagScreen::AddBagScreenToStack(const UObject *WorldContextObject)
+{
     return URPGMenuUtilities::InjectScreenToStack<UBagScreen>(WorldContextObject).GetPtrOrNull();
 }
 
-void UBagScreen::NativeConstruct() {
+void UBagScreen::NativeConstruct()
+{
     Super::NativeConstruct();
 
     auto &Bag = GetGameInstance()->GetSubsystem<UPokemonSubsystem>()->GetBag();
@@ -28,59 +30,75 @@ void UBagScreen::NativeConstruct() {
     ItemSelectionWindow->ActivateWidget();
 }
 
-void UBagScreen::ApplyItemFilter(const FItemFilter &ItemFilter) {
+void UBagScreen::ApplyItemFilter(const FItemFilter &ItemFilter)
+{
     RefreshScene();
 }
 
-UE5Coro::TCoroutine<TOptional<FSelectedItemHandle>> UBagScreen::PromptItemSelection() {
+UE5Coro::TCoroutine<TOptional<FSelectedItemHandle>> UBagScreen::PromptItemSelection()
+{
     auto [Result] = co_await OnItemSelected;
     co_return Result;
 }
 
-void UBagScreen::ToggleItemSelection(bool bCanSelect) {
-    if (bCanSelect) {
+void UBagScreen::ToggleItemSelection(bool bCanSelect)
+{
+    if (bCanSelect)
+    {
         ItemSelectionWindow->ActivateWidget();
-    } else {
+    }
+    else
+    {
         ItemSelectionWindow->DeactivateWidget();
     }
 }
 
-void UBagScreen::RemoveFromStack() {
+void UBagScreen::RemoveFromStack()
+{
     CloseScreen();
 }
 
-void UBagScreen::CloseScreen() {
+void UBagScreen::CloseScreen()
+{
     Super::CloseScreen();
     (void)OnItemSelected.ExecuteIfBound({});
 }
 
-void UBagScreen::RefreshScene() {
+void UBagScreen::RefreshScene()
+{
     RefreshSelf();
 }
 
-void UBagScreen::RefreshSelf_Implementation() {
+void UBagScreen::RefreshSelf_Implementation()
+{
     Super::RefreshSelf_Implementation();
     ItemSelectionWindow->RefreshWindow();
 }
 
-UItemSelectionWindow *UBagScreen::GetItemSelectionWindow() const {
+UItemSelectionWindow *UBagScreen::GetItemSelectionWindow() const
+{
     return ItemSelectionWindow;
 }
 
-UItemInfoWindow *UBagScreen::GetItemInfoWindow() const {
+UItemInfoWindow *UBagScreen::GetItemInfoWindow() const
+{
     return ItemInfoWindow;
 }
 
-UPocketTabWidget *UBagScreen::GetPocketTabWidget() const {
+UPocketTabWidget *UBagScreen::GetPocketTabWidget() const
+{
     return PocketTabWidget;
 }
 
-UPocketWindow *UBagScreen::GetPocketWindow() const {
+UPocketWindow *UBagScreen::GetPocketWindow() const
+{
     return PocketWindow;
 }
 
-void UBagScreen::SelectItem(const FItem &Item, int32 Quantity) {
-    if (OnItemSelected.IsBound()) {
+void UBagScreen::SelectItem(const FItem &Item, int32 Quantity)
+{
+    if (OnItemSelected.IsBound())
+    {
         OnItemSelected.Execute(FSelectedItemHandle(this, Item, Quantity));
         return;
     }
@@ -89,9 +107,11 @@ void UBagScreen::SelectItem(const FItem &Item, int32 Quantity) {
     ShowItemCommands();
 }
 
-void UBagScreen::OnItemEffectConclude(bool bSuccess, FName ItemID) {
+void UBagScreen::OnItemEffectConclude(bool bSuccess, FName ItemID)
+{
     auto &Item = FDataManager::GetInstance().GetDataTable<FItem>().GetDataChecked(ItemID);
-    if (bSuccess && Item.Consumable) {
+    if (bSuccess && Item.Consumable)
+    {
         UTrainerHelpers::GetBag(this)->RemoveItem(ItemID, 1);
     }
 

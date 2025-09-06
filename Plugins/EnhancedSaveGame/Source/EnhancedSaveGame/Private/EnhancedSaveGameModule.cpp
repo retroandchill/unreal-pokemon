@@ -6,17 +6,20 @@ DEFINE_LOG_CATEGORY(LogEnhancedSaveGame);
 
 FEnhancedSaveGameModule *FEnhancedSaveGameModule::Instance = nullptr;
 
-void FEnhancedSaveGameModule::StartupModule() {
+void FEnhancedSaveGameModule::StartupModule()
+{
     check(Instance == nullptr)
     Instance = this;
 }
 
-void FEnhancedSaveGameModule::ShutdownModule() {
+void FEnhancedSaveGameModule::ShutdownModule()
+{
     check(Instance != nullptr)
     Instance = nullptr;
 }
 
-ISaveGameSystem *FEnhancedSaveGameModule::GetSaveGameSystem() {
+ISaveGameSystem *FEnhancedSaveGameModule::GetSaveGameSystem()
+{
 #if WITH_EDITOR
     return bInMemorySavingEnabled ? static_cast<ISaveGameSystem *>(&InMemorySaveGameSystem)
                                   : static_cast<ISaveGameSystem *>(&MainSaveGameSystem);
@@ -25,17 +28,20 @@ ISaveGameSystem *FEnhancedSaveGameModule::GetSaveGameSystem() {
 #endif
 }
 
-FEnhancedSaveGameModule &FEnhancedSaveGameModule::Get() {
+FEnhancedSaveGameModule &FEnhancedSaveGameModule::Get()
+{
     check(Instance != nullptr)
     return *Instance;
 }
 
 #if WITH_EDITOR
-void FEnhancedSaveGameModule::EnableInMemorySaving() {
+void FEnhancedSaveGameModule::EnableInMemorySaving()
+{
     bInMemorySavingEnabled = true;
 }
 
-void FEnhancedSaveGameModule::DisableInMemorySaving() {
+void FEnhancedSaveGameModule::DisableInMemorySaving()
+{
     bInMemorySavingEnabled = false;
 }
 #endif

@@ -3,15 +3,16 @@
 #include "Components/Common/PlayerInfoWidget.h"
 #include "Player/PlayerMetadata.h"
 
-void UPlayerInfoWidget::SetPlayerInfo(const TScriptInterface<ITrainer> &NewTrainer,
-                                      UPlayerMetadata *NewPlayerMetadata) {
+void UPlayerInfoWidget::SetPlayerInfo(const TScriptInterface<ITrainer> &NewTrainer, UPlayerMetadata *NewPlayerMetadata)
+{
     PlayerTrainer = NewTrainer;
     PlayerMetadata = NewPlayerMetadata;
     HandlePlayerInfoSet(NewTrainer, NewPlayerMetadata);
 }
 
 void UPlayerInfoWidget::HandlePlayerInfoSet(const TScriptInterface<ITrainer> &NewTrainer,
-                                            UPlayerMetadata *NewPlayerMetadata) {
+                                            UPlayerMetadata *NewPlayerMetadata)
+{
     PlayerMetadata->GetOnTimeUpdated().AddUniqueDynamic(this, &UPlayerInfoWidget::SetPlayerTimeInfo);
     OnPlayerInfoSet(NewTrainer, NewPlayerMetadata);
     SetPlayerTimeInfo(NewPlayerMetadata->GetTotalPlaytime());

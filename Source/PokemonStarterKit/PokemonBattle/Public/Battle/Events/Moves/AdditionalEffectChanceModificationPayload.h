@@ -13,7 +13,8 @@ class IBattleMove;
  * The struct that holds the actual payload data
  */
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FAdditionalEffectChanceModificationData {
+struct POKEMONBATTLE_API FAdditionalEffectChanceModificationData
+{
     GENERATED_BODY()
 
     /**
@@ -53,7 +54,8 @@ struct POKEMONBATTLE_API FAdditionalEffectChanceModificationData {
  * Event payload for modifications to the additional effect chance of a move
  */
 UCLASS(BlueprintType)
-class POKEMONBATTLE_API UAdditionalEffectChanceModificationPayload : public UObject {
+class POKEMONBATTLE_API UAdditionalEffectChanceModificationPayload : public UObject
+{
     GENERATED_BODY()
 
   public:

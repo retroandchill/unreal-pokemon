@@ -3,9 +3,11 @@
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Settings/PokemonBattleSettings.h"
 
-void UStatStagesAttributeSet::PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue) {
+void UStatStagesAttributeSet::PreAttributeChange(const FGameplayAttribute &Attribute, float &NewValue)
+{
     if (Attribute == GetSameTypeAttackBonusAttribute() || Attribute == GetCriticalHitStagesAttribute() ||
-        Attribute == GetStatStageMultiplierAttribute()) {
+        Attribute == GetStatStageMultiplierAttribute())
+    {
         return;
     }
 

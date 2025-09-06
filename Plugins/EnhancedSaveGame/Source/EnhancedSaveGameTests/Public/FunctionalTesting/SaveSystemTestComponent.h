@@ -15,7 +15,8 @@
  * within the Unreal Engine testing framework.
  */
 UCLASS(ClassGroup = (FunctionalTest), meta = (BlueprintSpawnableComponent))
-class ENHANCEDSAVEGAMETESTS_API USaveSystemTestComponent : public UScopedTestComponent {
+class ENHANCEDSAVEGAMETESTS_API USaveSystemTestComponent : public UScopedTestComponent
+{
     GENERATED_BODY()
 
   public:

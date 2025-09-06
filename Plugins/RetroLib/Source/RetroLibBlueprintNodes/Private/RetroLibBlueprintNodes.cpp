@@ -1,10 +1,12 @@
 ﻿#include "RetroLibBlueprintNodes.h"
 
-void FRetroLibBlueprintNodesModule::StartupModule() {
+void FRetroLibBlueprintNodesModule::StartupModule()
+{
     // No special startup code
 }
 
-void FRetroLibBlueprintNodesModule::ShutdownModule() {
+void FRetroLibBlueprintNodesModule::ShutdownModule()
+{
     // No special shutdown code
 }
 

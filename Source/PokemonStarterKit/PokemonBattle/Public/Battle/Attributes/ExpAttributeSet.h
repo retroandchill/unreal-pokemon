@@ -12,7 +12,8 @@
  * Attributes related to Exp. and EV gain.
  */
 UCLASS()
-class POKEMONBATTLE_API UExpAttributeSet : public UAttributeSet {
+class POKEMONBATTLE_API UExpAttributeSet : public UAttributeSet
+{
     GENERATED_BODY()
 
   public:

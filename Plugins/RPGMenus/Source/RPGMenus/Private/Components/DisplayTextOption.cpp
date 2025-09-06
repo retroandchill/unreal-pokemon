@@ -3,23 +3,28 @@
 #include "Components/DisplayTextOption.h"
 #include "CommonTextBlock.h"
 
-void UDisplayTextOption::NativePreConstruct() {
+void UDisplayTextOption::NativePreConstruct()
+{
     Super::NativePreConstruct();
     DisplayText->SetText(Text);
 }
 
-const FText &UDisplayTextOption::GetText() const {
+const FText &UDisplayTextOption::GetText() const
+{
     return Text;
 }
 
-void UDisplayTextOption::SetText(const FText &NewText) {
+void UDisplayTextOption::SetText(const FText &NewText)
+{
     Text = NewText;
     DisplayText->SetText(Text);
 }
 
-void UDisplayTextOption::NativeOnCurrentTextStyleChanged() {
+void UDisplayTextOption::NativeOnCurrentTextStyleChanged()
+{
     Super::NativeOnCurrentTextStyleChanged();
-    if (DisplayText != nullptr) {
+    if (DisplayText != nullptr)
+    {
         DisplayText->SetStyle(GetCurrentTextStyleClass());
     }
 }

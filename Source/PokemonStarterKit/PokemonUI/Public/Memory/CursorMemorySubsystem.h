@@ -12,7 +12,8 @@
  * Subsystem used to store the memory of cursor locations in the bag between menu visits.
  */
 UCLASS()
-class POKEMONUI_API UCursorMemorySubsystem : public UGameInstanceSubsystem {
+class POKEMONUI_API UCursorMemorySubsystem : public UGameInstanceSubsystem
+{
     GENERATED_BODY()
 
   public:

@@ -4,11 +4,13 @@
 #include "CoreMinimal.h"
 #include "RetroLib/Meta/Registry.h"
 
-namespace Exp {
+namespace Exp
+{
     /**
      * Interface to represent various Exp. grow rates
      */
-    class POKEMONCORE_API IGrowthRate {
+    class POKEMONCORE_API IGrowthRate
+    {
       public:
         virtual ~IGrowthRate() = default;
 

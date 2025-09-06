@@ -16,7 +16,8 @@ class UDisplayText;
  * Fills out the information inside the card for the save screen.
  */
 UCLASS(Abstract)
-class POKEMONUI_API USaveGameCard : public UCommonUserWidget {
+class POKEMONUI_API USaveGameCard : public UCommonUserWidget
+{
     GENERATED_BODY()
 
   protected:

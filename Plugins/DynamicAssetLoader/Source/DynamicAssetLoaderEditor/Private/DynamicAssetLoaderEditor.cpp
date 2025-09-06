@@ -3,7 +3,8 @@
 #include "RetroLib/Variants/SoftVariantObjectCustomization.h"
 #include "RetroLib/Variants/VariantObjectCustomization.h"
 
-void FDynamicAssetLoaderEditorModule::StartupModule() {
+void FDynamicAssetLoaderEditorModule::StartupModule()
+{
     auto &PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
     PropertyModule.RegisterCustomPropertyTypeLayout(
         TEXT("AssetClassType"), FOnGetPropertyTypeCustomizationInstance::CreateStatic(
@@ -13,7 +14,8 @@ void FDynamicAssetLoaderEditorModule::StartupModule() {
                                         &Retro::TSoftVariantObjectCustomization<FSoftAssetClassType>::MakeInstance));
 }
 
-void FDynamicAssetLoaderEditorModule::ShutdownModule() {
+void FDynamicAssetLoaderEditorModule::ShutdownModule()
+{
     // No shutdown needed
 }
 

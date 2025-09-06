@@ -11,7 +11,8 @@
 struct FBattleRender;
 
 UCLASS()
-class POKEMONBATTLE_API ABattlerSpriteBase : public AActor, public IBattlerSprite {
+class POKEMONBATTLE_API ABattlerSpriteBase : public AActor, public IBattlerSprite
+{
     GENERATED_BODY()
 
   public:

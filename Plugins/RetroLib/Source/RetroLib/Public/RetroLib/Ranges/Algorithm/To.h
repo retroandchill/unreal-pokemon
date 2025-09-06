@@ -26,7 +26,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Ranges {
+namespace Retro::Ranges
+{
     /**
      * @struct TIsMap
      * @brief A type trait structure that indicates whether a given type is a map.
@@ -39,7 +40,9 @@ namespace Retro::Ranges {
      * in template metaprogramming scenarios.
      */
     RETROLIB_EXPORT template <template <typename...> typename>
-    struct TIsMap : std::false_type {};
+    struct TIsMap : std::false_type
+    {
+    };
 
     /**
      * @brief Trait to identify the std::map type.
@@ -56,11 +59,15 @@ namespace Retro::Ranges {
      * map-like container.
      */
     RETROLIB_EXPORT template <>
-    struct TIsMap<std::map> : std::true_type {};
+    struct TIsMap<std::map> : std::true_type
+    {
+    };
 
 #ifdef __UNREAL__
     RETROLIB_EXPORT template <>
-    struct TIsMap<TMap> : std::true_type {};
+    struct TIsMap<TMap> : std::true_type
+    {
+    };
 #endif
 
     /**
@@ -77,7 +84,8 @@ namespace Retro::Ranges {
      *        accessible via `std::ranges::range_value_t`.
      */
     RETROLIB_EXPORT template <template <typename...> typename C>
-    struct TFromRange {
+    struct TFromRange
+    {
         template <typename R>
         using Invoke = C<std::ranges::range_value_t<R>>;
     };
@@ -100,7 +108,8 @@ namespace Retro::Ranges {
      */
     RETROLIB_EXPORT template <template <typename...> typename C>
         requires TIsMap<C>::value
-    struct TFromRange<C> {
+    struct TFromRange<C>
+    {
         template <typename R>
             requires TupleLike<std::ranges::range_value_t<R>> && (std::tuple_size_v<std::ranges::range_value_t<R>> == 2)
         using Invoke = C<std::tuple_element_t<0, std::ranges::range_value_t<R>>,
@@ -137,10 +146,12 @@ namespace Retro::Ranges {
      */
     RETROLIB_EXPORT template <typename C, std::ranges::input_range R, typename... A>
         requires(!std::ranges::view<C>) && CompatibleContainerTypeForArgs<C, R, A...>
-    constexpr C To(R &&Range, A &&...Args) {
+    constexpr C To(R &&Range, A &&...Args)
+    {
         C Result(std::forward<A>(Args)...);
 
-        if constexpr (std::ranges::sized_range<R> && ReservableContainer<C>) {
+        if constexpr (std::ranges::sized_range<R> && ReservableContainer<C>)
+        {
             // We want to guarantee that we won't have any weird overflow issues when inserting into a container with
             // a mismatch between signed and unsigned sizes.
             RETROLIB_ASSERT(static_cast<std::ranges::range_size_t<R>>(std::ranges::size(Range)) <=
@@ -148,7 +159,8 @@ namespace Retro::Ranges {
             ContainerReserve(Result, std::ranges::size(Range));
         }
 
-        for (auto &&x : Range) {
+        for (auto &&x : Range)
+        {
             AppendContainer(Result, std::forward<decltype(x)>(x));
         }
 
@@ -170,7 +182,8 @@ namespace Retro::Ranges {
      * @return An instance of the target container type containing the elements of the input range.
      */
     RETROLIB_EXPORT template <template <typename...> typename C, std::ranges::input_range R, typename... A>
-    constexpr auto To(R &&Range, A &&...Args) {
+    constexpr auto To(R &&Range, A &&...Args)
+    {
         return To<typename TFromRange<C>::template Invoke<R>>(std::forward<R>(Range), std::forward<A>(Args)...);
     }
 
@@ -187,7 +200,8 @@ namespace Retro::Ranges {
      */
     template <typename C>
         requires(!std::ranges::view<C>)
-    struct TToInvoker {
+    struct TToInvoker
+    {
         /**
          * @brief Functor operator that converts a given range to a specified container type.
          *
@@ -202,7 +216,8 @@ namespace Retro::Ranges {
          */
         template <std::ranges::input_range R, typename... A>
             requires CompatibleContainerTypeForArgs<C, R, A...>
-        constexpr C operator()(R &&Range, A &&...Args) const {
+        constexpr C operator()(R &&Range, A &&...Args) const
+        {
             return To<C>(std::forward<R>(Range), std::forward<A>(Args)...);
         }
     };
@@ -228,7 +243,8 @@ namespace Retro::Ranges {
      * @tparam C The type to which the input range and additional arguments will be converted.
      */
     template <template <typename...> typename C>
-    struct TTemplatedToInvoker {
+    struct TTemplatedToInvoker
+    {
         /**
          * Functor operator that applies a transformation to a given range.
          *
@@ -248,7 +264,8 @@ namespace Retro::Ranges {
          *         type `C`.
          */
         template <std::ranges::input_range R, typename... A>
-        constexpr auto operator()(R &&Range, A &&...Args) const {
+        constexpr auto operator()(R &&Range, A &&...Args) const
+        {
             return To<C>(std::forward<R>(Range), std::forward<A>(Args)...);
         }
     };
@@ -278,7 +295,8 @@ namespace Retro::Ranges {
      */
     RETROLIB_EXPORT template <typename C, typename... A>
         requires(!std::ranges::view<C>) && std::constructible_from<C, A...>
-    constexpr auto To(A &&...Args) {
+    constexpr auto To(A &&...Args)
+    {
         return ExtensionMethod<ToCallback<C>>(std::forward<A>(Args)...);
     }
 
@@ -296,7 +314,8 @@ namespace Retro::Ranges {
      *         desired format or type.
      */
     RETROLIB_EXPORT template <template <typename...> typename C, typename... A>
-    constexpr auto To(A &&...Args) {
+    constexpr auto To(A &&...Args)
+    {
         return ExtensionMethod<TemplateToCallback<C>>(std::forward<A>(Args)...);
     }
 

@@ -12,7 +12,8 @@
  * Pane used to select Pokémon from in a grid based format
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONUI_API UPokemonSelectionPane : public UPokemonSelectionPaneBase {
+class POKEMONUI_API UPokemonSelectionPane : public UPokemonSelectionPaneBase
+{
     GENERATED_BODY()
 
   protected:

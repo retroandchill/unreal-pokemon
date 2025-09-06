@@ -4,11 +4,13 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(UPauseMenuScreen)
 
-UPauseMenuScreen *UPauseMenuScreen::AddPauseMenuScreenToStack(const UObject *WorldContextObject) {
+UPauseMenuScreen *UPauseMenuScreen::AddPauseMenuScreenToStack(const UObject *WorldContextObject)
+{
     return URPGMenuUtilities::InjectScreenToStack<UPauseMenuScreen>(WorldContextObject).GetPtrOrNull();
 }
 
-void UPauseMenuScreen::NativeConstruct() {
+void UPauseMenuScreen::NativeConstruct()
+{
     Super::NativeConstruct();
     PlaySound(OpenSound);
 }

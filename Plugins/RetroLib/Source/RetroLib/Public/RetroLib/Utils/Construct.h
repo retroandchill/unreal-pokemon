@@ -9,7 +9,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
 
     /**
      * @class TConstruct
@@ -17,7 +18,8 @@ namespace Retro {
      * provided parameters.
      */
     RETROLIB_EXPORT template <typename T>
-    struct TConstruct {
+    struct TConstruct
+    {
         /**
          * Constructs an object of type T with the provided arguments.
          *
@@ -26,7 +28,8 @@ namespace Retro {
          */
         template <typename... A>
             requires std::constructible_from<T, A...>
-        constexpr T operator()(A &&...Args) const {
+        constexpr T operator()(A &&...Args) const
+        {
             return T(std::forward<A>(Args)...);
         }
     };

@@ -3,10 +3,10 @@
 #include "Battle/StatusEffects/Nodes/CanStatusEffectBeInflicted.h"
 #include "Battle/StatusEffects/BattleStatusEffectUtils.h"
 
-UCanStatusEffectBeInflicted *
-UCanStatusEffectBeInflicted::CanStatusEffectBeInflicted(const TScriptInterface<IBattler> &Target,
-                                                        FStatusHandle StatusEffectID, FText AlreadyAppliedFormat,
-                                                        FText HasOtherStatusFormat) {
+UCanStatusEffectBeInflicted *UCanStatusEffectBeInflicted::CanStatusEffectBeInflicted(
+    const TScriptInterface<IBattler> &Target, FStatusHandle StatusEffectID, FText AlreadyAppliedFormat,
+    FText HasOtherStatusFormat)
+{
     auto Node = NewObject<UCanStatusEffectBeInflicted>();
     Node->SetWorldContext(Target.GetObject());
     Node->StatusEffectID = StatusEffectID;
@@ -16,7 +16,8 @@ UCanStatusEffectBeInflicted::CanStatusEffectBeInflicted(const TScriptInterface<I
     return Node;
 }
 
-UE5Coro::TCoroutine<> UCanStatusEffectBeInflicted::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine) {
+UE5Coro::TCoroutine<> UCanStatusEffectBeInflicted::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine)
+{
     OnComplete.Broadcast(co_await UBattleStatusEffectUtils::CanStatusEffectBeInflicted(
         Target, StatusEffectID, AlreadyAppliedFormat, HasOtherStatusFormat));
 }

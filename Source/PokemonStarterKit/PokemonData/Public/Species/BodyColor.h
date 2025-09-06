@@ -10,7 +10,8 @@
  * Represents the Body Color of a Pokémon. Used when searching in the Pokédex.
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FBodyColor : public FIndexedTableRow {
+struct POKEMONDATA_API FBodyColor : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -24,7 +25,8 @@ struct POKEMONDATA_API FBodyColor : public FIndexedTableRow {
  * Blueprint function library for getting body color data out.
  */
 UCLASS()
-class POKEMONDATA_API UBodyColorHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UBodyColorHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

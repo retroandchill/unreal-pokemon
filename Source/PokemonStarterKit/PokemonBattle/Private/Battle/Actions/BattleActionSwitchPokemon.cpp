@@ -7,25 +7,31 @@
 
 FBattleActionSwitchPokemon::FBattleActionSwitchPokemon(const TScriptInterface<IBattler> &BattlerIn,
                                                        const TScriptInterface<IBattler> &SwitchTargetIn)
-    : FBattleActionBase(BattlerIn), SwitchTarget(SwitchTargetIn) {
+    : FBattleActionBase(BattlerIn), SwitchTarget(SwitchTargetIn)
+{
 }
 
-FString FBattleActionSwitchPokemon::GetReferencerName() const {
+FString FBattleActionSwitchPokemon::GetReferencerName() const
+{
     return TEXT("FBattleActionSwitchPokemon");
 }
 
-bool FBattleActionSwitchPokemon::CanExecute() const {
+bool FBattleActionSwitchPokemon::CanExecute() const
+{
     return GetBattler()->GetOwningSide()->GetBattlers().Contains(GetBattler());
 }
 
-int32 FBattleActionSwitchPokemon::GetPriority() const {
+int32 FBattleActionSwitchPokemon::GetPriority() const
+{
     return GetDefault<UPokemonBattleSettings>()->SwitchPriority;
 }
 
-FText FBattleActionSwitchPokemon::GetActionMessage() const {
+FText FBattleActionSwitchPokemon::GetActionMessage() const
+{
     return FText::GetEmpty();
 }
 
-UE5Coro::TCoroutine<> FBattleActionSwitchPokemon::ActivateAbility() {
+UE5Coro::TCoroutine<> FBattleActionSwitchPokemon::ActivateAbility()
+{
     return GetBattler()->PerformSwitch(SwitchTarget);
 }

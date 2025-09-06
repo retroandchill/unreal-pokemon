@@ -14,7 +14,8 @@ class IBattler;
  *
  */
 UCLASS()
-class POKEMONBATTLE_API UBattleEffectUtilities : public UBlueprintFunctionLibrary {
+class POKEMONBATTLE_API UBattleEffectUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

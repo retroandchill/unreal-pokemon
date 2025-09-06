@@ -3,7 +3,8 @@
 #include "Managers/PokemonSubsystem.h"
 #include "PokemonDataSettings.h"
 
-void UPokemonSelectionPane::NativeConstruct() {
+void UPokemonSelectionPane::NativeConstruct()
+{
     Super::NativeConstruct();
 
     const auto &PokemonSubsystem = UPokemonSubsystem::GetInstance(this);
@@ -11,6 +12,7 @@ void UPokemonSelectionPane::NativeConstruct() {
     SetPokemonToDisplay(PlayerParty);
 }
 
-TOptional<int32> UPokemonSelectionPane::GetNumPanelsToAdd() const {
+TOptional<int32> UPokemonSelectionPane::GetNumPanelsToAdd() const
+{
     return GetDefault<UPokemonDataSettings>()->MaxPartySize;
 }

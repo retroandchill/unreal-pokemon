@@ -7,7 +7,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestImageAssetOperations, "Unit Tests.Images.TestImageAssetOperations",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestImageAssetOperations::RunTest(const FString &Parameters) {
+bool TestImageAssetOperations::RunTest(const FString &Parameters)
+{
     auto UtilityClass = UAssetLoader::LookupBlueprintClassByName<UImageAssetUtility>(TEXT("/RPGMenus/Tests/Resources"),
                                                                                      TEXT("ImageAssetUtilityImpl"));
     auto Class = UtilityClass.GetPtrOrNull();

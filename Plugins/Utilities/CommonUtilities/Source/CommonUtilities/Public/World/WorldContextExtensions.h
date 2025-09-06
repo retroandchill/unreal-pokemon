@@ -4,17 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+
 #include "WorldContextExtensions.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class COMMONUTILITIES_API UWorldContextExtensions : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(meta = (ScriptMethod))
-    static void SetWorldContext(UObject* Object);
+    static void SetWorldContext(UObject *Object);
 };

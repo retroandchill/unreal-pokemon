@@ -16,17 +16,20 @@ class UScreen;
  *
  */
 UCLASS()
-class RPGMENUS_API URPGMenuUtilities : public UBlueprintFunctionLibrary {
+class RPGMENUS_API URPGMenuUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:
     template <typename T, typename... A>
         requires RPG::Menus::InjectableScreen<T>
     static TOptional<T &> InjectScreenToLayer(const UObject *WorldContextObject, const FGameplayTag &LayerTag,
-                                              A &&...Args) {
+                                              A &&...Args)
+    {
         auto Layout = UPrimaryGameLayout::Get(WorldContextObject);
 
-        if (auto Layer = Layout->GetLayerWidget(LayerTag); Layer != nullptr) {
+        if (auto Layer = Layout->GetLayerWidget(LayerTag); Layer != nullptr)
+        {
             auto Widget = UnrealInjector::NewInjectedDependency<T, A...>(Layer, std::forward<A>(Args)...);
             Layer->AddWidgetInstance(*Widget);
             return Widget;
@@ -37,14 +40,16 @@ class RPGMENUS_API URPGMenuUtilities : public UBlueprintFunctionLibrary {
 
     template <typename T, typename... A>
         requires RPG::Menus::InjectableScreen<T>
-    static TOptional<T &> InjectScreenToStack(const UObject *WorldContextObject, A &&...Args) {
+    static TOptional<T &> InjectScreenToStack(const UObject *WorldContextObject, A &&...Args)
+    {
         return InjectScreenToLayer<T, A...>(WorldContextObject, RPG::Menus::PrimaryMenuLayerTag,
                                             std::forward<A>(Args)...);
     }
 
     template <typename T, typename... A>
         requires RPG::Menus::InjectableScreen<T>
-    static TOptional<T &> InjectScreenToOverlay(const UObject *WorldContextObject, A &&...Args) {
+    static TOptional<T &> InjectScreenToOverlay(const UObject *WorldContextObject, A &&...Args)
+    {
         return InjectScreenToLayer<T, A...>(WorldContextObject, RPG::Menus::OverlayMenuLayerTag,
                                             std::forward<A>(Args)...);
     }

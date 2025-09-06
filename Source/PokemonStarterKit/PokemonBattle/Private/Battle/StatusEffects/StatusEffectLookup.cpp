@@ -5,12 +5,14 @@
 #include "Battle/Status.h"
 #include "GameplayEffect.h"
 
-TOptional<TNonNullSubclassOf<UGameplayEffect>> Pokemon::Battle::StatusEffects::FindStatusEffect(FName ID) {
+TOptional<TNonNullSubclassOf<UGameplayEffect>> Pokemon::Battle::StatusEffects::FindStatusEffect(FName ID)
+{
     return Classes::StatusEffects.LoadClass(ID);
 }
 
-TOptional<TNonNullSubclassOf<UGameplayEffect>>
-Pokemon::Battle::StatusEffects::FindStatusEffect(TOptional<const FStatus &> Status) {
+TOptional<TNonNullSubclassOf<UGameplayEffect>> Pokemon::Battle::StatusEffects::FindStatusEffect(
+    TOptional<const FStatus &> Status)
+{
     // clang-format off
     return Status |
            Retro::Optionals::Transform(&FStatus::ID) |

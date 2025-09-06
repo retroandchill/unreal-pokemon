@@ -19,7 +19,8 @@
  * Enum for the result of a dynamic asset load. Uses for flow control in Blueprints.
  */
 UENUM()
-enum class EAssetLoadResult : uint8 {
+enum class EAssetLoadResult : uint8
+{
     /**
      * The specified asset was found
      */
@@ -35,7 +36,8 @@ enum class EAssetLoadResult : uint8 {
  * Function library for dynamically loading assets.
  */
 UCLASS()
-class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
+class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:
@@ -47,8 +49,10 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
      */
     template <typename T>
         requires std::is_base_of_v<UObject, T>
-    static TOptional<T &> AttemptLoad(FStringView SearchKey) {
-        if constexpr (std::is_same_v<T, UObject>) {
+    static TOptional<T &> AttemptLoad(FStringView SearchKey)
+    {
+        if constexpr (std::is_same_v<T, UObject>)
+        {
             auto Asset = Retro::Optionals::OfNullable(
                 StaticLoadObject(T::StaticClass(), nullptr, SearchKey.GetData(), nullptr, LOAD_NoWarn));
 
@@ -56,7 +60,9 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
             FTextureCompilingManager::Get().FinishAllCompilation();
 #endif
             return Asset;
-        } else {
+        }
+        else
+        {
             auto Asset = Retro::Optionals::OfNullable(
                 Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, SearchKey.GetData(), nullptr, LOAD_NoWarn)));
 
@@ -86,7 +92,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
      */
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
-    static TOptional<T &> FindAssetByName(FStringView BasePackageName, FStringView AssetName) {
+    static TOptional<T &> FindAssetByName(FStringView BasePackageName, FStringView AssetName)
+    {
         return AttemptLoad<T>(CreateSearchKey(BasePackageName, AssetName));
     }
 
@@ -99,7 +106,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
      */
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
-    static TOptional<T &> FindAssetByName(const FDirectoryPath &BasePackageName, FStringView AssetName) {
+    static TOptional<T &> FindAssetByName(const FDirectoryPath &BasePackageName, FStringView AssetName)
+    {
         return FindAssetByName<T>(BasePackageName.Path, AssetName);
     }
 
@@ -112,10 +120,12 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
      */
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
-    static TOptional<TSoftObjectRef<T>> LookupAssetByName(FStringView BasePackageName, FStringView AssetName) {
+    static TOptional<TSoftObjectRef<T>> LookupAssetByName(FStringView BasePackageName, FStringView AssetName)
+    {
         const auto &AssetManager = UAssetManager::Get();
         FSoftObjectPath Path(CreateSearchKey(BasePackageName, AssetName));
-        if (FAssetData AssetData; AssetManager.GetAssetDataForPath(Path, AssetData) && AssetData.IsInstanceOf<T>()) {
+        if (FAssetData AssetData; AssetManager.GetAssetDataForPath(Path, AssetData) && AssetData.IsInstanceOf<T>())
+        {
             return Retro::Optionals::OfNullable(TSoftObjectPtr<T>(Path));
         }
 
@@ -131,8 +141,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
      */
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
-    static TOptional<TSoftObjectRef<T>> LookupAssetByName(const FDirectoryPath &BasePackageName,
-                                                          FStringView AssetName) {
+    static TOptional<TSoftObjectRef<T>> LookupAssetByName(const FDirectoryPath &BasePackageName, FStringView AssetName)
+    {
         return LookupAssetByName<T>(BasePackageName.Path, AssetName);
     }
 
@@ -191,22 +201,27 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
     static TOptional<TNonNullSubclassOf<T>> LookupBlueprintClassByName(FStringView BasePackageName,
-                                                                       FStringView AssetName) {
+                                                                       FStringView AssetName)
+    {
         FStringView Prefix;
-        if (int32 CharIndex; AssetName.FindLastChar('/', CharIndex)) {
+        if (int32 CharIndex; AssetName.FindLastChar('/', CharIndex))
+        {
             int32 PrefixLength = CharIndex + 1;
             Prefix = AssetName.SubStr(0, PrefixLength);
             AssetName = AssetName.RightChop(PrefixLength);
         }
         auto SearchKey = FString::Format(TEXT("{0}/{1}{2}.{2}_C"), {BasePackageName, Prefix, AssetName});
-        if constexpr (std::is_same_v<T, UObject>) {
+        if constexpr (std::is_same_v<T, UObject>)
+        {
             // clang-format off
             return Retro::Optionals::OfNullable(LoadObject<UClass>(nullptr, *SearchKey, nullptr, LOAD_NoWarn)) |
                    Retro::Optionals::Transform([](UClass &Class) {
                        return TNonNullSubclassOf<T>(&Class);
                    });
             // clang-format on
-        } else {
+        }
+        else
+        {
             // clang-format off
             return Retro::Optionals::OfNullable(LoadObject<UClass>(nullptr, *SearchKey, nullptr, LOAD_NoWarn)) |
                    Retro::Optionals::Filter([](UClass& Class) { return Class.IsChildOf(T::StaticClass()); }) |
@@ -227,7 +242,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     template <typename T = UObject>
         requires std::is_base_of_v<UObject, T>
     static TOptional<TNonNullSubclassOf<T>> LookupBlueprintClassByName(const FDirectoryPath &BasePackageName,
-                                                                       FStringView AssetName) {
+                                                                       FStringView AssetName)
+    {
         return LookupBlueprintClassByName<T>(BasePackageName.Path, AssetName);
     }
 
@@ -256,7 +272,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     template <typename T = UObject, typename R>
         requires std::is_base_of_v<UObject, T> && std::ranges::input_range<R> &&
                  std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
-    static TOptional<T &> ResolveAsset(FStringView BasePackageName, R &&Keys) {
+    static TOptional<T &> ResolveAsset(FStringView BasePackageName, R &&Keys)
+    {
         // clang-format off
         return Keys |
                Retro::Ranges::Views::Transform([&BasePackageName]<typename U>(U &&Key) {
@@ -280,7 +297,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     template <typename T = UObject, typename R>
         requires std::is_base_of_v<UObject, T> && std::ranges::input_range<R> &&
                  std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
-    static TOptional<T &> ResolveAsset(const FDirectoryPath &BasePackageName, R &&Keys) {
+    static TOptional<T &> ResolveAsset(const FDirectoryPath &BasePackageName, R &&Keys)
+    {
         return ResolveAsset<T, R>(BasePackageName.Path, std::forward<R>(Keys));
     }
 
@@ -315,7 +333,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     template <typename T = UObject, typename R>
         requires std::is_base_of_v<UObject, T> && std::ranges::input_range<R> &&
                  std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
-    static TOptional<TSoftObjectRef<T>> ResolveSoftAsset(FStringView BasePackageName, R &&Keys) {
+    static TOptional<TSoftObjectRef<T>> ResolveSoftAsset(FStringView BasePackageName, R &&Keys)
+    {
         using ElementType = Retro::TRangeCommonReference<R>;
         // clang-format off
         return Keys |
@@ -340,7 +359,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     template <typename T = UObject, typename R>
         requires std::is_base_of_v<UObject, T> && std::ranges::input_range<R> &&
                  std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
-    static TOptional<TSoftObjectRef<T>> ResolveSoftAsset(const FDirectoryPath &BasePackageName, R &&Keys) {
+    static TOptional<TSoftObjectRef<T>> ResolveSoftAsset(const FDirectoryPath &BasePackageName, R &&Keys)
+    {
         return ResolveSoftAsset<T, R>(BasePackageName.Path, std::forward<R>(Keys));
     }
 
@@ -354,7 +374,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     template <typename T = UObject, typename R>
         requires std::is_base_of_v<UObject, T> && std::ranges::input_range<R> &&
                  std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
-    static TOptional<TNonNullSubclassOf<T>> ResolveClass(FStringView BasePackageName, R &&Keys) {
+    static TOptional<TNonNullSubclassOf<T>> ResolveClass(FStringView BasePackageName, R &&Keys)
+    {
         using ElementType = Retro::TRangeCommonReference<R>;
         // clang-format off
         return Keys |
@@ -379,7 +400,8 @@ class DYNAMICASSETLOADER_API UAssetLoader : public UBlueprintFunctionLibrary {
     template <typename T = UObject, typename R>
         requires std::is_base_of_v<UObject, T> && std::ranges::input_range<R> &&
                  std::convertible_to<Retro::TRangeCommonReference<R>, FStringView>
-    static TOptional<TNonNullSubclassOf<T>> ResolveClass(const FDirectoryPath &BasePackageName, R &&Keys) {
+    static TOptional<TNonNullSubclassOf<T>> ResolveClass(const FDirectoryPath &BasePackageName, R &&Keys)
+    {
         return ResolveClass<T, R>(BasePackageName.Path, std::forward<R>(Keys));
     }
 

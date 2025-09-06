@@ -10,7 +10,8 @@ class UBattleItemEffect;
 struct FItem;
 class UGameplayAbility;
 
-namespace Pokemon::Battle::Items {
+namespace Pokemon::Battle::Items
+{
     /**
      * Lookup a hold item effect by its ID
      * @param ID The ID that's associated with the hold item effect

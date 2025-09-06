@@ -6,9 +6,11 @@
 #include "DataManager.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 
-namespace Pokemon::Battle::StatusEffects {
+namespace Pokemon::Battle::StatusEffects
+{
 
-    FLookup::FLookup() {
+    FLookup::FLookup()
+    {
         auto &DataManager = FDataManager::GetInstance();
         auto &TypeTable = DataManager.GetDataTable<FStatus>();
         TypeTable.GetAllRows() | Retro::Ranges::ForEach([this](const FStatus &Status) {
@@ -19,7 +21,8 @@ namespace Pokemon::Battle::StatusEffects {
 
     FLookup::~FLookup() = default;
 
-    FLookup &FLookup::GetInstance() {
+    FLookup &FLookup::GetInstance()
+    {
         static FLookup Lookup;
         return Lookup;
     }

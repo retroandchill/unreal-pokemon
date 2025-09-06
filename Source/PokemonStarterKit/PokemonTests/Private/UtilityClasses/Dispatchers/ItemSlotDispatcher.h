@@ -12,7 +12,8 @@ struct FItem;
  * Dispatcher for an item slot method
  */
 UCLASS()
-class POKEMONTESTS_API UItemSlotDispatcher : public UObject {
+class POKEMONTESTS_API UItemSlotDispatcher : public UObject
+{
     GENERATED_BODY()
 
   public:

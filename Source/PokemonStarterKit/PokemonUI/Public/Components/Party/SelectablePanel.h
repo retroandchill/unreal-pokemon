@@ -12,14 +12,16 @@ class USelectableWidget;
 
 // This class does not need to be modified.
 UINTERFACE()
-class USelectablePanel : public URefreshable {
+class USelectablePanel : public URefreshable
+{
     GENERATED_BODY()
 };
 
 /**
  * Represents a selectable panel in the world.
  */
-class POKEMONUI_API ISelectablePanel : public IRefreshable {
+class POKEMONUI_API ISelectablePanel : public IRefreshable
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

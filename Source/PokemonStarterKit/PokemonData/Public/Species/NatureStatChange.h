@@ -10,7 +10,8 @@
  * Stores the stat change of a Nature
  */
 USTRUCT(BlueprintType)
-struct POKEMONDATA_API FNatureStatChange {
+struct POKEMONDATA_API FNatureStatChange
+{
     GENERATED_BODY()
 
     /**

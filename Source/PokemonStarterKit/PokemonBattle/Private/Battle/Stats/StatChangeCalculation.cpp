@@ -4,14 +4,16 @@
 #include "Battle/Attributes/StatStagesAttributeSet.h"
 #include "Battle/Stats/StatTags.h"
 
-UStatChangeCalculation::UStatChangeCalculation() {
+UStatChangeCalculation::UStatChangeCalculation()
+{
     StatChangeRateAttribute.AttributeToCapture = UStatStagesAttributeSet::GetStatStageMultiplierAttribute();
     StatChangeRateAttribute.AttributeSource = EGameplayEffectAttributeCaptureSource::Target;
     StatChangeRateAttribute.bSnapshot = false;
     RelevantAttributesToCapture.Emplace(StatChangeRateAttribute);
 }
 
-float UStatChangeCalculation::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec &Spec) const {
+float UStatChangeCalculation::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec &Spec) const
+{
     // Gather the tags from the source and target as that can affect which buffs should be used
     const FGameplayTagContainer *SourceTags = Spec.CapturedSourceTags.GetAggregatedTags();
     const FGameplayTagContainer *TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();

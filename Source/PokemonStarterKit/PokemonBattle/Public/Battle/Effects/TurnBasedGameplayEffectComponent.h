@@ -20,7 +20,8 @@ struct FGameplayEffectRemovalInfo;
  * turns. It interacts with the UTurnBasedEffectComponent to track and manage the turn-based effects.
  */
 UCLASS(DisplayName = "Turn Based")
-class POKEMONBATTLE_API UTurnBasedGameplayEffectComponent : public UGameplayEffectComponent {
+class POKEMONBATTLE_API UTurnBasedGameplayEffectComponent : public UGameplayEffectComponent
+{
     GENERATED_BODY()
 
   public:
@@ -39,7 +40,8 @@ class POKEMONBATTLE_API UTurnBasedGameplayEffectComponent : public UGameplayEffe
      *
      * @return The trigger condition for the duration of the gameplay effect.
      */
-    ETurnDurationTrigger GetTurnDurationTrigger() const {
+    ETurnDurationTrigger GetTurnDurationTrigger() const
+    {
         return TurnDurationTrigger;
     }
 

@@ -12,7 +12,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * Used to check if the given type is an Unreal Interface
      * @param T The particular interface type

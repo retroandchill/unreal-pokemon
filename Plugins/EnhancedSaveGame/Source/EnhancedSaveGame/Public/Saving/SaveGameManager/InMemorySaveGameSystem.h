@@ -8,11 +8,13 @@
 class USaveGame;
 
 #if WITH_EDITOR
-namespace EnhancedSaveGame {
+namespace EnhancedSaveGame
+{
     /**
      * Subsystem that holds save games in memory, primarily for usage in testing.
      */
-    class ENHANCEDSAVEGAME_API FInMemorySaveGameSystem : public ISaveGameSystem {
+    class ENHANCEDSAVEGAME_API FInMemorySaveGameSystem : public ISaveGameSystem
+    {
       public:
         bool PlatformHasNativeUI() override;
         bool DoesSaveSystemSupportMultipleUsers() override;

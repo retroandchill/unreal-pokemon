@@ -12,7 +12,8 @@ struct FVariantObjectTemplate;
  * Utility library for handling operations related to variant objects.
  */
 UCLASS()
-class RETROLIB_API UVariantObjectUtilities : public UBlueprintFunctionLibrary {
+class RETROLIB_API UVariantObjectUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

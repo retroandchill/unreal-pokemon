@@ -14,31 +14,37 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     template <template <typename...> typename C>
-    struct TConvertTupleFunction {
+    struct TConvertTupleFunction
+    {
 
         template <template <typename...> typename T, typename... A>
             requires TupleLike<C<std::decay_t<A>...>> && TupleLike<T<A...>>
-        constexpr C<std::decay_t<A>...> operator()(T<A...> &Tuple) const {
+        constexpr C<std::decay_t<A>...> operator()(T<A...> &Tuple) const
+        {
             return CreateTuple(Tuple, std::make_index_sequence<std::tuple_size_v<C<A...>>>{});
         }
 
         template <template <typename...> typename T, typename... A>
             requires TupleLike<C<std::decay_t<A>...>> && TupleLike<T<A...>>
-        constexpr C<std::decay_t<A>...> operator()(const T<A...> &Tuple) const {
+        constexpr C<std::decay_t<A>...> operator()(const T<A...> &Tuple) const
+        {
             return CreateTuple(Tuple, std::make_index_sequence<std::tuple_size_v<C<A...>>>{});
         }
 
         template <template <typename...> typename T, typename... A>
             requires TupleLike<C<A...>> && TupleLike<T<A...>>
-        constexpr C<std::decay_t<A>...> operator()(T<std::decay_t<A>...> &&Tuple) const {
+        constexpr C<std::decay_t<A>...> operator()(T<std::decay_t<A>...> &&Tuple) const
+        {
             return CreateTuple(std::move(Tuple), std::make_index_sequence<std::tuple_size_v<C<A...>>>{});
         }
 
       private:
         template <typename T, size_t... N>
-        static constexpr auto CreateTuple(T &&Tuple, std::index_sequence<N...>) {
+        static constexpr auto CreateTuple(T &&Tuple, std::index_sequence<N...>)
+        {
             return C<std::decay_t<std::tuple_element_t<N, std::decay_t<T>>>...>(get<N>(std::forward<T>(Tuple))...);
         }
     };

@@ -2,6 +2,7 @@
 #include "Moves/Target.h"
 #include "DataManager.h"
 
-TArray<FName> UTargetHelper::GetTargetNames() {
+TArray<FName> UTargetHelper::GetTargetNames()
+{
     return FDataManager::GetInstance().GetDataTable<FMoveTarget>().GetTableRowNames();
 }

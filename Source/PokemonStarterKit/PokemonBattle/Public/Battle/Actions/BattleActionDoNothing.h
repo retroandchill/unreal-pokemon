@@ -8,7 +8,8 @@
 /**
  * Action defined where the character does nothing. It is used to skip the battler's action entirely
  */
-class POKEMONBATTLE_API FBattleActionDoNothing : public FGCObject, public IBattleAction {
+class POKEMONBATTLE_API FBattleActionDoNothing : public FGCObject, public IBattleAction
+{
   public:
     /**
      * Construct a new action with the given battler

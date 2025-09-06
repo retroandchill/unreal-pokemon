@@ -17,7 +17,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * Global constant used to determine the size of the small buffer for opaque storage types.
      *

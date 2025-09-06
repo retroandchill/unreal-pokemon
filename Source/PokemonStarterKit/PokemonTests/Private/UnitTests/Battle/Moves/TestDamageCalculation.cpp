@@ -19,7 +19,8 @@ CORO_FUNCTIONS()
 
 END_DEFINE_SPEC(FTestDamageCalculation);
 
-void FTestDamageCalculation::Define() {
+void FTestDamageCalculation::Define()
+{
     CoroIt("PhysicalWeakNoCrit", [this]() -> UE5Coro::TCoroutine<> {
         auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
         auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
@@ -72,7 +73,8 @@ void FTestDamageCalculation::Define() {
 
         FTemporarySeed Seed(151566);
         // Roll 29 random numbers so that the next one %25 is 0
-        for (int32 i = 0; i < 29; i++) {
+        for (int32 i = 0; i < 29; i++)
+        {
             int32 Unused = FMath::Rand() % 24;
         }
 

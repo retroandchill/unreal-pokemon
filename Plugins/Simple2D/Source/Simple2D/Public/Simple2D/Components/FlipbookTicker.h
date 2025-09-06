@@ -6,18 +6,21 @@
 #include "RetroLib/RetroLibMacros.h"
 #include "Simple2D/Proxies/FlipbookProxy.h"
 
-namespace Simple2D {
+namespace Simple2D
+{
 
     /**
      *
      */
-    class SIMPLE2D_API FFlipbookTicker {
-        DECLARE_MULTICAST_DELEGATE_OneParam(FOnFrameIndexChanged, std::any)
+    class SIMPLE2D_API FFlipbookTicker
+    {
+      DECLARE_MULTICAST_DELEGATE_OneParam(FOnFrameIndexChanged, std::any)
 
-            public : FFlipbookTicker() = default;
+          public : FFlipbookTicker() = default;
 
         template <Flipbook T>
-        explicit FFlipbookTicker(T *Object) : Proxy(Object) {
+        explicit FFlipbookTicker(T *Object) : Proxy(Object)
+        {
         }
 
         void TickFlipbook(float DeltaTime);
@@ -26,13 +29,16 @@ namespace Simple2D {
         void ProcessPlaying(float DeltaTime, bool &bIsFinished);
 
       public:
-        FFlipbookProxy &GetFlipbook() {
+        FFlipbookProxy &GetFlipbook()
+        {
             return Proxy;
         }
 
         template <Flipbook T>
-        bool SetFlipbook(T *NewFlipbook) {
-            if (NewFlipbook != Proxy) {
+        bool SetFlipbook(T *NewFlipbook)
+        {
+            if (NewFlipbook != Proxy)
+            {
                 Proxy = NewFlipbook;
 
                 // We need to also reset the frame and time also

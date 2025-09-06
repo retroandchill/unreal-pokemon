@@ -18,7 +18,8 @@
  * @blueprintspawnable
  */
 UCLASS(ClassGroup = (FunctionalTesting), meta = (BlueprintSpawnableComponent))
-class RETROLIBTESTS_API UScopedTimeDilationComponent : public UScopedTestComponent {
+class RETROLIBTESTS_API UScopedTimeDilationComponent : public UScopedTestComponent
+{
     GENERATED_BODY()
 
   public:

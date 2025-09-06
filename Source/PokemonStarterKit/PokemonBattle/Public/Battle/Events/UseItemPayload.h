@@ -13,7 +13,8 @@ class UGameplayAbility;
  *
  */
 UCLASS()
-class POKEMONBATTLE_API UUseItemPayload : public UObject {
+class POKEMONBATTLE_API UUseItemPayload : public UObject
+{
     GENERATED_BODY()
 
   public:

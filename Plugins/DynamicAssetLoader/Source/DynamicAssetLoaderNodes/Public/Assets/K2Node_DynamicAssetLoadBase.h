@@ -20,7 +20,8 @@ struct FAssetClassType;
  * node that other dynamic asset loading nodes can extend.
  */
 UCLASS(Abstract)
-class DYNAMICASSETLOADERNODES_API UK2Node_DynamicAssetLoadBase : public UK2Node {
+class DYNAMICASSETLOADERNODES_API UK2Node_DynamicAssetLoadBase : public UK2Node
+{
     GENERATED_BODY()
 
   public:
@@ -84,7 +85,8 @@ class DYNAMICASSETLOADERNODES_API UK2Node_DynamicAssetLoadBase : public UK2Node 
      */
     template <typename T>
         requires std::convertible_to<std::remove_cvref_t<T>, FText>
-    void SetNodeTooltip(T &&Text) {
+    void SetNodeTooltip(T &&Text)
+    {
         NodeTooltip = std::forward<T>(Text);
     }
 

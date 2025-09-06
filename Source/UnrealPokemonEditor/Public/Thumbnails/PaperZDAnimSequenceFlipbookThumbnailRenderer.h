@@ -14,7 +14,8 @@ class UPaperFlipbook;
  *
  */
 UCLASS(Config = Editor)
-class UNREALPOKEMONEDITOR_API UPaperZDAnimSequenceFlipbookThumbnailRenderer : public UDefaultSizedThumbnailRenderer {
+class UNREALPOKEMONEDITOR_API UPaperZDAnimSequenceFlipbookThumbnailRenderer : public UDefaultSizedThumbnailRenderer
+{
     GENERATED_BODY()
 
   public:

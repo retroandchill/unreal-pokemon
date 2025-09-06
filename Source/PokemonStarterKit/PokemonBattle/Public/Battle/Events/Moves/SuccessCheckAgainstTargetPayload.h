@@ -12,7 +12,8 @@
 class IBattleMove;
 
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FTargetSuccessCheckPayload {
+struct POKEMONBATTLE_API FTargetSuccessCheckPayload
+{
     GENERATED_BODY()
 
     /**
@@ -65,7 +66,8 @@ struct POKEMONBATTLE_API FTargetSuccessCheckPayload {
  * Payload object for performing a success check against a target
  */
 UCLASS(BlueprintType)
-class POKEMONBATTLE_API USuccessCheckAgainstTargetPayload : public UObject, public ITargetedMoveEventPayload {
+class POKEMONBATTLE_API USuccessCheckAgainstTargetPayload : public UObject, public ITargetedMoveEventPayload
+{
     GENERATED_BODY()
 
   public:

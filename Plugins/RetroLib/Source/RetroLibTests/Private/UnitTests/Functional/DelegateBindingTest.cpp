@@ -7,7 +7,8 @@
 #include "TestAdapter.h"
 #include <array>
 
-namespace Retro::Testing::Delegates {
+namespace Retro::Testing::Delegates
+{
     DECLARE_DELEGATE_RetVal_TwoParams(bool, FDemoDelegate, FStringView, int32);
     DECLARE_MULTICAST_DELEGATE_TwoParams(FDemoMulticastDelegate, FStringView, int32);
     DECLARE_DELEGATE_RetVal(FString, FGetObjectName);
@@ -24,24 +25,30 @@ namespace Retro::Testing::Delegates {
     static_assert(Retro::Delegates::MulticastDelegate<FDemoMulticastDelegate>);
     static_assert(Retro::Delegates::UEDelegate<FDemoMulticastDelegate>);
 
-    static bool IsLength(FStringView View, int32 Length) {
+    static bool IsLength(FStringView View, int32 Length)
+    {
         return View.Len() == Length;
     }
 
-    static void AddValue(TArray<int32> &Array, int32 Value) {
+    static void AddValue(TArray<int32> &Array, int32 Value)
+    {
         Array.Add(Value);
     }
 
-    class FDemoClass : public TSharedFromThis<FDemoClass> {
+    class FDemoClass : public TSharedFromThis<FDemoClass>
+    {
       public:
-        explicit FDemoClass(int32 Value) : Value(Value) {
+        explicit FDemoClass(int32 Value) : Value(Value)
+        {
         }
 
-        int32 GetValue() const {
+        int32 GetValue() const
+        {
             return Value;
         }
 
-        void AddToValue(int32 Other) {
+        void AddToValue(int32 Other)
+        {
             Value += Other;
         }
 
@@ -49,16 +56,20 @@ namespace Retro::Testing::Delegates {
         int32 Value;
     };
 
-    class FUnsharedDemoClass {
+    class FUnsharedDemoClass
+    {
       public:
-        explicit FUnsharedDemoClass(int32 Value) : Value(Value) {
+        explicit FUnsharedDemoClass(int32 Value) : Value(Value)
+        {
         }
 
-        int32 GetValue() const {
+        int32 GetValue() const
+        {
             return Value;
         }
 
-        void AddToValue(int32 Other) {
+        void AddToValue(int32 Other)
+        {
             Value += Other;
         }
 
@@ -67,22 +78,25 @@ namespace Retro::Testing::Delegates {
     };
 } // namespace Retro::Testing::Delegates
 
-TEST_CASE_NAMED(FDelegateBindingTest, "Unit Tests::RetroLib::Functional::Delegates::Wrapping",
-                "[RetroLib][Functional]") {
+TEST_CASE_NAMED(FDelegateBindingTest, "Unit Tests::RetroLib::Functional::Delegates::Wrapping", "[RetroLib][Functional]")
+{
     using namespace Retro::Testing::Delegates;
 
-    SECTION("Should be able to bind a regular delegate") {
+    SECTION("Should be able to bind a regular delegate")
+    {
         FDemoDelegate Delegate;
         auto Binding = Retro::CreateBinding(FDemoDelegate::CreateStatic(&IsLength), 10);
         CHECK(Binding(TEXT("1234567890")));
         CHECK_FALSE(Binding(TEXT("123456789")));
     }
 
-    SECTION("Should be able to bind a multicast delegate") {
+    SECTION("Should be able to bind a multicast delegate")
+    {
         FDemoMulticastDelegate Delegate;
         int32 Findings = 0;
         Delegate.Add(FDemoMulticastDelegate::FDelegate::CreateLambda([&Findings](FStringView View, int32 Length) {
-            if (View.Len() == Length) {
+            if (View.Len() == Length)
+            {
                 Findings++;
             }
         }));
@@ -93,7 +107,8 @@ TEST_CASE_NAMED(FDelegateBindingTest, "Unit Tests::RetroLib::Functional::Delegat
         CHECK(Findings == 1);
     }
 
-    SECTION("Can binding a delegate to a range pipe") {
+    SECTION("Can binding a delegate to a range pipe")
+    {
         std::array Strings = {FStringView(TEXT("1234567890")), FStringView(TEXT("123456789"))};
 
         auto ValidStrings =
@@ -105,11 +120,12 @@ TEST_CASE_NAMED(FDelegateBindingTest, "Unit Tests::RetroLib::Functional::Delegat
     }
 }
 
-TEST_CASE_NAMED(FCreateDelegateTest, "Unit Tests::RetroLib::Functional::Delegates::Creation",
-                "[RetroLib][Functional]") {
+TEST_CASE_NAMED(FCreateDelegateTest, "Unit Tests::RetroLib::Functional::Delegates::Creation", "[RetroLib][Functional]")
+{
     using namespace Retro::Testing::Delegates;
 
-    SECTION("Can bind free functions and lambdas") {
+    SECTION("Can bind free functions and lambdas")
+    {
         static_assert(Retro::Delegates::CanBindStatic<FAddToArray, decltype(&AddValue), int32>);
         static_assert(Retro::Delegates::CanBindLambda<FAddToArray, decltype(&AddValue), int32>);
         TArray<int32> Array;
@@ -128,7 +144,8 @@ TEST_CASE_NAMED(FCreateDelegateTest, "Unit Tests::RetroLib::Functional::Delegate
         CHECK(Array[1] == 12);
     }
 
-    SECTION("Can bind UObject members") {
+    SECTION("Can bind UObject members")
+    {
         auto Object = NewObject<UDataTable>();
         static_assert(Retro::Delegates::CanBindUObject<FGetObjectName, UObject *, FString (UObject::*)() const>);
         static_assert(!Retro::Delegates::CanBindWeakLambda<FGetObjectName, UObject *, FString (UObject::*)() const>);
@@ -148,7 +165,8 @@ TEST_CASE_NAMED(FCreateDelegateTest, "Unit Tests::RetroLib::Functional::Delegate
         CHECK(Value == 24);
     }
 
-    SECTION("Can bind to shared pointers") {
+    SECTION("Can bind to shared pointers")
+    {
         auto SharedValue = MakeShared<FDemoClass>(12);
         static_assert(
             !Retro::Delegates::CanBindUObject<FGetObjectName, TSharedRef<FDemoClass> &, FString (UObject::*)() const>);
@@ -173,7 +191,8 @@ TEST_CASE_NAMED(FCreateDelegateTest, "Unit Tests::RetroLib::Functional::Delegate
         CHECK(SharedValue->GetValue() == 50);
     }
 
-    SECTION("Can bind to raw pointers") {
+    SECTION("Can bind to raw pointers")
+    {
         FUnsharedDemoClass RawValue(12);
 
         static_assert(
@@ -189,10 +208,12 @@ TEST_CASE_NAMED(FCreateDelegateTest, "Unit Tests::RetroLib::Functional::Delegate
     }
 }
 
-TEST_CASE_NAMED(FBindDelegateTest, "Unit Tests::RetroLib::Functional::Delegates::Binding", "[RetroLib][Functional]") {
+TEST_CASE_NAMED(FBindDelegateTest, "Unit Tests::RetroLib::Functional::Delegates::Binding", "[RetroLib][Functional]")
+{
     using namespace Retro::Testing::Delegates;
 
-    SECTION("Can bind free functions and lambdas") {
+    SECTION("Can bind free functions and lambdas")
+    {
         static_assert(Retro::Delegates::CanBindStatic<FAddToArray, decltype(&AddValue), int32>);
         static_assert(Retro::Delegates::CanBindLambda<FAddToArray, decltype(&AddValue), int32>);
         TArray<int32> Array;
@@ -213,7 +234,8 @@ TEST_CASE_NAMED(FBindDelegateTest, "Unit Tests::RetroLib::Functional::Delegates:
         CHECK(Array[1] == 12);
     }
 
-    SECTION("Can bind UObject members") {
+    SECTION("Can bind UObject members")
+    {
         auto Object = NewObject<UDataTable>();
         static_assert(Retro::Delegates::CanBindUObject<FGetObjectName, UObject *, FString (UObject::*)() const>);
         static_assert(!Retro::Delegates::CanBindWeakLambda<FGetObjectName, UObject *, FString (UObject::*)() const>);
@@ -234,7 +256,8 @@ TEST_CASE_NAMED(FBindDelegateTest, "Unit Tests::RetroLib::Functional::Delegates:
         CHECK(Value == 24);
     }
 
-    SECTION("Can bind to shared pointers") {
+    SECTION("Can bind to shared pointers")
+    {
         auto SharedValue = MakeShared<FDemoClass>(12);
         static_assert(
             !Retro::Delegates::CanBindUObject<FGetObjectName, TSharedRef<FDemoClass> &, FString (UObject::*)() const>);
@@ -262,7 +285,8 @@ TEST_CASE_NAMED(FBindDelegateTest, "Unit Tests::RetroLib::Functional::Delegates:
         CHECK(SharedValue->GetValue() == 50);
     }
 
-    SECTION("Can bind to raw pointers") {
+    SECTION("Can bind to raw pointers")
+    {
         FUnsharedDemoClass RawValue(12);
 
         static_assert(
@@ -279,10 +303,12 @@ TEST_CASE_NAMED(FBindDelegateTest, "Unit Tests::RetroLib::Functional::Delegates:
     }
 }
 
-TEST_CASE_NAMED(FAddDelegateTest, "Unit Tests::RetroLib::Functional::Delegates::Adding", "[RetroLib][Functional]") {
+TEST_CASE_NAMED(FAddDelegateTest, "Unit Tests::RetroLib::Functional::Delegates::Adding", "[RetroLib][Functional]")
+{
     using namespace Retro::Testing::Delegates;
 
-    SECTION("Can bind free functions and lambdas") {
+    SECTION("Can bind free functions and lambdas")
+    {
         static_assert(Retro::Delegates::CanAddStatic<FMultiAddToArray, decltype(&AddValue), int32>);
         static_assert(Retro::Delegates::CanAddLambda<FMultiAddToArray, decltype(&AddValue), int32>);
         TArray<int32> Array;
@@ -303,7 +329,8 @@ TEST_CASE_NAMED(FAddDelegateTest, "Unit Tests::RetroLib::Functional::Delegates::
         CHECK(Array[1] == 12);
     }
 
-    SECTION("Can bind UObject members") {
+    SECTION("Can bind UObject members")
+    {
         auto Object = NewObject<UDataTable>();
         static_assert(
             Retro::Delegates::CanAddUObject<FMultiGetObjectName, UObject *, void (UObject::*)(FString &) const>);
@@ -329,7 +356,8 @@ TEST_CASE_NAMED(FAddDelegateTest, "Unit Tests::RetroLib::Functional::Delegates::
         CHECK(Value == 24);
     }
 
-    SECTION("Can bind to shared pointers") {
+    SECTION("Can bind to shared pointers")
+    {
         auto SharedValue = MakeShared<FDemoClass>(12);
         static_assert(
             Retro::Delegates::CanAddSP<FMultiAddToValue, TSharedRef<FDemoClass> &, decltype(&FDemoClass::AddToValue)>);
@@ -353,7 +381,8 @@ TEST_CASE_NAMED(FAddDelegateTest, "Unit Tests::RetroLib::Functional::Delegates::
         CHECK(SharedValue->GetValue() == 50);
     }
 
-    SECTION("Can bind to raw pointers") {
+    SECTION("Can bind to raw pointers")
+    {
         FUnsharedDemoClass RawValue(12);
 
         static_assert(Retro::Delegates::CanAddRaw<FMultiAddToValue, FUnsharedDemoClass *,

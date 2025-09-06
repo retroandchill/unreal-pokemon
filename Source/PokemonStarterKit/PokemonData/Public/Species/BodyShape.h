@@ -11,7 +11,8 @@
  * Represents the Body Shape of a Pokémon. Used when searching in the Pokédex.
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FBodyShape : public FIndexedTableRow {
+struct POKEMONDATA_API FBodyShape : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -31,7 +32,8 @@ struct POKEMONDATA_API FBodyShape : public FIndexedTableRow {
  * Blueprint function library for getting body shape data out.
  */
 UCLASS()
-class POKEMONDATA_API UBodyShapeHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UBodyShapeHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

@@ -13,7 +13,8 @@
  * Handle that wraps around a battle transition's information
  */
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FBattleInfo {
+struct POKEMONBATTLE_API FBattleInfo
+{
     GENERATED_BODY()
 
     /**
@@ -53,9 +54,11 @@ struct POKEMONBATTLE_API FBattleInfo {
      * @param
      * @return The created side
      */
-    FORCEINLINE UE5Coro::TCoroutine<TScriptInterface<IBattleSide>>
-    CreateOpposingSide(TScriptInterface<IBattle> Battle, TSubclassOf<AActor> SideClass, const FTransform &Transform,
-                       FForceLatentCoroutine = {}) const {
+    FORCEINLINE UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> CreateOpposingSide(TScriptInterface<IBattle> Battle,
+                                                                                      TSubclassOf<AActor> SideClass,
+                                                                                      const FTransform &Transform,
+                                                                                      FForceLatentCoroutine = {}) const
+    {
         return OpponentInfo.CreateOpposingSide(Battle, SideClass, Transform, OpponentSideCount);
     }
 };

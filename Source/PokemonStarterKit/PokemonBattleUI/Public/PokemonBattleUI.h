@@ -8,7 +8,8 @@ DECLARE_LOG_CATEGORY_EXTERN(LogBattleUI, Log, All)
 /**
  * Module for handling the UI of the battle system.
  */
-class FPokemonBattleUIModule : public IModuleInterface {
+class FPokemonBattleUIModule : public IModuleInterface
+{
   public:
     void StartupModule() override;
     void ShutdownModule() override;

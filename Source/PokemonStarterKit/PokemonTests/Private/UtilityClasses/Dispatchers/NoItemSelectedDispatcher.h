@@ -11,7 +11,8 @@
  *
  */
 UCLASS()
-class POKEMONTESTS_API UNoItemSelectedDispatcher : public UObject {
+class POKEMONTESTS_API UNoItemSelectedDispatcher : public UObject
+{
     GENERATED_BODY()
 
   public:

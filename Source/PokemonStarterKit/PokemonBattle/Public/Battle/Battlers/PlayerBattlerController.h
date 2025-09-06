@@ -13,7 +13,8 @@ class IBattle;
  * The battler controller for the player
  */
 UCLASS()
-class POKEMONBATTLE_API UPlayerBattlerController : public UObject, public IBattlerController {
+class POKEMONBATTLE_API UPlayerBattlerController : public UObject, public IBattlerController
+{
     GENERATED_BODY()
 
   public:

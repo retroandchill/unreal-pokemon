@@ -14,7 +14,8 @@ class UMessageWindow;
  *
  */
 UCLASS(DisplayName = "RPG Menus Test Utilities")
-class RPGMENUSTESTS_API URPGMenusTestUtilities : public UBlueprintFunctionLibrary {
+class RPGMENUSTESTS_API URPGMenusTestUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

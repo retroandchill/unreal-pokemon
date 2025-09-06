@@ -8,11 +8,13 @@
 #include "RetroLib/Optionals/OrElseGet.h"
 #include "RetroLib/Optionals/OrElseValue.h"
 
-TOptional<TNonNullSubclassOf<UGameplayAbility>> Pokemon::Battle::Items::FindHoldItemEffect(FName ID) {
+TOptional<TNonNullSubclassOf<UGameplayAbility>> Pokemon::Battle::Items::FindHoldItemEffect(FName ID)
+{
     return Classes::HoldItemEffects.LoadClass(ID);
 }
 
-TOptional<TNonNullSubclassOf<UGameplayAbility>> Pokemon::Battle::Items::FindHoldItemEffect(const FItem *Item) {
+TOptional<TNonNullSubclassOf<UGameplayAbility>> Pokemon::Battle::Items::FindHoldItemEffect(const FItem *Item)
+{
     // clang-format off
     return Retro::Optionals::OfNullable(Item) |
            Retro::Optionals::Transform(&FItem::ID) |
@@ -22,14 +24,16 @@ TOptional<TNonNullSubclassOf<UGameplayAbility>> Pokemon::Battle::Items::FindHold
     // clang-format on
 }
 
-TSubclassOf<UBattleItemEffect> Pokemon::Battle::Items::FindBattleItemEffect(FName ID) {
+TSubclassOf<UBattleItemEffect> Pokemon::Battle::Items::FindBattleItemEffect(FName ID)
+{
     // clang-format off
     return Classes::ItemEffects.LoadClass(ID) |
            Retro::Optionals::OrElseValue(UBattleItemEffect::StaticClass());
     // clang-format on
 }
 
-TSubclassOf<UBattleItemEffect> Pokemon::Battle::Items::FindBattleItemEffect(const FItem *Item) {
+TSubclassOf<UBattleItemEffect> Pokemon::Battle::Items::FindBattleItemEffect(const FItem *Item)
+{
     // clang-format off
     auto ID = Retro::Optionals::OfNullable(Item) |
               Retro::Optionals::Transform(&FItem::ID) |

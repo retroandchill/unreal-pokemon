@@ -18,39 +18,47 @@ import RetroLib;
 #endif
 
 #ifdef __UNREAL__
-TEST_CASE_NAMED(FOptionalIteratorTest, "Unit Tests::RetroLib::Optionals::Iterator", "[optionals]") {
-    SECTION("Can use a ranged for loop") {
+TEST_CASE_NAMED(FOptionalIteratorTest, "Unit Tests::RetroLib::Optionals::Iterator", "[optionals]")
+{
+    SECTION("Can use a ranged for loop")
+    {
         TOptional Value = 3;
 
         int Sum = 0;
-        for (auto i : Value) {
+        for (auto i : Value)
+        {
             Sum += i;
         }
         CHECK(Sum == 3);
     }
 
-    SECTION("Can use an iterator based for loop") {
+    SECTION("Can use an iterator based for loop")
+    {
         const TOptional Value = 3;
 
         int Sum = 0;
-        for (auto It = begin(Value); It != end(Value); It++) {
+        for (auto It = begin(Value); It != end(Value); It++)
+        {
             Sum += *It;
         }
         CHECK(Sum == 3);
     }
 
-    SECTION("Can use as part of a range pipe") {
+    SECTION("Can use as part of a range pipe")
+    {
         std::vector<TOptional<int>> Values = {1, {}, 2, 3, {}, {}, {}};
         auto View = Values | Retro::Ranges::Views::Join;
 
         int Sum = 0;
-        for (auto i : View) {
+        for (auto i : View)
+        {
             Sum += i;
         }
         CHECK(Sum == 6);
     }
 
-    SECTION("Can be used to determine size") {
+    SECTION("Can be used to determine size")
+    {
         auto View = Retro::Ranges::Views::Concat(TOptional(1), TOptional<int>(), TOptional(2), TOptional<int>(),
                                                  TOptional<int>(), TOptional(3));
         CHECK(View.size() == 3);

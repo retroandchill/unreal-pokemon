@@ -3,14 +3,17 @@
 #pragma once
 #include "SSingleObjectDetailsPanel.h"
 
-namespace Simple2D {
+namespace Simple2D
+{
     class FSimpleFlipbookEditor;
     /**
      *
      */
-    class SIMPLE2DEDITOR_API SSimpleFlipbookPropertiesTabsBody : public SSingleObjectDetailsPanel {
+    class SIMPLE2DEDITOR_API SSimpleFlipbookPropertiesTabsBody : public SSingleObjectDetailsPanel
+    {
       public:
-        SLATE_BEGIN_ARGS(SSimpleFlipbookPropertiesTabsBody) {
+        SLATE_BEGIN_ARGS(SSimpleFlipbookPropertiesTabsBody)
+            {
             }
 
             SLATE_END_ARGS()

@@ -21,7 +21,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAfterBattle, EBattleResult, Result)
  * Initiate a battler with the provided settings then after the battle continue script processing
  */
 UCLASS(meta = (HideThen))
-class POKEMONBATTLE_API UInitiateBattle : public UBlueprintCoroutineActionBase {
+class POKEMONBATTLE_API UInitiateBattle : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

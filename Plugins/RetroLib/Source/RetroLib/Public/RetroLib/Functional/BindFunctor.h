@@ -17,7 +17,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
 
     /**
      * @struct TSimpleFunctorBinding
@@ -37,7 +38,8 @@ namespace Retro {
      */
     template <auto Functor>
         requires HasFunctionCallOperator<decltype(Functor)>
-    struct TSimpleFunctorBinding {
+    struct TSimpleFunctorBinding
+    {
         using F = decltype(Functor);
 
         /**
@@ -52,7 +54,8 @@ namespace Retro {
          */
         template <typename... A>
             requires std::invocable<F, A...>
-        constexpr decltype(auto) operator()(A &&...Args) const noexcept(std::is_nothrow_invocable_v<F, A...>) {
+        constexpr decltype(auto) operator()(A &&...Args) const noexcept(std::is_nothrow_invocable_v<F, A...>)
+        {
             return std::invoke(Functor, std::forward<A>(Args)...);
         }
     };
@@ -64,7 +67,8 @@ namespace Retro {
      */
     template <auto Functor>
         requires HasFunctionCallOperator<decltype(Functor)>
-    constexpr auto BindFunctor() {
+    constexpr auto BindFunctor()
+    {
         return TSimpleFunctorBinding<Functor>();
     }
 

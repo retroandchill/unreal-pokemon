@@ -17,7 +17,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTimeUpdate, float, NewPlaytime);
  * Various playthrough related metadata for the player character, such as playtime.
  */
 UCLASS()
-class POKEMONCORE_API UPlayerMetadata : public UObject, public FTickableGameObject {
+class POKEMONCORE_API UPlayerMetadata : public UObject, public FTickableGameObject
+{
     GENERATED_BODY()
 
   public:

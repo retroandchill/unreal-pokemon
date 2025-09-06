@@ -25,37 +25,47 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     template <typename T>
-    class TManualLifetime {
+    class TManualLifetime
+    {
       public:
-        TManualLifetime() noexcept {
+        TManualLifetime() noexcept
+        {
             // We need to manually construct to avoid an attempted construction
         }
 
-        ~TManualLifetime() {
+        ~TManualLifetime()
+        {
             // We need this to get the union to destruct manually
         }
 
         template <typename... A>
-        T &Construct(A &&...Args) noexcept(std::is_nothrow_constructible_v<T, A...>) {
+        T &Construct(A &&...Args) noexcept(std::is_nothrow_constructible_v<T, A...>)
+        {
             return *::new (static_cast<void *>(std::addressof(Value))) T(static_cast<A &&>(Args)...);
         }
 
-        void Destruct() noexcept(std::is_nothrow_destructible_v<T>) {
+        void Destruct() noexcept(std::is_nothrow_destructible_v<T>)
+        {
             Value.~T();
         }
 
-        T &Get() & noexcept {
+        T &Get() & noexcept
+        {
             return Value;
         }
-        T &&Get() && noexcept {
+        T &&Get() && noexcept
+        {
             return static_cast<T &&>(Value);
         }
-        const T &Get() const & noexcept {
+        const T &Get() const & noexcept
+        {
             return Value;
         }
-        const T &&Get() const && noexcept {
+        const T &&Get() const && noexcept
+        {
             return static_cast<const T &&>(Value);
         }
 
@@ -66,18 +76,22 @@ namespace Retro {
     };
 
     template <typename T>
-    class TManualLifetime<T &> {
+    class TManualLifetime<T &>
+    {
       public:
-        T &Construct(T &ValueIn) noexcept {
+        T &Construct(T &ValueIn) noexcept
+        {
             Value = std::addressof(ValueIn);
             return ValueIn;
         }
 
-        void Destruct() noexcept {
+        void Destruct() noexcept
+        {
             // No special destruction needed here
         }
 
-        T &Get() const noexcept {
+        T &Get() const noexcept
+        {
             return *Value;
         }
 
@@ -86,18 +100,22 @@ namespace Retro {
     };
 
     template <typename T>
-    class TManualLifetime<T &&> {
+    class TManualLifetime<T &&>
+    {
       public:
-        T &&Construct(T &&ValueIn) noexcept {
+        T &&Construct(T &&ValueIn) noexcept
+        {
             Value = std::addressof(ValueIn);
             return static_cast<T &&>(ValueIn);
         }
 
-        void Destruct() noexcept {
+        void Destruct() noexcept
+        {
             // No special destruction needed here
         }
 
-        T &&Get() const noexcept {
+        T &&Get() const noexcept
+        {
             return static_cast<T &&>(*Value);
         }
 
@@ -105,9 +123,12 @@ namespace Retro {
         T *Value = nullptr;
     };
 
-    struct FUseAllocatorArg {};
+    struct FUseAllocatorArg
+    {
+    };
 
-    namespace Ranges {
+    namespace Ranges
+    {
 
         /**
          * @brief Represents a collection or group of elements.
@@ -116,7 +137,8 @@ namespace Retro {
          * This class is used as a tag for overload resolution primarily.
          */
         RETROLIB_EXPORT template <typename R, typename A = FUseAllocatorArg>
-        struct TElementsOf {
+        struct TElementsOf
+        {
             /**
              * @brief Constructor for the ElementsOf class.
              *
@@ -130,7 +152,8 @@ namespace Retro {
              */
             explicit constexpr TElementsOf(R &&Range) noexcept
                 requires std::is_default_constructible_v<A>
-                : Range(static_cast<R &&>(Range)) {
+                : Range(static_cast<R &&>(Range))
+            {
             }
 
             /**
@@ -147,7 +170,8 @@ namespace Retro {
              * @param Alloc The allocator to use for initializing the object.
              */
             constexpr TElementsOf(R &&Range, A &&Alloc) noexcept
-                : Alloc(static_cast<A &&>(Alloc)), Range(static_cast<R &&>(Range)) {
+                : Alloc(static_cast<A &&>(Alloc)), Range(static_cast<R &&>(Range))
+            {
             }
 
             /**
@@ -202,7 +226,8 @@ namespace Retro {
              *
              * @return R&& An rvalue reference to the stored range.
              */
-            constexpr R &&Get() noexcept {
+            constexpr R &&Get() noexcept
+            {
                 return static_cast<R &&>(Range);
             }
 
@@ -214,7 +239,8 @@ namespace Retro {
              *
              * @return The allocator object associated with the instance.
              */
-            constexpr A GetAllocator() const noexcept {
+            constexpr A GetAllocator() const noexcept
+            {
                 return Alloc;
             }
 
@@ -240,7 +266,8 @@ namespace Retro {
         !std::allocator_traits<A>::is_always_equal::value || !std::is_default_constructible_v<A>;
 
     // Round s up to next multiple of a.
-    constexpr size_t AlignedAllocationSize(size_t s, size_t a) {
+    constexpr size_t AlignedAllocationSize(size_t s, size_t a)
+    {
         return (s + a - 1) & ~(a - 1);
     }
 
@@ -248,22 +275,27 @@ namespace Retro {
     class TGenerator;
 
     template <typename A>
-    class TPromiseBaseAlloc {
-        static constexpr std::size_t OffsetOfAllocator(std::size_t FrameSize) noexcept {
+    class TPromiseBaseAlloc
+    {
+        static constexpr std::size_t OffsetOfAllocator(std::size_t FrameSize) noexcept
+        {
             return AlignedAllocationSize(FrameSize, alignof(A));
         }
 
-        static constexpr std::size_t PaddedFrameSize(std::size_t FrameSize) noexcept {
+        static constexpr std::size_t PaddedFrameSize(std::size_t FrameSize) noexcept
+        {
             return OffsetOfAllocator(FrameSize) + sizeof(A);
         }
 
-        static A &GetAllocator(void *Frame, std::size_t FrameSize) noexcept {
+        static A &GetAllocator(void *Frame, std::size_t FrameSize) noexcept
+        {
             return *std::bit_cast<A *>(static_cast<char *>(Frame) + OffsetOfAllocator(FrameSize));
         }
 
       public:
         template <typename... T>
-        void *operator new(std::size_t FrameSize, std::allocator_arg_t, A Alloc, T &...) {
+        void *operator new(std::size_t FrameSize, std::allocator_arg_t, A Alloc, T &...)
+        {
             void *Frame = Alloc.allocate(PaddedFrameSize(FrameSize));
 
             // Store allocator at end of the coroutine frame.
@@ -274,11 +306,13 @@ namespace Retro {
         }
 
         template <typename T, typename... U>
-        void *operator new(std::size_t FrameSize, T &, std::allocator_arg_t, A Alloc, U &...) {
+        void *operator new(std::size_t FrameSize, T &, std::allocator_arg_t, A Alloc, U &...)
+        {
             return TPromiseBaseAlloc::operator new(FrameSize, std::allocator_arg, std::move(Alloc));
         }
 
-        void operator delete(void *Ptr, std::size_t FrameSize) noexcept {
+        void operator delete(void *Ptr, std::size_t FrameSize) noexcept
+        {
             A &alloc = GetAllocator(Ptr, FrameSize);
             A local_alloc(std::move(alloc));
             alloc.~A();
@@ -288,21 +322,25 @@ namespace Retro {
 
     template <typename A>
         requires(!AllocatorNeedsToBeStored<A>)
-    class TPromiseBaseAlloc<A> {
+    class TPromiseBaseAlloc<A>
+    {
       public:
-        void *operator new(std::size_t Size) {
+        void *operator new(std::size_t Size)
+        {
             A Alloc;
             return Alloc.allocate(Size);
         }
 
-        void operator delete(void *Ptr, std::size_t Size) noexcept {
+        void operator delete(void *Ptr, std::size_t Size) noexcept
+        {
             A Alloc;
             Alloc.deallocate(static_cast<std::byte *>(Ptr), Size);
         }
     };
 
     template <typename T>
-    struct TGeneratorPromiseBase {
+    struct TGeneratorPromiseBase
+    {
         template <typename R, typename V, typename A>
         friend class TGenerator;
 
@@ -316,11 +354,14 @@ namespace Retro {
         TManualLifetime<std::exception_ptr> Exception;
         TManualLifetime<T> Value;
 
-        explicit TGeneratorPromiseBase(std::coroutine_handle<> ThisCoro) noexcept : Root(this), ParentOrLeaf(ThisCoro) {
+        explicit TGeneratorPromiseBase(std::coroutine_handle<> ThisCoro) noexcept : Root(this), ParentOrLeaf(ThisCoro)
+        {
         }
 
-        ~TGeneratorPromiseBase() {
-            if (Root != this) {
+        ~TGeneratorPromiseBase()
+        {
+            if (Root != this)
+            {
                 // This coroutine was used as a nested generator and so will
                 // have constructed its __exception_ member which needs to be
                 // destroyed here.
@@ -328,31 +369,41 @@ namespace Retro {
             }
         }
 
-        std::suspend_always initial_suspend() noexcept {
+        std::suspend_always initial_suspend() noexcept
+        {
             return {};
         }
 
-        void return_void() noexcept {
+        void return_void() noexcept
+        {
         }
 
-        void unhandled_exception() {
-            if (Root != this) {
+        void unhandled_exception()
+        {
+            if (Root != this)
+            {
                 Exception.Get() = std::current_exception();
-            } else {
+            }
+            else
+            {
                 throw;
             }
         }
 
         // Transfers control back to the parent of a nested coroutine
-        struct FinalAwaiter {
-            bool await_ready() noexcept {
+        struct FinalAwaiter
+        {
+            bool await_ready() noexcept
+            {
                 return false;
             }
 
             template <typename P>
-            std::coroutine_handle<> await_suspend(std::coroutine_handle<P> Handle) noexcept {
+            std::coroutine_handle<> await_suspend(std::coroutine_handle<P> Handle) noexcept
+            {
                 auto &Promise = Handle.promise();
-                if (auto &CurrentRoot = *Promise.Root; &CurrentRoot != &Promise) {
+                if (auto &CurrentRoot = *Promise.Root; &CurrentRoot != &Promise)
+                {
                     auto Parent = Promise.ParentOrLeaf;
                     CurrentRoot.ParentOrLeaf = Parent;
                     return Parent;
@@ -360,45 +411,53 @@ namespace Retro {
                 return std::noop_coroutine();
             }
 
-            void await_resume() noexcept {
+            void await_resume() noexcept
+            {
                 // No implementation needed here
             }
         };
 
-        FinalAwaiter final_suspend() noexcept {
+        FinalAwaiter final_suspend() noexcept
+        {
             return {};
         }
 
-        std::suspend_always yield_value(T &&x) noexcept(std::is_nothrow_move_constructible_v<T>) {
+        std::suspend_always yield_value(T &&x) noexcept(std::is_nothrow_move_constructible_v<T>)
+        {
             Root->Value.Construct(std::move(x));
             return {};
         }
 
         template <typename V>
             requires(!std::is_reference_v<T>) && std::is_convertible_v<V, T>
-        std::suspend_always yield_value(V &&x) noexcept(std::is_nothrow_constructible_v<T, V>) {
+        std::suspend_always yield_value(V &&x) noexcept(std::is_nothrow_constructible_v<T, V>)
+        {
             Root->Value.Construct(std::forward<V>(x));
             return {};
         }
 
         template <typename G>
-        struct YieldSequenceAwaiter {
+        struct YieldSequenceAwaiter
+        {
             G Gen;
 
             explicit(false) YieldSequenceAwaiter(G &&Gen) noexcept
                 // Taking ownership of the generator ensures frame are destroyed
                 // in the reverse order of their execution.
-                : Gen(static_cast<G &&>(Gen)) {
+                : Gen(static_cast<G &&>(Gen))
+            {
             }
 
-            bool await_ready() noexcept {
+            bool await_ready() noexcept
+            {
                 return false;
             }
 
             // set the parent, root and exceptions pointer and
             // resume the nested
             template <typename Promise>
-            std::coroutine_handle<> await_suspend(std::coroutine_handle<Promise> Handle) noexcept {
+            std::coroutine_handle<> await_suspend(std::coroutine_handle<Promise> Handle) noexcept
+            {
                 auto &Current = Handle.promise();
                 auto &Nested = *Gen.GetPromise();
                 auto &CurrentRoot = *Current.Root;
@@ -416,28 +475,33 @@ namespace Retro {
                 return Gen.GetCoro();
             }
 
-            void await_resume() {
-                if (auto &NestedPromise = *Gen.GetPromise(); NestedPromise.Exception.Get()) {
+            void await_resume()
+            {
+                if (auto &NestedPromise = *Gen.GetPromise(); NestedPromise.Exception.Get())
+                {
                     std::rethrow_exception(std::move(NestedPromise.Exception.Get()));
                 }
             }
         };
 
         template <typename O, typename A>
-        YieldSequenceAwaiter<TGenerator<T, O, A>>
-        yield_value(Ranges::TElementsOf<TGenerator<T, O, A>> Generator) noexcept {
+        YieldSequenceAwaiter<TGenerator<T, O, A>> yield_value(
+            Ranges::TElementsOf<TGenerator<T, O, A>> Generator) noexcept
+        {
             return std::move(Generator).Get();
         }
 
         template <std::ranges::range R, typename A>
-        YieldSequenceAwaiter<TGenerator<T, std::remove_cvref_t<T>, A>> yield_value(Ranges::TElementsOf<R, A> &&X) {
+        YieldSequenceAwaiter<TGenerator<T, std::remove_cvref_t<T>, A>> yield_value(Ranges::TElementsOf<R, A> &&X)
+        {
             return [](std::allocator_arg_t, A, auto &&Range) -> TGenerator<T, std::remove_cvref_t<T>, A> {
                 for (auto &&E : Range)
                     co_yield static_cast<decltype(E)>(E);
             }(std::allocator_arg, X.get_allocator(), std::forward<R>(X.get()));
         }
 
-        void resume() {
+        void resume()
+        {
             ParentOrLeaf.resume();
         }
 
@@ -450,20 +514,24 @@ namespace Retro {
 
     template <typename T, typename V, typename A, typename B, bool ExplicitAllocator>
     struct TGeneratorPromise<TGenerator<T, V, A>, B, ExplicitAllocator> final : public TGeneratorPromiseBase<T>,
-                                                                                public TPromiseBaseAlloc<B> {
+                                                                                public TPromiseBaseAlloc<B>
+    {
         TGeneratorPromise() noexcept
-            : TGeneratorPromiseBase<T>(std::coroutine_handle<TGeneratorPromise>::from_promise(*this)) {
+            : TGeneratorPromiseBase<T>(std::coroutine_handle<TGeneratorPromise>::from_promise(*this))
+        {
         }
 
-        TGenerator<T, V, A> get_return_object() noexcept {
+        TGenerator<T, V, A> get_return_object() noexcept
+        {
             return TGenerator<T, V, A>{std::coroutine_handle<TGeneratorPromise>::from_promise(*this)};
         }
 
         using TGeneratorPromiseBase<T>::yield_value;
 
         template <std::ranges::range R, typename M>
-        typename TGeneratorPromiseBase<T>::template YieldSequenceAwaiter<TGenerator<T, V, M>>
-        yield_value(Ranges::TElementsOf<R, M> &&X) {
+        typename TGeneratorPromiseBase<T>::template YieldSequenceAwaiter<TGenerator<T, V, M>> yield_value(
+            Ranges::TElementsOf<R, M> &&X)
+        {
             static_assert(!ExplicitAllocator, "This coroutine has an explicit allocator specified with "
                                               "std::allocator_arg so an allocator needs to be passed "
                                               "explicitly to std::elements_of");
@@ -478,16 +546,19 @@ namespace Retro {
     using TByteAllocatorType = typename std::allocator_traits<std::remove_cvref_t<A>>::template rebind_alloc<std::byte>;
 } // namespace Retro
 
-namespace std {
+namespace std
+{
     // Type-erased allocator with default allocator behaviour.
     RETROLIB_EXPORT template <typename R, typename V, typename... A>
-    struct coroutine_traits<Retro::TGenerator<R, V>, A...> {
+    struct coroutine_traits<Retro::TGenerator<R, V>, A...>
+    {
         using promise_type = Retro::TGeneratorPromise<Retro::TGenerator<R, V>, std::allocator<std::byte>>;
     };
 
     // Type-erased allocator with std::allocator_arg parameter
     RETROLIB_EXPORT template <typename R, typename V, typename A, typename... T>
-    struct coroutine_traits<Retro::TGenerator<R, V>, allocator_arg_t, A, T...> {
+    struct coroutine_traits<Retro::TGenerator<R, V>, allocator_arg_t, A, T...>
+    {
       private:
         using ByteAllocator = Retro::TByteAllocatorType<A>;
 
@@ -498,7 +569,8 @@ namespace std {
 
     // Type-erased allocator with std::allocator_arg parameter (non-static member functions)
     RETROLIB_EXPORT template <typename R, typename V, typename S, typename A, typename... T>
-    struct coroutine_traits<Retro::TGenerator<R, V>, S, allocator_arg_t, A, T...> {
+    struct coroutine_traits<Retro::TGenerator<R, V>, S, allocator_arg_t, A, T...>
+    {
       private:
         using ByteAllocator = Retro::TByteAllocatorType<A>;
 
@@ -509,7 +581,8 @@ namespace std {
 
     // Generator with specified allocator type
     RETROLIB_EXPORT template <typename R, typename V, typename A, typename... T>
-    struct coroutine_traits<Retro::TGenerator<R, V, A>, T...> {
+    struct coroutine_traits<Retro::TGenerator<R, V, A>, T...>
+    {
       private:
         using ByteAllocator = Retro::TByteAllocatorType<A>;
 
@@ -518,7 +591,8 @@ namespace std {
     };
 } // namespace std
 
-namespace Retro {
+namespace Retro
+{
     /**
      * @class TGenerator
      * @brief The Generator class is a type of coroutine powered view. Allowing the user to define a method that
@@ -529,7 +603,8 @@ namespace Retro {
      * @tparam A The allocator used for this type
      */
     template <typename R, typename V, typename A>
-    class TGenerator : public std::ranges::view_interface<TGenerator<R, V, A>> {
+    class TGenerator : public std::ranges::view_interface<TGenerator<R, V, A>>
+    {
         using ByteAllocator = TByteAllocatorType<A>;
 
       public:
@@ -561,7 +636,8 @@ namespace Retro {
          * @return A newly constructed Generator object with the transferred resources.
          */
         TGenerator(TGenerator &&Other) noexcept
-            : Coroutine(std::exchange(Other.coroutine, {})), Started(std::exchange(Other.started, false)) {
+            : Coroutine(std::exchange(Other.coroutine, {})), Started(std::exchange(Other.started, false))
+        {
         }
 
         /**
@@ -573,9 +649,12 @@ namespace Retro {
          * It is marked noexcept, guaranteeing that no exceptions will be thrown
          * during resource cleanup.
          */
-        ~TGenerator() noexcept {
-            if (Coroutine) {
-                if (Started && !Coroutine.done()) {
+        ~TGenerator() noexcept
+        {
+            if (Coroutine)
+            {
+                if (Started && !Coroutine.done())
+                {
                     Coroutine.promise().value.destruct();
                 }
                 Coroutine.destroy();
@@ -592,7 +671,8 @@ namespace Retro {
          * @param g A reference to the Generator instance to be moved.
          * @return A reference to the current Generator instance.
          */
-        TGenerator &operator=(TGenerator &&g) noexcept {
+        TGenerator &operator=(TGenerator &&g) noexcept
+        {
             swap(g);
             return *this;
         }
@@ -606,15 +686,19 @@ namespace Retro {
          *
          * @param other The Generator object to swap with.
          */
-        void swap(TGenerator &other) noexcept {
+        void swap(TGenerator &other) noexcept
+        {
             std::swap(Coroutine, other.coroutine);
             std::swap(Started, other.started);
         }
 
       private:
-        struct Sentinel {};
+        struct Sentinel
+        {
+        };
 
-        class Iterator {
+        class Iterator
+        {
           public:
             using iterator_category = std::input_iterator_tag;
             using difference_type = std::ptrdiff_t;
@@ -625,39 +709,46 @@ namespace Retro {
             Iterator() noexcept = default;
             Iterator(const Iterator &) = delete;
 
-            Iterator(Iterator &&Other) noexcept : Coroutine(std::exchange(Other.Coroutine, {})) {
+            Iterator(Iterator &&Other) noexcept : Coroutine(std::exchange(Other.Coroutine, {}))
+            {
             }
 
             Iterator &operator=(const Iterator &) = delete;
 
-            Iterator &operator=(Iterator &&Other) noexcept {
+            Iterator &operator=(Iterator &&Other) noexcept
+            {
                 std::swap(Coroutine, Other.Coroutine);
                 return *this;
             }
 
             ~Iterator() = default;
 
-            friend bool operator==(const Iterator &It, Sentinel) noexcept {
+            friend bool operator==(const Iterator &It, Sentinel) noexcept
+            {
                 return !It.Coroutine || It.Coroutine.done();
             }
 
-            Iterator &operator++() {
+            Iterator &operator++()
+            {
                 Coroutine.promise().value.destruct();
                 Coroutine.promise().resume();
                 return *this;
             }
-            void operator++(int) {
+            void operator++(int)
+            {
                 (void)operator++();
             }
 
-            reference operator*() const noexcept {
+            reference operator*() const noexcept
+            {
                 return static_cast<reference>(Coroutine.promise().Value.Get());
             }
 
           private:
             friend TGenerator;
 
-            explicit Iterator(CoroutineHandle Coroutine) noexcept : Coroutine(Coroutine) {
+            explicit Iterator(CoroutineHandle Coroutine) noexcept : Coroutine(Coroutine)
+            {
             }
 
             CoroutineHandle Coroutine;
@@ -672,7 +763,8 @@ namespace Retro {
          *
          * @return An iterator pointing to the beginning of the sequence.
          */
-        Iterator begin() {
+        Iterator begin()
+        {
             RETROLIB_ASSERT(Coroutine);
             RETROLIB_ASSERT(!Started);
             Started = true;
@@ -686,12 +778,14 @@ namespace Retro {
          * This function returns a Sentinel object representing the end of a range.
          * It is marked noexcept, ensuring that it does not throw any exceptions.
          */
-        Sentinel end() noexcept {
+        Sentinel end() noexcept
+        {
             return {};
         }
 
       private:
-        explicit TGenerator(CoroutineHandle coroutine) noexcept : Coroutine(coroutine) {
+        explicit TGenerator(CoroutineHandle coroutine) noexcept : Coroutine(coroutine)
+        {
         }
 
       public:
@@ -703,7 +797,8 @@ namespace Retro {
          *
          * @return A coroutine handle representing the current coroutine.
          */
-        std::coroutine_handle<> GetCoro() noexcept {
+        std::coroutine_handle<> GetCoro() noexcept
+        {
             return Coroutine;
         }
 
@@ -715,7 +810,8 @@ namespace Retro {
          *
          * @return A pointer to the promise_type object.
          */
-        promise_type *GetPromise() noexcept {
+        promise_type *GetPromise() noexcept
+        {
             return std::addressof(Coroutine.promise());
         }
 
@@ -733,7 +829,8 @@ namespace Retro {
      * @tparam V The value type of the generator (defaults to the cvref unqualified version of R)
      */
     template <typename R, typename V>
-    class TGenerator<R, V, FUseAllocatorArg> : public std::ranges::view_interface<TGenerator<R, V>> {
+    class TGenerator<R, V, FUseAllocatorArg> : public std::ranges::view_interface<TGenerator<R, V>>
+    {
         using PromiseBase = TGeneratorPromiseBase<R>;
 
       public:
@@ -757,7 +854,8 @@ namespace Retro {
          */
         TGenerator(TGenerator &&Other) noexcept
             : Promise(std::exchange(Other.Promise, nullptr)), Coroutine(std::exchange(Other.Coroutine, {})),
-              Started(std::exchange(Other.Started, false)) {
+              Started(std::exchange(Other.Started, false))
+        {
         }
 
         /**
@@ -770,9 +868,12 @@ namespace Retro {
          * This destructor is marked noexcept, guaranteeing that it does not
          * throw any exceptions during its execution.
          */
-        ~TGenerator() noexcept {
-            if (Coroutine) {
-                if (Started && !Coroutine.done()) {
+        ~TGenerator() noexcept
+        {
+            if (Coroutine)
+            {
+                if (Started && !Coroutine.done())
+                {
                     Promise->Value.Destruct();
                 }
                 Coroutine.destroy();
@@ -789,7 +890,8 @@ namespace Retro {
          * @param g The Generator object to be assigned.
          * @return A reference to the updated Generator object.
          */
-        TGenerator &operator=(TGenerator g) noexcept {
+        TGenerator &operator=(TGenerator g) noexcept
+        {
             swap(g);
             return *this;
         }
@@ -803,16 +905,20 @@ namespace Retro {
          *
          * @param Other The Generator instance to swap with.
          */
-        void swap(TGenerator &Other) noexcept {
+        void swap(TGenerator &Other) noexcept
+        {
             std::swap(Promise, Other.Promise);
             std::swap(Coroutine, Other.Coroutine);
             std::swap(Started, Other.Started);
         }
 
       private:
-        struct Sentinel {};
+        struct Sentinel
+        {
+        };
 
-        class Iterator {
+        class Iterator
+        {
           public:
             using iterator_category = std::input_iterator_tag;
             using difference_type = std::ptrdiff_t;
@@ -824,12 +930,14 @@ namespace Retro {
             Iterator(const Iterator &) = delete;
 
             Iterator(Iterator &&Other) noexcept
-                : Promise(std::exchange(Other.Promise, nullptr)), Coroutine(std::exchange(Other.Coroutine, {})) {
+                : Promise(std::exchange(Other.Promise, nullptr)), Coroutine(std::exchange(Other.Coroutine, {}))
+            {
             }
 
             Iterator &operator=(const Iterator &) = default;
 
-            Iterator &operator=(Iterator &&Other) noexcept {
+            Iterator &operator=(Iterator &&Other) noexcept
+            {
                 Promise = std::exchange(Other.Promise, nullptr);
                 Coroutine = std::exchange(Other.Coroutine, {});
                 return *this;
@@ -837,21 +945,25 @@ namespace Retro {
 
             ~Iterator() = default;
 
-            friend bool operator==(const Iterator &It, Sentinel) noexcept {
+            friend bool operator==(const Iterator &It, Sentinel) noexcept
+            {
                 return !It.Coroutine || It.Coroutine.done();
             }
 
-            Iterator &operator++() {
+            Iterator &operator++()
+            {
                 Promise->Value.Destruct();
                 Promise->resume();
                 return *this;
             }
 
-            void operator++(int) {
+            void operator++(int)
+            {
                 (void)operator++();
             }
 
-            reference operator*() const noexcept {
+            reference operator*() const noexcept
+            {
                 return static_cast<reference>(Promise->Value.Get());
             }
 
@@ -859,7 +971,8 @@ namespace Retro {
             friend TGenerator;
 
             explicit Iterator(PromiseBase *Promise, std::coroutine_handle<> Coroutine) noexcept
-                : Promise(Promise), Coroutine(Coroutine) {
+                : Promise(Promise), Coroutine(Coroutine)
+            {
             }
 
             PromiseBase *Promise;
@@ -878,8 +991,10 @@ namespace Retro {
          *
          * @note The coroutine must be valid and not have started prior to this call.
          */
-        Iterator begin() {
-            if (Coroutine) {
+        Iterator begin()
+        {
+            if (Coroutine)
+            {
                 RETROLIB_ASSERT(!Started);
                 Started = true;
                 Coroutine.resume();
@@ -895,7 +1010,8 @@ namespace Retro {
          *
          * @return A Sentinel object representing the end of the range.
          */
-        Sentinel end() noexcept {
+        Sentinel end() noexcept
+        {
             return {};
         }
 
@@ -905,7 +1021,8 @@ namespace Retro {
 
         template <typename P>
         explicit TGenerator(std::coroutine_handle<P> Coroutine) noexcept
-            : Promise(std::addressof(Coroutine.promise())), Coroutine(Coroutine) {
+            : Promise(std::addressof(Coroutine.promise())), Coroutine(Coroutine)
+        {
         }
 
       public:
@@ -917,7 +1034,8 @@ namespace Retro {
          *
          * @return The coroutine handle associated with this object.
          */
-        std::coroutine_handle<> GetCoro() noexcept {
+        std::coroutine_handle<> GetCoro() noexcept
+        {
             return Coroutine;
         }
 
@@ -930,7 +1048,8 @@ namespace Retro {
          *
          * @return Pointer to the associated promise object.
          */
-        PromiseBase *GetPromise() noexcept {
+        PromiseBase *GetPromise() noexcept
+        {
             return Promise;
         }
 

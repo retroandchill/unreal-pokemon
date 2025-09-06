@@ -14,7 +14,8 @@ class IMove;
  * Abstract panel that displays information about a Pokémon's moves.
  */
 UCLASS(Abstract)
-class POKEMONUI_API UMovePanel : public UCommonButtonBase {
+class POKEMONUI_API UMovePanel : public UCommonButtonBase
+{
     GENERATED_BODY()
 
   public:

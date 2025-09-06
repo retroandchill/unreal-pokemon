@@ -11,19 +11,23 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(UPokemonStorageScreen)
 
-UPokemonStorageScreen *UPokemonStorageScreen::AddPokemonStorageScreenToStack(const UObject *WorldContextObject) {
+UPokemonStorageScreen *UPokemonStorageScreen::AddPokemonStorageScreenToStack(const UObject *WorldContextObject)
+{
     return URPGMenuUtilities::InjectScreenToStack<UPokemonStorageScreen>(WorldContextObject).GetPtrOrNull();
 }
 
-void UPokemonStorageScreen::NativeConstruct() {
+void UPokemonStorageScreen::NativeConstruct()
+{
     Super::NativeConstruct();
     auto &StorageSystem = UPokemonSubsystem::GetInstance(this).GetStorageSystem();
     StorageBoxWindow->SetStorageBox(StorageSystem->GetCurrentBox());
     StorageBoxWindow->BindToOnSelectedPokemonChanged(this, &UPokemonStorageScreen::OnSelectedPokemonChanged);
 }
 
-void UPokemonStorageScreen::OnSelectedPokemonChanged(TOptional<IPokemon &> SelectedPokemon) {
-    if (!SelectedPokemon.IsSet()) {
+void UPokemonStorageScreen::OnSelectedPokemonChanged(TOptional<IPokemon &> SelectedPokemon)
+{
+    if (!SelectedPokemon.IsSet())
+    {
         StorageInfoPanel->SetVisibility(ESlateVisibility::Hidden);
         return;
     }

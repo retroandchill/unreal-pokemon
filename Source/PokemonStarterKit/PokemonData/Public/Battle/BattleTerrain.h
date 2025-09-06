@@ -11,7 +11,8 @@
  * In-battle terrain effects caused by moves like Electric Terrain.
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FBattleTerrain : public FIndexedTableRow {
+struct POKEMONDATA_API FBattleTerrain : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**

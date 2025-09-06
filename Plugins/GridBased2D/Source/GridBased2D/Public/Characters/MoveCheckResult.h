@@ -13,7 +13,8 @@ class IInteractable;
  * The result struct of a movement check validation. Can be returned as a structured binding.
  */
 USTRUCT(BlueprintType)
-struct GRIDBASED2D_API FMoveCheckResult {
+struct GRIDBASED2D_API FMoveCheckResult
+{
     GENERATED_BODY()
 
     /**
@@ -34,7 +35,8 @@ struct GRIDBASED2D_API FMoveCheckResult {
      * @return The found result
      */
     template <std::size_t Index>
-    std::tuple_element_t<Index, FMoveCheckResult> &get() {
+    std::tuple_element_t<Index, FMoveCheckResult> &get()
+    {
         if constexpr (Index == 0)
             return bCanMove;
         if constexpr (Index == 1)
@@ -43,22 +45,28 @@ struct GRIDBASED2D_API FMoveCheckResult {
 };
 
 // Structured binding metadata declaration
-namespace std {
+namespace std
+{
     template <>
-    struct tuple_size<FMoveCheckResult> : integral_constant<size_t, 2> {};
+    struct tuple_size<FMoveCheckResult> : integral_constant<size_t, 2>
+    {
+    };
 
     template <>
-    struct tuple_element<0, FMoveCheckResult> {
+    struct tuple_element<0, FMoveCheckResult>
+    {
         using type = bool;
     };
 
     template <>
-    struct tuple_element<1, FMoveCheckResult> {
+    struct tuple_element<1, FMoveCheckResult>
+    {
         using type = TArray<TScriptInterface<IInteractable>>;
     };
 
     template <size_t Index>
-    struct tuple_element<Index, FMoveCheckResult> : conditional<Index == 0, std::string, int> {
+    struct tuple_element<Index, FMoveCheckResult> : conditional<Index == 0, std::string, int>
+    {
         static_assert(Index < 2, "Index out of bounds for MoveCheckResult");
     };
 } // namespace std

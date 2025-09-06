@@ -6,7 +6,8 @@
 #include "EnhancedSaveGameModule.h"
 
 #if WITH_EDITOR
-namespace EnhancedSaveGame {
+namespace EnhancedSaveGame
+{
     /**
      * @class FScopedInMemorySaveHandle
      *
@@ -15,7 +16,8 @@ namespace EnhancedSaveGame {
      * The FScopedInMemorySaveHandle class is designed to temporarily enable in-memory saving, returning to regular,
      * file-based saving when this object is destructed.
      */
-    class FScopedInMemorySaveHandle {
+    class FScopedInMemorySaveHandle
+    {
       public:
         /**
          * @brief Constructor that enables in-memory saving.
@@ -23,7 +25,8 @@ namespace EnhancedSaveGame {
          * This constructor calls EnableInMemorySaving on FEnhancedSaveGameModule to
          * switch the save system to use in-memory saving for the duration of this object's lifecycle.
          */
-        FScopedInMemorySaveHandle() {
+        FScopedInMemorySaveHandle()
+        {
             FEnhancedSaveGameModule::Get().EnableInMemorySaving();
         }
 
@@ -38,7 +41,8 @@ namespace EnhancedSaveGame {
          *
          * @return A new instance of FScopedInMemorySaveHandle with moved state.
          */
-        FScopedInMemorySaveHandle(FScopedInMemorySaveHandle &&Other) noexcept {
+        FScopedInMemorySaveHandle(FScopedInMemorySaveHandle &&Other) noexcept
+        {
             Other.bIsActive = false;
         }
 
@@ -49,8 +53,10 @@ namespace EnhancedSaveGame {
          * revert the save system back to regular, file-based saving after in-memory saving
          * was enabled during the lifecycle of this object.
          */
-        ~FScopedInMemorySaveHandle() {
-            if (bIsActive) {
+        ~FScopedInMemorySaveHandle()
+        {
+            if (bIsActive)
+            {
                 FEnhancedSaveGameModule::Get().DisableInMemorySaving();
             }
         }
@@ -66,7 +72,8 @@ namespace EnhancedSaveGame {
          *
          * @return A new instance of FScopedInMemorySaveHandle with moved state.
          */
-        FScopedInMemorySaveHandle &operator=(FScopedInMemorySaveHandle &&Other) noexcept {
+        FScopedInMemorySaveHandle &operator=(FScopedInMemorySaveHandle &&Other) noexcept
+        {
             bIsActive = true;
             Other.bIsActive = false;
             return *this;

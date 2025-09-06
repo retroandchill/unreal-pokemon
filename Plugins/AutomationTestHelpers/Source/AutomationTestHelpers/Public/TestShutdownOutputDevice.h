@@ -7,7 +7,8 @@
 /**
  * This class is a custom output device for capturing log messages.
  */
-class AUTOMATIONTESTHELPERS_API FTestShutdownOutputDevice : public FOutputDevice {
+class AUTOMATIONTESTHELPERS_API FTestShutdownOutputDevice : public FOutputDevice
+{
   public:
     void Serialize(const TCHAR *V, ELogVerbosity::Type Verbosity, const FName &Category) override;
 

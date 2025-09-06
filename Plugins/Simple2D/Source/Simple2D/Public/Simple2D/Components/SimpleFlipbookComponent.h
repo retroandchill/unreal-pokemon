@@ -12,7 +12,8 @@ class USimpleFlipbook;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFlipbookFinishedPlaying);
 
 UCLASS(ShowCategories = (Mobility, ComponentReplication), ClassGroup = Simple2D, meta = (BlueprintSpawnableComponent))
-class SIMPLE2D_API USimpleFlipbookComponent : public UMeshComponent {
+class SIMPLE2D_API USimpleFlipbookComponent : public UMeshComponent
+{
     GENERATED_BODY()
 
   public:
@@ -28,7 +29,8 @@ class SIMPLE2D_API USimpleFlipbookComponent : public UMeshComponent {
 
     /** Returns the current color of the sprite */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    FLinearColor GetSpriteColor() const {
+    FLinearColor GetSpriteColor() const
+    {
         return SpriteColor;
     }
 
@@ -126,7 +128,8 @@ class SIMPLE2D_API USimpleFlipbookComponent : public UMeshComponent {
 
   private:
     // disable parallel add to scene for paper2d
-    void CreateRenderState_Concurrent(FRegisterComponentContext *Context) override {
+    void CreateRenderState_Concurrent(FRegisterComponentContext *Context) override
+    {
         Super::CreateRenderState_Concurrent(nullptr);
     }
 

@@ -16,7 +16,8 @@
         FOnGetPropertyTypeCustomizationInstance::CreateLambda(std::bind_front(                                         \
             &FWrappedKeyCustomization::MakeInstance, GET_MEMBER_NAME_CHECKED(F##StructName, PropertyName))))
 
-void FPokemonEditorToolsModule::StartupModule() {
+void FPokemonEditorToolsModule::StartupModule()
+{
     FEdGraphUtilities::RegisterVisualPinFactory(MakeShared<FDataHandlePinFactory>());
 
     auto &PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
@@ -37,7 +38,8 @@ void FPokemonEditorToolsModule::StartupModule() {
     REGISTER_WRAPPED_PROPERTY(PropertyModule, AbilityHandle, RowID);
 }
 
-void FPokemonEditorToolsModule::ShutdownModule() {
+void FPokemonEditorToolsModule::ShutdownModule()
+{
     // No shutdown required
 }
 

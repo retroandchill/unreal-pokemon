@@ -16,7 +16,8 @@ class UImage;
  * Utility class for Widget related operations
  */
 UCLASS()
-class RPGMENUS_API UWidgetUtilities : public UBlueprintFunctionLibrary {
+class RPGMENUS_API UWidgetUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

@@ -10,7 +10,8 @@
  * Handles the default representation of the main battle stats
  */
 UCLASS()
-class POKEMONCORE_API UDefaultMainBattleStatEntry : public UDefaultStatEntry {
+class POKEMONCORE_API UDefaultMainBattleStatEntry : public UDefaultStatEntry
+{
     GENERATED_BODY()
 
   public:

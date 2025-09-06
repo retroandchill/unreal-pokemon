@@ -20,7 +20,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCheckMoves);
  * The page in the summary screen that displays the moves.
  */
 UCLASS(Abstract)
-class POKEMONUI_API UPokemonMovesPage : public USummaryScreenPage {
+class POKEMONUI_API UPokemonMovesPage : public USummaryScreenPage
+{
     GENERATED_BODY()
 
   protected:

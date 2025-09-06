@@ -11,7 +11,8 @@
  * The various damage effectiveness that there are. Used to determine what message to show to the player.
  */
 UENUM(BlueprintType)
-enum class EDamageEffectiveness : uint8 {
+enum class EDamageEffectiveness : uint8
+{
     /**
      * Move deals no damage, but was also non-damaging to begin with
      * TODO: Remove this once the ties to this enum in the old battle code have been severed
@@ -39,7 +40,8 @@ enum class EDamageEffectiveness : uint8 {
     SuperEffective = 0x1 << 3
 };
 
-namespace Pokemon::TypeEffectiveness {
+namespace Pokemon::TypeEffectiveness
+{
 
     /**
      * The amount to multiply a move's damage by for an immunity
@@ -66,7 +68,8 @@ namespace Pokemon::TypeEffectiveness {
      * @param Multiplier The multiplier for the determined match-up
      * @return Is the match-up against the move ineffective?
      */
-    constexpr bool IsIneffective(float Multiplier) {
+    constexpr bool IsIneffective(float Multiplier)
+    {
         return Multiplier <= IneffectiveMultiplier;
     }
 
@@ -75,7 +78,8 @@ namespace Pokemon::TypeEffectiveness {
      * @param Multiplier The multiplier for the determined match-up
      * @return Is the match-up against the move not-very-effective?
      */
-    constexpr bool IsNotVeryEffective(float Multiplier) {
+    constexpr bool IsNotVeryEffective(float Multiplier)
+    {
         return Multiplier > IneffectiveMultiplier && Multiplier < NormalEffectiveMultiplier;
     }
 
@@ -84,7 +88,8 @@ namespace Pokemon::TypeEffectiveness {
      * @param Multiplier The multiplier for the determined match-up
      * @return Is the match-up against the move not-very-effective or ineffective?
      */
-    constexpr bool IsResistant(float Multiplier) {
+    constexpr bool IsResistant(float Multiplier)
+    {
         return Multiplier < NormalEffectiveMultiplier;
     }
 
@@ -93,7 +98,8 @@ namespace Pokemon::TypeEffectiveness {
      * @param Multiplier The multiplier for the determined match-up
      * @return Is the match-up against the move normally effectiveness?
      */
-    constexpr bool IsNormal(float Multiplier) {
+    constexpr bool IsNormal(float Multiplier)
+    {
         return Multiplier == NormalEffectiveMultiplier;
     }
 
@@ -102,7 +108,8 @@ namespace Pokemon::TypeEffectiveness {
      * @param Multiplier The multiplier for the determined match-up
      * @return Is the match-up against the move super effective?
      */
-    constexpr bool IsSuperEffective(float Multiplier) {
+    constexpr bool IsSuperEffective(float Multiplier)
+    {
         return Multiplier > NormalEffectiveMultiplier;
     }
 
@@ -111,9 +118,11 @@ namespace Pokemon::TypeEffectiveness {
      * @param Effectiveness The effectiveness to evaluate
      * @return The multiplier to apply
      */
-    constexpr float GetMultiplierForEffectiveness(EDamageEffectiveness Effectiveness) {
+    constexpr float GetMultiplierForEffectiveness(EDamageEffectiveness Effectiveness)
+    {
         using enum EDamageEffectiveness;
-        switch (Effectiveness) {
+        switch (Effectiveness)
+        {
         case NoEffect:
             return IneffectiveMultiplier;
         case NotVeryEffective:
@@ -130,18 +139,22 @@ namespace Pokemon::TypeEffectiveness {
      * @param Multiplier The multiplier for the determined match-up
      * @return The state of effectiveness
      */
-    constexpr EDamageEffectiveness GetEffectivenessFromMultiplier(float Multiplier) {
+    constexpr EDamageEffectiveness GetEffectivenessFromMultiplier(float Multiplier)
+    {
         using enum EDamageEffectiveness;
 
-        if (IsIneffective(Multiplier)) {
+        if (IsIneffective(Multiplier))
+        {
             return NoEffect;
         }
 
-        if (IsNotVeryEffective(Multiplier)) {
+        if (IsNotVeryEffective(Multiplier))
+        {
             return NotVeryEffective;
         }
 
-        if (IsSuperEffective(Multiplier)) {
+        if (IsSuperEffective(Multiplier))
+        {
             return SuperEffective;
         }
 
@@ -154,7 +167,8 @@ namespace Pokemon::TypeEffectiveness {
  * Represents the types that belong to both individual species as well as the moves used by them
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "PBS"))
-struct POKEMONDATA_API FType : public FIndexedTableRow {
+struct POKEMONDATA_API FType : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -222,7 +236,8 @@ struct POKEMONDATA_API FType : public FIndexedTableRow {
  * Blueprint function library for getting type data out.
  */
 UCLASS()
-class POKEMONDATA_API UTypeHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UTypeHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

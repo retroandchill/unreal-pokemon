@@ -11,7 +11,8 @@
 #include "RetroLib/Utils/BlueprintMathUtils.h"
 
 bool UTurnBasedGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer &GEContainer,
-                                                                    FActiveGameplayEffect &ActiveGE) const {
+                                                                    FActiveGameplayEffect &ActiveGE) const
+{
     auto OwningActor = GEContainer.Owner->GetOwnerActor();
     auto TurnBasedComponent = OwningActor->FindComponentByClass<UTurnBasedEffectComponent>();
     check(IsValid(TurnBasedComponent))
@@ -28,24 +29,32 @@ bool UTurnBasedGameplayEffectComponent::OnActiveGameplayEffectAdded(FActiveGamep
 }
 
 #if WITH_EDITOR
-EDataValidationResult UTurnBasedGameplayEffectComponent::IsDataValid(FDataValidationContext &Context) const {
+EDataValidationResult UTurnBasedGameplayEffectComponent::IsDataValid(FDataValidationContext &Context) const
+{
     auto OriginalResult = Super::IsDataValid(Context);
 
     bool bHasError = false;
-    if (TurnDuration.IsSet()) {
+    if (TurnDuration.IsSet())
+    {
         auto &Range = TurnDuration.GetValue();
-        if (!Range.HasLowerBound()) {
+        if (!Range.HasLowerBound())
+        {
             Context.AddError(LOCALIZED_TEXT("BadLowerBound", "Turn Duration must have a lower bound"));
             bHasError = true;
-        } else if (Range.GetLowerBoundValue() <= 0) {
+        }
+        else if (Range.GetLowerBoundValue() <= 0)
+        {
             Context.AddError(LOCALIZED_TEXT("BadLowerBoundValue", "Turn Duration must have a positive lower bound"));
             bHasError = true;
         }
 
-        if (!Range.HasUpperBound()) {
+        if (!Range.HasUpperBound())
+        {
             Context.AddError(LOCALIZED_TEXT("BadUpperBound", "Turn Duration must have an upper bound"));
             bHasError = true;
-        } else if (Range.GetUpperBoundValue() <= 0) {
+        }
+        else if (Range.GetUpperBoundValue() <= 0)
+        {
             Context.AddError(LOCALIZED_TEXT("BadUpperBoundValue", "Turn Duration must have a positive upper bound"));
             bHasError = true;
         }
@@ -56,6 +65,7 @@ EDataValidationResult UTurnBasedGameplayEffectComponent::IsDataValid(FDataValida
 #endif
 
 void UTurnBasedGameplayEffectComponent::OnGameplayEffectRemoved(const FGameplayEffectRemovalInfo &GERemovalInfo,
-                                                                UTurnBasedEffectComponent *Component) {
+                                                                UTurnBasedEffectComponent *Component)
+{
     Component->RemoveTurnBasedEffect(GERemovalInfo.ActiveEffect->Handle);
 }

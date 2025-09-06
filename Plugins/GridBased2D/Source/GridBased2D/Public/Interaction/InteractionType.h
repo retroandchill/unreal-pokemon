@@ -8,7 +8,8 @@
  * Enumeration for the various type of possible interactivity for the object.
  */
 UENUM(BlueprintType, meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor = "true"))
-enum class EInteractionType : uint8 {
+enum class EInteractionType : uint8
+{
     /**
      * No interaction types
      */

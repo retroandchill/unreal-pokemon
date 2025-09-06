@@ -8,16 +8,20 @@
 #include "Storage/StorageSystem.h"
 
 TScriptInterface<IPokemon> UPartyManagementHelpers::AddPokemonToParty(const UObject *WorldContext,
-                                                                      const FPokemonDTO &Pokemon) {
+                                                                      const FPokemonDTO &Pokemon)
+{
     auto &Subsystem = UPokemonSubsystem::GetInstance(WorldContext);
     auto Player = Subsystem.GetPlayer();
     check(Player != nullptr)
     auto CreatedPokemon = UnrealInjector::NewInjectedDependency<IPokemon>(Player.GetObject(), Pokemon);
-    if (Player->IsPartyFull()) {
+    if (Player->IsPartyFull())
+    {
         auto StorageSystem = Subsystem.GetStorageSystem();
         check(StorageSystem != nullptr)
         StorageSystem->TryDeposit(CreatedPokemon);
-    } else {
+    }
+    else
+    {
         Player->AddPokemonToParty(CreatedPokemon);
     }
     return CreatedPokemon;

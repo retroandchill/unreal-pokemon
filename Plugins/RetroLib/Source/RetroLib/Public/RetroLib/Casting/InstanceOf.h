@@ -20,10 +20,12 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
 
     RETROLIB_EXPORT template <PolymorphicType T>
-    struct TInstanceChecker {
+    struct TInstanceChecker
+    {
         /**
          * Checks if the given instance of type U is a valid instance of the desired base type T.
          *
@@ -32,11 +34,15 @@ namespace Retro {
          *         that can be dynamically cast to T. Otherwise, returns false.
          */
         template <PolymorphicType U>
-        constexpr bool operator()(const U &Value) const {
-            if constexpr (std::derived_from<U, T>) {
+        constexpr bool operator()(const U &Value) const
+        {
+            if constexpr (std::derived_from<U, T>)
+            {
                 // Trivial case, U is derived from T, so we know with certainty that this is valid
                 return true;
-            } else {
+            }
+            else
+            {
 #if !RTTI_ENABLED
                 static_assert(false, "RTTI is disabled, but the type is not derived from T");
 #endif
@@ -59,7 +65,8 @@ namespace Retro {
      * @tparam T The type against which the object's type is being checked.
      */
     template <PolymorphicType T>
-    struct TInstanceOfFunction {
+    struct TInstanceOfFunction
+    {
         /**
          * Checks if the given value is a valid instance of type U.
          *
@@ -67,7 +74,8 @@ namespace Retro {
          * @return A boolean indicating whether the value is a valid instance of type U.
          */
         template <PolymorphicType U>
-        constexpr bool operator()(const U &Value) const {
+        constexpr bool operator()(const U &Value) const
+        {
             return IsValidInstance<T>(Value);
         }
 
@@ -83,7 +91,8 @@ namespace Retro {
          * dereferenced value, otherwise false.
          */
         template <PointerType U>
-        constexpr bool operator()(U &&Ptr) const {
+        constexpr bool operator()(U &&Ptr) const
+        {
             return ValidPtr(std::forward<U>(Ptr)) && (*this)(*std::forward<U>(Ptr));
         }
 
@@ -100,7 +109,8 @@ namespace Retro {
          *         to the dereferenced value of the polymorphic object.
          */
         template <Class U, size_t Size>
-        constexpr bool operator()(const TPolymorphic<U, Size> &Polymorphic) const {
+        constexpr bool operator()(const TPolymorphic<U, Size> &Polymorphic) const
+        {
             return (*this)(*Polymorphic);
         }
 
@@ -110,7 +120,8 @@ namespace Retro {
          * @param std::nullptr_t A parameter of type std::nullptr_t representing a null pointer.
          * @return Always returns false as null pointers are considered false.
          */
-        constexpr bool operator()(std::nullptr_t) const {
+        constexpr bool operator()(std::nullptr_t) const
+        {
             return false;
         }
     };

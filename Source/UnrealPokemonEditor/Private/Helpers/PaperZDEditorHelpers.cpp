@@ -4,10 +4,12 @@
 #include "TextureCompiler.h"
 #include "UnrealPokemonEditor.h"
 
-bool UPaperZDEditorHelpers::SetTargetAnimSource(UFactory *Factory, UPaperZDAnimationSource *AnimationSource) {
+bool UPaperZDEditorHelpers::SetTargetAnimSource(UFactory *Factory, UPaperZDAnimationSource *AnimationSource)
+{
     static FName TargetAnimSource = "TargetAnimSource";
     auto Property = Factory->GetClass()->FindPropertyByName(TargetAnimSource);
-    if (Property == nullptr) {
+    if (Property == nullptr)
+    {
         UE_LOG(LogUnrealPokemonEditor, Error, TEXT("Provided factory does not have the 'TargetAnimSource' property"))
         return false;
     }
@@ -18,6 +20,7 @@ bool UPaperZDEditorHelpers::SetTargetAnimSource(UFactory *Factory, UPaperZDAnima
     return true;
 }
 
-void UPaperZDEditorHelpers::FinishLoadingTexture(UTexture2D *Texture) {
+void UPaperZDEditorHelpers::FinishLoadingTexture(UTexture2D *Texture)
+{
     FTextureCompilingManager::Get().FinishCompilation({Texture});
 }

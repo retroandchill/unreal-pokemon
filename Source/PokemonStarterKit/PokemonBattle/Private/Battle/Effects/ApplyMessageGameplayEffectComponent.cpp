@@ -4,10 +4,11 @@
 #include "PokemonBattleModule.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
 
-UE5Coro::TCoroutine<>
-UApplyMessageGameplayEffectComponent::DisplayApplyMessage(UE5Coro::TLatentContext<const UObject> Context,
-                                                          const FText &TargetName) const {
-    if (MessageFormat.IsEmptyOrWhitespace()) {
+UE5Coro::TCoroutine<> UApplyMessageGameplayEffectComponent::DisplayApplyMessage(
+    UE5Coro::TLatentContext<const UObject> Context, const FText &TargetName) const
+{
+    if (MessageFormat.IsEmptyOrWhitespace())
+    {
         UE_LOG(LogBattle, Error, TEXT("You must provide a message."));
         co_return;
     }

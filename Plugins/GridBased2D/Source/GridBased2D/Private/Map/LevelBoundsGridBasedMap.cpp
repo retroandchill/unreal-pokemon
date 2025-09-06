@@ -4,9 +4,11 @@
 #include "GridBased2D.h"
 #include "GridUtils.h"
 
-FIntRect ALevelBoundsGridBasedMap::GetBounds() const {
+FIntRect ALevelBoundsGridBasedMap::GetBounds() const
+{
 #if WITH_EDITOR
-    if (LevelBounds == nullptr) {
+    if (LevelBounds == nullptr)
+    {
         UE_LOG(LogGridBased2D, Error, TEXT("You need to set a valid level bounds for the map object!"))
         return FIntRect();
     }

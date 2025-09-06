@@ -7,14 +7,17 @@
 #include "Simple2D/Assets/SimpleFlipbook.h"
 
 void USimpleFlipbookThumbnailRenderer::Draw(UObject *Object, int32 X, int32 Y, uint32 Width, uint32 Height,
-                                            FRenderTarget *RenderTarget, FCanvas *Canvas, bool bAdditionalViewFamily) {
-    if (auto *Flipbook = Cast<USimpleFlipbook>(Object); Flipbook != nullptr) {
+                                            FRenderTarget *RenderTarget, FCanvas *Canvas, bool bAdditionalViewFamily)
+{
+    if (auto *Flipbook = Cast<USimpleFlipbook>(Object); Flipbook != nullptr)
+    {
         const double DeltaTime = FApp::GetCurrentTime() - GStartTime;
         const double TotalDuration = Flipbook->GetTotalDuration();
         const float PlayTime = TotalDuration > 0.0f ? static_cast<float>(FMath::Fmod(DeltaTime, TotalDuration)) : 0.0f;
 
         if (const int32 KeyFrameIndex = Flipbook->GetKeyFrameIndexAtTime(PlayTime);
-            Flipbook->IsValidKeyFrameIndex(KeyFrameIndex)) {
+            Flipbook->IsValidKeyFrameIndex(KeyFrameIndex))
+        {
             const auto &[Index, FrameRun] = Flipbook->GetKeyFrameChecked(KeyFrameIndex);
             DrawFrame(Flipbook, Index, X, Y, Width, Height, RenderTarget, Canvas);
             return;
@@ -23,7 +26,8 @@ void USimpleFlipbookThumbnailRenderer::Draw(UObject *Object, int32 X, int32 Y, u
         // Fallback for empty frames or newly created flipbooks
         DrawGrid(X, Y, Width, Height, Canvas);
 
-        if (TotalDuration == 0.0f) {
+        if (TotalDuration == 0.0f)
+        {
             // Warning text for no frames
             const FText ErrorText = NSLOCTEXT("SimpleFlipbookEditorApp", "ThumbnailWarningNoFrames", "No frames");
             FCanvasTextItem TextItem(FVector2D(5.0f, 5.0f), ErrorText, UEngine::GetLargeFont(), FLinearColor::Red);
@@ -35,17 +39,21 @@ void USimpleFlipbookThumbnailRenderer::Draw(UObject *Object, int32 X, int32 Y, u
 }
 
 void USimpleFlipbookThumbnailRenderer::DrawFrame(USimpleFlipbook *Flipbook, int32 Index, int32 X, int32 Y, uint32 Width,
-                                                 uint32 Height, FRenderTarget *, FCanvas *Canvas) {
+                                                 uint32 Height, FRenderTarget *, FCanvas *Canvas)
+{
     const UTexture2D *SourceTexture = nullptr;
-    if (Flipbook != nullptr) {
+    if (Flipbook != nullptr)
+    {
         SourceTexture = Flipbook->GetSourceTexture();
     }
 
-    if (SourceTexture != nullptr) {
+    if (SourceTexture != nullptr)
+    {
         const bool bUseTranslucentBlend = SourceTexture->HasAlphaChannel();
 
         // Draw the grid behind the sprite
-        if (bUseTranslucentBlend) {
+        if (bUseTranslucentBlend)
+        {
             DrawGrid(X, Y, Width, Height, Canvas);
         }
 
@@ -61,7 +69,8 @@ void USimpleFlipbookThumbnailRenderer::DrawFrame(USimpleFlipbook *Flipbook, int3
         FVector2D ScaledSize(ActualSize.X / SourceTexture->GetSizeX(), ActualSize.Y / SourceTexture->GetSizeY());
         const int32 Column = Index % Flipbook->GetColumns();
         const int32 Row = Index / Flipbook->GetColumns();
-        for (int Vertex = 0; Vertex < BakedRenderData.Num(); ++Vertex) {
+        for (int Vertex = 0; Vertex < BakedRenderData.Num(); ++Vertex)
+        {
             new (CanvasPositions) FVector2D(BakedRenderData[Vertex].X, BakedRenderData[Vertex].Y);
             new (CanvasUVs) FVector2D(BakedRenderData[Vertex].Z * ScaledSize.X + ScaledSize.X * Column,
                                       BakedRenderData[Vertex].W * ScaledSize.Y + ScaledSize.Y * Row);
@@ -85,16 +94,19 @@ void USimpleFlipbookThumbnailRenderer::DrawFrame(USimpleFlipbook *Flipbook, int3
 
         // Scale and recenter
         const FVector2D CanvasPositionCenter = (MaxPoint + MinPoint) * 0.5f;
-        for (int Vertex = 0; Vertex < CanvasPositions.Num(); ++Vertex) {
+        for (int Vertex = 0; Vertex < CanvasPositions.Num(); ++Vertex)
+        {
             CanvasPositions[Vertex] = (CanvasPositions[Vertex] - CanvasPositionCenter) * ScaleFactor + Origin;
             CanvasPositions[Vertex].Y = Height - CanvasPositions[Vertex].Y;
         }
 
         // Draw triangles
-        if (CanvasPositions.Num() > 0 && SourceTexture->GetResource() != nullptr) {
+        if (CanvasPositions.Num() > 0 && SourceTexture->GetResource() != nullptr)
+        {
             TArray<FCanvasUVTri> Triangles;
             const FLinearColor SpriteColor(FLinearColor::White);
-            for (int Vertex = 0; Vertex < CanvasPositions.Num(); Vertex += 3) {
+            for (int Vertex = 0; Vertex < CanvasPositions.Num(); Vertex += 3)
+            {
                 FCanvasUVTri *Triangle = new (Triangles) FCanvasUVTri();
                 Triangle->V0_Pos = CanvasPositions[Vertex + 0];
                 Triangle->V0_UV = CanvasUVs[Vertex + 0];
@@ -110,15 +122,19 @@ void USimpleFlipbookThumbnailRenderer::DrawFrame(USimpleFlipbook *Flipbook, int3
             CanvasTriangle.BlendMode = bUseTranslucentBlend ? SE_BLEND_Translucent : SE_BLEND_Opaque;
             Canvas->DrawItem(CanvasTriangle);
         }
-    } else {
+    }
+    else
+    {
         // Fallback for a bogus sprite
         DrawGrid(X, Y, Width, Height, Canvas);
     }
 }
 
-void USimpleFlipbookThumbnailRenderer::DrawGrid(int32 X, int32 Y, uint32 Width, uint32 Height, FCanvas *Canvas) {
+void USimpleFlipbookThumbnailRenderer::DrawGrid(int32 X, int32 Y, uint32 Width, uint32 Height, FCanvas *Canvas)
+{
     static UTexture2D *GridTexture = nullptr;
-    if (GridTexture == nullptr) {
+    if (GridTexture == nullptr)
+    {
         GridTexture = LoadObject<UTexture2D>(
             nullptr, TEXT("/Engine/EngineMaterials/DefaultDiffuse_TC_Masks.DefaultDiffuse_TC_Masks"), nullptr,
             LOAD_None, nullptr);

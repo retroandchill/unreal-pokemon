@@ -22,13 +22,15 @@
  */
 RETROLIB_EXPORT template <typename T = UObject>
     requires std::is_base_of_v<UObject, T>
-struct TSoftObjectRef {
+struct TSoftObjectRef
+{
     static constexpr bool bHasIntrusiveUnsetOptionalState = true;
     using IntrusiveUnsetOptionalStateType = TSoftObjectRef;
 
     template <typename... A>
         requires std::constructible_from<TSoftObjectPtr<T>, A...> && (!Retro::PackSameAs<TSoftObjectRef, A...>)
-    explicit TSoftObjectRef(A &&...Args) : Ptr(std::forward<A>(Args)...) {
+    explicit TSoftObjectRef(A &&...Args) : Ptr(std::forward<A>(Args)...)
+    {
         check(IsAssetValid());
     }
 
@@ -36,7 +38,8 @@ struct TSoftObjectRef {
      * Returns asset name string, leaving off the /package/path part
      * @return the asset name string, leaving off the /package/path part
      */
-    FString GetAssetName() const {
+    FString GetAssetName() const
+    {
         return Ptr.GetAssetName();
     }
 
@@ -44,7 +47,8 @@ struct TSoftObjectRef {
      * Returns /package/path string, leaving off the asset name
      * @return /package/path string, leaving off the asset name
      */
-    FString GetLongPackageName() const {
+    FString GetLongPackageName() const
+    {
         return Ptr.GetAssetName();
     }
 
@@ -52,7 +56,8 @@ struct TSoftObjectRef {
      * Hash function
      * @return The hash for this type
      */
-    uint32 GetPtrTypeHash() const {
+    uint32 GetPtrTypeHash() const
+    {
         return Ptr.GetPtrTypeHash();
     }
 
@@ -60,7 +65,8 @@ struct TSoftObjectRef {
      * Test if this points to a live UObject
      * @return if this points to a live UObject
      */
-    bool IsValid() const {
+    bool IsValid() const
+    {
         return Ptr.IsValid();
     }
 
@@ -68,14 +74,16 @@ struct TSoftObjectRef {
      * Synchronously load (if necessary) and return the asset object represented by this asset ptr
      * @return the asset object represented by this asset ptr
      */
-    T &LoadSynchronous() const {
+    T &LoadSynchronous() const
+    {
         auto Result = Ptr.LoadSynchronous();
         check(::IsValid(Result))
         return *Result;
     }
 
 #if RETROLIB_WITH_UE5CORO
-    UE5Coro::TCoroutine<T &> LoadAsync() const {
+    UE5Coro::TCoroutine<T &> LoadAsync() const
+    {
         auto Result = co_await UE5Coro::Latent::AsyncLoadObject(Ptr);
         check(::IsValid(Result))
         co_return *Result;
@@ -86,7 +94,8 @@ struct TSoftObjectRef {
      * Returns the StringObjectPath that is wrapped by this SoftObjectPtr
      * @return The StringObjectPath that is wrapped by this SoftObjectPtr
      */
-    TSoftObjectPtr<T> &ToSoftObjectPtr() & {
+    TSoftObjectPtr<T> &ToSoftObjectPtr() &
+    {
         return Ptr;
     }
 
@@ -94,7 +103,8 @@ struct TSoftObjectRef {
      * Returns the StringObjectPath that is wrapped by this SoftObjectPtr
      * @return The StringObjectPath that is wrapped by this SoftObjectPtr
      */
-    const TSoftObjectPtr<T> &ToSoftObjectPtr() const & {
+    const TSoftObjectPtr<T> &ToSoftObjectPtr() const &
+    {
         return Ptr;
     }
 
@@ -102,7 +112,8 @@ struct TSoftObjectRef {
      * Returns the StringObjectPath that is wrapped by this SoftObjectPtr
      * @return The StringObjectPath that is wrapped by this SoftObjectPtr
      */
-    TSoftObjectPtr<T> &&ToSoftObjectPtr() && {
+    TSoftObjectPtr<T> &&ToSoftObjectPtr() &&
+    {
         return std::move(Ptr);
     }
 
@@ -110,7 +121,8 @@ struct TSoftObjectRef {
      * Returns the StringObjectPath that is wrapped by this SoftObjectPtr
      * @return The StringObjectPath that is wrapped by this SoftObjectPtr
      */
-    operator TSoftObjectPtr<T>() & {
+    operator TSoftObjectPtr<T>() &
+    {
         return Ptr;
     }
 
@@ -118,7 +130,8 @@ struct TSoftObjectRef {
      * Returns the StringObjectPath that is wrapped by this SoftObjectPtr
      * @return The StringObjectPath that is wrapped by this SoftObjectPtr
      */
-    operator TSoftObjectPtr<T>() const & {
+    operator TSoftObjectPtr<T>() const &
+    {
         return Ptr;
     }
 
@@ -126,7 +139,8 @@ struct TSoftObjectRef {
      * Returns the StringObjectPath that is wrapped by this SoftObjectPtr
      * @return The StringObjectPath that is wrapped by this SoftObjectPtr
      */
-    operator TSoftObjectPtr<T>() && {
+    operator TSoftObjectPtr<T>() &&
+    {
         return std::move(Ptr);
     }
 
@@ -134,7 +148,8 @@ struct TSoftObjectRef {
      * Returns the StringObjectPath that is wrapped by this SoftObjectPtr
      * @return The StringObjectPath that is wrapped by this SoftObjectPtr
      */
-    const FSoftObjectPath &ToSoftObjectPath() const {
+    const FSoftObjectPath &ToSoftObjectPath() const
+    {
         return Ptr.ToSoftObjectPath();
     }
 
@@ -142,21 +157,25 @@ struct TSoftObjectRef {
      * Returns string representation of reference, in form /package/path.assetname
      * @return The string representation of reference, in form /package/path.assetname
      */
-    FString ToString() const {
+    FString ToString() const
+    {
         return Ptr.ToString();
     }
 
-    bool operator==(FIntrusiveUnsetOptionalState) const {
+    bool operator==(FIntrusiveUnsetOptionalState) const
+    {
         return Ptr.IsNull();
     }
 
-    bool IsAssetValid() const {
+    bool IsAssetValid() const
+    {
         const auto &AssetManager = UAssetManager::Get();
         FAssetData Data;
         return AssetManager.GetAssetDataForPath(ToSoftObjectPath(), Data) && Data.IsInstanceOf<T>();
     }
 
-    bool IsAssetOfType(const UClass *AssetType) const {
+    bool IsAssetOfType(const UClass *AssetType) const
+    {
         const auto &AssetManager = UAssetManager::Get();
         FAssetData Data;
         return AssetManager.GetAssetDataForPath(ToSoftObjectPath(), Data) && Data.IsInstanceOf(AssetType);
@@ -165,10 +184,12 @@ struct TSoftObjectRef {
   private:
     friend struct TOptional<TSoftObjectRef>;
 
-    explicit TSoftObjectRef(FIntrusiveUnsetOptionalState) {
+    explicit TSoftObjectRef(FIntrusiveUnsetOptionalState)
+    {
     }
 
-    TSoftObjectRef &operator=(FIntrusiveUnsetOptionalState) {
+    TSoftObjectRef &operator=(FIntrusiveUnsetOptionalState)
+    {
         Ptr.Reset();
         return *this;
     }
@@ -176,35 +197,41 @@ struct TSoftObjectRef {
     TSoftObjectPtr<T> Ptr;
 };
 
-namespace Retro::Optionals {
+namespace Retro::Optionals
+{
     RETROLIB_EXPORT template <typename T>
         requires std::derived_from<T, UObject>
-    struct TNullableOptionalParam<TSoftObjectPtr<T>> : FValidType {
+    struct TNullableOptionalParam<TSoftObjectPtr<T>> : FValidType
+    {
         using RawType = TSoftObjectPtr<T>;
         using ReferenceType = TSoftObjectRef<T>;
 
         template <template <typename...> typename O, typename U>
             requires std::derived_from<U, T> && OptionalType<O<TSoftObjectRef<U>>>
-        static constexpr auto OfNullable(const TSoftObjectPtr<U> &Ptr) {
+        static constexpr auto OfNullable(const TSoftObjectPtr<U> &Ptr)
+        {
             return !Ptr.IsNull() ? O<ReferenceType>(ReferenceType(Ptr)) : O<ReferenceType>();
-        }
+        } // namespace Retro::Optionals
 
         template <template <typename...> typename O, typename U>
             requires std::derived_from<U, T> && OptionalType<O<TSoftObjectRef<U>>>
-        static constexpr auto OfNullable(TSoftObjectPtr<U> &&Ptr) {
+        static constexpr auto OfNullable(TSoftObjectPtr<U> &&Ptr)
+        {
             return !Ptr.IsNull() ? O<ReferenceType>(ReferenceType(std::move(Ptr))) : O<ReferenceType>();
         }
 
         template <template <typename...> typename O, typename U, typename E, typename... A>
             requires std::derived_from<U, T> && OptionalType<O<TSoftObjectRef<U>, E>>
-        static constexpr auto OfNullable(const TSoftObjectPtr<U> &Ptr, A &&...Args) {
+        static constexpr auto OfNullable(const TSoftObjectPtr<U> &Ptr, A &&...Args)
+        {
             return !Ptr.IsNull() ? O<ReferenceType, E>(ReferenceType(Ptr))
                                  : CreateEmptyExpected<O, ReferenceType, E>(std::forward<A>(Args)...);
         }
 
         template <template <typename...> typename O, typename U, typename E, typename... A>
             requires std::derived_from<U, T> && OptionalType<O<TSoftObjectRef<U>, E>>
-        static constexpr auto OfNullable(TSoftObjectPtr<U> &&Ptr, A &&...Args) {
+        static constexpr auto OfNullable(TSoftObjectPtr<U> &&Ptr, A &&...Args)
+        {
             return !Ptr.IsNull() ? O<ReferenceType, E>(ReferenceType(std::move(Ptr)))
                                  : CreateEmptyExpected<O, ReferenceType, E>(std::forward<A>(Args)...);
         }
@@ -212,6 +239,8 @@ namespace Retro::Optionals {
 
     RETROLIB_EXPORT template <typename T>
         requires SpecializationOf<std::decay_t<T>, TSoftObjectPtr> && (!std::same_as<std::decay_t<T>, T>)
-    struct TNullableOptionalParam<T> : TNullableOptionalParam<std::decay_t<T>> {};
+    struct TNullableOptionalParam<T> : TNullableOptionalParam<std::decay_t<T>>
+    {
+    };
 } // namespace Retro::Optionals
 #endif

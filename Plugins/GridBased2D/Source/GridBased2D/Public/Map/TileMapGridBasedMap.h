@@ -18,7 +18,8 @@ class UDataTable;
  * Actor that contains the basic information about the map
  */
 UCLASS(Blueprintable, ClassGroup = (Map))
-class GRIDBASED2D_API ATileMapGridBasedMap : public AGridBasedMapBase {
+class GRIDBASED2D_API ATileMapGridBasedMap : public AGridBasedMapBase
+{
     GENERATED_BODY()
 
   public:

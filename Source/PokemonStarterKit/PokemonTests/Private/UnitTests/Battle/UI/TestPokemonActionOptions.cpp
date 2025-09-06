@@ -11,7 +11,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestPokemonActionOptions, "Unit Tests.Battle.UI.TestPokemonActionOptions",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestPokemonActionOptions::RunTest(const FString &Parameters) {
+bool TestPokemonActionOptions::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonActionOptions>();
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());

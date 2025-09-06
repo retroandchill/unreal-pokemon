@@ -25,7 +25,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnProgresBarUpdateComplete);
  * The panel that displays the battle information about a Pokémon.
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UPokemonBattlePanel : public UUserWidget {
+class POKEMONBATTLEUI_API UPokemonBattlePanel : public UUserWidget
+{
     GENERATED_BODY()
 
   public:
@@ -34,7 +35,8 @@ class POKEMONBATTLEUI_API UPokemonBattlePanel : public UUserWidget {
      * @return The battler whose information is being displayed
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const TScriptInterface<IBattler> &GetCurrentBattler() const {
+    const TScriptInterface<IBattler> &GetCurrentBattler() const
+    {
         return CurrentBattler;
     }
 

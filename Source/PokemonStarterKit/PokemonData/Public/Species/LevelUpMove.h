@@ -10,7 +10,8 @@
  * Represents a move learned upon level up
  */
 USTRUCT(BlueprintType)
-struct POKEMONDATA_API FLevelUpMove {
+struct POKEMONDATA_API FLevelUpMove
+{
     GENERATED_BODY()
 
     /**

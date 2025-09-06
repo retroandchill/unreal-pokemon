@@ -5,16 +5,21 @@
 
 UE5Coro::TCoroutine<int32> UAsyncAbilityComponent::HandleGameplayEventAsync(FGameplayTag EventTag,
                                                                             const FGameplayEventData *Payload,
-                                                                            FForceLatentCoroutine) {
+                                                                            FForceLatentCoroutine)
+{
     int32 TriggeredCount = 0;
     auto CurrentTag = EventTag;
     FScopedAbilityListLock ActiveScopeLock(*this);
-    while (CurrentTag.IsValid()) {
-        if (GameplayEventTriggeredAbilities.Contains(CurrentTag)) {
+    while (CurrentTag.IsValid())
+    {
+        if (GameplayEventTriggeredAbilities.Contains(CurrentTag))
+        {
             for (auto TriggeredAbilityHandles = GameplayEventTriggeredAbilities[CurrentTag];
-                 auto &AbilityHandle : TriggeredAbilityHandles) {
+                 auto &AbilityHandle : TriggeredAbilityHandles)
+            {
                 if (co_await TriggerAbilityFromGameplayEventAsync(AbilityHandle, AbilityActorInfo.Get(), EventTag,
-                                                                  Payload, *this)) {
+                                                                  Payload, *this))
+                {
                     TriggeredCount++;
                 }
             }
@@ -23,7 +28,8 @@ UE5Coro::TCoroutine<int32> UAsyncAbilityComponent::HandleGameplayEventAsync(FGam
         CurrentTag = CurrentTag.RequestDirectParent();
     }
 
-    if (FGameplayEventMulticastDelegate *Delegate = GenericGameplayEventCallbacks.Find(EventTag)) {
+    if (FGameplayEventMulticastDelegate *Delegate = GenericGameplayEventCallbacks.Find(EventTag))
+    {
         // Make a copy before broadcasting to prevent memory stomping
         FGameplayEventMulticastDelegate DelegateCopy = *Delegate;
         DelegateCopy.Broadcast(Payload);
@@ -33,8 +39,10 @@ UE5Coro::TCoroutine<int32> UAsyncAbilityComponent::HandleGameplayEventAsync(FGam
     TArray<TPair<FGameplayTagContainer, FGameplayEventTagMulticastDelegate>> LocalGameplayEventTagContainerDelegates =
         GameplayEventTagContainerDelegates;
     for (TPair<FGameplayTagContainer, FGameplayEventTagMulticastDelegate> &SearchPair :
-         LocalGameplayEventTagContainerDelegates) {
-        if (SearchPair.Key.IsEmpty() || EventTag.MatchesAny(SearchPair.Key)) {
+         LocalGameplayEventTagContainerDelegates)
+    {
+        if (SearchPair.Key.IsEmpty() || EventTag.MatchesAny(SearchPair.Key))
+        {
             SearchPair.Value.Broadcast(EventTag, Payload);
         }
     }
@@ -44,15 +52,18 @@ UE5Coro::TCoroutine<int32> UAsyncAbilityComponent::HandleGameplayEventAsync(FGam
 
 UE5Coro::TCoroutine<bool> UAsyncAbilityComponent::TriggerAbilityFromGameplayEventAsync(
     FGameplayAbilitySpecHandle AbilityToTrigger, FGameplayAbilityActorInfo *ActorInfo, FGameplayTag Tag,
-    const FGameplayEventData *Payload, UAbilitySystemComponent &Component) {
+    const FGameplayEventData *Payload, UAbilitySystemComponent &Component)
+{
     TPromise<int32> FutureState;
     Retro::Delegates::TScopedBinding Binding(OnAbilityEnded,
                                              [&FutureState, AbilityToTrigger](const FAbilityEndedData &Data) {
-                                                 if (Data.AbilitySpecHandle == AbilityToTrigger) {
+                                                 if (Data.AbilitySpecHandle == AbilityToTrigger)
+                                                 {
                                                      FutureState.EmplaceValue(0);
                                                  }
                                              });
-    if (!TriggerAbilityFromGameplayEvent(AbilityToTrigger, ActorInfo, Tag, Payload, Component)) {
+    if (!TriggerAbilityFromGameplayEvent(AbilityToTrigger, ActorInfo, Tag, Payload, Component))
+    {
         co_return false;
     }
 

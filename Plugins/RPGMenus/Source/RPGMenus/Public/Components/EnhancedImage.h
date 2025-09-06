@@ -18,7 +18,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFlipbookFinishedPlaying);
  *
  */
 UCLASS()
-class RPGMENUS_API UEnhancedImage : public UCommonLazyImage, public FTickableGameObject {
+class RPGMENUS_API UEnhancedImage : public UCommonLazyImage, public FTickableGameObject
+{
     GENERATED_BODY()
 
   public:

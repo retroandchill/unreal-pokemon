@@ -10,4 +10,10 @@
  * The enum used to determine the method the Pokémon was obtained as
  */
 UENUM(BlueprintType)
-enum class EObtainMethod : uint8 { Default, Egg, Trade, FatefulEncounter };
+enum class EObtainMethod : uint8
+{
+    Default,
+    Egg,
+    Trade,
+    FatefulEncounter
+};

@@ -8,7 +8,8 @@
 #include "BattleMessageSettings.generated.h"
 
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FStatChangeSettings {
+struct POKEMONBATTLE_API FStatChangeSettings
+{
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Config, Category = "Battle|Stats")
@@ -32,7 +33,8 @@ struct POKEMONBATTLE_API FStatChangeSettings {
  *
  */
 UCLASS(Config = Game, DefaultConfig, DisplayName = "Battle System Messages")
-class POKEMONBATTLE_API UBattleMessageSettings : public UDeveloperSettings {
+class POKEMONBATTLE_API UBattleMessageSettings : public UDeveloperSettings
+{
     GENERATED_BODY()
 
   public:

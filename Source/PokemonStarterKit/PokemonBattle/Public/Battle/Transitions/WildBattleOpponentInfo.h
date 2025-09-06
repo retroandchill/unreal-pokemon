@@ -10,7 +10,8 @@ struct FPokemonDTO;
 /**
  * Information about a wild battle in the game
  */
-class POKEMONBATTLE_API FWildBattleOpponentInfo : public IBattleOpponentInfo {
+class POKEMONBATTLE_API FWildBattleOpponentInfo : public IBattleOpponentInfo
+{
   public:
     /**
      * Construct a new wild battle against a single Pokémon
@@ -18,9 +19,11 @@ class POKEMONBATTLE_API FWildBattleOpponentInfo : public IBattleOpponentInfo {
      */
     explicit FWildBattleOpponentInfo(const TSharedRef<FPokemonDTO> &PokemonInfo);
 
-    UE5Coro::TCoroutine<TScriptInterface<IBattleSide>>
-    CreateOpposingSide(TScriptInterface<IBattle> Battle, TSubclassOf<AActor> SideClass, const FTransform &Transform,
-                       int32 ActivePokemonCount = 1, FForceLatentCoroutine = {}) override;
+    UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> CreateOpposingSide(TScriptInterface<IBattle> Battle,
+                                                                          TSubclassOf<AActor> SideClass,
+                                                                          const FTransform &Transform,
+                                                                          int32 ActivePokemonCount = 1,
+                                                                          FForceLatentCoroutine = {}) override;
 
   private:
     /**

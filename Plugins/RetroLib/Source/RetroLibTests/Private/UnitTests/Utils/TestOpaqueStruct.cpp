@@ -8,7 +8,8 @@ BEGIN_DEFINE_SPEC(FTestOpaqueStruct, "Unit Tests.Ranges.Structs",
 
 END_DEFINE_SPEC(FTestOpaqueStruct);
 
-void FTestOpaqueStruct::Define() {
+void FTestOpaqueStruct::Define()
+{
     Describe("Test Opaque Struct Type", [this] {
         BeforeEach([] {});
 

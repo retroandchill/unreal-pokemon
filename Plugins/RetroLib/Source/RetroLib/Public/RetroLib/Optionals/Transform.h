@@ -15,42 +15,62 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Optionals {
+namespace Retro::Optionals
+{
 
     template <template <typename...> typename O, typename T, typename U>
-    constexpr auto FromResult(const O<U> &, T &&Value) {
-        if constexpr (Nullable<T, O>) {
+    constexpr auto FromResult(const O<U> &, T &&Value)
+    {
+        if constexpr (Nullable<T, O>)
+        {
             return OfNullable<O>(std::forward<T>(Value));
-        } else if constexpr (std::is_lvalue_reference_v<T>) {
+        }
+        else if constexpr (std::is_lvalue_reference_v<T>)
+        {
             return OfReference<O>(std::forward<T>(Value));
-        } else {
+        }
+        else
+        {
             return Of<O>(std::forward<T>(Value));
         }
     }
 
     template <template <typename...> typename O, typename T, typename U, typename E>
-    constexpr auto FromResult(const O<U, E> &Expected, T &&Value) {
-        if constexpr (Nullable<T, O>) {
+    constexpr auto FromResult(const O<U, E> &Expected, T &&Value)
+    {
+        if constexpr (Nullable<T, O>)
+        {
             return OfNullable<O, E>(std::forward<T>(Value), GetError(Expected));
-        } else if constexpr (std::is_lvalue_reference_v<T>) {
+        }
+        else if constexpr (std::is_lvalue_reference_v<T>)
+        {
             return OfReference<O, E>(std::forward<T>(Value));
-        } else {
+        }
+        else
+        {
             return Of<O, E>(std::forward<T>(Value));
         }
     }
 
     template <template <typename...> typename O, typename T, typename U, typename E>
-    constexpr auto FromResult(O<U, E> &&Expected, T &&Value) {
-        if constexpr (Nullable<T, O>) {
+    constexpr auto FromResult(O<U, E> &&Expected, T &&Value)
+    {
+        if constexpr (Nullable<T, O>)
+        {
             return OfNullable<O, E>(std::forward<T>(Value), GetError(std::move(Expected)));
-        } else if constexpr (std::is_lvalue_reference_v<T>) {
+        }
+        else if constexpr (std::is_lvalue_reference_v<T>)
+        {
             return OfReference<O, E>(std::forward<T>(Value));
-        } else {
+        }
+        else
+        {
             return Of<O, E>(std::forward<T>(Value));
         }
     }
 
-    struct FTransformInvoker {
+    struct FTransformInvoker
+    {
         /**
          * Invokes the given functor on the value held by the optional-like object, if it has a value.
          * If the optional-like object does not contain a value, returns a default-constructed result type.
@@ -62,7 +82,8 @@ namespace Retro::Optionals {
          */
         template <OptionalType O, typename F>
             requires std::invocable<F, TCommonReference<O>>
-        constexpr auto operator()(O &&Optional, F &&Functor) const {
+        constexpr auto operator()(O &&Optional, F &&Functor) const
+        {
             using ResultType = decltype(FromResult(
                 std::forward<O>(Optional), std::invoke(std::forward<F>(Functor), Get<O>(std::forward<O>(Optional)))));
             return HasValue(std::forward<O>(Optional))
@@ -73,7 +94,8 @@ namespace Retro::Optionals {
 
         template <VoidOptional O, typename F>
             requires std::invocable<F>
-        constexpr auto operator()(O &&Optional, F &&Functor) const {
+        constexpr auto operator()(O &&Optional, F &&Functor) const
+        {
             using ResultType = decltype(FromResult(std::forward<O>(Optional), std::invoke(std::forward<F>(Functor))));
             return HasValue(std::forward<O>(Optional))
                        ? FromResult(std::forward<O>(Optional), std::invoke(std::forward<F>(Functor)))

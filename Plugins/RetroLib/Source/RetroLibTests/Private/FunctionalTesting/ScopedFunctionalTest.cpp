@@ -8,7 +8,8 @@
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 
-void AScopedFunctionalTest::PrepareTest() {
+void AScopedFunctionalTest::PrepareTest()
+{
     Super::PrepareTest();
     // clang-format off
     GetComponents() |
@@ -18,7 +19,8 @@ void AScopedFunctionalTest::PrepareTest() {
     // clang-format on
 }
 
-void AScopedFunctionalTest::CleanUp() {
+void AScopedFunctionalTest::CleanUp()
+{
     Super::CleanUp();
 
     // This will force all the destructors of the scoped components to be called

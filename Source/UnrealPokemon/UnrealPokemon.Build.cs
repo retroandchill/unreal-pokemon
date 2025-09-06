@@ -1,11 +1,16 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 using UnrealBuildTool;
 
-public class UnrealPokemon : ModuleRules {
-    public UnrealPokemon(ReadOnlyTargetRules Target) : base(Target) {
+public class UnrealPokemon : ModuleRules
+{
+    public UnrealPokemon(ReadOnlyTargetRules Target)
+        : base(Target)
+    {
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+        PublicDependencyModuleNames.AddRange(
+            new string[] { "Core", "CoreUObject", "Engine", "InputCore" }
+        );
 
         PrivateDependencyModuleNames.AddRange(new string[] { "PaperZD" });
 

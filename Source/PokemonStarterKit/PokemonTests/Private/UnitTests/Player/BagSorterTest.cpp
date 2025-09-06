@@ -8,7 +8,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagSorterTest_Indexed, "Unit Tests.Player.BagSorterTest.IndexedBagSorter",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool BagSorterTest_Indexed::RunTest(const FString &Parameters) {
+bool BagSorterTest_Indexed::RunTest(const FString &Parameters)
+{
     TArray<FItemSlot, TInlineAllocator<4>> Pocket = {{.Item = TEXT("SUPERPOTION")},
                                                      {.Item = TEXT("POTION")},
                                                      {.Item = TEXT("MAXPOTION")},
@@ -27,7 +28,8 @@ bool BagSorterTest_Indexed::RunTest(const FString &Parameters) {
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagSorterTest_Named, "Unit Tests.Player.BagSorterTest.NamedBagSorter",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool BagSorterTest_Named::RunTest(const FString &Parameters) {
+bool BagSorterTest_Named::RunTest(const FString &Parameters)
+{
     TArray<FItemSlot, TInlineAllocator<4>> Pocket = {{.Item = TEXT("SUPERPOTION")},
                                                      {.Item = TEXT("POTION")},
                                                      {.Item = TEXT("MAXPOTION")},

@@ -11,7 +11,8 @@
  * Struct used to cache a replaced tile
  */
 USTRUCT()
-struct TILEREPLACER_API FReplacedTile {
+struct TILEREPLACER_API FReplacedTile
+{
     GENERATED_BODY()
 
     /**

@@ -10,7 +10,8 @@ class UCommandCondition;
  * The struct that holds the command information
  */
 UCLASS(Blueprintable, EditInlineNew)
-class RPGMENUS_API UCommand : public UObject {
+class RPGMENUS_API UCommand : public UObject
+{
     GENERATED_BODY()
 
   public:
@@ -57,7 +58,8 @@ class RPGMENUS_API UCommand : public UObject {
      * @return The handler (if exists and the types match, otherwise nullptr)
      */
     template <typename T>
-    T *GetHandler() const {
+    T *GetHandler() const
+    {
         return Cast<T>(Handler);
     }
 

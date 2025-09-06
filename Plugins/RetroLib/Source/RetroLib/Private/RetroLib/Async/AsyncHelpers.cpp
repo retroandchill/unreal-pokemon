@@ -4,10 +4,12 @@
 #include "RetroLib/Functional/Delegates.h"
 #include "SaveGameSystem.h"
 
-namespace Retro {
-    
+namespace Retro
+{
+
     UE5Coro::TCoroutine<bool> SaveGameToSlotAsync(USaveGame *SaveGameObject, const FString &SlotName,
-                                                  const int32 UserIndex) {
+                                                  const int32 UserIndex)
+    {
         TPromise<bool> SuccessState;
         auto FutureSuccess = SuccessState.GetFuture();
         UGameplayStatics::AsyncSaveGameToSlot(

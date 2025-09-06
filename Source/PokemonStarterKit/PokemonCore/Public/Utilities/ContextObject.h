@@ -11,6 +11,7 @@
  *
  */
 UCLASS(Blueprintable, meta = (ShowWorldContextPin))
-class POKEMONCORE_API UContextObject : public UObject {
+class POKEMONCORE_API UContextObject : public UObject
+{
     GENERATED_BODY()
 };

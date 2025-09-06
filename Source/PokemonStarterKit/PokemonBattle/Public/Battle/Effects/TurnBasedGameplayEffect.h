@@ -20,7 +20,8 @@ class UTurnBasedEffectComponent;
  * trigger gameplay events or effects, such as the start or end of a turn or action.
  */
 UENUM(BlueprintType)
-enum class ETurnDurationTrigger : uint8 {
+enum class ETurnDurationTrigger : uint8
+{
     /**
      * Triggered at the end of the turn, will remove the effect before any turn-end abilities are triggered.
      */
@@ -45,7 +46,8 @@ enum class ETurnDurationTrigger : uint8 {
  * of turns for which the effect has been active and manages its duration.
  */
 USTRUCT()
-struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
+struct POKEMONBATTLE_API FTurnBasedGameplayEffect
+{
     GENERATED_BODY()
 
     /**
@@ -81,7 +83,8 @@ struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
      *
      * @return An optional reference to the owning UTurnBasedEffectComponent.
      */
-    TOptional<UTurnBasedEffectComponent &> GetOwningComponent() const {
+    TOptional<UTurnBasedEffectComponent &> GetOwningComponent() const
+    {
         return *OwningComponent.Get();
     }
 
@@ -93,7 +96,8 @@ struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
      *
      * @return A constant reference to the FActiveGameplayEffectHandle.
      */
-    const FActiveGameplayEffectHandle &GetEffectHandle() const {
+    const FActiveGameplayEffectHandle &GetEffectHandle() const
+    {
         return EffectHandle;
     }
 
@@ -106,7 +110,8 @@ struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
      *
      * @return A constant pointer to the UGameplayEffect.
      */
-    const UGameplayEffect *GetGameplayEffect() const {
+    const UGameplayEffect *GetGameplayEffect() const
+    {
         return GameplayEffect;
     }
 
@@ -117,7 +122,8 @@ struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
      *
      * @return The number of turns the gameplay effect has been active.
      */
-    int32 GetTurnsActive() const {
+    int32 GetTurnsActive() const
+    {
         return TurnsActive;
     }
 
@@ -129,7 +135,8 @@ struct POKEMONBATTLE_API FTurnBasedGameplayEffect {
      *
      * @return A constant reference to an optional integer containing the number of turns remaining.
      */
-    const TOptional<int32> &GetTurnsRemaining() const {
+    const TOptional<int32> &GetTurnsRemaining() const
+    {
         return TurnsRemaining;
     }
 

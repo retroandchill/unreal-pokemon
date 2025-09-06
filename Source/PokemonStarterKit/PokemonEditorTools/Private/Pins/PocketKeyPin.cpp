@@ -12,15 +12,18 @@
 
 class UPokemonDataSettings;
 
-void SPocketKeyPin::Construct(const FArguments &, UEdGraphPin *InGraphPin) {
+void SPocketKeyPin::Construct(const FArguments &, UEdGraphPin *InGraphPin)
+{
     SGraphPin::Construct(SGraphPin::FArguments(), InGraphPin);
 }
 
-void SPocketKeyPin::ParseDefaultValueData() {
+void SPocketKeyPin::ParseDefaultValueData()
+{
     Handle.FromExportString(GraphPinObj->GetDefaultAsString(), PPF_SerializedAsImportText);
 }
 
-TSharedRef<SWidget> SPocketKeyPin::GetDefaultValueWidget() {
+TSharedRef<SWidget> SPocketKeyPin::GetDefaultValueWidget()
+{
     ParseDefaultValueData();
     // clang-format off
     Options = GetDefault<UPokemonDataSettings>()->PocketNames |
@@ -28,7 +31,8 @@ TSharedRef<SWidget> SPocketKeyPin::GetDefaultValueWidget() {
               Retro::Ranges::Views::Transform(&UStringUtilities::NameToStringPtr) |
               Retro::Ranges::To<TArray>();
     // clang-format on
-    if (!Retro::Ranges::AnyOf(Options, Retro::BindFront<&SPocketKeyPin::RowMatches>(this)) && !Options.IsEmpty()) {
+    if (!Retro::Ranges::AnyOf(Options, Retro::BindFront<&SPocketKeyPin::RowMatches>(this)) && !Options.IsEmpty())
+    {
         Handle.PocketName = **Options[0];
     }
 
@@ -60,11 +64,13 @@ TSharedRef<SWidget> SPocketKeyPin::GetDefaultValueWidget() {
     // clang-format on
 }
 
-bool SPocketKeyPin::RowMatches(const TSharedPtr<FString> &Str) const {
+bool SPocketKeyPin::RowMatches(const TSharedPtr<FString> &Str) const
+{
     return FName(*Str) == Handle.PocketName;
 }
 
-const TSharedPtr<FString> &SPocketKeyPin::GetItemString() const {
+const TSharedPtr<FString> &SPocketKeyPin::GetItemString() const
+{
     // clang-format off
     auto Item = Options |
                 Retro::Ranges::Views::Filter(Retro::BindFront<&SPocketKeyPin::RowMatches>(this)) |
@@ -74,6 +80,7 @@ const TSharedPtr<FString> &SPocketKeyPin::GetItemString() const {
     return *Item;
 }
 
-FText SPocketKeyPin::GetItemText() const {
+FText SPocketKeyPin::GetItemText() const
+{
     return FText::FromString(*GetItemString());
 }

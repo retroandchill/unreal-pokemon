@@ -13,7 +13,8 @@ class UCommandWindow;
  * Basic Pokémon pause menu screen
  */
 UCLASS(Blueprintable, Abstract)
-class POKEMONUI_API UPauseMenuScreen : public UScreen {
+class POKEMONUI_API UPauseMenuScreen : public UScreen
+{
     GENERATED_BODY()
 
   public:

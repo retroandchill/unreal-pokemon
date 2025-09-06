@@ -3,49 +3,58 @@
 #include "Battle/Items/BlueprintableBattleItemEffect.h"
 
 UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::ApplyGlobalEffect(TScriptInterface<IBattler> User,
-                                                                            FForceLatentCoroutine) {
-    
+                                                                            FForceLatentCoroutine)
+{
+
     StageCompleteState = MakeUnique<TPromise<bool>>();
     StartApplyGlobalEffect(User);
-    co_return co_await StageCompleteState->GetFuture();   
+    co_return co_await StageCompleteState->GetFuture();
 }
 
 UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::ApplyEffectToTarget(TScriptInterface<IBattler> User,
                                                                               TScriptInterface<IBattler> Target,
-                                                                              FForceLatentCoroutine) {
+                                                                              FForceLatentCoroutine)
+{
     StageCompleteState = MakeUnique<TPromise<bool>>();
     StartApplyEffectToTarget(User, Target);
-    co_return co_await StageCompleteState->GetFuture();  
+    co_return co_await StageCompleteState->GetFuture();
 }
 
 UE5Coro::TCoroutine<bool> UBlueprintableBattleItemEffect::IsTargetValid(TScriptInterface<IBattler> Battler,
-                                                                        FForceLatentCoroutine) {
+                                                                        FForceLatentCoroutine)
+{
     StageCompleteState = MakeUnique<TPromise<bool>>();
     StartIsTargetValidCheck(Battler);
-    co_return co_await StageCompleteState->GetFuture();  
+    co_return co_await StageCompleteState->GetFuture();
 }
 
-void UBlueprintableBattleItemEffect::StartApplyGlobalEffect_Implementation(const TScriptInterface<IBattler> &User) {
+void UBlueprintableBattleItemEffect::StartApplyGlobalEffect_Implementation(const TScriptInterface<IBattler> &User)
+{
     CompleteApplyGlobalEffect(false);
 }
 
-void UBlueprintableBattleItemEffect::CompleteApplyGlobalEffect(bool bResult) {
+void UBlueprintableBattleItemEffect::CompleteApplyGlobalEffect(bool bResult)
+{
     StageCompleteState->EmplaceValue(bResult);
 }
 
 void UBlueprintableBattleItemEffect::StartApplyEffectToTarget_Implementation(const TScriptInterface<IBattler> &User,
-                                                                             const TScriptInterface<IBattler> &Target) {
+                                                                             const TScriptInterface<IBattler> &Target)
+{
     CompleteApplyEffectToTarget(false);
 }
 
-void UBlueprintableBattleItemEffect::CompleteApplyEffectToTarget(bool bResult) {
+void UBlueprintableBattleItemEffect::CompleteApplyEffectToTarget(bool bResult)
+{
     StageCompleteState->EmplaceValue(bResult);
 }
 
-void UBlueprintableBattleItemEffect::StartIsTargetValidCheck_Implementation(const TScriptInterface<IBattler> &Battler) {
+void UBlueprintableBattleItemEffect::StartIsTargetValidCheck_Implementation(const TScriptInterface<IBattler> &Battler)
+{
     CompleteIsTargetValidCheck(false);
 }
 
-void UBlueprintableBattleItemEffect::CompleteIsTargetValidCheck(bool bResult) {
+void UBlueprintableBattleItemEffect::CompleteIsTargetValidCheck(bool bResult)
+{
     StageCompleteState->EmplaceValue(bResult);
 }

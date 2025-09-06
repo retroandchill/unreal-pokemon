@@ -30,7 +30,8 @@ DECLARE_DYNAMIC_DELEGATE(FBattleLevelUpEnd);
  * Information about a status effect inflicted upon the battler
  */
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FStatusEffectInfo {
+struct POKEMONBATTLE_API FStatusEffectInfo
+{
     GENERATED_BODY()
 
     /**
@@ -62,7 +63,8 @@ struct POKEMONBATTLE_API FStatusEffectInfo {
  * Information about Exp. that the battler gained
  */
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FExpGainInfo {
+struct POKEMONBATTLE_API FExpGainInfo
+{
     GENERATED_BODY()
 
     /**
@@ -86,14 +88,16 @@ struct POKEMONBATTLE_API FExpGainInfo {
 };
 
 // This class does not need to be modified.
-UINTERFACE(NotBlueprintable, BlueprintType) class POKEMONBATTLE_API UBattler : public UInterface {
+UINTERFACE(NotBlueprintable, BlueprintType) class POKEMONBATTLE_API UBattler : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Wrapper around a Pokémon for its usage in battle
  */
-class POKEMONBATTLE_API IBattler {
+class POKEMONBATTLE_API IBattler
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

@@ -7,7 +7,8 @@
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "Items/BattleItemEffect.h"
 
-namespace Pokemon::Battle::Classes {
+namespace Pokemon::Battle::Classes
+{
     /**
      * Blueprint class lookup for move effects.
      */

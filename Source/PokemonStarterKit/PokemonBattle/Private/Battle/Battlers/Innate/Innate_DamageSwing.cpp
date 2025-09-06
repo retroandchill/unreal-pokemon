@@ -7,7 +7,8 @@
 constexpr int32 MinimumSwing = 85;
 constexpr int32 Variance = 100 - MinimumSwing;
 
-UInnate_DamageSwing::UInnate_DamageSwing() {
+UInnate_DamageSwing::UInnate_DamageSwing()
+{
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
     AbilityTrigger.TriggerTag = Pokemon::Battle::Moves::DamageModificationEvents.UserTag;
 }
@@ -15,7 +16,8 @@ UInnate_DamageSwing::UInnate_DamageSwing() {
 void UInnate_DamageSwing::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                           const FGameplayAbilityActorInfo *ActorInfo,
                                           const FGameplayAbilityActivationInfo ActivationInfo,
-                                          const FGameplayEventData *TriggerEventData) {
+                                          const FGameplayEventData *TriggerEventData)
+{
     Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
     check(TriggerEventData != nullptr)
     auto Payload = CastChecked<UDamageModificationPayload>(TriggerEventData->OptionalObject);

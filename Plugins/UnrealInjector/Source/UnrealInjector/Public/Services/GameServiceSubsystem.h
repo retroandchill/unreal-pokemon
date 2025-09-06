@@ -24,7 +24,8 @@
  * Subsystem for creating and populating services in the game context.
  */
 UCLASS()
-class UNREALINJECTOR_API UGameServiceSubsystem : public UGameInstanceSubsystem {
+class UNREALINJECTOR_API UGameServiceSubsystem : public UGameInstanceSubsystem
+{
     GENERATED_BODY()
 
   public:
@@ -40,7 +41,8 @@ class UNREALINJECTOR_API UGameServiceSubsystem : public UGameInstanceSubsystem {
      */
     template <typename T>
         requires std::derived_from<T, UService>
-    T &GetService(const TSubclassOf<T> &ServiceClass = T::StaticClass()) const {
+    T &GetService(const TSubclassOf<T> &ServiceClass = T::StaticClass()) const
+    {
         // clang-format off
         return Retro::Optionals::OfNullable(Services.Find(ServiceClass)) |
                Retro::Optionals::Transform([](const TObjectPtr<UService>& P) { return P.Get(); }) |
@@ -64,7 +66,8 @@ class UNREALINJECTOR_API UGameServiceSubsystem : public UGameInstanceSubsystem {
      */
     template <typename T>
         requires std::derived_from<T, UService>
-    static T &GetService(const UObject *WorldContext, const TSubclassOf<T> &ServiceClass = T::StaticClass()) {
+    static T &GetService(const UObject *WorldContext, const TSubclassOf<T> &ServiceClass = T::StaticClass())
+    {
         auto GameInstance = UGameplayStatics::GetGameInstance(WorldContext);
         check(IsValid(GameInstance))
         auto Subsystem = GameInstance->GetSubsystem<UGameServiceSubsystem>();
@@ -90,7 +93,8 @@ class UNREALINJECTOR_API UGameServiceSubsystem : public UGameInstanceSubsystem {
      */
     template <typename T>
         requires std::derived_from<T, UService> || Retro::UnrealInterface<T>
-    auto GetServicesOfType() const {
+    auto GetServicesOfType() const
+    {
         // clang-format off
         return Services |
             Retro::Ranges::Views::Values |

@@ -11,7 +11,8 @@
  *
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONBATTLE_API UBlueprintableMoveFunctionCode : public UBattleMoveFunctionCode {
+class POKEMONBATTLE_API UBlueprintableMoveFunctionCode : public UBattleMoveFunctionCode
+{
     GENERATED_BODY()
 
   public:

@@ -9,7 +9,8 @@
 /**
  * Abstract class for handing the sorting of the player's bag.
  */
-class POKEMONCORE_API IBagSorter {
+class POKEMONCORE_API IBagSorter
+{
 
   public:
     virtual ~IBagSorter();

@@ -6,7 +6,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestMoveEffectLookup, "Unit Tests.Battle.Moves.TestMoveEffectLookup",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestMoveEffectLookup::RunTest(const FString &Parameters) {
+bool TestMoveEffectLookup::RunTest(const FString &Parameters)
+{
     auto MoveClass = Pokemon::Battle::Moves::LookupMoveEffectClass("AlwaysCriticalHit");
     UE_CHECK_EQUAL(TEXT("Move_AlwaysCriticalHit_C"), MoveClass->GetName());
 

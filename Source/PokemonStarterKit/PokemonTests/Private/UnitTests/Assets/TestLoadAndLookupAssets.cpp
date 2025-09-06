@@ -13,7 +13,8 @@ BEGIN_DEFINE_SPEC(FTestLoadAndLookupAssets, "Unit Tests.Assets.BattleRender",
 
 DeclareTestableBP(TestBP, TestGraph);
 
-FORCEINLINE void AssertValidNode(UK2Node *Node) {
+FORCEINLINE void AssertValidNode(UK2Node *Node)
+{
     UE_CHECK_FALSE(Node->GetNodeTitle(ENodeTitleType::MenuTitle).IsEmpty());
     UE_CHECK_FALSE(Node->GetTooltipText().IsEmpty());
     UE_CHECK_FALSE(Node->IsNodePure());
@@ -22,7 +23,8 @@ FORCEINLINE void AssertValidNode(UK2Node *Node) {
 
 END_DEFINE_SPEC(FTestLoadAndLookupAssets);
 
-void FTestLoadAndLookupAssets::Define() {
+void FTestLoadAndLookupAssets::Define()
+{
     Describe("Test Asset Loading/Lookup Blueprint Nodes", [this] {
         BeforeEach([this] { DefineTestableBP(TestBP, TestGraph); });
 

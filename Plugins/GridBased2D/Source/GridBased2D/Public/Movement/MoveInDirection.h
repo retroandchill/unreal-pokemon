@@ -22,7 +22,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMovementFinished);
  * on player control will be taken away if the character being moved is the player.
  */
 UCLASS(meta = (HideThen))
-class GRIDBASED2D_API UMoveInDirection : public UBlueprintCoroutineActionBase {
+class GRIDBASED2D_API UMoveInDirection : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

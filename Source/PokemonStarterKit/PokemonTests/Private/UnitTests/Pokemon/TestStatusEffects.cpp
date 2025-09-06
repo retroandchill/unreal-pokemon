@@ -8,7 +8,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestStatusEffects, "Unit Tests.Pokemon.TestStatusEffects",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestStatusEffects::RunTest(const FString &Parameters) {
+bool TestStatusEffects::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
     UPokemonSubsystem::GetInstance(World.Get()).StartNewGame();

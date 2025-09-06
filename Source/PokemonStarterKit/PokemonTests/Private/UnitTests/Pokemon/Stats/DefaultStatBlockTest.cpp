@@ -13,7 +13,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultStatBlockTest, "Unit Tests.Core.Stats.DefaultStatBlockTest",
                                  EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
 
-bool DefaultStatBlockTest::RunTest(const FString &Parameters) {
+bool DefaultStatBlockTest::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
     FPokemonDTO PokemonDTO = {.Species = FName("GARCHOMP"), .Level = 78, .Nature = FName("ADAMANT")};

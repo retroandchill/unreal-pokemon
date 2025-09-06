@@ -14,7 +14,8 @@ class UObjectLibrary;
  * Utility library used to aid in getting reflection properties by name.
  */
 UCLASS()
-class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibrary {
+class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:
@@ -27,7 +28,8 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
      * @return The value of the property
      */
     template <typename T>
-    static const T &GetPropertyValue(const UObject *TargetObject, FName PropertyName) {
+    static const T &GetPropertyValue(const UObject *TargetObject, FName PropertyName)
+    {
         auto Property = TargetObject->GetClass()->FindPropertyByName(PropertyName);
         auto PropertyContainer = Property->ContainerPtrToValuePtr<void>(TargetObject);
         return TPropertyTypeFundamentals<T>::GetPropertyValue(PropertyContainer);
@@ -42,7 +44,8 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
      * @return The value of the property
      */
     template <typename T>
-    static T &GetMutablePropertyValue(const UObject *TargetObject, FName PropertyName) {
+    static T &GetMutablePropertyValue(const UObject *TargetObject, FName PropertyName)
+    {
         return const_cast<T &>(GetPropertyValue<T>(TargetObject, PropertyName));
     }
 
@@ -55,7 +58,8 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
      * @param NewValue The new value that is being added
      */
     template <typename T>
-    static void SetPropertyValue(UObject *TargetObject, FName PropertyName, const T &NewValue) {
+    static void SetPropertyValue(UObject *TargetObject, FName PropertyName, const T &NewValue)
+    {
         auto Property = TargetObject->GetClass()->FindPropertyByName(PropertyName);
         auto PropertyContainer = Property->ContainerPtrToValuePtr<void>(TargetObject);
         TPropertyTypeFundamentals<T>::SetPropertyValue(PropertyContainer, NewValue);
@@ -69,7 +73,8 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
      */
     template <typename T>
         requires std::is_base_of_v<UObject, T>
-    static TArray<TSubclassOf<T>> GetAllSubclassesOfClass(TSubclassOf<T> TargetClass = T::StaticClass()) {
+    static TArray<TSubclassOf<T>> GetAllSubclassesOfClass(TSubclassOf<T> TargetClass = T::StaticClass())
+    {
         auto &AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>(FName("AssetRegistry"));
         auto &AssetRegistry = AssetRegistryModule.Get();
         TArray<FString> PathsToScan;
@@ -80,9 +85,11 @@ class AUTOMATIONTESTHELPERS_API UReflectionUtils : public UBlueprintFunctionLibr
         AssetRegistry.GetAssetsByPath(FName("/Game/Blueprints/"), ScriptAssetList, true);
 
         TArray<TSubclassOf<T>> Classes;
-        for (const auto &Asset : ScriptAssetList) {
+        for (const auto &Asset : ScriptAssetList)
+        {
             auto Blueprint = Cast<UBlueprint>(Asset.GetAsset());
-            if (Blueprint == nullptr) {
+            if (Blueprint == nullptr)
+            {
                 continue;
             }
 

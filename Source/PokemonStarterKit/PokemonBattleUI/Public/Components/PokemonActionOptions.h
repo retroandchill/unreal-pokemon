@@ -16,7 +16,8 @@ class UBattleMenuHandler;
  * The window for selecting a Pokémon's initial actions in the battle system.
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UPokemonActionOptions : public UNamedSlotSelectableWidget {
+class POKEMONBATTLEUI_API UPokemonActionOptions : public UNamedSlotSelectableWidget
+{
     GENERATED_BODY()
 
   public:

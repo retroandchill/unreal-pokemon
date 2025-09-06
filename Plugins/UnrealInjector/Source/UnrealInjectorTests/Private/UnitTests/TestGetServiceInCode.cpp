@@ -7,7 +7,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetServiceInCode, "Unit Tests.DependencyInjection.TestGetServiceInCode",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestGetServiceInCode::RunTest(const FString &Parameters) {
+bool TestGetServiceInCode::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto &Service = UGameServiceSubsystem::GetService<UTestService>(World.Get());
     auto OtherService = UGameServiceSubsystem::StaticGetService(World.Get(), UTestService::StaticClass());

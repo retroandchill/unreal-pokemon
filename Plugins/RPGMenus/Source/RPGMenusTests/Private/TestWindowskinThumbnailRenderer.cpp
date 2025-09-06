@@ -8,7 +8,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestWindowskinThumbnailRenderer, "Unit Tests.RPGMenus.TestWindowskinThumbnailRenderer",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestWindowskinThumbnailRenderer::RunTest(const FString &Parameters) {
+bool TestWindowskinThumbnailRenderer::RunTest(const FString &Parameters)
+{
     TGCPointer Renderer(NewObject<UWindowskinThumbnailRenderer>());
     TGCPointer InvalidWindowskin(NewObject<UWindowskin>());
 

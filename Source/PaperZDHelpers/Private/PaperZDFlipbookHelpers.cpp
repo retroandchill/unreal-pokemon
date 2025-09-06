@@ -3,10 +3,11 @@
 #include "PaperZDFlipbookHelpers.h"
 #include "AnimSequences/PaperZDAnimSequence_Flipbook.h"
 
-UPaperFlipbook *UPaperZDFlipbookHelpers::GetPreviewFlipbook(UPaperZDAnimSequence *Sequence,
-                                                            EFacingDirection Direction) {
+UPaperFlipbook *UPaperZDFlipbookHelpers::GetPreviewFlipbook(UPaperZDAnimSequence *Sequence, EFacingDirection Direction)
+{
     float RenderOrientation = 0.f;
-    switch (Direction) {
+    switch (Direction)
+    {
         using enum EFacingDirection;
     case Down:
         RenderOrientation = 180.f;
@@ -23,7 +24,8 @@ UPaperFlipbook *UPaperZDFlipbookHelpers::GetPreviewFlipbook(UPaperZDAnimSequence
     }
 
     auto FlipbookSequence = Cast<UPaperZDAnimSequence_Flipbook>(Sequence);
-    if (FlipbookSequence == nullptr) {
+    if (FlipbookSequence == nullptr)
+    {
         return nullptr;
     }
 

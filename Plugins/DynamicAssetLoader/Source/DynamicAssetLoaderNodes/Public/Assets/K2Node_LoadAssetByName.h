@@ -34,7 +34,8 @@
  * references.
  */
 UCLASS()
-class DYNAMICASSETLOADERNODES_API UK2Node_LoadAssetByName : public UK2Node_DynamicAssetLoadBase {
+class DYNAMICASSETLOADERNODES_API UK2Node_LoadAssetByName : public UK2Node_DynamicAssetLoadBase
+{
     GENERATED_BODY()
 
   public:

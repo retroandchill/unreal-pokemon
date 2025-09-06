@@ -12,7 +12,8 @@
  * Attribute set for handling stat stages
  */
 UCLASS()
-class POKEMONBATTLE_API UStatStagesAttributeSet : public UAttributeSet {
+class POKEMONBATTLE_API UStatStagesAttributeSet : public UAttributeSet
+{
     GENERATED_BODY()
 
   public:

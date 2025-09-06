@@ -4,11 +4,13 @@
 
 #include "DynamicMeshBuilder.h"
 
-namespace Simple2D {
+namespace Simple2D
+{
     /**
      *
      */
-    class SIMPLE2D_API FSimpleFlipbookVertexBuffer : public FVertexBuffer {
+    class SIMPLE2D_API FSimpleFlipbookVertexBuffer : public FVertexBuffer
+    {
 
       public:
         FSimpleFlipbookVertexBuffer() = default;
@@ -31,21 +33,25 @@ namespace Simple2D {
         void ReleaseResource() override;
 
         /* True if generating a commit would require a reallocation of the buffers. */
-        FORCEINLINE bool CommitRequiresBufferRecreation() const {
+        FORCEINLINE bool CommitRequiresBufferRecreation() const
+        {
             return NumAllocatedVertices != Vertices.Num();
         }
 
         /* Checks if the buffer has been initialized. */
-        FORCEINLINE bool IsFullyInitialized() const {
+        FORCEINLINE bool IsFullyInitialized() const
+        {
             return NumAllocatedVertices > 0;
         }
 
         /* Obtain the index buffer initialized for this buffer. */
-        FORCEINLINE const FIndexBuffer *GetIndexPtr() const {
+        FORCEINLINE const FIndexBuffer *GetIndexPtr() const
+        {
             return &IndexBuffer;
         }
 
-        void SetVertices(TArray<FDynamicMeshVertex> NewVertices) {
+        void SetVertices(TArray<FDynamicMeshVertex> NewVertices)
+        {
             Vertices = std::move(NewVertices);
         }
 

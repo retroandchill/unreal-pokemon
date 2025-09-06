@@ -4,7 +4,8 @@
 
 RETRO_DEFINE_VARIANT_OBJECT_STRUCT(FAssetClassType);
 
-static UScriptStruct *StaticGetBaseStructureInternal(FName Name) {
+static UScriptStruct *StaticGetBaseStructureInternal(FName Name)
+{
     static const auto *const CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/DynamicAssetLoader"));
     auto Result = static_cast<UScriptStruct *>(StaticFindObjectFastInternal(
         UScriptStruct::StaticClass(), CoreUObjectPkg, Name, false, RF_NoFlags, EInternalObjectFlags::None));
@@ -12,12 +13,14 @@ static UScriptStruct *StaticGetBaseStructureInternal(FName Name) {
     return Result;
 }
 
-UScriptStruct *TBaseStructure<FAssetClassType>::Get() {
+UScriptStruct *TBaseStructure<FAssetClassType>::Get()
+{
     static auto ScriptStruct = StaticGetBaseStructureInternal(TEXT("AssetClassType"));
     return ScriptStruct;
 }
 
-UScriptStruct *TBaseStructure<FSoftAssetClassType>::Get() {
+UScriptStruct *TBaseStructure<FSoftAssetClassType>::Get()
+{
     static UScriptStruct *ScriptStruct = StaticGetBaseStructureInternal(TEXT("SoftAssetClassType"));
     return ScriptStruct;
 }
@@ -26,12 +29,14 @@ FAssetLoadingEntry::FAssetLoadingEntry(FName Key, FStringView RootDirectory, FSt
                                        UClass *AssetClass)
     : DisplayName(FText::FromString(Key.ToString())), RootDirectory({FString(RootDirectory)}),
       AssetPrefix(AssetPrefix.IsEmpty() ? TOptional<FString>() : FString(AssetPrefix)), AssetClass(AssetClass),
-      bIsNative(true) {
+      bIsNative(true)
+{
 }
 
 FAssetLoadingEntry::FAssetLoadingEntry(FName Key, FStringView RootDirectory, FStringView AssetPrefix,
                                        UScriptStruct *AssetClass)
     : DisplayName(FText::FromString(Key.ToString())), RootDirectory({FString(RootDirectory)}),
       AssetPrefix(AssetPrefix.IsEmpty() ? TOptional<FString>() : FString(AssetPrefix)), AssetClass(AssetClass),
-      bIsNative(true) {
+      bIsNative(true)
+{
 }

@@ -33,17 +33,13 @@ using UnrealBuildTool;
 
 public class UE5CoroAI : UE5CoroModuleRules
 {
-	public UE5CoroAI(ReadOnlyTargetRules Target)
-		: base(Target)
-	{
-		PublicDependencyModuleNames.AddRange(new[]
-		{
-			"AIModule",
-			"GameplayTasks",
-			"NavigationSystem",
-			"UE5Coro",
-		});
+    public UE5CoroAI(ReadOnlyTargetRules Target)
+        : base(Target)
+    {
+        PublicDependencyModuleNames.AddRange(
+            new[] { "AIModule", "GameplayTasks", "NavigationSystem", "UE5Coro" }
+        );
 
-		PrivateDefinitions.Add("UE5COROAI_PRIVATE_ALLOW_DIRECT_INCLUDE");
-	}
+        PrivateDefinitions.Add("UE5COROAI_PRIVATE_ALLOW_DIRECT_INCLUDE");
+    }
 }

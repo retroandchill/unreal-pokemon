@@ -16,7 +16,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * Represents a type we see as a valid opaque byte pointer.
      *
@@ -42,7 +43,8 @@ namespace Retro {
      * - Utility methods to handle casting of custom objects, if needed.
      */
     template <typename T>
-    struct TByteCastFunction {
+    struct TByteCastFunction
+    {
         /**
          * @brief Casts a byte pointer to a specified data type.
          *
@@ -56,7 +58,8 @@ namespace Retro {
          */
         template <typename U>
             requires ValidByteType<U>
-        constexpr decltype(auto) operator()(U *Bytes) const {
+        constexpr decltype(auto) operator()(U *Bytes) const
+        {
             return *std::bit_cast<T *>(Bytes);
         }
     };

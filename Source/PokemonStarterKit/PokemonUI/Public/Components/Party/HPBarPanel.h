@@ -10,14 +10,16 @@
 class UProgressBar;
 // This class does not need to be modified.
 UINTERFACE(DisplayName = "HP Bar Panel")
-class UHPBarPanel : public UInterface {
+class UHPBarPanel : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Panel that displays an HP bar to the player.
  */
-class POKEMONUI_API IHPBarPanel {
+class POKEMONUI_API IHPBarPanel
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

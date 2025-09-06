@@ -11,7 +11,8 @@
  *
  */
 UCLASS()
-class AUDIOPLAYBACKMANAGER_API UAudioPlaybackUtils : public UBlueprintFunctionLibrary {
+class AUDIOPLAYBACKMANAGER_API UAudioPlaybackUtils : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

@@ -22,7 +22,8 @@ BEGIN_DEFINE_SPEC(FTestStatChanges, "Unit Tests.Battle.Battlers.TestStatChanges"
 CORO_FUNCTIONS()
 END_DEFINE_SPEC(FTestStatChanges)
 
-void FTestStatChanges::Define() {
+void FTestStatChanges::Define()
+{
     Describe("StatChanges", [this] {
         CoroIt("Unaltered", [this]() -> UE5Coro::TCoroutine<> {
             auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();

@@ -18,11 +18,13 @@ constexpr std::array GFastGrowthTable = {
 IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateFastTest, "Unit Tests.Core.Exp.GrowthRateFastTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-void GrowthRateFastTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const {
+void GrowthRateFastTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const
+{
     OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateFastTest: Level = 1");
     OutTestCommands.Add("1");
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++)
+    {
         auto Fmt = FString::Printf(TEXT("Unit Tests.Core.Exp.GrowthRateFastTest: Level = 2-99 (Sample %d)"), i + 1);
         OutBeautifiedNames.Add(Fmt);
         OutTestCommands.Add(FString::FromInt(FMath::RandRange(2, 99)));
@@ -32,7 +34,8 @@ void GrowthRateFastTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FS
     OutTestCommands.Add("100");
 }
 
-bool GrowthRateFastTest::RunTest(const FString &Parameters) {
+bool GrowthRateFastTest::RunTest(const FString &Parameters)
+{
     const int32 Level = FCString::Atoi(GetData(Parameters));
 
     Exp::FFast GrowthRate;

@@ -15,9 +15,11 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Optionals {
+namespace Retro::Optionals
+{
 
-    struct FOrElseInvoker {
+    struct FOrElseInvoker
+    {
         /**
          * Applies a functor to provide a fallback value if the given optional input has no value.
          * If the optional contains a value, it is returned as is.
@@ -28,8 +30,10 @@ namespace Retro::Optionals {
          */
         template <OptionalType O, typename F>
             requires std::invocable<F> && std::same_as<std::invoke_result_t<F>, std::decay_t<O>>
-        constexpr std::decay_t<O> operator()(O &&Optional, F &&Functor) const {
-            if (HasValue(std::forward<O>(Optional))) {
+        constexpr std::decay_t<O> operator()(O &&Optional, F &&Functor) const
+        {
+            if (HasValue(std::forward<O>(Optional)))
+            {
                 return std::forward<O>(Optional);
             }
 

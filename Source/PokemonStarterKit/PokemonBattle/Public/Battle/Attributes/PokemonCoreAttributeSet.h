@@ -13,7 +13,8 @@ class IPokemon;
  * Represents the core attributes that are present on a Pokémon.
  */
 UCLASS()
-class POKEMONBATTLE_API UPokemonCoreAttributeSet : public UAttributeSet {
+class POKEMONBATTLE_API UPokemonCoreAttributeSet : public UAttributeSet
+{
     GENERATED_BODY()
 
   public:

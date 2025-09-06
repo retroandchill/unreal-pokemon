@@ -12,7 +12,8 @@
  * Implementation of IBattleAnimation that lacks a surrounding UObject
  */
 UCLASS(Abstract, BlueprintType, Blueprintable, meta = (ShowWorldContextPin))
-class POKEMONBATTLE_API UAnimationObject : public UObject, public IBattleAnimation {
+class POKEMONBATTLE_API UAnimationObject : public UObject, public IBattleAnimation
+{
     GENERATED_BODY()
 
   public:

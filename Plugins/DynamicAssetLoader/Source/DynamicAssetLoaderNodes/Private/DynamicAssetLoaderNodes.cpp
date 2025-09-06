@@ -1,10 +1,12 @@
 ﻿#include "DynamicAssetLoaderNodes.h"
 
-void FDynamicAssetLoaderNodesModule::StartupModule() {
+void FDynamicAssetLoaderNodesModule::StartupModule()
+{
     // No startup implementation
 }
 
-void FDynamicAssetLoaderNodesModule::ShutdownModule() {
+void FDynamicAssetLoaderNodesModule::ShutdownModule()
+{
     // No shutdown implementation
 }
 

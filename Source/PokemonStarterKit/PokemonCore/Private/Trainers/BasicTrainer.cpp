@@ -9,7 +9,8 @@
 #include "PokemonDataSettings.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 
-TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText NewTrainerName) {
+TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText NewTrainerName)
+{
     InternalId = FGuid::NewGuid();
     TrainerType = NewTrainerType;
     Name = NewTrainerName;
@@ -18,7 +19,8 @@ TScriptInterface<ITrainer> UBasicTrainer::Initialize(FName NewTrainerType, FText
     return this;
 }
 
-TScriptInterface<ITrainer> UBasicTrainer::Initialize(const FTrainerDTO &DTO) {
+TScriptInterface<ITrainer> UBasicTrainer::Initialize(const FTrainerDTO &DTO)
+{
     InternalId = DTO.InternalID;
     TrainerType = DTO.TrainerType;
     Name = DTO.Name;
@@ -35,7 +37,8 @@ TScriptInterface<ITrainer> UBasicTrainer::Initialize(const FTrainerDTO &DTO) {
     return this;
 }
 
-FTrainerDTO UBasicTrainer::ToDTO() const {
+FTrainerDTO UBasicTrainer::ToDTO() const
+{
     return {.InternalID = InternalId,
             .TrainerType = TrainerType,
             .Name = Name,
@@ -48,11 +51,13 @@ FTrainerDTO UBasicTrainer::ToDTO() const {
             .SecretID = SecretID};
 }
 
-const FGuid &UBasicTrainer::GetInternalId() const {
+const FGuid &UBasicTrainer::GetInternalId() const
+{
     return InternalId;
 }
 
-const FTrainerType &UBasicTrainer::GetTrainerType() const {
+const FTrainerType &UBasicTrainer::GetTrainerType() const
+{
     const auto &DataManager = FDataManager::GetInstance();
     auto &TrainerTypeTable = DataManager.GetDataTable<FTrainerType>();
 
@@ -61,45 +66,56 @@ const FTrainerType &UBasicTrainer::GetTrainerType() const {
     return *TrainerTypeData;
 }
 
-FText UBasicTrainer::GetTrainerName() const {
+FText UBasicTrainer::GetTrainerName() const
+{
     return Name;
 }
 
-FText UBasicTrainer::GetFullTrainerName() const {
+FText UBasicTrainer::GetFullTrainerName() const
+{
     return FText::Format(FText::FromStringView(TEXT("{0} {1}")), {GetTrainerType().RealName, Name});
 }
 
-int32 UBasicTrainer::GetPayout() const {
+int32 UBasicTrainer::GetPayout() const
+{
     check(!Party.IsEmpty())
     return GetTrainerType().BaseMoney * Party.Last()->GetStatBlock()->GetLevel();
 }
 
-void UBasicTrainer::HealParty() {
+void UBasicTrainer::HealParty()
+{
     Algo::ForEach(Party, [](const TScriptInterface<IPokemon> &Pokemon) { Pokemon->FullyHeal(); });
 }
 
-const TArray<TScriptInterface<IPokemon>> &UBasicTrainer::GetParty() const {
+const TArray<TScriptInterface<IPokemon>> &UBasicTrainer::GetParty() const
+{
     return Party;
 }
 
-bool UBasicTrainer::IsPartyFull() const {
+bool UBasicTrainer::IsPartyFull() const
+{
     int32 MaxPartySize = GetDefault<UPokemonDataSettings>()->MaxPartySize;
     check(Party.Num() <= MaxPartySize)
     return Party.Num() == MaxPartySize;
 }
 
-TScriptInterface<IPokemon> UBasicTrainer::GetPokemon(int32 Index) const {
-    if (!Party.IsValidIndex(Index)) {
+TScriptInterface<IPokemon> UBasicTrainer::GetPokemon(int32 Index) const
+{
+    if (!Party.IsValidIndex(Index))
+    {
         return nullptr;
     }
 
     return Party[Index];
 }
 
-int32 UBasicTrainer::GetAblePokemonCount() const {
+int32 UBasicTrainer::GetAblePokemonCount() const
+{
     int32 Count = 0;
-    for (auto &Pokemon : Party) {
-        if (!Pokemon->IsFainted()) {
+    for (auto &Pokemon : Party)
+    {
+        if (!Pokemon->IsFainted())
+        {
             Count++;
         }
     }
@@ -107,24 +123,29 @@ int32 UBasicTrainer::GetAblePokemonCount() const {
     return Count;
 }
 
-void UBasicTrainer::AddPokemonToParty(const TScriptInterface<IPokemon> &Pokemon) {
+void UBasicTrainer::AddPokemonToParty(const TScriptInterface<IPokemon> &Pokemon)
+{
     Party.Add(Pokemon);
     Pokemon->SetCurrentHandler(this);
 }
 
-void UBasicTrainer::SwapPositionsInParty(int32 Index1, int32 Index2) {
+void UBasicTrainer::SwapPositionsInParty(int32 Index1, int32 Index2)
+{
     check(Index1 >= 0 && Index1 < Party.Num() && Index2 >= 0 && Index2 < Party.Num())
     Swap(Party[Index1], Party[Index2]);
 }
 
-void UBasicTrainer::ClearParty() {
+void UBasicTrainer::ClearParty()
+{
     Party.Empty();
 }
 
-int32 UBasicTrainer::GetIdNumber() const {
+int32 UBasicTrainer::GetIdNumber() const
+{
     return ID;
 }
 
-int32 UBasicTrainer::GetSecretId() const {
+int32 UBasicTrainer::GetSecretId() const
+{
     return SecretID;
 }

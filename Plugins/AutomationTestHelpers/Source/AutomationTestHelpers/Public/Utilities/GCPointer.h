@@ -10,7 +10,8 @@
  */
 template <typename T>
     requires std::is_base_of_v<UObject, T>
-class TGCPointer : public FGCObject {
+class TGCPointer : public FGCObject
+{
   public:
     /**
      * Construct an empty pointer with the reference nulled out
@@ -21,7 +22,8 @@ class TGCPointer : public FGCObject {
      * Instantiate a new pointer from the given object pointer
      * @param Object The pointer to add as a reference
      */
-    explicit TGCPointer(T *Object) : HeldObject(Object) {
+    explicit TGCPointer(T *Object) : HeldObject(Object)
+    {
     }
 
     /**
@@ -29,7 +31,8 @@ class TGCPointer : public FGCObject {
      * @param Object The new object a point to
      * @return A reference to this object
      */
-    TGCPointer &operator=(T *Object) {
+    TGCPointer &operator=(T *Object)
+    {
         HeldObject = Object;
         return *this;
     }
@@ -39,22 +42,26 @@ class TGCPointer : public FGCObject {
      * @param Other The object type being pointed to
      * @return Are the two pointers equal
      */
-    bool operator==(T *Other) const {
+    bool operator==(T *Other) const
+    {
         return HeldObject == Other;
     }
 
     /**
      * Convert the held pointer to the type held by itself
      */
-    explicit operator T() const {
+    explicit operator T() const
+    {
         return HeldObject;
     }
 
-    void AddReferencedObjects(FReferenceCollector &Collector) override {
+    void AddReferencedObjects(FReferenceCollector &Collector) override
+    {
         Collector.AddReferencedObject(HeldObject);
     }
 
-    FString GetReferencerName() const override {
+    FString GetReferencerName() const override
+    {
         return FString::Format(TEXT("TGCPointer<{ClassName}>"),
                                FStringFormatNamedArguments({{TEXT("ClassName"), T::StaticClass()->GetName()}}));
     }
@@ -63,7 +70,8 @@ class TGCPointer : public FGCObject {
      * Get a reference to this object, provided it has not been garbage collected
      * @return The object held by this pointer
      */
-    T *Get() const {
+    T *Get() const
+    {
         return HeldObject.Get();
     }
 
@@ -71,7 +79,8 @@ class TGCPointer : public FGCObject {
      * Dereferences the held object returning it by reference
      * @return The object held by this pointer
      */
-    T &operator*() const {
+    T &operator*() const
+    {
         check(HeldObject != nullptr)
         return *HeldObject;
     }
@@ -80,7 +89,8 @@ class TGCPointer : public FGCObject {
      * Dereferences the held object returning it by reference
      * @return The object held by this pointer
      */
-    T *operator->() const {
+    T *operator->() const
+    {
         return HeldObject;
     }
 

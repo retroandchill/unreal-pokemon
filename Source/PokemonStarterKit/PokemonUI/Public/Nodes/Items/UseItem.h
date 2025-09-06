@@ -16,12 +16,14 @@
  *
  */
 UCLASS(Abstract)
-class POKEMONUI_API UUseItem : public UBlueprintCoroutineActionBase {
+class POKEMONUI_API UUseItem : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
   public:
     template <typename T>
         requires std::is_base_of_v<UUseItem, T>
-    static T *ConstructUseItemNode(UBagScreen *Screen, FName Item, int32 Quantity) {
+    static T *ConstructUseItemNode(UBagScreen *Screen, FName Item, int32 Quantity)
+    {
         auto Node = NewObject<T>();
         Node->SetWorldContext(Screen);
         Node->BagScreen = Screen;
@@ -33,11 +35,15 @@ class POKEMONUI_API UUseItem : public UBlueprintCoroutineActionBase {
   protected:
     template <typename T, typename... A>
         requires Pokemon::Items::FieldItem<T, A...>
-    UE5Coro::TCoroutine<> UseItem(FForceLatentCoroutine = {}, A &&...Args) {
+    UE5Coro::TCoroutine<> UseItem(FForceLatentCoroutine = {}, A &&...Args)
+    {
         if (auto &ItemData = FDataManager::GetInstance().GetDataTable<FItem>().GetDataChecked(ItemName);
-            co_await BagScreen->TryUseItem<T, A...>(ItemData, ItemQuantity, std::forward<A>(Args)...)) {
+            co_await BagScreen->TryUseItem<T, A...>(ItemData, ItemQuantity, std::forward<A>(Args)...))
+        {
             ItemUsed.Broadcast();
-        } else {
+        }
+        else
+        {
             ItemNotUsed.Broadcast();
         }
     }

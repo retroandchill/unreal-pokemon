@@ -15,7 +15,8 @@ struct FItem;
  * Item effect type for items that are used on a Pokémon.
  */
 UCLASS(Abstract)
-class POKEMONITEMS_API UFieldItemEffectUseOnPokemon : public UFieldItemEffect {
+class POKEMONITEMS_API UFieldItemEffectUseOnPokemon : public UFieldItemEffect
+{
     GENERATED_BODY()
 
   public:

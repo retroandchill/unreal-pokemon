@@ -20,7 +20,8 @@ class UPlayerMetadata;
  * Subsystem for interfacing with the Pokémon data. Has a backdoor static pointer for non-UObject singleton access.
  */
 UCLASS()
-class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem, public ISaveableSubsystem {
+class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem, public ISaveableSubsystem
+{
     GENERATED_BODY()
 
   public:
@@ -135,7 +136,8 @@ class POKEMONCORE_API UPokemonSubsystem : public UGameInstanceSubsystem, public 
     UFUNCTION(BlueprintCallable, Category = Reset)
     void SetPlayerResetLocationAsCurrentLocation(ACharacter *PlayerCharacter);
 
-    IPokemonCoroutineDispatcher &GetCoroutineDispatcher() const {
+    IPokemonCoroutineDispatcher &GetCoroutineDispatcher() const
+    {
         check(CoroutineDispatcher != nullptr) ;
         return *CoroutineDispatcher;
     }

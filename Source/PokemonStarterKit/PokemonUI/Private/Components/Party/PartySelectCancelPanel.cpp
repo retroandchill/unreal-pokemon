@@ -3,14 +3,17 @@
 #include "Components/Party/PartySelectCancelPanel.h"
 #include "Components/SelectableWidget.h"
 
-void UPartySelectCancelPanel::SetOwner(USelectableWidget *NewOwner) {
+void UPartySelectCancelPanel::SetOwner(USelectableWidget *NewOwner)
+{
     Owner = NewOwner;
 }
 
-bool UPartySelectCancelPanel::IsPanelSelected() const {
+bool UPartySelectCancelPanel::IsPanelSelected() const
+{
     return IsHovered();
 }
 
-void UPartySelectCancelPanel::Refresh() {
+void UPartySelectCancelPanel::Refresh()
+{
     RefreshVisuals();
 }

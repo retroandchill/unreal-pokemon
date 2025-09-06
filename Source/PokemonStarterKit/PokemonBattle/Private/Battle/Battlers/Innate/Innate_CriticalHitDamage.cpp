@@ -7,7 +7,8 @@
 #include "Battle/Moves/MoveTags.h"
 #include "Battle/Settings/PokemonBattleSettings.h"
 
-UInnate_CriticalHitDamage::UInnate_CriticalHitDamage() {
+UInnate_CriticalHitDamage::UInnate_CriticalHitDamage()
+{
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
     AbilityTrigger.TriggerTag = Pokemon::Battle::Moves::DamageModificationEvents.UserTag;
 }
@@ -15,12 +16,14 @@ UInnate_CriticalHitDamage::UInnate_CriticalHitDamage() {
 void UInnate_CriticalHitDamage::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                                 const FGameplayAbilityActorInfo *ActorInfo,
                                                 const FGameplayAbilityActivationInfo ActivationInfo,
-                                                const FGameplayEventData *TriggerEventData) {
+                                                const FGameplayEventData *TriggerEventData)
+{
     Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
     check(TriggerEventData != nullptr)
     auto Payload = CastChecked<UDamageModificationPayload>(TriggerEventData->OptionalObject);
     auto &Data = Payload->GetData();
-    if (Data.Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit)) {
+    if (Data.Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit))
+    {
         Payload->SetFinalDamageMultiplier(Data.FinalDamageMultiplier *
                                           GetDefault<UPokemonBattleSettings>()->CriticalHitMultiplier);
     }

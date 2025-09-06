@@ -6,7 +6,8 @@
 #include "Battle/Stats/StatTags.h"
 #include "Species/Stat.h"
 
-float UStatStageModMagnitudeCalculation::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec &Spec) const {
+float UStatStageModMagnitudeCalculation::CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec &Spec) const
+{
     using enum EPokemonStatType;
 
     // Gather the tags from the source and target as that can affect which buffs should be used
@@ -27,11 +28,13 @@ float UStatStageModMagnitudeCalculation::CalculateBaseMagnitude_Implementation(c
     // are the same thing in this context.
     static auto &Lookup = Pokemon::Battle::Stats::FLookup::Get();
     auto InstigatorComponent = Spec.GetContext().GetInstigatorAbilitySystemComponent();
-    if (Stages > 0 && !InstigatorComponent->HasMatchingGameplayTag(Lookup.GetIgnorePositiveTag(StatID))) {
+    if (Stages > 0 && !InstigatorComponent->HasMatchingGameplayTag(Lookup.GetIgnorePositiveTag(StatID)))
+    {
         return StageInfo[Stages - 1].PositiveStatMultiplier;
     }
 
-    if (Stages < 0 && !InstigatorComponent->HasMatchingGameplayTag(Lookup.GetIgnoreNegativeTag(StatID))) {
+    if (Stages < 0 && !InstigatorComponent->HasMatchingGameplayTag(Lookup.GetIgnoreNegativeTag(StatID)))
+    {
         return StageInfo[-Stages - 1].NegativeStatMultiplier;
     }
 
@@ -39,7 +42,8 @@ float UStatStageModMagnitudeCalculation::CalculateBaseMagnitude_Implementation(c
 }
 
 #if WITH_EDITOR
-void UStatStageModMagnitudeCalculation::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
+void UStatStageModMagnitudeCalculation::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent)
+{
     Super::PostEditChangeProperty(PropertyChangedEvent);
     RelevantAttributesToCapture.Reset();
     RelevantAttributesToCapture.Emplace(StagesAttribute);

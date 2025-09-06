@@ -13,7 +13,8 @@ class UTextBlock;
  * Specialized native action button implementation used to handling the changing of styles when the input method does
  */
 UCLASS(Abstract, meta = (DisableNativeTick))
-class POKEMONUI_API UPokemonActionBoundButton : public UCommonButtonBase, public ICommonBoundActionButtonInterface {
+class POKEMONUI_API UPokemonActionBoundButton : public UCommonButtonBase, public ICommonBoundActionButtonInterface
+{
     GENERATED_BODY()
 
   protected:

@@ -9,7 +9,8 @@
 #include "GivePokemonItemTest.generated.h"
 
 UCLASS(BlueprintType)
-class POKEMONTESTS_API AGivePokemonItemTest : public ACoroutineFunctionalTest {
+class POKEMONTESTS_API AGivePokemonItemTest : public ACoroutineFunctionalTest
+{
     GENERATED_BODY()
 
   public:

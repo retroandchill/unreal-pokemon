@@ -12,7 +12,8 @@
 class IPokemon;
 
 USTRUCT(BlueprintType)
-struct POKEMONCORE_API FMoveDTO {
+struct POKEMONCORE_API FMoveDTO
+{
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data",
@@ -28,7 +29,8 @@ struct POKEMONCORE_API FMoveDTO {
  * over the network.
  */
 USTRUCT(BlueprintType)
-struct POKEMONCORE_API FPokemonDTO {
+struct POKEMONCORE_API FPokemonDTO
+{
     GENERATED_BODY()
 
     /**

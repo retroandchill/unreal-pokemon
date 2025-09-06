@@ -5,19 +5,22 @@
 #include "Services/Service.h"
 #include "Services/ServiceUtilities.h"
 
-void UGameServiceSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
+void UGameServiceSubsystem::Initialize(FSubsystemCollectionBase &Collection)
+{
     Super::Initialize(Collection);
     UnrealInjector::GetAllServices() | Retro::Ranges::ForEach([this](const TSubclassOf<UService> &Class) {
         Services.Emplace(Class, NewObject<UService>(this, Class));
     });
 }
 
-void UGameServiceSubsystem::Deinitialize() {
+void UGameServiceSubsystem::Deinitialize()
+{
     Super::Deinitialize();
     Services.Empty();
 }
 
 UService *UGameServiceSubsystem::StaticGetService(const UObject *WorldContext,
-                                                  const TSubclassOf<UService> &ServiceClass) {
+                                                  const TSubclassOf<UService> &ServiceClass)
+{
     return &GetService(WorldContext, ServiceClass);
 }

@@ -12,7 +12,8 @@
  * Modifier calculation for a stat stage
  */
 UCLASS(Abstract, Blueprintable, HideCategories = "Attributes")
-class POKEMONBATTLE_API UStatStageModMagnitudeCalculation : public UGameplayModMagnitudeCalculation {
+class POKEMONBATTLE_API UStatStageModMagnitudeCalculation : public UGameplayModMagnitudeCalculation
+{
     GENERATED_BODY()
 
   public:

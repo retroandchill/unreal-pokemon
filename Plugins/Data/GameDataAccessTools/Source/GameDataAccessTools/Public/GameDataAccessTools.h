@@ -6,9 +6,8 @@
 
 class FGameDataAccessToolsModule : public IModuleInterface
 {
-public:
-
-	/** IModuleInterface implementation */
-	void StartupModule() override;
-	void ShutdownModule() override;
+  public:
+    /** IModuleInterface implementation */
+    void StartupModule() override;
+    void ShutdownModule() override;
 };

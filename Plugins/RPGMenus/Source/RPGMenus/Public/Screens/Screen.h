@@ -14,7 +14,8 @@ struct FInputActionInstance;
 
 DECLARE_MULTICAST_DELEGATE(FOnScreenClosed);
 
-namespace RPG::Menus {
+namespace RPG::Menus
+{
 
     /**
      * The native tag assigned the primary layer for display
@@ -29,14 +30,21 @@ namespace RPG::Menus {
 } // namespace RPG::Menus
 
 UENUM(BlueprintType)
-enum class ERPGWidgetInputMode : uint8 { Default, GameAndMenu, Game, Menu };
+enum class ERPGWidgetInputMode : uint8
+{
+    Default,
+    GameAndMenu,
+    Game,
+    Menu
+};
 
 /**
  * Represents a basic screen used by the UI. They tend to be added in a stack format, and are displayed one on top
  * of the other.
  */
 UCLASS(Blueprintable, BlueprintType, Abstract)
-class RPGMENUS_API UScreen : public UCommonActivatableWidget {
+class RPGMENUS_API UScreen : public UCommonActivatableWidget
+{
     GENERATED_BODY()
 
   protected:
@@ -96,7 +104,8 @@ class RPGMENUS_API UScreen : public UCommonActivatableWidget {
     EMouseCaptureMode GameMouseCaptureMode = EMouseCaptureMode::CapturePermanently;
 };
 
-namespace RPG::Menus {
+namespace RPG::Menus
+{
     template <typename T>
     concept InjectableScreen = std::derived_from<T, UScreen> && UnrealInjector::Injectable<T>;
 

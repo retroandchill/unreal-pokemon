@@ -13,7 +13,8 @@
  * Represents the data for a Move in the game
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "PBS"))
-struct POKEMONDATA_API FMoveData : public FIndexedTableRow {
+struct POKEMONDATA_API FMoveData : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -108,7 +109,8 @@ struct POKEMONDATA_API FMoveData : public FIndexedTableRow {
 };
 
 USTRUCT(BlueprintType, meta = (DisableSplitPin))
-struct POKEMONDATA_API FMoveHandle {
+struct POKEMONDATA_API FMoveHandle
+{
     GENERATED_BODY()
     DECLARE_DATA_HANDLE(FMoveHandle, FMoveData)
 
@@ -123,7 +125,8 @@ struct POKEMONDATA_API FMoveHandle {
  * Blueprint function library for getting move data out.
  */
 UCLASS()
-class POKEMONDATA_API UMoveHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UMoveHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

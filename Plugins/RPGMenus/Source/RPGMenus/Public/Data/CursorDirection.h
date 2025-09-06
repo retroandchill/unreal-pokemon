@@ -7,7 +7,8 @@
  * The direction of the cursor based upon the key received
  */
 UENUM(BlueprintType)
-enum class ECursorDirection : uint8 {
+enum class ECursorDirection : uint8
+{
     /**
      * Cursor UP
      */

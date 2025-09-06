@@ -16,7 +16,8 @@
  * a UObject instance into an FObjectData and deserializing an FObjectData back into a UObject.
  */
 USTRUCT(BlueprintType)
-struct ENHANCEDSAVEGAME_API FObjectData {
+struct ENHANCEDSAVEGAME_API FObjectData
+{
     GENERATED_BODY()
 
     /**
@@ -76,7 +77,8 @@ struct ENHANCEDSAVEGAME_API FObjectData {
  * blueprint scripts and integrates with Unreal Engine's gameplay saving functionality.
  */
 UCLASS()
-class ENHANCEDSAVEGAME_API USaveSerializationUtils : public UBlueprintFunctionLibrary {
+class ENHANCEDSAVEGAME_API USaveSerializationUtils : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

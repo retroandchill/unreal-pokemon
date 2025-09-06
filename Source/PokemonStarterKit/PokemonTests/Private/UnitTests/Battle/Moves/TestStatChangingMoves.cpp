@@ -18,7 +18,8 @@ BEGIN_DEFINE_SPEC(FTestStatChangingMoves, "Unit Tests.Battle.Moves.TestStatChang
 CORO_FUNCTIONS()
 END_DEFINE_SPEC(FTestStatChangingMoves);
 
-void FTestStatChangingMoves::Define() {
+void FTestStatChangingMoves::Define()
+{
     CoroIt("RaiseUserStats.Success", [this]() -> UE5Coro::TCoroutine<> {
         auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
         auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(

@@ -4,11 +4,13 @@
 #include "RetroLib/Utils/BlueprintMathUtils.h"
 #include "RetroLib/Utils/Math.h"
 
-void UPlayerMetadata::Tick(float DeltaTime) {
+void UPlayerMetadata::Tick(float DeltaTime)
+{
     TotalPlaytime += DeltaTime;
     LastUpdated += DeltaTime;
 
-    if (LastUpdated >= Retro::SECONDS_PER_MINUTE) {
+    if (LastUpdated >= Retro::SECONDS_PER_MINUTE)
+    {
         OnTimeUpdated.Broadcast(TotalPlaytime);
         LastUpdated = FMath::Fmod(LastUpdated, Retro::SECONDS_PER_MINUTE);
     }
@@ -16,31 +18,38 @@ void UPlayerMetadata::Tick(float DeltaTime) {
 
 TStatId UPlayerMetadata::GetStatId() const {RETURN_QUICK_DECLARE_CYCLE_STAT(UPlayerMetadata, STATGROUP_Tickables)}
 
-UWorld *UPlayerMetadata::GetTickableGameObjectWorld() const {
+UWorld *UPlayerMetadata::GetTickableGameObjectWorld() const
+{
     return GetWorld();
 }
 
-const FDateTime &UPlayerMetadata::GetStartDate() const {
+const FDateTime &UPlayerMetadata::GetStartDate() const
+{
     return StartDate;
 }
 
-float UPlayerMetadata::GetTotalPlaytime() const {
+float UPlayerMetadata::GetTotalPlaytime() const
+{
     return TotalPlaytime;
 }
 
-int32 UPlayerMetadata::GetRepelSteps() const {
+int32 UPlayerMetadata::GetRepelSteps() const
+{
     return RepelSteps;
 }
 
-void UPlayerMetadata::SetRepelSteps(int32 NewRepelSteps) {
+void UPlayerMetadata::SetRepelSteps(int32 NewRepelSteps)
+{
     RepelSteps = FMath::Max(0, NewRepelSteps);
 }
 
-FOnTimeUpdate &UPlayerMetadata::GetOnTimeUpdated() {
+FOnTimeUpdate &UPlayerMetadata::GetOnTimeUpdated()
+{
     return OnTimeUpdated;
 }
 
-void UPlayerMetadata::StartNewGame() {
+void UPlayerMetadata::StartNewGame()
+{
     StartDate = FDateTime::Now();
     TotalPlaytime = 0.f;
 }

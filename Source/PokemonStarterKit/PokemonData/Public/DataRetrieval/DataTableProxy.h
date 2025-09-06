@@ -14,38 +14,47 @@
  */
 template <typename T>
     requires Pokemon::Data::DataStruct<T>
-class TDataTableProxy final : public IGameData {
+class TDataTableProxy final : public IGameData
+{
   public:
-    explicit TDataTableProxy(UDataTable *DataTable) : DataTable(DataTable) {
+    explicit TDataTableProxy(UDataTable *DataTable) : DataTable(DataTable)
+    {
     }
 
-    UScriptStruct *GetStructType() const override {
+    UScriptStruct *GetStructType() const override
+    {
         return T::StaticStruct();
     }
 
-    const T *GetData(FName ID) const override {
+    const T *GetData(FName ID) const override
+    {
         return DataTable->FindRow<T>(ID, TEXT("Find row!"));
     }
 
-    const T &GetDataChecked(FName ID) const override {
+    const T &GetDataChecked(FName ID) const override
+    {
         auto Data = DataTable->FindRow<T>(ID, TEXT("Find row!"));
         check(Data != nullptr)
         return *Data;
     }
 
-    TArray<FName> GetTableRowNames() const override {
+    TArray<FName> GetTableRowNames() const override
+    {
         return DataTable->GetRowNames();
     }
 
-    bool IsRowNameValid(FName ID) const override {
+    bool IsRowNameValid(FName ID) const override
+    {
         return GetTableRowNames().Contains(ID);
     }
 
-    UDataTable *GetDataTable() const override {
+    UDataTable *GetDataTable() const override
+    {
         return DataTable.Get();
     }
 
-    auto GetAllRows() const {
+    auto GetAllRows() const
+    {
         // clang-format off
         return DataTable->GetRowMap() |
                Retro::Ranges::Views::Values |

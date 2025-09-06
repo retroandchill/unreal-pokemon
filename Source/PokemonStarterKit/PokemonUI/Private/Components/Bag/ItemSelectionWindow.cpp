@@ -13,89 +13,111 @@
 #include <functional>
 
 UItemSelectionWindow::UItemSelectionWindow(const FObjectInitializer &ObjectInitializer)
-    : USelectableWidget(ObjectInitializer) {
+    : USelectableWidget(ObjectInitializer)
+{
 }
 
-void UItemSelectionWindow::SetBag(const TScriptInterface<IBag> &Bag) {
+void UItemSelectionWindow::SetBag(const TScriptInterface<IBag> &Bag)
+{
     CurrentBag = Bag;
 }
 
-void UItemSelectionWindow::SetPocket(FName Pocket) {
+void UItemSelectionWindow::SetPocket(FName Pocket)
+{
     CurrentPocket = Pocket;
     UpdatePocket();
 
-    if (auto DesiredFocusTarget = GetDesiredFocusTarget(); DesiredFocusTarget != nullptr) {
+    if (auto DesiredFocusTarget = GetDesiredFocusTarget(); DesiredFocusTarget != nullptr)
+    {
         DesiredFocusTarget->SetFocus();
     }
 }
 
-const FItem *UItemSelectionWindow::GetCurrentItem() const {
-    if (auto Option = GetSelectableOption<UItemOption>(GetIndex()); Option != nullptr) {
+const FItem *UItemSelectionWindow::GetCurrentItem() const
+{
+    if (auto Option = GetSelectableOption<UItemOption>(GetIndex()); Option != nullptr)
+    {
         return &Option->GetItem();
     }
 
     return nullptr;
 }
 
-int32 UItemSelectionWindow::GetItemQuantity() const {
-    if (auto Option = GetSelectableOption<UItemOption>(GetIndex()); Option != nullptr) {
+int32 UItemSelectionWindow::GetItemQuantity() const
+{
+    if (auto Option = GetSelectableOption<UItemOption>(GetIndex()); Option != nullptr)
+    {
         return Option->GetQuantity();
     }
 
     return 0;
 }
 
-void UItemSelectionWindow::RefreshWindow() {
+void UItemSelectionWindow::RefreshWindow()
+{
     UpdatePocket();
 }
 
-void UItemSelectionWindow::ApplyItemFilter(const FItemFilter &ItemFilter) {
+void UItemSelectionWindow::ApplyItemFilter(const FItemFilter &ItemFilter)
+{
     ItemListFilter = ItemFilter;
 }
 
-FOnItemChanged &UItemSelectionWindow::GetOnItemSelected() {
+FOnItemChanged &UItemSelectionWindow::GetOnItemSelected()
+{
     return OnItemSelected;
 }
 
-FOnPocketChanged &UItemSelectionWindow::GetOnPocketChanged() {
+FOnPocketChanged &UItemSelectionWindow::GetOnPocketChanged()
+{
     return OnPocketChanged;
 }
 
-FOnItemChanged &UItemSelectionWindow::GetOnItemChanged() {
+FOnItemChanged &UItemSelectionWindow::GetOnItemChanged()
+{
     return OnItemChanged;
 }
 
-FOnNoItemSelected &UItemSelectionWindow::GetOnNoItemSelected() {
+FOnNoItemSelected &UItemSelectionWindow::GetOnNoItemSelected()
+{
     return OnNoItemSelected;
 }
 
-void UItemSelectionWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
+void UItemSelectionWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex)
+{
     Super::OnSelectionChange_Implementation(OldIndex, NewIndex);
     GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->UpdatePocketMemory(CurrentPocket, NewIndex);
-    if (auto Item = GetCurrentItem(); Item != nullptr) {
+    if (auto Item = GetCurrentItem(); Item != nullptr)
+    {
         OnItemChanged.Broadcast(*Item, GetSelectableOption<UItemOption>(NewIndex)->GetQuantity());
-    } else {
+    }
+    else
+    {
         OnNoItemSelected.Broadcast();
     }
 }
 
-void UItemSelectionWindow::ProcessConfirm_Implementation(int32 CurrentIndex) {
+void UItemSelectionWindow::ProcessConfirm_Implementation(int32 CurrentIndex)
+{
     UItemOption *Option = GetSelectableOption<UItemOption>(CurrentIndex);
     check(Option != nullptr)
     OnItemSelected.Broadcast(Option->GetItem(), Option->GetQuantity());
 }
 
-void UItemSelectionWindow::UpdatePocket() {
+void UItemSelectionWindow::UpdatePocket()
+{
     ClearSelectableOptions();
     CurrentBag->ForEachInPocket(CurrentPocket, std::bind_front(&UItemSelectionWindow::AddItemToWindow, this));
     SetIndex(GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->GetBagPocketMemory()[CurrentPocket]);
     OnPocketChanged.Broadcast(CurrentPocket);
 }
 
-void UItemSelectionWindow::AddItemToWindow(FName ItemName, int32 Quantity) {
+void UItemSelectionWindow::AddItemToWindow(FName ItemName, int32 Quantity)
+{
     auto Item = FDataManager::GetInstance().GetDataTable<FItem>().GetData(ItemName);
     check(Item != nullptr)
-    if (ItemListFilter.IsBound() && !ItemListFilter.Execute(*Item)) {
+    if (ItemListFilter.IsBound() && !ItemListFilter.Execute(*Item))
+    {
         return;
     }
 

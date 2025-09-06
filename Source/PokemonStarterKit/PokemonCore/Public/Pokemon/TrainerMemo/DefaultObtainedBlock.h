@@ -12,7 +12,8 @@
  * The default implementation for the obtained information
  */
 UCLASS()
-class POKEMONCORE_API UDefaultObtainedBlock : public UObject, public IObtainedBlock {
+class POKEMONCORE_API UDefaultObtainedBlock : public UObject, public IObtainedBlock
+{
     GENERATED_BODY()
 
   public:

@@ -17,7 +17,8 @@ BEGIN_DEFINE_SPEC(FTestExpGain, "Unit Tests.Battle.Battlers.TestExpGain",
 CORO_FUNCTIONS()
 END_DEFINE_SPEC(FTestExpGain);
 
-void FTestExpGain::Define() {
+void FTestExpGain::Define()
+{
     CoroIt("GainsExpAtEndOfBattle", [this]() -> UE5Coro::TCoroutine<> {
         auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
         auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(

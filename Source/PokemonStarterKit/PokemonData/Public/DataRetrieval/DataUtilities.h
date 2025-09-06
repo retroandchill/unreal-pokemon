@@ -20,7 +20,8 @@
  * Utility library used for getting data for the custom nodes
  */
 UCLASS(Blueprintable)
-class POKEMONDATA_API UDataUtilities : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UDataUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:
@@ -42,7 +43,8 @@ class POKEMONDATA_API UDataUtilities : public UBlueprintFunctionLibrary {
      * @param OutRow The output struct returned to the user
      */
     template <typename T>
-    static void Generic_GetData(const UScriptStruct *StructType, FName RowName, T *OutRow) {
+    static void Generic_GetData(const UScriptStruct *StructType, FName RowName, T *OutRow)
+    {
         check(StructType != nullptr && OutRow != nullptr)
 
         const auto Row = FDataManager::GetInstance().GetDataTable(StructType).GetData(RowName);
@@ -55,7 +57,8 @@ class POKEMONDATA_API UDataUtilities : public UBlueprintFunctionLibrary {
      * @param Stack The current state of the Blueprint callstack
      * @param Z_Param__Result The block of memory to save the result of the execution to
      */
-    DECLARE_FUNCTION(execGetData) {
+    DECLARE_FUNCTION(execGetData)
+    {
         P_GET_OBJECT(UScriptStruct, StructType)
         P_GET_PROPERTY(FNameProperty, RowName)
 
@@ -64,14 +67,18 @@ class POKEMONDATA_API UDataUtilities : public UBlueprintFunctionLibrary {
 
         P_FINISH
 
-        if (const auto StructProp = CastField<FStructProperty>(Stack.MostRecentProperty); StructProp && OutRowPtr) {
+        if (const auto StructProp = CastField<FStructProperty>(Stack.MostRecentProperty); StructProp && OutRowPtr)
+        {
             if (auto OutputType = StructProp->Struct;
                 (OutputType == StructType) ||
-                (OutputType->IsChildOf(StructType) && FStructUtils::TheSameLayout(OutputType, StructType))) {
+                (OutputType->IsChildOf(StructType) && FStructUtils::TheSameLayout(OutputType, StructType)))
+            {
                 P_NATIVE_BEGIN
                 Generic_GetData(StructType, RowName, OutRowPtr);
                 P_NATIVE_END
-            } else {
+            }
+            else
+            {
                 FBlueprintExceptionInfo ExceptionInfo(
                     EBlueprintExceptionType::AccessViolation,
                     NSLOCTEXT(
@@ -79,7 +86,9 @@ class POKEMONDATA_API UDataUtilities : public UBlueprintFunctionLibrary {
                         "Incompatible output parameter; the data table's type is not the same as the return type."));
                 FBlueprintCoreDelegates::ThrowScriptException(P_THIS, Stack, ExceptionInfo);
             }
-        } else {
+        }
+        else
+        {
             FBlueprintExceptionInfo ExceptionInfo(
                 EBlueprintExceptionType::AccessViolation,
                 NSLOCTEXT("GetData", "MissingOutputProperty",
@@ -113,18 +122,21 @@ class POKEMONDATA_API UDataUtilities : public UBlueprintFunctionLibrary {
      * @param ActionRegistrar The ActionRegistrar object passed to GetMenuActions
      */
     template <typename T>
-    static void AddAllDataTableTypesToMenu(UClass *ActionKey, FBlueprintActionDatabaseRegistrar &ActionRegistrar) {
+    static void AddAllDataTableTypesToMenu(UClass *ActionKey, FBlueprintActionDatabaseRegistrar &ActionRegistrar)
+    {
         auto CustomizeCallback = [](UEdGraphNode *Node, [[maybe_unused]] bool bIsTemplateNode,
                                     UScriptStruct *Subclass) {
             auto TypedNode = CastChecked<T>(Node);
             TypedNode->Initialize(Subclass);
         };
 
-        if (ActionRegistrar.IsOpenForRegistration(ActionKey)) {
+        if (ActionRegistrar.IsOpenForRegistration(ActionKey))
+        {
             auto StructTypes = FDataManager::GetInstance().GetStructTypes();
 
             const auto &DataRegistry = FDataRegistry::GetInstance();
-            for (auto Type : StructTypes) {
+            for (auto Type : StructTypes)
+            {
                 if (!UEdGraphSchema_K2::IsAllowableBlueprintVariableType(Type, true) ||
                     !DataRegistry.IsTypeRegistered(Type))
                     continue;

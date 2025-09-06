@@ -19,7 +19,8 @@ class UPaperFlipbook;
  * Blueprint Function library for loading sprites dynamically.
  */
 UCLASS()
-class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
+class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:
@@ -72,9 +73,8 @@ class POKEMONASSETS_API USpriteLoader : public UBlueprintFunctionLibrary {
      */
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Graphics|Pokémon",
               meta = (CallableWithoutWorldContext))
-    static FSoftBattleRender
-    GetLazySpeciesBattleSprite(FName Species, bool bBack = false,
-                               const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
+    static FSoftBattleRender GetLazySpeciesBattleSprite(
+        FName Species, bool bBack = false, const FPokemonAssetParams &AdditionalParams = FPokemonAssetParams());
 
     /**
      * Get the icon based upon the Pokémon that was passed in.

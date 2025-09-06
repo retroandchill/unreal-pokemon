@@ -13,40 +13,49 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     RETROLIB_EXPORT template <typename E>
-    class TUnexpected {
+    class TUnexpected
+    {
       public:
         template <typename T = E>
             requires(!std::same_as<std::remove_cvref_t<T>, TUnexpected>) &&
                     (!std::same_as<std::remove_cvref_t<T>, std::in_place_t>) && std::constructible_from<E, T>
-        constexpr explicit TUnexpected(T &&Arg) : Error(std::forward<T>(Arg)) {
+        constexpr explicit TUnexpected(T &&Arg) : Error(std::forward<T>(Arg))
+        {
         }
 
         template <typename... A>
             requires std::constructible_from<E, A...>
-        constexpr explicit TUnexpected(std::in_place_t, A &&...Arg) : Error(std::forward<A>(Arg)...) {
+        constexpr explicit TUnexpected(std::in_place_t, A &&...Arg) : Error(std::forward<A>(Arg)...)
+        {
         }
 
         template <typename U, typename... A>
             requires std::constructible_from<E, std::initializer_list<U> &, A...>
         constexpr explicit TUnexpected(std::in_place_t, std::initializer_list<U> InitializerList, A &&...Arg)
-            : Error(InitializerList, std::forward<A>(Arg)...) {
+            : Error(InitializerList, std::forward<A>(Arg)...)
+        {
         }
 
-        constexpr E &GetError() & noexcept {
+        constexpr E &GetError() & noexcept
+        {
             return Error;
         }
 
-        constexpr const E &GetError() const & noexcept {
+        constexpr const E &GetError() const & noexcept
+        {
             return Error;
         }
 
-        constexpr E &&GetError() && noexcept {
+        constexpr E &&GetError() && noexcept
+        {
             return std::move(Error);
         }
 
-        constexpr const E &&GetError() const && noexcept {
+        constexpr const E &&GetError() const && noexcept
+        {
             return std::move(Error);
         }
 
@@ -82,7 +91,8 @@ namespace Retro {
     class TBadExpectedAccess;
 
     RETROLIB_EXPORT template <>
-    class TBadExpectedAccess<void> : public std::exception {
+    class TBadExpectedAccess<void> : public std::exception
+    {
       protected:
         TBadExpectedAccess() noexcept = default;
         TBadExpectedAccess(const TBadExpectedAccess &) = default;
@@ -92,30 +102,37 @@ namespace Retro {
         TBadExpectedAccess &operator=(TBadExpectedAccess &&) noexcept = default;
 
       public:
-        const char *what() const noexcept override {
+        const char *what() const noexcept override
+        {
             return "Bad Expected";
         }
     };
 
     template <typename E>
-    class TBadExpectedAccess : public TBadExpectedAccess<void> {
+    class TBadExpectedAccess : public TBadExpectedAccess<void>
+    {
       public:
-        constexpr explicit TBadExpectedAccess(E Arg) : Value(std::move(Arg)) {
+        constexpr explicit TBadExpectedAccess(E Arg) : Value(std::move(Arg))
+        {
         }
 
-        constexpr E &Error() & noexcept {
+        constexpr E &Error() & noexcept
+        {
             return Value;
         }
 
-        constexpr const E &Error() const & noexcept {
+        constexpr const E &Error() const & noexcept
+        {
             return Value;
         }
 
-        constexpr E &&Error() && noexcept {
+        constexpr E &&Error() && noexcept
+        {
             return std::move(Value);
         }
 
-        constexpr const E &&Error() const && noexcept {
+        constexpr const E &&Error() const && noexcept
+        {
             return std::move(Value);
         }
 
@@ -123,7 +140,8 @@ namespace Retro {
         E Value;
     };
 
-    RETROLIB_EXPORT struct FUnexpectType {
+    RETROLIB_EXPORT struct FUnexpectType
+    {
         explicit FUnexpectType() = default;
     };
 
@@ -155,20 +173,29 @@ namespace Retro {
     concept IsExpected = std::same_as<std::remove_cvref_t<T>, TExpected<typename T::ValueType, typename T::ErrorType>>;
 
     template <typename T, typename U, typename... A>
-    constexpr void ReinitExpected(T &NewVal, U &OldVal, A &&...Args) {
-        if constexpr (std::is_nothrow_constructible_v<T, A...>) {
+    constexpr void ReinitExpected(T &NewVal, U &OldVal, A &&...Args)
+    {
+        if constexpr (std::is_nothrow_constructible_v<T, A...>)
+        {
             std::destroy_at(std::addressof(OldVal));
             std::construct_at(std::addressof(NewVal), std::forward<A>(Args)...);
-        } else if constexpr (std::is_nothrow_move_constructible_v<T>) {
+        }
+        else if constexpr (std::is_nothrow_move_constructible_v<T>)
+        {
             T Temp(std::forward<A>(Args)...);
             std::destroy_at(std::addressof(OldVal));
             std::construct_at(std::addressof(NewVal), std::move(Temp));
-        } else {
+        }
+        else
+        {
             U Temp(std::move(OldVal));
             std::destroy_at(std::addressof(OldVal));
-            try {
+            try
+            {
                 std::construct_at(std::addressof(NewVal), std::forward<A>(Args)...);
-            } catch (...) {
+            }
+            catch (...)
+            {
                 std::construct_at(std::addressof(NewVal), std::forward<A>(Args)...);
                 throw;
             }
@@ -176,7 +203,8 @@ namespace Retro {
     }
 
     template <NonVoidDestructible T, std::destructible E>
-    class TExpected {
+    class TExpected
+    {
         template <NonVoidDestructible U, std::destructible G>
         friend class TExpected;
 
@@ -190,7 +218,8 @@ namespace Retro {
 
         constexpr TExpected()
             requires std::default_initializable<T>
-            : Value() {
+            : Value()
+        {
         }
 
         constexpr TExpected(const TExpected &)
@@ -200,10 +229,14 @@ namespace Retro {
 
         constexpr TExpected(const TExpected &Other)
             requires std::copy_constructible<T> && std::copy_constructible<E>
-            : IsValid(Other.IsValid) {
-            if (Other.IsValid) {
+            : IsValid(Other.IsValid)
+        {
+            if (Other.IsValid)
+            {
                 std::construct_at(std::addressof(Value), Other.Value);
-            } else {
+            }
+            else
+            {
                 std::construct_at(std::addressof(Error), Other.Error);
             }
         }
@@ -216,10 +249,14 @@ namespace Retro {
         constexpr TExpected(TExpected &&Other) noexcept(std::is_nothrow_move_constructible_v<T> &&
                                                         std::is_nothrow_move_constructible_v<E>)
             requires std::move_constructible<T> && std::move_constructible<E>
-            : IsValid(Other.IsValid) {
-            if (Other.IsValid) {
+            : IsValid(Other.IsValid)
+        {
+            if (Other.IsValid)
+            {
                 std::construct_at(std::addressof(Value), std::move(Other.Value));
-            } else {
+            }
+            else
+            {
                 std::construct_at(std::addressof(Error), std::move(Other.Error));
             }
         }
@@ -227,10 +264,14 @@ namespace Retro {
         template <typename U, typename G>
             requires ExpectedConstructibleFromOther<T, E, U, G, const U &, const G &>
         constexpr explicit(!std::convertible_to<const U &, T> || std::convertible_to<const G &, E>)
-            TExpected(const TExpected<G, U> &Other) {
-            if (Other.IsSet()) {
+            TExpected(const TExpected<G, U> &Other)
+        {
+            if (Other.IsSet())
+            {
                 std::construct_at(std::addressof(Value), Other.Value);
-            } else {
+            }
+            else
+            {
                 std::construct_at(std::addressof(Error), Other.Error);
             }
         }
@@ -238,10 +279,14 @@ namespace Retro {
         template <typename U, typename G>
             requires ExpectedConstructibleFromOther<T, E, U, G, U, G>
         constexpr explicit(!std::convertible_to<const U &, T> || std::convertible_to<const G &, E>)
-            TExpected(TExpected<G, U> &&Other) {
-            if (Other.IsSet()) {
+            TExpected(TExpected<G, U> &&Other)
+        {
+            if (Other.IsSet())
+            {
                 std::construct_at(std::addressof(Value), std::move(Other.Value));
-            } else {
+            }
+            else
+            {
                 std::construct_at(std::addressof(Error), std::move(Other.Error));
             }
         }
@@ -250,41 +295,48 @@ namespace Retro {
             requires(!std::same_as<std::remove_cvref_t<U>, std::in_place_t>) &&
                     (!std::same_as<std::remove_cvref_t<U>, TExpected>) &&
                     (!IsUnexpected<U>) && std::constructible_from<T, U>
-        constexpr explicit(!std::convertible_to<U, T>) TExpected(U &&Val) : Value(std::forward<U>(Val)) {
+        constexpr explicit(!std::convertible_to<U, T>) TExpected(U &&Val) : Value(std::forward<U>(Val))
+        {
         }
 
         template <typename G>
             requires std::constructible_from<E, const G &>
         constexpr explicit(!std::convertible_to<const G &, E>) TExpected(const TUnexpected<G> &Err)
-            : IsValid(false), Error(Err.Error()) {
+            : IsValid(false), Error(Err.Error())
+        {
         }
 
         template <typename G>
             requires std::constructible_from<E, G>
         constexpr explicit(!std::convertible_to<G, E>) TExpected(TUnexpected<G> &&Err)
-            : IsValid(false), Error(std::move(Err.GetError())) {
+            : IsValid(false), Error(std::move(Err.GetError()))
+        {
         }
 
         template <typename... A>
             requires std::constructible_from<T, A...>
-        constexpr explicit TExpected(std::in_place_t, A &&...Args) : Value(std::forward<A>(Args)...) {
+        constexpr explicit TExpected(std::in_place_t, A &&...Args) : Value(std::forward<A>(Args)...)
+        {
         }
 
         template <typename U, typename... A>
             requires std::constructible_from<T, std::initializer_list<U> &, A...>
         constexpr explicit TExpected(std::in_place_t, std::initializer_list<U> Initializers, A &&...Args)
-            : Value(Initializers, std::forward<A>(Args)...) {
+            : Value(Initializers, std::forward<A>(Args)...)
+        {
         }
 
         template <typename... A>
             requires std::constructible_from<E, A...>
-        constexpr explicit TExpected(FUnexpectType, A &&...Args) : IsValid(false), Error(std::forward<A>(Args)...) {
+        constexpr explicit TExpected(FUnexpectType, A &&...Args) : IsValid(false), Error(std::forward<A>(Args)...)
+        {
         }
 
         template <typename U, typename... A>
             requires std::constructible_from<E, std::initializer_list<U> &, A...>
         constexpr explicit TExpected(FUnexpectType, std::initializer_list<U> Initializers, A &&...Args)
-            : IsValid(false), Error(Initializers, std::forward<A>(Args)...) {
+            : IsValid(false), Error(Initializers, std::forward<A>(Args)...)
+        {
         }
 
         constexpr ~TExpected()
@@ -294,18 +346,28 @@ namespace Retro {
         constexpr ~TExpected()
             requires(!std::is_trivially_destructible_v<T>) || (!std::is_trivially_destructible_v<E>)
         {
-            if constexpr (std::is_trivially_destructible_v<T>) {
-                if (!IsValid) {
+            if constexpr (std::is_trivially_destructible_v<T>)
+            {
+                if (!IsValid)
+                {
                     std::destroy_at(std::addressof(Error));
                 }
-            } else if constexpr (std::is_trivially_destructible_v<E>) {
-                if (IsValid) {
+            }
+            else if constexpr (std::is_trivially_destructible_v<E>)
+            {
+                if (IsValid)
+                {
                     std::destroy_at(std::addressof(Value));
                 }
-            } else {
-                if (IsValid) {
+            }
+            else
+            {
+                if (IsValid)
+                {
                     std::destroy_at(std::addressof(Value));
-                } else {
+                }
+                else
+                {
                     std::destroy_at(std::addressof(Error));
                 }
             }
@@ -322,13 +384,20 @@ namespace Retro {
                      (!std::is_trivially_copy_assignable_v<T> || !std::is_trivially_copy_assignable_v<E>)
         {
             IsValid = Other.IsValid;
-            if (IsValid && Other.IsValid) {
+            if (IsValid && Other.IsValid)
+            {
                 Value = Other.Value;
-            } else if (IsValid) {
+            }
+            else if (IsValid)
+            {
                 ReinitExpected(Error, Value, Other.Error);
-            } else if (Other.IsValid) {
+            }
+            else if (Other.IsValid)
+            {
                 ReinitExpected(Value, Error, Other.Value);
-            } else {
+            }
+            else
+            {
                 Error = Other.Error;
             }
 
@@ -349,13 +418,20 @@ namespace Retro {
                      (!std::is_trivially_move_assignable_v<T> || !std::is_trivially_move_assignable_v<E>)
         {
             IsValid = Other.IsValid;
-            if (IsValid && Other.IsValid) {
+            if (IsValid && Other.IsValid)
+            {
                 Value = std::move(Other.Value);
-            } else if (IsValid) {
+            }
+            else if (IsValid)
+            {
                 ReinitExpected(Error, Value, std::move(Other.Error));
-            } else if (Other.IsValid) {
+            }
+            else if (Other.IsValid)
+            {
                 ReinitExpected(Value, Error, std::move(Other.Value));
-            } else {
+            }
+            else
+            {
                 Error = std::move(Other.Error);
             }
 
@@ -367,10 +443,14 @@ namespace Retro {
                     std::constructible_from<T, U> && std::assignable_from<T &, U> &&
                     (std::is_nothrow_constructible_v<T, U> || std::is_nothrow_move_constructible_v<T> ||
                      std::is_nothrow_move_constructible_v<E>)
-        constexpr TExpected &operator=(U &&Other) {
-            if (IsValid) {
+        constexpr TExpected &operator=(U &&Other)
+        {
+            if (IsValid)
+            {
                 Value = std::forward<U>(Other);
-            } else {
+            }
+            else
+            {
                 ReinitExpected(Value, Error, std::forward<U>(Other));
                 IsValid = true;
             }
@@ -381,11 +461,15 @@ namespace Retro {
             requires std::constructible_from<E, const G &> && std::assignable_from<E &, const G &> &&
                      (std::is_nothrow_constructible_v<E, const G &> || std::is_nothrow_move_constructible_v<T> ||
                       std::is_nothrow_move_constructible_v<E>)
-        constexpr TExpected &operator=(const TUnexpected<G> &Other) {
-            if (IsValid) {
+        constexpr TExpected &operator=(const TUnexpected<G> &Other)
+        {
+            if (IsValid)
+            {
                 ReinitExpected(Error, Value, Other.Error);
                 IsValid = false;
-            } else {
+            }
+            else
+            {
                 Error = Other.Error;
             }
 
@@ -396,11 +480,15 @@ namespace Retro {
             requires std::constructible_from<E, G> && std::assignable_from<E &, G> &&
                      (std::is_nothrow_constructible_v<E, G> || std::is_nothrow_move_constructible_v<T> ||
                       std::is_nothrow_move_constructible_v<E>)
-        constexpr TExpected &operator=(TUnexpected<G> &&Other) {
-            if (IsValid) {
+        constexpr TExpected &operator=(TUnexpected<G> &&Other)
+        {
+            if (IsValid)
+            {
                 ReinitExpected(Error, Value, std::move(Other.GetError()));
                 IsValid = false;
-            } else {
+            }
+            else
+            {
                 Error = std::move(Other.GetError());
             }
 
@@ -409,10 +497,14 @@ namespace Retro {
 
         template <typename... A>
             requires std::is_nothrow_constructible_v<T, A...>
-        constexpr T &Emplace(A &&...Args) noexcept {
-            if (IsValid) {
+        constexpr T &Emplace(A &&...Args) noexcept
+        {
+            if (IsValid)
+            {
                 std::destroy_at(std::addressof(Value));
-            } else {
+            }
+            else
+            {
                 std::destroy_at(std::addressof(Error));
                 IsValid = true;
             }
@@ -422,10 +514,14 @@ namespace Retro {
 
         template <typename U, typename... A>
             requires std::is_nothrow_constructible_v<T, std::initializer_list<U> &, A...>
-        constexpr T &Emplace(std::initializer_list<U> Initializers, A &&...Args) noexcept {
-            if (IsValid) {
+        constexpr T &Emplace(std::initializer_list<U> Initializers, A &&...Args) noexcept
+        {
+            if (IsValid)
+            {
                 std::destroy_at(std::addressof(Value));
-            } else {
+            }
+            else
+            {
                 std::destroy_at(std::addressof(Error));
                 IsValid = true;
             }
@@ -433,114 +529,148 @@ namespace Retro {
             return *std::construct_at(std::addressof(Value), Initializers, std::forward<A>(Args)...);
         }
 
-        constexpr void
-        Swap(TExpected &Other) noexcept(std::is_nothrow_constructible_v<T> && std::is_nothrow_swappable_v<T> &&
-                                        std::is_nothrow_move_constructible_v<E> && std::is_nothrow_swappable_v<E>)
+        constexpr void Swap(TExpected &Other) noexcept(std::is_nothrow_constructible_v<T> &&
+                                                       std::is_nothrow_swappable_v<T> &&
+                                                       std::is_nothrow_move_constructible_v<E> &&
+                                                       std::is_nothrow_swappable_v<E>)
             requires std::is_swappable_v<T> && std::is_swappable_v<E> && std::is_move_constructible_v<T> &&
                      std::is_move_constructible_v<E> &&
                      (std::is_nothrow_constructible_v<T> || std::is_nothrow_constructible_v<E>)
         {
-            if (Other.IsValid) {
-                if (IsValid) {
+            if (Other.IsValid)
+            {
+                if (IsValid)
+                {
                     using std::swap;
                     swap(Value, Other.Value);
-                } else {
+                }
+                else
+                {
                     Other.Swap(*this);
                 }
-            } else {
-                if (IsValid) {
-                    if constexpr (std::is_nothrow_move_constructible_v<E>) {
+            }
+            else
+            {
+                if (IsValid)
+                {
+                    if constexpr (std::is_nothrow_move_constructible_v<E>)
+                    {
                         E Temp = std::move(Other.Error);
                         std::destroy_at(std::addressof(Other.Error));
-                        try {
+                        try
+                        {
                             std::construct_at(std::addressof(Other.Value), std::move(Value));
                             std::destroy_at(std::addressof(Value));
                             std::construct_at(std::addressof(Error), std::move(Temp));
-                        } catch (...) {
+                        }
+                        catch (...)
+                        {
                             std::construct_at(std::addressof(Error), std::move(Temp));
                             throw;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         T Temp = std::move(Value);
                         std::destroy_at(std::addressof(Value));
-                        try {
+                        try
+                        {
                             std::construct_at(std::addressof(Error), std::move(Other.Error));
                             std::destroy_at(std::addressof(Other.Error));
                             std::construct_at(std::addressof(Other.Value), std::move(Temp));
-                        } catch (...) {
+                        }
+                        catch (...)
+                        {
                             std::construct_at(std::addressof(Value), std::move(Temp));
                             throw;
                         }
                     }
                     IsValid = false;
                     Other.IsValid = true;
-                } else {
+                }
+                else
+                {
                     using std::swap;
                     swap(Error, Other.Error);
                 }
             }
         }
 
-        constexpr T *operator->() noexcept {
+        constexpr T *operator->() noexcept
+        {
             RETROLIB_ASSERT(IsValid);
             return std::addressof(Value);
         }
 
-        constexpr const T *operator->() const noexcept {
+        constexpr const T *operator->() const noexcept
+        {
             RETROLIB_ASSERT(IsValid);
             return std::addressof(Value);
         }
 
-        constexpr T &operator*() & noexcept {
+        constexpr T &operator*() & noexcept
+        {
             RETROLIB_ASSERT(IsValid);
             return Value;
         }
 
-        constexpr const T &operator*() const & noexcept {
+        constexpr const T &operator*() const & noexcept
+        {
             RETROLIB_ASSERT(IsValid);
             return Value;
         }
 
-        constexpr T &&operator*() && noexcept {
+        constexpr T &&operator*() && noexcept
+        {
             RETROLIB_ASSERT(IsValid);
             return std::move(Value);
         }
 
-        constexpr const T &&operator*() const && noexcept {
+        constexpr const T &&operator*() const && noexcept
+        {
             RETROLIB_ASSERT(IsValid);
             return std::move(Value);
         }
 
-        [[nodiscard]] constexpr bool IsSet() const noexcept {
+        [[nodiscard]] constexpr bool IsSet() const noexcept
+        {
             return IsValid;
         }
 
-        constexpr T &GetValue() & {
-            if (IsValid) {
+        constexpr T &GetValue() &
+        {
+            if (IsValid)
+            {
                 return Value;
             }
 
             throw TBadExpectedAccess(Error);
         }
 
-        constexpr const T &GetValue() const & {
-            if (IsValid) {
+        constexpr const T &GetValue() const &
+        {
+            if (IsValid)
+            {
                 return Value;
             }
 
             throw TBadExpectedAccess(Error);
         }
 
-        constexpr T &&GetValue() && {
-            if (IsValid) {
+        constexpr T &&GetValue() &&
+        {
+            if (IsValid)
+            {
                 return std::move(Value);
             }
 
             throw TBadExpectedAccess(std::move(Error));
         }
 
-        constexpr const T &&GetValue() const && {
-            if (IsValid) {
+        constexpr const T &&GetValue() const &&
+        {
+            if (IsValid)
+            {
                 return std::move(Value);
             }
 
@@ -549,68 +679,82 @@ namespace Retro {
 
         template <typename U>
             requires std::convertible_to<T, U> && std::is_copy_constructible_v<T>
-        constexpr T Get(U &&Default) const & noexcept {
+        constexpr T Get(U &&Default) const & noexcept
+        {
             return IsValid ? Value : std::forward<U>(Default);
         }
 
         template <typename U>
             requires std::convertible_to<T, U> && std::is_move_constructible_v<T>
-        constexpr T Get(U &&Default) && noexcept {
+        constexpr T Get(U &&Default) && noexcept
+        {
             return IsValid ? std::move(Value) : std::forward<U>(Default);
         }
 
-        constexpr T *GetPtrOrNull() noexcept {
+        constexpr T *GetPtrOrNull() noexcept
+        {
             return IsValid ? std::addressof(Value) : nullptr;
         }
 
-        constexpr const T *GetPtrOrNull() const noexcept {
+        constexpr const T *GetPtrOrNull() const noexcept
+        {
             return IsValid ? std::addressof(Value) : nullptr;
         }
 
-        constexpr E &GetError() & noexcept {
+        constexpr E &GetError() & noexcept
+        {
             RETROLIB_ASSERT(!IsValid);
             return Error;
         }
 
-        constexpr const E &GetError() const & noexcept {
+        constexpr const E &GetError() const & noexcept
+        {
             RETROLIB_ASSERT(!IsValid);
             return Error;
         }
 
-        constexpr E &&GetError() && noexcept {
+        constexpr E &&GetError() && noexcept
+        {
             RETROLIB_ASSERT(!IsValid);
             return std::move(Error);
         }
 
-        constexpr const E &&GetError() const && noexcept {
+        constexpr const E &&GetError() const && noexcept
+        {
             RETROLIB_ASSERT(!IsValid);
             return std::move(Error);
         }
 
         template <typename G>
             requires std::convertible_to<G, E> && std::is_copy_constructible_v<E>
-        constexpr E GetError(G &&Default) const & {
+        constexpr E GetError(G &&Default) const &
+        {
             return IsValid ? std::forward<G>(Default) : Error;
         }
 
         template <typename G>
             requires std::convertible_to<G, E> && std::is_move_constructible_v<E>
-        constexpr E GetError(G &&Default) && {
+        constexpr E GetError(G &&Default) &&
+        {
             return IsValid ? std::forward<G>(Default) : std::move(Error);
         }
 
-        constexpr E *GetErrorPtrOrNull() noexcept {
+        constexpr E *GetErrorPtrOrNull() noexcept
+        {
             return IsValid ? nullptr : std::addressof(Error);
         }
 
-        constexpr const E *GetErrorPtrOrNull() const noexcept {
+        constexpr const E *GetErrorPtrOrNull() const noexcept
+        {
             return IsValid ? nullptr : std::addressof(Error);
         }
 
         template <typename U, typename G>
             requires(!std::is_void_v<U>) && EqualityComparable<T, U> && EqualityComparable<E, G>
-        friend constexpr bool operator==(const TExpected &LHS, const TExpected<U, G> &RHS) noexcept {
-            if (LHS.IsSet() != RHS.IsSet()) {
+        friend constexpr bool operator==(const TExpected &LHS, const TExpected<U, G> &RHS) noexcept
+        {
+            if (LHS.IsSet() != RHS.IsSet())
+            {
                 return false;
             }
 
@@ -619,17 +763,20 @@ namespace Retro {
 
         template <typename U>
             requires(!IsExpected<U>) && EqualityComparable<T, U>
-        friend constexpr bool operator==(const TExpected &LHS, const U &RHS) {
+        friend constexpr bool operator==(const TExpected &LHS, const U &RHS)
+        {
             return LHS.IsSet() && *LHS == RHS;
         }
 
         template <typename G>
             requires EqualityComparable<E, G>
-        friend constexpr bool operator==(const TExpected &LHS, const TUnexpected<G> &RHS) {
+        friend constexpr bool operator==(const TExpected &LHS, const TUnexpected<G> &RHS)
+        {
             return !LHS.IsSet() && LHS.Error() == RHS;
         }
 
-        friend constexpr void swap(TExpected &LHS, TExpected &RHS) noexcept(noexcept(LHS.Swap(RHS))) {
+        friend constexpr void swap(TExpected &LHS, TExpected &RHS) noexcept(noexcept(LHS.Swap(RHS)))
+        {
             LHS.Swap(RHS);
         }
 
@@ -643,7 +790,8 @@ namespace Retro {
     };
 
     template <std::destructible E>
-    class TExpected<void, E> {
+    class TExpected<void, E>
+    {
         template <NonVoidDestructible U, std::destructible G>
         friend class TExpected;
 
@@ -655,7 +803,8 @@ namespace Retro {
         template <typename U>
         using Rebind = TExpected<U, ErrorType>;
 
-        constexpr TExpected() noexcept {
+        constexpr TExpected() noexcept
+        {
         }
 
         constexpr TExpected(const TExpected &)
@@ -664,8 +813,10 @@ namespace Retro {
 
         constexpr TExpected(const TExpected &Other)
             requires std::is_copy_constructible_v<E> && (!std::is_trivially_copy_constructible_v<E>)
-            : IsValid(Other.IsValid) {
-            if (!Other.IsValid) {
+            : IsValid(Other.IsValid)
+        {
+            if (!Other.IsValid)
+            {
                 std::construct_at(std::addressof(Other.Error), Error);
             }
         }
@@ -676,8 +827,10 @@ namespace Retro {
 
         constexpr TExpected(TExpected &&Other)
             requires std::is_move_constructible_v<E> && (!std::is_trivially_move_constructible_v<E>)
-            : IsValid(Other.IsValid) {
-            if (!Other.IsValid) {
+            : IsValid(Other.IsValid)
+        {
+            if (!Other.IsValid)
+            {
                 std::construct_at(std::addressof(Other.Error), std::move(Error));
             }
         }
@@ -688,8 +841,10 @@ namespace Retro {
                      (!std::is_constructible_v<TUnexpected<E>, TExpected<U, G>>) &&
                      (!std::is_constructible_v<TUnexpected<E>, const TExpected<U, G> &>) &&
                      (!std::is_constructible_v<TUnexpected<E>, const TExpected<U, G> &>)
-        constexpr explicit(!std::is_convertible_v<const G &, E>) TExpected(const TExpected<U, G> &Other) {
-            if (!Other.IsValid) {
+        constexpr explicit(!std::is_convertible_v<const G &, E>) TExpected(const TExpected<U, G> &Other)
+        {
+            if (!Other.IsValid)
+            {
                 std::construct_at(std::addressof(Error), Other.Error);
             }
         }
@@ -701,8 +856,10 @@ namespace Retro {
                      (!std::is_constructible_v<TUnexpected<E>, const TExpected<U, G> &>) &&
                      (!std::is_constructible_v<TUnexpected<E>, const TExpected<U, G> &>)
         constexpr explicit(!std::is_convertible_v<const G &, E>) TExpected(TExpected<U, G> &&Other)
-            : IsValid(Other.IsValid) {
-            if (!Other.IsValid) {
+            : IsValid(Other.IsValid)
+        {
+            if (!Other.IsValid)
+            {
                 std::construct_at(std::addressof(Error), std::move(Other.Error));
             }
         }
@@ -710,27 +867,32 @@ namespace Retro {
         template <typename G>
             requires std::constructible_from<E, const G &>
         constexpr explicit(!std::convertible_to<const G &, E>) TExpected(const TUnexpected<G> &Other)
-            : IsValid(false), Error(Other.GetError()) {
+            : IsValid(false), Error(Other.GetError())
+        {
         }
 
         template <typename G>
             requires std::constructible_from<E, G>
         constexpr explicit(!std::convertible_to<G, E>) TExpected(TUnexpected<G> &&Other)
-            : IsValid(false), Error(std::move(Other.GetError())) {
+            : IsValid(false), Error(std::move(Other.GetError()))
+        {
         }
 
-        constexpr explicit TExpected(std::in_place_t) noexcept {
+        constexpr explicit TExpected(std::in_place_t) noexcept
+        {
         }
 
         template <typename... A>
             requires std::is_constructible_v<E, A...>
-        constexpr explicit TExpected(FUnexpectType, A &&...Args) : IsValid(false), Error(std::forward<A>(Args)...) {
+        constexpr explicit TExpected(FUnexpectType, A &&...Args) : IsValid(false), Error(std::forward<A>(Args)...)
+        {
         }
 
         template <typename U, typename... A>
             requires std::is_constructible_v<E, std::initializer_list<U> &, A...>
         constexpr explicit TExpected(FUnexpectType, std::initializer_list<U> Initializers, A &&...Args)
-            : IsValid(false), Error(Initializers, std::forward<A>(Args)...) {
+            : IsValid(false), Error(Initializers, std::forward<A>(Args)...)
+        {
         }
 
         constexpr ~TExpected()
@@ -740,7 +902,8 @@ namespace Retro {
         constexpr ~TExpected()
             requires(!std::is_trivially_destructible_v<E>)
         {
-            if (!IsValid) {
+            if (!IsValid)
+            {
                 std::destroy_at(std::addressof(Error));
             }
         }
@@ -753,15 +916,22 @@ namespace Retro {
             requires std::is_copy_assignable_v<E> && std::is_copy_constructible_v<E> &&
                      (!std::is_trivially_copy_assignable_v<E>)
         {
-            if (IsValid && Other.IsValid) {
+            if (IsValid && Other.IsValid)
+            {
                 // Do nothing
-            } else if (IsValid) {
+            }
+            else if (IsValid)
+            {
                 std::construct_at(std::addressof(Error), Other.Error);
                 IsValid = false;
-            } else if (Other.IsValid) {
+            }
+            else if (Other.IsValid)
+            {
                 std::destroy_at(Error);
                 IsValid = true;
-            } else {
+            }
+            else
+            {
                 Error = Other.Error;
             }
 
@@ -776,15 +946,22 @@ namespace Retro {
             requires std::is_copy_assignable_v<E> && std::is_move_assignable_v<E> &&
                      (!std::is_trivially_move_assignable_v<E>)
         {
-            if (IsValid && Other.IsValid) {
+            if (IsValid && Other.IsValid)
+            {
                 // Do nothing
-            } else if (IsValid) {
+            }
+            else if (IsValid)
+            {
                 std::construct_at(std::addressof(Error), std::move(Other.Error));
                 IsValid = false;
-            } else if (Other.IsValid) {
+            }
+            else if (Other.IsValid)
+            {
                 std::destroy_at(Error);
                 IsValid = true;
-            } else {
+            }
+            else
+            {
                 Error = std::move(Other.Error);
             }
 
@@ -793,11 +970,15 @@ namespace Retro {
 
         template <typename G>
             requires std::constructible_from<E, const G &> && std::assignable_from<E &, const G &>
-        constexpr TExpected &operator=(const TUnexpected<G> &Other) {
-            if (IsValid) {
+        constexpr TExpected &operator=(const TUnexpected<G> &Other)
+        {
+            if (IsValid)
+            {
                 std::construct_at(std::addressof(Error), Other.GetError());
                 IsValid = false;
-            } else {
+            }
+            else
+            {
                 Error = Other.Error;
             }
 
@@ -806,19 +987,25 @@ namespace Retro {
 
         template <typename G>
             requires std::constructible_from<E, G> && std::assignable_from<E &, G>
-        constexpr TExpected &operator=(TUnexpected<G> &&Other) {
-            if (IsValid) {
+        constexpr TExpected &operator=(TUnexpected<G> &&Other)
+        {
+            if (IsValid)
+            {
                 std::construct_at(std::addressof(Error), std::move(Other.GetError()));
                 IsValid = false;
-            } else {
+            }
+            else
+            {
                 Error = std::move(Other.GetError());
             }
 
             return *this;
         }
 
-        constexpr void Emplace() noexcept {
-            if (!IsValid) {
+        constexpr void Emplace() noexcept
+        {
+            if (!IsValid)
+            {
                 std::destroy_at(std::addressof(Error));
                 IsValid = true;
             }
@@ -828,87 +1015,110 @@ namespace Retro {
                                                        std::is_nothrow_swappable_v<E>)
             requires std::is_swappable_v<E> && std::is_move_constructible_v<E>
         {
-            if (Other.IsValid) {
-                if (!IsValid) {
+            if (Other.IsValid)
+            {
+                if (!IsValid)
+                {
                     Other.Swap(*this);
                 }
-            } else {
-                if (IsValid) {
+            }
+            else
+            {
+                if (IsValid)
+                {
                     std::construct_at(std::addressof(Error), std::move(Other.Error));
                     std::destroy_at(std::addressof(Other.Error));
                     IsValid = false;
                     Other.IsValid = true;
-                } else {
+                }
+                else
+                {
                     using std::swap;
                     swap(Error, Other.Error);
                 }
             }
         }
 
-        [[nodiscard]] constexpr bool IsSet() const noexcept {
+        [[nodiscard]] constexpr bool IsSet() const noexcept
+        {
             return IsValid;
         }
 
-        constexpr void operator*() const noexcept {
+        constexpr void operator*() const noexcept
+        {
             // I don't get why this is here, but it is in the specification.
         }
 
-        constexpr void GetValue() const & {
-            if (!IsValid) {
+        constexpr void GetValue() const &
+        {
+            if (!IsValid)
+            {
                 throw TBadExpectedAccess(Error);
             }
         }
 
-        constexpr void GetValue() && {
-            if (!IsValid) {
+        constexpr void GetValue() &&
+        {
+            if (!IsValid)
+            {
                 throw TBadExpectedAccess(std::move(Error));
             }
         }
 
-        constexpr E &GetError() & noexcept {
+        constexpr E &GetError() & noexcept
+        {
             RETROLIB_ASSERT(!IsValid);
             return Error;
         }
 
-        constexpr const E &GetError() const & noexcept {
+        constexpr const E &GetError() const & noexcept
+        {
             RETROLIB_ASSERT(!IsValid);
             return Error;
         }
 
-        constexpr E &&GetError() && noexcept {
+        constexpr E &&GetError() && noexcept
+        {
             RETROLIB_ASSERT(!IsValid);
             return std::move(Error);
         }
 
-        constexpr const E &&GetError() const && noexcept {
+        constexpr const E &&GetError() const && noexcept
+        {
             RETROLIB_ASSERT(!IsValid);
             return std::move(Error);
         }
 
         template <typename G>
             requires std::convertible_to<G, E> && std::is_copy_constructible_v<E>
-        constexpr E GetError(G &&Default) const & {
+        constexpr E GetError(G &&Default) const &
+        {
             return IsValid ? std::forward<G>(Default) : Error;
         }
 
         template <typename G>
             requires std::convertible_to<G, E> && std::is_move_constructible_v<E>
-        constexpr E GetError(G &&Default) && {
+        constexpr E GetError(G &&Default) &&
+        {
             return IsValid ? std::forward<G>(Default) : std::move(Error);
         }
 
-        constexpr E *GetErrorPtrOrNull() noexcept {
+        constexpr E *GetErrorPtrOrNull() noexcept
+        {
             return IsValid ? nullptr : std::addressof(Error);
         }
 
-        constexpr const E *GetErrorPtrOrNull() const noexcept {
+        constexpr const E *GetErrorPtrOrNull() const noexcept
+        {
             return IsValid ? nullptr : std::addressof(Error);
         }
 
         template <typename U, typename G>
             requires std::is_void_v<U> && EqualityComparable<E, G>
-        friend constexpr bool operator==(const TExpected &LHS, const TExpected<U, G> &RHS) {
-            if (LHS.IsSet() != RHS.IsSet()) {
+        friend constexpr bool operator==(const TExpected &LHS, const TExpected<U, G> &RHS)
+        {
+            if (LHS.IsSet() != RHS.IsSet())
+            {
                 return false;
             }
 
@@ -917,11 +1127,13 @@ namespace Retro {
 
         template <typename G>
             requires EqualityComparable<E, G>
-        friend constexpr bool operator==(const TExpected &LHS, const G &RHS) {
+        friend constexpr bool operator==(const TExpected &LHS, const G &RHS)
+        {
             return !LHS.IsSet() && LHS.Error() == RHS.Error();
         }
 
-        friend constexpr void swap(TExpected &LHS, TExpected &RHS) noexcept {
+        friend constexpr void swap(TExpected &LHS, TExpected &RHS) noexcept
+        {
             LHS.Swap(RHS);
         }
 
@@ -934,10 +1146,12 @@ namespace Retro {
     };
 
     template <NonVoidDestructible T>
-    struct Optionals::TErrorPassthrough<T> {
+    struct Optionals::TErrorPassthrough<T>
+    {
         template <typename E>
             requires std::constructible_from<T, TUnexpected<std::remove_cvref_t<E>>>
-        constexpr T operator()(E &&Error) const {
+        constexpr T operator()(E &&Error) const
+        {
             return T(TUnexpected(std::forward<E>(Error)));
         }
     };

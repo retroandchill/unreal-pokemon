@@ -12,7 +12,8 @@ class IGridMovable;
  *
  */
 UCLASS()
-class GRIDBASED2D_API UGridBasedCharacterUtilities : public UBlueprintFunctionLibrary {
+class GRIDBASED2D_API UGridBasedCharacterUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

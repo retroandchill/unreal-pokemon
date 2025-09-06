@@ -13,7 +13,8 @@
  * Game clock that determines its time based on the number of ticks experienced in the game.
  */
 UCLASS(Config = Game)
-class DAYNIGHTCYCLE_API UTickBasedClock : public UObject, public IGameClock, public FTickableGameObject {
+class DAYNIGHTCYCLE_API UTickBasedClock : public UObject, public IGameClock, public FTickableGameObject
+{
     GENERATED_BODY()
 
   public:

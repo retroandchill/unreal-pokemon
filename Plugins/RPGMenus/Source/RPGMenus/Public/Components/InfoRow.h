@@ -15,7 +15,8 @@
  * and delegates.
  */
 UCLASS(Abstract)
-class RPGMENUS_API UInfoRow : public UCommonUserWidget {
+class RPGMENUS_API UInfoRow : public UCommonUserWidget
+{
     GENERATED_BODY()
 
   protected:

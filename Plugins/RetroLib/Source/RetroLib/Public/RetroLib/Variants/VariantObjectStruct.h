@@ -22,7 +22,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     RETROLIB_EXPORT class FVariantObjectStructRegistry;
 
     /**
@@ -30,7 +31,8 @@ namespace Retro {
      * Implementations of this interface define the logic for translating data
      * from one struct type to another, supporting both standard and 'soft' variants.
      */
-    RETROLIB_EXPORT class RETROLIB_API IVariantConversion {
+    RETROLIB_EXPORT class RETROLIB_API IVariantConversion
+    {
       public:
         virtual ~IVariantConversion() = default;
 
@@ -101,32 +103,39 @@ namespace Retro {
     };
 
     template <VariantObjectStruct T, VariantObjectStruct U>
-    class TVariantConversionImpl : public IVariantConversion {
+    class TVariantConversionImpl : public IVariantConversion
+    {
       public:
-        UScriptStruct *GetSourceStructType() const final {
+        UScriptStruct *GetSourceStructType() const final
+        {
             return GetScriptStruct<T>();
         }
 
-        UScriptStruct *GetSourceSoftStructType() const final {
+        UScriptStruct *GetSourceSoftStructType() const final
+        {
             return GetScriptStruct<typename T::SoftPtrType>();
         }
 
-        UScriptStruct *GetDestStructType() const final {
+        UScriptStruct *GetDestStructType() const final
+        {
             return GetScriptStruct<U>();
         }
 
-        UScriptStruct *GetDestSoftStructType() const final {
+        UScriptStruct *GetDestSoftStructType() const final
+        {
             return GetScriptStruct<typename U::SoftPtrType>();
         }
 
         bool ConvertVariant(const FStructProperty &SourceProperty, const uint8 *SourceValue,
-                            const FStructProperty &DestProperty, uint8 *DestValue) const final {
+                            const FStructProperty &DestProperty, uint8 *DestValue) const final
+        {
             ValidateStructsMatch(SourceProperty, GetSourceStructType());
             ValidateStructsMatch(DestProperty, GetDestStructType());
             auto SourcePtr = std::bit_cast<const T *>(SourceValue);
             auto DestPtr = std::bit_cast<U *>(DestValue);
 
-            if (TOptional<U> Converted = SourcePtr->template Convert<U>(); Converted.IsSet()) {
+            if (TOptional<U> Converted = SourcePtr->template Convert<U>(); Converted.IsSet())
+            {
                 *DestPtr = Converted.GetValue();
                 return true;
             }
@@ -135,13 +144,15 @@ namespace Retro {
         }
 
         bool ConvertSoftVariant(const FStructProperty &SourceProperty, const uint8 *SourceValue,
-                                const FStructProperty &DestProperty, uint8 *DestValue) const final {
+                                const FStructProperty &DestProperty, uint8 *DestValue) const final
+        {
             ValidateStructsMatch(SourceProperty, GetSourceSoftStructType());
             ValidateStructsMatch(DestProperty, GetDestSoftStructType());
             auto SourcePtr = std::bit_cast<const typename T::SoftPtrType *>(SourceValue);
             auto DestPtr = std::bit_cast<typename U::SoftPtrType *>(DestValue);
 
-            if (auto Converted = SourcePtr->template Convert<typename U::SoftPtrType>(); Converted.IsSet()) {
+            if (auto Converted = SourcePtr->template Convert<typename U::SoftPtrType>(); Converted.IsSet())
+            {
                 *DestPtr = std::move(Converted.GetValue());
                 return true;
             }
@@ -155,7 +166,8 @@ namespace Retro {
      * in blueprints as several of this methods throw exception that are intended to be handled by a CustomThunk
      * function that will then trigger an actual blueprint exception.
      */
-    RETROLIB_EXPORT class RETROLIB_API IVariantRegistration {
+    RETROLIB_EXPORT class RETROLIB_API IVariantRegistration
+    {
       public:
         virtual ~IVariantRegistration() = default;
 
@@ -269,7 +281,8 @@ namespace Retro {
          * Combines multiple data processing views to extract and transform conversion objects
          * into their appropriate shared reference variant type.
          */
-        auto GetAllConversions() const {
+        auto GetAllConversions() const
+        {
             return Conversions | Ranges::Views::Values | Ranges::Views::Transform(&TSharedRef<IVariantConversion>::Get);
         }
 
@@ -281,7 +294,8 @@ namespace Retro {
          *
          * @return A reference to the map containing variant conversions.
          */
-        TMap<FName, TSharedRef<IVariantConversion>> &GetMutableConversions() {
+        TMap<FName, TSharedRef<IVariantConversion>> &GetMutableConversions()
+        {
             return Conversions;
         }
 
@@ -292,7 +306,8 @@ namespace Retro {
          *
          * @return A reference to the map containing variant conversions.
          */
-        const TMap<FName, TSharedRef<IVariantConversion>> &GetConversions() const {
+        const TMap<FName, TSharedRef<IVariantConversion>> &GetConversions() const
+        {
             return Conversions;
         }
 
@@ -309,33 +324,41 @@ namespace Retro {
      */
     template <typename T>
         requires VariantObjectStruct<T>
-    class TVariantStructRegistration : public IVariantRegistration {
+    class TVariantStructRegistration : public IVariantRegistration
+    {
       public:
-        UScriptStruct *GetStructType() const final {
+        UScriptStruct *GetStructType() const final
+        {
             return GetScriptStruct<T>();
         }
 
-        UScriptStruct *GetSoftStructType() const final {
+        UScriptStruct *GetSoftStructType() const final
+        {
             return GetScriptStruct<typename T::SoftPtrType>();
         }
 
-        bool IsValidType(const UClass *Class) const final {
+        bool IsValidType(const UClass *Class) const final
+        {
             return T::IsValidType(Class);
         }
 
-        TOptional<uint64> GetTypeIndex(const UObject *SourceObject) const final {
+        TOptional<uint64> GetTypeIndex(const UObject *SourceObject) const final
+        {
             return T::GetTypeIndex(SourceObject);
         }
 
-        TOptional<uint64> GetTypeIndex(const TSoftObjectPtr<> &SourceObject) const final {
+        TOptional<uint64> GetTypeIndex(const TSoftObjectPtr<> &SourceObject) const final
+        {
             return T::SoftPtrType::GetTypeIndex(SourceObject);
         }
 
-        void SetStructValue(UObject *SourceObject, const FStructProperty &Property, uint8 *StructValue) const final {
+        void SetStructValue(UObject *SourceObject, const FStructProperty &Property, uint8 *StructValue) const final
+        {
             ValidateStructsMatch(Property, GetStructType());
             auto Variant = std::bit_cast<T *>(StructValue);
             if (auto TypeIndex = T::GetTypeIndex(SourceObject);
-                !TypeIndex.IsSet() || TypeIndex.GetValue() == T::template GetTypeIndex<std::nullptr_t>()) {
+                !TypeIndex.IsSet() || TypeIndex.GetValue() == T::template GetTypeIndex<std::nullptr_t>())
+            {
                 throw FVariantException("Incompatible object parameter; the supplied object is not of a "
                                         "valid type for this variant object");
             }
@@ -343,14 +366,16 @@ namespace Retro {
             Variant->Set(SourceObject);
         }
 
-        TOptional<UObject &> GetValue(const FStructProperty &Property, uint8 *StructValue) const final {
+        TOptional<UObject &> GetValue(const FStructProperty &Property, uint8 *StructValue) const final
+        {
             ValidateStructsMatch(Property, GetStructType());
             auto Variant = std::bit_cast<T *>(StructValue);
             return Variant->TryGet();
         }
 
         void MakeSoftValue(const FStructProperty &Property, const uint8 *StructValue,
-                           const FStructProperty &SoftProperty, uint8 *SoftStructValue) const final {
+                           const FStructProperty &SoftProperty, uint8 *SoftStructValue) const final
+        {
             ValidateStructsMatch(Property, GetStructType());
             ValidateStructsMatch(SoftProperty, GetSoftStructType());
             auto Variant = std::bit_cast<const T *>(StructValue);
@@ -360,18 +385,21 @@ namespace Retro {
         }
 
         void MakeSoftValue(const TSoftObjectPtr<> &Path, const FStructProperty &SoftProperty,
-                           uint8 *SoftStructValue) const final {
+                           uint8 *SoftStructValue) const final
+        {
             ValidateStructsMatch(SoftProperty, GetSoftStructType());
             auto SoftVariant = std::bit_cast<typename T::SoftPtrType *>(SoftStructValue);
             SoftVariant->Set(Path);
         }
 
         TOptional<TSoftObjectRef<>> TryGetSoftValue(const UClass *Class, const FStructProperty &SoftProperty,
-                                                    uint8 *SoftStructValue) const final {
+                                                    uint8 *SoftStructValue) const final
+        {
             ValidateStructsMatch(SoftProperty, GetSoftStructType());
             auto SoftVariant = std::bit_cast<const typename T::SoftPtrType *>(SoftStructValue);
             if (auto ClassIndex = T::GetTypeIndexForClass(Class);
-                !ClassIndex.IsSet() || *ClassIndex != SoftVariant->GetTypeIndex()) {
+                !ClassIndex.IsSet() || *ClassIndex != SoftVariant->GetTypeIndex())
+            {
                 return TOptional<TSoftObjectRef<>>();
             }
 
@@ -379,14 +407,16 @@ namespace Retro {
         }
 
         bool LoadSynchronous(const FStructProperty &SoftProperty, const uint8 *SoftStructValue,
-                             const FStructProperty &Property, uint8 *StructValue) const final {
+                             const FStructProperty &Property, uint8 *StructValue) const final
+        {
             ValidateStructsMatch(Property, GetStructType());
             ValidateStructsMatch(SoftProperty, GetSoftStructType());
             auto Variant = std::bit_cast<T *>(StructValue);
             auto SoftVariant = std::bit_cast<const typename T::SoftPtrType *>(SoftStructValue);
 
             auto Result = SoftVariant->LoadSynchronous();
-            if (!Result.IsSet()) {
+            if (!Result.IsSet())
+            {
                 return false;
             }
 
@@ -394,11 +424,13 @@ namespace Retro {
             return true;
         }
 
-        TArray<UClass *> GetValidClasses() const final {
+        TArray<UClass *> GetValidClasses() const final
+        {
             return T::GetTypeClasses();
         }
 
-        TOptional<IVariantConversion &> GetConversion(const UScriptStruct &To) const final {
+        TOptional<IVariantConversion &> GetConversion(const UScriptStruct &To) const final
+        {
             return Optionals::OfNullable(GetConversions().Find(To.GetFName())) |
                    Optionals::Transform(&TSharedRef<IVariantConversion>::Get);
         }
@@ -407,7 +439,8 @@ namespace Retro {
     /**
      * Static registry for a variant struct object.
      */
-    class RETROLIB_API FVariantObjectStructRegistry {
+    class RETROLIB_API FVariantObjectStructRegistry
+    {
         DECLARE_MULTICAST_DELEGATE_TwoParams(FOnRegistrationComplete, FName, IVariantRegistration &);
 
         FVariantObjectStructRegistry() = default;
@@ -434,7 +467,8 @@ namespace Retro {
          */
         template <typename T>
             requires VariantObjectStruct<T>
-        static bool RegisterVariantStruct() {
+        static bool RegisterVariantStruct()
+        {
             FCoreDelegates::OnPostEngineInit | Delegates::Add([] {
                 auto &Instance = Get();
                 auto Struct = GetScriptStruct<T>();
@@ -461,7 +495,8 @@ namespace Retro {
          * @return True if the registration process completes successfully (always returns true).
          */
         template <VariantObjectStruct T, VariantObjectStruct U>
-        static bool RegisterVariantConversion() {
+        static bool RegisterVariantConversion()
+        {
             []() -> UE5Coro::TCoroutine<> {
                 co_await FCoreDelegates::OnPostEngineInit;
                 auto &Instance = Get();
@@ -502,7 +537,8 @@ namespace Retro {
          * Get the range of all registered structs.
          * @return The iterable range of all the registered structs.
          */
-        auto GetAllRegisteredStructs() const {
+        auto GetAllRegisteredStructs() const
+        {
             // clang-format off
             return RegisteredStructs |
                    Ranges::Views::Values |
@@ -521,7 +557,8 @@ namespace Retro {
          * @return A range containing all the registered variant conversion interfaces as dereferenced shared
          * references.
          */
-        auto GetAllRegisteredConversions() const {
+        auto GetAllRegisteredConversions() const
+        {
             // clang-format off
             return GetAllRegisteredStructs() |
                    Ranges::Views::Transform(&IVariantRegistration::GetMutableConversions) |

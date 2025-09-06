@@ -1,10 +1,12 @@
 ﻿#include "PaperZDHelpers.h"
 
-void FPaperZDHelpersModule::StartupModule() {
+void FPaperZDHelpersModule::StartupModule()
+{
     // No startup needed
 }
 
-void FPaperZDHelpersModule::ShutdownModule() {
+void FPaperZDHelpersModule::ShutdownModule()
+{
     // No shutdown needed
 }
 

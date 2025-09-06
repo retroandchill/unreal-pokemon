@@ -7,9 +7,11 @@
 
 FOwnerInfo::FOwnerInfo() = default;
 
-FOwnerInfo::FOwnerInfo(const UObject *WorldContext) {
+FOwnerInfo::FOwnerInfo(const UObject *WorldContext)
+{
     auto PlayerTrainer = UPokemonSubsystem::GetInstance(WorldContext).GetPlayer();
-    if (PlayerTrainer == nullptr) {
+    if (PlayerTrainer == nullptr)
+    {
         return;
     }
 
@@ -21,5 +23,6 @@ FOwnerInfo::FOwnerInfo(const UObject *WorldContext) {
 
 FOwnerInfo::FOwnerInfo(const ITrainer &Trainer)
     : OriginalTrainerName(Trainer.GetTrainerName()), OriginalTrainerGender(Trainer.GetTrainerType().Gender),
-      ID(Trainer.GetIdNumber()), SecretID(Trainer.GetSecretId()) {
+      ID(Trainer.GetIdNumber()), SecretID(Trainer.GetSecretId())
+{
 }

@@ -6,18 +6,21 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(UPokemonSelectScreen)
 
-UPokemonSelectScreen *UPokemonSelectScreen::AddPokemonSelectScreenToStack(const UObject *WorldContextObject) {
+UPokemonSelectScreen *UPokemonSelectScreen::AddPokemonSelectScreenToStack(const UObject *WorldContextObject)
+{
     return URPGMenuUtilities::InjectScreenToStack<UPokemonSelectScreen>(WorldContextObject).GetPtrOrNull();
 }
 
-void UPokemonSelectScreen::NativeConstruct() {
+void UPokemonSelectScreen::NativeConstruct()
+{
     Super::NativeConstruct();
     check(SelectionPane != nullptr)
     SelectionPane->SetIndex(0);
     SelectionPane->ActivateWidget();
 }
 
-void UPokemonSelectScreen::BeginSwitch(int32 Index) {
+void UPokemonSelectScreen::BeginSwitch(int32 Index)
+{
     SelectionPane->ToggleCommandVisibility(true);
 
     SelectionPane->SetIndex(Index);
@@ -25,62 +28,80 @@ void UPokemonSelectScreen::BeginSwitch(int32 Index) {
     SelectionPane->ActivateWidget();
 }
 
-APlayerController *UPokemonSelectScreen::GetPlayerController() const {
+APlayerController *UPokemonSelectScreen::GetPlayerController() const
+{
     return GetOwningPlayer();
 }
 
-UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>> UPokemonSelectScreen::PromptPokemonSelection() {
+UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>> UPokemonSelectScreen::PromptPokemonSelection()
+{
     auto [Result] = co_await PokemonSelected;
     co_return Result;
 }
 
-void UPokemonSelectScreen::RefreshScene() {
+void UPokemonSelectScreen::RefreshScene()
+{
     SelectionPane->RefreshWindow();
 }
 
-void UPokemonSelectScreen::RefreshSelf_Implementation() {
+void UPokemonSelectScreen::RefreshSelf_Implementation()
+{
     Super::RefreshSelf_Implementation();
     RefreshScene();
 }
 
-UPokemonSelectionPane *UPokemonSelectScreen::GetSelectionPane() const {
+UPokemonSelectionPane *UPokemonSelectScreen::GetSelectionPane() const
+{
     return SelectionPane;
 }
 
-UPokemonSelectionPaneBase *UPokemonSelectScreen::GetPokemonSelectionPane_Implementation() const {
+UPokemonSelectionPaneBase *UPokemonSelectScreen::GetPokemonSelectionPane_Implementation() const
+{
     return SelectionPane;
 }
 
-void UPokemonSelectScreen::RemoveFromStack() {
+void UPokemonSelectScreen::RemoveFromStack()
+{
     CloseScreen();
 }
 
-void UPokemonSelectScreen::CloseScreen() {
+void UPokemonSelectScreen::CloseScreen()
+{
     Super::CloseScreen();
     (void)PokemonSelected.ExecuteIfBound({});
 }
 
-void UPokemonSelectScreen::OnPokemonSelected(int32 Index) {
+void UPokemonSelectScreen::OnPokemonSelected(int32 Index)
+{
     auto Trainer = UPokemonSubsystem::GetInstance(this).GetPlayer();
-    if (PokemonSelected.IsBound()) {
+    if (PokemonSelected.IsBound())
+    {
         PokemonSelected.Execute(FSelectedPokemonHandle(this, Trainer, Index));
         return;
     }
 
-    if (SelectionPane->IsSwitching()) {
-        if (int32 SwitchingIndex = SelectionPane->GetSwitchingIndex().GetValue(); Index != SwitchingIndex) {
+    if (SelectionPane->IsSwitching())
+    {
+        if (int32 SwitchingIndex = SelectionPane->GetSwitchingIndex().GetValue(); Index != SwitchingIndex)
+        {
             Trainer->SwapPositionsInParty(SwitchingIndex, Index);
         }
         SelectionPane->CompleteSwitch();
-    } else {
+    }
+    else
+    {
         DisplayPokemonCommands(Trainer, Index);
     }
 }
 
-void UPokemonSelectScreen::OnPokemonCancel() {
-    if (SelectionPane->IsSwitching()) {
+void UPokemonSelectScreen::OnPokemonCancel()
+{
+    if (SelectionPane->IsSwitching())
+    {
         SelectionPane->CancelSwitch();
-    } else {
+    }
+    else
+    {
         CloseScreen();
     }
 }

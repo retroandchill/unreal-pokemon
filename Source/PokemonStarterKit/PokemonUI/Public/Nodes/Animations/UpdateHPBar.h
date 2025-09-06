@@ -17,7 +17,8 @@ class UProgressBar;
  * Update a Pokémon's HP bar to its new desired value.
  */
 UCLASS(DisplayName = "Update HP Bar", meta = (HideThen))
-class POKEMONUI_API UUpdateHPBar : public UBlueprintCoroutineActionBase {
+class POKEMONUI_API UUpdateHPBar : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

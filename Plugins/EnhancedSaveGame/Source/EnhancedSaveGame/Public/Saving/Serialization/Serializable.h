@@ -9,16 +9,17 @@
 
 // This class does not need to be modified.
 UINTERFACE()
-class USerializable : public UInterface {
+class USerializable : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Marker interface that represents an object that can be serialized for save games.
  */
-class ENHANCEDSAVEGAME_API ISerializable {
+class ENHANCEDSAVEGAME_API ISerializable{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
-  public:
+    public :
 };

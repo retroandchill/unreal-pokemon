@@ -12,7 +12,8 @@
  * The default implementation for a Pokémon's move block.
  */
 UCLASS()
-class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock {
+class POKEMONCORE_API UDefaultMoveBlock : public UObject, public IMoveBlock
+{
     GENERATED_BODY()
 
   public:

@@ -13,7 +13,8 @@
 
 constexpr float CapsuleOffset = 5.f;
 
-static TArray<FOverlapResult> GetTerrainActors(const UObject *WorldContext, const ACharacter *Character) {
+static TArray<FOverlapResult> GetTerrainActors(const UObject *WorldContext, const ACharacter *Character)
+{
     auto World = WorldContext->GetWorld();
     check(World != nullptr)
 
@@ -31,7 +32,8 @@ static TArray<FOverlapResult> GetTerrainActors(const UObject *WorldContext, cons
 }
 
 bool UTerrainTagUtilities::HasTerrainTag(const UObject *WorldContext, const FGameplayTag &Tag,
-                                         const ACharacter *Character) {
+                                         const ACharacter *Character)
+{
     auto Overlaps = GetTerrainActors(WorldContext, Character);
     // clang-format off
     return Overlaps |
@@ -44,7 +46,8 @@ bool UTerrainTagUtilities::HasTerrainTag(const UObject *WorldContext, const FGam
 }
 
 bool UTerrainTagUtilities::HasAnyTerrainTag(const UObject *WorldContext, const FGameplayTagContainer &Tags,
-                                            const ACharacter *Character) {
+                                            const ACharacter *Character)
+{
     auto Overlaps = GetTerrainActors(WorldContext, Character);
     // clang-format off
     return Overlaps |
@@ -57,7 +60,8 @@ bool UTerrainTagUtilities::HasAnyTerrainTag(const UObject *WorldContext, const F
 }
 
 bool UTerrainTagUtilities::HasAllTerrainTags(const UObject *WorldContext, const FGameplayTagContainer &Tags,
-                                             ACharacter *Character) {
+                                             ACharacter *Character)
+{
     auto Overlaps = GetTerrainActors(WorldContext, Character);
     // clang-format off
     return Overlaps |

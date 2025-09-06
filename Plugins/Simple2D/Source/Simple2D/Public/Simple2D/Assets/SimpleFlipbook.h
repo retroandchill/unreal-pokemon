@@ -8,12 +8,14 @@
 
 #include "SimpleFlipbook.generated.h"
 
-namespace EFlipbookCollisionMode {
+namespace EFlipbookCollisionMode
+{
     enum Type : int;
 }
 
 USTRUCT()
-struct SIMPLE2D_API FSimpleFlipbookDrawCall : public FSpriteDrawCallRecord {
+struct SIMPLE2D_API FSimpleFlipbookDrawCall : public FSpriteDrawCallRecord
+{
     GENERATED_BODY()
 
     UPROPERTY()
@@ -27,7 +29,8 @@ struct SIMPLE2D_API FSimpleFlipbookDrawCall : public FSpriteDrawCallRecord {
 };
 
 USTRUCT(BlueprintType)
-struct SIMPLE2D_API FSimpleFlipbookKeyFrame {
+struct SIMPLE2D_API FSimpleFlipbookKeyFrame
+{
     GENERATED_BODY()
 
     UPROPERTY(Category = Sprite, EditAnywhere, BlueprintReadOnly, meta = (ClampMin = 0))
@@ -37,7 +40,8 @@ struct SIMPLE2D_API FSimpleFlipbookKeyFrame {
     int32 FrameRun = 1;
 };
 
-namespace Simple2D {
+namespace Simple2D
+{
     class FScopedSimpleFlipbookMutator;
 #if WITH_EDITOR
     class FSimpleFlipbookDetailsCustomization;
@@ -48,14 +52,16 @@ namespace Simple2D {
  *
  */
 UCLASS(BlueprintType)
-class SIMPLE2D_API USimpleFlipbook : public UObject {
+class SIMPLE2D_API USimpleFlipbook : public UObject
+{
     GENERATED_BODY()
 
   public:
     USimpleFlipbook();
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UTexture2D *GetSourceTexture() const {
+    UTexture2D *GetSourceTexture() const
+    {
         return SourceTexture;
     }
 
@@ -63,22 +69,26 @@ class SIMPLE2D_API USimpleFlipbook : public UObject {
     int32 GetNumFrames() const;
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    int32 GetRows() const {
+    int32 GetRows() const
+    {
         return Rows;
     }
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    int32 GetColumns() const {
+    int32 GetColumns() const
+    {
         return Columns;
     }
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    float GetFramesPerSecond() const {
+    float GetFramesPerSecond() const
+    {
         return FramesPerSecond;
     }
 
     UFUNCTION(BlueprintCallable, Category = "Sprite")
-    int32 GetNumKeyFrames() const {
+    int32 GetNumKeyFrames() const
+    {
         return KeyFrames.Num();
     }
 
@@ -89,23 +99,27 @@ class SIMPLE2D_API USimpleFlipbook : public UObject {
     int32 GetKeyFrameIndexAtTime(float Time, bool bClampToEnds = false) const;
 
     UFUNCTION(BlueprintCallable, Category = "Sprite")
-    const FSimpleFlipbookKeyFrame &GetKeyFrameChecked(int32 Index) const {
+    const FSimpleFlipbookKeyFrame &GetKeyFrameChecked(int32 Index) const
+    {
         return KeyFrames[Index];
     }
 
     UFUNCTION(BlueprintCallable, Category = "Sprite")
-    bool IsValidKeyFrameIndex(int32 Index) const {
+    bool IsValidKeyFrameIndex(int32 Index) const
+    {
         return KeyFrames.IsValidIndex(Index);
     }
 
     FBoxSphereBounds GetRenderBounds() const;
 
-    float GetPixelsPerUnrealUnit() const {
+    float GetPixelsPerUnrealUnit() const
+    {
         return PixelsPerUnrealUnit;
     }
 
     // Return the scaling factor between Unreal units (cm) and pixels
-    float GetUnrealUnitsPerPixel() const {
+    float GetUnrealUnitsPerPixel() const
+    {
         return 1.0f / PixelsPerUnrealUnit;
     }
 
@@ -118,7 +132,8 @@ class SIMPLE2D_API USimpleFlipbook : public UObject {
 #endif
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UMaterialInterface *GetDefaultMaterial() const {
+    UMaterialInterface *GetDefaultMaterial() const
+    {
         return DefaultMaterial;
     }
 
@@ -126,7 +141,8 @@ class SIMPLE2D_API USimpleFlipbook : public UObject {
 
     FSimpleFlipbookDrawCall CreateDrawCallRecord(int32 FrameIndex) const;
 
-    int32 GetAlternateMaterialSplitIndex() const {
+    int32 GetAlternateMaterialSplitIndex() const
+    {
         return AlternateMaterialSplitIndex;
     }
 
@@ -204,29 +220,34 @@ class SIMPLE2D_API USimpleFlipbook : public UObject {
     TArray<FVector4> BakedRenderData;
 };
 
-namespace Simple2D {
-    class FScopedSimpleFlipbookMutator {
+namespace Simple2D
+{
+    class FScopedSimpleFlipbookMutator
+    {
       public:
         float &FramesPerSecond;
         TArray<FSimpleFlipbookKeyFrame> &KeyFrames;
         USimpleFlipbook *SourceFlipbook;
 
         explicit FScopedSimpleFlipbookMutator(USimpleFlipbook *InFlipbook)
-            : FramesPerSecond(InFlipbook->FramesPerSecond), KeyFrames(InFlipbook->KeyFrames),
-              SourceFlipbook(InFlipbook) {
+            : FramesPerSecond(InFlipbook->FramesPerSecond), KeyFrames(InFlipbook->KeyFrames), SourceFlipbook(InFlipbook)
+        {
         }
 
-        ~FScopedSimpleFlipbookMutator() {
+        ~FScopedSimpleFlipbookMutator()
+        {
             InvalidateCachedData();
         }
 
         UE_NONCOPYABLE(FScopedSimpleFlipbookMutator)
 
-        void InvalidateCachedData() {
+        void InvalidateCachedData()
+        {
             SourceFlipbook->InvalidateCachedData();
         }
 
-        USimpleFlipbook *GetSourceFlipbook() const {
+        USimpleFlipbook *GetSourceFlipbook() const
+        {
             return SourceFlipbook;
         }
     };

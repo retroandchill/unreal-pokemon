@@ -12,14 +12,16 @@ class UPaperFlipbook;
 struct FMaterialInstanceWithSize;
 // This class does not need to be modified.
 UINTERFACE()
-class UBattlerSprite : public UInterface {
+class UBattlerSprite : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Represents the sprite actor for the battler.
  */
-class POKEMONBATTLE_API IBattlerSprite {
+class POKEMONBATTLE_API IBattlerSprite
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

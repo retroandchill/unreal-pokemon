@@ -14,7 +14,8 @@
 #define CORO_FUNCTIONS()                                                                                               \
     template <typename F>                                                                                              \
         requires std::invocable<F> && std::convertible_to<std::invoke_result_t<F>, UE5Coro::TCoroutine<>>              \
-    void CoroIt(const FString &InDescription, F &&Functor) {                                                           \
+    void CoroIt(const FString &InDescription, F &&Functor)                                                             \
+    {                                                                                                                  \
         LatentIt(InDescription,                                                                                        \
                  [this, Functor = std::forward<F>(Functor)](FDoneDelegate Delegate) -> UE5Coro::TCoroutine<> {         \
                      co_await std::invoke(std::move(Functor));                                                         \
@@ -23,23 +24,32 @@
     }
 
 #define CHECK_THROWS_AS(Expression, Exception)                                                                         \
-    try {                                                                                                              \
+    try                                                                                                                \
+    {                                                                                                                  \
         Expression;                                                                                                    \
         FAutomationTestFramework::Get().GetCurrentTest()->AddError(TEXT("No exception thrown"));                       \
-    } catch (Exception &) {                                                                                            \
-    } catch (...) {                                                                                                    \
+    }                                                                                                                  \
+    catch (Exception &)                                                                                                \
+    {                                                                                                                  \
+    }                                                                                                                  \
+    catch (...)                                                                                                        \
+    {                                                                                                                  \
         FAutomationTestFramework::Get().GetCurrentTest()->AddError(TEXT("Wrong exception thrown"));                    \
     }
 
 #define CHECK_NOTHROW(Expression)                                                                                      \
-    try {                                                                                                              \
+    try                                                                                                                \
+    {                                                                                                                  \
         Expression;                                                                                                    \
-    } catch (...) {                                                                                                    \
+    }                                                                                                                  \
+    catch (...)                                                                                                        \
+    {                                                                                                                  \
         FAutomationTestFramework::Get().GetCurrentTest()->AddError(TEXT("Exception thrown where none expected"));      \
     }
 
 #define CO_REQUIRE(...)                                                                                                \
-    if (!(__VA_ARGS__)) {                                                                                              \
+    if (!(__VA_ARGS__))                                                                                                \
+    {                                                                                                                  \
         FAutomationTestFramework::Get().GetCurrentTest()->AddError(TEXT("Condition failed!"));                         \
         co_return;                                                                                                     \
     }

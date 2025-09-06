@@ -12,7 +12,8 @@
  * Blueprint function library for utilities that revolve around player operations.
  */
 UCLASS()
-class RPGMENUSTESTS_API UPlayerUtilities : public UBlueprintFunctionLibrary {
+class RPGMENUSTESTS_API UPlayerUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

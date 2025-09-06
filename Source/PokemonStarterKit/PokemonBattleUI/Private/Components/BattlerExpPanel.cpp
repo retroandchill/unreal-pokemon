@@ -11,7 +11,8 @@
 constexpr float AnimationGainSpeed = 1.75f;
 
 void UBattlerExpPanel::SetBattler(const TScriptInterface<IBattler> &Battler, const TOptional<int32> &Level,
-                                  const TOptional<float> &ExpGainPercent) {
+                                  const TOptional<float> &ExpGainPercent)
+{
     CurrentBattler = Battler;
     DisplayedLevel = Level.Get(Battler->GetPokemonLevel());
     LevelText->SetText(FText::FromString(FString::FromInt(DisplayedLevel)));
@@ -20,13 +21,15 @@ void UBattlerExpPanel::SetBattler(const TScriptInterface<IBattler> &Battler, con
     OnBattlerSet(CurrentBattler);
 }
 
-void UBattlerExpPanel::ChangeExpGainDisplay(int32 Gain) {
+void UBattlerExpPanel::ChangeExpGainDisplay(int32 Gain)
+{
     static const auto GainFormat = FText::FromStringView(TEXT("+{0}"));
     ExpGainText->SetText(FText::Format(GainFormat, {Gain}));
     ExpGain = Gain;
 }
 
-UE5Coro::TCoroutine<> UBattlerExpPanel::AnimateGain(float MaxDuration) {
+UE5Coro::TCoroutine<> UBattlerExpPanel::AnimateGain(float MaxDuration)
+{
     using Pokemon::UI::FSetNewPercent;
     int32 LevelDiff = CurrentBattler->GetPokemonLevel() - DisplayedLevel;
     check(LevelDiff >= 0)
@@ -41,20 +44,24 @@ UE5Coro::TCoroutine<> UBattlerExpPanel::AnimateGain(float MaxDuration) {
     OnGainAnimationComplete.Broadcast();
 }
 
-void UBattlerExpPanel::BindOnAnimationComplete(FSimpleDelegate Callback) {
+void UBattlerExpPanel::BindOnAnimationComplete(FSimpleDelegate Callback)
+{
     OnGainAnimationComplete.Add(std::move(Callback));
 }
 
-void UBattlerExpPanel::UpdateExpBarPercent(float NewPercent) {
+void UBattlerExpPanel::UpdateExpBarPercent(float NewPercent)
+{
     ExpBar->SetPercent(NewPercent);
 }
 
-void UBattlerExpPanel::OnLevelUp() {
+void UBattlerExpPanel::OnLevelUp()
+{
     DisplayedLevel++;
     LevelText->SetCurrentValue(static_cast<float>(DisplayedLevel));
     DisplayLevelUp();
 }
 
-void UBattlerExpPanel::OnExpGainComplete() const {
+void UBattlerExpPanel::OnExpGainComplete() const
+{
     OnGainAnimationComplete.Broadcast();
 }

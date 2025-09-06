@@ -15,7 +15,8 @@ struct FGenderRatio;
  * Represents an individual species object
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "PBS"))
-struct POKEMONDATA_API FSpeciesData : public FIndexedTableRow {
+struct POKEMONDATA_API FSpeciesData : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -236,7 +237,8 @@ struct POKEMONDATA_API FSpeciesData : public FIndexedTableRow {
 };
 
 USTRUCT(BlueprintType, meta = (DisableSplitPin))
-struct POKEMONDATA_API FSpeciesHandle {
+struct POKEMONDATA_API FSpeciesHandle
+{
     GENERATED_BODY()
     DECLARE_DATA_HANDLE(FSpeciesHandle, FSpeciesData);
 
@@ -251,7 +253,8 @@ struct POKEMONDATA_API FSpeciesHandle {
  * Blueprint function library for getting species data out.
  */
 UCLASS()
-class POKEMONDATA_API USpeciesHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API USpeciesHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

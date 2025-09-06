@@ -12,7 +12,8 @@
  * K2 Node to make a variant object struct from a valid object type.
  */
 UCLASS()
-class RETROLIBBLUEPRINTNODES_API UK2Node_MakeVariantObjectStruct : public UK2Node_VariantOperationBase {
+class RETROLIBBLUEPRINTNODES_API UK2Node_MakeVariantObjectStruct : public UK2Node_VariantOperationBase
+{
     GENERATED_BODY()
 
   public:

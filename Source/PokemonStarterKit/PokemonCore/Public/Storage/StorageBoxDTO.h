@@ -10,7 +10,8 @@
 class IStorageBox;
 
 USTRUCT(BlueprintType)
-struct POKEMONCORE_API FStorageSlot {
+struct POKEMONCORE_API FStorageSlot
+{
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, Category = Contents)
@@ -21,7 +22,8 @@ struct POKEMONCORE_API FStorageSlot {
  * The underlying storage type used to save and load a storage box
  */
 USTRUCT(BlueprintType)
-struct POKEMONCORE_API FStorageBoxDTO {
+struct POKEMONCORE_API FStorageBoxDTO
+{
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, Category = Information)

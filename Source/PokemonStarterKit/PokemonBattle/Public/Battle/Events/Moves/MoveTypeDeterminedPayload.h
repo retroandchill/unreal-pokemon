@@ -13,7 +13,8 @@ class IBattler;
  * Event payload for when the Type for a move is determined.
  */
 UCLASS(BlueprintType)
-class POKEMONBATTLE_API UMoveTypeDeterminedPayload : public UObject, public IMoveEventPayload {
+class POKEMONBATTLE_API UMoveTypeDeterminedPayload : public UObject, public IMoveEventPayload
+{
     GENERATED_BODY()
 
   public:

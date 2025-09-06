@@ -12,7 +12,8 @@
 
 #include "PokemonSaveGame.generated.h"
 
-namespace Pokemon::Saving {
+namespace Pokemon::Saving
+{
     /**
      * The native gameplay tag for the save data slot for this plugin's information.
      */
@@ -28,7 +29,8 @@ namespace Pokemon::Saving {
  * The structure of a save file for the game.
  */
 UCLASS()
-class POKEMONCORE_API UPokemonSaveGame : public UObject, public ISerializable {
+class POKEMONCORE_API UPokemonSaveGame : public UObject, public ISerializable
+{
     GENERATED_BODY()
 
   public:

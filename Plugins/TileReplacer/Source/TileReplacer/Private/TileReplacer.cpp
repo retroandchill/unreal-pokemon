@@ -2,11 +2,13 @@
 
 #define LOCTEXT_NAMESPACE "FTileReplacerModule"
 
-void FTileReplacerModule::StartupModule() {
+void FTileReplacerModule::StartupModule()
+{
     // No startup code required
 }
 
-void FTileReplacerModule::ShutdownModule() {
+void FTileReplacerModule::ShutdownModule()
+{
     // No shutdown code required
 }
 

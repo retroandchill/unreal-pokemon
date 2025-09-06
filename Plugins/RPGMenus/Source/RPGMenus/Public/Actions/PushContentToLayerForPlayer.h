@@ -27,7 +27,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPushContentToLayerForPlayerAsyncDel
  * or cancelled, providing flexibility for managing UI state in gameplay.
  */
 UCLASS()
-class RPGMENUS_API UPushContentToLayerForPlayer : public UCancellableAsyncAction {
+class RPGMENUS_API UPushContentToLayerForPlayer : public UCancellableAsyncAction
+{
     GENERATED_BODY()
 
   public:

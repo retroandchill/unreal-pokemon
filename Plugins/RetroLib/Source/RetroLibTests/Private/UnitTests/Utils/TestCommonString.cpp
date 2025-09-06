@@ -7,7 +7,8 @@ BEGIN_DEFINE_SPEC(FTestCommonString, "Unit Tests.Ranges.String",
 
 END_DEFINE_SPEC(FTestCommonString);
 
-void FTestCommonString::Define() {
+void FTestCommonString::Define()
+{
     Describe("Test Common String Operations", [this] {
         BeforeEach([] {});
 

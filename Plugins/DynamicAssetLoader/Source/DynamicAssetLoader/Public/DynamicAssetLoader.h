@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FDynamicAssetLoaderModule : public IModuleInterface {
+class FDynamicAssetLoaderModule : public IModuleInterface
+{
   public:
     /** IModuleInterface implementation */
     void StartupModule() override;

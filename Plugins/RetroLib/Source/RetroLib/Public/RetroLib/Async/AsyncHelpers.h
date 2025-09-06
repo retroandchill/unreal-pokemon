@@ -8,7 +8,8 @@
 
 class USaveGame;
 
-namespace Retro {
+namespace Retro
+{
     /**
      * Saves the provided save game object to the specified slot asynchronously.
      *
@@ -30,7 +31,8 @@ namespace Retro {
      */
     template <Delegates::NativeDelegate D, typename F>
         requires std::invocable<F> && (std::tuple_size_v<Delegates::TDelegateTuple<D>> == 0)
-    UE5Coro::TCoroutine<> BindToDelegateDispatch(D &Delegate, F &&Functor) {
+    UE5Coro::TCoroutine<> BindToDelegateDispatch(D &Delegate, F &&Functor)
+    {
         TPromise<int32> State;
         Delegates::TScopedBinding Binding(Delegate, [&State](auto &&...) { State.EmplaceValue(0); });
         std::invoke(std::forward<F>(Functor));
@@ -47,7 +49,8 @@ namespace Retro {
      */
     template <Delegates::NativeDelegate D, typename F>
         requires std::invocable<F> && (std::tuple_size_v<Delegates::TDelegateTuple<D>> > 0)
-    UE5Coro::TCoroutine<Delegates::TDelegateTuple<D>> BindToDelegateDispatch(D &Delegate, F &&Functor) {
+    UE5Coro::TCoroutine<Delegates::TDelegateTuple<D>> BindToDelegateDispatch(D &Delegate, F &&Functor)
+    {
         TPromise<Delegates::TDelegateTuple<D>> State;
         Delegates::TScopedBinding Binding(
             Delegate, [&State]<typename... A>(A &&...Args) { State.EmplaceValue(std::forward<A>(Args)...); });

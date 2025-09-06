@@ -23,7 +23,8 @@ DECLARE_DELEGATE(FUnbindActions)
  * Play a battler's HP draining animation
  */
 UCLASS(DisplayName = "Play Battler HP Animation", meta = (HideThen))
-class POKEMONBATTLEUI_API UPlayBattlerHPAnimation : public UBlueprintCoroutineActionBase {
+class POKEMONBATTLEUI_API UPlayBattlerHPAnimation : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

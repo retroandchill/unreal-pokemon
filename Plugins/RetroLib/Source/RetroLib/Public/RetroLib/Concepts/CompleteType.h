@@ -15,7 +15,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * @struct TIsComplete
      * @brief A type trait structure that inherits from std::false_type.
@@ -29,7 +30,9 @@ namespace Retro {
      * metaprogramming techniques.
      */
     template <typename, typename = void>
-    struct TIsComplete : std::false_type {};
+    struct TIsComplete : std::false_type
+    {
+    };
 
     /**
      * @struct TIsComplete
@@ -45,7 +48,9 @@ namespace Retro {
      * @note This type trait will inherit from std::true_type if T is complete.
      */
     template <typename T>
-    struct TIsComplete<T, std::void_t<decltype(sizeof(T))>> : std::true_type {};
+    struct TIsComplete<T, std::void_t<decltype(sizeof(T))>> : std::true_type
+    {
+    };
 
     /**
      * Concept to check if a type is a complete type or not.

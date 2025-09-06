@@ -14,7 +14,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * Cast the underlying object of an interface into the specified object type. Will return nullptr if the cast is
      * invalid.
@@ -24,7 +25,8 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename T>
         requires std::is_base_of_v<UObject, T>
-    T *CastInterface(const FScriptInterface &Interface) {
+    T *CastInterface(const FScriptInterface &Interface)
+    {
         return Cast<T>(Interface.GetObject());
     }
 
@@ -37,7 +39,8 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename T>
         requires std::is_base_of_v<UObject, T>
-    T *CastInterfaceChecked(const FScriptInterface &Interface) {
+    T *CastInterfaceChecked(const FScriptInterface &Interface)
+    {
         return CastChecked<T>(Interface.GetObject());
     }
 
@@ -52,10 +55,14 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T>
-    constexpr bool TypesMatch(const UClass &Class) {
-        if constexpr (std::derived_from<T, UObject>) {
+    constexpr bool TypesMatch(const UClass &Class)
+    {
+        if constexpr (std::derived_from<T, UObject>)
+        {
             return Class.IsChildOf<T>();
-        } else {
+        }
+        else
+        {
             static_assert(UnrealInterface<T>);
             return Class.IsChildOf<typename T::UClassType>();
         }
@@ -72,8 +79,10 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T>
-    constexpr bool TypesMatch(const UClass *Class) {
-        if (Class == nullptr) {
+    constexpr bool TypesMatch(const UClass *Class)
+    {
+        if (Class == nullptr)
+        {
             return false;
         }
 
@@ -88,7 +97,8 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T>
-    constexpr bool TypesMatch(const FSoftClassPath &Path) {
+    constexpr bool TypesMatch(const FSoftClassPath &Path)
+    {
         return TypesMatch<T>(Path.TryLoadClass<UObject>());
     }
 
@@ -101,8 +111,10 @@ namespace Retro {
      *         If the Class has the CLASS_Interface flag, returns whether the Object implements the interface.
      *         Otherwise, returns whether the Object is of the specified Class type.
      */
-    RETROLIB_EXPORT inline bool TypesMatch(const UObject &Object, const UClass &Class) {
-        if (Class.HasAnyClassFlags(CLASS_Interface)) {
+    RETROLIB_EXPORT inline bool TypesMatch(const UObject &Object, const UClass &Class)
+    {
+        if (Class.HasAnyClassFlags(CLASS_Interface))
+        {
             return Object.GetClass()->ImplementsInterface(&Class);
         }
 
@@ -122,10 +134,14 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T>
-    constexpr UClass *GetClass() {
-        if constexpr (std::derived_from<T, UObject>) {
+    constexpr UClass *GetClass()
+    {
+        if constexpr (std::derived_from<T, UObject>)
+        {
             return T::StaticClass();
-        } else {
+        }
+        else
+        {
             static_assert(UnrealInterface<T>);
             return T::UClassType::StaticClass();
         }
@@ -140,12 +156,17 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename T>
         requires std::derived_from<T, UObject> || UnrealInterface<T>
-    constexpr bool IsValidSubclass(const UClass *Class) {
-        if constexpr (std::derived_from<T, UObject>) {
+    constexpr bool IsValidSubclass(const UClass *Class)
+    {
+        if constexpr (std::derived_from<T, UObject>)
+        {
             return Class->IsChildOf<T>();
-        } else {
+        }
+        else
+        {
             static_assert(UnrealInterface<T>);
-            if (Class->HasAnyClassFlags(CLASS_Interface)) {
+            if (Class->HasAnyClassFlags(CLASS_Interface))
+            {
                 return Class->IsChildOf<typename T::UClassType>();
             }
 
@@ -160,11 +181,13 @@ namespace Retro {
      * @return A boolean indicating whether the Class is instantiable.
      *         Returns false if the ClassName starts with "SKEL_" or "REINST_".
      */
-    RETROLIB_EXPORT inline bool IsInstantiableClass(const UClass *Class) {
+    RETROLIB_EXPORT inline bool IsInstantiableClass(const UClass *Class)
+    {
         auto ClassName = Class->GetName();
         ClassName.ToUpperInline();
         // We don't want skeleton or reinstantiated classes to be loaded.
-        if (ClassName.StartsWith("SKEL_") || ClassName.StartsWith("REINST_")) {
+        if (ClassName.StartsWith("SKEL_") || ClassName.StartsWith("REINST_"))
+        {
             return false;
         }
 
@@ -173,7 +196,8 @@ namespace Retro {
 
     RETROLIB_EXPORT template <PolymorphicType T>
         requires std::derived_from<T, UObject>
-    struct TInstanceChecker<T> {
+    struct TInstanceChecker<T>
+    {
         /**
          * Checks if the given instance of type U is a valid instance of the desired base type T.
          *
@@ -182,21 +206,29 @@ namespace Retro {
          *         that can be dynamically cast to T. Otherwise, returns false.
          */
         template <std::derived_from<UObject> U>
-        constexpr bool operator()(const U &Value) const {
-            if constexpr (std::derived_from<U, T>) {
+        constexpr bool operator()(const U &Value) const
+        {
+            if constexpr (std::derived_from<U, T>)
+            {
                 // Trivial case, U is derived from T, so we know with certainty that this is valid
                 return true;
-            } else {
+            }
+            else
+            {
                 return Value.template IsA<T>();
             }
         }
 
         template <UnrealInterface U>
-        constexpr bool operator()(const U &Value) const {
-            if constexpr (std::derived_from<U, T>) {
+        constexpr bool operator()(const U &Value) const
+        {
+            if constexpr (std::derived_from<U, T>)
+            {
                 // Trivial case, U is derived from T, so we know with certainty that this is valid
                 return true;
-            } else {
+            }
+            else
+            {
                 check(Value._getUObject() != nullptr) ;
                 return Value._getUObject()->template IsA<T>();
             }
@@ -205,7 +237,8 @@ namespace Retro {
 
     RETROLIB_EXPORT template <PolymorphicType T>
         requires UnrealInterface<T>
-    struct TInstanceChecker<T> {
+    struct TInstanceChecker<T>
+    {
         /**
          * Checks if the given instance of type U is a valid instance of the desired base type T.
          *
@@ -214,42 +247,59 @@ namespace Retro {
          *         that can be dynamically cast to T. Otherwise, returns false.
          */
         template <std::derived_from<UObject> U>
-        constexpr bool operator()(const U &Value) const {
-            if constexpr (std::derived_from<U, T>) {
+        constexpr bool operator()(const U &Value) const
+        {
+            if constexpr (std::derived_from<U, T>)
+            {
                 // Trivial case, U is derived from T, so we know with certainty that this is valid
                 return true;
-            } else {
+            }
+            else
+            {
                 return Value.template Implements<typename T::UClassType>();
             }
         }
 
         template <UnrealInterface U>
-        constexpr bool operator()(const U &Value) const {
-            if constexpr (std::derived_from<U, T>) {
+        constexpr bool operator()(const U &Value) const
+        {
+            if constexpr (std::derived_from<U, T>)
+            {
                 // Trivial case, U is derived from T, so we know with certainty that this is valid
                 return true;
-            } else {
+            }
+            else
+            {
                 check(Value._getUObject() != nullptr) ;
                 return Value._getUObject()->template Implements<typename T::UClassType>();
             }
         }
     };
 
-    struct FGetObjectFunction {
+    struct FGetObjectFunction
+    {
         template <UnrealInterface T>
-        constexpr auto operator()(T &Interface) const {
-            if constexpr (std::derived_from<T, UObject>) {
+        constexpr auto operator()(T &Interface) const
+        {
+            if constexpr (std::derived_from<T, UObject>)
+            {
                 return &Interface;
-            } else {
+            }
+            else
+            {
                 return Interface._getUObject();
             }
         }
 
         template <UnrealInterface T>
-        constexpr auto operator()(T *Interface) const {
-            if constexpr (std::derived_from<T, UObject>) {
+        constexpr auto operator()(T *Interface) const
+        {
+            if constexpr (std::derived_from<T, UObject>)
+            {
                 return Interface;
-            } else {
+            }
+            else
+            {
                 return Interface->_getUObject();
             }
         }
@@ -257,14 +307,17 @@ namespace Retro {
 
     constexpr FGetObjectFunction ToUObject;
 
-    struct FWrapPointerFunction {
+    struct FWrapPointerFunction
+    {
         template <std::derived_from<UObject> T>
-        constexpr auto operator()(T *Interface) const {
+        constexpr auto operator()(T *Interface) const
+        {
             return TObjectPtr<T>(Interface->_getUObject());
         }
 
         template <UnrealInterface T>
-        constexpr auto operator()(T *Interface) const {
+        constexpr auto operator()(T *Interface) const
+        {
             return TScriptInterface<T>(Interface->_getUObject());
         }
     };
@@ -272,13 +325,16 @@ namespace Retro {
     constexpr FWrapPointerFunction WrapPointer;
 
     template <UnrealInterface T>
-    struct TAsInterfaceFunction {
-        TScriptInterface<T> operator()(UObject &Object) {
+    struct TAsInterfaceFunction
+    {
+        TScriptInterface<T> operator()(UObject &Object)
+        {
             check(Object.Implements<typename T::UClassType>())
             return TScriptInterface<T>(&Object);
         }
 
-        TScriptInterface<T> operator()(UObject *Object) {
+        TScriptInterface<T> operator()(UObject *Object)
+        {
             check(IsValid(Object))
             return (*this)(*Object);
         }

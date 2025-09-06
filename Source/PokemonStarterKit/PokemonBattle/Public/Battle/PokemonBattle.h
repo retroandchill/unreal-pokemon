@@ -29,7 +29,8 @@ class ITrainer;
  * Enum for the various phases of battle
  */
 UENUM(BlueprintType)
-enum class EBattlePhase : uint8 {
+enum class EBattlePhase : uint8
+{
     /**
      * The battle is still being set up
      */
@@ -61,7 +62,8 @@ enum class EBattlePhase : uint8 {
  * The actual battle class used for battle flow.
  */
 UCLASS(Abstract)
-class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
+class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle
+{
     GENERATED_BODY()
 
   public:
@@ -109,7 +111,8 @@ class POKEMONBATTLE_API APokemonBattle : public AActor, public IBattle {
     APawn *GetBattlePawn() const final;
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const TScriptInterface<IBattleHUD> &GetBattleHUD() const override {
+    const TScriptInterface<IBattleHUD> &GetBattleHUD() const override
+    {
         return BattleHUD;
     }
 

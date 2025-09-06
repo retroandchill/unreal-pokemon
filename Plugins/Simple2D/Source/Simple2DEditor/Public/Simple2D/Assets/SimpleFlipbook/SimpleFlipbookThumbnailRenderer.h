@@ -12,7 +12,8 @@
  *
  */
 UCLASS()
-class SIMPLE2DEDITOR_API USimpleFlipbookThumbnailRenderer : public UThumbnailRenderer {
+class SIMPLE2DEDITOR_API USimpleFlipbookThumbnailRenderer : public UThumbnailRenderer
+{
     GENERATED_BODY()
 
   public:

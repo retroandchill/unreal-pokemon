@@ -7,9 +7,12 @@
 /**
  * "Deleter" to shutdown the game instance so it doesn't cause issues when it gets garbage collected.
  */
-struct FGameInstanceShutdown {
-    void operator()(UGameInstance *GameInstance) {
-        if (GameInstance != nullptr) {
+struct FGameInstanceShutdown
+{
+    void operator()(UGameInstance *GameInstance)
+    {
+        if (GameInstance != nullptr)
+        {
             GameInstance->Shutdown();
         }
     }
@@ -23,9 +26,12 @@ using FGameInstancePtr = TUniquePtr<UGameInstance, FGameInstanceShutdown>;
 /**
  * "Deleter" to remove a widget from the viewport.
  */
-struct FRemoveWidgetFromViewport {
-    void operator()(UWidget *Widget) {
-        if (Widget != nullptr) {
+struct FRemoveWidgetFromViewport
+{
+    void operator()(UWidget *Widget)
+    {
+        if (Widget != nullptr)
+        {
             Widget->RemoveFromParent();
         }
     }
@@ -41,9 +47,12 @@ using TWidgetPtr = TUniquePtr<T, FRemoveWidgetFromViewport>;
 /**
  * "Deleter" used to clean up the world
  */
-struct FCleanupWorld {
-    void operator()(UWorld *World) {
-        if (World != nullptr) {
+struct FCleanupWorld
+{
+    void operator()(UWorld *World)
+    {
+        if (World != nullptr)
+        {
             World->DestroyWorld(false);
         }
     }
@@ -57,9 +66,12 @@ using FWorldPtr = TUniquePtr<UWorld, FCleanupWorld>;
 /**
  * "Deleter" used to remove a local player
  */
-struct FRemovePlayer {
-    void operator()(ULocalPlayer *Player) {
-        if (Player != nullptr) {
+struct FRemovePlayer
+{
+    void operator()(ULocalPlayer *Player)
+    {
+        if (Player != nullptr)
+        {
             Player->PlayerRemoved();
         }
     }

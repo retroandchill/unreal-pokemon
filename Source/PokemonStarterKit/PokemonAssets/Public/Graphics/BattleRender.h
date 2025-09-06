@@ -28,7 +28,8 @@ struct FSoftBattleRender;
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FBattleRender
 #if CPP
-    : Retro::TVariantObject<BATTLE_RENDER_TYPES> {
+    : Retro::TVariantObject<BATTLE_RENDER_TYPES>
+{
 #else
 {
 #endif
@@ -49,7 +50,8 @@ RETRO_DECLARE_VARIANT_OBJECT_STRUCT(FBattleRender);
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FSoftBattleRender
 #if CPP
-    : Retro::TSoftVariantObject<FBattleRender> {
+    : Retro::TSoftVariantObject<FBattleRender>
+{
 #else
 {
 #endif
@@ -68,11 +70,13 @@ struct FSoftBattleRender
 RETRO_DECLARE_SOFT_VARIANT_OBJECT_STRUCT(FSoftBattleRender);
 
 template <>
-struct POKEMONASSETS_API TBaseStructure<FBattleRender> {
+struct POKEMONASSETS_API TBaseStructure<FBattleRender>
+{
     static UScriptStruct *Get();
 };
 
 template <>
-struct POKEMONASSETS_API TBaseStructure<FSoftBattleRender> {
+struct POKEMONASSETS_API TBaseStructure<FSoftBattleRender>
+{
     static UScriptStruct *Get();
 };

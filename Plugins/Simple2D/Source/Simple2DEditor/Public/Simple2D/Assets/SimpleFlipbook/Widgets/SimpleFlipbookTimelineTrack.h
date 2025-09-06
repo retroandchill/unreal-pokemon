@@ -8,22 +8,28 @@
 #include "SimpleFlipbookTimeline.h"
 #include "Widgets/SCompoundWidget.h"
 
-namespace Simple2D {
-    namespace Flipbooks {
+namespace Simple2D
+{
+    namespace Flipbooks
+    {
         constexpr float HandleWidth = 12.0f;
         constexpr float FrameHeight = 48;
         constexpr float HeightBeforeFrames = 16;
         const FMargin FramePadding(0.0f, 7.0f, 0.0f, 7.0f);
     } // namespace Flipbooks
 
-    class FKeyFrameDragDropOp : public FDragDropOperation {
-        struct FInitTag {};
+    class FKeyFrameDragDropOp : public FDragDropOperation
+    {
+        struct FInitTag
+        {
+        };
 
       public:
         explicit FKeyFrameDragDropOp(FInitTag, FSimpleFlipbookKeyFrame KeyFrameData, int32 SourceFrameIndex,
                                      USimpleFlipbook *SourceFlipbook, float WidgetWidth)
             : WidgetWidth(WidgetWidth), KeyFrameData(KeyFrameData), SourceFrameIndex(SourceFrameIndex),
-              SourceFlipbook(SourceFlipbook) {
+              SourceFlipbook(SourceFlipbook)
+        {
         }
 
         DRAG_DROP_OPERATOR_TYPE(FKeyFrameDragDropOp, FDragDropOperation)
@@ -44,16 +50,19 @@ namespace Simple2D {
 
         void InsertInFlipbook(USimpleFlipbook *DestinationFlipbook, int32 Index);
 
-        void SetCanDropHere(bool bCanDropHere) {
+        void SetCanDropHere(bool bCanDropHere)
+        {
             MouseCursor = bCanDropHere ? EMouseCursor::TextEditBeam : EMouseCursor::SlashedCircle;
         }
 
         static TSharedRef<FKeyFrameDragDropOp> New(int32 InWidth, USimpleFlipbook *InFlipbook, int32 InFrameIndex);
     };
 
-    class SSimpleFlipbookKeyframeWidget : public SCompoundWidget {
+    class SSimpleFlipbookKeyframeWidget : public SCompoundWidget
+    {
       public:
-        SLATE_BEGIN_ARGS(SSimpleFlipbookKeyframeWidget) : _SlateUnitsPerFrame(1), _FlipbookBeingEdited(nullptr) {
+        SLATE_BEGIN_ARGS(SSimpleFlipbookKeyframeWidget) : _SlateUnitsPerFrame(1), _FlipbookBeingEdited(nullptr)
+            {
             }
 
             SLATE_ATTRIBUTE(float, SlateUnitsPerFrame)
@@ -92,9 +101,11 @@ namespace Simple2D {
         /**
          *
          */
-        class SIMPLE2DEDITOR_API SSimpleFlipbookTimelineTrack : public SCompoundWidget {
+        class SIMPLE2DEDITOR_API SSimpleFlipbookTimelineTrack : public SCompoundWidget
+        {
           public:
-            SLATE_BEGIN_ARGS(SSimpleFlipbookTimelineTrack) : _SlateUnitsPerFrame(1), _FlipbookBeingEdited(nullptr) {
+            SLATE_BEGIN_ARGS(SSimpleFlipbookTimelineTrack) : _SlateUnitsPerFrame(1), _FlipbookBeingEdited(nullptr)
+                {
                 }
 
                 SLATE_ATTRIBUTE(float, SlateUnitsPerFrame)

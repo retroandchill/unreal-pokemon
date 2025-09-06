@@ -33,14 +33,9 @@ using UnrealBuildTool;
 
 public class UE5CoroK2 : UE5CoroModuleRules
 {
-	public UE5CoroK2(ReadOnlyTargetRules Target)
-		: base(Target)
-	{
-		PublicDependencyModuleNames.AddRange(new[]
-		{
-			"BlueprintGraph",
-			"UE5Coro",
-			"UnrealEd",
-		});
-	}
+    public UE5CoroK2(ReadOnlyTargetRules Target)
+        : base(Target)
+    {
+        PublicDependencyModuleNames.AddRange(new[] { "BlueprintGraph", "UE5Coro", "UnrealEd" });
+    }
 }

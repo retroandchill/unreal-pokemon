@@ -24,14 +24,16 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnMoveLearnEnd, bool);
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
-class UMoveBlock : public UInterface {
+class UMoveBlock : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * The block of code for handling a Pokémon's moves
  */
-class POKEMONCORE_API IMoveBlock {
+class POKEMONCORE_API IMoveBlock
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

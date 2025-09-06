@@ -9,7 +9,8 @@
 /**
  * Internal registry used to handle the tracking of the data table structs
  */
-class POKEMONDATA_API FDataRegistry {
+class POKEMONDATA_API FDataRegistry
+{
     FDataRegistry();
     ~FDataRegistry();
 
@@ -37,7 +38,8 @@ class POKEMONDATA_API FDataRegistry {
      * @return The registration succeeded
      */
     template <typename T>
-    bool RegisterStruct() {
+    bool RegisterStruct()
+    {
         const UScriptStruct *const TypeStruct = T::StaticStruct();
         Registry.RegisterClass<TDataTableProxy<T>>(TypeStruct->GetFName());
         return true;

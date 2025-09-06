@@ -16,7 +16,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScreenSaveComplete);
  * Attempt to save the game.
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API USaveGameOnScreen : public UBlueprintCoroutineActionBase {
+class POKEMONUI_API USaveGameOnScreen : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

@@ -18,11 +18,13 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     RETROLIB_EXPORT template <typename T, size_t E = std::dynamic_extent>
     using TSpan = std::span<T, E>;
 
-    namespace Ranges::Views {
+    namespace Ranges::Views
+    {
         RETROLIB_EXPORT template <typename T>
         constexpr auto Empty = std::ranges::views::empty<T>;
 

@@ -14,7 +14,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonPanelInfoTest, "Unit Tests.UI.PokemonPanelInfoTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool PokemonPanelInfoTest::RunTest(const FString &Parameters) {
+bool PokemonPanelInfoTest::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonSelectionPane>();
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());
@@ -26,7 +27,8 @@ bool PokemonPanelInfoTest::RunTest(const FString &Parameters) {
     Screen->AddToViewport();
 
     TArray<UPokemonPanel *> Panels;
-    for (int32 i = 0; i < 3; i++) {
+    for (int32 i = 0; i < 3; i++)
+    {
         FName Name(FString::Format(TEXT("SelectionPanel{Num}"), FStringFormatNamedArguments({{TEXT("Num"), i}})));
         auto Panel = Screen->WidgetTree->FindWidget<UPokemonPanel>(Name);
         UE_ASSERT_NOT_NULL(Panel);

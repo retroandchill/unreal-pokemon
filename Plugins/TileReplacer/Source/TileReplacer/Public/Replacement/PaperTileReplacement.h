@@ -11,14 +11,16 @@ struct FPaperTileMetadata;
 struct FPaperTileInfo;
 // This class does not need to be modified.
 UINTERFACE()
-class UPaperTileReplacement : public UInterface {
+class UPaperTileReplacement : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Interface to be used on actors that replace a Paper Tile in a TileMap.
  */
-class TILEREPLACER_API IPaperTileReplacement {
+class TILEREPLACER_API IPaperTileReplacement
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

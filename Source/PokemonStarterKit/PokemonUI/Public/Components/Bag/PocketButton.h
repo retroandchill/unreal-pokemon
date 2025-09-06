@@ -11,7 +11,8 @@
  *
  */
 UCLASS(Abstract)
-class POKEMONUI_API UPocketButton : public UCommonButtonBase {
+class POKEMONUI_API UPocketButton : public UCommonButtonBase
+{
     GENERATED_BODY()
 
   public:

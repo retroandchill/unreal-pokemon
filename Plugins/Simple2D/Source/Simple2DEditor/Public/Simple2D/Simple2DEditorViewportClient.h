@@ -2,8 +2,10 @@
 
 #pragma once
 
-namespace Simple2D {
-    struct FViewportSelectionRectangle {
+namespace Simple2D
+{
+    struct FViewportSelectionRectangle
+    {
         FVector2D TopLeft;
         FVector2D Dimensions;
         FLinearColor Color;
@@ -12,7 +14,8 @@ namespace Simple2D {
     /**
      *
      */
-    class SIMPLE2DEDITOR_API FSimple2DEditorViewportClient : public FEditorViewportClient {
+    class SIMPLE2DEDITOR_API FSimple2DEditorViewportClient : public FEditorViewportClient
+    {
       public:
         explicit FSimple2DEditorViewportClient(const TWeakPtr<SEditorViewport> &InEditorViewportWidget = nullptr);
 
@@ -23,7 +26,8 @@ namespace Simple2D {
 
         void ModifyCheckerboardTextureColors();
 
-        void SetZoomPos(FVector2D InNewPos, float InNewZoom) {
+        void SetZoomPos(FVector2D InNewPos, float InNewZoom)
+        {
             ZoomPos = InNewPos;
             ZoomAmount = InNewZoom;
         }
@@ -35,7 +39,8 @@ namespace Simple2D {
       protected:
         void DrawSelectionRectangles(FViewport *Viewport, FCanvas *Canvas);
 
-        virtual FBox GetDesiredFocusBounds() const {
+        virtual FBox GetDesiredFocusBounds() const
+        {
             return FBox(ForceInitToZero);
         }
 

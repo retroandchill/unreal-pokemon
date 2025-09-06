@@ -11,7 +11,8 @@
  * Utility class for handling additional functions when loading assets.
  */
 UCLASS()
-class DYNAMICASSETLOADER_API UAssetUtilities : public UBlueprintFunctionLibrary {
+class DYNAMICASSETLOADER_API UAssetUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

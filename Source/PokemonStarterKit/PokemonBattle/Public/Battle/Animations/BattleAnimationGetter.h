@@ -14,14 +14,16 @@ class IBattleAnimation;
  *
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONBATTLE_API UBattleAnimationGetter : public UObject {
+class POKEMONBATTLE_API UBattleAnimationGetter : public UObject
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
   public:
     static UBattleAnimationGetter &Get(const UObject *WorldContext);
 
-    static UBattleAnimationGetter &Get(const FScriptInterface &WorldContext) {
+    static UBattleAnimationGetter &Get(const FScriptInterface &WorldContext)
+    {
         return Get(WorldContext.GetObject());
     }
 

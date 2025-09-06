@@ -16,7 +16,8 @@ THIRD_PARTY_INCLUDES_END
 /**
  *
  */
-class FMockPokemon : public IPokemon {
+class FMockPokemon : public IPokemon
+{
     DECLARE_MOCK_INTERFACE(FMockPokemon)
 
   public:

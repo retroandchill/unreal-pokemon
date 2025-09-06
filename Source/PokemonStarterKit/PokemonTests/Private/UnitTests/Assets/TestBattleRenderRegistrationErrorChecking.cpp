@@ -18,7 +18,8 @@ TOptional<Retro::IVariantRegistration &> Registration;
 
 END_DEFINE_SPEC(FTestRegistrationErrorChecking);
 
-void FTestRegistrationErrorChecking::Define() {
+void FTestRegistrationErrorChecking::Define()
+{
     Describe("Test Battle Render Blueprint System Error checking", [this] {
         BeforeEach([this] {
             Helper = NewObject<UExceptionTestHelper>();

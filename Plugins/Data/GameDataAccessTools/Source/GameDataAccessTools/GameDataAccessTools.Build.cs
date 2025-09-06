@@ -36,7 +36,7 @@ public class GameDataAccessTools : ModuleRules
         );
 
         PrivateDependencyModuleNames.AddRange(
-            new string[] { "CoreUObject", "Engine", "Slate", "SlateCore"}
+            new string[] { "CoreUObject", "Engine", "Slate", "SlateCore" }
         );
 
         DynamicallyLoadedModuleNames.AddRange(new string[] { });

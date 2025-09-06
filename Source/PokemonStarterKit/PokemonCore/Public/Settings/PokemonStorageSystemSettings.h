@@ -11,7 +11,8 @@
  * The settings for the Pokémon storage system.
  */
 UCLASS(Config = Game, DefaultConfig, DisplayName = "Pokémon Storage System")
-class POKEMONCORE_API UPokemonStorageSystemSettings : public UDeveloperSettings {
+class POKEMONCORE_API UPokemonStorageSystemSettings : public UDeveloperSettings
+{
     GENERATED_BODY()
 
   public:

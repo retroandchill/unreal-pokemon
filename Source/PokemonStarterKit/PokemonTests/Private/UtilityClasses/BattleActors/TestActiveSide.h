@@ -8,7 +8,8 @@
 #include "TestActiveSide.generated.h"
 
 UCLASS()
-class POKEMONTESTS_API ATestActiveSide : public AActiveSide {
+class POKEMONTESTS_API ATestActiveSide : public AActiveSide
+{
     GENERATED_BODY()
 
   public:

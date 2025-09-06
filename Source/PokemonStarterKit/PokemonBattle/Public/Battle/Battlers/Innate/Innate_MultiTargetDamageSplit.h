@@ -11,7 +11,8 @@
  * Applied a 75% modifier if a move hits multiple targets
  */
 UCLASS()
-class POKEMONBATTLE_API UInnate_MultiTargetDamageSplit : public UGameplayAbility {
+class POKEMONBATTLE_API UInnate_MultiTargetDamageSplit : public UGameplayAbility
+{
     GENERATED_BODY()
 
   public:

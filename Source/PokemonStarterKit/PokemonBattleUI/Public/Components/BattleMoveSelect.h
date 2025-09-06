@@ -24,7 +24,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnMoveSelected, const TScriptInter
  * Selection window for picking moves to use in combat.
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UBattleMoveSelect : public USelectableWidget {
+class POKEMONBATTLEUI_API UBattleMoveSelect : public USelectableWidget
+{
     GENERATED_BODY()
 
   public:

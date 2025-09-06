@@ -2,7 +2,8 @@
 
 #include "Battle/BlueprintClasses.h"
 
-namespace Pokemon::Battle::Classes {
+namespace Pokemon::Battle::Classes
+{
     UE_DEFINE_BLUEPRINT_CLASS(MoveEffects, UBattleMoveFunctionCode, "/Game/Blueprints/Battle/Moves/FunctionCodes",
                               "Move_");
 

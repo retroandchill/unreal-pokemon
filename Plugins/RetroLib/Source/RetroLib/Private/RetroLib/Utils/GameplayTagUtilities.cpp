@@ -3,7 +3,8 @@
 #include "RetroLib/Utils/GameplayTagUtilities.h"
 #include "GameplayTagsManager.h"
 
-FGameplayTag UGameplayTagUtilities::RequestGameplayTagChild(const FGameplayTag &Base, FName Suffix) {
+FGameplayTag UGameplayTagUtilities::RequestGameplayTagChild(const FGameplayTag &Base, FName Suffix)
+{
     const auto &Manager = UGameplayTagsManager::Get();
     auto GameplayTag = Base.ToString();
     GameplayTag.Append(TEXT(".")).Append(Suffix.ToString());

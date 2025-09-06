@@ -13,7 +13,8 @@
  * days in a real-time day, but the time is still tied to the system clock.
  */
 UCLASS(Config = Game)
-class DAYNIGHTCYCLE_API UAcceleratedRealTimeClock : public UObject, public IGameClock {
+class DAYNIGHTCYCLE_API UAcceleratedRealTimeClock : public UObject, public IGameClock
+{
     GENERATED_BODY()
 
   protected:

@@ -12,7 +12,8 @@
  * Attribute set for the damage state of a given target.
  */
 UCLASS()
-class POKEMONBATTLE_API UTargetDamageStateAttributeSet : public UAttributeSet {
+class POKEMONBATTLE_API UTargetDamageStateAttributeSet : public UAttributeSet
+{
     GENERATED_BODY()
 
   public:

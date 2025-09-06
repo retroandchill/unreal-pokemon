@@ -43,7 +43,8 @@
 #include "Utilities/TrainerHelpers.h"
 #include <functional>
 
-TScriptInterface<IBattleMove> CreateBattleMove(const TScriptInterface<IMove> &Move, ABattlerActor *Battler) {
+TScriptInterface<IBattleMove> CreateBattleMove(const TScriptInterface<IMove> &Move, ABattlerActor *Battler)
+{
     check(Battler != nullptr)
     check(Move != nullptr)
     TScriptInterface<IBattleMove> BattleMove = NewObject<UPokemonBattleMove>(Battler);
@@ -51,7 +52,8 @@ TScriptInterface<IBattleMove> CreateBattleMove(const TScriptInterface<IMove> &Mo
     return BattleMove;
 }
 
-ABattlerActor::ABattlerActor() {
+ABattlerActor::ABattlerActor()
+{
     BattlerAbilityComponent = CreateDefaultSubobject<UBattlerAbilityComponent>("BattlerAbilityComponent");
     TurnBasedEffectComponent = CreateDefaultSubobject<UTurnBasedEffectComponent>(FName("TurnBasedEffectsComponent"));
     InnateAbilities.Add(UInnate_CriticalHitDamage::StaticClass());
@@ -61,7 +63,8 @@ ABattlerActor::ABattlerActor() {
 
 UE5Coro::TCoroutine<TScriptInterface<IBattler>> ABattlerActor::Initialize(TScriptInterface<IBattleSide> Side,
                                                                           TScriptInterface<IPokemon> Pokemon,
-                                                                          bool ShowImmediately, FForceLatentCoroutine) {
+                                                                          bool ShowImmediately, FForceLatentCoroutine)
+{
     OwningSide = Side;
     WrappedPokemon = Pokemon;
     InternalId = FGuid::NewGuid();
@@ -71,19 +74,22 @@ UE5Coro::TCoroutine<TScriptInterface<IBattler>> ABattlerActor::Initialize(TScrip
     auto &StatTable = DataSubsystem.GetDataTable<FStat>();
 
     TMap<UClass *, UAttributeSet *> Attributes;
-    for (auto AttributeSets = BattlerAbilityComponent->GetSpawnedAttributes(); auto Attribute : AttributeSets) {
+    for (auto AttributeSets = BattlerAbilityComponent->GetSpawnedAttributes(); auto Attribute : AttributeSets)
+    {
         Attributes.Add(Attribute->GetClass(), Attribute);
     }
 
     auto StatBlock = WrappedPokemon->GetStatBlock();
     StatTable.GetAllRows() | Retro::Ranges::ForEach([this, &Attributes, &StatBlock](const FStat &Stat) {
-        if (Stat.BaseAttribute.IsValid() && Stat.Type != EPokemonStatType::Battle) {
+        if (Stat.BaseAttribute.IsValid() && Stat.Type != EPokemonStatType::Battle)
+        {
             auto StatValue = StatBlock->GetStat(Stat.ID);
             BattlerAbilityComponent->SetNumericAttributeBase(Stat.BaseAttribute,
                                                              static_cast<float>(StatValue->GetStatValue()));
         }
 
-        if (Stat.StagesAttribute.IsValid()) {
+        if (Stat.StagesAttribute.IsValid())
+        {
             BattlerAbilityComponent->SetNumericAttributeBase(Stat.StagesAttribute, 0.f);
         }
     });
@@ -103,37 +109,49 @@ UE5Coro::TCoroutine<TScriptInterface<IBattler>> ABattlerActor::Initialize(TScrip
     co_await SpawnSpriteActor(ShowImmediately);
 
     auto &Battle = OwningSide->GetOwningBattle();
-    if (OwningSide->ShowBackSprites()) {
+    if (OwningSide->ShowBackSprites())
+    {
         Controller = NewObject<UPlayerBattlerController>(this)->SetBattle(Battle);
-    } else {
+    }
+    else
+    {
         Controller = NewObject<UAIBattlerController>(this);
     }
     Controller->BindOnActionReady(
         FActionReady::CreateLambda(std::bind_front(&IBattle::QueueAction, Battle.GetInterface())));
 
     if (auto AbilityClass = Pokemon::Battle::Abilities::CreateAbilityEffect(Pokemon->GetAbility()->GetAbilityID());
-        AbilityClass.IsSet()) {
+        AbilityClass.IsSet())
+    {
         Ability =
             BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(AbilityClass.GetValue(), 1, INDEX_NONE, this));
-    } else {
+    }
+    else
+    {
         Ability = FGameplayAbilitySpecHandle();
     }
 
     if (auto HoldItemClass = Pokemon::Battle::Items::FindHoldItemEffect(Pokemon->GetHoldItem().GetPtrOrNull());
-        HoldItemClass.IsSet()) {
+        HoldItemClass.IsSet())
+    {
         HoldItem =
             BattlerAbilityComponent->GiveAbility(FGameplayAbilitySpec(HoldItemClass.GetValue(), 1, INDEX_NONE, this));
-    } else {
+    }
+    else
+    {
         HoldItem = FGameplayAbilitySpecHandle();
     }
 
     if (auto StatusEffectClass = Pokemon::Battle::StatusEffects::FindStatusEffect(Pokemon->GetStatusEffect());
-        StatusEffectClass.IsSet()) {
+        StatusEffectClass.IsSet())
+    {
         auto Spec = BattlerAbilityComponent->MakeOutgoingSpec(StatusEffectClass.GetValue(), 0,
                                                               BattlerAbilityComponent->MakeEffectContext());
         StatusEffect.Emplace(Pokemon->GetStatusEffect()->ID,
                              BattlerAbilityComponent->ApplyGameplayEffectSpecToSelf(*Spec.Data));
-    } else {
+    }
+    else
+    {
         StatusEffect.Reset();
     }
 
@@ -143,7 +161,8 @@ UE5Coro::TCoroutine<TScriptInterface<IBattler>> ABattlerActor::Initialize(TScrip
     co_return this;
 }
 
-void ABattlerActor::BeginPlay() {
+void ABattlerActor::BeginPlay()
+{
     Super::BeginPlay();
     BattlerAbilityComponent->InitAbilityActorInfo(this, this);
     // clang-format off
@@ -161,55 +180,68 @@ void ABattlerActor::BeginPlay() {
     // clang-format on
 }
 
-void ABattlerActor::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+void ABattlerActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
     Super::EndPlay(EndPlayReason);
     BattlerAbilityComponent->ClearAbility(Ability);
-    for (auto Innate : InnateAbilityHandles) {
+    for (auto Innate : InnateAbilityHandles)
+    {
         BattlerAbilityComponent->ClearAbility(Innate);
     }
-    if (Sprite != nullptr) {
+    if (Sprite != nullptr)
+    {
         Sprite->Destroy();
     }
 }
 
-FGuid ABattlerActor::GetInternalId() const {
+FGuid ABattlerActor::GetInternalId() const
+{
     return InternalId;
 }
 
-const TScriptInterface<IBattleSide> &ABattlerActor::GetOwningSide() const {
+const TScriptInterface<IBattleSide> &ABattlerActor::GetOwningSide() const
+{
     return OwningSide;
 }
 
-const TScriptInterface<IPokemon> &ABattlerActor::GetWrappedPokemon() const {
+const TScriptInterface<IPokemon> &ABattlerActor::GetWrappedPokemon() const
+{
     return WrappedPokemon;
 }
 
-bool ABattlerActor::IsActive() const {
+bool ABattlerActor::IsActive() const
+{
     return OwningSide->GetBattlers().Contains(this);
 }
 
-const FSpeciesData &ABattlerActor::GetSpecies() const {
+const FSpeciesData &ABattlerActor::GetSpecies() const
+{
     return WrappedPokemon->GetSpecies();
 }
 
-FText ABattlerActor::GetNickname() const {
+FText ABattlerActor::GetNickname() const
+{
     return WrappedPokemon->GetNickname();
 }
 
-EPokemonGender ABattlerActor::GetGender() const {
+EPokemonGender ABattlerActor::GetGender() const
+{
     return WrappedPokemon->GetGender();
 }
 
-int32 ABattlerActor::GetPokemonLevel() const {
+int32 ABattlerActor::GetPokemonLevel() const
+{
     return WrappedPokemon->GetStatBlock()->GetLevel();
 }
 
-void ABattlerActor::RefreshStats() {
+void ABattlerActor::RefreshStats()
+{
     auto &DataSubsystem = FDataManager::GetInstance();
     auto &StatTable = DataSubsystem.GetDataTable<FStat>();
     auto StatBlock = WrappedPokemon->GetStatBlock();
     StatTable.GetAllRows() | Retro::Ranges::ForEach([this, &StatBlock](const FStat &Stat) {
-        if (Stat.BaseAttribute.IsValid() && Stat.Type != EPokemonStatType::Battle) {
+        if (Stat.BaseAttribute.IsValid() && Stat.Type != EPokemonStatType::Battle)
+        {
             auto StatValue = StatBlock->GetStat(Stat.ID);
             BattlerAbilityComponent->SetNumericAttributeBase(Stat.BaseAttribute,
                                                              static_cast<float>(StatValue->GetStatValue()));
@@ -220,42 +252,52 @@ void ABattlerActor::RefreshStats() {
                                                      static_cast<float>(WrappedPokemon->GetCurrentHP()));
 }
 
-float ABattlerActor::GetHPPercent() const {
+float ABattlerActor::GetHPPercent() const
+{
     auto CoreAttributes = BattlerAbilityComponent->GetCoreAttributes();
     return CoreAttributes->GetHP() / CoreAttributes->GetMaxHP();
 }
 
-void ABattlerActor::TakeBattleDamage(int32 Damage) {
+void ABattlerActor::TakeBattleDamage(int32 Damage)
+{
     WrappedPokemon->SetCurrentHP(WrappedPokemon->GetCurrentHP() - Damage);
 }
 
-bool ABattlerActor::IsFainted() const {
+bool ABattlerActor::IsFainted() const
+{
     return WrappedPokemon->IsFainted();
 }
 
-bool ABattlerActor::IsNotFainted() const {
+bool ABattlerActor::IsNotFainted() const
+{
     return !WrappedPokemon->IsFainted();
 }
 
-void ABattlerActor::Faint() const {
-    if (Sprite == nullptr) {
+void ABattlerActor::Faint() const
+{
+    if (Sprite == nullptr)
+    {
         return;
     }
     IBattlerSprite::Execute_Faint(Sprite);
 }
 
-bool ABattlerActor::CanGainExp() const {
+bool ABattlerActor::CanGainExp() const
+{
     return OwningSide == OwningSide->GetOwningBattle()->GetPlayerSide();
 }
 
-float ABattlerActor::GetExpPercent() const {
+float ABattlerActor::GetExpPercent() const
+{
     return WrappedPokemon->GetStatBlock()->GetExpPercent();
 }
 
-UE5Coro::TCoroutine<TArray<FExpGainInfo>> ABattlerActor::GiveExpToParticipants() {
+UE5Coro::TCoroutine<TArray<FExpGainInfo>> ABattlerActor::GiveExpToParticipants()
+{
     TArray<FExpGainInfo> GainInfos;
     auto &Battle = OwningSide->GetOwningBattle();
-    if (OwningSide != Battle->GetOpposingSide()) {
+    if (OwningSide != Battle->GetOpposingSide())
+    {
         co_return GainInfos;
     }
 
@@ -268,8 +310,10 @@ UE5Coro::TCoroutine<TArray<FExpGainInfo>> ABattlerActor::GiveExpToParticipants()
     int32 Level = GetPokemonLevel();
 
     auto &PlayerTrainer = UTrainerHelpers::GetPlayerCharacter(this);
-    for (auto &PlayerParty = Battle->GetPlayerSide()->GetTrainerParty(PlayerTrainer); auto &Battler : PlayerParty) {
-        if (Battler->IsFainted()) {
+    for (auto &PlayerParty = Battle->GetPlayerSide()->GetTrainerParty(PlayerTrainer); auto &Battler : PlayerParty)
+    {
+        if (Battler->IsFainted())
+        {
             auto &GainInfo = GainInfos.Emplace_GetRef(Battler, 0);
             GainInfo.StatChanges = co_await Battler->GainExpAndEVs(GainInfo.Amount, {});
             continue;
@@ -291,36 +335,44 @@ UE5Coro::TCoroutine<TArray<FExpGainInfo>> ABattlerActor::GiveExpToParticipants()
     co_return GainInfos;
 }
 
-UE5Coro::TCoroutine<FLevelUpStatChanges> ABattlerActor::GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs) {
+UE5Coro::TCoroutine<FLevelUpStatChanges> ABattlerActor::GainExpAndEVs(int32 Exp, const TMap<FName, uint8> &EVs)
+{
     auto StatBlock = WrappedPokemon->GetStatBlock();
-    for (auto &[ID, Amount] : EVs) {
+    for (auto &[ID, Amount] : EVs)
+    {
         auto Stat = StatBlock->GetStat(ID);
         Stat->SetEV(Stat->GetEV() + Amount);
     }
     return StatBlock->GainExp(Exp, false);
 }
 
-TArray<FName> ABattlerActor::GetTypes() const {
+TArray<FName> ABattlerActor::GetTypes() const
+{
     return WrappedPokemon->GetTypes();
 }
 
-UBattlerAbilityComponent *ABattlerActor::GetAbilityComponent() const {
+UBattlerAbilityComponent *ABattlerActor::GetAbilityComponent() const
+{
     return BattlerAbilityComponent;
 }
 
-UTurnBasedEffectComponent *ABattlerActor::GetTurnBasedEffectComponent() const {
+UTurnBasedEffectComponent *ABattlerActor::GetTurnBasedEffectComponent() const
+{
     return TurnBasedEffectComponent;
 }
 
-const TArray<TScriptInterface<IBattleMove>> &ABattlerActor::GetMoves() const {
+const TArray<TScriptInterface<IBattleMove>> &ABattlerActor::GetMoves() const
+{
     return Moves;
 }
 
-FText ABattlerActor::GetRecallMessage() const {
+FText ABattlerActor::GetRecallMessage() const
+{
     return GetMessageOnRecall();
 }
 
-UE5Coro::TCoroutine<> ABattlerActor::PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget) {
+UE5Coro::TCoroutine<> ABattlerActor::PerformSwitch(const TScriptInterface<IBattler> &SwitchTarget)
+{
     FGameplayEventData EventData;
     EventData.Instigator = this;
 
@@ -341,31 +393,38 @@ UE5Coro::TCoroutine<> ABattlerActor::PerformSwitch(const TScriptInterface<IBattl
                                                              Pokemon::Battle::SwitchOut, EventData);
 }
 
-bool ABattlerActor::IsOwnedByPlayer() const {
+bool ABattlerActor::IsOwnedByPlayer() const
+{
     return WrappedPokemon->GetCurrentHandler() == UTrainerHelpers::GetPlayerCharacter(this);
 }
 
-void ABattlerActor::SelectActions() {
-    if (!CanSelectActions()) {
+void ABattlerActor::SelectActions()
+{
+    if (!CanSelectActions())
+    {
         return;
     }
 
     Controller->ActionSelection(this);
 }
 
-void ABattlerActor::RequireSwitch() {
+void ABattlerActor::RequireSwitch()
+{
     Controller->InitiateForcedSwitch(this);
 }
 
-uint8 ABattlerActor::GetActionCount() const {
+uint8 ABattlerActor::GetActionCount() const
+{
     return 1;
 }
 
-bool ABattlerActor::CanSelectActions() const {
+bool ABattlerActor::CanSelectActions() const
+{
     return IsNotFainted();
 }
 
-Retro::TGenerator<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
+Retro::TGenerator<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const
+{
     // clang-format off
     co_yield Retro::Ranges::TElementsOf(OwningSide->GetBattlers() |
            Retro::Ranges::Views::Filter([this](const TScriptInterface<IBattler> &Battler) {
@@ -374,8 +433,10 @@ Retro::TGenerator<TScriptInterface<IBattler>> ABattlerActor::GetAllies() const {
     // clang-format on
 }
 
-void ABattlerActor::ShowSprite(const FVector &Offset) const {
-    if (Sprite == nullptr) {
+void ABattlerActor::ShowSprite(const FVector &Offset) const
+{
+    if (Sprite == nullptr)
+    {
         return;
     }
 
@@ -383,16 +444,20 @@ void ABattlerActor::ShowSprite(const FVector &Offset) const {
     Sprite->SetActorHiddenInGame(false);
 }
 
-void ABattlerActor::HideSprite() const {
-    if (Sprite == nullptr) {
+void ABattlerActor::HideSprite() const
+{
+    if (Sprite == nullptr)
+    {
         return;
     }
 
     Sprite->SetActorHiddenInGame(true);
 }
 
-void ABattlerActor::RecordParticipation() {
-    if (!IsOwnedByPlayer()) {
+void ABattlerActor::RecordParticipation()
+{
+    if (!IsOwnedByPlayer())
+    {
         return;
     }
 
@@ -401,39 +466,47 @@ void ABattlerActor::RecordParticipation() {
         Retro::Ranges::ForEach(Retro::BindBack<&IBattler::AddParticipant>(this));
 }
 
-void ABattlerActor::AddParticipant(const TScriptInterface<IBattler> &Participant) {
+void ABattlerActor::AddParticipant(const TScriptInterface<IBattler> &Participant)
+{
     Participants.Add(Participant->GetInternalId());
 }
 
-int32 ABattlerActor::GetTurnCount() const {
+int32 ABattlerActor::GetTurnCount() const
+{
     return TurnCount;
 }
 
-const TOptional<FStatusEffectInfo> &ABattlerActor::GetStatusEffect() const {
+const TOptional<FStatusEffectInfo> &ABattlerActor::GetStatusEffect() const
+{
     return StatusEffect;
 }
 
-void ABattlerActor::InflictStatusEffect(FStatusHandle StatusEffectID, FActiveGameplayEffectHandle EffectHandle) {
+void ABattlerActor::InflictStatusEffect(FStatusHandle StatusEffectID, FActiveGameplayEffectHandle EffectHandle)
+{
     check(!StatusEffect.IsSet())
     StatusEffect.Emplace(StatusEffectID, EffectHandle);
     WrappedPokemon->SetStatusEffect(StatusEffectID);
 }
 
-void ABattlerActor::CureStatusEffect() {
+void ABattlerActor::CureStatusEffect()
+{
     check(StatusEffect.IsSet())
     StatusEffect.Reset();
     WrappedPokemon->RemoveStatusEffect();
 }
 
-FTransform ABattlerActor::GetSpriteTransform_Implementation() const {
+FTransform ABattlerActor::GetSpriteTransform_Implementation() const
+{
     return GetTransform();
 }
 
-void ABattlerActor::UpdateHPValue(const FOnAttributeChangeData &Data) const {
+void ABattlerActor::UpdateHPValue(const FOnAttributeChangeData &Data) const
+{
     WrappedPokemon->SetCurrentHP(FMath::FloorToInt32(Data.NewValue));
 }
 
-UE5Coro::TCoroutine<> ABattlerActor::SpawnSpriteActor(bool ShouldShow) {
+UE5Coro::TCoroutine<> ABattlerActor::SpawnSpriteActor(bool ShouldShow)
+{
     Sprite = GetWorld()->SpawnActor<AActor>(co_await UE5Coro::Latent::AsyncLoadClass(BattlerSpriteClass),
                                             GetSpriteTransform());
     Sprite->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));

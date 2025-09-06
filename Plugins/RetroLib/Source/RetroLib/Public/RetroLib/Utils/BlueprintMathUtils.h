@@ -10,7 +10,8 @@
  * Common utility functions for math
  */
 UCLASS()
-class RETROLIB_API UBlueprintMathUtils : public UBlueprintFunctionLibrary {
+class RETROLIB_API UBlueprintMathUtils : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

@@ -17,21 +17,27 @@ import RetroLib;
 #include <optional>
 #endif
 
-namespace InstanceofTest {
-    struct Base {
+namespace InstanceofTest
+{
+    struct Base
+    {
         virtual ~Base() = default;
         virtual int Foo() = 0;
     };
 
-    struct Derived1 : Base {
-        int Foo() override {
+    struct Derived1 : Base
+    {
+        int Foo() override
+        {
             return Value1;
         }
 
         int Value1 = 3;
     };
-    struct Derived2 : Base {
-        int Foo() override {
+    struct Derived2 : Base
+    {
+        int Foo() override
+        {
             return Value2;
         }
 
@@ -39,20 +45,24 @@ namespace InstanceofTest {
     };
 } // namespace InstanceofTest
 
-TEST_CASE_NAMED(FStaticCastTest, "Unit Tests::RetroLib::Casting::StaticCast", "[utils]") {
+TEST_CASE_NAMED(FStaticCastTest, "Unit Tests::RetroLib::Casting::StaticCast", "[utils]")
+{
     using namespace InstanceofTest;
 
-    SECTION("Can convert between numberic types") {
+    SECTION("Can convert between numberic types")
+    {
         CHECK(Retro::StaticCast<double>(4) == 4.0);
         CHECK(Retro::StaticCast<int>(4.0) == 4);
     }
 
-    SECTION("Can perform implicit conversions that call constructors") {
+    SECTION("Can perform implicit conversions that call constructors")
+    {
         CHECK(Retro::StaticCast<std::string>("Hello world") == "Hello world");
         CHECK(Retro::StaticCast<std::optional<int>>(4) == 4);
     }
 
-    SECTION("Can convert to pointers") {
+    SECTION("Can convert to pointers")
+    {
         Derived1 Value1;
         auto BaseValue = Retro::StaticCast<Base *>(&Value1);
         CHECK(BaseValue == &Value1);
@@ -65,10 +75,12 @@ TEST_CASE_NAMED(FStaticCastTest, "Unit Tests::RetroLib::Casting::StaticCast", "[
 }
 
 #if RTTI_ENABLED
-TEST_CASE_NAMED(FInstanceOfTest, "Unit Tests::RetroLib::Casting::InstanceOf", "[utils]") {
+TEST_CASE_NAMED(FInstanceOfTest, "Unit Tests::RetroLib::Casting::InstanceOf", "[utils]")
+{
     using namespace InstanceofTest;
 
-    SECTION("Can work with raw pointers") {
+    SECTION("Can work with raw pointers")
+    {
         Derived1 Value1;
         Derived2 Value2;
         Base *Ptr = nullptr;
@@ -88,12 +100,14 @@ TEST_CASE_NAMED(FInstanceOfTest, "Unit Tests::RetroLib::Casting::InstanceOf", "[
         CHECK(Retro::InstanceOf<Derived2>(ValidPtr2));
     }
 
-    SECTION("Handles nullptr literals") {
+    SECTION("Handles nullptr literals")
+    {
         CHECK_FALSE(Retro::InstanceOf<Derived1>(nullptr));
         CHECK_FALSE(Retro::InstanceOf<Derived2>(nullptr));
     }
 
-    SECTION("Can work with wrapped pointer types (smart pointers)") {
+    SECTION("Can work with wrapped pointer types (smart pointers)")
+    {
         std::unique_ptr<Base> Ptr = nullptr;
         std::unique_ptr<Base> ValidPtr1 = std::make_unique<Derived1>();
         std::unique_ptr<Base> ValidPtr2 = std::make_unique<Derived2>();
@@ -111,7 +125,8 @@ TEST_CASE_NAMED(FInstanceOfTest, "Unit Tests::RetroLib::Casting::InstanceOf", "[
         CHECK(Retro::InstanceOf<Derived2>(ValidPtr2));
     }
 
-    SECTION("Can work with a polymorphic value instance") {
+    SECTION("Can work with a polymorphic value instance")
+    {
         Retro::TPolymorphic<Base> ValidPtr1(std::in_place_type<Derived1>);
         Retro::TPolymorphic<Base> ValidPtr2(std::in_place_type<Derived2>);
 
@@ -125,10 +140,12 @@ TEST_CASE_NAMED(FInstanceOfTest, "Unit Tests::RetroLib::Casting::InstanceOf", "[
     }
 }
 
-TEST_CASE_NAMED(FDynamicCastTest, "Unit Tests::RetroLib::Casting::DynamicCast", "[utils]") {
+TEST_CASE_NAMED(FDynamicCastTest, "Unit Tests::RetroLib::Casting::DynamicCast", "[utils]")
+{
     using namespace InstanceofTest;
 
-    SECTION("Can work with raw pointers") {
+    SECTION("Can work with raw pointers")
+    {
         Derived1 Value1;
         Derived2 Value2;
         Base *Ptr = nullptr;
@@ -148,12 +165,14 @@ TEST_CASE_NAMED(FDynamicCastTest, "Unit Tests::RetroLib::Casting::DynamicCast", 
         CHECK(Retro::Optionals::HasValue(Retro::DynamicCast<Derived2>(ValidPtr2)));
     }
 
-    SECTION("Handles nullptr literals") {
+    SECTION("Handles nullptr literals")
+    {
         CHECK_FALSE(Retro::Optionals::HasValue(Retro::DynamicCast<Derived1>(nullptr)));
         CHECK_FALSE(Retro::Optionals::HasValue(Retro::DynamicCast<Derived2>(nullptr)));
     }
 
-    SECTION("Can work with wrapped pointer types (smart pointers)") {
+    SECTION("Can work with wrapped pointer types (smart pointers)")
+    {
         std::unique_ptr<Base> Ptr = nullptr;
         std::unique_ptr<Base> ValidPtr1 = std::make_unique<Derived1>();
         std::unique_ptr<Base> ValidPtr2 = std::make_unique<Derived2>();
@@ -171,7 +190,8 @@ TEST_CASE_NAMED(FDynamicCastTest, "Unit Tests::RetroLib::Casting::DynamicCast", 
         CHECK(Retro::Optionals::HasValue(Retro::DynamicCast<Derived2>(ValidPtr2)));
     }
 
-    SECTION("Can work with a polymorphic value instance") {
+    SECTION("Can work with a polymorphic value instance")
+    {
         Retro::TPolymorphic<Base> ValidPtr1(std::in_place_type<Derived1>);
         Retro::TPolymorphic<Base> ValidPtr2(std::in_place_type<Derived2>);
 

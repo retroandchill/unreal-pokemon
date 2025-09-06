@@ -11,7 +11,8 @@
  * Specialized button base that has the ability to be disabled/hidden by the game as needed.
  */
 UCLASS(Abstract, DisplayName = "RPG Button Base")
-class RPGMENUS_API URPGButtonBase : public UCommonButtonBase {
+class RPGMENUS_API URPGButtonBase : public UCommonButtonBase
+{
     GENERATED_BODY()
 
   public:

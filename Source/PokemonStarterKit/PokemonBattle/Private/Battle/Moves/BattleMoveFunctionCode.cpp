@@ -39,7 +39,8 @@
 #include "Species/Stat.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
 
-int32 FCapturedBattleStat::GetStatValue() const {
+int32 FCapturedBattleStat::GetStatValue() const
+{
     static auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
     auto Stat = StatTable.GetData(StatID);
     check(Stat != nullptr)
@@ -47,17 +48,20 @@ int32 FCapturedBattleStat::GetStatValue() const {
     return FMath::FloorToInt32(OwningBattler->GetAbilityComponent()->GetNumericAttribute(Stat->BaseAttribute));
 }
 
-UBattleMoveFunctionCode::UBattleMoveFunctionCode() {
+UBattleMoveFunctionCode::UBattleMoveFunctionCode()
+{
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
     AbilityTrigger.TriggerTag = Pokemon::Battle::Moves::UsingMove;
 }
 
-const TScriptInterface<IBattleMove> &UBattleMoveFunctionCode::GetMove() const {
+const TScriptInterface<IBattleMove> &UBattleMoveFunctionCode::GetMove() const
+{
     return BattleMove;
 }
 
 bool UBattleMoveFunctionCode::ShouldAbilityRespondToEvent(const FGameplayAbilityActorInfo *ActorInfo,
-                                                          const FGameplayEventData *Payload) const {
+                                                          const FGameplayEventData *Payload) const
+{
     auto MovePayload = CastChecked<UUseMovePayload>(Payload->OptionalObject);
     return MovePayload->Ability == this;
 }
@@ -65,7 +69,8 @@ bool UBattleMoveFunctionCode::ShouldAbilityRespondToEvent(const FGameplayAbility
 UE5Coro::GAS::FAbilityCoroutine UBattleMoveFunctionCode::ExecuteAbility(FGameplayAbilitySpecHandle Handle,
                                                                         const FGameplayAbilityActorInfo *ActorInfo,
                                                                         FGameplayAbilityActivationInfo ActivationInfo,
-                                                                        const FGameplayEventData *TriggerEventData) {
+                                                                        const FGameplayEventData *TriggerEventData)
+{
     // If this is not triggered by an event throw an exception
     check(TriggerEventData != nullptr)
     BattleMove = CastChecked<UUseMovePayload>(TriggerEventData->OptionalObject)->Move;
@@ -94,7 +99,8 @@ UE5Coro::GAS::FAbilityCoroutine UBattleMoveFunctionCode::ExecuteAbility(FGamepla
     TScriptInterface<IBattler> User = ActorInfo->OwnerActor.Get();
     TArray<TScriptInterface<IBattler>> Targets;
     Targets.Reserve(TargetsActors.Num());
-    for (auto Actor : TargetsActors) {
+    for (auto Actor : TargetsActors)
+    {
         auto &Battler = Targets.Emplace_GetRef(Actor);
         auto &Tags = AddedTargetTags.Emplace(Actor);
         Tags.AddTag(Pokemon::Battle::Moves::MoveTarget);
@@ -114,7 +120,8 @@ UE5Coro::GAS::FAbilityCoroutine UBattleMoveFunctionCode::ExecuteAbility(FGamepla
     co_await UseMove(User, std::move(Targets));
 
     ActorInfo->AbilitySystemComponent->RemoveLooseGameplayTags(AddedTags, TNumericLimits<int32>::Max());
-    for (auto &[Actor, Tags] : AddedTargetTags) {
+    for (auto &[Actor, Tags] : AddedTargetTags)
+    {
         TScriptInterface<IBattler> Battler = Actor;
         auto AbilityComponent = Battler->GetAbilityComponent();
         AbilityComponent->RemoveLooseGameplayTags(Tags, TNumericLimits<int32>::Max());
@@ -122,13 +129,15 @@ UE5Coro::GAS::FAbilityCoroutine UBattleMoveFunctionCode::ExecuteAbility(FGamepla
     }
 }
 
-FName UBattleMoveFunctionCode::DetermineType_Implementation() const {
+FName UBattleMoveFunctionCode::DetermineType_Implementation() const
+{
     return BattleMove->GetDisplayType();
 }
 
 TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAbilitySpecHandle Handle,
                                                                const FGameplayAbilityActorInfo &ActorInfo,
-                                                               const FGameplayEventData *TriggerEventData) {
+                                                               const FGameplayEventData *TriggerEventData)
+{
     // clang-format off
     return TriggerEventData->TargetData.Data |
            Retro::Ranges::Views::Transform(&FGameplayAbilityTargetData::GetActors) |
@@ -145,9 +154,11 @@ TArray<AActor *> UBattleMoveFunctionCode::FilterInvalidTargets(const FGameplayAb
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::UseMove(TScriptInterface<IBattler> User,
                                                        TArray<TScriptInterface<IBattler>> Targets,
-                                                       FForceLatentCoroutine) {
+                                                       FForceLatentCoroutine)
+{
     TArray<TScriptInterface<IBattler>> SuccessfulHits;
-    if (!co_await CheckMoveSuccess(User, Targets, SuccessfulHits)) {
+    if (!co_await CheckMoveSuccess(User, Targets, SuccessfulHits))
+    {
         ProcessMoveFailure(User);
         co_await EndMove(User, Targets);
         co_return;
@@ -163,10 +174,12 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::UseMove(TScriptInterface<IBattler
 UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(TScriptInterface<IBattler> User,
                                                                     const TArray<TScriptInterface<IBattler>> &Targets,
                                                                     TArray<TScriptInterface<IBattler>> &SuccessfulHits,
-                                                                    FForceLatentCoroutine) {
+                                                                    FForceLatentCoroutine)
+{
     UE_LOG(LogBattle, Display, TEXT("%s is using move %s!"), *User->GetNickname().ToString(),
            *BattleMove->GetDisplayName().ToString())
-    if (co_await MoveFailed(User, Targets)) {
+    if (co_await MoveFailed(User, Targets))
+    {
         UE_LOG(LogBattle, Display, TEXT("%s failed!"), *BattleMove->GetDisplayName().ToString())
         co_return false;
     }
@@ -174,7 +187,8 @@ UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(TScriptInter
     auto &Dispatcher = IPokemonCoroutineDispatcher::Get(User);
     auto Settings = GetDefault<UBattleMessageSettings>();
     if (Targets.IsEmpty() && BattleMove->GetTargetType().NumTargets != ETargetCount::NoneOrSelf &&
-        !WorksWithNoTargets()) {
+        !WorksWithNoTargets())
+    {
         co_await Dispatcher.DisplayMessage(Settings->NoTargetMessage);
         UE_LOG(LogBattle, Display, TEXT("%s has no targets!"), *BattleMove->GetDisplayName().ToString())
         co_return false;
@@ -182,9 +196,11 @@ UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(TScriptInter
 
     TArray<TScriptInterface<IBattler>> FilteredTargets;
     FilteredTargets.Reserve(Targets.Num());
-    for (auto Target : Targets) {
+    for (auto Target : Targets)
+    {
         Target->GetAbilityComponent()->GetTargetDamageStateAttributeSet()->Reset();
-        if (!co_await SuccessCheckAgainstTarget(User, Target)) {
+        if (!co_await SuccessCheckAgainstTarget(User, Target))
+        {
             Target->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
             AddedTargetTags.FindChecked(CastChecked<AActor>(Target.GetObject()))
                 .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Failed);
@@ -194,14 +210,16 @@ UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(TScriptInter
         FilteredTargets.Add(Target);
     }
 
-    if (!Targets.IsEmpty() && FilteredTargets.IsEmpty()) {
+    if (!Targets.IsEmpty() && FilteredTargets.IsEmpty())
+    {
         UE_LOG(LogBattle, Display, TEXT("%s failed against all targets!"), *BattleMove->GetDisplayName().ToString())
         co_return false;
     }
 
     auto HitCheckCallback = [this, &User](const TScriptInterface<IBattler> &Target) {
         bool bHitResult = HitCheck(User, Target);
-        if (!bHitResult) {
+        if (!bHitResult)
+        {
             UE_LOG(LogBattle, Display, TEXT("%s missed %s!"), *BattleMove->GetDisplayName().ToString(),
                    *Target->GetNickname().ToString())
             Target->GetAbilityComponent()->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_Missed);
@@ -212,7 +230,8 @@ UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(TScriptInter
     };
     SuccessfulHits = FilteredTargets | Retro::Ranges::Views::Filter(HitCheckCallback) | Retro::Ranges::To<TArray>();
 
-    if (!Targets.IsEmpty() && SuccessfulHits.IsEmpty()) {
+    if (!Targets.IsEmpty() && SuccessfulHits.IsEmpty())
+    {
         UE_LOG(LogBattle, Display, TEXT("%s missed all targets!"), *BattleMove->GetDisplayName().ToString())
         co_await Dispatcher.DisplayMessage(Settings->MoveMissedMessage);
         ProcessMoveFailure(User);
@@ -225,26 +244,31 @@ UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::CheckMoveSuccess(TScriptInter
 
 UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::MoveFailed(TScriptInterface<IBattler> User,
                                                               const TArray<TScriptInterface<IBattler>> &Targets,
-                                                              FForceLatentCoroutine) {
+                                                              FForceLatentCoroutine)
+{
     co_return false;
 }
 
-void UBattleMoveFunctionCode::ProcessMoveFailure(const TScriptInterface<IBattler> &User) const {
+void UBattleMoveFunctionCode::ProcessMoveFailure(const TScriptInterface<IBattler> &User) const
+{
     User->OnMoveFailed(BattleMove);
 }
 
 UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::SuccessCheckAgainstTarget(TScriptInterface<IBattler> User,
                                                                              TScriptInterface<IBattler> Target,
-                                                                             FForceLatentCoroutine) {
+                                                                             FForceLatentCoroutine)
+{
     float TypeMod = CalculateTypeMatchUp(DeterminedType, User, Target);
     auto &TargetAbilities = *Target->GetAbilityComponent();
     auto &DamageState = *TargetAbilities.GetTargetDamageStateAttributeSet();
     DamageState.SetTypeMod(TypeMod);
-    if (User->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::TwoTurnAttack)) {
+    if (User->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::TwoTurnAttack))
+    {
         co_return true;
     }
 
-    if (BattleMove->GetCategory() != EMoveDamageCategory::Status && FMath::IsNearlyZero(TypeMod)) {
+    if (BattleMove->GetCategory() != EMoveDamageCategory::Status && FMath::IsNearlyZero(TypeMod))
+    {
         TargetAbilities.AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_NoEffect);
         AddedTargetTags.FindChecked(CastChecked<AActor>(Target.GetObject()))
             .AddTag(Pokemon::Battle::Moves::MoveTarget_Unaffected_NoEffect);
@@ -253,7 +277,8 @@ UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::SuccessCheckAgainstTarget(TSc
         co_return false;
     }
 
-    if (co_await FailsAgainstTarget(User, Target)) {
+    if (co_await FailsAgainstTarget(User, Target))
+    {
         co_return false;
     }
 
@@ -265,18 +290,22 @@ UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::SuccessCheckAgainstTarget(TSc
 
 UE5Coro::TCoroutine<bool> UBattleMoveFunctionCode::FailsAgainstTarget(TScriptInterface<IBattler> User,
                                                                       TScriptInterface<IBattler> Target,
-                                                                      FForceLatentCoroutine) {
+                                                                      FForceLatentCoroutine)
+{
     co_return false;
 }
 
-bool UBattleMoveFunctionCode::WorksWithNoTargets_Implementation() {
+bool UBattleMoveFunctionCode::WorksWithNoTargets_Implementation()
+{
     return false;
 }
 
 bool UBattleMoveFunctionCode::HitCheck_Implementation(const TScriptInterface<IBattler> &User,
-                                                      const TScriptInterface<IBattler> &Target) {
+                                                      const TScriptInterface<IBattler> &Target)
+{
     auto BaseAccuracy = CalculateBaseAccuracy(BattleMove->GetAccuracy(), User, Target);
-    if (BaseAccuracy == FMoveData::GuaranteedHit) {
+    if (BaseAccuracy == FMoveData::GuaranteedHit)
+    {
         UE_LOG(LogBattle, Display, TEXT("%s always hits, bypassing accuracy check against %s"),
                *BattleMove->GetDisplayName().ToString(), *Target->GetNickname().ToString())
         return true;
@@ -285,7 +314,8 @@ bool UBattleMoveFunctionCode::HitCheck_Implementation(const TScriptInterface<IBa
     auto Payload = UHitCheckPayload::Create(this, User, Target, BaseAccuracy);
     Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload, Pokemon::Battle::Moves::HitCheckEvents);
     BaseAccuracy = Payload->GetData().BaseAccuracy;
-    if (BaseAccuracy == FMoveData::GuaranteedHit) {
+    if (BaseAccuracy == FMoveData::GuaranteedHit)
+    {
         return true;
     }
 
@@ -295,11 +325,16 @@ bool UBattleMoveFunctionCode::HitCheck_Implementation(const TScriptInterface<IBa
     int32 EvasionStages = FMath::RoundToInt32(Target->GetAbilityComponent()->GetStatStages()->GetEvasionStages());
     int32 CompositeStages = FMath::Clamp(AccuracyStages - EvasionStages, -StatStageBound, StatStageBound);
     float AccuracyMultiplier;
-    if (CompositeStages > 0) {
+    if (CompositeStages > 0)
+    {
         AccuracyMultiplier = StageInfo[CompositeStages - 1].PositiveAccEvaMultiplier;
-    } else if (CompositeStages < 0) {
+    }
+    else if (CompositeStages < 0)
+    {
         AccuracyMultiplier = StageInfo[-CompositeStages - 1].NegativeAccEvaMultiplier;
-    } else {
+    }
+    else
+    {
         AccuracyMultiplier = 1.f;
     }
 
@@ -311,22 +346,27 @@ bool UBattleMoveFunctionCode::HitCheck_Implementation(const TScriptInterface<IBa
 
 int32 UBattleMoveFunctionCode::CalculateBaseAccuracy_Implementation(int32 Accuracy,
                                                                     const TScriptInterface<IBattler> &User,
-                                                                    const TScriptInterface<IBattler> &Target) {
+                                                                    const TScriptInterface<IBattler> &Target)
+{
     return Accuracy;
 }
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::PlayAnimation(TScriptInterface<IBattler> User,
                                                              const TArray<TScriptInterface<IBattler>> &Targets,
-                                                             FForceLatentCoroutine) {
+                                                             FForceLatentCoroutine)
+{
     // TODO: Retrieve the move animation
     co_return;
 }
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DealDamage(TScriptInterface<IBattler> User,
                                                           const TArray<TScriptInterface<IBattler>> &Targets,
-                                                          FForceLatentCoroutine) {
-    if (BattleMove->GetCategory() != EMoveDamageCategory::Status) {
-        for (auto &Target : Targets) {
+                                                          FForceLatentCoroutine)
+{
+    if (BattleMove->GetCategory() != EMoveDamageCategory::Status)
+    {
+        for (auto &Target : Targets)
+        {
             CalculateDamageAgainstTarget(User, Target, Targets.Num());
         }
     }
@@ -344,9 +384,11 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DealDamage(TScriptInterface<IBatt
     auto Handle = GetCurrentAbilitySpecHandle();
     auto ActorInfo = GetActorInfo();
     auto &ActivationInfo = GetCurrentActivationInfoRef();
-    for (auto &Target : Targets) {
+    for (auto &Target : Targets)
+    {
         auto TargetAbilities = Target->GetAbilityComponent();
-        if (TargetAbilities->HasAnyMatchingGameplayTags(UnaffectedTagsFilter)) {
+        if (TargetAbilities->HasAnyMatchingGameplayTags(UnaffectedTagsFilter))
+        {
             UE_LOG(LogBattle, Display, TEXT("%s is unaffected by the move, skipping damage step!"),
                    *Target->GetNickname().ToString())
             continue;
@@ -367,17 +409,20 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DealDamage(TScriptInterface<IBatt
 }
 
 int32 UBattleMoveFunctionCode::CalculateBasePower_Implementation(int32 Power, const TScriptInterface<IBattler> &User,
-                                                                 const TScriptInterface<IBattler> &Target) {
+                                                                 const TScriptInterface<IBattler> &Target)
+{
     return Power;
 }
 
 void UBattleMoveFunctionCode::CalculateDamageAgainstTarget_Implementation(const TScriptInterface<IBattler> &User,
                                                                           const TScriptInterface<IBattler> &Target,
-                                                                          int32 TargetCount) {
+                                                                          int32 TargetCount)
+{
     check(BattleMove->GetCategory() != EMoveDamageCategory::Status)
     auto TargetAbilityComponent = Target->GetAbilityComponent();
     auto &DamageState = *TargetAbilityComponent->GetTargetDamageStateAttributeSet();
-    if (IsCritical(User, Target)) {
+    if (IsCritical(User, Target))
+    {
         UE_LOG(LogBattle, Display, TEXT("Critical hit against %s!"), *Target->GetNickname().ToString());
         TargetAbilityComponent->AddLooseGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit);
     }
@@ -396,7 +441,8 @@ void UBattleMoveFunctionCode::CalculateDamageAgainstTarget_Implementation(const 
     auto [Attack, Defense] = GetAttackAndDefense(User, Target);
 
     static auto &Lookup = Pokemon::Battle::Stats::FLookup::Get();
-    if (TargetAbilityComponent->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit)) {
+    if (TargetAbilityComponent->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit))
+    {
         Attack.OwningBattler->GetAbilityComponent()->AddLooseGameplayTag(Lookup.GetIgnoreNegativeTag(Attack.StatID));
         Defense.OwningBattler->GetAbilityComponent()->AddLooseGameplayTag(Lookup.GetIgnorePositiveTag(Defense.StatID));
     }
@@ -412,21 +458,23 @@ void UBattleMoveFunctionCode::CalculateDamageAgainstTarget_Implementation(const 
     DamageState.SetCalculatedDamage(static_cast<float>(Damage));
     UE_LOG(LogBattle, Display, TEXT("%s calculated to take %d damage"), *Target->GetNickname().ToString(), Damage);
 
-    if (TargetAbilityComponent->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit)) {
+    if (TargetAbilityComponent->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_CriticalHit))
+    {
         Attack.OwningBattler->GetAbilityComponent()->RemoveLooseGameplayTag(Lookup.GetIgnoreNegativeTag(Attack.StatID));
         Defense.OwningBattler->GetAbilityComponent()->RemoveLooseGameplayTag(
             Lookup.GetIgnorePositiveTag(Defense.StatID));
     }
 }
 
-FAttackAndDefenseStats
-UBattleMoveFunctionCode::GetAttackAndDefense_Implementation(const TScriptInterface<IBattler> &User,
-                                                            const TScriptInterface<IBattler> &Target) {
+FAttackAndDefenseStats UBattleMoveFunctionCode::GetAttackAndDefense_Implementation(
+    const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target)
+{
     using enum EMoveDamageCategory;
     auto Category = BattleMove->GetCategory();
     check(Category != Status)
 
-    if (Category == Special) {
+    if (Category == Special)
+    {
         static FName SpecialAttack = "SPECIAL_ATTACK";
         static FName SpecialDefense = "SPECIAL_DEFENSE";
         return {{User, SpecialAttack}, {Target, SpecialDefense}};
@@ -437,21 +485,24 @@ UBattleMoveFunctionCode::GetAttackAndDefense_Implementation(const TScriptInterfa
     return {{User, Attack}, {Target, Defense}};
 }
 
-ECriticalOverride
-UBattleMoveFunctionCode::GetCriticalOverride_Implementation(const TScriptInterface<IBattler> &User,
-                                                            const TScriptInterface<IBattler> &Target) {
+ECriticalOverride UBattleMoveFunctionCode::GetCriticalOverride_Implementation(const TScriptInterface<IBattler> &User,
+                                                                              const TScriptInterface<IBattler> &Target)
+{
     return ECriticalOverride::Normal;
 }
 
 float UBattleMoveFunctionCode::CalculateTypeMatchUp_Implementation(FName MoveType,
                                                                    const TScriptInterface<IBattler> &User,
-                                                                   const TScriptInterface<IBattler> &Target) {
+                                                                   const TScriptInterface<IBattler> &Target)
+{
     float Effectiveness = Pokemon::TypeEffectiveness::NormalEffectiveMultiplier;
-    if (MoveType.IsNone()) {
+    if (MoveType.IsNone())
+    {
         return Effectiveness;
     }
 
-    for (auto DefendingType : Target->GetTypes()) {
+    for (auto DefendingType : Target->GetTypes())
+    {
         Effectiveness *= CalculateSingleTypeMod(MoveType, DefendingType, User, Target);
     }
 
@@ -463,7 +514,8 @@ float UBattleMoveFunctionCode::CalculateTypeMatchUp_Implementation(FName MoveTyp
 
 float UBattleMoveFunctionCode::CalculateSingleTypeMod_Implementation(FName AttackingType, FName DefendingType,
                                                                      const TScriptInterface<IBattler> &User,
-                                                                     const TScriptInterface<IBattler> &Target) {
+                                                                     const TScriptInterface<IBattler> &Target)
+{
     float Effectiveness = UTypeHelper::GetTypeEffectiveness(AttackingType, DefendingType);
     auto Payload = USingleTypeModPayload::Create(User, Target, AttackingType, DefendingType, Effectiveness);
     SYNC_EVENT(Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload,
@@ -472,7 +524,8 @@ float UBattleMoveFunctionCode::CalculateSingleTypeMod_Implementation(FName Attac
 }
 
 bool UBattleMoveFunctionCode::IsCritical_Implementation(const TScriptInterface<IBattler> &User,
-                                                        const TScriptInterface<IBattler> &Target) {
+                                                        const TScriptInterface<IBattler> &Target)
+{
     auto StatStagesAttributes = User->GetAbilityComponent()->GetStatStages();
     auto Override = GetCriticalOverride(User, Target);
     auto Stage = static_cast<int32>(StatStagesAttributes->GetCriticalHitStages());
@@ -483,7 +536,8 @@ bool UBattleMoveFunctionCode::IsCritical_Implementation(const TScriptInterface<I
     Override = Data.Override;
     Stage = Data.CriticalHitRateStages;
 
-    switch (Override) {
+    switch (Override)
+    {
     case ECriticalOverride::Always:
         return true;
     case ECriticalOverride::Never:
@@ -498,15 +552,18 @@ bool UBattleMoveFunctionCode::IsCritical_Implementation(const TScriptInterface<I
 
     int32 Rate = Ratios[Stage];
     check(Rate > 0)
-    if (Rate == 1) {
+    if (Rate == 1)
+    {
         return true;
     }
     int32 Roll = FMath::Rand() % Rate;
     return Roll == 0;
 }
 
-UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DisplayDamage(const TArray<TScriptInterface<IBattler>> &Targets) {
-    if (Targets.IsEmpty()) {
+UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DisplayDamage(const TArray<TScriptInterface<IBattler>> &Targets)
+{
+    if (Targets.IsEmpty())
+    {
         co_return;
     }
 
@@ -514,7 +571,8 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DisplayDamage(const TArray<TScrip
     auto DamageAnimation = Anims.GetDamageAnimation(Targets);
     co_await IBattleAnimation::PlayAnimation(DamageAnimation);
 
-    if (BattleMove->GetCategory() == EMoveDamageCategory::Status) {
+    if (BattleMove->GetCategory() == EMoveDamageCategory::Status)
+    {
         co_return;
     }
 
@@ -527,7 +585,8 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DisplayDamage(const TArray<TScrip
 
     auto &Dispatcher = IPokemonCoroutineDispatcher::Get(Targets[0].GetObject());
     auto Messages = GetDefault<UBattleMessageSettings>();
-    if (!CriticalHits.IsEmpty()) {
+    if (!CriticalHits.IsEmpty())
+    {
         co_await Dispatcher.DisplayMessage(
             Targets.Num() > 1
                 ? FText::FormatNamed(Messages->CriticalHitMessageMulti, "Pkmn",
@@ -537,46 +596,59 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::DisplayDamage(const TArray<TScrip
 
     TArray<FText> SuperEffectiveHits;
     TArray<FText> NotVeryEffectiveHits;
-    for (auto &Target : Targets) {
+    for (auto &Target : Targets)
+    {
         float Mod = Target->GetAbilityComponent()->GetTargetDamageStateAttributeSet()->GetTypeMod();
 
         if (auto Effectiveness = Pokemon::TypeEffectiveness::GetEffectivenessFromMultiplier(Mod);
-            Effectiveness == EDamageEffectiveness::SuperEffective) {
+            Effectiveness == EDamageEffectiveness::SuperEffective)
+        {
             SuperEffectiveHits.Add(Target->GetNickname());
-        } else if (Effectiveness == EDamageEffectiveness::NotVeryEffective) {
+        }
+        else if (Effectiveness == EDamageEffectiveness::NotVeryEffective)
+        {
             NotVeryEffectiveHits.Add(Target->GetNickname());
         }
     }
 
-    if (Targets.Num() > 1) {
-        if (!SuperEffectiveHits.IsEmpty()) {
+    if (Targets.Num() > 1)
+    {
+        if (!SuperEffectiveHits.IsEmpty())
+        {
             co_await Dispatcher.DisplayMessage(FText::FormatNamed(
                 Messages->SuperEffectiveMessageMulti, "Pkmn",
                 UStringUtilities::GenerateList(SuperEffectiveHits, UStringUtilities::ConjunctionAnd)));
         }
 
-        if (!NotVeryEffectiveHits.IsEmpty()) {
+        if (!NotVeryEffectiveHits.IsEmpty())
+        {
             co_await Dispatcher.DisplayMessage(FText::FormatNamed(
                 Messages->NotVeryEffectiveMessageMulti, "Pkmn",
                 UStringUtilities::GenerateList(NotVeryEffectiveHits, UStringUtilities::ConjunctionAnd)));
         }
-    } else {
-        if (!SuperEffectiveHits.IsEmpty()) {
+    }
+    else
+    {
+        if (!SuperEffectiveHits.IsEmpty())
+        {
             co_await Dispatcher.DisplayMessage(Messages->SuperEffectiveMessage);
         }
 
-        if (!NotVeryEffectiveHits.IsEmpty()) {
+        if (!NotVeryEffectiveHits.IsEmpty())
+        {
             co_await Dispatcher.DisplayMessage(Messages->NotVeryEffectiveMessage);
         }
     }
 }
 
-UE5Coro::TCoroutine<TArray<TScriptInterface<IBattler>>>
-UBattleMoveFunctionCode::ApplyMoveEffects(TScriptInterface<IBattler> User,
-                                          const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine) {
+UE5Coro::TCoroutine<TArray<TScriptInterface<IBattler>>> UBattleMoveFunctionCode::ApplyMoveEffects(
+    TScriptInterface<IBattler> User, const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine)
+{
     UE_LOG(LogBattle, Display, TEXT("Applying post-damage effects of %s!"), *BattleMove->GetDisplayName().ToString())
-    for (auto &Target : Targets) {
-        if (Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected)) {
+    for (auto &Target : Targets)
+    {
+        if (Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected))
+        {
             UE_LOG(LogBattle, Display, TEXT("%s is unaffected by the move, skipping post-damage effect application!"),
                    *Target->GetNickname().ToString())
             continue;
@@ -588,8 +660,10 @@ UBattleMoveFunctionCode::ApplyMoveEffects(TScriptInterface<IBattler> User,
     }
 
     UE_LOG(LogBattle, Display, TEXT("Applying effects of %s!"), *BattleMove->GetDisplayName().ToString())
-    for (auto &Target : Targets) {
-        if (Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected)) {
+    for (auto &Target : Targets)
+    {
+        if (Target->GetAbilityComponent()->HasMatchingGameplayTag(Pokemon::Battle::Moves::MoveTarget_Unaffected))
+        {
             UE_LOG(LogBattle, Display, TEXT("%s is unaffected by the move, skipping effect application!"),
                    *Target->GetNickname().ToString())
             continue;
@@ -606,27 +680,30 @@ UBattleMoveFunctionCode::ApplyMoveEffects(TScriptInterface<IBattler> User,
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyEffectWhenDealingDamage(TScriptInterface<IBattler> User,
                                                                             TScriptInterface<IBattler> Target,
-                                                                            FForceLatentCoroutine) {
+                                                                            FForceLatentCoroutine)
+{
     // No effect in this method
     co_return;
 }
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyEffectAgainstTarget(TScriptInterface<IBattler> User,
                                                                         TScriptInterface<IBattler> Target,
-                                                                        FForceLatentCoroutine) {
+                                                                        FForceLatentCoroutine)
+{
     // No effect in this method
     co_return;
 }
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyGeneralEffect(TScriptInterface<IBattler> User,
-                                                                  FForceLatentCoroutine) {
+                                                                  FForceLatentCoroutine)
+{
     // No effect in this method
     co_return;
 }
 
-UE5Coro::TCoroutine<TArray<TScriptInterface<IBattler>>>
-UBattleMoveFunctionCode::FaintCheck(TScriptInterface<IBattler> User, const TArray<TScriptInterface<IBattler>> &Targets,
-                                    FForceLatentCoroutine) {
+UE5Coro::TCoroutine<TArray<TScriptInterface<IBattler>>> UBattleMoveFunctionCode::FaintCheck(
+    TScriptInterface<IBattler> User, const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine)
+{
     using FAnim = TScriptInterface<IBattleAnimation>;
     constexpr auto GetFaintAnimation = &UBattleAnimationGetter::GetFaintAnimation;
 
@@ -644,10 +721,13 @@ UBattleMoveFunctionCode::FaintCheck(TScriptInterface<IBattler> User, const TArra
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyAdditionalEffects(TScriptInterface<IBattler> User,
                                                                       const TArray<TScriptInterface<IBattler>> &Targets,
-                                                                      FForceLatentCoroutine) {
+                                                                      FForceLatentCoroutine)
+{
     UE_LOG(LogBattle, Display, TEXT("Applying additional effects of %s!"), *BattleMove->GetDisplayName().ToString())
-    for (auto &Target : Targets) {
-        if (Target->GetAbilityComponent()->GetTargetDamageStateAttributeSet()->GetCalculatedDamage() == 0.f) {
+    for (auto &Target : Targets)
+    {
+        if (Target->GetAbilityComponent()->GetTargetDamageStateAttributeSet()->GetCalculatedDamage() == 0.f)
+        {
             UE_LOG(LogBattle, Display, TEXT("%s didn't take any damage, skipping the additional effect chance!"),
                    *Target->GetNickname().ToString())
             continue;
@@ -656,14 +736,16 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyAdditionalEffects(TScriptInt
         int32 Chance = CalculateAdditionalEffectChance(User, Target);
         UE_LOG(LogBattle, Display, TEXT("%s's additional effect chance against %s calculated to be %d"),
                *BattleMove->GetDisplayName().ToString(), *Target->GetNickname().ToString(), Chance)
-        if (Chance <= 0) {
+        if (Chance <= 0)
+        {
             UE_LOG(LogBattle, Display, TEXT("%s's additional effect chance is 0, skipping!"),
                    *BattleMove->GetDisplayName().ToString())
             continue;
         }
 
         int32 Roll = FMath::Rand() % 100;
-        if (Roll < Chance) {
+        if (Roll < Chance)
+        {
             UE_LOG(LogBattle, Display, TEXT("Applying additional effect of %s to %s!"),
                    *BattleMove->GetDisplayName().ToString(), *Target->GetNickname().ToString())
             co_await ApplyAdditionalEffect(User, Target);
@@ -677,13 +759,15 @@ UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyAdditionalEffects(TScriptInt
 }
 
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::ApplyAdditionalEffect(TScriptInterface<IBattler> User,
-                                                                     TScriptInterface<IBattler> Target) {
+                                                                     TScriptInterface<IBattler> Target)
+{
     // No effect in this method
     co_return;
 }
 
-int32 UBattleMoveFunctionCode::CalculateAdditionalEffectChance_Implementation(
-    const TScriptInterface<IBattler> &User, const TScriptInterface<IBattler> &Target) {
+int32 UBattleMoveFunctionCode::CalculateAdditionalEffectChance_Implementation(const TScriptInterface<IBattler> &User,
+                                                                              const TScriptInterface<IBattler> &Target)
+{
     auto Payload =
         UAdditionalEffectChanceModificationPayload::Create(User, Target, BattleMove->GetAdditionalEffectChance());
     SYNC_EVENT(Pokemon::Battle::Events::SendOutMoveEvents(User, Target, Payload,
@@ -694,6 +778,7 @@ int32 UBattleMoveFunctionCode::CalculateAdditionalEffectChance_Implementation(
 UE5Coro::TCoroutine<> UBattleMoveFunctionCode::EndMove(const TScriptInterface<IBattler> &User,
                                                        const TArray<TScriptInterface<IBattler>> &Targets,
                                                        const TArray<TScriptInterface<IBattler>> &FaintedBattlers,
-                                                       FForceLatentCoroutine) {
+                                                       FForceLatentCoroutine)
+{
     co_await UBattlerHelpers::GainExpOnFaint(User.GetObject(), FaintedBattlers);
 }

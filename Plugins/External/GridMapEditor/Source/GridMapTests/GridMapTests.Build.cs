@@ -2,16 +2,12 @@
 
 public class GridMapTests : ModuleRules
 {
-    public GridMapTests(ReadOnlyTargetRules Target) : base(Target)
+    public GridMapTests(ReadOnlyTargetRules Target)
+        : base(Target)
     {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicDependencyModuleNames.AddRange(
-            new string[]
-            {
-                "Core",
-            }
-        );
+        PublicDependencyModuleNames.AddRange(new string[] { "Core" });
 
         PrivateDependencyModuleNames.AddRange(
             new string[]
@@ -19,13 +15,12 @@ public class GridMapTests : ModuleRules
                 "CoreUObject",
                 "Engine",
                 "Slate",
-                "SlateCore", 
+                "SlateCore",
                 "GridMapEditor",
                 "GridMap",
-                
                 "InteractiveToolsFramework",
                 "UnrealEd",
-                "EditorFramework"
+                "EditorFramework",
             }
         );
     }

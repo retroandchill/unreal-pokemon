@@ -12,7 +12,8 @@
  * Represents one of the possible Pokémon natures
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FNature : public FIndexedTableRow {
+struct POKEMONDATA_API FNature : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -32,7 +33,8 @@ struct POKEMONDATA_API FNature : public FIndexedTableRow {
  * Blueprint function library for getting nature data out.
  */
 UCLASS()
-class POKEMONDATA_API UNatureHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UNatureHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

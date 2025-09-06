@@ -9,7 +9,8 @@
 #include "AsyncAbilityComponent.generated.h"
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class POKEMONBATTLE_API UAsyncAbilityComponent : public UAbilitySystemComponent {
+class POKEMONBATTLE_API UAsyncAbilityComponent : public UAbilitySystemComponent
+{
     GENERATED_BODY()
 
   public:

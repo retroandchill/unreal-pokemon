@@ -20,14 +20,16 @@ class IBattler;
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
-class POKEMONBATTLE_API UBattleSide : public UInterface {
+class POKEMONBATTLE_API UBattleSide : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Represents a "side" of the battle.
  */
-class POKEMONBATTLE_API IBattleSide {
+class POKEMONBATTLE_API IBattleSide
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
@@ -54,9 +56,11 @@ class POKEMONBATTLE_API IBattleSide {
      * @param
      * @return This side post-initialization
      */
-    virtual UE5Coro::TCoroutine<TScriptInterface<IBattleSide>>
-    Initialize(TScriptInterface<IBattle> Battle, TScriptInterface<ITrainer> Trainer, uint8 PokemonCount = 1,
-               bool ShowBackSprites = false, FForceLatentCoroutine = {}) = 0;
+    virtual UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> Initialize(TScriptInterface<IBattle> Battle,
+                                                                          TScriptInterface<ITrainer> Trainer,
+                                                                          uint8 PokemonCount = 1,
+                                                                          bool ShowBackSprites = false,
+                                                                          FForceLatentCoroutine = {}) = 0;
 
     virtual const FGuid &GetInternalId() const = 0;
 
@@ -119,8 +123,8 @@ class POKEMONBATTLE_API IBattleSide {
     UFUNCTION(BlueprintCallable, Category = "Battle|Battlers")
     virtual const TArray<TScriptInterface<ITrainer>> &GetTrainers() const = 0;
 
-    virtual const TArray<TScriptInterface<IBattler>> &
-    GetTrainerParty(const TScriptInterface<ITrainer> &Trainer) const = 0;
+    virtual const TArray<TScriptInterface<IBattler>> &GetTrainerParty(
+        const TScriptInterface<ITrainer> &Trainer) const = 0;
 
     virtual void SwapBattlerPositions(const TScriptInterface<ITrainer> &Trainer, int32 IndexA, int32 IndexB) = 0;
 

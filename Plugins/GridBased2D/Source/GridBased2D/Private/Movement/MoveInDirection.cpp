@@ -5,7 +5,8 @@
 #include "Components/GridMovable.h"
 
 UMoveInDirection *UMoveInDirection::MoveInDirection(const TScriptInterface<IGridMovable> &Character,
-                                                    EFacingDirection MovementDirection) {
+                                                    EFacingDirection MovementDirection)
+{
     auto Node = NewObject<UMoveInDirection>();
     Node->SetWorldContext(Character.GetObject());
     Node->Character = Character;
@@ -13,13 +14,16 @@ UMoveInDirection *UMoveInDirection::MoveInDirection(const TScriptInterface<IGrid
     return Node;
 }
 
-UE5Coro::TCoroutine<> UMoveInDirection::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine) {
+UE5Coro::TCoroutine<> UMoveInDirection::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine)
+{
     bool bCanInput = false;
     APlayerController *PlayerController = nullptr;
     auto Pawn = Cast<APawn>(Character.GetObject());
-    if (Pawn != nullptr) {
+    if (Pawn != nullptr)
+    {
         PlayerController = Cast<APlayerController>(Pawn->Controller);
-        if (PlayerController != nullptr) {
+        if (PlayerController != nullptr)
+        {
             bCanInput = PlayerController->InputEnabled();
             Pawn->DisableInput(PlayerController);
         }
@@ -27,7 +31,8 @@ UE5Coro::TCoroutine<> UMoveInDirection::ExecuteCoroutine(FForceLatentCoroutine F
 
     auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Character.GetObject());
     co_await MovementComponent->MoveInDirection(MovementDirection);
-    if (PlayerController != nullptr && bCanInput) {
+    if (PlayerController != nullptr && bCanInput)
+    {
         Pawn->EnableInput(PlayerController);
     }
 

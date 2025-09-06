@@ -12,7 +12,8 @@
  *
  */
 UCLASS()
-class POKEMONENCOUNTERS_API URandomEncounterAttributeSet : public UAttributeSet {
+class POKEMONENCOUNTERS_API URandomEncounterAttributeSet : public UAttributeSet
+{
     GENERATED_BODY()
 
   public:

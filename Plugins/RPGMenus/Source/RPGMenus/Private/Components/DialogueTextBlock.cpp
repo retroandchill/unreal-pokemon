@@ -5,7 +5,8 @@
 #include "Styling/SlateStyle.h"
 #include "Widgets/Text/SRichTextBlock.h"
 
-TSharedRef<SWidget> UDialogueTextBlock::RebuildWidget() {
+TSharedRef<SWidget> UDialogueTextBlock::RebuildWidget()
+{
     // Copied from URichTextBlock::RebuildWidget
     UpdateStyleData();
 
@@ -25,13 +26,15 @@ TSharedRef<SWidget> UDialogueTextBlock::RebuildWidget() {
     return MyRichTextBlock.ToSharedRef();
 }
 
-TSharedRef<FRichTextLayoutMarshaller>
-UDialogueTextBlock::CreateMarshaller(TArray<TSharedRef<ITextDecorator>> CreatedDecorators) {
+TSharedRef<FRichTextLayoutMarshaller> UDialogueTextBlock::CreateMarshaller(
+    TArray<TSharedRef<ITextDecorator>> CreatedDecorators)
+{
     return FRichTextLayoutMarshaller::Create(CreateMarkupParser(), CreateMarkupWriter(), std::move(CreatedDecorators),
                                              StyleInstance.Get());
 }
 
 TSharedRef<FSlateTextLayout> UDialogueTextBlock::CreateLayout(SWidget *InOwner,
-                                                              const FTextBlockStyle &InDefaultTextStyle) {
+                                                              const FTextBlockStyle &InDefaultTextStyle)
+{
     return FSlateTextLayout::Create(InOwner, InDefaultTextStyle);
 }

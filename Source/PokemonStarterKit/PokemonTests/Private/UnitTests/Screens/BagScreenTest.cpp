@@ -20,7 +20,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagScreenTest, "Unit Tests.Screens.BagScreenTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool BagScreenTest::RunTest(const FString &Parameters) {
+bool BagScreenTest::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UBagScreen>();
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());

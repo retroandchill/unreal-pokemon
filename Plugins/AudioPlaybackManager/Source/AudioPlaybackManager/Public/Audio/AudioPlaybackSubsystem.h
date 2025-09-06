@@ -11,7 +11,8 @@
  * Subsystem used to handle the playback of audio to the player.
  */
 UCLASS()
-class AUDIOPLAYBACKMANAGER_API UAudioPlaybackSubsystem : public UGameInstanceSubsystem {
+class AUDIOPLAYBACKMANAGER_API UAudioPlaybackSubsystem : public UGameInstanceSubsystem
+{
     GENERATED_BODY()
 
   public:

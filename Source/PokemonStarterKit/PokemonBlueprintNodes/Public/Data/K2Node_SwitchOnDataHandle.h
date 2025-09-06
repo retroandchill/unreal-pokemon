@@ -15,7 +15,8 @@ struct FStatusHandle;
  *
  */
 UCLASS()
-class POKEMONBLUEPRINTNODES_API UK2Node_SwitchOnDataHandle : public UK2Node_Switch, public IDataStructHandleNode {
+class POKEMONBLUEPRINTNODES_API UK2Node_SwitchOnDataHandle : public UK2Node_Switch, public IDataStructHandleNode
+{
     GENERATED_BODY()
 
   public:

@@ -14,7 +14,8 @@ THIRD_PARTY_INCLUDES_END
 /**
  *
  */
-class FMockBattleMove : public IBattleMove {
+class FMockBattleMove : public IBattleMove
+{
     DECLARE_MOCK_INTERFACE(FMockBattleMove)
 
   public:

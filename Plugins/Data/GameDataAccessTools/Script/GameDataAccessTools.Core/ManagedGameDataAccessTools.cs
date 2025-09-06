@@ -6,12 +6,7 @@ namespace GameDataAccessTools.Core;
 [UsedImplicitly]
 public class FManagedGameDataAccessTools : IModuleInterface
 {
-    public void StartupModule()
-    {
-        
-    }
+    public void StartupModule() { }
 
-    public void ShutdownModule()
-    {
-    }
+    public void ShutdownModule() { }
 }

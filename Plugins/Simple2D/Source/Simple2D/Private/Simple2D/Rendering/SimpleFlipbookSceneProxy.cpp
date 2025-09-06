@@ -17,12 +17,12 @@
 DECLARE_CYCLE_STAT(TEXT("Get New Batch Meshes"), STAT_Simple2DRender_GetNewBatchMeshes, STATGROUP_Simple2D);
 DECLARE_CYCLE_STAT(TEXT("SpriteProxy GDME"), STAT_Simple2DRenderSceneProxy_GetDynamicMeshElements, STATGROUP_Simple2D);
 
-namespace Simple2D {
+namespace Simple2D
+{
     static TAutoConsoleVariable CVarDrawSpritesAsTwoSided(TEXT("r.Simple2D.DrawTwoSided"), 1,
                                                           TEXT("Draw sprites as two sided."));
-    static TAutoConsoleVariable
-        CVarDrawSpritesUsingPrebuiltVertexBuffers(TEXT("r.Simple2D.UsePrebuiltVertexBuffers"), 1,
-                                                  TEXT("Draw sprites using prebuilt vertex buffers."));
+    static TAutoConsoleVariable CVarDrawSpritesUsingPrebuiltVertexBuffers(
+        TEXT("r.Simple2D.UsePrebuiltVertexBuffers"), 1, TEXT("Draw sprites using prebuilt vertex buffers."));
 
     FSimpleFlipbookSceneProxy::FSimpleFlipbookSceneProxy(const UMeshComponent *InComponent)
         : FPrimitiveSceneProxy(InComponent), VertexFactory(InComponent->GetWorld()->GetFeatureLevel()),
@@ -31,29 +31,35 @@ namespace Simple2D {
           bSpritesUseVertexBufferPath(CVarDrawSpritesUsingPrebuiltVertexBuffers.GetValueOnAnyThread() != 0),
           MaterialRelevance(InComponent->GetMaterialRelevance(GetScene().GetFeatureLevel())),
           CollisionResponse(InComponent->GetCollisionResponseToChannels()), Material(InComponent->GetMaterial(0)),
-          AlternateMaterial(InComponent->GetMaterial(1)) {
+          AlternateMaterial(InComponent->GetMaterial(1))
+    {
         SetWireframeColor(FLinearColor::White);
 
-        if (Material == nullptr) {
+        if (Material == nullptr)
+        {
             Material = UMaterial::GetDefaultMaterial(MD_Surface);
         }
 
-        if (AlternateMaterial == nullptr) {
+        if (AlternateMaterial == nullptr)
+        {
             AlternateMaterial = UMaterial::GetDefaultMaterial(MD_Surface);
         }
     }
 
-    FSimpleFlipbookSceneProxy::~FSimpleFlipbookSceneProxy() {
+    FSimpleFlipbookSceneProxy::~FSimpleFlipbookSceneProxy()
+    {
         VertexBuffer.ReleaseResource();
         VertexFactory.ReleaseResource();
     }
 
-    SIZE_T FSimpleFlipbookSceneProxy::GetTypeHash() const {
+    SIZE_T FSimpleFlipbookSceneProxy::GetTypeHash() const
+    {
         static size_t UniquePointer;
         return std::bit_cast<size_t>(std::addressof(UniquePointer));
     }
 
-    void FSimpleFlipbookSceneProxy::SetFlipbookBounds(const FSimpleFlipbookDrawCall &NewDynamicData) {
+    void FSimpleFlipbookSceneProxy::SetFlipbookBounds(const FSimpleFlipbookDrawCall &NewDynamicData)
+    {
         SCOPE_CYCLE_COUNTER(STAT_PaperRender_SetSpriteRT)
 
         BatchedSections.Reset();
@@ -71,22 +77,27 @@ namespace Simple2D {
 
     void FSimpleFlipbookSceneProxy::GetDynamicMeshElements(const TArray<const FSceneView *> &Views,
                                                            const FSceneViewFamily &ViewFamily, uint32 VisibilityMap,
-                                                           FMeshElementCollector &Collector) const {
+                                                           FMeshElementCollector &Collector) const
+    {
         SCOPE_CYCLE_COUNTER(STAT_Simple2DRenderSceneProxy_GetDynamicMeshElements)
 
         const FEngineShowFlags &EngineShowFlags = ViewFamily.EngineShowFlags;
 
-        for (int32 ViewIndex = 0; ViewIndex < Views.Num(); ViewIndex++) {
-            if (VisibilityMap & (1 << ViewIndex)) {
+        for (int32 ViewIndex = 0; ViewIndex < Views.Num(); ViewIndex++)
+        {
+            if (VisibilityMap & (1 << ViewIndex))
+            {
                 const FSceneView *View = Views[ViewIndex];
 
                 GetDynamicMeshElementsForView(View, ViewIndex, Collector);
             }
         }
 
-        for (int32 ViewIndex = 0; ViewIndex < Views.Num(); ViewIndex++) {
+        for (int32 ViewIndex = 0; ViewIndex < Views.Num(); ViewIndex++)
+        {
 #if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
-            if (VisibilityMap & 1 << ViewIndex && EngineShowFlags.Paper2DSprites) {
+            if (VisibilityMap & 1 << ViewIndex && EngineShowFlags.Paper2DSprites)
+            {
                 // Draw bounds
                 RenderBounds(Collector.GetPDI(ViewIndex), EngineShowFlags, GetBounds(),
                              (Owner == nullptr) || IsSelected());
@@ -95,7 +106,8 @@ namespace Simple2D {
         }
     }
 
-    FPrimitiveViewRelevance FSimpleFlipbookSceneProxy::GetViewRelevance(const FSceneView *View) const {
+    FPrimitiveViewRelevance FSimpleFlipbookSceneProxy::GetViewRelevance(const FSceneView *View) const
+    {
         const FEngineShowFlags &EngineShowFlags = View->Family->EngineShowFlags;
 
         checkSlow(IsInParallelRenderingThread());
@@ -113,7 +125,8 @@ namespace Simple2D {
         Result.bStaticRelevance = false;
         Result.bDynamicRelevance = true;
 
-        if (!EngineShowFlags.Materials) {
+        if (!EngineShowFlags.Materials)
+        {
             Result.bOpaque = true;
         }
 
@@ -122,20 +135,25 @@ namespace Simple2D {
         return Result;
     }
 
-    uint32 FSimpleFlipbookSceneProxy::GetMemoryFootprint() const {
+    uint32 FSimpleFlipbookSceneProxy::GetMemoryFootprint() const
+    {
         return sizeof(*this) + static_cast<uint32>(GetAllocatedSize());
     }
 
-    bool FSimpleFlipbookSceneProxy::CanBeOccluded() const {
+    bool FSimpleFlipbookSceneProxy::CanBeOccluded() const
+    {
         return !MaterialRelevance.bDisableDepthTest;
     }
 
-    bool FSimpleFlipbookSceneProxy::IsUsingDistanceCullFade() const {
+    bool FSimpleFlipbookSceneProxy::IsUsingDistanceCullFade() const
+    {
         return MaterialRelevance.bUsesDistanceCullFade;
     }
 
-    void FSimpleFlipbookSceneProxy::CreateRenderThreadResources(FRHICommandListBase &RHICmdList) {
-        if (bSpritesUseVertexBufferPath && (Vertices.Num() > 0)) {
+    void FSimpleFlipbookSceneProxy::CreateRenderThreadResources(FRHICommandListBase &RHICmdList)
+    {
+        if (bSpritesUseVertexBufferPath && (Vertices.Num() > 0))
+        {
             VertexBuffer.SetVertices(Vertices);
 
             // Init the resources
@@ -145,33 +163,42 @@ namespace Simple2D {
     }
 
 #if WITH_EDITOR
-    void
-    FSimpleFlipbookSceneProxy::SetTransientTextureOverride_RenderThread(const UTexture *InTextureToModifyOverrideFor,
-                                                                        const UTexture *InOverrideTexture) {
-        if (InOverrideTexture != nullptr) {
+    void FSimpleFlipbookSceneProxy::SetTransientTextureOverride_RenderThread(
+        const UTexture *InTextureToModifyOverrideFor, const UTexture *InOverrideTexture)
+    {
+        if (InOverrideTexture != nullptr)
+        {
             TextureOverrideList.FindOrAdd(InTextureToModifyOverrideFor) = InOverrideTexture;
-        } else {
+        }
+        else
+        {
             TextureOverrideList.Remove(InTextureToModifyOverrideFor);
         }
     }
 #endif
 
     void FSimpleFlipbookSceneProxy::GetDynamicMeshElementsForView(const FSceneView *View, int32 ViewIndex,
-                                                                  FMeshElementCollector &Collector) const {
-        if (bSpritesUseVertexBufferPath) {
+                                                                  FMeshElementCollector &Collector) const
+    {
+        if (bSpritesUseVertexBufferPath)
+        {
             GetNewBatchMeshesPrebuilt(View, ViewIndex, Collector);
-        } else {
+        }
+        else
+        {
             GetNewBatchMeshes(View, ViewIndex, Collector);
         }
     }
 
     bool FSimpleFlipbookSceneProxy::GetMeshElement(FMeshElementCollector &Collector, int32 SectionIndex,
                                                    uint8 DepthPriorityGroup, bool bIsSelected,
-                                                   FMeshBatch &OutMeshBatch) const {
+                                                   FMeshBatch &OutMeshBatch) const
+    {
         check(bSpritesUseVertexBufferPath);
         check(SectionIndex < BatchedSections.Num());
 
-        if (const auto &Section = BatchedSections[SectionIndex]; Section.IsValid()) {
+        if (const auto &Section = BatchedSections[SectionIndex]; Section.IsValid())
+        {
             checkSlow(VertexBuffer.IsFullyInitialized() && VertexFactory.IsInitialized());
 
             OutMeshBatch.bCanApplyViewModeOverrides = true;
@@ -204,8 +231,10 @@ namespace Simple2D {
     }
 
     void FSimpleFlipbookSceneProxy::GetNewBatchMeshes(const FSceneView *View, int32 ViewIndex,
-                                                      FMeshElementCollector &Collector) const {
-        if (BatchedSections.Num() == 0) {
+                                                      FMeshElementCollector &Collector) const
+    {
+        if (BatchedSections.Num() == 0)
+        {
             return;
         }
 
@@ -214,17 +243,21 @@ namespace Simple2D {
         auto DPG = GetDepthPriorityGroup(View);
         const bool bIsWireframeView = View->Family->EngineShowFlags.Wireframe;
 
-        if (Vertices.Num()) {
+        if (Vertices.Num())
+        {
             int32 SectionIndex = 0;
             FDynamicMeshBuilder DynamicMeshBuilder(View->GetFeatureLevel());
             DynamicMeshBuilder.AddVertices(Vertices);
             DynamicMeshBuilder.ReserveTriangles(Vertices.Num() / 3);
-            for (int32 i = 0; i < Vertices.Num(); i += 3) {
+            for (int32 i = 0; i < Vertices.Num(); i += 3)
+            {
                 DynamicMeshBuilder.AddTriangle(i, i + 1, i + 2);
             }
 
-            for (const FFlipbookRenderSection &Batch : BatchedSections) {
-                if (Batch.IsValid()) {
+            for (const FFlipbookRenderSection &Batch : BatchedSections)
+            {
+                if (Batch.IsValid())
+                {
                     FMaterialRenderProxy *ParentMaterialProxy = Batch.Material->GetRenderProxy();
 
                     FDynamicMeshBuilderSettings Settings;
@@ -233,7 +266,8 @@ namespace Simple2D {
 
                     // Implementing our own wireframe coloring as the automatic one (controlled by
                     // Mesh.bCanApplyViewModeOverrides) only supports per-FPrimitiveSceneProxy WireframeColor
-                    if (bIsWireframeView) {
+                    if (bIsWireframeView)
+                    {
                         const FLinearColor EffectiveWireframeColor =
                             IsOpaqueBlendMode(*Batch.Material) ? GetWireframeColor() : FLinearColor::Green;
 
@@ -270,18 +304,22 @@ namespace Simple2D {
     }
 
     void FSimpleFlipbookSceneProxy::GetNewBatchMeshesPrebuilt(const FSceneView *View, int32 ViewIndex,
-                                                              FMeshElementCollector &Collector) const {
+                                                              FMeshElementCollector &Collector) const
+    {
         const auto DPG = static_cast<uint8>(GetDepthPriorityGroup(View));
         const bool bIsWireframeView = View->Family->EngineShowFlags.Wireframe;
 
         // Go for each section, creating a batch and collecting it
-        for (int32 SectionIndex = 0; SectionIndex < BatchedSections.Num(); SectionIndex++) {
+        for (int32 SectionIndex = 0; SectionIndex < BatchedSections.Num(); SectionIndex++)
+        {
             FMeshBatch &Batch = Collector.AllocateMesh();
 
-            if (GetMeshElement(Collector, SectionIndex, DPG, IsSelected(), Batch)) {
+            if (GetMeshElement(Collector, SectionIndex, DPG, IsSelected(), Batch))
+            {
                 // Implementing our own wireframe coloring as the automatic one (controlled by
                 // Mesh.bCanApplyViewModeOverrides) only supports per-FPrimitiveSceneProxy WireframeColor
-                if (bIsWireframeView) {
+                if (bIsWireframeView)
+                {
                     const auto &Section = BatchedSections[SectionIndex];
                     const FLinearColor EffectiveWireframeColor =
                         IsOpaqueBlendMode(*Section.Material) ? GetWireframeColor() : FLinearColor::Green;
@@ -306,10 +344,13 @@ namespace Simple2D {
         }
     }
 
-    void FSimpleFlipbookSceneProxy::RecreateCachedRenderData(FRHICommandListBase &RHICmdList) {
+    void FSimpleFlipbookSceneProxy::RecreateCachedRenderData(FRHICommandListBase &RHICmdList)
+    {
         int32 BatchIndex = 0;
-        for (const auto &Proxy : MaterialTextureOverrideProxies) {
-            if ((Proxy != nullptr) && BatchedSections.IsValidIndex(BatchIndex)) {
+        for (const auto &Proxy : MaterialTextureOverrideProxies)
+        {
+            if ((Proxy != nullptr) && BatchedSections.IsValidIndex(BatchIndex))
+            {
                 const auto &Section = BatchedSections[BatchIndex];
                 Proxy->Reinitialize(Section.Material->GetRenderProxy(), Section.BaseTexture, Section.AdditionalTextures,
                                     Section.Rows, Section.Columns, Section.FrameNumber);
@@ -317,36 +358,43 @@ namespace Simple2D {
             ++BatchIndex;
         }
 
-        if (bSpritesUseVertexBufferPath && (Vertices.Num() > 0)) {
+        if (bSpritesUseVertexBufferPath && (Vertices.Num() > 0))
+        {
             VertexBuffer.SetVertices(Vertices);
 
             // We want the proxy to update the buffer, if it has been already initialized
-            if (VertexBuffer.IsFullyInitialized()) {
+            if (VertexBuffer.IsFullyInitialized())
+            {
                 const bool bFactoryRequiresReInitialization = VertexBuffer.CommitRequiresBufferRecreation();
                 VertexBuffer.CommitVertexData(RHICmdList);
 
                 // When the buffer reallocates, the factory needs to bind the buffers and SRV again, we just init again.
-                if (bFactoryRequiresReInitialization) {
+                if (bFactoryRequiresReInitialization)
+                {
                     VertexFactory.Init(RHICmdList, &VertexBuffer);
                 }
-            } else {
+            }
+            else
+            {
                 VertexBuffer.InitResource(RHICmdList);
                 VertexFactory.Init(RHICmdList, &VertexBuffer);
             }
         }
     }
 
-    FFlipbookTextureOverrideRenderProxy *
-    FSimpleFlipbookSceneProxy::GetCachedMaterialProxyForSection(FMeshElementCollector &Collector, int32 SectionIndex,
-                                                                FMaterialRenderProxy *ParentMaterialProxy) const {
+    FFlipbookTextureOverrideRenderProxy *FSimpleFlipbookSceneProxy::GetCachedMaterialProxyForSection(
+        FMeshElementCollector &Collector, int32 SectionIndex, FMaterialRenderProxy *ParentMaterialProxy) const
+    {
         UE::TScopeLock Lock(MaterialTextureOverrideProxiesMutex);
 
-        if (MaterialTextureOverrideProxies.Num() < BatchedSections.Num()) {
+        if (MaterialTextureOverrideProxies.Num() < BatchedSections.Num())
+        {
             MaterialTextureOverrideProxies.AddDefaulted(BatchedSections.Num() - MaterialTextureOverrideProxies.Num());
         }
 
         auto &Result = MaterialTextureOverrideProxies[SectionIndex];
-        if (Result == nullptr) {
+        if (Result == nullptr)
+        {
             const auto &Section = BatchedSections[SectionIndex];
 #if WITH_EDITOR
             Result = MakeUnique<FFlipbookTextureOverrideRenderProxy>(
@@ -357,12 +405,15 @@ namespace Simple2D {
                                                                      Section.AdditionalTextures, Section.Rows,
                                                                      Section.Columns, Section.FrameNumber);
 #endif
-        } else if (const auto &Section = BatchedSections[SectionIndex];
-                   !Result->FrameDataMatches(Section.Rows, Section.Columns, Section.FrameNumber)) {
+        }
+        else if (const auto &Section = BatchedSections[SectionIndex];
+                 !Result->FrameDataMatches(Section.Rows, Section.Columns, Section.FrameNumber))
+        {
             Result->UpdateFrameData(Section.Rows, Section.Columns, Section.FrameNumber);
         }
 
-        if (!Result->CheckValidity(ParentMaterialProxy)) {
+        if (!Result->CheckValidity(ParentMaterialProxy))
+        {
             Collector.CacheUniformExpressions(Result.Get(), true);
         }
 

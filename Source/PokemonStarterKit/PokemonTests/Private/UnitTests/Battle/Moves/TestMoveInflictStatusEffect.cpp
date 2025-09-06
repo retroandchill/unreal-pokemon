@@ -18,7 +18,8 @@ BEGIN_DEFINE_SPEC(FTestMoveInflictStatusEffect, "Unit Tests.Battle.Moves.TestMov
 CORO_FUNCTIONS()
 END_DEFINE_SPEC(FTestMoveInflictStatusEffect);
 
-void FTestMoveInflictStatusEffect::Define() {
+void FTestMoveInflictStatusEffect::Define()
+{
     CoroIt("MainEffect", [this]() -> UE5Coro::TCoroutine<> {
         auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
         auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(
@@ -111,7 +112,8 @@ void FTestMoveInflictStatusEffect::Define() {
         FTemporarySeed Seed(156157);
 
         // Forcibly spin the RNG a few times to get favorable rolls
-        for (int32 i = 0; i < 5; i++) {
+        for (int32 i = 0; i < 5; i++)
+        {
             [[maybe_unused]] int32 Roll = FMath::Rand() % 100;
         }
 
@@ -156,7 +158,8 @@ void FTestMoveInflictStatusEffect::Define() {
         FTemporarySeed Seed(156157);
 
         // Forcibly spin the RNG a few times to get favorable rolls
-        for (int32 i = 0; i < 5; i++) {
+        for (int32 i = 0; i < 5; i++)
+        {
             [[maybe_unused]] int32 Roll = FMath::Rand() % 100;
         }
 

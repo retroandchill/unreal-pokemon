@@ -11,7 +11,8 @@
  * The damage applied when a critical hit is scored.
  */
 UCLASS()
-class POKEMONBATTLE_API UInnate_CriticalHitDamage : public UGameplayAbility {
+class POKEMONBATTLE_API UInnate_CriticalHitDamage : public UGameplayAbility
+{
     GENERATED_BODY()
 
   public:

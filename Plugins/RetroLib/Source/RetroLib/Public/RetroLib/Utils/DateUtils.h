@@ -11,7 +11,8 @@
  * Utlity methods related to date operations.
  */
 UCLASS()
-class RETROLIB_API UDateUtils : public UBlueprintFunctionLibrary {
+class RETROLIB_API UDateUtils : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

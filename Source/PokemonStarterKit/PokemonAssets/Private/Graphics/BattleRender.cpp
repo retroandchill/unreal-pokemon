@@ -7,7 +7,8 @@
 RETRO_DEFINE_VARIANT_OBJECT_STRUCT(FBattleRender);
 RETRO_DEFINE_VARIANT_OBJECT_CONVERSION(FBattleRender, FImageAsset);
 
-static UScriptStruct *StaticGetBaseStructureInternal(FName Name) {
+static UScriptStruct *StaticGetBaseStructureInternal(FName Name)
+{
     static const auto *const CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/PokemonAssets"));
     auto Result = static_cast<UScriptStruct *>(StaticFindObjectFastInternal(
         UScriptStruct::StaticClass(), CoreUObjectPkg, Name, false, RF_NoFlags, EInternalObjectFlags::None));
@@ -18,12 +19,14 @@ static UScriptStruct *StaticGetBaseStructureInternal(FName Name) {
     return Result;
 }
 
-UScriptStruct *TBaseStructure<FBattleRender>::Get() {
+UScriptStruct *TBaseStructure<FBattleRender>::Get()
+{
     static auto *ScriptStruct = StaticGetBaseStructureInternal(TEXT("BattleRender"));
     return ScriptStruct;
 }
 
-UScriptStruct *TBaseStructure<FSoftBattleRender>::Get() {
+UScriptStruct *TBaseStructure<FSoftBattleRender>::Get()
+{
     static auto *ScriptStruct = StaticGetBaseStructureInternal(TEXT("SoftBattleRender"));
     return ScriptStruct;
 }

@@ -21,7 +21,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMoveLearnComplete);
  * Prompt to forget a move and replace it with a new one
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API UPromptReplaceMove : public UBlueprintCoroutineActionBase {
+class POKEMONUI_API UPromptReplaceMove : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

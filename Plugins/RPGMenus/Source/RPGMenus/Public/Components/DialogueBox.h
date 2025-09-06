@@ -12,7 +12,8 @@ class UDialogueTextBlock;
 
 DECLARE_MULTICAST_DELEGATE(FOnLineFinishedPlaying);
 
-struct FDialogueTextSegment {
+struct FDialogueTextSegment
+{
     FString Text;
     FRunInfo RunInfo;
 };
@@ -21,7 +22,8 @@ struct FDialogueTextSegment {
  *
  */
 UCLASS()
-class RPGMENUS_API UDialogueBox : public UCommonUserWidget {
+class RPGMENUS_API UDialogueBox : public UCommonUserWidget
+{
     GENERATED_BODY()
 
   public:
@@ -29,12 +31,14 @@ class RPGMENUS_API UDialogueBox : public UCommonUserWidget {
     void PlayLine(const FText &InLine);
 
     UFUNCTION(BlueprintCallable, Category = "Dialogue Box")
-    const FText &GetCurrentLine() const {
+    const FText &GetCurrentLine() const
+    {
         return CurrentLine;
     }
 
     UFUNCTION(BlueprintCallable, Category = "Dialogue Box")
-    bool HasFinishedPlayingLine() const {
+    bool HasFinishedPlayingLine() const
+    {
         return bHasFinishedPlaying;
     }
 

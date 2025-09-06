@@ -16,7 +16,8 @@ class UDisplayText;
  * Window that displays the current pocket to the player.
  */
 UCLASS(Abstract)
-class POKEMONUI_API UPocketWindow : public UUserWidget {
+class POKEMONUI_API UPocketWindow : public UUserWidget
+{
     GENERATED_BODY()
 
   public:

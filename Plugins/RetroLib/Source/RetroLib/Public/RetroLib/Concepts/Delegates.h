@@ -13,7 +13,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Delegates {
+namespace Retro::Delegates
+{
     /**
      * Concept to check if a delegate is a native (single binding) delegate.
      *
@@ -83,13 +84,16 @@ namespace Retro::Delegates {
     concept UEDelegate = UnicastDelegate<T> || MulticastDelegate<T>;
 
     template <NativeDelegate, typename, typename...>
-    struct TValidFreeBinding : FInvalidType {};
+    struct TValidFreeBinding : FInvalidType
+    {
+    };
 
     template <NativeDelegate>
     struct TDelegateBindingTraits;
 
     template <typename R, typename... A, typename U>
-    struct TDelegateBindingTraits<TDelegate<R(A...), U>> {
+    struct TDelegateBindingTraits<TDelegate<R(A...), U>>
+    {
         template <typename F, typename... B>
         static constexpr bool InvocableFree = std::is_invocable_r_v<R, F, A..., B...>;
 
@@ -98,7 +102,8 @@ namespace Retro::Delegates {
     };
 
     template <typename... A, typename U>
-    struct TDelegateBindingTraits<TDelegate<void(A...), U>> {
+    struct TDelegateBindingTraits<TDelegate<void(A...), U>>
+    {
         template <typename F, typename... B>
         static constexpr bool InvocableFree = std::is_invocable_v<F, A..., B...>;
 
@@ -107,7 +112,8 @@ namespace Retro::Delegates {
     };
 
     template <typename... A, typename U>
-    struct TDelegateBindingTraits<TMulticastDelegate<void(A...), U>> {
+    struct TDelegateBindingTraits<TMulticastDelegate<void(A...), U>>
+    {
         template <typename F, typename... B>
         static constexpr bool InvocableFree = std::is_invocable_v<F, A..., B...>;
 
@@ -116,18 +122,26 @@ namespace Retro::Delegates {
     };
 
     template <typename>
-    struct TCanBindSp : std::false_type {};
+    struct TCanBindSp : std::false_type
+    {
+    };
 
     template <typename T, ESPMode Mode>
-    struct TCanBindSp<TSharedRef<T, Mode>> : std::true_type {};
+    struct TCanBindSp<TSharedRef<T, Mode>> : std::true_type
+    {
+    };
 
     template <typename T>
         requires std::is_base_of_v<TSharedFromThis<T>, T>
-    struct TCanBindSp<T *> : std::true_type {};
+    struct TCanBindSp<T *> : std::true_type
+    {
+    };
 
     template <typename T>
         requires std::is_base_of_v<TSharedFromThis<T>, T>
-    struct TCanBindSp<const T *> : std::true_type {};
+    struct TCanBindSp<const T *> : std::true_type
+    {
+    };
 
     /**
      * Concept to check if a single-cast delegate is bindable to a target multicast delegate
@@ -289,7 +303,8 @@ namespace Retro::Delegates {
     struct TDelegateTraitsBase;
 
     template <typename D, typename R, typename... A>
-    struct TDelegateTraitsBase<R (D::*)(A...) const> {
+    struct TDelegateTraitsBase<R (D::*)(A...) const>
+    {
         using ReturnType = R;
         using ArgsTuple = TTuple<A...>;
     };
@@ -298,10 +313,14 @@ namespace Retro::Delegates {
     struct TDelegateTraits;
 
     template <UnicastDelegate D>
-    struct TDelegateTraits<D> : TDelegateTraitsBase<decltype(&D::Execute)> {};
+    struct TDelegateTraits<D> : TDelegateTraitsBase<decltype(&D::Execute)>
+    {
+    };
 
     template <MulticastDelegate D>
-    struct TDelegateTraits<D> : TDelegateTraitsBase<decltype(&D::Broadcast)> {};
+    struct TDelegateTraits<D> : TDelegateTraitsBase<decltype(&D::Broadcast)>
+    {
+    };
 
     template <UEDelegate D>
     using TDelegateTuple = typename TDelegateTraits<D>::ArgsTuple;

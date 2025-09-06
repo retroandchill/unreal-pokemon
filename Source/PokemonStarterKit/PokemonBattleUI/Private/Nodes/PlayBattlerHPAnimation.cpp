@@ -7,7 +7,8 @@
 
 UPlayBattlerHPAnimation *UPlayBattlerHPAnimation::PlayBattlerHPAnimation(const UObject *WorldContextObject,
                                                                          const TScriptInterface<IBattler> &Battler,
-                                                                         float MaxDuration) {
+                                                                         float MaxDuration)
+{
     auto Node = NewObject<UPlayBattlerHPAnimation>();
     Node->SetWorldContext(WorldContextObject);
     Node->Battler = Battler;
@@ -15,9 +16,11 @@ UPlayBattlerHPAnimation *UPlayBattlerHPAnimation::PlayBattlerHPAnimation(const U
     return Node;
 }
 
-UE5Coro::TCoroutine<> UPlayBattlerHPAnimation::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine) {
+UE5Coro::TCoroutine<> UPlayBattlerHPAnimation::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine)
+{
     auto Panel = UBattleScreenHelpers::FindPokemonBattlePanel(GetWorldContext(), Battler);
-    if (Panel == nullptr) {
+    if (Panel == nullptr)
+    {
         OnSelected.Broadcast();
         co_return;
     }

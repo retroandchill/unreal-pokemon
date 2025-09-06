@@ -9,7 +9,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestDayNightValues, "Unit Tests.Clock.TestDayNightValues",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestDayNightValues::RunTest(const FString &Parameters) {
+bool TestDayNightValues::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subsystem = GameInstance->GetSubsystem<UGameClockSubsystem>();
     UE_ASSERT_NOT_NULL(Subsystem);

@@ -5,11 +5,13 @@
 
 class IDetailCategoryBuilder;
 
-namespace Simple2D {
+namespace Simple2D
+{
     /**
      *
      */
-    class SIMPLE2DEDITOR_API FSimpleFlipbookDetailsCustomization : public IDetailCustomization {
+    class SIMPLE2DEDITOR_API FSimpleFlipbookDetailsCustomization : public IDetailCustomization
+    {
 
       public:
         static TSharedRef<IDetailCustomization> MakeInstance();

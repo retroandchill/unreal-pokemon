@@ -4,9 +4,11 @@
 #include "Simple2D/Assets/SimpleFlipbook.h"
 #include "SlateOptMacros.h"
 
-namespace Simple2D {
+namespace Simple2D
+{
 
-    void SSimpleFlipbookTimelineHeader::Construct(const FArguments &InArgs) {
+    void SSimpleFlipbookTimelineHeader::Construct(const FArguments &InArgs)
+    {
         SlateUnitsPerFrame = InArgs._SlateUnitsPerFrame;
         FlipbookBeingEdited = InArgs._FlipbookBeingEdited;
         PlayTime = InArgs._PlayTime;
@@ -18,14 +20,17 @@ namespace Simple2D {
         Rebuild();
     }
 
-    void SSimpleFlipbookTimelineHeader::Rebuild() {
+    void SSimpleFlipbookTimelineHeader::Rebuild()
+    {
         MainBoxPtr->ClearChildren();
 
         auto *Flipbook = FlipbookBeingEdited.Get();
         if (const float LocalSlateUnitsPerFrame = SlateUnitsPerFrame.Get();
-            Flipbook != nullptr && (LocalSlateUnitsPerFrame > 0)) {
+            Flipbook != nullptr && (LocalSlateUnitsPerFrame > 0))
+        {
             const int32 NumFrames = Flipbook->GetNumFrames();
-            for (int32 FrameIndex = 0; FrameIndex < NumFrames; ++FrameIndex) {
+            for (int32 FrameIndex = 0; FrameIndex < NumFrames; ++FrameIndex)
+            {
                 MainBoxPtr->AddSlot()
                     .AutoWidth()[SNew(SBox)
                                      .WidthOverride(LocalSlateUnitsPerFrame)
@@ -33,7 +38,9 @@ namespace Simple2D {
             }
 
             NumFramesFromLastRebuild = NumFrames;
-        } else {
+        }
+        else
+        {
             NumFramesFromLastRebuild = 0;
         }
     }

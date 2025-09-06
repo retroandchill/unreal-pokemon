@@ -5,22 +5,27 @@
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "RetroLib/Variants/VariantObjectStruct.h"
 
-FText UK2Node_VariantOperationBase::GetMenuCategory() const {
+FText UK2Node_VariantOperationBase::GetMenuCategory() const
+{
     return NSLOCTEXT("K2Node", "VariantOperationBase_GetMenuCategory", "Variants");
 }
 
-bool UK2Node_VariantOperationBase::IsNodePure() const {
+bool UK2Node_VariantOperationBase::IsNodePure() const
+{
     return true;
 }
 
-FSlateIcon UK2Node_VariantOperationBase::GetIconAndTint(FLinearColor &OutColor) const {
+FSlateIcon UK2Node_VariantOperationBase::GetIconAndTint(FLinearColor &OutColor) const
+{
     OutColor = GetNodeTitleColor();
     static FSlateIcon Icon(FAppStyle::GetAppStyleSetName(), "Kismet.AllClasses.FunctionIcon");
     return Icon;
 }
 
-void UK2Node_VariantOperationBase::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const {
-    if (!ActionRegistrar.IsOpenForRegistration(GetClass())) {
+void UK2Node_VariantOperationBase::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const
+{
+    if (!ActionRegistrar.IsOpenForRegistration(GetClass()))
+    {
         return;
     }
 
@@ -32,9 +37,11 @@ void UK2Node_VariantOperationBase::GetMenuActions(FBlueprintActionDatabaseRegist
                            StructType.GetStructType(), true);
                    });
     // clang-format on
-    for (TSet<UScriptStruct *> Seen; auto &Registration : AllData) {
+    for (TSet<UScriptStruct *> Seen; auto &Registration : AllData)
+    {
         auto Struct = Registration.GetStructType();
-        if (Seen.Contains(Struct)) {
+        if (Seen.Contains(Struct))
+        {
             continue;
         }
         Seen.Add(Struct);

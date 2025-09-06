@@ -11,7 +11,8 @@
  * Utility functions to handle importing data from data tables. Mainly used for the Python API
  */
 UCLASS(BlueprintType)
-class POKEMONEDITORTOOLS_API UImportUtils : public UBlueprintFunctionLibrary {
+class POKEMONEDITORTOOLS_API UImportUtils : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

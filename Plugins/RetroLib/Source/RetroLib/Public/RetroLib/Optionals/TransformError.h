@@ -9,22 +9,27 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Optionals {
+namespace Retro::Optionals
+{
 
     template <ExpectedType O, ExpectedType P>
-    constexpr auto TransformErrorPassthrough(P &&InputValue) {
+    constexpr auto TransformErrorPassthrough(P &&InputValue)
+    {
         return O(Get(std::forward<P>(InputValue)));
     }
 
     template <template <typename...> typename O, typename T, typename E, typename G>
-    constexpr auto TransformErrorHelper(const O<T, E> &, G &&Value) {
+    constexpr auto TransformErrorHelper(const O<T, E> &, G &&Value)
+    {
         return PassError<O<T, std::remove_reference_t<G>>>(std::forward<G>(Value));
     }
 
-    struct FTransformErrorInvoker {
+    struct FTransformErrorInvoker
+    {
         template <ExpectedType O, typename F>
             requires std::invocable<F, TErrorReference<O>>
-        constexpr auto operator()(O &&Optional, F &&Functor) const {
+        constexpr auto operator()(O &&Optional, F &&Functor) const
+        {
             using TransformedType = decltype(TransformErrorHelper(
                 std::forward<O>(Optional), std::invoke(std::forward<F>(Functor), GetError(std::forward<O>(Optional)))));
             return HasValue(Optional) ? TransformErrorPassthrough<TransformedType>(std::forward<O>(Optional))

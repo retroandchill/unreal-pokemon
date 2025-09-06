@@ -11,25 +11,30 @@ UE5Coro::TCoroutine<bool> UBattleStatusEffectUtils::CanStatusEffectBeInflicted(c
                                                                                FName StatusEffectID,
                                                                                const FText &AlreadyAppliedFormat,
                                                                                const FText &HasOtherStatusFormat,
-                                                                               FForceLatentCoroutine) {
+                                                                               FForceLatentCoroutine)
+{
     auto &StatusEffect = Target->GetStatusEffect();
-    if (!StatusEffect.IsSet()) {
+    if (!StatusEffect.IsSet())
+    {
         co_return true;
     }
 
     auto &Dispatcher = IPokemonCoroutineDispatcher::Get(Target.GetObject());
-    if (auto &Status = StatusEffect.GetValue(); Status.StatusEffectID == StatusEffectID) {
+    if (auto &Status = StatusEffect.GetValue(); Status.StatusEffectID == StatusEffectID)
+    {
         co_await Dispatcher.DisplayMessage(FText::FormatNamed(AlreadyAppliedFormat, "Pkmn", Target->GetNickname()));
-    } else {
+    }
+    else
+    {
         co_await Dispatcher.DisplayMessage(FText::FormatNamed(HasOtherStatusFormat, "Pkmn", Target->GetNickname()));
     }
 
     co_return false;
 }
 
-UE5Coro::TCoroutine<FActiveGameplayEffectHandle>
-UBattleStatusEffectUtils::ApplyStatusEffectToBattler(const TScriptInterface<IBattler> &Battler,
-                                                     FStatusHandle StatusEffect, FForceLatentCoroutine) {
+UE5Coro::TCoroutine<FActiveGameplayEffectHandle> UBattleStatusEffectUtils::ApplyStatusEffectToBattler(
+    const TScriptInterface<IBattler> &Battler, FStatusHandle StatusEffect, FForceLatentCoroutine)
+{
     FGameplayAbilityTargetDataHandle TargetDataHandle;
     auto &TargetData = TargetDataHandle.Data.Emplace_GetRef(MakeShared<FGameplayAbilityTargetData_ActorArray>());
     TargetData->SetActors({CastChecked<AActor>(Battler.GetObject())});
@@ -41,7 +46,8 @@ UBattleStatusEffectUtils::ApplyStatusEffectToBattler(const TScriptInterface<IBat
         AbilityComponent->MakeOutgoingSpec(StatusEffectClass.GetValue(), 0, AbilityComponent->MakeEffectContext());
     auto Handle = AbilityComponent->ApplyGameplayEffectSpecToSelf(*Spec.Data);
     auto Settings = GetDefault<UPokemonMessageSettings>();
-    if (auto MessageFormat = Settings->ObtainedStatusEffectMessages.Find(StatusEffect); MessageFormat != nullptr) {
+    if (auto MessageFormat = Settings->ObtainedStatusEffectMessages.Find(StatusEffect); MessageFormat != nullptr)
+    {
         auto &Dispatcher = IPokemonCoroutineDispatcher::Get(Battler.GetObject());
         co_await Dispatcher.DisplayMessage(FText::FormatNamed(*MessageFormat, "Pkmn", Battler->GetNickname()));
     }
@@ -49,21 +55,23 @@ UBattleStatusEffectUtils::ApplyStatusEffectToBattler(const TScriptInterface<IBat
     co_return Handle;
 }
 
-UE5Coro::TCoroutine<bool>
-UBattleStatusEffectUtils::RemoveStatusEffectFromBattler(const TScriptInterface<IBattler> &Target,
-                                                        FForceLatentCoroutine) {
+UE5Coro::TCoroutine<bool> UBattleStatusEffectUtils::RemoveStatusEffectFromBattler(
+    const TScriptInterface<IBattler> &Target, FForceLatentCoroutine)
+{
     auto &Status = Target->GetStatusEffect();
-    if (!Status.IsSet()) {
+    if (!Status.IsSet())
+    {
         co_return false;
     }
 
-    if (!Target->GetAbilityComponent()->RemoveActiveGameplayEffect(Status->EffectHandle)) {
+    if (!Target->GetAbilityComponent()->RemoveActiveGameplayEffect(Status->EffectHandle))
+    {
         co_return false;
     }
 
     auto Settings = GetDefault<UPokemonMessageSettings>();
-    if (auto MessageFormat = Settings->StatusEffectCuredMessages.Find(Status->StatusEffectID);
-        MessageFormat != nullptr) {
+    if (auto MessageFormat = Settings->StatusEffectCuredMessages.Find(Status->StatusEffectID); MessageFormat != nullptr)
+    {
         auto &Dispatcher = IPokemonCoroutineDispatcher::Get(Target.GetObject());
         co_await Dispatcher.DisplayMessage(FText::FormatNamed(*MessageFormat, "Pkmn", Target->GetNickname()));
     }
@@ -71,24 +79,28 @@ UBattleStatusEffectUtils::RemoveStatusEffectFromBattler(const TScriptInterface<I
     co_return true;
 }
 
-UE5Coro::TCoroutine<bool>
-UBattleStatusEffectUtils::RemoveStatusEffectFromBattler(const TScriptInterface<IBattler> &Target,
-                                                        FStatusHandle StatusEffect, FForceLatentCoroutine) {
+UE5Coro::TCoroutine<bool> UBattleStatusEffectUtils::RemoveStatusEffectFromBattler(
+    const TScriptInterface<IBattler> &Target, FStatusHandle StatusEffect, FForceLatentCoroutine)
+{
     auto &Status = Target->GetStatusEffect();
-    if (!Status.IsSet()) {
+    if (!Status.IsSet())
+    {
         co_return false;
     }
 
-    if (Status->StatusEffectID != StatusEffect) {
+    if (Status->StatusEffectID != StatusEffect)
+    {
         co_return false;
     }
 
-    if (!Target->GetAbilityComponent()->RemoveActiveGameplayEffect(Status->EffectHandle)) {
+    if (!Target->GetAbilityComponent()->RemoveActiveGameplayEffect(Status->EffectHandle))
+    {
         co_return false;
     }
 
     auto Settings = GetDefault<UPokemonMessageSettings>();
-    if (auto MessageFormat = Settings->StatusEffectCuredMessages.Find(StatusEffect); MessageFormat != nullptr) {
+    if (auto MessageFormat = Settings->StatusEffectCuredMessages.Find(StatusEffect); MessageFormat != nullptr)
+    {
         auto &Dispatcher = IPokemonCoroutineDispatcher::Get(Target.GetObject());
         co_await Dispatcher.DisplayMessage(FText::FormatNamed(*MessageFormat, "Pkmn", Target->GetNickname()));
     }

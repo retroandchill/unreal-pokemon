@@ -6,16 +6,19 @@
 #include "RetroLib/Functional/Overloaded.h"
 #include "RetroLib/Optionals/PtrOrNull.h"
 
-UK2Node_LookupAssetByName::UK2Node_LookupAssetByName() {
+UK2Node_LookupAssetByName::UK2Node_LookupAssetByName()
+{
     SetNodeTooltip(
         NSLOCTEXT("UK2Node_LookupAssetByName", "NodeTooltip", "Attempts to find the path of an asset by its name"));
 }
 
-FText UK2Node_LookupAssetByName::GetNodeTitleFormat() const {
+FText UK2Node_LookupAssetByName::GetNodeTitleFormat() const
+{
     return NSLOCTEXT("K2Node", "LookupAssetByNameTitle", "Lookup {AssetClass} by Name");
 }
 
-UEdGraphPin *UK2Node_LookupAssetByName::CreateResultsPin(const FAssetClassType &AssetClass) {
+UEdGraphPin *UK2Node_LookupAssetByName::CreateResultsPin(const FAssetClassType &AssetClass)
+{
     return AssetClass.Visit(Retro::TOverloaded{
         [this](UClass *Class) {
             return CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_SoftObject, Class, UEdGraphSchema_K2::PN_ReturnValue);
@@ -30,6 +33,7 @@ UEdGraphPin *UK2Node_LookupAssetByName::CreateResultsPin(const FAssetClassType &
         }});
 }
 
-FName UK2Node_LookupAssetByName::GetLoadFunctionName() const {
+FName UK2Node_LookupAssetByName::GetLoadFunctionName() const
+{
     return GET_FUNCTION_NAME_CHECKED(UAssetLoader, LookupDynamicAsset);
 }

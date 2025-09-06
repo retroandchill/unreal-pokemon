@@ -25,14 +25,16 @@ struct FSpeciesData;
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
-class POKEMONCORE_API UPokemon : public UInterface {
+class POKEMONCORE_API UPokemon : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Abstract interface for a Pokémon object
  */
-class POKEMONCORE_API IPokemon {
+class POKEMONCORE_API IPokemon
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

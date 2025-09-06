@@ -16,7 +16,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatusCanBeInflicted, bool, ReturnV
  *
  */
 UCLASS(meta = (HideThen))
-class POKEMONBATTLE_API UCanStatusEffectBeInflicted : public UBlueprintCoroutineActionBase {
+class POKEMONBATTLE_API UCanStatusEffectBeInflicted : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

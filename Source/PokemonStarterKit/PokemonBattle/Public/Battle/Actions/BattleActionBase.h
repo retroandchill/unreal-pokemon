@@ -10,7 +10,8 @@
 /**
  * The base action implementation, defines the battler held by the action.
  */
-class POKEMONBATTLE_API FBattleActionBase : public FGCObject, public IBattleAction {
+class POKEMONBATTLE_API FBattleActionBase : public FGCObject, public IBattleAction
+{
   public:
     /**
      * Construct a new action with the given battler

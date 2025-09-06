@@ -9,10 +9,13 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Optionals {
-    struct FErrorInvoker {
+namespace Retro::Optionals
+{
+    struct FErrorInvoker
+    {
         template <ExpectedType O>
-        constexpr decltype(auto) operator()(O &&Optional) const {
+        constexpr decltype(auto) operator()(O &&Optional) const
+        {
             return GetError(std::forward<O>(Optional));
         }
     };

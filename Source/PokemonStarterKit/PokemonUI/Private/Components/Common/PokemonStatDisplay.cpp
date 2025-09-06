@@ -3,7 +3,8 @@
 #include "Components/Common/PokemonStatDisplay.h"
 #include "Components/Common/PokemonStatGraph.h"
 
-TSharedRef<SWidget> UPokemonStatDisplay::RebuildWidget() {
+TSharedRef<SWidget> UPokemonStatDisplay::RebuildWidget()
+{
     // clang-format off
     StatGraph = SNew(SPokemonStatGraph)
         .StatNames(StatOrder)
@@ -14,14 +15,17 @@ TSharedRef<SWidget> UPokemonStatDisplay::RebuildWidget() {
     return StatGraph.ToSharedRef();
 }
 
-void UPokemonStatDisplay::ReleaseSlateResources(bool bReleaseChildren) {
+void UPokemonStatDisplay::ReleaseSlateResources(bool bReleaseChildren)
+{
     Super::ReleaseSlateResources(bReleaseChildren);
     StatGraph.Reset();
 }
 
-void UPokemonStatDisplay::SynchronizeProperties() {
+void UPokemonStatDisplay::SynchronizeProperties()
+{
     Super::SynchronizeProperties();
-    if (StatGraph == nullptr) {
+    if (StatGraph == nullptr)
+    {
         return;
     }
 
@@ -31,22 +35,26 @@ void UPokemonStatDisplay::SynchronizeProperties() {
     StatGraph->SetMinimumDesiredSize(MinimumDesiredSize);
 }
 
-void UPokemonStatDisplay::SetInnerLinesColor(const FLinearColor &InInnerLinesColor) {
+void UPokemonStatDisplay::SetInnerLinesColor(const FLinearColor &InInnerLinesColor)
+{
     InnerLinesColor = InInnerLinesColor;
     SynchronizeProperties();
 }
 
-void UPokemonStatDisplay::SetOutlineColor(const FLinearColor &InOutlineColor) {
+void UPokemonStatDisplay::SetOutlineColor(const FLinearColor &InOutlineColor)
+{
     OutlineColor = InOutlineColor;
     SynchronizeProperties();
 }
 
-void UPokemonStatDisplay::SetMinimumDesiredSize(const FVector2D &InMinimumDesiredSize) {
+void UPokemonStatDisplay::SetMinimumDesiredSize(const FVector2D &InMinimumDesiredSize)
+{
     MinimumDesiredSize = InMinimumDesiredSize;
     SynchronizeProperties();
 }
 
-void UPokemonStatDisplay::SetPokemon(const TScriptInterface<IPokemon> &NewPokemon) {
+void UPokemonStatDisplay::SetPokemon(const TScriptInterface<IPokemon> &NewPokemon)
+{
     Pokemon = NewPokemon;
     SynchronizeProperties();
 }

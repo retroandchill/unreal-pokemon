@@ -4,7 +4,8 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Pokemon/PokemonDTO.h"
 
-TScriptInterface<IObtainedBlock> UDefaultObtainedBlock::Initialize(const FPokemonDTO &DTO) {
+TScriptInterface<IObtainedBlock> UDefaultObtainedBlock::Initialize(const FPokemonDTO &DTO)
+{
     ObtainMethod = DTO.ObtainMethod;
     LevelMet = DTO.LevelMet.Get(DTO.Level);
 
@@ -23,34 +24,42 @@ TScriptInterface<IObtainedBlock> UDefaultObtainedBlock::Initialize(const FPokemo
     return this;
 }
 
-EObtainMethod UDefaultObtainedBlock::GetObtainMethod() const {
+EObtainMethod UDefaultObtainedBlock::GetObtainMethod() const
+{
     return ObtainMethod;
 }
 
-int32 UDefaultObtainedBlock::GetLevelMet() const {
+int32 UDefaultObtainedBlock::GetLevelMet() const
+{
     return LevelMet;
 }
 
-TOptional<const FDateTime &> UDefaultObtainedBlock::GetTimeReceived() const {
+TOptional<const FDateTime &> UDefaultObtainedBlock::GetTimeReceived() const
+{
     return &TimeReceived;
 }
 
-TOptional<FText> UDefaultObtainedBlock::GetObtainText() {
+TOptional<FText> UDefaultObtainedBlock::GetObtainText()
+{
     return ObtainText;
 }
 
-TOptional<const FDateTime &> UDefaultObtainedBlock::GetTimeHatched() const {
+TOptional<const FDateTime &> UDefaultObtainedBlock::GetTimeHatched() const
+{
     return TimeHatched.GetPtrOrNull();
 }
 
-void UDefaultObtainedBlock::SetTimeHatched(const FDateTime &DateTime) {
+void UDefaultObtainedBlock::SetTimeHatched(const FDateTime &DateTime)
+{
     TimeHatched = DateTime;
 }
 
-TOptional<FText> UDefaultObtainedBlock::GetHatchedMap() {
+TOptional<FText> UDefaultObtainedBlock::GetHatchedMap()
+{
     return HatchedMap;
 }
 
-void UDefaultObtainedBlock::SetHatchedMap(const FText &MapName) {
+void UDefaultObtainedBlock::SetHatchedMap(const FText &MapName)
+{
     HatchedMap = MapName;
 }

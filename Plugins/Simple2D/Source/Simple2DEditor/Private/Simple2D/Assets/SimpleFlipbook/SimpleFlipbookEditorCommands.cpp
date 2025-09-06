@@ -2,8 +2,10 @@
 
 #include "Simple2D/Assets/SimpleFlipbook/SimpleFlipbookEditorCommands.h"
 
-namespace Simple2D {
-    void FSimpleFlipbookEditorCommands::RegisterCommands() {
+namespace Simple2D
+{
+    void FSimpleFlipbookEditorCommands::RegisterCommands()
+    {
         constexpr auto TEXT(LOCTEXT_NAMESPACE) = TEXT("Simple2D");
 
         UI_COMMAND(AddKeyFrame, "Add Key Frame", "Inserts a new key frame at the current time",

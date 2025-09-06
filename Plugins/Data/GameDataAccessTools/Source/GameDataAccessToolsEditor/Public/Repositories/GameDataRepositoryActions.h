@@ -4,13 +4,12 @@
 #include "CSManagedGCHandle.h"
 #include "Serialization/GameDataEntrySerializer.h"
 
-
 class FGameDataEntrySerializerPtr;
 class UGameDataRepository;
 class IGameDataEntrySerializer;
-DECLARE_DELEGATE_OneParam(FOnFileAction, const FString&)
+DECLARE_DELEGATE_OneParam(FOnFileAction, const FString &)
 
-struct FImportExportAction
+    struct FImportExportAction
 {
     FSharedGCHandle ActionHandle;
     FText FormatName;
@@ -20,18 +19,18 @@ struct FImportExportAction
 
 class FGameDataRepositoryActions final : public FAssetTypeActions_Base
 {
-public:
+  public:
     FText GetName() const override;
     FColor GetTypeColor() const override;
-    UClass* GetSupportedClass() const override;
+    UClass *GetSupportedClass() const override;
     uint32 GetCategories() override;
 
-    void GetActions(const TArray<UObject*>& InObjects, FMenuBuilder& MenuBuilder) override;
+    void GetActions(const TArray<UObject *> &InObjects, FMenuBuilder &MenuBuilder) override;
 
-    void OpenAssetEditor(const TArray<UObject*>& InObjects,
+    void OpenAssetEditor(const TArray<UObject *> &InObjects,
                          const TSharedPtr<IToolkitHost> EditWithinLevelEditor) override;
 
-private:
-    static void AddSerializationActions(FMenuBuilder& SubMenuBuilder, const UObject* InObject);
-    static void ExportAsset(const UGameDataRepository* Repository, const UGameDataEntrySerializer* Serializer);
+  private:
+    static void AddSerializationActions(FMenuBuilder &SubMenuBuilder, const UObject *InObject);
+    static void ExportAsset(const UGameDataRepository *Repository, const UGameDataEntrySerializer *Serializer);
 };

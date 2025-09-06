@@ -13,8 +13,10 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
-    RETROLIB_EXPORT class RETROLIB_API FBlueprintException : public std::exception {
+namespace Retro
+{
+    RETROLIB_EXPORT class RETROLIB_API FBlueprintException : public std::exception
+    {
       public:
         FBlueprintException() = default;
 
@@ -29,7 +31,8 @@ namespace Retro {
 
         [[nodiscard]] const char *what() const noexcept override;
 
-        EBlueprintExceptionType::Type GetType() const {
+        EBlueprintExceptionType::Type GetType() const
+        {
             return Type;
         }
 

@@ -16,19 +16,23 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Optionals {
+namespace Retro::Optionals
+{
 
-    struct FPtrOrNullInvoker {
+    struct FPtrOrNullInvoker
+    {
 
         template <OptionalType O>
             requires(!SpecializationOf<TValueType<O>, std::reference_wrapper>)
-        constexpr auto operator()(O &&Optional) const {
+        constexpr auto operator()(O &&Optional) const
+        {
             return HasValue(std::forward<O>(Optional)) ? GetPtrFromRef(Get(std::forward<O>(Optional))) : nullptr;
         }
 
         template <template <typename...> typename O, typename T>
             requires OptionalType<O<std::reference_wrapper<T>>>
-        constexpr auto operator()(const O<std::reference_wrapper<T>> &Optional) const {
+        constexpr auto operator()(const O<std::reference_wrapper<T>> &Optional) const
+        {
             return HasValue(Optional) ? GetPtrFromRef(Get(Optional).get()) : nullptr;
         }
     };

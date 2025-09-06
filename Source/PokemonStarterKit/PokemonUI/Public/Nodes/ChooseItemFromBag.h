@@ -20,7 +20,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnItemCancel);
  * Choose and item from the bag and process the item accordingly
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API UChooseItemFromBag : public UBlueprintCoroutineActionBase {
+class POKEMONUI_API UChooseItemFromBag : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

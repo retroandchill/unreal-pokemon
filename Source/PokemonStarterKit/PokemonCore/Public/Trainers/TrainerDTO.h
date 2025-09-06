@@ -12,7 +12,8 @@
  *
  */
 USTRUCT(BlueprintType)
-struct POKEMONCORE_API FTrainerDTO {
+struct POKEMONCORE_API FTrainerDTO
+{
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)

@@ -16,7 +16,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * Extract the decayed version of the Nth type from the parameter pack.
      *

@@ -6,8 +6,10 @@
 #include "TestAdapter.h"
 #include <array>
 
-TEST_CASE_NAMED(FOptionalPipesTest, "Unit Tests::RetroLib::Optionals::Pipes", "[RetroLib][Optionals]") {
-    SECTION("Can pipe an TOptional object") {
+TEST_CASE_NAMED(FOptionalPipesTest, "Unit Tests::RetroLib::Optionals::Pipes", "[RetroLib][Optionals]")
+{
+    SECTION("Can pipe an TOptional object")
+    {
         TOptional Value = 4;
         auto Result = Value | Retro::Optionals::Transform([](int i) { return i * 2; }) | Retro::Optionals::Value;
         CHECK(Result == 8);
@@ -17,7 +19,8 @@ TEST_CASE_NAMED(FOptionalPipesTest, "Unit Tests::RetroLib::Optionals::Pipes", "[
         CHECK(Result == 12);
     }
 
-    SECTION("Can pipe an std::optional into TOptional") {
+    SECTION("Can pipe an std::optional into TOptional")
+    {
         std::optional Value3 = 5;
         auto AsUeOptional3 = Value3 | Retro::Optionals::To<TOptional>();
         CHECK(AsUeOptional3.GetValue() == 5);
@@ -27,7 +30,8 @@ TEST_CASE_NAMED(FOptionalPipesTest, "Unit Tests::RetroLib::Optionals::Pipes", "[
         CHECK(AsUeOptional4.GetValue() == 5);
     }
 
-    SECTION("TOptional has range semantics") {
+    SECTION("TOptional has range semantics")
+    {
         static_assert(std::ranges::input_range<TOptional<int32>>);
         TOptional Value = 1;
         auto AsVector = Value | Retro::Ranges::To<std::vector>();

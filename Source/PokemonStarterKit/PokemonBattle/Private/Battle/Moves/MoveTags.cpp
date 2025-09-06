@@ -6,7 +6,8 @@
 #include "Moves/MoveData.h"
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 
-namespace Pokemon::Battle::Moves {
+namespace Pokemon::Battle::Moves
+{
 
     const UE_DEFINE_GAMEPLAY_TAG(UsingMove, "Battle.UsingMove");
     const UE_DEFINE_GAMEPLAY_TAG(TypeDetermined, "Battle.Moves.TypeDetermined");
@@ -32,9 +33,11 @@ namespace Pokemon::Battle::Moves {
 
     const UE_DEFINE_GAMEPLAY_TAG(TwoTurnAttack, "Battle.Moves.TwoTurnAttack");
 
-    const FNativeGameplayTag &GetUserCategoryTag(EMoveDamageCategory Category) {
+    const FNativeGameplayTag &GetUserCategoryTag(EMoveDamageCategory Category)
+    {
         using enum EMoveDamageCategory;
-        switch (Category) {
+        switch (Category)
+        {
         case Physical:
             return UsingMove_Physical;
         case Special:
@@ -44,9 +47,11 @@ namespace Pokemon::Battle::Moves {
         }
     }
 
-    const FNativeGameplayTag &GetTargetCategoryTag(EMoveDamageCategory Category) {
+    const FNativeGameplayTag &GetTargetCategoryTag(EMoveDamageCategory Category)
+    {
         using enum EMoveDamageCategory;
-        switch (Category) {
+        switch (Category)
+        {
         case Physical:
             return MoveTarget_Physical;
         case Special:
@@ -56,12 +61,15 @@ namespace Pokemon::Battle::Moves {
         }
     }
 
-    FLookup::FLookup() {
+    FLookup::FLookup()
+    {
         auto &DataManager = FDataManager::GetInstance();
         auto &TypeTable = DataManager.GetDataTable<FMoveData>();
         TypeTable.GetAllRows() | Retro::Ranges::ForEach([this](const FMoveData &Move) {
-            for (auto Tag : Move.Tags) {
-                if (Tags.Contains(Tag)) {
+            for (auto Tag : Move.Tags)
+            {
+                if (Tags.Contains(Tag))
+                {
                     continue;
                 }
 
@@ -72,7 +80,8 @@ namespace Pokemon::Battle::Moves {
 
     FLookup::~FLookup() = default;
 
-    FLookup &FLookup::GetInstance() {
+    FLookup &FLookup::GetInstance()
+    {
         static FLookup Lookup;
         return Lookup;
     }

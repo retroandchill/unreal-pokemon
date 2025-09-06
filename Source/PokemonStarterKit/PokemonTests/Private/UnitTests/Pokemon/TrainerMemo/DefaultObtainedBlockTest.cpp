@@ -8,7 +8,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultObtainedBlockTest, "Unit Tests.Pokemon.TrainerMemo.DefaultObtainedBlockTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool DefaultObtainedBlockTest::RunTest(const FString &Parameters) {
+bool DefaultObtainedBlockTest::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     FPokemonDTO Blank;
     auto BlankBlock = NewObject<UDefaultObtainedBlock>(World.Get())->Initialize(Blank);

@@ -14,7 +14,8 @@
 
 constexpr auto GLoctextNamespace = "FPokemonCoreModule";
 
-void FPokemonCoreModule::StartupModule() {
+void FPokemonCoreModule::StartupModule()
+{
     auto &GrowthRateRegistry = Exp::FGrowthRateRegistry::GetInstance();
     GrowthRateRegistry.RegisterClass<Exp::FMedium>("Medium");
     GrowthRateRegistry.RegisterClass<Exp::FErratic>("Erratic");
@@ -28,7 +29,8 @@ void FPokemonCoreModule::StartupModule() {
     BagSorterRegistry.RegisterClass<FNamedBagSorter>("NamedBagSorter");
 }
 
-void FPokemonCoreModule::ShutdownModule() {
+void FPokemonCoreModule::ShutdownModule()
+{
     // No implementation needed
 }
 

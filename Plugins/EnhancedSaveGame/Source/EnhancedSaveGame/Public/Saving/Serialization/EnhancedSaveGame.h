@@ -15,7 +15,8 @@ class ISerializable;
  *
  */
 UCLASS()
-class ENHANCEDSAVEGAME_API UEnhancedSaveGame : public USaveGame {
+class ENHANCEDSAVEGAME_API UEnhancedSaveGame : public USaveGame
+{
     GENERATED_BODY()
 
   public:
@@ -24,7 +25,8 @@ class ENHANCEDSAVEGAME_API UEnhancedSaveGame : public USaveGame {
 
     template <typename T>
         requires std::derived_from<T, ISerializable> && std::derived_from<T, UObject>
-    TOptional<T &> LoadObjectFromSaveGame(const FGameplayTag &Tag) const {
+    TOptional<T &> LoadObjectFromSaveGame(const FGameplayTag &Tag) const
+    {
         return static_cast<T *>(LoadObjectFromSaveGame(T::StaticClass(), Tag));
     }
 

@@ -12,7 +12,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(GenderRatioTest, "Unit Tests.Core.Pokemon.GenderRatioTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool GenderRatioTest::RunTest(const FString &Parameters) {
+bool GenderRatioTest::RunTest(const FString &Parameters)
+{
     using enum EPokemonGender;
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 

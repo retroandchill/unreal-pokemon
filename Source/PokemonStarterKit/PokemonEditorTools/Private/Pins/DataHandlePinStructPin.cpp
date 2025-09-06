@@ -6,21 +6,25 @@
 #include "RetroLib/Ranges/Views/NameAliases.h"
 #include "SSearchableComboBox.h"
 
-void SDataHandlePinStructPin::Construct(const FArguments &, UEdGraphPin *InGraphPin) {
+void SDataHandlePinStructPin::Construct(const FArguments &, UEdGraphPin *InGraphPin)
+{
     SGraphPin::Construct(SGraphPin::FArguments(), InGraphPin);
 }
 
-void SDataHandlePinStructPin::ParseDefaultValueData() {
+void SDataHandlePinStructPin::ParseDefaultValueData()
+{
     Handle = CastChecked<UScriptStruct>(GraphPinObj->PinType.PinSubCategoryObject.Get());
     Handle.FromExportString(GraphPinObj->GetDefaultAsString(), PPF_SerializedAsImportText);
 }
 
-TSharedRef<SWidget> SDataHandlePinStructPin::GetDefaultValueWidget() {
+TSharedRef<SWidget> SDataHandlePinStructPin::GetDefaultValueWidget()
+{
     ParseDefaultValueData();
     Options = Handle.GetStructOptions();
 
     if (!Retro::Ranges::AnyOf(Options, Retro::BindMethod<&SDataHandlePinStructPin::RowMatches>(this)) &&
-        !Options.IsEmpty()) {
+        !Options.IsEmpty())
+    {
         Handle.SetRowID(FName(**Options[0]));
     }
 
@@ -52,11 +56,13 @@ TSharedRef<SWidget> SDataHandlePinStructPin::GetDefaultValueWidget() {
     // clang-format on
 }
 
-bool SDataHandlePinStructPin::RowMatches(const TSharedPtr<FString> &Str) const {
+bool SDataHandlePinStructPin::RowMatches(const TSharedPtr<FString> &Str) const
+{
     return FName(*Str) == Handle.GetRowID();
 }
 
-const TSharedPtr<FString> &SDataHandlePinStructPin::GetItemString() const {
+const TSharedPtr<FString> &SDataHandlePinStructPin::GetItemString() const
+{
     // clang-format off
     auto Item = Options |
                 Retro::Ranges::Views::Filter(Retro::BindMethod<&SDataHandlePinStructPin::RowMatches>(this)) |
@@ -66,6 +72,7 @@ const TSharedPtr<FString> &SDataHandlePinStructPin::GetItemString() const {
     return *Item;
 }
 
-FText SDataHandlePinStructPin::GetItemText() const {
+FText SDataHandlePinStructPin::GetItemText() const
+{
     return FText::FromString(*GetItemString());
 }

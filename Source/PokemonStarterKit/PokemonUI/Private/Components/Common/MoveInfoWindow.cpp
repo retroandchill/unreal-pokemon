@@ -3,11 +3,15 @@
 #include "Components/Common/MoveInfoWindow.h"
 #include "Pokemon/Moves/Move.h"
 
-void UMoveInfoWindow::SetMove(const TScriptInterface<IMove> &NewMove) {
+void UMoveInfoWindow::SetMove(const TScriptInterface<IMove> &NewMove)
+{
     Move = NewMove;
-    if (IsValid(Move.GetObject())) {
+    if (IsValid(Move.GetObject()))
+    {
         OnMoveSet(NewMove);
-    } else {
+    }
+    else
+    {
         OnMoveCleared();
     }
 }

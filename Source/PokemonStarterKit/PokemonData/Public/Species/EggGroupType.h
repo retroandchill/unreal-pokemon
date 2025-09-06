@@ -7,7 +7,8 @@
  * Represents the type of Egg Group
  */
 UENUM(BlueprintType)
-enum class EEggGroupType : uint8 {
+enum class EEggGroupType : uint8
+{
     /**
      * Eggs are created when two Pokémon of the same Egg Group are in the Day Care together
      */

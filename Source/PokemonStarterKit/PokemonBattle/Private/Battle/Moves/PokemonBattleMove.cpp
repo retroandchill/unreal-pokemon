@@ -19,15 +19,19 @@
 #include "RetroLib/Utils/MakeWeak.h"
 
 TScriptInterface<IBattleMove> UPokemonBattleMove::Initialize(const TScriptInterface<IBattler> &Battler,
-                                                             const TScriptInterface<IMove> &Move) {
+                                                             const TScriptInterface<IMove> &Move)
+{
     Owner = Battler;
     WrappedMove = Move;
 
     auto AbilityComponent = Owner->GetAbilityComponent();
     auto FunctionCodeClass = Pokemon::Battle::Moves::LookupMoveEffectClass(WrappedMove->GetFunctionCode());
-    if (auto AbilityObject = AbilityComponent->FindAbilitySpecFromClass(FunctionCodeClass); AbilityObject != nullptr) {
+    if (auto AbilityObject = AbilityComponent->FindAbilitySpecFromClass(FunctionCodeClass); AbilityObject != nullptr)
+    {
         FunctionCode = AbilityObject->Handle;
-    } else {
+    }
+    else
+    {
         FGameplayAbilitySpec Spec(FunctionCodeClass, 1, INDEX_NONE, this);
         FunctionCode = AbilityComponent->GiveAbility(Spec);
     }
@@ -35,11 +39,13 @@ TScriptInterface<IBattleMove> UPokemonBattleMove::Initialize(const TScriptInterf
     return this;
 }
 
-bool UPokemonBattleMove::IsUsable() const {
+bool UPokemonBattleMove::IsUsable() const
+{
     return WrappedMove->GetCurrentPP() > 0;
 }
 
-Retro::TGenerator<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossibleTargets() const {
+Retro::TGenerator<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossibleTargets() const
+{
     TArray<TScriptInterface<IBattler>> Targets;
     auto UserSide = Owner->GetOwningSide();
     auto UserId = Owner->GetInternalId();
@@ -52,59 +58,73 @@ Retro::TGenerator<TScriptInterface<IBattler>> UPokemonBattleMove::GetAllPossible
     // clang-format on
 }
 
-FText UPokemonBattleMove::GetDisplayName() const {
+FText UPokemonBattleMove::GetDisplayName() const
+{
     return WrappedMove->GetDisplayName();
 }
 
-int32 UPokemonBattleMove::GetCurrentPP() const {
+int32 UPokemonBattleMove::GetCurrentPP() const
+{
     return WrappedMove->GetCurrentPP();
 }
 
-int32 UPokemonBattleMove::GetMaxPP() const {
+int32 UPokemonBattleMove::GetMaxPP() const
+{
     return WrappedMove->GetTotalPP();
 }
 
-FName UPokemonBattleMove::GetDisplayType() const {
+FName UPokemonBattleMove::GetDisplayType() const
+{
     return WrappedMove->GetType();
 }
 
-int32 UPokemonBattleMove::GetBasePower() const {
+int32 UPokemonBattleMove::GetBasePower() const
+{
     return WrappedMove->GetBasePower();
 }
 
-int32 UPokemonBattleMove::GetAccuracy() const {
+int32 UPokemonBattleMove::GetAccuracy() const
+{
     return WrappedMove->GetAccuracy();
 }
 
-EMoveDamageCategory UPokemonBattleMove::GetCategory() const {
+EMoveDamageCategory UPokemonBattleMove::GetCategory() const
+{
     return WrappedMove->GetDamageCategory();
 }
 
-const FMoveTarget &UPokemonBattleMove::GetTargetType() const {
+const FMoveTarget &UPokemonBattleMove::GetTargetType() const
+{
     return WrappedMove->GetTargetType();
 }
 
-const TArray<FName> &UPokemonBattleMove::GetTags() const {
+const TArray<FName> &UPokemonBattleMove::GetTags() const
+{
     return WrappedMove->GetTags();
 }
 
-int32 UPokemonBattleMove::GetPriority() const {
+int32 UPokemonBattleMove::GetPriority() const
+{
     return WrappedMove->GetMoveData().Priority;
 }
 
-int32 UPokemonBattleMove::GetAdditionalEffectChance() const {
+int32 UPokemonBattleMove::GetAdditionalEffectChance() const
+{
     return WrappedMove->GetAdditionalEffectChance();
 }
 
-void UPokemonBattleMove::PayCost(int32 Amount) {
+void UPokemonBattleMove::PayCost(int32 Amount)
+{
     WrappedMove->DecrementPP(Amount);
 }
 
-const TScriptInterface<IBattler> &UPokemonBattleMove::GetOwningBattler() const {
+const TScriptInterface<IBattler> &UPokemonBattleMove::GetOwningBattler() const
+{
     return Owner;
 }
 
-UE5Coro::TCoroutine<> UPokemonBattleMove::TryActivateMove(const TArray<FTargetWithIndex> &Targets) {
+UE5Coro::TCoroutine<> UPokemonBattleMove::TryActivateMove(const TArray<FTargetWithIndex> &Targets)
+{
     auto AbilityComponent = Owner->GetAbilityComponent();
     auto OwnerActor = CastChecked<AActor>(Owner.GetObject());
     FGameplayEventData EventData;

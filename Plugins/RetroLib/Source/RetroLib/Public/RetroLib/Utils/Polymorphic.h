@@ -22,7 +22,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * @brief A class template that provides polymorphic storage and access capabilities for types derived from a base
      * class.
@@ -34,7 +35,8 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <Class T, bool MoveOnly = false, size_t SmallStorageSize = DEFAULT_SMALL_STORAGE_SIZE>
         requires(SmallStorageSize >= sizeof(void *))
-    class TPolymorphic {
+    class TPolymorphic
+    {
         template <typename U>
             requires std::derived_from<U, T>
         static constexpr bool FitsSmallStorage = sizeof(U) <= SmallStorageSize;
@@ -86,7 +88,8 @@ namespace Retro {
         template <typename U>
             requires std::derived_from<std::decay_t<U>, T> && (!std::same_as<std::decay_t<U>, TPolymorphic>) &&
                      (std::copyable<U> || MoveOnly) && std::movable<U>
-        explicit(false) constexpr TPolymorphic(U &&Value) noexcept : Vtable(GetVtable<U>()) {
+        explicit(false) constexpr TPolymorphic(U &&Value) noexcept : Vtable(GetVtable<U>())
+        {
             Storage.template Emplace<std::decay_t<U>>(std::forward<U>(Value));
         }
 
@@ -115,12 +118,14 @@ namespace Retro {
         template <typename U, typename... A>
             requires std::derived_from<U, T> && std::constructible_from<U, A...> &&
                      (std::copyable<U> || MoveOnly) && std::movable<U>
-        explicit constexpr TPolymorphic(std::in_place_type_t<U>, A &&...Args) noexcept : Vtable(GetVtable<U>()) {
+        explicit constexpr TPolymorphic(std::in_place_type_t<U>, A &&...Args) noexcept : Vtable(GetVtable<U>())
+        {
             Storage.template Emplace<U>(std::forward<A>(Args)...);
         }
 
 #ifdef __UNREAL__
-        explicit constexpr TPolymorphic(FIntrusiveUnsetOptionalState) noexcept : Vtable(nullptr) {
+        explicit constexpr TPolymorphic(FIntrusiveUnsetOptionalState) noexcept : Vtable(nullptr)
+        {
         }
 #endif
 
@@ -141,8 +146,10 @@ namespace Retro {
          */
         constexpr TPolymorphic(const TPolymorphic &Other) noexcept
             requires(!MoveOnly)
-            : Vtable(Other.Vtable) {
-            if (Vtable != nullptr) {
+            : Vtable(Other.Vtable)
+        {
+            if (Vtable != nullptr)
+            {
                 Vtable->Copy(Other.Storage, Storage);
             }
         }
@@ -164,8 +171,10 @@ namespace Retro {
          *
          * @throws No exceptions are thrown. The constructor is marked noexcept.
          */
-        constexpr TPolymorphic(TPolymorphic &&Other) noexcept : Vtable(Other.Vtable) {
-            if (Vtable != nullptr) {
+        constexpr TPolymorphic(TPolymorphic &&Other) noexcept : Vtable(Other.Vtable)
+        {
+            if (Vtable != nullptr)
+            {
                 Vtable->Move(Other.Storage, Storage);
             }
         }
@@ -181,8 +190,10 @@ namespace Retro {
          * @note This operation is marked as noexcept, indicating that no exceptions will be
          *       thrown during the destruction process.
          */
-        constexpr ~TPolymorphic() noexcept {
-            if (Vtable != nullptr) {
+        constexpr ~TPolymorphic() noexcept
+        {
+            if (Vtable != nullptr)
+            {
                 Vtable->Destroy(Storage);
             }
         }
@@ -201,18 +212,26 @@ namespace Retro {
         constexpr TPolymorphic &operator=(const TPolymorphic &Other) noexcept
             requires(!MoveOnly)
         {
-            if (Vtable == nullptr) {
+            if (Vtable == nullptr)
+            {
                 Vtable = Other.Vtable;
-                if (Vtable != nullptr) {
+                if (Vtable != nullptr)
+                {
                     Vtable->Copy(Other.Storage, Storage);
                 }
-            } else if (Other.Vtable == nullptr) {
+            }
+            else if (Other.Vtable == nullptr)
+            {
                 Vtable->Destroy(Storage);
                 Vtable = nullptr;
-            } else if (Vtable->GetType() == Other.Vtable->GetType()) {
+            }
+            else if (Vtable->GetType() == Other.Vtable->GetType())
+            {
                 Vtable = Other.Vtable;
                 Vtable->CopyAssign(Other.Storage, Storage);
-            } else {
+            }
+            else
+            {
                 Vtable->Destroy(Storage);
                 Vtable = Other.Vtable;
                 Vtable->Copy(Other.Storage, Storage);
@@ -237,19 +256,28 @@ namespace Retro {
          *
          * @note The operation is noexcept, ensuring that it does not throw exceptions.
          */
-        constexpr TPolymorphic &operator=(TPolymorphic &&Other) noexcept {
-            if (Vtable == nullptr) {
+        constexpr TPolymorphic &operator=(TPolymorphic &&Other) noexcept
+        {
+            if (Vtable == nullptr)
+            {
                 Vtable = Other.Vtable;
-                if (Vtable != nullptr) {
+                if (Vtable != nullptr)
+                {
                     Vtable->Move(Other.Storage, Storage);
                 }
-            } else if (Other.Vtable == nullptr) {
+            }
+            else if (Other.Vtable == nullptr)
+            {
                 Vtable->Destroy(Storage);
                 Vtable = nullptr;
-            } else if (Vtable->GetType() == Other.Vtable->GetType()) {
+            }
+            else if (Vtable->GetType() == Other.Vtable->GetType())
+            {
                 Vtable = Other.Vtable;
                 Vtable->MoveAssign(Other.Storage, Storage);
-            } else {
+            }
+            else
+            {
                 Vtable->Destroy(Storage);
                 Vtable = Other.Vtable;
                 Vtable->Move(Other.Storage, Storage);
@@ -272,13 +300,15 @@ namespace Retro {
          */
         template <typename U>
             requires std::derived_from<std::decay_t<U>, T>
-        constexpr TPolymorphic &operator=(U &&Value) noexcept {
+        constexpr TPolymorphic &operator=(U &&Value) noexcept
+        {
             Emplace<std::decay_t<U>>(std::forward<U>(Value));
             return *this;
         }
 
 #ifdef __UNREAL__
-        constexpr bool operator==(FIntrusiveUnsetOptionalState) const noexcept {
+        constexpr bool operator==(FIntrusiveUnsetOptionalState) const noexcept
+        {
             return Vtable == nullptr;
         }
 #endif
@@ -291,7 +321,8 @@ namespace Retro {
          *
          * @return A pointer to the stored value of type T.
          */
-        constexpr T *Get() {
+        constexpr T *Get()
+        {
             return Vtable->GetValue(Storage);
         }
 
@@ -303,7 +334,8 @@ namespace Retro {
          *
          * @return A pointer to the stored value of type T.
          */
-        constexpr const T *Get() const {
+        constexpr const T *Get() const
+        {
             return Vtable->GetConstValue(Storage);
         }
 
@@ -316,7 +348,8 @@ namespace Retro {
          *
          * @return A pointer of type T* managed by this object.
          */
-        constexpr T *operator->() {
+        constexpr T *operator->()
+        {
             return Get();
         }
 
@@ -329,7 +362,8 @@ namespace Retro {
          *
          * @return A pointer of type T* managed by this object.
          */
-        constexpr const T *operator->() const {
+        constexpr const T *operator->() const
+        {
             return Get();
         }
 
@@ -342,7 +376,8 @@ namespace Retro {
          *
          * @return A reference to the object of type T that is managed by the current instance.
          */
-        constexpr T &operator*() {
+        constexpr T &operator*()
+        {
             return *Get();
         }
 
@@ -355,7 +390,8 @@ namespace Retro {
          *
          * @return A reference to the object of type T that is managed by the current instance.
          */
-        constexpr const T &operator*() const {
+        constexpr const T &operator*() const
+        {
             return *Get();
         }
 
@@ -377,12 +413,16 @@ namespace Retro {
          */
         template <typename U, typename... A>
             requires std::derived_from<U, T>
-        constexpr void Emplace(A &&...Args) noexcept {
+        constexpr void Emplace(A &&...Args) noexcept
+        {
             Vtable->Destroy(Storage);
             Vtable = GetVtable<U>();
-            if constexpr (FitsSmallStorage<U>) {
+            if constexpr (FitsSmallStorage<U>)
+            {
                 new (std::bit_cast<U *>(Storage.SmallStorage.data())) U(std::forward<A>(Args)...);
-            } else {
+            }
+            else
+            {
                 Storage.LargeStorage = new U(std::forward<A>(Args)...);
             }
         }
@@ -392,7 +432,8 @@ namespace Retro {
          *
          * @return The size as a constant expression.
          */
-        constexpr size_t GetSize() const {
+        constexpr size_t GetSize() const
+        {
             return Vtable->GetSize();
         }
 
@@ -403,16 +444,21 @@ namespace Retro {
 
             template <typename U, typename... A>
                 requires std::derived_from<U, T> && std::constructible_from<U, A...>
-            constexpr void Emplace(A &&...Args) noexcept {
-                if constexpr (FitsSmallStorage<U>) {
+            constexpr void Emplace(A &&...Args) noexcept
+            {
+                if constexpr (FitsSmallStorage<U>)
+                {
                     new (std::bit_cast<U *>(SmallStorage.data())) U(std::forward<A>(Args)...);
-                } else {
+                }
+                else
+                {
                     LargeStorage = new U(std::forward<A>(Args)...);
                 }
             }
         };
 
-        struct FVTable {
+        struct FVTable
+        {
             const std::type_info &(*GetType)();
             size_t (*GetSize)();
             T *(*GetValue)(FOpaqueStorage &Storage);
@@ -426,35 +472,50 @@ namespace Retro {
 
         template <typename U>
             requires std::derived_from<U, T>
-        struct TVTableImpl {
-            static constexpr const std::type_info &GetType() {
+        struct TVTableImpl
+        {
+            static constexpr const std::type_info &GetType()
+            {
                 return typeid(U);
             }
 
-            static constexpr size_t GetSize() {
+            static constexpr size_t GetSize()
+            {
                 return sizeof(U);
             }
 
-            static constexpr T *GetValue(FOpaqueStorage &Data) {
-                if constexpr (FitsSmallStorage<U>) {
+            static constexpr T *GetValue(FOpaqueStorage &Data)
+            {
+                if constexpr (FitsSmallStorage<U>)
+                {
                     return std::bit_cast<U *>(Data.SmallStorage.data());
-                } else {
+                }
+                else
+                {
                     return static_cast<U *>(Data.LargeStorage);
                 }
             }
 
-            static constexpr const T *GetConstValue(const FOpaqueStorage &Data) {
-                if constexpr (FitsSmallStorage<U>) {
+            static constexpr const T *GetConstValue(const FOpaqueStorage &Data)
+            {
+                if constexpr (FitsSmallStorage<U>)
+                {
                     return std::bit_cast<const U *>(Data.SmallStorage.data());
-                } else {
+                }
+                else
+                {
                     return static_cast<const U *>(Data.LargeStorage);
                 }
             }
 
-            static constexpr void Destroy(FOpaqueStorage &Data) {
-                if constexpr (FitsSmallStorage<U>) {
+            static constexpr void Destroy(FOpaqueStorage &Data)
+            {
+                if constexpr (FitsSmallStorage<U>)
+                {
                     std::bit_cast<const U *>(Data.SmallStorage.data())->~U();
-                } else {
+                }
+                else
+                {
                     delete static_cast<const U *>(Data.LargeStorage);
                 }
             }
@@ -462,9 +523,12 @@ namespace Retro {
             static constexpr void Copy(const FOpaqueStorage &Src, FOpaqueStorage &Dest)
                 requires(std::copyable<U>)
             {
-                if constexpr (FitsSmallStorage<U>) {
+                if constexpr (FitsSmallStorage<U>)
+                {
                     Dest.template Emplace<U>(*std::bit_cast<const U *>(Src.SmallStorage.data()));
-                } else {
+                }
+                else
+                {
                     Dest.template Emplace<U>(*static_cast<const U *>(Src.LargeStorage));
                 }
             }
@@ -472,26 +536,37 @@ namespace Retro {
             static constexpr void CopyAssign(const FOpaqueStorage &Src, FOpaqueStorage &Dest)
                 requires(std::copyable<U>)
             {
-                if constexpr (FitsSmallStorage<U>) {
+                if constexpr (FitsSmallStorage<U>)
+                {
                     *std::bit_cast<U *>(Dest.SmallStorage.data()) = *std::bit_cast<const U *>(Src.SmallStorage.data());
-                } else {
+                }
+                else
+                {
                     *static_cast<U *>(Dest.LargeStorage) = *static_cast<const U *>(Src.LargeStorage);
                 }
             }
 
-            static constexpr void Move(FOpaqueStorage &Src, FOpaqueStorage &Dest) {
-                if constexpr (FitsSmallStorage<U>) {
+            static constexpr void Move(FOpaqueStorage &Src, FOpaqueStorage &Dest)
+            {
+                if constexpr (FitsSmallStorage<U>)
+                {
                     Dest.template Emplace<U>(std::move(*std::bit_cast<U *>(Src.SmallStorage.data())));
-                } else {
+                }
+                else
+                {
                     Dest.template Emplace<U>(std::move(*static_cast<U *>(Src.LargeStorage)));
                 }
             }
 
-            static constexpr void MoveAssign(FOpaqueStorage &Src, FOpaqueStorage &Dest) {
-                if constexpr (FitsSmallStorage<U>) {
+            static constexpr void MoveAssign(FOpaqueStorage &Src, FOpaqueStorage &Dest)
+            {
+                if constexpr (FitsSmallStorage<U>)
+                {
                     *std::bit_cast<U *>(Dest.SmallStorage.data()) =
                         std::move(*std::bit_cast<U *>(Src.SmallStorage.data()));
-                } else {
+                }
+                else
+                {
                     *static_cast<U *>(Dest.LargeStorage) = std::move(*static_cast<U *>(Src.LargeStorage));
                 }
             }
@@ -499,7 +574,8 @@ namespace Retro {
 
         template <typename U>
             requires std::derived_from<U, T> && std::copyable<U>
-        static const FVTable *GetVtable() {
+        static const FVTable *GetVtable()
+        {
             using ImplType = TVTableImpl<U>;
             static constexpr FVTable Vtable = {.GetType = &ImplType::GetType,
                                                .GetSize = &ImplType::GetSize,
@@ -515,7 +591,8 @@ namespace Retro {
 
         template <typename U>
             requires std::derived_from<U, T> && (!std::copyable<U>)
-        static const FVTable *GetVtable() {
+        static const FVTable *GetVtable()
+        {
             using ImplType = TVTableImpl<U>;
             static constexpr FVTable Vtable = {.GetType = &ImplType::GetType,
                                                .GetSize = &ImplType::GetSize,

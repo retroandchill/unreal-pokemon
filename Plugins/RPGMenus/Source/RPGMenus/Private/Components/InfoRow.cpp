@@ -5,14 +5,17 @@
 #include "RetroLib/Optionals/OrElseValue.h"
 #include "RetroLib/Optionals/Transform.h"
 
-void UInfoRow::NativePreConstruct() {
+void UInfoRow::NativePreConstruct()
+{
     Super::NativePreConstruct();
     UpdateVisibility();
 }
 
-void UInfoRow::UpdateVisibility() {
+void UInfoRow::UpdateVisibility()
+{
 #if WITH_EDITOR
-    if (IsDesignTime()) {
+    if (IsDesignTime())
+    {
         SetVisibility(InitialVisibility);
         return;
     }

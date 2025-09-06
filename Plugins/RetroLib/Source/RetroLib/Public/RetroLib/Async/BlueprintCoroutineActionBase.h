@@ -17,7 +17,8 @@
  *
  */
 UCLASS(Abstract)
-class RETROLIB_API UBlueprintCoroutineActionBase : public UBlueprintAsyncActionBase {
+class RETROLIB_API UBlueprintCoroutineActionBase : public UBlueprintAsyncActionBase
+{
     GENERATED_BODY()
 
 #if RETROLIB_WITH_UE5CORO
@@ -27,17 +28,20 @@ class RETROLIB_API UBlueprintCoroutineActionBase : public UBlueprintAsyncActionB
     UWorld *GetWorld() const override;
 
   protected:
-    virtual UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine = {}) ABSTRACT_METHOD
+    virtual UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine = {})
+    ABSTRACT_METHOD
 
   public:
     UE5Coro::TCoroutine<> UntilComplete(FForceLatentCoroutine = {}) const;
 
   protected:
-    const UObject *GetWorldContext() const {
+    const UObject *GetWorldContext() const
+    {
         return WorldContext;
     }
 
-    void SetWorldContext(const UObject *WorldContextObject) {
+    void SetWorldContext(const UObject *WorldContextObject)
+    {
         WorldContext = WorldContextObject;
     }
 #endif

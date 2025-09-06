@@ -6,11 +6,13 @@
 
 using FRotateEvent = FOnCameraAngleChanged::FDelegate;
 
-UCameraFacingRotatorComponent::UCameraFacingRotatorComponent() {
+UCameraFacingRotatorComponent::UCameraFacingRotatorComponent()
+{
     PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UCameraFacingRotatorComponent::BeginPlay() {
+void UCameraFacingRotatorComponent::BeginPlay()
+{
     Super::BeginPlay();
 
     auto CameraSubsystem = GetWorld()->GetSubsystem<UCameraSubsystem>();
@@ -20,9 +22,11 @@ void UCameraFacingRotatorComponent::BeginPlay() {
     AdjustCameraRotation(CameraSubsystem->GetCurrentCameraAngle());
 }
 
-void UCameraFacingRotatorComponent::AdjustCameraRotation(const FVector2D &Angle) const {
+void UCameraFacingRotatorComponent::AdjustCameraRotation(const FVector2D &Angle) const
+{
 #if WITH_EDITOR
-    if (!IsValid(RotatedComponent)) {
+    if (!IsValid(RotatedComponent))
+    {
         return;
     }
 #endif

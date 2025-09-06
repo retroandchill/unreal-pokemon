@@ -14,8 +14,10 @@ import RetroLib;
 #include "RetroLib/Optionals/OptionalOperations.h"
 #endif
 
-TEST_CASE_NAMED(FTestOptionalOperations, "Unit Tests::RetroLib::Optionals::Operations", "[optionals]") {
-    SECTION("Can get the values out of an optional correctly") {
+TEST_CASE_NAMED(FTestOptionalOperations, "Unit Tests::RetroLib::Optionals::Operations", "[optionals]")
+{
+    SECTION("Can get the values out of an optional correctly")
+    {
         std::optional<int> Optional1;
         std::optional Optional2 = 1;
 
@@ -27,7 +29,8 @@ TEST_CASE_NAMED(FTestOptionalOperations, "Unit Tests::RetroLib::Optionals::Opera
         CHECK(Retro::Optionals::Get(Optional2) == 1);
     }
 
-    SECTION("Can convert an optional to a reference wrapped value") {
+    SECTION("Can convert an optional to a reference wrapped value")
+    {
         std::optional Optional = 1;
         decltype(auto) Wrapped = Retro::Optionals::MakeOptionalReference(Optional);
         CHECK(Optional.value() == Wrapped.value());

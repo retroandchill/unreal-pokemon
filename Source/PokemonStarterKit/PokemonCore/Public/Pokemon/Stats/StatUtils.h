@@ -4,7 +4,8 @@
 #include "CoreMinimal.h"
 #include "Pokemon/Exp/GrowthRate.h"
 
-namespace StatUtils {
+namespace StatUtils
+{
     /**
      * Randomize the Pokémon's IVs and return a map of the values
      * @return The randomized IVs

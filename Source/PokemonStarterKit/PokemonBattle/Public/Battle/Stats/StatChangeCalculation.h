@@ -11,7 +11,8 @@
  * The calculation class for applying a stat change to
  */
 UCLASS(Blueprintable)
-class POKEMONBATTLE_API UStatChangeCalculation : public UGameplayModMagnitudeCalculation {
+class POKEMONBATTLE_API UStatChangeCalculation : public UGameplayModMagnitudeCalculation
+{
     GENERATED_BODY()
 
   public:

@@ -7,7 +7,8 @@
 
 class USimpleFlipbook;
 
-namespace Simple2D {
+namespace Simple2D
+{
     class SSimpleFlipbookTimelineTrack;
     class SSimpleFlipbookTimelineHeader;
 
@@ -16,9 +17,11 @@ namespace Simple2D {
     /**
      *
      */
-    class SIMPLE2DEDITOR_API SSimpleFlipbookTimeline : public SCompoundWidget {
+    class SIMPLE2DEDITOR_API SSimpleFlipbookTimeline : public SCompoundWidget
+    {
       public:
-        SLATE_BEGIN_ARGS(SSimpleFlipbookTimeline) : _FlipbookBeingEdited(nullptr), _PlayTime(0) {
+        SLATE_BEGIN_ARGS(SSimpleFlipbookTimeline) : _FlipbookBeingEdited(nullptr), _PlayTime(0)
+            {
             }
 
             SLATE_ATTRIBUTE(USimpleFlipbook *, FlipbookBeingEdited)
@@ -46,7 +49,8 @@ namespace Simple2D {
             EVisibility NoFramesWarningVisibility() const;
             void CheckForRebuild(bool bRebuildAll = false);
 
-            float GetSlateUnitsPerFrame() const {
+            float GetSlateUnitsPerFrame() const
+            {
                 return SlateUnitsPerFrame;
             }
 

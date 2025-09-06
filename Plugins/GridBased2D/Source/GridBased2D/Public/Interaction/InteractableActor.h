@@ -12,7 +12,8 @@
  * Basic actor class for interactivity
  */
 UCLASS(Abstract, Blueprintable)
-class GRIDBASED2D_API AInteractableActor : public AActor, public IInteractable {
+class GRIDBASED2D_API AInteractableActor : public AActor, public IInteractable
+{
     GENERATED_BODY()
 
   public:

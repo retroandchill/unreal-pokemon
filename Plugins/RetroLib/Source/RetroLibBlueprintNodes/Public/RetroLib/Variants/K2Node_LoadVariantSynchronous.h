@@ -11,7 +11,8 @@
  *
  */
 UCLASS()
-class RETROLIBBLUEPRINTNODES_API UK2Node_LoadVariantSynchronous : public UK2Node_VariantOperationBase {
+class RETROLIBBLUEPRINTNODES_API UK2Node_LoadVariantSynchronous : public UK2Node_VariantOperationBase
+{
     GENERATED_BODY()
 
   public:

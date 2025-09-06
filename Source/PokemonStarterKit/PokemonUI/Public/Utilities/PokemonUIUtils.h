@@ -21,7 +21,8 @@ class UDisplayText;
  * Blueprint function library for basic operations that the UI might require
  */
 UCLASS()
-class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary {
+class POKEMONUI_API UPokemonUIUtils : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

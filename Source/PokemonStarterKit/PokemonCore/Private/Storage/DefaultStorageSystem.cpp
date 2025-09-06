@@ -16,7 +16,8 @@ static TOptional<FDepositResult> TryDepositToBox(int32 Index, const TScriptInter
                                                  const TScriptInterface<IPokemon> &Pokemon);
 
 TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(int32 BoxCount, int32 BoxCapacity,
-                                                                   int32 StartingIndex) {
+                                                                   int32 StartingIndex)
+{
     // clang-format off
     Boxes = Retro::Ranges::Views::Iota(0, BoxCount) |
             Retro::Ranges::Views::Transform(&GetDefaultBoxName) |
@@ -28,7 +29,8 @@ TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(int32 BoxCoun
     return this;
 }
 
-TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(const FStorageSystemDTO &DTO) {
+TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(const FStorageSystemDTO &DTO)
+{
     // clang-format off
     Boxes = DTO.Boxes |
             Retro::Ranges::Views::Transform(Retro::BindBack<&FStorageBoxDTO::CreateBox>(this)) |
@@ -39,7 +41,8 @@ TScriptInterface<IStorageSystem> UDefaultStorageSystem::Initialize(const FStorag
     return this;
 }
 
-FStorageSystemDTO UDefaultStorageSystem::ToDTO() const {
+FStorageSystemDTO UDefaultStorageSystem::ToDTO() const
+{
     return {// clang-format off
         .Boxes = Boxes |
                  Retro::Ranges::Views::Transform(&IStorageBox::ToDTO) |
@@ -48,29 +51,35 @@ FStorageSystemDTO UDefaultStorageSystem::ToDTO() const {
             .CurrentBoxIndex = CurrentBoxIndex};
 }
 
-int32 UDefaultStorageSystem::GetBoxCount() const {
+int32 UDefaultStorageSystem::GetBoxCount() const
+{
     return Boxes.Num();
 }
 
-const TScriptInterface<IStorageBox> &UDefaultStorageSystem::GetBox(int32 Index) const {
+const TScriptInterface<IStorageBox> &UDefaultStorageSystem::GetBox(int32 Index) const
+{
     check(Boxes.IsValidIndex(Index))
     return Boxes[Index];
 }
 
-const TScriptInterface<IStorageBox> &UDefaultStorageSystem::GetCurrentBox() const {
+const TScriptInterface<IStorageBox> &UDefaultStorageSystem::GetCurrentBox() const
+{
     return GetBox(CurrentBoxIndex);
 }
 
-int32 UDefaultStorageSystem::GetCurrentBoxIndex() const {
+int32 UDefaultStorageSystem::GetCurrentBoxIndex() const
+{
     return CurrentBoxIndex;
 }
 
-void UDefaultStorageSystem::SetCurrentBoxIndex(int32 NewIndex) {
+void UDefaultStorageSystem::SetCurrentBoxIndex(int32 NewIndex)
+{
     check(Boxes.IsValidIndex(NewIndex))
     CurrentBoxIndex = NewIndex;
 }
 
-TOptional<FDepositResult> UDefaultStorageSystem::TryDeposit(const TScriptInterface<IPokemon> &Pokemon) {
+TOptional<FDepositResult> UDefaultStorageSystem::TryDeposit(const TScriptInterface<IPokemon> &Pokemon)
+{
     check(Boxes.IsValidIndex(CurrentBoxIndex))
     std::array Indexes = {Retro::Ranges::Views::Iota(CurrentBoxIndex, Boxes.Num()),
                           Retro::Ranges::Views::Iota(0, CurrentBoxIndex)};
@@ -88,21 +97,25 @@ TOptional<FDepositResult> UDefaultStorageSystem::TryDeposit(const TScriptInterfa
     // clang-format on
 }
 
-TScriptInterface<IStorageBox> UDefaultStorageSystem::CreateStorageBox(FText &&BoxName, int32 BoxCapacity) {
+TScriptInterface<IStorageBox> UDefaultStorageSystem::CreateStorageBox(FText &&BoxName, int32 BoxCapacity)
+{
     return UnrealInjector::NewInjectedDependency<IStorageBox>(this, std::move(BoxName), BoxCapacity);
 }
 
-static FText GetDefaultBoxName(int32 Index) {
+static FText GetDefaultBoxName(int32 Index)
+{
     auto Settings = GetDefault<UPokemonStorageSystemSettings>();
     return FText::FormatNamed(Settings->BoxNameFormat, TEXT("Index"), Index + 1);
 }
 
-static bool CheckOpenBox(int32, const TScriptInterface<IStorageBox> &Box) {
+static bool CheckOpenBox(int32, const TScriptInterface<IStorageBox> &Box)
+{
     return !Box->IsBoxFull();
 }
 
 static TOptional<FDepositResult> TryDepositToBox(int32 Index, const TScriptInterface<IStorageBox> &Box,
-                                                 const TScriptInterface<IPokemon> &Pokemon) {
+                                                 const TScriptInterface<IPokemon> &Pokemon)
+{
     // clang-format off
     return Box->DepositToBox(Pokemon) |
            Retro::Optionals::Transform(BindBack(Retro::Construct<FDepositResult>, Index));

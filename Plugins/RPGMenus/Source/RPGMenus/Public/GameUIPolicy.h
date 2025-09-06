@@ -15,7 +15,8 @@ class URPGUIManagerSubsystem;
  *
  */
 UENUM()
-enum class ELocalMultiplayerInteractionMode : uint8 {
+enum class ELocalMultiplayerInteractionMode : uint8
+{
     // Fullscreen viewport for the primary player only, regardless of the other player's existence
     PrimaryOnly,
 
@@ -27,7 +28,8 @@ enum class ELocalMultiplayerInteractionMode : uint8 {
 };
 
 USTRUCT()
-struct FRootViewportLayoutInfo {
+struct FRootViewportLayoutInfo
+{
     GENERATED_BODY()
 
     UPROPERTY(Transient)
@@ -42,10 +44,12 @@ struct FRootViewportLayoutInfo {
     FRootViewportLayoutInfo() = default;
 
     FRootViewportLayoutInfo(ULocalPlayer *InLocalPlayer, UPrimaryGameLayout *InRootLayout, bool bIsInViewport)
-        : LocalPlayer(InLocalPlayer), RootLayout(InRootLayout), bAddedToViewport(bIsInViewport) {
+        : LocalPlayer(InLocalPlayer), RootLayout(InRootLayout), bAddedToViewport(bIsInViewport)
+    {
     }
 
-    bool operator==(const ULocalPlayer *OtherLocalPlayer) const {
+    bool operator==(const ULocalPlayer *OtherLocalPlayer) const
+    {
         return LocalPlayer == OtherLocalPlayer;
     }
 };
@@ -66,15 +70,20 @@ struct FRootViewportLayoutInfo {
  * UIs are displayed and function per the game's design requirements.
  */
 UCLASS(Abstract, Blueprintable, Within = RPGUIManagerSubsystem)
-class RPGMENUS_API UGameUIPolicy : public UObject {
+class RPGMENUS_API UGameUIPolicy : public UObject
+{
     GENERATED_BODY()
 
   public:
     template <std::derived_from<UGameUIPolicy> T>
-    static T *Get(const UObject *WorldContextObject) {
-        if constexpr (std::same_as<T, UGameUIPolicy>) {
+    static T *Get(const UObject *WorldContextObject)
+    {
+        if constexpr (std::same_as<T, UGameUIPolicy>)
+        {
             return Get(WorldContextObject);
-        } else {
+        }
+        else
+        {
             return Cast<T>(Get(WorldContextObject));
         }
     }
@@ -85,7 +94,8 @@ class RPGMENUS_API UGameUIPolicy : public UObject {
     URPGUIManagerSubsystem *GetOwningUIManager() const;
     UPrimaryGameLayout *GetRootLayout(const URPGLocalPlayer *LocalPlayer) const;
 
-    ELocalMultiplayerInteractionMode GetLocalMultiplayerInteractionMode() const {
+    ELocalMultiplayerInteractionMode GetLocalMultiplayerInteractionMode() const
+    {
         return LocalMultiplayerInteractionMode;
     }
 

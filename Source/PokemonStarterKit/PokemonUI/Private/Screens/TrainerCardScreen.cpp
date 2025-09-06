@@ -7,11 +7,13 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(UTrainerCardScreen)
 
-UTrainerCardScreen *UTrainerCardScreen::AddTrainerCardScreenToStack(const UObject *WorldContextObject) {
+UTrainerCardScreen *UTrainerCardScreen::AddTrainerCardScreenToStack(const UObject *WorldContextObject)
+{
     return URPGMenuUtilities::InjectScreenToStack<UTrainerCardScreen>(WorldContextObject).GetPtrOrNull();
 }
 
-void UTrainerCardScreen::NativeConstruct() {
+void UTrainerCardScreen::NativeConstruct()
+{
     Super::NativeConstruct();
 
     auto PokemonSubsystem = GetGameInstance()->GetSubsystem<UPokemonSubsystem>();

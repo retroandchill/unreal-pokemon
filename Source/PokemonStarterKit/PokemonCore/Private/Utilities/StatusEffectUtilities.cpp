@@ -4,9 +4,11 @@
 #include "Pokemon/Pokemon.h"
 
 EStatusEffectStatus UStatusEffectUtilities::GetStatusEffect(const TScriptInterface<IPokemon> &Pokemon,
-                                                            FStatus &StatusEffect) {
+                                                            FStatus &StatusEffect)
+{
     auto Status = Pokemon->GetStatusEffect();
-    if (!Status.IsSet()) {
+    if (!Status.IsSet())
+    {
         return EStatusEffectStatus::NoStatusEffect;
     }
 

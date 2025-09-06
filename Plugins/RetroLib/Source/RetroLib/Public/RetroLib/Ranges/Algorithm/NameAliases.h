@@ -18,7 +18,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Ranges {
+namespace Retro::Ranges
+{
 
     RETROLIB_EXPORT constexpr auto AllOf = ExtensionMethod<std::ranges::all_of>;
 

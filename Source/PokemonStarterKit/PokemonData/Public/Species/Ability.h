@@ -11,7 +11,8 @@
  * Represents the data for an Ability type in the game
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "PBS"))
-struct POKEMONDATA_API FAbility : public FIndexedTableRow {
+struct POKEMONDATA_API FAbility : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -34,7 +35,8 @@ struct POKEMONDATA_API FAbility : public FIndexedTableRow {
 };
 
 USTRUCT(BlueprintType, meta = (DisableSplitPin))
-struct POKEMONDATA_API FAbilityHandle {
+struct POKEMONDATA_API FAbilityHandle
+{
     GENERATED_BODY()
     DECLARE_DATA_HANDLE(FAbilityHandle, FAbility)
 
@@ -49,7 +51,8 @@ struct POKEMONDATA_API FAbilityHandle {
  * Blueprint function library for getting ability data out.
  */
 UCLASS()
-class POKEMONDATA_API UAbilityHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UAbilityHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

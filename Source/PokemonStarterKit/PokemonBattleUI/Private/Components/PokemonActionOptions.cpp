@@ -2,10 +2,12 @@
 
 #include "Components/PokemonActionOptions.h"
 
-const TScriptInterface<IBattler> &UPokemonActionOptions::GetCurrentBattler() const {
+const TScriptInterface<IBattler> &UPokemonActionOptions::GetCurrentBattler() const
+{
     return CurrentBattler;
 }
 
-void UPokemonActionOptions::SetBattler(const TScriptInterface<IBattler> &Battler) {
+void UPokemonActionOptions::SetBattler(const TScriptInterface<IBattler> &Battler)
+{
     CurrentBattler = Battler;
 }

@@ -13,7 +13,8 @@ struct FBattleRender;
  *
  */
 UCLASS()
-class POKEMONTESTS_API UExceptionTestHelper : public UObject {
+class POKEMONTESTS_API UExceptionTestHelper : public UObject
+{
     GENERATED_BODY()
 
   public:

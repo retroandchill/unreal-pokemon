@@ -12,7 +12,8 @@
  * Handles target processing for a move
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FMoveTarget : public FIndexedTableRow {
+struct POKEMONDATA_API FMoveTarget : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -56,7 +57,8 @@ struct POKEMONDATA_API FMoveTarget : public FIndexedTableRow {
  * Blueprint function library for getting target data out.
  */
 UCLASS()
-class POKEMONDATA_API UTargetHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UTargetHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

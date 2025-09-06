@@ -2,7 +2,8 @@
 
 #include "Graphics/GraphicsAssetClasses.h"
 
-namespace Pokemon::Assets::Graphics {
+namespace Pokemon::Assets::Graphics
+{
 
     UE_DEFINE_ASSET_CLASS(PokemonBattleSprites, FBattleRender, "/Game/Graphics/Pokemon", "");
     UE_DEFINE_ASSET_CLASS(PokemonMenuSprites, FImageAsset, "/Game/Graphics/Pokemon", "");

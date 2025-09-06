@@ -7,7 +7,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(BagTest, "Unit Tests.Player.BagTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool BagTest::RunTest(const FString &Parameters) {
+bool BagTest::RunTest(const FString &Parameters)
+{
     auto Bag = NewObject<UDefaultBag>();
     UE_CHECK_EQUAL(2, Bag->ObtainItem(TEXT("FULLHEAL"), 2));
     UE_CHECK_EQUAL(5, Bag->ObtainItem(TEXT("POTION"), 5));

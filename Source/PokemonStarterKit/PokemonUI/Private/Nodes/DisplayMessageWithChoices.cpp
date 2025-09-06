@@ -7,7 +7,8 @@ class UPokemonUISettings;
 
 UDisplayMessageWithChoices *UDisplayMessageWithChoices::DisplayMessageWithChoices(const UObject *WorldContextObject,
                                                                                   FText Message,
-                                                                                  const TArray<FText> &Choices) {
+                                                                                  const TArray<FText> &Choices)
+{
     auto Node = NewObject<UDisplayMessageWithChoices>();
     Node->SetWorldContext(WorldContextObject);
     Node->Message = std::move(Message);
@@ -15,7 +16,8 @@ UDisplayMessageWithChoices *UDisplayMessageWithChoices::DisplayMessageWithChoice
     return Node;
 }
 
-UE5Coro::TCoroutine<> UDisplayMessageWithChoices::ExecuteCoroutine(FForceLatentCoroutine) {
+UE5Coro::TCoroutine<> UDisplayMessageWithChoices::ExecuteCoroutine(FForceLatentCoroutine)
+{
     auto &Dispatcher = IPokemonCoroutineDispatcher::Get(GetWorldContext());
     auto [ChoiceIndex, ChoiceID] = co_await Dispatcher.DisplayMessageWithChoices(Message, Choices);
     OnChoiceSelected.Broadcast(ChoiceIndex, ChoiceID);

@@ -4,9 +4,11 @@
 
 // Add default functionality here for any IBattler functions that are not pure virtual.
 FStatusEffectInfo::FStatusEffectInfo(FName StatusEffectID, FActiveGameplayEffectHandle EffectHandle)
-    : StatusEffectID(StatusEffectID), EffectHandle(EffectHandle) {
+    : StatusEffectID(StatusEffectID), EffectHandle(EffectHandle)
+{
 }
 
 FExpGainInfo::FExpGainInfo(const TScriptInterface<IBattler> &Battler, int32 Amount)
-    : GainingBattler(Battler), Amount(Amount) {
+    : GainingBattler(Battler), Amount(Amount)
+{
 }

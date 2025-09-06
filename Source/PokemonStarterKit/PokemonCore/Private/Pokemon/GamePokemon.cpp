@@ -20,7 +20,8 @@
 #include "Species/SpeciesData.h"
 #include "Utilities/PersonalityValueUtils.h"
 
-void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer) {
+void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITrainer> &Trainer)
+{
     Species = DTO.Species;
     PersonalityValue = UPersonalityValueUtils::GeneratePersonalityValue(DTO);
     Nickname = DTO.Nickname;
@@ -34,24 +35,36 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     HoldItem = DTO.Item;
     StatusEffect = DTO.StatusEffect;
 
-    if (DTO.PokeBall.IsSet()) {
+    if (DTO.PokeBall.IsSet())
+    {
         PokeBall = *DTO.PokeBall;
-    } else {
+    }
+    else
+    {
         PokeBall = GetDefault<UPokemonDataSettings>()->DefaultPokeBall;
     }
 
-    if (Trainer != nullptr) {
-        if (DTO.OwnerInfo.IsSet()) {
+    if (Trainer != nullptr)
+    {
+        if (DTO.OwnerInfo.IsSet())
+        {
             OwnerInfo = *DTO.OwnerInfo;
-        } else {
+        }
+        else
+        {
             OwnerInfo = FOwnerInfo(*Trainer);
         }
         CurrentHandler = Trainer;
         Rename(nullptr, CurrentHandler.GetObject());
-    } else {
-        if (DTO.OwnerInfo.IsSet()) {
+    }
+    else
+    {
+        if (DTO.OwnerInfo.IsSet())
+        {
             OwnerInfo = *DTO.OwnerInfo;
-        } else {
+        }
+        else
+        {
             OwnerInfo = FOwnerInfo(this);
         }
         CurrentHandler = nullptr;
@@ -60,7 +73,8 @@ void UGamePokemon::Initialize(const FPokemonDTO &DTO, const TScriptInterface<ITr
     ObtainedBlock = UnrealInjector::NewInjectedDependency<IObtainedBlock>(this, DTO);
 }
 
-FPokemonDTO UGamePokemon::ToDTO() const {
+FPokemonDTO UGamePokemon::ToDTO() const
+{
     TMap<FName, int32> IVs;
     TMap<FName, int32> EVs;
     StatBlock->ForEachStat([&IVs, &EVs](FName ID, const IStatEntry &Stat) {
@@ -97,11 +111,13 @@ FPokemonDTO UGamePokemon::ToDTO() const {
             .OwnerInfo = OwnerInfo};
 }
 
-FText UGamePokemon::GetNickname() const {
+FText UGamePokemon::GetNickname() const
+{
     return Nickname.IsSet() ? Nickname.GetValue() : GetSpecies().RealName;
 }
 
-EPokemonGender UGamePokemon::GetGender() const {
+EPokemonGender UGamePokemon::GetGender() const
+{
     using enum EPokemonGender;
 
     if (Gender.IsSet())
@@ -114,16 +130,20 @@ EPokemonGender UGamePokemon::GetGender() const {
     return (PersonalityValue & UPersonalityValueUtils::LOWER_8_BITS) < GenderRatio.FemaleChance ? Female : Male;
 }
 
-const TArray<FName> &UGamePokemon::GetTypes() const {
+const TArray<FName> &UGamePokemon::GetTypes() const
+{
     return GetSpecies().Types;
 }
 
-FName UGamePokemon::GetPokeBall() const {
+FName UGamePokemon::GetPokeBall() const
+{
     return PokeBall;
 }
 
-bool UGamePokemon::IsShiny() const {
-    if (Shiny.IsSet()) {
+bool UGamePokemon::IsShiny() const
+{
+    if (Shiny.IsSet())
+    {
         return Shiny.GetValue();
     }
 
@@ -134,40 +154,48 @@ bool UGamePokemon::IsShiny() const {
     return D < static_cast<uint32>(GetDefault<UPokemonDataSettings>()->ShinyPokemonChance);
 }
 
-bool UGamePokemon::IsAble() const {
+bool UGamePokemon::IsAble() const
+{
     return CurrentHP > 0;
 }
 
-int32 UGamePokemon::GetCurrentHP() const {
+int32 UGamePokemon::GetCurrentHP() const
+{
     return CurrentHP;
 }
 
-void UGamePokemon::SetCurrentHP(int32 Value) {
+void UGamePokemon::SetCurrentHP(int32 Value)
+{
     CurrentHP = FMath::Clamp(Value, 0, GetMaxHP());
 }
 
-int32 UGamePokemon::GetMaxHP() const {
+int32 UGamePokemon::GetMaxHP() const
+{
     return GetStatBlock()->GetStat(GetDefault<UPokemonDataSettings>()->HPStat)->GetStatValue();
 }
 
-int32 UGamePokemon::RestoreHP(int32 Amount) {
+int32 UGamePokemon::RestoreHP(int32 Amount)
+{
     int32 Before = CurrentHP;
     SetCurrentHP(CurrentHP + Amount);
     return CurrentHP - Before;
 }
 
-void UGamePokemon::FullyHeal() {
+void UGamePokemon::FullyHeal()
+{
     SetCurrentHP(GetMaxHP());
     Algo::ForEach(MoveBlock->GetMoves(),
                   [](const TScriptInterface<IMove> &Move) { Move->RecoverPP(Move->GetTotalPP()); });
     StatusEffect.Reset();
 }
 
-bool UGamePokemon::IsFainted() const {
+bool UGamePokemon::IsFainted() const
+{
     return CurrentHP <= 0;
 }
 
-const FSpeciesData &UGamePokemon::GetSpecies() const {
+const FSpeciesData &UGamePokemon::GetSpecies() const
+{
     const auto &DataManager = FDataManager::GetInstance();
     auto &SpeciesTable = DataManager.GetDataTable<FSpeciesData>();
 
@@ -176,24 +204,30 @@ const FSpeciesData &UGamePokemon::GetSpecies() const {
     return *SpeciesData;
 }
 
-uint32 UGamePokemon::GetPersonalityValue() const {
+uint32 UGamePokemon::GetPersonalityValue() const
+{
     return PersonalityValue;
 }
 
-TScriptInterface<IStatBlock> UGamePokemon::GetStatBlock() const {
+TScriptInterface<IStatBlock> UGamePokemon::GetStatBlock() const
+{
     return StatBlock;
 }
 
-TScriptInterface<IMoveBlock> UGamePokemon::GetMoveBlock() const {
+TScriptInterface<IMoveBlock> UGamePokemon::GetMoveBlock() const
+{
     return MoveBlock;
 }
 
-TScriptInterface<IAbilityBlock> UGamePokemon::GetAbility() const {
+TScriptInterface<IAbilityBlock> UGamePokemon::GetAbility() const
+{
     return AbilityBlock;
 }
 
-TOptional<const FItem &> UGamePokemon::GetHoldItem() const {
-    if (!HoldItem.IsSet()) {
+TOptional<const FItem &> UGamePokemon::GetHoldItem() const
+{
+    if (!HoldItem.IsSet())
+    {
         return nullptr;
     }
 
@@ -202,15 +236,18 @@ TOptional<const FItem &> UGamePokemon::GetHoldItem() const {
     return ItemData;
 }
 
-void UGamePokemon::SetHoldItem(FItemHandle Item) {
+void UGamePokemon::SetHoldItem(FItemHandle Item)
+{
     HoldItem.Emplace(Item);
 }
 
-void UGamePokemon::RemoveHoldItem() {
+void UGamePokemon::RemoveHoldItem()
+{
     HoldItem.Reset();
 }
 
-TOptional<const FStatus &> UGamePokemon::GetStatusEffect() const {
+TOptional<const FStatus &> UGamePokemon::GetStatusEffect() const
+{
     static auto &StatusTable = FDataManager::GetInstance().GetDataTable<FStatus>();
     // clang-format off
     return StatusEffect |
@@ -220,12 +257,15 @@ TOptional<const FStatus &> UGamePokemon::GetStatusEffect() const {
     // clang-format on
 }
 
-bool UGamePokemon::HasStatusEffect(const FStatusHandle &Handle) const {
+bool UGamePokemon::HasStatusEffect(const FStatusHandle &Handle) const
+{
     return StatusEffect == Handle.RowID;
 }
 
-bool UGamePokemon::SetStatusEffect(const FStatusHandle &StatusID, bool bOverwriteExisting) {
-    if (StatusEffect.IsSet() && !bOverwriteExisting) {
+bool UGamePokemon::SetStatusEffect(const FStatusHandle &StatusID, bool bOverwriteExisting)
+{
+    if (StatusEffect.IsSet() && !bOverwriteExisting)
+    {
         return false;
     }
 
@@ -234,33 +274,40 @@ bool UGamePokemon::SetStatusEffect(const FStatusHandle &StatusID, bool bOverwrit
     return true;
 }
 
-void UGamePokemon::RemoveStatusEffect() {
+void UGamePokemon::RemoveStatusEffect()
+{
     StatusEffect.Reset();
 }
 
-const FOwnerInfo &UGamePokemon::GetOwnerInfo() const {
+const FOwnerInfo &UGamePokemon::GetOwnerInfo() const
+{
     return OwnerInfo;
 }
 
-TScriptInterface<IObtainedBlock> UGamePokemon::GetObtainedInformation() const {
+TScriptInterface<IObtainedBlock> UGamePokemon::GetObtainedInformation() const
+{
     return ObtainedBlock;
 }
 
-const TScriptInterface<ITrainer> &UGamePokemon::GetCurrentHandler() const {
+const TScriptInterface<ITrainer> &UGamePokemon::GetCurrentHandler() const
+{
     return CurrentHandler;
 }
 
-void UGamePokemon::SetCurrentHandler(const TScriptInterface<ITrainer> &NewHandler) {
+void UGamePokemon::SetCurrentHandler(const TScriptInterface<ITrainer> &NewHandler)
+{
     CurrentHandler = NewHandler;
     Rename(nullptr, CurrentHandler.GetObject());
 }
 
-UGamePokemon *UGamePokemon::Create(UObject *WorldContext, const FPokemonDTO &Data) {
+UGamePokemon *UGamePokemon::Create(UObject *WorldContext, const FPokemonDTO &Data)
+{
     return Create(WorldContext, Data, nullptr);
 }
 
 UGamePokemon *UGamePokemon::Create(UObject *WorldContext, const FPokemonDTO &Data,
-                                   const TScriptInterface<ITrainer> &Trainer) {
+                                   const TScriptInterface<ITrainer> &Trainer)
+{
     auto Ret = NewObject<UGamePokemon>(WorldContext);
     Ret->Initialize(Data, Trainer);
     return Ret;

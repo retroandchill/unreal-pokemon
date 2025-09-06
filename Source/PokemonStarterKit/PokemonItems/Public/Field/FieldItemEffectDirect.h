@@ -13,7 +13,8 @@ struct FItem;
  * Item effect for direct usage of an item.
  */
 UCLASS()
-class POKEMONITEMS_API UFieldItemEffectDirect : public UFieldItemEffect {
+class POKEMONITEMS_API UFieldItemEffectDirect : public UFieldItemEffect
+{
     GENERATED_BODY()
 
   public:

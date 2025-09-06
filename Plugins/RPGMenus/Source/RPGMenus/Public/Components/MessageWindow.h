@@ -33,7 +33,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAdvanceText);
  * Window for display text to the player
  */
 UCLASS()
-class RPGMENUS_API UMessageWindow : public UCommonActivatableWidget {
+class RPGMENUS_API UMessageWindow : public UCommonActivatableWidget
+{
     GENERATED_BODY()
 
   protected:

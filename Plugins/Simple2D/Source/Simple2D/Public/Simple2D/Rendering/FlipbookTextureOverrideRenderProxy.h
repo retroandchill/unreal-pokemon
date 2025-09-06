@@ -7,11 +7,13 @@
 #include "PaperSprite.h"
 #include "SceneManagement.h"
 
-namespace Simple2D {
+namespace Simple2D
+{
     using FFlipbookRenderSceneProxyTextureOverrideMap = TMap<const UTexture *, const UTexture *>;
 
     class SIMPLE2D_API FFlipbookTextureOverrideRenderProxy : public FDynamicPrimitiveResource,
-                                                             public FMaterialRenderProxy {
+                                                             public FMaterialRenderProxy
+    {
       public:
 #if WITH_EDITOR
         FFlipbookTextureOverrideRenderProxy(const FMaterialRenderProxy *InParent, const UTexture *InBaseTexture,

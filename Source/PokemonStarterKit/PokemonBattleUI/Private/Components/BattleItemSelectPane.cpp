@@ -7,14 +7,16 @@
 #include "Managers/PokemonSubsystem.h"
 #include "Player/Bag.h"
 
-void UBattleItemSelectPane::SetBattleItemUse(const FGameplayTag &Usage) {
+void UBattleItemSelectPane::SetBattleItemUse(const FGameplayTag &Usage)
+{
     ClearSelectableOptions();
     auto &Bag = UPokemonSubsystem::GetInstance(this).GetBag();
 
     static auto &ItemTable = FDataManager::GetInstance().GetDataTable<FItem>();
     Bag->ForEachItem([this, &Usage](FName Item, int32 Quantity) {
         if (auto &ItemData = ItemTable.GetDataChecked(Item);
-            ItemData.BattleUse == EBattleUse::NoBattleUse || !ItemData.BattleUsageCategories.HasTag(Usage)) {
+            ItemData.BattleUse == EBattleUse::NoBattleUse || !ItemData.BattleUsageCategories.HasTag(Usage))
+        {
             return;
         }
 
@@ -25,6 +27,7 @@ void UBattleItemSelectPane::SetBattleItemUse(const FGameplayTag &Usage) {
     });
 }
 
-void UBattleItemSelectPane::ItemSelected(FName Item, int32 Quantity) const {
+void UBattleItemSelectPane::ItemSelected(FName Item, int32 Quantity) const
+{
     OnItemSelected.Broadcast(Item, Quantity);
 }

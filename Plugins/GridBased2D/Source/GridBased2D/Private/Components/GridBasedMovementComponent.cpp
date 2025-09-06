@@ -15,11 +15,13 @@
 #include "RetroLib/Utils/BlueprintMathUtils.h"
 #include "RetroLib/Utils/Math.h"
 
-UGridBasedMovementComponent::UGridBasedMovementComponent() : CurrentPosition(0, 0), DesiredPosition(0, 0) {
+UGridBasedMovementComponent::UGridBasedMovementComponent() : CurrentPosition(0, 0), DesiredPosition(0, 0)
+{
     PrimaryComponentTick.bCanEverTick = true;
 }
 
-void UGridBasedMovementComponent::SetPositionInGrid(FVector Position) {
+void UGridBasedMovementComponent::SetPositionInGrid(FVector Position)
+{
     auto GridSize = UGridUtils::GetGridSize(this);
     CurrentPosition.X = FMath::FloorToInt32(Position.X / GridSize);
     CurrentPosition.Y = FMath::FloorToInt32(Position.Y / GridSize);
@@ -29,32 +31,38 @@ void UGridBasedMovementComponent::SetPositionInGrid(FVector Position) {
     GetOwner()->SetActorLocation(Position, bPerformSweep);
 }
 
-void UGridBasedMovementComponent::SetMoveTime(double Time) {
+void UGridBasedMovementComponent::SetMoveTime(double Time)
+{
     MoveTime = Time;
 }
 
-void UGridBasedMovementComponent::BeginPlay() {
+void UGridBasedMovementComponent::BeginPlay()
+{
     Super::BeginPlay();
 
     auto Owner = GetOwner();
-    if (Owner == nullptr) {
+    if (Owner == nullptr)
+    {
         return;
     }
     auto Position = Owner->GetActorLocation();
     SetPositionInGrid(Position);
 
-    if (auto Pawn = Cast<APawn>(Owner); Pawn == nullptr || !Pawn->IsPlayerControlled()) {
+    if (auto Pawn = Cast<APawn>(Owner); Pawn == nullptr || !Pawn->IsPlayerControlled())
+    {
         return;
     }
     if (auto MapSubsystem = Owner->GetGameInstance()->GetSubsystem<UMapSubsystem>();
-        MapSubsystem != nullptr && Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass())) {
+        MapSubsystem != nullptr && Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
+    {
         MapSubsystem->SetPlayerLocation(Owner);
     }
 }
 
 // Called every frame
 void UGridBasedMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                                FActorComponentTickFunction *ThisTickFunction) {
+                                                FActorComponentTickFunction *ThisTickFunction)
+{
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
     UpdateMovement(DeltaTime);
@@ -62,15 +70,18 @@ void UGridBasedMovementComponent::TickComponent(float DeltaTime, ELevelTick Tick
 }
 
 UE5Coro::TCoroutine<> UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirection,
-                                                                   FForceLatentCoroutine) {
-    if (MoveCallback.IsBound()) {
+                                                                   FForceLatentCoroutine)
+{
+    if (MoveCallback.IsBound())
+    {
         UE_LOG(LogBlueprint, Warning, TEXT("The movement timer is already set for character: %s"),
                *GetOwner()->GetName())
         co_return;
     }
 
     FaceDirection(MovementDirection);
-    if (auto [bCanMove, FoundActors] = MovementCheck(MovementDirection); !bCanMove) {
+    if (auto [bCanMove, FoundActors] = MovementCheck(MovementDirection); !bCanMove)
+    {
         HitInteraction(FoundActors);
         co_return;
     }
@@ -84,38 +95,46 @@ UE5Coro::TCoroutine<> UGridBasedMovementComponent::MoveInDirection(EFacingDirect
     co_await MoveCallback;
 }
 
-FMoveCheckResult UGridBasedMovementComponent::MovementCheck(EFacingDirection MovementDirection) const {
+FMoveCheckResult UGridBasedMovementComponent::MovementCheck(EFacingDirection MovementDirection) const
+{
     FMoveCheckResult Ret;
     TArray<AActor *> Maps;
     UGameplayStatics::GetAllActorsWithInterface(this, UMapGrid::StaticClass(), Maps);
     auto DestinationPosition = GetCurrentPosition();
     UGridUtils::AdjustMovementPosition(MovementDirection, DestinationPosition);
     bool bMapFound = false;
-    for (auto Actor : Maps) {
-        if (TScriptInterface<IMapGrid> Map = Actor; Map->IsPositionInMap(DestinationPosition)) {
+    for (auto Actor : Maps)
+    {
+        if (TScriptInterface<IMapGrid> Map = Actor; Map->IsPositionInMap(DestinationPosition))
+        {
             bMapFound = Map->IsObjectInMap(GetOwner()) || CanMoveBetweenMaps();
             break;
         }
     }
 
-    if (!bMapFound) {
+    if (!bMapFound)
+    {
         Ret.bCanMove = false;
         return Ret;
     }
 
     UPrimitiveComponent *BlockingComponent = nullptr;
-    for (auto Results = HitTestOnFacingTile(MovementDirection); const auto &Result : Results) {
-        if (Result.bBlockingHit) {
+    for (auto Results = HitTestOnFacingTile(MovementDirection); const auto &Result : Results)
+    {
+        if (Result.bBlockingHit)
+        {
             Ret.bCanMove = false;
             BlockingComponent = Result.GetComponent();
         }
 
-        if (auto Interactable = Cast<IInteractable>(Result.GetActor()); Interactable != nullptr) {
+        if (auto Interactable = Cast<IInteractable>(Result.GetActor()); Interactable != nullptr)
+        {
             Ret.FoundActors.Emplace(Result.GetActor());
         }
     }
 
-    if (auto Owner = GetOwner(); Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass())) {
+    if (auto Owner = GetOwner(); Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
+    {
         FVector LocalOffset(0, 0, 0);
         UGridUtils::AdjustMovementPosition(MovementDirection, LocalOffset);
         auto Position = Owner->GetActorLocation();
@@ -127,17 +146,20 @@ FMoveCheckResult UGridBasedMovementComponent::MovementCheck(EFacingDirection Mov
     return Ret;
 }
 
-bool UGridBasedMovementComponent::CanMoveBetweenMaps() const {
+bool UGridBasedMovementComponent::CanMoveBetweenMaps() const
+{
     auto Owner = GetOwner<APawn>();
     return Owner != nullptr && Owner->IsPlayerControlled();
 }
 
-void UGridBasedMovementComponent::FaceDirection(EFacingDirection FacingDirection) {
+void UGridBasedMovementComponent::FaceDirection(EFacingDirection FacingDirection)
+{
     Direction = FacingDirection;
     OnDirectionChange.Broadcast(Direction);
 }
 
-void UGridBasedMovementComponent::WarpToLocation(int32 X, int32 Y, FVector Offset) {
+void UGridBasedMovementComponent::WarpToLocation(int32 X, int32 Y, FVector Offset)
+{
     auto GridSize = UGridUtils::GetGridSize(this);
     CurrentPosition =
         DesiredPosition = {FMath::FloorToInt32(Offset.X / GridSize) + X, FMath::FloorToInt32(Offset.Y / GridSize) + Y};
@@ -146,31 +168,38 @@ void UGridBasedMovementComponent::WarpToLocation(int32 X, int32 Y, FVector Offse
     GetOwner()->SetActorLocation(Offset);
 }
 
-void UGridBasedMovementComponent::OnMapChanged(IMapGrid &NewMap) const {
-    if (auto Owner = GetOwner<APawn>(); Owner == nullptr || !Owner->IsPlayerControlled()) {
+void UGridBasedMovementComponent::OnMapChanged(IMapGrid &NewMap) const
+{
+    if (auto Owner = GetOwner<APawn>(); Owner == nullptr || !Owner->IsPlayerControlled())
+    {
         return;
     }
 
     NewMap.OnPlayerEnter();
 }
 
-FIntVector2 UGridBasedMovementComponent::GetCurrentPosition() const {
+FIntVector2 UGridBasedMovementComponent::GetCurrentPosition() const
+{
     return CurrentPosition;
 }
 
-FIntVector2 UGridBasedMovementComponent::GetDesiredPosition() const {
+FIntVector2 UGridBasedMovementComponent::GetDesiredPosition() const
+{
     return DesiredPosition;
 }
 
-EFacingDirection UGridBasedMovementComponent::GetDirection() const {
+EFacingDirection UGridBasedMovementComponent::GetDirection() const
+{
     return Direction;
 }
 
-bool UGridBasedMovementComponent::IsMoving() const {
+bool UGridBasedMovementComponent::IsMoving() const
+{
     return bIsMoving;
 }
 
-void UGridBasedMovementComponent::MoveInput(const FVector2D &InputVector) {
+void UGridBasedMovementComponent::MoveInput(const FVector2D &InputVector)
+{
     auto Dir = UGridUtils::VectorToFacingDirection(InputVector);
     if (!Dir.IsSet() || CurrentPosition != DesiredPosition)
         return;
@@ -178,7 +207,8 @@ void UGridBasedMovementComponent::MoveInput(const FVector2D &InputVector) {
     MoveInDirection(Dir.GetValue());
 }
 
-void UGridBasedMovementComponent::TurnInput(const FVector2D &InputVector) {
+void UGridBasedMovementComponent::TurnInput(const FVector2D &InputVector)
+{
     auto Dir = UGridUtils::VectorToFacingDirection(InputVector);
     if (!Dir.IsSet() || CurrentPosition != DesiredPosition)
         return;
@@ -186,7 +216,8 @@ void UGridBasedMovementComponent::TurnInput(const FVector2D &InputVector) {
     FaceDirection(Dir.GetValue());
 }
 
-TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingDirection MovementDirection) const {
+TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingDirection MovementDirection) const
+{
     static const auto FloatGridSize = static_cast<float>(UGridUtils::GetGridSize(this));
 
     FVector LocalOffset(0, 0, 0);
@@ -208,8 +239,9 @@ TArray<FOverlapResult> UGridBasedMovementComponent::HitTestOnFacingTile(EFacingD
     return Result;
 }
 
-TArray<TScriptInterface<IInteractable>>
-UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementDirection) const {
+TArray<TScriptInterface<IInteractable>> UGridBasedMovementComponent::InteractTestOnFacingTile(
+    EFacingDirection MovementDirection) const
+{
     auto Results = HitTestOnFacingTile(MovementDirection);
     // clang-format off
     return Results |
@@ -220,12 +252,15 @@ UGridBasedMovementComponent::InteractTestOnFacingTile(EFacingDirection MovementD
     // clang-format on
 }
 
-void UGridBasedMovementComponent::HitInteraction(const TArray<TScriptInterface<IInteractable>> &Interactables) const {
-    if (auto Owner = GetOwner<APawn>(); Owner == nullptr || !Owner->IsPlayerControlled()) {
+void UGridBasedMovementComponent::HitInteraction(const TArray<TScriptInterface<IInteractable>> &Interactables) const
+{
+    if (auto Owner = GetOwner<APawn>(); Owner == nullptr || !Owner->IsPlayerControlled())
+    {
         return;
     }
 
-    for (auto &Interactable : Interactables) {
+    for (auto &Interactable : Interactables)
+    {
         if ((static_cast<std::byte>(IInteractable::Execute_GetInteractionTypes(Interactable.GetObject())) &
              static_cast<std::byte>(EInteractionType::Hit)) == static_cast<std::byte>(0))
             continue;
@@ -233,7 +268,8 @@ void UGridBasedMovementComponent::HitInteraction(const TArray<TScriptInterface<I
     }
 }
 
-void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
+void UGridBasedMovementComponent::UpdateMovement(float DeltaTime)
+{
     if (!MoveTimer.IsSet())
         return;
 
@@ -244,41 +280,50 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime) {
     auto Owner = GetOwner();
     auto Position = Owner->GetActorLocation();
     auto GridSize = UGridUtils::GetGridSize(this);
-    if (CurrentPosition.X != DesiredPosition.X) {
+    if (CurrentPosition.X != DesiredPosition.X)
+    {
         int32 Distance = FMath::Abs(CurrentPosition.X - DesiredPosition.X);
         Position.X = Retro::LinearInterpolation(CurrentPosition.X * GridSize, DesiredPosition.X * GridSize,
                                                 MoveTime * Distance, Timer);
 
-        if (Timer >= MoveTime * Distance) {
+        if (Timer >= MoveTime * Distance)
+        {
             CurrentPosition.X = DesiredPosition.X;
         }
     }
 
-    if (CurrentPosition.Y != DesiredPosition.Y) {
+    if (CurrentPosition.Y != DesiredPosition.Y)
+    {
         int32 Distance = FMath::Abs(CurrentPosition.Y - DesiredPosition.Y);
         Position.Y = Retro::LinearInterpolation(CurrentPosition.Y * GridSize, DesiredPosition.Y * GridSize,
                                                 MoveTime * Distance, Timer);
 
-        if (Timer >= MoveTime * Distance) {
+        if (Timer >= MoveTime * Distance)
+        {
             CurrentPosition.Y = DesiredPosition.Y;
         }
     }
 
     Owner->SetActorLocation(Position, bPerformSweep);
-    if (Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass())) {
+    if (Owner->GetClass()->ImplementsInterface(UGridMovable::StaticClass()))
+    {
         IGridMovable::Execute_AdjustCharacterPlacement(Owner);
     }
-    if (CurrentPosition != Pos && CurrentPosition == DesiredPosition) {
+    if (CurrentPosition != Pos && CurrentPosition == DesiredPosition)
+    {
         MoveComplete();
     }
 }
 
-void UGridBasedMovementComponent::UpdateAnimation(float DeltaTime) {
-    if (StopTimer.IsSet()) {
+void UGridBasedMovementComponent::UpdateAnimation(float DeltaTime)
+{
+    if (StopTimer.IsSet())
+    {
         auto &Timer = StopTimer.GetValue();
         Timer += DeltaTime;
 
-        if (Timer >= 0.125f) {
+        if (Timer >= 0.125f)
+        {
             bIsMoving = false;
             OnMovementStateChange.Broadcast(false);
             StopTimer.Reset();
@@ -286,7 +331,8 @@ void UGridBasedMovementComponent::UpdateAnimation(float DeltaTime) {
     }
 }
 
-void UGridBasedMovementComponent::MoveComplete() {
+void UGridBasedMovementComponent::MoveComplete()
+{
     MoveTimer.Reset();
     StopTimer.Emplace(0.f);
 

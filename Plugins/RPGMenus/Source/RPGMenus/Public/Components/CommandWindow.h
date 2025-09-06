@@ -25,7 +25,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FProcessCommand, int32, CurrentInde
  * Basic command window, with a set of commands that can be dispatched
  */
 UCLASS(Blueprintable, Abstract)
-class RPGMENUS_API UCommandWindow : public USelectableWidget {
+class RPGMENUS_API UCommandWindow : public USelectableWidget
+{
     GENERATED_BODY()
 
   public:

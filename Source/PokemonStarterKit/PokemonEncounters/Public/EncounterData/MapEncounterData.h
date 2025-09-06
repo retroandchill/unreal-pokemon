@@ -12,7 +12,8 @@
  * Struct that contains the information about an individual encounter
  */
 USTRUCT(BlueprintType)
-struct POKEMONENCOUNTERS_API FEncounterEntry {
+struct POKEMONENCOUNTERS_API FEncounterEntry
+{
     GENERATED_BODY()
 
     /**
@@ -40,7 +41,8 @@ struct POKEMONENCOUNTERS_API FEncounterEntry {
  * Struct that contains all the information about a specific encounter type.
  */
 USTRUCT(BlueprintType)
-struct POKEMONENCOUNTERS_API FEncounterData {
+struct POKEMONENCOUNTERS_API FEncounterData
+{
     GENERATED_BODY()
 
     /**
@@ -61,7 +63,8 @@ struct POKEMONENCOUNTERS_API FEncounterData {
  * Actor that contains all information about a map's random encounters.
  */
 UCLASS(BlueprintType, Blueprintable)
-class POKEMONENCOUNTERS_API AMapEncounterData : public AActor {
+class POKEMONENCOUNTERS_API AMapEncounterData : public AActor
+{
     GENERATED_BODY()
 
   public:

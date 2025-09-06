@@ -17,30 +17,38 @@ import RetroLib;
 #include <memory>
 #endif
 
-namespace Retro::Testing::Polymorphic {
-    class Base {
+namespace Retro::Testing::Polymorphic
+{
+    class Base
+    {
       public:
         virtual ~Base() = default;
 
-        virtual int GetValue() const {
+        virtual int GetValue() const
+        {
             return 0;
         }
 
-        virtual const std::type_info &GetType() const {
+        virtual const std::type_info &GetType() const
+        {
             return typeid(Base);
         }
     };
 
-    class Derived1 : public Base {
+    class Derived1 : public Base
+    {
       public:
-        explicit Derived1(int Value) : Value(Value) {
+        explicit Derived1(int Value) : Value(Value)
+        {
         }
 
-        int GetValue() const override {
+        int GetValue() const override
+        {
             return Value;
         }
 
-        const std::type_info &GetType() const override {
+        const std::type_info &GetType() const override
+        {
             return typeid(Derived1);
         }
 
@@ -48,20 +56,25 @@ namespace Retro::Testing::Polymorphic {
         int Value;
     };
 
-    class Derived2 : public Base {
+    class Derived2 : public Base
+    {
       public:
-        explicit Derived2(const std::array<int, 15> &Values) : Values(Values) {
+        explicit Derived2(const std::array<int, 15> &Values) : Values(Values)
+        {
         }
 
-        int GetValue() const override {
+        int GetValue() const override
+        {
             int Value = 0;
-            for (int Val : Values) {
+            for (int Val : Values)
+            {
                 Value += Val;
             }
             return Value;
         }
 
-        const std::type_info &GetType() const override {
+        const std::type_info &GetType() const override
+        {
             return typeid(Derived2);
         }
 
@@ -69,16 +82,20 @@ namespace Retro::Testing::Polymorphic {
         std::array<int, 15> Values;
     };
 
-    class Derived3 : public Base {
+    class Derived3 : public Base
+    {
       public:
-        explicit Derived3(std::shared_ptr<int> Value) : Value(std::move(Value)) {
+        explicit Derived3(std::shared_ptr<int> Value) : Value(std::move(Value))
+        {
         }
 
-        int GetValue() const override {
+        int GetValue() const override
+        {
             return *Value;
         }
 
-        const std::type_info &GetType() const override {
+        const std::type_info &GetType() const override
+        {
             return typeid(Derived3);
         }
 
@@ -90,7 +107,8 @@ namespace Retro::Testing::Polymorphic {
 constexpr std::array ValueArray1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 constexpr std::array ValueArray2 = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30};
 
-TEST_CASE_NAMED(FPolymorphicCopyTest, "Unit Tests::RetroLib::Utils::Polymorphic::Copying", "[utils]") {
+TEST_CASE_NAMED(FPolymorphicCopyTest, "Unit Tests::RetroLib::Utils::Polymorphic::Copying", "[utils]")
+{
     using namespace Retro::Testing::Polymorphic;
 
     // We want to test that we can assign different polymorphic values into each other
@@ -158,7 +176,8 @@ TEST_CASE_NAMED(FPolymorphicCopyTest, "Unit Tests::RetroLib::Utils::Polymorphic:
     CHECK(Dereferenced3.GetValue() == 120);
 }
 
-TEST_CASE_NAMED(FPolymorphicMoveTest, "Unit Tests::RetroLib::Utils::Polymorphic::Moving", "[utils]") {
+TEST_CASE_NAMED(FPolymorphicMoveTest, "Unit Tests::RetroLib::Utils::Polymorphic::Moving", "[utils]")
+{
     using namespace Retro::Testing::Polymorphic;
 
     // We want to test that we can assign different polymorphic values into each other
@@ -207,7 +226,8 @@ TEST_CASE_NAMED(FPolymorphicMoveTest, "Unit Tests::RetroLib::Utils::Polymorphic:
 }
 
 #ifdef __UNREAL__
-TEST_CASE_NAMED(FPolymorphicOptionalState, "Unit Tests::RetroLib::Utils::Polymorphic::IntrusiveOptional", "[utils]") {
+TEST_CASE_NAMED(FPolymorphicOptionalState, "Unit Tests::RetroLib::Utils::Polymorphic::IntrusiveOptional", "[utils]")
+{
     using namespace Retro::Testing::Polymorphic;
 
     static_assert(sizeof(Retro::TPolymorphic<Base>) == sizeof(TOptional<Retro::TPolymorphic<Base>>));

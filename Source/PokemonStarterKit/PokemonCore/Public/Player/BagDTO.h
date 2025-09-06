@@ -12,7 +12,8 @@
  * Wrapper around the items in a pocket in the game.
  */
 USTRUCT(BlueprintType)
-struct POKEMONCORE_API FPocket {
+struct POKEMONCORE_API FPocket
+{
     GENERATED_BODY()
 
     /**
@@ -26,7 +27,8 @@ struct POKEMONCORE_API FPocket {
  *
  */
 USTRUCT(BlueprintType)
-struct POKEMONCORE_API FBagDTO {
+struct POKEMONCORE_API FBagDTO
+{
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)

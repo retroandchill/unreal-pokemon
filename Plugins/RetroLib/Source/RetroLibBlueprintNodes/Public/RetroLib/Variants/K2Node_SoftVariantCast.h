@@ -11,7 +11,8 @@
  * Attempt to cast a soft variant to a soft object of one of its valid types.
  */
 UCLASS()
-class RETROLIBBLUEPRINTNODES_API UK2Node_SoftVariantCast : public UK2Node_VariantCastBase {
+class RETROLIBBLUEPRINTNODES_API UK2Node_SoftVariantCast : public UK2Node_VariantCastBase
+{
     GENERATED_BODY()
 
   public:

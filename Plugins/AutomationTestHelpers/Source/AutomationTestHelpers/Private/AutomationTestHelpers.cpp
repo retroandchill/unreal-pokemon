@@ -8,24 +8,30 @@
 
 class FMessageLogModule;
 
-void FAutomationTestHelpersModule::StartupModule() {
+void FAutomationTestHelpersModule::StartupModule()
+{
     FCoreDelegates::OnPostEngineInit.AddRaw(this, &FAutomationTestHelpersModule::PostEngineInit);
 
-    if (FModuleManager::Get().IsModuleLoaded("MessageLog")) {
+    if (FModuleManager::Get().IsModuleLoaded("MessageLog"))
+    {
         auto &MessageLogModule = FModuleManager::GetModuleChecked<FMessageLogModule>("MessageLog");
         MessageLogModule.RegisterLogListing("PokemonTests", LOCTEXT("PokemonTests", "Pokémon Tests"));
     }
 }
 
-void FAutomationTestHelpersModule::ShutdownModule() {
-    if (FModuleManager::Get().IsModuleLoaded("MessageLog")) {
+void FAutomationTestHelpersModule::ShutdownModule()
+{
+    if (FModuleManager::Get().IsModuleLoaded("MessageLog"))
+    {
         FMessageLogModule &MessageLogModule = FModuleManager::GetModuleChecked<FMessageLogModule>("MessageLog");
         MessageLogModule.UnregisterLogListing("PokemonTests");
     }
 }
 
-void FAutomationTestHelpersModule::PostEngineInit() {
-    if (GEngine != nullptr) {
+void FAutomationTestHelpersModule::PostEngineInit()
+{
+    if (GEngine != nullptr)
+    {
         IConsoleManager::Get().RegisterConsoleCommand(
             TEXT("ShutdownAfterTests"),
             TEXT("This calls for a full shutdown of the editor, so that LLVM can generate coverage profiling."),

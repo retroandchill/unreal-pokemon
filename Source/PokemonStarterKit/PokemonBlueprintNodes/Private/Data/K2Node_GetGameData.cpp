@@ -4,11 +4,13 @@
 #include "K2Node_CallFunction.h"
 #include "KismetCompiler.h"
 
-void UK2Node_GetGameData::Initialize(UScriptStruct *NodeStruct) {
+void UK2Node_GetGameData::Initialize(UScriptStruct *NodeStruct)
+{
     StructType = NodeStruct;
 }
 
-void UK2Node_GetGameData::AllocateDefaultPins() {
+void UK2Node_GetGameData::AllocateDefaultPins()
+{
     auto RowNamePin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Name, TEXT("RowName"));
     RowNamePin->DefaultValue = GetRowNames()[0].ToString();
     CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Struct,
@@ -18,9 +20,12 @@ void UK2Node_GetGameData::AllocateDefaultPins() {
     Super::AllocateDefaultPins();
 }
 
-FText UK2Node_GetGameData::GetNodeTitle(ENodeTitleType::Type TitleType) const {
-    if (StructType) {
-        if (TitleType == ENodeTitleType::FullTitle) {
+FText UK2Node_GetGameData::GetNodeTitle(ENodeTitleType::Type TitleType) const
+{
+    if (StructType)
+    {
+        if (TitleType == ENodeTitleType::FullTitle)
+        {
             return StructType->GetDisplayNameText();
         }
 
@@ -31,8 +36,10 @@ FText UK2Node_GetGameData::GetNodeTitle(ENodeTitleType::Type TitleType) const {
     return GetTooltipText();
 }
 
-FText UK2Node_GetGameData::GetTooltipText() const {
-    if (StructType) {
+FText UK2Node_GetGameData::GetTooltipText() const
+{
+    if (StructType)
+    {
         return FText::FormatNamed(
             NSLOCTEXT("K2Node", "GetGameData_TooltipFormat", "Get {StructName} \n\n{StructTooltip}"),
             TEXT("StructName"), StructType->GetDisplayNameText(), TEXT("StructTooltip"),
@@ -42,11 +49,13 @@ FText UK2Node_GetGameData::GetTooltipText() const {
     return NSLOCTEXT("K2Node", "GetGameData_InvalidStructTypeTooltip", "Invalid Struct Type");
 }
 
-bool UK2Node_GetGameData::IsNodePure() const {
+bool UK2Node_GetGameData::IsNodePure() const
+{
     return true;
 }
 
-FText UK2Node_GetGameData::GetMenuCategory() const {
+FText UK2Node_GetGameData::GetMenuCategory() const
+{
     if (StructType == nullptr)
         return Super::GetMenuCategory();
 
@@ -58,19 +67,22 @@ FText UK2Node_GetGameData::GetMenuCategory() const {
     return FText::FromString(FullCategory);
 }
 
-FSlateIcon UK2Node_GetGameData::GetIconAndTint(FLinearColor &OutColor) const {
+FSlateIcon UK2Node_GetGameData::GetIconAndTint(FLinearColor &OutColor) const
+{
     OutColor = GetNodeTitleColor();
     static FSlateIcon Icon(FAppStyle::GetAppStyleSetName(), "Kismet.AllClasses.FunctionIcon");
     return Icon;
 }
 
-void UK2Node_GetGameData::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const {
+void UK2Node_GetGameData::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const
+{
     Super::GetMenuActions(ActionRegistrar);
 
     UDataUtilities::AddAllDataTableTypesToMenu<UK2Node_GetGameData>(GetClass(), ActionRegistrar);
 }
 
-void UK2Node_GetGameData::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
+void UK2Node_GetGameData::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph)
+{
     Super::ExpandNode(CompilerContext, SourceGraph);
 
     // FUNCTION NODE
@@ -100,7 +112,8 @@ void UK2Node_GetGameData::ExpandNode(FKismetCompilerContext &CompilerContext, UE
     BreakAllNodeLinks();
 }
 
-TArray<FName> UK2Node_GetGameData::GetRowNames() const {
+TArray<FName> UK2Node_GetGameData::GetRowNames() const
+{
     if (StructType == nullptr)
         return {};
 
@@ -108,6 +121,7 @@ TArray<FName> UK2Node_GetGameData::GetRowNames() const {
     return DataTable.GetTableRowNames();
 }
 
-UEdGraphPin *UK2Node_GetGameData::GetRowPin() const {
+UEdGraphPin *UK2Node_GetGameData::GetRowPin() const
+{
     return FindPinChecked(TEXT("RowName"));
 }

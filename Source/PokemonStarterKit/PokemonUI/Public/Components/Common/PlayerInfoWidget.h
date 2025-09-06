@@ -17,7 +17,8 @@ class ITrainer;
  * for player trainer and metadata information. It also includes Blueprint events for handling updates.
  */
 UCLASS(Abstract)
-class POKEMONUI_API UPlayerInfoWidget : public UCommonUserWidget {
+class POKEMONUI_API UPlayerInfoWidget : public UCommonUserWidget
+{
     GENERATED_BODY()
 
   public:
@@ -30,7 +31,8 @@ class POKEMONUI_API UPlayerInfoWidget : public UCommonUserWidget {
      * @return A constant reference to the TScriptInterface of the ITrainer interface representing the player's trainer.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const TScriptInterface<ITrainer> &GetPlayerTrainer() const {
+    const TScriptInterface<ITrainer> &GetPlayerTrainer() const
+    {
         return PlayerTrainer;
     }
 
@@ -43,7 +45,8 @@ class POKEMONUI_API UPlayerInfoWidget : public UCommonUserWidget {
      * @return A pointer to the UPlayerMetadata associated with the player.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UPlayerMetadata *GetPlayerMetadata() const {
+    UPlayerMetadata *GetPlayerMetadata() const
+    {
         return PlayerMetadata;
     }
 

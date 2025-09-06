@@ -21,7 +21,8 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnItemEffectComplete, bool);
  * Basic abstract definition of an item effect, regardless of usage type.
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONITEMS_API UFieldItemEffect : public UObject {
+class POKEMONITEMS_API UFieldItemEffect : public UObject
+{
     GENERATED_BODY()
 
   public:
@@ -40,7 +41,8 @@ class POKEMONITEMS_API UFieldItemEffect : public UObject {
     void EffectComplete(bool bSuccess) const;
 };
 
-namespace Pokemon::Items {
+namespace Pokemon::Items
+{
     template <typename T, typename... A>
     concept FieldItem =
         std::is_base_of_v<UFieldItemEffect, T> && requires(T &Effect, const FItem &Item, int32 Quantity, A &&...Args) {

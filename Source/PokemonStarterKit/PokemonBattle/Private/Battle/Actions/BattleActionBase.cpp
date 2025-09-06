@@ -5,25 +5,31 @@
 #include "Battle/BattleSide.h"
 #include <functional>
 
-FBattleActionBase::FBattleActionBase(const TScriptInterface<IBattler> &BattlerIn) : Battler(BattlerIn) {
+FBattleActionBase::FBattleActionBase(const TScriptInterface<IBattler> &BattlerIn) : Battler(BattlerIn)
+{
 }
 
-void FBattleActionBase::AddReferencedObjects(FReferenceCollector &Collector) {
+void FBattleActionBase::AddReferencedObjects(FReferenceCollector &Collector)
+{
     Collector.AddReferencedObject(Battler.GetObjectRef());
 }
 
-const TScriptInterface<IBattler> &FBattleActionBase::GetBattler() const {
+const TScriptInterface<IBattler> &FBattleActionBase::GetBattler() const
+{
     return Battler;
 }
 
-bool FBattleActionBase::CanExecute() const {
+bool FBattleActionBase::CanExecute() const
+{
     return !Battler->IsFainted() && Battler->GetOwningSide()->GetBattlers().Contains(Battler);
 }
 
-UE5Coro::TCoroutine<> FBattleActionBase::Execute() {
+UE5Coro::TCoroutine<> FBattleActionBase::Execute()
+{
     co_await ActivateAbility();
 }
 
-bool FBattleActionBase::IsExecuting() const {
+bool FBattleActionBase::IsExecuting() const
+{
     return Executing;
 }

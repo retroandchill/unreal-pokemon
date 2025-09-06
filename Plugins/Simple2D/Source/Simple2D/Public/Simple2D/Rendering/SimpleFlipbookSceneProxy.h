@@ -12,11 +12,13 @@ struct FSimpleFlipbookDrawCall;
 struct FSpriteDrawCallRecord;
 class UMeshComponent;
 
-namespace Simple2D {
+namespace Simple2D
+{
     /**
      *
      */
-    class SIMPLE2D_API FSimpleFlipbookSceneProxy : public FPrimitiveSceneProxy {
+    class SIMPLE2D_API FSimpleFlipbookSceneProxy : public FPrimitiveSceneProxy
+    {
       public:
         explicit FSimpleFlipbookSceneProxy(const UMeshComponent *InComponent);
         ~FSimpleFlipbookSceneProxy() override;
@@ -53,9 +55,8 @@ namespace Simple2D {
         // Call this if you modify BatchedSections or Vertices after the proxy has already been created
         void RecreateCachedRenderData(FRHICommandListBase &RHICmdList);
 
-        FFlipbookTextureOverrideRenderProxy *
-        GetCachedMaterialProxyForSection(FMeshElementCollector &Collector, int32 SectionIndex,
-                                         FMaterialRenderProxy *ParentMaterialProxy) const;
+        FFlipbookTextureOverrideRenderProxy *GetCachedMaterialProxyForSection(
+            FMeshElementCollector &Collector, int32 SectionIndex, FMaterialRenderProxy *ParentMaterialProxy) const;
 
       private:
         TArray<FFlipbookRenderSection> BatchedSections;

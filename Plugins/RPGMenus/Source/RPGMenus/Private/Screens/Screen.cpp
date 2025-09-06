@@ -9,11 +9,13 @@ class UEnhancedInputLocalPlayerSubsystem;
 const UE_DEFINE_GAMEPLAY_TAG(RPG::Menus::PrimaryMenuLayerTag, "UI.Layer.GameMenu");
 const UE_DEFINE_GAMEPLAY_TAG(RPG::Menus::OverlayMenuLayerTag, "UI.Layer.Overlay");
 
-void UScreen::RefreshSelf_Implementation() {
+void UScreen::RefreshSelf_Implementation()
+{
     // No base implementation
 }
 
-void UScreen::NativeConstruct() {
+void UScreen::NativeConstruct()
+{
     Super::NativeConstruct();
 
     SelectableWidgets.Empty();
@@ -26,15 +28,18 @@ void UScreen::NativeConstruct() {
     });
 }
 
-UWidget *UScreen::NativeGetDesiredFocusTarget() const {
+UWidget *UScreen::NativeGetDesiredFocusTarget() const
+{
     auto Widget = SelectableWidgets.FindByPredicate(&UCommonActivatableWidget::IsActivated);
     return Widget != nullptr ? *Widget : nullptr;
 }
 
-TOptional<FUIInputConfig> UScreen::GetDesiredInputConfig() const {
+TOptional<FUIInputConfig> UScreen::GetDesiredInputConfig() const
+{
     using enum ERPGWidgetInputMode;
 
-    switch (InputConfig) {
+    switch (InputConfig)
+    {
     case GameAndMenu:
         return FUIInputConfig(ECommonInputMode::All, GameMouseCaptureMode);
     case Game:
@@ -46,7 +51,8 @@ TOptional<FUIInputConfig> UScreen::GetDesiredInputConfig() const {
     }
 }
 
-void UScreen::CloseScreen() {
+void UScreen::CloseScreen()
+{
     DeactivateWidget();
     auto Layout = UPrimaryGameLayout::Get(GetOwningPlayer());
     Layout->FindAndRemoveWidgetFromLayer(this);
@@ -54,22 +60,27 @@ void UScreen::CloseScreen() {
     RemoveFromParent();
 }
 
-FOnScreenClosed &UScreen::GetOnScreenClosed() {
+FOnScreenClosed &UScreen::GetOnScreenClosed()
+{
     return OnScreenClosed;
 }
 
-void UScreen::NativeOnActivated() {
+void UScreen::NativeOnActivated()
+{
     Super::NativeOnActivated();
-    if (GetVisibility() == ESlateVisibility::HitTestInvisible) {
+    if (GetVisibility() == ESlateVisibility::HitTestInvisible)
+    {
         SetVisibility(ESlateVisibility::SelfHitTestInvisible);
     }
 
     GetGameInstance()->GetSubsystem<URPGUIManagerSubsystem>()->OnScreenActivated(this);
 }
 
-void UScreen::NativeOnDeactivated() {
+void UScreen::NativeOnDeactivated()
+{
     Super::NativeOnDeactivated();
-    if (IsVisible()) {
+    if (IsVisible())
+    {
         SetVisibility(ESlateVisibility::HitTestInvisible);
     }
 

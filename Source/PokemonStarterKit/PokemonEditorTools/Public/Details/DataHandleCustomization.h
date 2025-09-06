@@ -7,7 +7,8 @@
 /**
  *
  */
-class POKEMONEDITORTOOLS_API FDataHandleCustomization : public IPropertyTypeCustomization {
+class POKEMONEDITORTOOLS_API FDataHandleCustomization : public IPropertyTypeCustomization
+{
   public:
     static TSharedRef<IPropertyTypeCustomization> MakeInstance();
 

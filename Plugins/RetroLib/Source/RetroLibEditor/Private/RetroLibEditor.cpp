@@ -1,10 +1,12 @@
 ﻿#include "RetroLibEditor.h"
 
-void FRetroLibEditorModule::StartupModule() {
+void FRetroLibEditorModule::StartupModule()
+{
     // No special startup code
 }
 
-void FRetroLibEditorModule::ShutdownModule() {
+void FRetroLibEditorModule::ShutdownModule()
+{
     // No special shutdown code
 }
 

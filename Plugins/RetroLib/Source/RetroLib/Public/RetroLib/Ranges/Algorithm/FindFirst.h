@@ -23,7 +23,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Ranges {
+namespace Retro::Ranges
+{
     /**
      * Finds the first element in a given range and returns it wrapped in a specified output type.
      *
@@ -33,7 +34,8 @@ namespace Retro::Ranges {
      */
     RETROLIB_EXPORT template <Optionals::OptionalType O, std::ranges::input_range R>
         requires std::constructible_from<O, TRangeCommonReference<R>>
-    constexpr O FindFirst(R &&Range) {
+    constexpr O FindFirst(R &&Range)
+    {
         auto Result = std::ranges::begin(Range);
         return Result != std::ranges::end(Range) ? O(*ForwardLike<R>(Result)) : O();
     }
@@ -41,7 +43,8 @@ namespace Retro::Ranges {
     RETROLIB_EXPORT template <Optionals::OptionalType O, std::ranges::input_range R>
         requires(!std::constructible_from<O, TRangeCommonReference<R>>) && Dereferenceable<TRangeCommonReference<R>> &&
                 std::constructible_from<O, TDereferencedType<TRangeCommonReference<R>>>
-    constexpr O FindFirst(R &&Range) {
+    constexpr O FindFirst(R &&Range)
+    {
         auto Result = std::ranges::begin(Range);
         return Result != std::ranges::end(Range) ? O(**ForwardLike<R>(Result)) : O();
     }
@@ -56,19 +59,28 @@ namespace Retro::Ranges {
     RETROLIB_EXPORT template <template <typename...> typename O = RETROLIB_DEFAULT_OPTIONAL_TYPE,
                               std::ranges::input_range R>
         requires Optionals::OptionalType<O<std::ranges::range_value_t<R>>>
-    constexpr auto FindFirst(R &&Range) {
-        if constexpr (Optionals::Nullable<TRangeCommonReference<R>, O>) {
+    constexpr auto FindFirst(R &&Range)
+    {
+        if constexpr (Optionals::Nullable<TRangeCommonReference<R>, O>)
+        {
             auto Result = std::ranges::begin(Range);
             using ResultType = decltype(Optionals::OfNullable<O>(*ForwardLike<R>(Result)));
             return Result != std::ranges::end(Range) ? Optionals::OfNullable<O>(*ForwardLike<R>(Result)) : ResultType();
-        } else if constexpr (std::is_lvalue_reference_v<TRangeCommonReference<R>>) {
-            if constexpr (Optionals::RawReferenceOptionalValid<O, std::ranges::range_value_t<R>>) {
+        }
+        else if constexpr (std::is_lvalue_reference_v<TRangeCommonReference<R>>)
+        {
+            if constexpr (Optionals::RawReferenceOptionalValid<O, std::ranges::range_value_t<R>>)
+            {
                 return FindFirst<O<TRangeCommonReference<R>>>(std::forward<R>(Range));
-            } else {
+            }
+            else
+            {
                 return FindFirst<O<std::reference_wrapper<std::remove_reference_t<TRangeCommonReference<R>>>>>(
                     std::forward<R>(Range));
             }
-        } else {
+        }
+        else
+        {
             return FindFirst<O<std::ranges::range_value_t<R>>>(std::forward<R>(Range));
         }
     }
@@ -94,10 +106,12 @@ namespace Retro::Ranges {
      * @return O The result of invoking `find_first` on the given range.
      */
     template <Optionals::OptionalType O>
-    struct TFindFirstInvoker {
+    struct TFindFirstInvoker
+    {
         template <std::ranges::input_range R>
             requires std::constructible_from<O, TRangeCommonReference<R>>
-        constexpr O operator()(R &&Range) const {
+        constexpr O operator()(R &&Range) const
+        {
             return FindFirst<O>(std::forward<R>(Range));
         }
     };
@@ -134,10 +148,12 @@ namespace Retro::Ranges {
      *          arguments are compile-time constant.
      */
     template <template <typename...> typename O = RETROLIB_DEFAULT_OPTIONAL_TYPE>
-    struct TFindFirstTemplateInvoker {
+    struct TFindFirstTemplateInvoker
+    {
         template <std::ranges::input_range R>
             requires Optionals::OptionalType<O<std::ranges::range_value_t<R>>>
-        constexpr auto operator()(R &&Range) const {
+        constexpr auto operator()(R &&Range) const
+        {
             return FindFirst<O>(std::forward<R>(Range));
         }
     };
@@ -165,7 +181,8 @@ namespace Retro::Ranges {
      *         for the specified type.
      */
     RETROLIB_EXPORT template <Optionals::OptionalType O>
-    constexpr auto FindFirst() {
+    constexpr auto FindFirst()
+    {
         return ExtensionMethod<FindFirstFunction<O>>();
     }
 
@@ -178,7 +195,8 @@ namespace Retro::Ranges {
      * @return The result of the find-first operation as determined by the template invoker.
      */
     RETROLIB_EXPORT template <template <typename...> typename O = RETROLIB_DEFAULT_OPTIONAL_TYPE>
-    constexpr auto FindFirst() {
+    constexpr auto FindFirst()
+    {
         return ExtensionMethod<FindFirstTemplateFunction<O>>();
     }
 

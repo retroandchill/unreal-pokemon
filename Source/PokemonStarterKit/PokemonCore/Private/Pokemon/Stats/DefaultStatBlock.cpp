@@ -23,7 +23,8 @@ using namespace StatUtils;
  * @param Nature The nature to look up
  * @return The found nature
  */
-const FNature &FindNature(FName Nature) {
+const FNature &FindNature(FName Nature)
+{
     const auto &DataSubsystem = FDataManager::GetInstance();
     auto &NatureTable = DataSubsystem.GetDataTable<FNature>();
 
@@ -32,7 +33,8 @@ const FNature &FindNature(FName Nature) {
     return *Ret;
 }
 
-void UDefaultStatBlock::Initialize(const TScriptInterface<IPokemon> &NewOwner, const FPokemonDTO &DTO) {
+void UDefaultStatBlock::Initialize(const TScriptInterface<IPokemon> &NewOwner, const FPokemonDTO &DTO)
+{
     Owner = NewOwner;
     Level = DTO.Level;
 
@@ -62,23 +64,28 @@ void UDefaultStatBlock::Initialize(const TScriptInterface<IPokemon> &NewOwner, c
     // clang-format on
 }
 
-int32 UDefaultStatBlock::GetLevel() const {
+int32 UDefaultStatBlock::GetLevel() const
+{
     return Level;
 }
 
-int32 UDefaultStatBlock::GetExp() const {
+int32 UDefaultStatBlock::GetExp() const
+{
     return Exp;
 }
 
-int32 UDefaultStatBlock::GetExpForNextLevel() const {
+int32 UDefaultStatBlock::GetExpForNextLevel() const
+{
     if (Level == GetMaxLevel())
         return 0;
 
     return UPokemonSubsystem::GetInstance(this).GetGrowthRate(Owner->GetSpecies().GrowthRate).ExpForLevel(Level + 1);
 }
 
-float UDefaultStatBlock::GetExpPercent() const {
-    if (Level == GetMaxLevel()) {
+float UDefaultStatBlock::GetExpPercent() const
+{
+    if (Level == GetMaxLevel())
+    {
         return 0.f;
     }
 
@@ -88,7 +95,8 @@ float UDefaultStatBlock::GetExpPercent() const {
     return (static_cast<float>(Exp) - ExpNeededForLevel) / TotalNeededForLevel;
 }
 
-UE5Coro::TCoroutine<FLevelUpStatChanges> UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages) {
+UE5Coro::TCoroutine<FLevelUpStatChanges> UDefaultStatBlock::GainExp(int32 Change, bool bShowMessages)
+{
     FLevelUpStatChanges Changes;
     float ExpPercent = GetExpPercent();
     Changes.ExpPercentChange.Before = ExpPercent;
@@ -97,28 +105,34 @@ UE5Coro::TCoroutine<FLevelUpStatChanges> UDefaultStatBlock::GainExp(int32 Change
 
     Changes.LevelChange.Before = Level;
     Changes.LevelChange.After = Level;
-    for (auto &[ID, Stat] : Stats) {
+    for (auto &[ID, Stat] : Stats)
+    {
         int32 StatValue = Stat->GetStatValue();
         Changes.StatChanges.Emplace(ID, {.Before = StatValue, .After = StatValue});
     }
-    while (Exp >= GetExpForNextLevel()) {
+    while (Exp >= GetExpForNextLevel())
+    {
         Level++;
     }
 
-    if (Level > Changes.LevelChange.Before) {
+    if (Level > Changes.LevelChange.Before)
+    {
         Changes.LevelChange.After = Level;
         Changes.ExpPercentChange.After = GetExpPercent();
         CalculateStats(Owner->GetSpecies().BaseStats);
         auto HPStat = GetDefault<UPokemonDataSettings>()->HPStat;
-        for (auto &[ID, Stat] : Stats) {
+        for (auto &[ID, Stat] : Stats)
+        {
             Changes.StatChanges[ID].After = Stat->GetStatValue();
-            if (ID == HPStat) {
+            if (ID == HPStat)
+            {
                 int32 Diff = Changes.StatChanges[ID].Diff();
                 Owner->SetCurrentHP(Owner->GetCurrentHP() + Diff);
             }
         }
 
-        if (bShowMessages) {
+        if (bShowMessages)
+        {
             auto &Dispatcher = IPokemonCoroutineDispatcher::Get(this);
             co_await Dispatcher.ProcessLevelUp(this, Changes);
         }
@@ -127,7 +141,8 @@ UE5Coro::TCoroutine<FLevelUpStatChanges> UDefaultStatBlock::GainExp(int32 Change
     co_return Changes;
 }
 
-const FNature &UDefaultStatBlock::GetNature() const {
+const FNature &UDefaultStatBlock::GetNature() const
+{
     if (Nature.IsSet())
         return FindNature(Nature.GetValue());
 
@@ -137,21 +152,26 @@ const FNature &UDefaultStatBlock::GetNature() const {
     return *DataTable.GetData(NatureRows[Index]);
 }
 
-TScriptInterface<IStatEntry> UDefaultStatBlock::GetStat(FMainStatHandle Stat) const {
+TScriptInterface<IStatEntry> UDefaultStatBlock::GetStat(FMainStatHandle Stat) const
+{
     check(Stats.Contains(Stat))
     return Stats[Stat];
 }
 
-void UDefaultStatBlock::ForEachStat(const TFunctionRef<void(FName, const IStatEntry &)> &Predicate) const {
-    for (const auto &[Key, Value] : Stats) {
+void UDefaultStatBlock::ForEachStat(const TFunctionRef<void(FName, const IStatEntry &)> &Predicate) const
+{
+    for (const auto &[Key, Value] : Stats)
+    {
         Predicate(Key, *Value);
     }
 }
 
-void UDefaultStatBlock::CalculateStats(const TMap<FName, int32> &BaseStats) {
+void UDefaultStatBlock::CalculateStats(const TMap<FName, int32> &BaseStats)
+{
     auto &NatureData = GetNature();
 
-    for (const auto &[StatID, Stat] : Stats) {
+    for (const auto &[StatID, Stat] : Stats)
+    {
         check(BaseStats.Contains(StatID))
         Stat->RefreshValue(Level, BaseStats[StatID], NatureData);
     }

@@ -11,7 +11,8 @@
  * Represents the different options for how an item can be used in battle
  */
 UENUM(BlueprintType)
-enum class EBattleUse : uint8 {
+enum class EBattleUse : uint8
+{
     /**
      * Not usable in battle
      */
@@ -43,7 +44,8 @@ enum class EBattleUse : uint8 {
     Direct = 5
 };
 
-namespace Pokemon::Data::Bag {
+namespace Pokemon::Data::Bag
+{
 
     /**
      * Tag for items that restore HP.

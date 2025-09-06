@@ -10,13 +10,15 @@
 #include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/Transform.h"
 
-TSharedRef<IPropertyTypeCustomization> FInjectionTargetCustomization::MakeInstance() {
+TSharedRef<IPropertyTypeCustomization> FInjectionTargetCustomization::MakeInstance()
+{
     return MakeShared<FInjectionTargetCustomization>();
 }
 
 void FInjectionTargetCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> InPropertyHandle,
                                                     FDetailWidgetRow &HeaderRow,
-                                                    IPropertyTypeCustomizationUtils &CustomizationUtils) {
+                                                    IPropertyTypeCustomizationUtils &CustomizationUtils)
+{
     PropertyHandle = InPropertyHandle;
 
     const bool bShowTreeView = PropertyHandle->HasMetaData("ShowTreeView");
@@ -67,28 +69,33 @@ void FInjectionTargetCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> 
 
 void FInjectionTargetCustomization::CustomizeChildren(TSharedRef<IPropertyHandle> InPropertyHandle,
                                                       IDetailChildrenBuilder &ChildBuilder,
-                                                      IPropertyTypeCustomizationUtils &CustomizationUtils) {
+                                                      IPropertyTypeCustomizationUtils &CustomizationUtils)
+{
     // No child customization
 }
 
-const UClass *FInjectionTargetCustomization::OnGetClass() const {
+const UClass *FInjectionTargetCustomization::OnGetClass() const
+{
     auto WrappedProperty = PropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FInjectionTarget, InjectedClass));
     FString ClassName;
     WrappedProperty->GetValueAsFormattedString(ClassName);
 
     // Do we have a valid cached class pointer?
     auto Class = CachedClassPtr.Get();
-    if (!Class || Class->GetPathName() != ClassName) {
+    if (!Class || Class->GetPathName() != ClassName)
+    {
         Class = FEditorClassUtils::GetClassFromString(ClassName);
         CachedClassPtr = MakeWeakObjectPtr(Class);
     }
     return Class;
 }
 
-void FInjectionTargetCustomization::OnSetClass(const UClass *NewClass) const {
+void FInjectionTargetCustomization::OnSetClass(const UClass *NewClass) const
+{
     using enum FPropertyAccess::Result;
     if (auto WrappedProperty = PropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FInjectionTarget, InjectedClass));
-        WrappedProperty->SetValueFromFormattedString(NewClass ? NewClass->GetPathName() : "None") == Success) {
+        WrappedProperty->SetValueFromFormattedString(NewClass ? NewClass->GetPathName() : "None") == Success)
+    {
         CachedClassPtr = MakeWeakObjectPtr(NewClass);
         void *Struct;
         PropertyHandle->GetValueData(Struct);

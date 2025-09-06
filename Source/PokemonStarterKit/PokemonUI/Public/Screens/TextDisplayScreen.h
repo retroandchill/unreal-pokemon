@@ -25,7 +25,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FChoiceMade, int32, Index, FName, C
  * Screen for displaying text to the player
  */
 UCLASS(Blueprintable, Abstract)
-class POKEMONUI_API UTextDisplayScreen : public UScreen {
+class POKEMONUI_API UTextDisplayScreen : public UScreen
+{
     GENERATED_BODY()
 
   public:

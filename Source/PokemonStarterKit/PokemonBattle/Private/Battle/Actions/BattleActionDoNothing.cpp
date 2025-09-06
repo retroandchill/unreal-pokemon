@@ -2,38 +2,47 @@
 
 #include "Battle/Actions/BattleActionDoNothing.h"
 
-FBattleActionDoNothing::FBattleActionDoNothing(const TScriptInterface<IBattler> &BattlerIn) : Battler(BattlerIn) {
+FBattleActionDoNothing::FBattleActionDoNothing(const TScriptInterface<IBattler> &BattlerIn) : Battler(BattlerIn)
+{
 }
 
-void FBattleActionDoNothing::AddReferencedObjects(FReferenceCollector &Collector) {
+void FBattleActionDoNothing::AddReferencedObjects(FReferenceCollector &Collector)
+{
     Collector.AddReferencedObject(Battler.GetObjectRef());
 }
 
-FString FBattleActionDoNothing::GetReferencerName() const {
+FString FBattleActionDoNothing::GetReferencerName() const
+{
     return TEXT("FBattleActionDoNothing");
 }
 
-const TScriptInterface<IBattler> &FBattleActionDoNothing::GetBattler() const {
+const TScriptInterface<IBattler> &FBattleActionDoNothing::GetBattler() const
+{
     return Battler;
 }
 
-bool FBattleActionDoNothing::CanExecute() const {
+bool FBattleActionDoNothing::CanExecute() const
+{
     return false;
 }
 
-UE5Coro::TCoroutine<> FBattleActionDoNothing::Execute() {
+UE5Coro::TCoroutine<> FBattleActionDoNothing::Execute()
+{
     // This will never get called
     co_return;
 }
 
-bool FBattleActionDoNothing::IsExecuting() const {
+bool FBattleActionDoNothing::IsExecuting() const
+{
     return false;
 }
 
-int32 FBattleActionDoNothing::GetPriority() const {
+int32 FBattleActionDoNothing::GetPriority() const
+{
     return 0;
 }
 
-FText FBattleActionDoNothing::GetActionMessage() const {
+FText FBattleActionDoNothing::GetActionMessage() const
+{
     return FText::GetEmpty();
 }

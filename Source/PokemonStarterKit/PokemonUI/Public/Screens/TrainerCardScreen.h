@@ -18,7 +18,8 @@ class UDisplayText;
  * The screen used to bring up the trainer card.
  */
 UCLASS(Blueprintable, Abstract)
-class POKEMONUI_API UTrainerCardScreen : public UScreen {
+class POKEMONUI_API UTrainerCardScreen : public UScreen
+{
     GENERATED_BODY()
 
   public:
@@ -34,7 +35,8 @@ class POKEMONUI_API UTrainerCardScreen : public UScreen {
      * @return A constant reference to the TScriptInterface of the ITrainer interface representing the player's trainer.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const TScriptInterface<ITrainer> &GetPlayerTrainer() const {
+    const TScriptInterface<ITrainer> &GetPlayerTrainer() const
+    {
         return PlayerTrainer;
     }
 
@@ -47,7 +49,8 @@ class POKEMONUI_API UTrainerCardScreen : public UScreen {
      * @return A pointer to the UPlayerMetadata associated with the player.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UPlayerMetadata *GetPlayerMetadata() const {
+    UPlayerMetadata *GetPlayerMetadata() const
+    {
         return PlayerMetadata;
     }
 

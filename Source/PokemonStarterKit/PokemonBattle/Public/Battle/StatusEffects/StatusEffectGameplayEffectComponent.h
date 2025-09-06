@@ -15,7 +15,8 @@ class IBattler;
  * Gameplay effect component that governs the application of status conditions to a battler
  */
 UCLASS(DisplayName = "Status Effect")
-class POKEMONBATTLE_API UStatusEffectGameplayEffectComponent : public UGameplayEffectComponent {
+class POKEMONBATTLE_API UStatusEffectGameplayEffectComponent : public UGameplayEffectComponent
+{
     GENERATED_BODY()
 
   public:

@@ -3,9 +3,9 @@
 #include "Battle/StatusEffects/Nodes/RemoveStatusEffectFromBattler.h"
 #include "Battle/StatusEffects/BattleStatusEffectUtils.h"
 
-URemoveStatusEffectFromBattler *
-URemoveStatusEffectFromBattler::RemoveStatusEffectFromBattler(const TScriptInterface<IBattler> &Target,
-                                                              FStatusHandle StatusEffectID) {
+URemoveStatusEffectFromBattler *URemoveStatusEffectFromBattler::RemoveStatusEffectFromBattler(
+    const TScriptInterface<IBattler> &Target, FStatusHandle StatusEffectID)
+{
     auto Node = NewObject<URemoveStatusEffectFromBattler>();
     Node->SetWorldContext(Target.GetObject());
     Node->Target = Target;
@@ -13,6 +13,7 @@ URemoveStatusEffectFromBattler::RemoveStatusEffectFromBattler(const TScriptInter
     return Node;
 }
 
-UE5Coro::TCoroutine<> URemoveStatusEffectFromBattler::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine) {
+UE5Coro::TCoroutine<> URemoveStatusEffectFromBattler::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine)
+{
     OnComplete.Broadcast(co_await UBattleStatusEffectUtils::RemoveStatusEffectFromBattler(Target, StatusEffectID));
 }

@@ -12,7 +12,8 @@
  * Get the value of a variant object, with a check for an invalid value
  */
 UCLASS()
-class RETROLIBBLUEPRINTNODES_API UK2Node_GetVariantValue : public UK2Node_VariantCastBase {
+class RETROLIBBLUEPRINTNODES_API UK2Node_GetVariantValue : public UK2Node_VariantCastBase
+{
     GENERATED_BODY()
 
   public:

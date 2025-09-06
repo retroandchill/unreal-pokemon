@@ -4,11 +4,13 @@
 #include "Simple2D/Rendering/SimpleFlipbookVertexBuffer.h"
 
 Simple2D::FSimpleFlipbookVertexFactory::FSimpleFlipbookVertexFactory(ERHIFeatureLevel::Type FeatureLevel)
-    : FLocalVertexFactory(FeatureLevel, "FSimpleFlipbookVertexFactory") {
+    : FLocalVertexFactory(FeatureLevel, "FSimpleFlipbookVertexFactory")
+{
 }
 
 void Simple2D::FSimpleFlipbookVertexFactory::Init(FRHICommandListBase &RHICmdList,
-                                                  const FSimpleFlipbookVertexBuffer *InVertexBuffer) {
+                                                  const FSimpleFlipbookVertexBuffer *InVertexBuffer)
+{
     FDataType VertexData;
     VertexData.NumTexCoords = 1;
 

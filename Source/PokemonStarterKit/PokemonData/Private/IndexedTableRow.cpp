@@ -2,7 +2,8 @@
 
 #include "IndexedTableRow.h"
 
-void FIndexedTableRow::OnDataTableChanged(const UDataTable *InDataTable, const FName InRowName) {
+void FIndexedTableRow::OnDataTableChanged(const UDataTable *InDataTable, const FName InRowName)
+{
     ID = InRowName;
     RowID = InDataTable->GetRowNames().IndexOfByKey(ID) + 1;
 }

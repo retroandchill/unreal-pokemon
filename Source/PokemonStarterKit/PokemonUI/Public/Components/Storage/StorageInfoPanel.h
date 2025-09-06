@@ -13,7 +13,8 @@ class UWidgetSwitcher;
  * The side panel for the current Pokémon that is being selected in the box view.
  */
 UCLASS(Abstract)
-class POKEMONUI_API UStorageInfoPanel : public UCommonUserWidget {
+class POKEMONUI_API UStorageInfoPanel : public UCommonUserWidget
+{
     GENERATED_BODY()
 
   public:
@@ -29,7 +30,8 @@ class POKEMONUI_API UStorageInfoPanel : public UCommonUserWidget {
      * @return The widget switcher that displays the information about the Pokémon being displayed.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UWidgetSwitcher *GetStorageInfoSwitcher() const {
+    UWidgetSwitcher *GetStorageInfoSwitcher() const
+    {
         return StorageInfoSwitcher;
     }
 

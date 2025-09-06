@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "UE5Coro.h"
 
-namespace Pokemon::UI {
+namespace Pokemon::UI
+{
 
     /**
      * Callback delegate for updating the progress bar
@@ -20,7 +21,8 @@ namespace Pokemon::UI {
     /**
      * Struct that contains all the information needed to update a progress bar
      */
-    struct POKEMONUI_API FBarAnimationData {
+    struct POKEMONUI_API FBarAnimationData
+    {
 
         /**
          * The starting percentage for the animation

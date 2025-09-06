@@ -12,7 +12,8 @@
  * The settings related to dependency injection related tasks in Pokémon Core.
  */
 UCLASS(Config = Game, DefaultConfig, DisplayName = "Dependency Injection")
-class UNREALINJECTOR_API UDependencyInjectionSettings : public UDeveloperSettings {
+class UNREALINJECTOR_API UDependencyInjectionSettings : public UDeveloperSettings
+{
     GENERATED_BODY()
 
   public:

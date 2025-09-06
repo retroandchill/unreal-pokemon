@@ -7,7 +7,8 @@
 #include "Utilities/PartyManagementHelpers.h"
 #include "Utilities/TrainerHelpers.h"
 
-void FPokemonTestUtilities::CreateMockParty(UObject *WorldContext) {
+void FPokemonTestUtilities::CreateMockParty(UObject *WorldContext)
+{
     using enum EPokemonGender;
 
     auto Player = UTrainerHelpers::GetPlayerCharacter(WorldContext);

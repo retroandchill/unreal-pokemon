@@ -21,7 +21,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
 
     /**
      * The type of forwarded tuple element. Normally it's the same as using `forward_like`, except when the tuple
@@ -59,7 +60,8 @@ namespace Retro {
      *         sequence correspond to valid tuple elements within the type `T`. Returns true
      *         if all indices*/
     RETROLIB_EXPORT template <typename T, size_t... I>
-    consteval bool AllHasTupleElement(std::index_sequence<I...>) {
+    consteval bool AllHasTupleElement(std::index_sequence<I...>)
+    {
         return (HasTupleElement<T, I> && ...);
     }
 
@@ -95,7 +97,8 @@ namespace Retro {
      *              the given index sequence, otherwise false.
      */
     template <typename F, typename T, size_t... I>
-    consteval bool CanApplyIndexSequence(std::index_sequence<I...>) {
+    consteval bool CanApplyIndexSequence(std::index_sequence<I...>)
+    {
         return CanApplyArgs<F, T, I...>;
     }
 
@@ -134,7 +137,8 @@ namespace Retro {
      *         exceptions.
      */
     template <typename F, typename T, size_t... I>
-    consteval bool IsNoThrowApplicable(std::index_sequence<I...>) {
+    consteval bool IsNoThrowApplicable(std::index_sequence<I...>)
+    {
         return NoThrowApplicableArgs<F, T, I...>;
     }
     /**
@@ -149,7 +153,8 @@ namespace Retro {
         IsNoThrowApplicable<F, T>(std::make_index_sequence<std::tuple_size_v<std::decay_t<T>>>{});
 
     template <TupleLike T, typename A, size_t... I>
-    consteval bool HasTypeImpl(std::index_sequence<I...>) {
+    consteval bool HasTypeImpl(std::index_sequence<I...>)
+    {
         return (std::same_as<A, std::tuple_element_t<I, T>> || ...);
     }
 
@@ -157,7 +162,8 @@ namespace Retro {
     concept HasType = TupleLike<T> && HasTypeImpl<T, A>(std::make_index_sequence<std::tuple_size_v<T>>{});
 
     template <TupleLike T, TupleLike U, size_t... I>
-    consteval bool HasOverlappingTypesImpl(std::index_sequence<I...>) {
+    consteval bool HasOverlappingTypesImpl(std::index_sequence<I...>)
+    {
         return (HasType<U, std::tuple_element_t<I, T>> || ...);
     }
 
@@ -166,17 +172,24 @@ namespace Retro {
         TupleLike<T> && TupleLike<U> && HasOverlappingTypesImpl<T, U>(std::make_index_sequence<std::tuple_size_v<T>>{});
 
     template <TupleLike T, typename A, size_t... I>
-    consteval std::optional<size_t> GetTypeIndexImpl(std::index_sequence<I...>) {
+    consteval std::optional<size_t> GetTypeIndexImpl(std::index_sequence<I...>)
+    {
         return (std::same_as<A, std::tuple_element_t<I, T>> || ...);
     }
 
     template <size_t I, typename A, typename T>
-    consteval std::optional<size_t> GetIndexOfType() {
-        if constexpr (I >= std::tuple_size_v<T>) {
+    consteval std::optional<size_t> GetIndexOfType()
+    {
+        if constexpr (I >= std::tuple_size_v<T>)
+        {
             return std::nullopt;
-        } else if constexpr (std::same_as<A, std::tuple_element_t<I, T>>) {
+        }
+        else if constexpr (std::same_as<A, std::tuple_element_t<I, T>>)
+        {
             return I;
-        } else {
+        }
+        else
+        {
             return GetIndexOfType<I + 1, A, T>();
         }
     }
@@ -185,7 +198,8 @@ namespace Retro {
     constexpr auto IndexInTuple = GetIndexOfType<0, A, T>();
 
     template <TupleLike T, TupleLike U, size_t... I>
-    consteval auto GetMatchingTupleIndexesImpl(std::index_sequence<I...>) {
+    consteval auto GetMatchingTupleIndexesImpl(std::index_sequence<I...>)
+    {
         return std::array{IndexInTuple<std::tuple_element_t<I, U>, T>...};
     }
 

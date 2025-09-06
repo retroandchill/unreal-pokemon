@@ -8,32 +8,38 @@
 
 DECLARE_DELEGATE(FLoadFinalized)
 
-UMapSubsystem::UMapSubsystem(const FObjectInitializer &) {
+UMapSubsystem::UMapSubsystem(const FObjectInitializer &)
+{
 }
 
-void UMapSubsystem::WarpToMap(const TSoftObjectPtr<UWorld> &Map, FName WarpTag) {
+void UMapSubsystem::WarpToMap(const TSoftObjectPtr<UWorld> &Map, FName WarpTag)
+{
     auto PlayerCharacter = GetWorld()->GetFirstPlayerController()->GetPawnOrSpectator();
-    if (PlayerCharacter == nullptr) {
+    if (PlayerCharacter == nullptr)
+    {
         UE_LOG(LogBlueprint, Warning, TEXT("There is no valid pawn!"))
         return;
     }
 
     auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(PlayerCharacter);
-    if (MovementComponent == nullptr) {
+    if (MovementComponent == nullptr)
+    {
         UE_LOG(LogBlueprint, Warning, TEXT("The pawn class does not implement IGridMovable!"))
         return;
     }
     WarpToMapWithDirection(Map, WarpTag, MovementComponent->GetDirection());
 }
 
-void UMapSubsystem::WarpToMapWithDirection(const TSoftObjectPtr<UWorld> &Map, FName WarpTag,
-                                           EFacingDirection Direction) {
+void UMapSubsystem::WarpToMapWithDirection(const TSoftObjectPtr<UWorld> &Map, FName WarpTag, EFacingDirection Direction)
+{
     WarpDestination.Emplace(WarpTag, Direction);
     UGameplayStatics::OpenLevelBySoftObjectPtr(this, Map);
 }
 
-void UMapSubsystem::SetPlayerLocation(const TScriptInterface<IGridMovable> &PlayerCharacter) {
-    if (!WarpDestination.IsSet()) {
+void UMapSubsystem::SetPlayerLocation(const TScriptInterface<IGridMovable> &PlayerCharacter)
+{
+    if (!WarpDestination.IsSet())
+    {
         return;
     }
 
@@ -43,40 +49,49 @@ void UMapSubsystem::SetPlayerLocation(const TScriptInterface<IGridMovable> &Play
     WarpDestination.Reset();
 }
 
-void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovable> &Movable) const {
+void UMapSubsystem::UpdateCharacterMapPosition(const TScriptInterface<IGridMovable> &Movable) const
+{
     TArray<AActor *> Maps;
     UGameplayStatics::GetAllActorsWithInterface(GetWorld(), UMapGrid::StaticClass(), Maps);
     TScriptInterface<IMapGrid> OldMap = nullptr;
     TScriptInterface<IMapGrid> NewMap = nullptr;
-    for (auto Actor : Maps) {
+    for (auto Actor : Maps)
+    {
         TScriptInterface<IMapGrid> Map = Actor;
-        if (OldMap == nullptr && Map->IsCharacterPartOfMap(Movable)) {
+        if (OldMap == nullptr && Map->IsCharacterPartOfMap(Movable))
+        {
             OldMap = Map;
         }
 
         if (auto MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Movable.GetObject());
-            NewMap == nullptr && Map->IsPositionInMap(MovementComponent->GetCurrentPosition())) {
+            NewMap == nullptr && Map->IsPositionInMap(MovementComponent->GetCurrentPosition()))
+        {
             NewMap = Map;
         }
 
-        if (OldMap != nullptr && NewMap != nullptr) {
+        if (OldMap != nullptr && NewMap != nullptr)
+        {
             break;
         }
     }
 
-    if (OldMap == NewMap) {
+    if (OldMap == NewMap)
+    {
         return;
     }
 
-    if (OldMap != nullptr) {
+    if (OldMap != nullptr)
+    {
         OldMap->RemoveCharacter(Movable);
     }
 
-    if (NewMap != nullptr) {
+    if (NewMap != nullptr)
+    {
         NewMap->AddCharacter(Movable);
     }
 }
 
-const TOptional<TPair<FName, EFacingDirection>> &UMapSubsystem::GetWarpDestination() const {
+const TOptional<TPair<FName, EFacingDirection>> &UMapSubsystem::GetWarpDestination() const
+{
     return WarpDestination;
 }

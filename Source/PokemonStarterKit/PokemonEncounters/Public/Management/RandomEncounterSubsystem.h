@@ -16,7 +16,8 @@ class AMapEncounterData;
  * Information about an encounter that was fetched.
  */
 USTRUCT(BlueprintType)
-struct POKEMONENCOUNTERS_API FRetrievedEncounter {
+struct POKEMONENCOUNTERS_API FRetrievedEncounter
+{
     GENERATED_BODY()
 
     /**
@@ -36,7 +37,8 @@ struct POKEMONENCOUNTERS_API FRetrievedEncounter {
  * Subsystem that handles the random encounters in the world.
  */
 UCLASS()
-class POKEMONENCOUNTERS_API URandomEncounterSubsystem : public UWorldSubsystem {
+class POKEMONENCOUNTERS_API URandomEncounterSubsystem : public UWorldSubsystem
+{
     GENERATED_BODY()
 
   public:

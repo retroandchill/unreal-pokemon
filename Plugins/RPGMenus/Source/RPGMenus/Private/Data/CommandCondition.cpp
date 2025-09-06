@@ -2,6 +2,7 @@
 
 #include "Data/CommandCondition.h"
 
-bool UCommandCondition::IsEnabled_Implementation() const {
+bool UCommandCondition::IsEnabled_Implementation() const
+{
     return true;
 }

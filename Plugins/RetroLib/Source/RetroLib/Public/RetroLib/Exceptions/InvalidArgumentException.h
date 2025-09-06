@@ -9,11 +9,13 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * Exception for where there is an invalid argument in a Blueprint function.
      */
-    RETROLIB_EXPORT class RETROLIB_API FInvalidArgumentException : public FBlueprintException {
+    RETROLIB_EXPORT class RETROLIB_API FInvalidArgumentException : public FBlueprintException
+    {
       public:
         using FBlueprintException::FBlueprintException;
     };

@@ -15,7 +15,8 @@ class IBattler;
  * The basic controller used by the AI to choose an action.
  */
 UCLASS(meta = (DisplayName = "AI Battler Controller"))
-class POKEMONBATTLE_API UAIBattlerController : public UObject, public IBattlerController {
+class POKEMONBATTLE_API UAIBattlerController : public UObject, public IBattlerController
+{
     GENERATED_BODY()
 
   public:

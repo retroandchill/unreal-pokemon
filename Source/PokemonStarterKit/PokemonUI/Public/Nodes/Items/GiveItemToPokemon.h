@@ -20,7 +20,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FItemResult);
  * Give an item to a Pokémon to hold, and take a held item from a Pokémon.
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API UGiveItemToPokemon : public UBlueprintCoroutineActionBase {
+class POKEMONUI_API UGiveItemToPokemon : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

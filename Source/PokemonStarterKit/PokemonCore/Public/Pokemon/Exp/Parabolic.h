@@ -4,11 +4,13 @@
 #include "CoreMinimal.h"
 #include "GrowthRate.h"
 
-namespace Exp {
+namespace Exp
+{
     /**
      * Represents the Parabolic Exp. Growth Scheme
      */
-    class POKEMONCORE_API FParabolic : public IGrowthRate {
+    class POKEMONCORE_API FParabolic : public IGrowthRate
+    {
       public:
         ~FParabolic() override = default;
         int32 ExpForLevel(int32 Level) const override;

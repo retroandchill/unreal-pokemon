@@ -9,16 +9,21 @@
 #include "Graphics/GraphicsAssetClasses.h"
 #include "Utilities/PokemonUIUtils.h"
 
-void UPokemonBattlePanel::SetBattler(const TScriptInterface<IBattler> &Battler) {
+void UPokemonBattlePanel::SetBattler(const TScriptInterface<IBattler> &Battler)
+{
     CurrentBattler = Battler;
     Refresh();
 }
 
-void UPokemonBattlePanel::Refresh() {
+void UPokemonBattlePanel::Refresh()
+{
     check(CurrentBattler != nullptr)
-    if (CurrentBattler->IsFainted()) {
+    if (CurrentBattler->IsFainted())
+    {
         SetVisibility(ESlateVisibility::Hidden);
-    } else {
+    }
+    else
+    {
         SetVisibility(ESlateVisibility::SelfHitTestInvisible);
     }
     RefreshStatusEffect();
@@ -27,7 +32,8 @@ void UPokemonBattlePanel::Refresh() {
     OnRefresh();
 }
 
-UE5Coro::TCoroutine<> UPokemonBattlePanel::AnimateHP(float MaxDuration) {
+UE5Coro::TCoroutine<> UPokemonBattlePanel::AnimateHP(float MaxDuration)
+{
     using Pokemon::UI::FSetNewPercent;
     auto CoreAttributes = CurrentBattler->GetAbilityComponent()->GetCoreAttributes();
     float HPPercent = HPBar->GetPercent();
@@ -40,13 +46,15 @@ UE5Coro::TCoroutine<> UPokemonBattlePanel::AnimateHP(float MaxDuration) {
         FSetNewPercent::CreateUObject(this, &UPokemonBattlePanel::UpdateHPPercent));
 }
 
-void UPokemonBattlePanel::RefreshStatusEffect() {
+void UPokemonBattlePanel::RefreshStatusEffect()
+{
     // clang-format off
     auto Icon = CurrentBattler->GetStatusEffect() |
                 Retro::Optionals::Transform(&FStatusEffectInfo::StatusEffectID) |
                 Retro::Optionals::AndThen([](FName ID) { return Pokemon::Assets::Graphics::StatusIcons.LoadAsset(ID); });
     // clang-format on
-    if (!Icon.IsSet()) {
+    if (!Icon.IsSet())
+    {
         StatusIcon->SetVisibility(ESlateVisibility::Hidden);
         return;
     }
@@ -55,6 +63,7 @@ void UPokemonBattlePanel::RefreshStatusEffect() {
     StatusIcon->SetBrushFromImageAsset(Icon.GetValue(), true);
 }
 
-void UPokemonBattlePanel::UpdateHPPercent(float NewPercent) {
+void UPokemonBattlePanel::UpdateHPPercent(float NewPercent)
+{
     HPBar->SetPercent(NewPercent);
 }

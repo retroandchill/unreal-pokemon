@@ -2,10 +2,12 @@
 
 #include "Utilities/TemporarySeed.h"
 
-FTemporarySeed::FTemporarySeed(int32 Seed) {
+FTemporarySeed::FTemporarySeed(int32 Seed)
+{
     FMath::RandInit(Seed);
 }
 
-FTemporarySeed::~FTemporarySeed() {
+FTemporarySeed::~FTemporarySeed()
+{
     FMath::RandInit(static_cast<int32>(std::time(nullptr)));
 }

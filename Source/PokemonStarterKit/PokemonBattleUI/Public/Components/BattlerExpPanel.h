@@ -17,7 +17,8 @@ class UProgressBar;
  *
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UBattlerExpPanel : public UCommonUserWidget {
+class POKEMONBATTLEUI_API UBattlerExpPanel : public UCommonUserWidget
+{
     GENERATED_BODY()
 
   public:

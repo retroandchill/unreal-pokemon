@@ -11,7 +11,8 @@
  * The style information for the HP bar
  */
 USTRUCT(BlueprintType, DisplayName = "HP Bar Style")
-struct FHPBarStyle {
+struct FHPBarStyle
+{
     GENERATED_BODY()
 
     /**
@@ -31,7 +32,8 @@ struct FHPBarStyle {
  * Progress Bar Widget that uses a special material instance to change the color of the bar based on the percent.
  */
 UCLASS()
-class POKEMONUI_API UHPBar : public UProgressBar, public FTickableGameObject {
+class POKEMONUI_API UHPBar : public UProgressBar, public FTickableGameObject
+{
     GENERATED_BODY()
 
   protected:

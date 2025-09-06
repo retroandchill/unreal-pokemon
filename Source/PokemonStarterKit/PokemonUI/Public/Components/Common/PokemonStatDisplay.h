@@ -20,7 +20,8 @@ class SPokemonStatGraph;
  * and sizes can be customized.
  */
 UCLASS()
-class POKEMONUI_API UPokemonStatDisplay : public UWidget {
+class POKEMONUI_API UPokemonStatDisplay : public UWidget
+{
     GENERATED_BODY()
 
   public:
@@ -38,7 +39,8 @@ class POKEMONUI_API UPokemonStatDisplay : public UWidget {
      * @return A reference to the FLinearColor object representing the color of the inner lines.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const FLinearColor &GetInnerLinesColor() const {
+    const FLinearColor &GetInnerLinesColor() const
+    {
         return InnerLinesColor;
     }
 
@@ -64,7 +66,8 @@ class POKEMONUI_API UPokemonStatDisplay : public UWidget {
      * @return A reference to the FLinearColor object representing the color of the outline.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const FLinearColor &GetOutlineColor() const {
+    const FLinearColor &GetOutlineColor() const
+    {
         return OutlineColor;
     }
 
@@ -90,7 +93,8 @@ class POKEMONUI_API UPokemonStatDisplay : public UWidget {
      * @return A constant reference to a FVector2D representing the minimum desired size.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const FVector2D &GetMinimumDesiredSize() const {
+    const FVector2D &GetMinimumDesiredSize() const
+    {
         return MinimumDesiredSize;
     }
 
@@ -116,7 +120,8 @@ class POKEMONUI_API UPokemonStatDisplay : public UWidget {
      * @return A constant reference to the TScriptInterface representing the Pokémon.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    const TScriptInterface<IPokemon> &GetPokemon() const {
+    const TScriptInterface<IPokemon> &GetPokemon() const
+    {
         return Pokemon;
     }
 

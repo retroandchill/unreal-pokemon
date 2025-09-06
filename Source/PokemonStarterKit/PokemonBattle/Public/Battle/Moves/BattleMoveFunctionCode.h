@@ -20,7 +20,8 @@ class IMove;
  * The override state for a critical hit.
  */
 UENUM(BlueprintType)
-enum class ECriticalOverride : uint8 {
+enum class ECriticalOverride : uint8
+{
     /**
      * Roll a critical hit normally.
      */
@@ -35,14 +36,14 @@ enum class ECriticalOverride : uint8 {
      * The move can never land a crit.
      */
     Never
-
 };
 
 /**
  * Information about a captured stat
  */
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FCapturedBattleStat {
+struct POKEMONBATTLE_API FCapturedBattleStat
+{
     GENERATED_BODY()
 
     /**
@@ -68,7 +69,8 @@ struct POKEMONBATTLE_API FCapturedBattleStat {
  * The structure for the attack and defense stats used in damage calculation
  */
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FAttackAndDefenseStats {
+struct POKEMONBATTLE_API FAttackAndDefenseStats
+{
     GENERATED_BODY()
 
     /**
@@ -88,7 +90,8 @@ struct POKEMONBATTLE_API FAttackAndDefenseStats {
  * The gameplay ability for using a move.
  */
 UCLASS(NotBlueprintable, BlueprintType)
-class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility {
+class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
+{
     GENERATED_BODY()
 
   public:
@@ -312,9 +315,8 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
      * @param Targets The targets of the move
      * @param Coro
      */
-    UE5Coro::TCoroutine<TArray<TScriptInterface<IBattler>>>
-    ApplyMoveEffects(TScriptInterface<IBattler> User, const TArray<TScriptInterface<IBattler>> &Targets,
-                     FForceLatentCoroutine = {});
+    UE5Coro::TCoroutine<TArray<TScriptInterface<IBattler>>> ApplyMoveEffects(
+        TScriptInterface<IBattler> User, const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine = {});
 
     /**
      * Effect applied to a target that took damage from a move
@@ -350,9 +352,8 @@ class POKEMONBATTLE_API UBattleMoveFunctionCode : public UUE5CoroGameplayAbility
      * @param Targets the targets of the move
      * @param
      */
-    static UE5Coro::TCoroutine<TArray<TScriptInterface<IBattler>>>
-    FaintCheck(TScriptInterface<IBattler> User, const TArray<TScriptInterface<IBattler>> &Targets,
-               FForceLatentCoroutine = {});
+    static UE5Coro::TCoroutine<TArray<TScriptInterface<IBattler>>> FaintCheck(
+        TScriptInterface<IBattler> User, const TArray<TScriptInterface<IBattler>> &Targets, FForceLatentCoroutine = {});
 
     /**
      * Apply additional effects against the user

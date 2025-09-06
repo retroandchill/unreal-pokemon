@@ -16,7 +16,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
 
     /**
      * @struct FInvalidType
@@ -35,7 +36,8 @@ namespace Retro {
      *
      * @see IsValid
      */
-    RETROLIB_EXPORT struct FInvalidType {
+    RETROLIB_EXPORT struct FInvalidType
+    {
         static constexpr bool IsValid = false;
     };
 
@@ -49,7 +51,8 @@ namespace Retro {
      * metaprogramming to conditionally compile code based on the validity
      * of the type.
      */
-    RETROLIB_EXPORT struct FValidType {
+    RETROLIB_EXPORT struct FValidType
+    {
         static constexpr bool IsValid = true;
     };
 
@@ -90,10 +93,13 @@ namespace Retro {
     };
 
     RETROLIB_EXPORT template <typename>
-    struct TTemplateSpecializationType : FInvalidType {};
+    struct TTemplateSpecializationType : FInvalidType
+    {
+    };
 
     RETROLIB_EXPORT template <template <typename...> typename T, typename... A>
-    struct TTemplateSpecializationType<T<A...>> : FValidType {
+    struct TTemplateSpecializationType<T<A...>> : FValidType
+    {
         using Type = T<A...>;
 
         template <typename... B>
@@ -104,10 +110,14 @@ namespace Retro {
     concept TemplateSpecialization = TTemplateSpecializationType<T>::IsValid;
 
     RETROLIB_EXPORT template <typename, template <typename...> typename>
-    struct IsSpecializationOf : std::false_type {};
+    struct IsSpecializationOf : std::false_type
+    {
+    };
 
     RETROLIB_EXPORT template <template <typename...> typename T, typename... A>
-    struct IsSpecializationOf<T<A...>, T> : std::true_type {};
+    struct IsSpecializationOf<T<A...>, T> : std::true_type
+    {
+    };
 
     RETROLIB_EXPORT template <typename T, template <typename...> typename C>
     concept SpecializationOf = IsSpecializationOf<T, C>::value;

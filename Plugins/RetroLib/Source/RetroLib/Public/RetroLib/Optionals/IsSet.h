@@ -14,11 +14,14 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Optionals {
+namespace Retro::Optionals
+{
 
-    struct FIsSetInvoker {
+    struct FIsSetInvoker
+    {
         template <OptionalType O>
-        constexpr bool operator()(O &&Optional) const {
+        constexpr bool operator()(O &&Optional) const
+        {
             return HasValue(std::forward<O>(Optional));
         }
     };

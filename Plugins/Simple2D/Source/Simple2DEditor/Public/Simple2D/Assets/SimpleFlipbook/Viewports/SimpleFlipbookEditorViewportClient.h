@@ -6,11 +6,13 @@
 class USimpleFlipbookComponent;
 class USimpleFlipbook;
 
-namespace Simple2D {
+namespace Simple2D
+{
     /**
      *
      */
-    class SIMPLE2DEDITOR_API FSimpleFlipbookEditorViewportClient : public FSimple2DEditorViewportClient {
+    class SIMPLE2DEDITOR_API FSimpleFlipbookEditorViewportClient : public FSimple2DEditorViewportClient
+    {
       public:
         explicit FSimpleFlipbookEditorViewportClient(const TAttribute<USimpleFlipbook *> &InFlipbookBeingEdited);
 
@@ -21,15 +23,18 @@ namespace Simple2D {
         bool InputKey(const FInputKeyEventArgs &EventArgs) override;
         FLinearColor GetBackgroundColor() const override;
 
-        void ToggleShowPivot() {
+        void ToggleShowPivot()
+        {
             bShowPivot = !bShowPivot;
             Invalidate();
         }
-        bool IsShowPivotChecked() const {
+        bool IsShowPivotChecked() const
+        {
             return bShowPivot;
         }
 
-        USimpleFlipbookComponent *GetPreviewComponent() const {
+        USimpleFlipbookComponent *GetPreviewComponent() const
+        {
             return AnimatedRenderComponent.Get();
         }
 

@@ -7,7 +7,8 @@
 /**
  * A singleton class used to retrieve the game data when needed
  */
-class POKEMONDATA_API FDataManager {
+class POKEMONDATA_API FDataManager
+{
     FDataManager();
     ~FDataManager();
 
@@ -26,13 +27,15 @@ class POKEMONDATA_API FDataManager {
 
     template <typename T>
         requires Pokemon::Data::DataStructHandle<T>
-    auto GetData(const T &Handle) const {
+    auto GetData(const T &Handle) const
+    {
         return GetDataTable<typename T::FValueType>().GetData(Handle);
     }
 
     template <typename T>
         requires Pokemon::Data::DataStructHandle<T>
-    decltype(auto) GetDataChecked(const T &Handle) const {
+    decltype(auto) GetDataChecked(const T &Handle) const
+    {
         return GetDataTable<typename T::FValueType>().GetDataChecked(Handle);
     }
 
@@ -43,7 +46,8 @@ class POKEMONDATA_API FDataManager {
      */
     template <typename T>
         requires std::is_base_of_v<FTableRowBase, T>
-    const TDataTableProxy<T> &GetDataTable() const {
+    const TDataTableProxy<T> &GetDataTable() const
+    {
         const UScriptStruct *const StructClass = T::StaticStruct();
         auto RowName = StructClass->GetFName();
         check(DataTables.Contains(RowName))

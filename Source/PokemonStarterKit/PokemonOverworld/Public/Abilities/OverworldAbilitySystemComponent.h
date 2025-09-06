@@ -10,7 +10,8 @@
 class URandomEncounterAttributeSet;
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class POKEMONOVERWORLD_API UOverworldAbilitySystemComponent : public UAbilitySystemComponent {
+class POKEMONOVERWORLD_API UOverworldAbilitySystemComponent : public UAbilitySystemComponent
+{
     GENERATED_BODY()
 
   public:

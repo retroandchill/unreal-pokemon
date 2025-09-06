@@ -12,8 +12,10 @@
 #include "RetroLib/Utils/BlueprintMathUtils.h"
 
 bool UGridBasedCharacterUtilities::InvalidFloor(ACharacter *Character, const FVector &TargetSquare,
-                                                const UPrimitiveComponent *HitComponent) {
-    if (HitComponent != nullptr && !CanStepUpOnComponent(Character, *HitComponent)) {
+                                                const UPrimitiveComponent *HitComponent)
+{
+    if (HitComponent != nullptr && !CanStepUpOnComponent(Character, *HitComponent))
+    {
         return true;
     }
 
@@ -23,36 +25,43 @@ bool UGridBasedCharacterUtilities::InvalidFloor(ACharacter *Character, const FVe
     return !Result.bWalkableFloor;
 }
 
-bool UGridBasedCharacterUtilities::IsStandingNextToCliff(ACharacter *Character, const FVector &TargetSquare) {
+bool UGridBasedCharacterUtilities::IsStandingNextToCliff(ACharacter *Character, const FVector &TargetSquare)
+{
     auto [Distance1, Component1] =
         PerformTraceToGround(Character, FindLocationJustOffTileEdge(Character, TargetSquare));
     auto [Distance2, Component2] =
         PerformTraceToGround(Character, FindLocationJustBeforeTileEdge(Character, TargetSquare));
 
-    if (FMath::Abs(Distance1 - Distance2) > Character->GetCharacterMovement()->MaxStepHeight) {
+    if (FMath::Abs(Distance1 - Distance2) > Character->GetCharacterMovement()->MaxStepHeight)
+    {
         return true;
     }
 
-    if (Component2 != nullptr) {
+    if (Component2 != nullptr)
+    {
         return !CanStepUpOnComponent(Character, *Component2);
     }
 
     return false;
 }
 
-bool UGridBasedCharacterUtilities::CanStepUpOnComponent(ACharacter *Character, const UPrimitiveComponent &Component) {
-    if (!Component.CanCharacterStepUp(Character)) {
+bool UGridBasedCharacterUtilities::CanStepUpOnComponent(ACharacter *Character, const UPrimitiveComponent &Component)
+{
+    if (!Component.CanCharacterStepUp(Character))
+    {
         return false;
     }
 
-    if (auto StaticMeshComponent = Cast<UStaticMeshComponent>(&Component); StaticMeshComponent != nullptr) {
+    if (auto StaticMeshComponent = Cast<UStaticMeshComponent>(&Component); StaticMeshComponent != nullptr)
+    {
         return StaticMeshComponent->GetWalkableSlopeOverride().WalkableSlopeBehavior != WalkableSlope_Unwalkable;
     }
 
     return true;
 }
 
-FVector UGridBasedCharacterUtilities::FindLocationJustOffTileEdge(ACharacter *Character, const FVector &TargetSquare) {
+FVector UGridBasedCharacterUtilities::FindLocationJustOffTileEdge(ACharacter *Character, const FVector &TargetSquare)
+{
     auto Location = Character->GetActorLocation();
     auto MidPoint = UBlueprintMathUtils::Midpoint(TargetSquare, Location);
     auto Diff = TargetSquare - Location;
@@ -60,8 +69,8 @@ FVector UGridBasedCharacterUtilities::FindLocationJustOffTileEdge(ACharacter *Ch
     return MidPoint + Diff;
 }
 
-FVector UGridBasedCharacterUtilities::FindLocationJustBeforeTileEdge(ACharacter *Character,
-                                                                     const FVector &TargetSquare) {
+FVector UGridBasedCharacterUtilities::FindLocationJustBeforeTileEdge(ACharacter *Character, const FVector &TargetSquare)
+{
     auto Location = Character->GetActorLocation();
     auto MidPoint = UBlueprintMathUtils::Midpoint(TargetSquare, Location);
     auto Diff = TargetSquare - Location;
@@ -70,7 +79,8 @@ FVector UGridBasedCharacterUtilities::FindLocationJustBeforeTileEdge(ACharacter 
 }
 
 TPair<double, UPrimitiveComponent *> UGridBasedCharacterUtilities::PerformTraceToGround(ACharacter *Character,
-                                                                                        const FVector &Position) {
+                                                                                        const FVector &Position)
+{
     static constexpr double TraceMax = 100.0;
     FHitResult Result;
     FCollisionQueryParams Params;

@@ -11,14 +11,17 @@
 
 class UGameMapsSettings;
 
-UWidget *UWidgetTestUtilities::FindChildWidget(UUserWidget *Parent, FName WidgetName) {
+UWidget *UWidgetTestUtilities::FindChildWidget(UUserWidget *Parent, FName WidgetName)
+{
     auto RootWidget = Parent->GetRootWidget();
-    if (RootWidget->GetFName() == WidgetName) {
+    if (RootWidget->GetFName() == WidgetName)
+    {
         return RootWidget;
     }
 
     auto Panel = Cast<UPanelWidget>(RootWidget);
-    if (Panel == nullptr) {
+    if (Panel == nullptr)
+    {
         return nullptr;
     }
 
@@ -26,7 +29,8 @@ UWidget *UWidgetTestUtilities::FindChildWidget(UUserWidget *Parent, FName Widget
     return UWidgetTree::FindWidgetChild(Panel, WidgetName, Index);
 }
 
-TTuple<FDudWidgets, FWorldPtr, FGameInstancePtr> UWidgetTestUtilities::CreateTestWorld(bool bBeginPlay) {
+TTuple<FDudWidgets, FWorldPtr, FGameInstancePtr> UWidgetTestUtilities::CreateTestWorld(bool bBeginPlay)
+{
     auto GameInstanceClassName = GetDefault<UGameMapsSettings>()->GameInstanceClass;
     auto GameInstanceClass = GameInstanceClassName.TryLoadClass<UGameInstance>();
     FGameInstancePtr GameInstance(NewObject<UGameInstance>(GEngine, GameInstanceClass));
@@ -39,7 +43,8 @@ TTuple<FDudWidgets, FWorldPtr, FGameInstancePtr> UWidgetTestUtilities::CreateTes
     WorldContext->GameViewport->SetViewportOverlayWidget(nullptr, DudWidgets.DudOverlay);
     WorldContext->GameViewport->SetGameLayerManager(DudWidgets.GameLayerManager);
 
-    if (bBeginPlay) {
+    if (bBeginPlay)
+    {
         World->InitializeActorsForPlay(World->URL);
         World->BeginPlay();
         World->SetBegunPlay(true);

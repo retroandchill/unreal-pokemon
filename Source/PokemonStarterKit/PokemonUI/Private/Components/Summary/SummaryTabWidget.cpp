@@ -10,14 +10,16 @@
 #include "Input/CommonUIInputTypes.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 
-void USummaryTabWidget::NativePreConstruct() {
+void USummaryTabWidget::NativePreConstruct()
+{
     Super::NativePreConstruct();
 
     PageLeftActionWidget->SetEnhancedInputAction(PageLeftAction);
     PageRightActionWidget->SetEnhancedInputAction(PageRightAction);
 }
 
-void USummaryTabWidget::NativeConstruct() {
+void USummaryTabWidget::NativeConstruct()
+{
     Super::NativeConstruct();
 
     auto CreateBindArgs = [this](UInputAction *Action, auto Function, bool bDisplayInActionBar = false) {
@@ -30,11 +32,13 @@ void USummaryTabWidget::NativeConstruct() {
     PageRightBinding = RegisterUIActionBinding(CreateBindArgs(PageRightAction, &USummaryTabWidget::PageRight));
 }
 
-void USummaryTabWidget::SetSummaryPages(USummaryPages *Window) {
+void USummaryTabWidget::SetSummaryPages(USummaryPages *Window)
+{
     SummaryPages = Window;
 
 #if WITH_EDITOR
-    if (PageButtonClass == nullptr) {
+    if (PageButtonClass == nullptr)
+    {
         return;
     }
 #endif
@@ -48,14 +52,16 @@ void USummaryTabWidget::SetSummaryPages(USummaryPages *Window) {
                   Retro::Ranges::Views::Transform(Retro::BindMethod<&USummaryTabWidget::CreatePageButton>(this)) |
                   Retro::Ranges::To<TArray>();
     // clang-format on
-    if (SummaryPages->GetPages().IsEmpty()) {
+    if (SummaryPages->GetPages().IsEmpty())
+    {
         return;
     }
 
     PageButtons[SummaryPages->GetCurrentPageIndex()]->SetIsSelected(true);
 }
 
-UCommonButtonBase *USummaryTabWidget::CreatePageButton(USummaryScreenPage *Page) {
+UCommonButtonBase *USummaryTabWidget::CreatePageButton(USummaryScreenPage *Page)
+{
     auto Button = WidgetTree->ConstructWidget(PageButtonClass);
     Button->SetStyle(Page->GetTabButtonStyle());
     PageButtonGroup->AddWidget(Button);
@@ -65,17 +71,20 @@ UCommonButtonBase *USummaryTabWidget::CreatePageButton(USummaryScreenPage *Page)
     return Button;
 }
 
-void USummaryTabWidget::PageLeft() const {
+void USummaryTabWidget::PageLeft() const
+{
     SummaryPages->PreviousPage();
     PageButtons[SummaryPages->GetCurrentPageIndex()]->SetIsSelected(true);
 }
 
-void USummaryTabWidget::PageRight() const {
+void USummaryTabWidget::PageRight() const
+{
     SummaryPages->NextPage();
     PageButtons[SummaryPages->GetCurrentPageIndex()]->SetIsSelected(true);
 }
 
-void USummaryTabWidget::OnPageClicked(int32 Index) const {
+void USummaryTabWidget::OnPageClicked(int32 Index) const
+{
     SummaryPages->SetPage(Index);
     PageButtons[SummaryPages->GetCurrentPageIndex()]->SetIsSelected(true);
 }

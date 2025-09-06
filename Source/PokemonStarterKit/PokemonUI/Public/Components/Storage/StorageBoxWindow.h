@@ -17,7 +17,8 @@ class IStorageBox;
  * The window used to display the Pokémon stored inside a box.
  */
 UCLASS(Abstract)
-class POKEMONUI_API UStorageBoxWindow : public USelectableWidget {
+class POKEMONUI_API UStorageBoxWindow : public USelectableWidget
+{
     GENERATED_BODY()
 
   public:

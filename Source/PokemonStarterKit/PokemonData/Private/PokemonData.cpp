@@ -25,7 +25,8 @@
 
 constexpr auto GLoctextNamespace = "FPokemonDataModule";
 
-void FPokemonDataModule::StartupModule() {
+void FPokemonDataModule::StartupModule()
+{
     auto &DataRegistry = FDataRegistry::GetInstance();
     DataRegistry.RegisterStruct<FGrowthRateData>();
     DataRegistry.RegisterStruct<FGenderRatio>();
@@ -51,7 +52,8 @@ void FPokemonDataModule::StartupModule() {
     DataRegistry.RegisterStruct<FTrainerType>();
 }
 
-void FPokemonDataModule::ShutdownModule() {
+void FPokemonDataModule::ShutdownModule()
+{
     // No custom shutdown needed
 }
 

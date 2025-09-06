@@ -10,8 +10,10 @@
 /**
  *
  */
-class POKEMONEDITORTOOLS_API SPocketKeyPin : public SGraphPinStructInstance {
-    SLATE_BEGIN_ARGS(SPocketKeyPin) {
+class POKEMONEDITORTOOLS_API SPocketKeyPin : public SGraphPinStructInstance
+{
+    SLATE_BEGIN_ARGS(SPocketKeyPin)
+        {
         }
 
         SLATE_END_ARGS()

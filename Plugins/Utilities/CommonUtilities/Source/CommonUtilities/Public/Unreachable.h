@@ -12,4 +12,4 @@ namespace UE
         __builtin_unreachable();
 #endif
     }
-}
+} // namespace UE

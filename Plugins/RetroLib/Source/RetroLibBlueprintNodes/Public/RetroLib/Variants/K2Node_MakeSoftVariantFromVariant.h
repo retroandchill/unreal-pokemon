@@ -11,7 +11,8 @@
  * Make a soft variant struct from its corresponding hard reference.
  */
 UCLASS()
-class RETROLIBBLUEPRINTNODES_API UK2Node_MakeSoftVariantFromVariant : public UK2Node_VariantOperationBase {
+class RETROLIBBLUEPRINTNODES_API UK2Node_MakeSoftVariantFromVariant : public UK2Node_VariantOperationBase
+{
     GENERATED_BODY()
 
   public:

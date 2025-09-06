@@ -22,7 +22,8 @@ class IBattle;
  * The underlying screen that sits on top of the battle system.
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen, public IBattleHUD {
+class POKEMONBATTLEUI_API UPokemonBattleScreen : public UScreen, public IBattleHUD
+{
     GENERATED_BODY()
 
   public:

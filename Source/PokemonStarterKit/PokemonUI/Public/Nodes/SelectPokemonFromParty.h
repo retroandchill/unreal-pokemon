@@ -21,7 +21,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPokemonCancel);
  * Open the menu to select a Pokémon from the party
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API USelectPokemonFromParty : public UBlueprintCoroutineActionBase {
+class POKEMONUI_API USelectPokemonFromParty : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

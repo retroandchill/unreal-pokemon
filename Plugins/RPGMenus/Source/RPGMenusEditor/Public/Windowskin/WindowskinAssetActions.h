@@ -7,7 +7,8 @@
 /**
  * The actions used for editing the Windowskin assets
  */
-class RPGMENUSEDITOR_API FWindowskinAssetActions : public FAssetTypeActions_Base {
+class RPGMENUSEDITOR_API FWindowskinAssetActions : public FAssetTypeActions_Base
+{
   public:
     FText GetName() const override;
     UClass *GetSupportedClass() const override;

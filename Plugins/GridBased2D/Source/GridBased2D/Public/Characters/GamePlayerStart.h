@@ -10,7 +10,8 @@
  * Player start class with a capsule that matches the size of the grid.
  */
 UCLASS(Blueprintable)
-class GRIDBASED2D_API AGamePlayerStart : public APlayerStart {
+class GRIDBASED2D_API AGamePlayerStart : public APlayerStart
+{
     GENERATED_BODY()
 
   public:

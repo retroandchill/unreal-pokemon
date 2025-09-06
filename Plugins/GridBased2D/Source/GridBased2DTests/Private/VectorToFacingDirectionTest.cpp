@@ -8,8 +8,8 @@
 IMPLEMENT_COMPLEX_AUTOMATION_TEST(VectorToFacingDirectionTest, "Unit Tests.Movement.VectorToFacingDirectionTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-void VectorToFacingDirectionTest::GetTests(TArray<FString> &OutBeautifiedNames,
-                                           TArray<FString> &OutTestCommands) const {
+void VectorToFacingDirectionTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const
+{
     OutBeautifiedNames.Add("Up");
     OutTestCommands.Add("0 -1 " + FString::FromInt(static_cast<uint8>(EFacingDirection::Up)));
 
@@ -23,7 +23,8 @@ void VectorToFacingDirectionTest::GetTests(TArray<FString> &OutBeautifiedNames,
     OutTestCommands.Add("0 1 " + FString::FromInt(static_cast<uint8>(EFacingDirection::Down)));
 }
 
-bool VectorToFacingDirectionTest::RunTest(const FString &Parameters) {
+bool VectorToFacingDirectionTest::RunTest(const FString &Parameters)
+{
     std::stringstream InputStream(TCHAR_TO_UTF8(*Parameters));
     double X;
     double Y;

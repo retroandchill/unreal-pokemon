@@ -14,7 +14,8 @@
  * Represents the data for a status condition
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FStatus : public FIndexedTableRow {
+struct POKEMONDATA_API FStatus : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -31,7 +32,8 @@ struct POKEMONDATA_API FStatus : public FIndexedTableRow {
 };
 
 USTRUCT(BlueprintType, meta = (DisableSplitPin))
-struct POKEMONDATA_API FStatusHandle {
+struct POKEMONDATA_API FStatusHandle
+{
     GENERATED_BODY()
     DECLARE_DATA_HANDLE(FStatusHandle, FStatus)
 
@@ -46,7 +48,8 @@ struct POKEMONDATA_API FStatusHandle {
  * Helper functions for status effects
  */
 UCLASS()
-class POKEMONDATA_API UStatusEffectHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UStatusEffectHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

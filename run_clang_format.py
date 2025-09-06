@@ -1,8 +1,8 @@
 ﻿import os
 import subprocess
 
-STAY_OUT = ['Deps', 'External', 'Intermediate']
-LINE_ENDINGS = ['.cs', '.h', '.cpp', '.hpp', '.c', '.hxx', '.cxx']
+STAY_OUT = ['Deps', 'External', 'Intermediate', 'UnrealSharp/UnrealSharp']
+LINE_ENDINGS = ['.h', '.cpp', '.hpp', '.c', '.hxx', '.cxx']
 
 if __name__ == '__main__':
 

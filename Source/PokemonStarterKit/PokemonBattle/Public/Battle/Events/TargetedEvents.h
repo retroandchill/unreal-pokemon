@@ -17,7 +17,8 @@ class IBattler;
  * Enum used to look up the specific tag for a battle event
  */
 UENUM(BlueprintType)
-enum class ETargetedEventScope : uint8 {
+enum class ETargetedEventScope : uint8
+{
     /**
      * The tag for abilities/effects that are activated by events that occur if possessed by any Pokémon in battle.
      */
@@ -62,7 +63,8 @@ enum class ETargetedEventScope : uint8 {
 /**
  * Wrapper struct for an event that contains a set of native tags for various event types
  */
-struct POKEMONBATTLE_API FTargetedEvent {
+struct POKEMONBATTLE_API FTargetedEvent
+{
 
     /**
      * The tag for abilities/effects that are activated by events that occur if possessed by any Pokémon in battle.
@@ -124,7 +126,8 @@ struct POKEMONBATTLE_API FTargetedEvent {
  * @param Prefix The prefix to append the scope names to create the tag
  */
 #define DEFINE_TARGETED_EVENT_TYPE(Name, Prefix)                                                                       \
-    FTargetedEvent Name {                                                                                              \
+    FTargetedEvent Name                                                                                                \
+    {                                                                                                                  \
         .GlobalTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".Global", TEXT(""),                    \
                                         ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD),                           \
         .UserTag = FNativeGameplayTag(UE_PLUGIN_NAME, UE_MODULE_NAME, Prefix ".User", TEXT(""),                        \
@@ -153,7 +156,8 @@ struct POKEMONBATTLE_API FTargetedEvent {
 #define SYNC_EVENT(Expression) Expression;
 #endif
 
-namespace Pokemon::Battle::Events {
+namespace Pokemon::Battle::Events
+{
 
     POKEMONBATTLE_API UE5Coro::TCoroutine<> SendOutActivationEvent(UAsyncAbilityComponent *AbilityComponent,
                                                                    FGameplayAbilitySpecHandle Handle, FGameplayTag Tag,

@@ -14,10 +14,12 @@ FTurnBasedGameplayEffect::FTurnBasedGameplayEffect(UTurnBasedEffectComponent *Ow
                                                    FActiveGameplayEffectHandle EffectHandle, int32 TurnDuration)
     : OwningComponent(OwningComponent), EffectHandle(EffectHandle),
       GameplayEffect(OwningComponent->GetAbilitySystemComponent()->GetGameplayEffectCDO(EffectHandle)),
-      TurnsRemaining(TurnDuration > 0 ? TOptional(TurnDuration) : TOptional<int32>()) {
+      TurnsRemaining(TurnDuration > 0 ? TOptional(TurnDuration) : TOptional<int32>())
+{
 }
 
-bool FTurnBasedGameplayEffect::HasTrigger(ETurnDurationTrigger Trigger) const {
+bool FTurnBasedGameplayEffect::HasTrigger(ETurnDurationTrigger Trigger) const
+{
     // clang-format off
     return Retro::Optionals::OfNullable(GameplayEffect) |
            Retro::Optionals::Transform(&UGameplayEffect::FindComponent<UTurnBasedGameplayEffectComponent>) |
@@ -27,7 +29,8 @@ bool FTurnBasedGameplayEffect::HasTrigger(ETurnDurationTrigger Trigger) const {
     // clang-format on
 }
 
-bool FTurnBasedGameplayEffect::IncrementTurnCount() {
+bool FTurnBasedGameplayEffect::IncrementTurnCount()
+{
     TurnsActive++;
     // clang-format off
     return TurnsRemaining |
@@ -37,7 +40,8 @@ bool FTurnBasedGameplayEffect::IncrementTurnCount() {
     // clang-format on
 }
 
-bool FTurnBasedGameplayEffect::RemoveEffect(int32 StacksToRemove) {
+bool FTurnBasedGameplayEffect::RemoveEffect(int32 StacksToRemove)
+{
     // clang-format off
     return Retro::Optionals::OfNullable(OwningComponent.Get()) |
                     Retro::Optionals::Transform(&UTurnBasedEffectComponent::GetAbilitySystemComponent) |

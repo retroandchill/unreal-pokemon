@@ -1,8 +1,6 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Repositories/GameDataRepositoryFactory.h"
-
 #include "ClassViewerFilter.h"
 #include "ClassViewerModule.h"
 #include "GameDataRepository.h"
@@ -10,8 +8,8 @@
 
 class FGameDataRepositoryFilter final : public IClassViewerFilter
 {
-public:
-    bool IsClassAllowed(const FClassViewerInitializationOptions& InInitOptions, const UClass* InClass,
+  public:
+    bool IsClassAllowed(const FClassViewerInitializationOptions &InInitOptions, const UClass *InClass,
                         const TSharedRef<FClassViewerFilterFuncs> InFilterFuncs) override
     {
         if (!InClass->IsChildOf<UGameDataRepository>() || InClass->HasAnyClassFlags(CLASS_Abstract))
@@ -29,7 +27,7 @@ public:
         return InnerProperty != nullptr;
     }
 
-    bool IsUnloadedClassAllowed(const FClassViewerInitializationOptions& InInitOptions,
+    bool IsUnloadedClassAllowed(const FClassViewerInitializationOptions &InInitOptions,
                                 const TSharedRef<const IUnloadedBlueprintData> InUnloadedClassData,
                                 const TSharedRef<FClassViewerFilterFuncs> InFilterFuncs) override
     {
@@ -56,10 +54,10 @@ bool UGameDataRepositoryFactory::ConfigureProperties()
     const auto Filter = MakeShared<FGameDataRepositoryFilter>();
     Options.ClassFilters.Add(Filter);
 
-    const FText TitleText = NSLOCTEXT("GameDataRepositoryFactory", "CreateGameDataRepositoryOptions",
-                                      "Pick Game Data Asset Class");
-    if (UClass* ChosenClass = nullptr; SClassPickerDialog::PickClass(TitleText, Options, ChosenClass,
-                                                                     UGameDataRepository::StaticClass()))
+    const FText TitleText =
+        NSLOCTEXT("GameDataRepositoryFactory", "CreateGameDataRepositoryOptions", "Pick Game Data Asset Class");
+    if (UClass *ChosenClass = nullptr;
+        SClassPickerDialog::PickClass(TitleText, Options, ChosenClass, UGameDataRepository::StaticClass()))
     {
         AssetClass = ChosenClass;
         return true;
@@ -68,9 +66,9 @@ bool UGameDataRepositoryFactory::ConfigureProperties()
     return false;
 }
 
-UObject* UGameDataRepositoryFactory::FactoryCreateNew(UClass* InClass, UObject* InParent, const FName InName,
-                                                      const EObjectFlags Flags,
-                                                      UObject* Context, FFeedbackContext* Warn)
+UObject *UGameDataRepositoryFactory::FactoryCreateNew(UClass *InClass, UObject *InParent, const FName InName,
+                                                      const EObjectFlags Flags, UObject *Context,
+                                                      FFeedbackContext *Warn)
 {
     return NewObject<UGameDataRepository>(InParent, AssetClass, InName, Flags);
 }

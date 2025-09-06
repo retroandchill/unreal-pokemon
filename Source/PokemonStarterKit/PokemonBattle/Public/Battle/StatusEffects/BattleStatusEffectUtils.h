@@ -16,7 +16,8 @@ class IBattler;
  * Helper class related to status effects
  */
 UCLASS()
-class POKEMONBATTLE_API UBattleStatusEffectUtils : public UBlueprintFunctionLibrary {
+class POKEMONBATTLE_API UBattleStatusEffectUtils : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:
@@ -34,9 +35,8 @@ class POKEMONBATTLE_API UBattleStatusEffectUtils : public UBlueprintFunctionLibr
                                                                 const FText &HasOtherStatusFormat,
                                                                 FForceLatentCoroutine = {});
 
-    static UE5Coro::TCoroutine<FActiveGameplayEffectHandle>
-    ApplyStatusEffectToBattler(const TScriptInterface<IBattler> &Battler, FStatusHandle StatusEffect,
-                               FForceLatentCoroutine = {});
+    static UE5Coro::TCoroutine<FActiveGameplayEffectHandle> ApplyStatusEffectToBattler(
+        const TScriptInterface<IBattler> &Battler, FStatusHandle StatusEffect, FForceLatentCoroutine = {});
 
     static UE5Coro::TCoroutine<bool> RemoveStatusEffectFromBattler(const TScriptInterface<IBattler> &Target,
                                                                    FForceLatentCoroutine = {});

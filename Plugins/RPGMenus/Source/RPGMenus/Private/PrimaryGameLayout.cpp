@@ -11,17 +11,20 @@
 #include "RPGMenus.h"
 #include "RPGUIManagerSubsystem.h"
 
-UPrimaryGameLayout *UPrimaryGameLayout::Get(const UObject *WorldContextObject) {
+UPrimaryGameLayout *UPrimaryGameLayout::Get(const UObject *WorldContextObject)
+{
     auto GameInstance = UGameplayStatics::GetGameInstance(WorldContextObject);
     auto PlayerController = GameInstance->GetPrimaryPlayerController(false);
     return Get(PlayerController);
 }
 
-UPrimaryGameLayout *UPrimaryGameLayout::Get(const APlayerController *PlayerController) {
+UPrimaryGameLayout *UPrimaryGameLayout::Get(const APlayerController *PlayerController)
+{
     return PlayerController ? Get(Cast<URPGLocalPlayer>(PlayerController->Player)) : nullptr;
 }
 
-UPrimaryGameLayout *UPrimaryGameLayout::Get(ULocalPlayer *LocalPlayer) {
+UPrimaryGameLayout *UPrimaryGameLayout::Get(ULocalPlayer *LocalPlayer)
+{
     // clang-format off
     auto CommonLocalPlayer = Retro::Optionals::OfNullable(LocalPlayer) |
                              Retro::Optionals::Transform(Retro::DynamicCastChecked<URPGLocalPlayer>);
@@ -39,8 +42,10 @@ UPrimaryGameLayout *UPrimaryGameLayout::Get(ULocalPlayer *LocalPlayer) {
     // clang-format on
 }
 
-void UPrimaryGameLayout::SetIsDormant(bool Dormant) {
-    if (bIsDormant == Dormant) {
+void UPrimaryGameLayout::SetIsDormant(bool Dormant)
+{
+    if (bIsDormant == Dormant)
+    {
         return;
     }
 
@@ -56,19 +61,24 @@ void UPrimaryGameLayout::SetIsDormant(bool Dormant) {
     OnIsDormantChanged();
 }
 
-void UPrimaryGameLayout::FindAndRemoveWidgetFromLayer(UCommonActivatableWidget *ActivatableWidget) {
+void UPrimaryGameLayout::FindAndRemoveWidgetFromLayer(UCommonActivatableWidget *ActivatableWidget)
+{
     // We're not sure what layer the widget is on so go searching.
-    for (const auto &[Key, Value] : Layers) {
+    for (const auto &[Key, Value] : Layers)
+    {
         Value->RemoveWidget(*ActivatableWidget);
     }
 }
 
-UCommonActivatableWidgetContainerBase *UPrimaryGameLayout::GetLayerWidget(FGameplayTag LayerName) {
+UCommonActivatableWidgetContainerBase *UPrimaryGameLayout::GetLayerWidget(FGameplayTag LayerName)
+{
     return Layers.FindRef(LayerName);
 }
 
-void UPrimaryGameLayout::RegisterLayer(FGameplayTag LayerTag, UCommonActivatableWidgetContainerBase *LayerWidget) {
-    if (IsDesignTime()) {
+void UPrimaryGameLayout::RegisterLayer(FGameplayTag LayerTag, UCommonActivatableWidgetContainerBase *LayerWidget)
+{
+    if (IsDesignTime())
+    {
         return;
     }
 
@@ -81,17 +91,23 @@ void UPrimaryGameLayout::RegisterLayer(FGameplayTag LayerTag, UCommonActivatable
     Layers.Add(LayerTag, LayerWidget);
 }
 
-void UPrimaryGameLayout::OnIsDormantChanged() {
+void UPrimaryGameLayout::OnIsDormantChanged()
+{
     // Currently no processing
 }
 
-void UPrimaryGameLayout::OnWidgetStackTransitioning(UCommonActivatableWidgetContainerBase *, bool bIsTransitioning) {
-    if (bIsTransitioning) {
+void UPrimaryGameLayout::OnWidgetStackTransitioning(UCommonActivatableWidgetContainerBase *, bool bIsTransitioning)
+{
+    if (bIsTransitioning)
+    {
         const FName SuspendToken =
             UCommonUIExtensions::SuspendInputForPlayer(GetOwningLocalPlayer(), TEXT("GlobalStackTransion"));
         SuspendInputTokens.Add(SuspendToken);
-    } else {
-        if (ensure(SuspendInputTokens.Num() > 0)) {
+    }
+    else
+    {
+        if (ensure(SuspendInputTokens.Num() > 0))
+        {
             const FName SuspendToken = SuspendInputTokens.Pop();
             UCommonUIExtensions::ResumeInputForPlayer(GetOwningLocalPlayer(), SuspendToken);
         }

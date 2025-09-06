@@ -8,7 +8,8 @@
 #include "Pokemon/Pokemon.h"
 #include "PokemonDataSettings.h"
 
-void UMoveSelectWindow::DisplayMoves(const TScriptInterface<IPokemon> &Pokemon) {
+void UMoveSelectWindow::DisplayMoves(const TScriptInterface<IPokemon> &Pokemon)
+{
     CurrentPokemon = Pokemon;
 
     ClearSelectableOptions();
@@ -16,33 +17,40 @@ void UMoveSelectWindow::DisplayMoves(const TScriptInterface<IPokemon> &Pokemon) 
     auto Moves = Pokemon->GetMoveBlock()->GetMoves();
 
     check(PanelClass != nullptr)
-    for (int i = 0; i < MoveCount; i++) {
+    for (int i = 0; i < MoveCount; i++)
+    {
         CreateMovePanel(i < Moves.Num() ? Moves[i] : nullptr);
     }
 
-    if (MoveToLearn.IsSet()) {
+    if (MoveToLearn.IsSet())
+    {
         auto TempMove = CurrentPokemon->GetMoveBlock()->CreateNewMove({.Move = *MoveToLearn});
         CreateMovePanel(TempMove, true);
     }
 }
 
-void UMoveSelectWindow::BeginMoveLearnDisplay(const TScriptInterface<IPokemon> &Pokemon, FName Move) {
+void UMoveSelectWindow::BeginMoveLearnDisplay(const TScriptInterface<IPokemon> &Pokemon, FName Move)
+{
     MoveToLearn.Emplace(Move);
     DisplayMoves(Pokemon);
 }
 
-void UMoveSelectWindow::BindToOnMoveSelectionChanged(const FOnMoveSelectionChanged::FDelegate &Callback) {
+void UMoveSelectWindow::BindToOnMoveSelectionChanged(const FOnMoveSelectionChanged::FDelegate &Callback)
+{
     OnMoveSelectionChanged.Add(Callback);
 }
 
-void UMoveSelectWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) {
+void UMoveSelectWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex)
+{
     Super::OnSelectionChange_Implementation(OldIndex, NewIndex);
-    if (NewIndex != INDEX_NONE) {
+    if (NewIndex != INDEX_NONE)
+    {
         OnMoveSelectionChanged.Broadcast(GetSelectableOption<UMovePanel>(NewIndex)->GetMove());
     }
 }
 
-UMovePanel *UMoveSelectWindow::CreateMovePanel(const TScriptInterface<IMove> &Move, bool bIsMoveToLearn) {
+UMovePanel *UMoveSelectWindow::CreateMovePanel(const TScriptInterface<IMove> &Move, bool bIsMoveToLearn)
+{
     check(PanelClass != nullptr)
     auto Panel = WidgetTree->ConstructWidget(PanelClass);
     Panel->SetMove(Move);

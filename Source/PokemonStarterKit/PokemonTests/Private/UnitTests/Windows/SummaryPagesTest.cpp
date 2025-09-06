@@ -19,7 +19,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(SummaryPagesTest, "Unit Tests.Windows.SummaryPagesTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool SummaryPagesTest::RunTest(const FString &Parameters) {
+bool SummaryPagesTest::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonSummaryScreen>();
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());

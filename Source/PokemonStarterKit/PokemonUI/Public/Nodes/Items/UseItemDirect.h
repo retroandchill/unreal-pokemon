@@ -14,7 +14,8 @@ class UBagScreen;
  *
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API UUseItemDirect : public UUseItem {
+class POKEMONUI_API UUseItemDirect : public UUseItem
+{
     GENERATED_BODY()
 
   public:

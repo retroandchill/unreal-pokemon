@@ -9,7 +9,8 @@
 
 class IPaper2DEditorModule;
 
-void FSimple2DEditorModule::StartupModule() {
+void FSimple2DEditorModule::StartupModule()
+{
     FCoreDelegates::OnPostEngineInit.AddLambda([this] {
         FlipbookEditor_MenuExtensibilityManager = MakeShared<FExtensibilityManager>();
         FlipbookEditor_ToolBarExtensibilityManager = MakeShared<FExtensibilityManager>();
@@ -30,7 +31,8 @@ void FSimple2DEditorModule::StartupModule() {
     });
 }
 
-void FSimple2DEditorModule::ShutdownModule() {
+void FSimple2DEditorModule::ShutdownModule()
+{
     FCoreDelegates::OnPostEngineInit.RemoveAll(this);
 
     FlipbookEditor_MenuExtensibilityManager.Reset();

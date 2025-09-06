@@ -14,7 +14,8 @@ class IPokemon;
  * The default implementation of a Pokémon's ability block.
  */
 UCLASS()
-class POKEMONCORE_API UDefaultAbilityBlock : public UObject, public IAbilityBlock {
+class POKEMONCORE_API UDefaultAbilityBlock : public UObject, public IAbilityBlock
+{
     GENERATED_BODY()
 
   public:

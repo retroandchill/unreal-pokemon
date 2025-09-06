@@ -3,11 +3,13 @@
 #ifdef __UNREAL__
 #include "RetroLibModule.h"
 
-void FRetroLibModule::StartupModule() {
+void FRetroLibModule::StartupModule()
+{
     // No special startup code
 }
 
-void FRetroLibModule::ShutdownModule() {
+void FRetroLibModule::ShutdownModule()
+{
     // No special shutdown code
 }
 

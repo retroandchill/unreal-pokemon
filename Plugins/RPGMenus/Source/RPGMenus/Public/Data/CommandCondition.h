@@ -11,7 +11,8 @@
  * Condition for a command in the game.
  */
 UCLASS(Abstract, Blueprintable)
-class RPGMENUS_API UCommandCondition : public UObject {
+class RPGMENUS_API UCommandCondition : public UObject
+{
     GENERATED_BODY()
 
   public:

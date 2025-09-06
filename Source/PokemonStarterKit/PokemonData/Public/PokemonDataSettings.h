@@ -11,7 +11,8 @@
  * Meta info about a pocket in the bag.
  */
 USTRUCT(BlueprintType)
-struct POKEMONDATA_API FPocketInfo {
+struct POKEMONDATA_API FPocketInfo
+{
     GENERATED_BODY()
 
     /**
@@ -37,7 +38,8 @@ struct POKEMONDATA_API FPocketInfo {
  * Data related to the Pokémon core data tables used by the game
  */
 UCLASS(Config = Game, DefaultConfig, DisplayName = "Pokémon Data")
-class POKEMONDATA_API UPokemonDataSettings : public UDeveloperSettings {
+class POKEMONDATA_API UPokemonDataSettings : public UDeveloperSettings
+{
     GENERATED_BODY()
 
   public:

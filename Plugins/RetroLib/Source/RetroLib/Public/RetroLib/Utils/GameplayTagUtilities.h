@@ -12,7 +12,8 @@
  *
  */
 UCLASS()
-class RETROLIB_API UGameplayTagUtilities : public UBlueprintFunctionLibrary {
+class RETROLIB_API UGameplayTagUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

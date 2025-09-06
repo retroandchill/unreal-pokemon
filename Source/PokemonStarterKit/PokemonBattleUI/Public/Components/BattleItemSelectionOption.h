@@ -14,7 +14,8 @@ class UDisplayText;
  * The individual item option to select in battle.
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UBattleItemSelectionOption : public UCommonButtonBase {
+class POKEMONBATTLEUI_API UBattleItemSelectionOption : public UCommonButtonBase
+{
     GENERATED_BODY()
 
   public:

@@ -15,7 +15,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(PartyScreenTest, "Unit Tests.Screens.PartyScreenTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool PartyScreenTest::RunTest(const FString &Parameters) {
+bool PartyScreenTest::RunTest(const FString &Parameters)
+{
     using enum ESlateVisibility;
 
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();

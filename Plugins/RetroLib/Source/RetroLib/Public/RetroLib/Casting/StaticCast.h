@@ -17,7 +17,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
 
     /**
      * Checks if you can cast from T to U.
@@ -45,7 +46,8 @@ namespace Retro {
      *       to be implicitly convertible.
      */
     template <typename T>
-    struct TStaticCastFunction {
+    struct TStaticCastFunction
+    {
         /**
          * @brief Invokes the conversion of the provided argument to the specified type T.
          *
@@ -66,7 +68,8 @@ namespace Retro {
          */
         template <typename U>
             requires CanStaticCast<U, T>
-        constexpr decltype(auto) operator()(U &&Args) const {
+        constexpr decltype(auto) operator()(U &&Args) const
+        {
             return static_cast<T>(std::forward<U>(Args));
         }
     };

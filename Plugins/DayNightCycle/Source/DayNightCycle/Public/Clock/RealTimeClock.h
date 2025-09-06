@@ -12,7 +12,8 @@
  * Game Clock implementation that uses the system time to set the current time.
  */
 UCLASS()
-class DAYNIGHTCYCLE_API URealTimeClock : public UObject, public IGameClock {
+class DAYNIGHTCYCLE_API URealTimeClock : public UObject, public IGameClock
+{
     GENERATED_BODY()
 
   protected:

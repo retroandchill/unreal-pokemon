@@ -11,7 +11,8 @@
  * Utility class for blueprint related operations.
  */
 UCLASS()
-class AUTOMATIONTESTHELPERS_API UBlueprintTestUtils : public UBlueprintFunctionLibrary {
+class AUTOMATIONTESTHELPERS_API UBlueprintTestUtils : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

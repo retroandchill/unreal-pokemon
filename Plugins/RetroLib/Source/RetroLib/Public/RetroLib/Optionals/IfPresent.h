@@ -14,8 +14,10 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Optionals {
-    struct FIfPresentInvoker {
+namespace Retro::Optionals
+{
+    struct FIfPresentInvoker
+    {
         /**
          * Invokes the provided functor with the value contained in the optional if it has a value.
          *
@@ -24,16 +26,20 @@ namespace Retro::Optionals {
          */
         template <OptionalType O, typename F>
             requires std::invocable<F, TCommonReference<O>>
-        constexpr void operator()(O &&Optional, F &&Functor) const {
-            if (HasValue(Optional)) {
+        constexpr void operator()(O &&Optional, F &&Functor) const
+        {
+            if (HasValue(Optional))
+            {
                 std::invoke(std::forward<F>(Functor), Get(std::forward<O>(Optional)));
             }
         }
 
         template <VoidOptional O, typename F>
             requires std::invocable<F>
-        constexpr void operator()(O &&Optional, F &&Functor) const {
-            if (HasValue(Optional)) {
+        constexpr void operator()(O &&Optional, F &&Functor) const
+        {
+            if (HasValue(Optional))
+            {
                 std::invoke(std::forward<F>(Functor));
             }
         }

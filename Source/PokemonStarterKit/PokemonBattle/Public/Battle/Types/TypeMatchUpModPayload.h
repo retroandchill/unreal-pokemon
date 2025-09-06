@@ -13,7 +13,8 @@ class IBattler;
  * Data payload for the type match-up data for the entire type matchup
  */
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FTypeMatchUpModData {
+struct POKEMONBATTLE_API FTypeMatchUpModData
+{
     GENERATED_BODY()
 
     /**
@@ -60,7 +61,8 @@ struct POKEMONBATTLE_API FTypeMatchUpModData {
  * Payload object for the event for any additional data needed during damage calculation.
  */
 UCLASS()
-class POKEMONBATTLE_API UTypeMatchUpModPayload : public UObject {
+class POKEMONBATTLE_API UTypeMatchUpModPayload : public UObject
+{
     GENERATED_BODY()
 
   public:

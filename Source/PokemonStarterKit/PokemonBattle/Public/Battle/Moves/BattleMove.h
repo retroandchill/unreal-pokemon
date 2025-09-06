@@ -18,7 +18,8 @@ class IMove;
 class IBattler;
 class IBattle;
 
-struct POKEMONBATTLE_API FTargetWithIndex {
+struct POKEMONBATTLE_API FTargetWithIndex
+{
     TWeakInterfacePtr<IBattler> Target;
     int32 BattlerIndex;
 
@@ -29,14 +30,16 @@ struct POKEMONBATTLE_API FTargetWithIndex {
 
 // This class does not need to be modified.
 UINTERFACE(BlueprintType, NotBlueprintable)
-class POKEMONBATTLE_API UBattleMove : public UInterface {
+class POKEMONBATTLE_API UBattleMove : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Wrapper around a move for its effects in battle.
  */
-class POKEMONBATTLE_API IBattleMove {
+class POKEMONBATTLE_API IBattleMove
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

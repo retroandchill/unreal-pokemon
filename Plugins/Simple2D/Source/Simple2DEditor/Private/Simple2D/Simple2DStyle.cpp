@@ -13,11 +13,13 @@
 #define BOX_BRUSH(RelativePath, ...) FSlateBoxBrush(StyleSet->RootToContentDir(RelativePath, TEXT(".png")), __VA_ARGS__)
 #define DEFAULT_FONT(...) FCoreStyle::GetDefaultFontStyle(__VA_ARGS__)
 
-namespace Simple2D {
+namespace Simple2D
+{
 
     TSharedPtr<FSlateStyleSet> FSimple2DStyle::StyleSet;
 
-    void FSimple2DStyle::Initialize() {
+    void FSimple2DStyle::Initialize()
+    {
         // Const icon sizes
         const FVector2D Icon8x8(8.0f, 8.0f);
         const FVector2D Icon16x16(16.0f, 16.0f);
@@ -26,7 +28,8 @@ namespace Simple2D {
         const FVector2D Icon64x64(64.0f, 64.0f);
 
         // Only register once
-        if (StyleSet.IsValid()) {
+        if (StyleSet.IsValid())
+        {
             return;
         }
 
@@ -116,24 +119,29 @@ namespace Simple2D {
         FSlateStyleRegistry::RegisterSlateStyle(*StyleSet.Get());
     }
 
-    void FSimple2DStyle::Shutdown() {
-        if (StyleSet.IsValid()) {
+    void FSimple2DStyle::Shutdown()
+    {
+        if (StyleSet.IsValid())
+        {
             FSlateStyleRegistry::UnRegisterSlateStyle(*StyleSet.Get());
             ensure(StyleSet.IsUnique());
             StyleSet.Reset();
         }
     }
 
-    TSharedPtr<ISlateStyle> FSimple2DStyle::Get() {
+    TSharedPtr<ISlateStyle> FSimple2DStyle::Get()
+    {
         return StyleSet;
     }
 
-    FName FSimple2DStyle::GetStyleSetName() {
+    FName FSimple2DStyle::GetStyleSetName()
+    {
         static FName PaperStyleName(TEXT("Simple2DStyle"));
         return PaperStyleName;
     }
 
-    FString FSimple2DStyle::InContent(const FString &RelativePath, const ANSICHAR *Extension) {
+    FString FSimple2DStyle::InContent(const FString &RelativePath, const ANSICHAR *Extension)
+    {
         static FString ContentDir = IPluginManager::Get().FindPlugin(TEXT("Paper2D"))->GetContentDir();
         return (ContentDir / RelativePath) + Extension;
     }

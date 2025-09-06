@@ -11,7 +11,8 @@
  * Test service used for automated tests.
  */
 UCLASS()
-class UNREALINJECTORTESTS_API UTestService : public UService {
+class UNREALINJECTORTESTS_API UTestService : public UService
+{
     GENERATED_BODY()
 
   public:

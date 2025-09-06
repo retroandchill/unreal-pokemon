@@ -8,7 +8,8 @@
 #include "TestStructs.generated.h"
 
 USTRUCT()
-struct FTestStruct {
+struct FTestStruct
+{
     GENERATED_BODY()
 
     int32 Value1 = 3;

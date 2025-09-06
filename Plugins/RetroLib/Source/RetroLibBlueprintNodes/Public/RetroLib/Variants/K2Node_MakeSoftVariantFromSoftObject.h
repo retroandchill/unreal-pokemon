@@ -11,7 +11,8 @@
  * Create a soft variant reference from a valid soft object reference.
  */
 UCLASS()
-class RETROLIBBLUEPRINTNODES_API UK2Node_MakeSoftVariantFromSoftObject : public UK2Node_VariantOperationBase {
+class RETROLIBBLUEPRINTNODES_API UK2Node_MakeSoftVariantFromSoftObject : public UK2Node_VariantOperationBase
+{
     GENERATED_BODY()
 
   public:

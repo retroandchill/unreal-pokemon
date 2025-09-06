@@ -5,7 +5,8 @@
  * Represents the type of stat this stat represents
  */
 UENUM(BlueprintType)
-enum class EPokemonStatType : uint8 {
+enum class EPokemonStatType : uint8
+{
     /**
      * Represents a stat that is important everywhere and is actively displayed to the player
      */

@@ -8,7 +8,8 @@
  * Represents the possible genders of a trainer
  */
 UENUM(BlueprintType)
-enum class ETrainerGender : uint8 {
+enum class ETrainerGender : uint8
+{
     /**
      * Represents a male trainer
      */

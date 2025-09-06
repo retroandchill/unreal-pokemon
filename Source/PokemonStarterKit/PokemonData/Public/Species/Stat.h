@@ -14,7 +14,8 @@
  * Represents one of the stats in the database.
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FStat : public FIndexedTableRow {
+struct POKEMONDATA_API FStat : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -60,7 +61,8 @@ struct POKEMONDATA_API FStat : public FIndexedTableRow {
 };
 
 USTRUCT(BlueprintType, meta = (DisableSplitPin))
-struct POKEMONDATA_API FStatHandle {
+struct POKEMONDATA_API FStatHandle
+{
     GENERATED_BODY()
     DECLARE_DATA_HANDLE(FStatHandle, FStat)
 
@@ -73,7 +75,8 @@ struct POKEMONDATA_API FStatHandle {
 };
 
 USTRUCT(BlueprintType, meta = (DisableSplitPin))
-struct POKEMONDATA_API FMainStatHandle {
+struct POKEMONDATA_API FMainStatHandle
+{
     GENERATED_BODY()
     DECLARE_DATA_HANDLE(FMainStatHandle, FStat)
 
@@ -89,7 +92,8 @@ struct POKEMONDATA_API FMainStatHandle {
  * Thin wrapper around a battle stat name, that forces the user to select a battle stat.
  */
 USTRUCT(BlueprintType, meta = (DisableSplitPin))
-struct POKEMONDATA_API FBattleStatHandle {
+struct POKEMONDATA_API FBattleStatHandle
+{
     GENERATED_BODY()
     DECLARE_DATA_HANDLE(FBattleStatHandle, FStat)
 
@@ -102,7 +106,8 @@ struct POKEMONDATA_API FBattleStatHandle {
 };
 
 USTRUCT(BlueprintType, meta = (DisableSplitPin))
-struct POKEMONDATA_API FMainBattleStatHandle {
+struct POKEMONDATA_API FMainBattleStatHandle
+{
     GENERATED_BODY()
     DECLARE_DATA_HANDLE(FMainBattleStatHandle, FStat)
 
@@ -118,7 +123,8 @@ struct POKEMONDATA_API FMainBattleStatHandle {
  * Blueprint function library for getting stat data out.
  */
 UCLASS()
-class POKEMONDATA_API UStatHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UStatHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

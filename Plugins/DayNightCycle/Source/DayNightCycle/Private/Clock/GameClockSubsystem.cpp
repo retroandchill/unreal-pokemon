@@ -5,28 +5,34 @@
 
 class UDayNightCycleSettings;
 
-void UGameClockSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
+void UGameClockSubsystem::Initialize(FSubsystemCollectionBase &Collection)
+{
     Super::Initialize(Collection);
     GameClock = NewObject<UObject>(this, GetDefault<UDayNightCycleSettings>()->ClockClass);
 }
 
-void UGameClockSubsystem::Deinitialize() {
+void UGameClockSubsystem::Deinitialize()
+{
     Super::Deinitialize();
     GameClock = nullptr;
 }
 
-const TScriptInterface<IGameClock> &UGameClockSubsystem::GetGameClock() const {
+const TScriptInterface<IGameClock> &UGameClockSubsystem::GetGameClock() const
+{
     return GameClock;
 }
 
-bool UGameClockSubsystem::IsDay() const {
+bool UGameClockSubsystem::IsDay() const
+{
     auto CurrentTime = IGameClock::Execute_GetCurrentTime(GameClock.GetObject());
     auto CurrentHour = static_cast<float>(CurrentTime.GetTimeOfDay().GetTotalHours());
     return GetDefault<UDayNightCycleSettings>()->DayRange.Contains(CurrentHour);
 }
 
-float UGameClockSubsystem::GetDayCoefficient() const {
-    if (!IsDay()) {
+float UGameClockSubsystem::GetDayCoefficient() const
+{
+    if (!IsDay())
+    {
         return 0.f;
     }
 

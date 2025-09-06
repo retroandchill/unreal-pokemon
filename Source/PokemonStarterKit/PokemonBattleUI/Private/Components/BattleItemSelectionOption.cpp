@@ -4,7 +4,8 @@
 #include "Bag/Item.h"
 #include "DataManager.h"
 
-void UBattleItemSelectionOption::SetItem(FName Item, int32 Quantity) {
+void UBattleItemSelectionOption::SetItem(FName Item, int32 Quantity)
+{
     ItemID = Item;
     ItemQuantity = Quantity;
     static auto &ItemTable = FDataManager::GetInstance().GetDataTable<FItem>();

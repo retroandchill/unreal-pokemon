@@ -11,7 +11,8 @@
  * Utility library for handling camera related operations.
  */
 UCLASS()
-class GRIDBASED2D_API UCameraUtilities : public UBlueprintFunctionLibrary {
+class GRIDBASED2D_API UCameraUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

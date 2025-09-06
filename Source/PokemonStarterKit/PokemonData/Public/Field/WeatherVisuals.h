@@ -8,14 +8,16 @@
 
 // This class does not need to be modified.
 UINTERFACE()
-class UWeatherVisuals : public UInterface {
+class UWeatherVisuals : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Interface for handling the visuals of the weather effects on the field
  */
-class POKEMONDATA_API IWeatherVisuals {
+class POKEMONDATA_API IWeatherVisuals
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

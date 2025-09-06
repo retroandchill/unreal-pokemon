@@ -9,13 +9,16 @@
 #include "PropertyCustomizationHelpers.h"
 #include "Simple2D/Assets/SimpleFlipbook.h"
 
-namespace Simple2D {
+namespace Simple2D
+{
 
-    TSharedRef<IDetailCustomization> FSimpleFlipbookDetailsCustomization::MakeInstance() {
+    TSharedRef<IDetailCustomization> FSimpleFlipbookDetailsCustomization::MakeInstance()
+    {
         return MakeShared<FSimpleFlipbookDetailsCustomization>();
     }
 
-    void FSimpleFlipbookDetailsCustomization::CustomizeDetails(IDetailLayoutBuilder &DetailBuilder) {
+    void FSimpleFlipbookDetailsCustomization::CustomizeDetails(IDetailLayoutBuilder &DetailBuilder)
+    {
         auto &SpriteCategory = DetailBuilder.EditCategory("Sprite", FText::GetEmpty(), ECategoryPriority::Important);
 
         // Show other normal properties in the sprite category so that desired ordering doesn't get messed up
@@ -40,37 +43,47 @@ namespace Simple2D {
     }
 
     void FSimpleFlipbookDetailsCustomization::ExtractSpriteSamplerLabels(FText &SourceTextureOverrideLabel,
-                                                                         class UMaterial *DefaultMaterial) {
+                                                                         class UMaterial *DefaultMaterial)
+    {
         // Get a list of sprite samplers
         TArray<const UMaterialExpressionSpriteTextureSampler *> SpriteSamplerExpressions;
         DefaultMaterial->GetAllExpressionsOfType(SpriteSamplerExpressions);
 
         // Turn that into a set of labels
-        for (const UMaterialExpressionSpriteTextureSampler *Sampler : SpriteSamplerExpressions) {
-            if (Sampler->SlotDisplayName.IsEmpty()) {
+        for (const UMaterialExpressionSpriteTextureSampler *Sampler : SpriteSamplerExpressions)
+        {
+            if (Sampler->SlotDisplayName.IsEmpty())
+            {
                 continue;
             }
 
-            if (Sampler->bSampleAdditionalTextures) {
+            if (Sampler->bSampleAdditionalTextures)
+            {
                 AdditionalTextureLabels.FindOrAdd(Sampler->AdditionalSlotIndex) = Sampler->SlotDisplayName;
-            } else {
+            }
+            else
+            {
                 SourceTextureOverrideLabel = Sampler->SlotDisplayName;
             }
         }
     }
 
     void FSimpleFlipbookDetailsCustomization::BuildTextureSection(IDetailCategoryBuilder &SpriteCategory,
-                                                                  IDetailLayoutBuilder &DetailLayout) {
+                                                                  IDetailLayoutBuilder &DetailLayout)
+    {
         // Grab information about the material
         auto DefaultMaterialProperty =
             DetailLayout.GetProperty(GET_MEMBER_NAME_CHECKED(USimpleFlipbook, DefaultMaterial));
 
         FText SourceTextureOverrideLabel;
         if (UObject * DefaultMaterialAsObject;
-            DefaultMaterialProperty->GetValue(DefaultMaterialAsObject) == FPropertyAccess::Success) {
+            DefaultMaterialProperty->GetValue(DefaultMaterialAsObject) == FPropertyAccess::Success)
+        {
             if (auto DefaultMaterialInterface = Cast<UMaterialInterface>(DefaultMaterialAsObject);
-                DefaultMaterialInterface != nullptr) {
-                if (auto DefaultMaterial = DefaultMaterialInterface->GetMaterial(); DefaultMaterial != nullptr) {
+                DefaultMaterialInterface != nullptr)
+            {
+                if (auto DefaultMaterial = DefaultMaterialInterface->GetMaterial(); DefaultMaterial != nullptr)
+                {
                     ExtractSpriteSamplerLabels(SourceTextureOverrideLabel, DefaultMaterial);
                 }
             }
@@ -102,11 +115,13 @@ namespace Simple2D {
     }
 
     void FSimpleFlipbookDetailsCustomization::GenerateAdditionalTextureWidget(
-        TSharedRef<IPropertyHandle> PropertyHandle, int32 ArrayIndex, IDetailChildrenBuilder &ChildrenBuilder) {
+        TSharedRef<IPropertyHandle> PropertyHandle, int32 ArrayIndex, IDetailChildrenBuilder &ChildrenBuilder)
+    {
         auto &TextureRow = ChildrenBuilder.AddProperty(PropertyHandle);
 
         FText ExtraText;
-        if (const auto *ExtraTextPtr = AdditionalTextureLabels.Find(ArrayIndex); ExtraTextPtr != nullptr) {
+        if (const auto *ExtraTextPtr = AdditionalTextureLabels.Find(ArrayIndex); ExtraTextPtr != nullptr)
+        {
             ExtraText = *ExtraTextPtr;
         }
 
@@ -133,11 +148,12 @@ namespace Simple2D {
         // clang-format on
     }
 
-    TSharedRef<SWidget>
-    FSimpleFlipbookDetailsCustomization::CreateTextureNameWidget(TSharedPtr<IPropertyHandle> PropertyHandle,
-                                                                 const FText &OverrideText) {
+    TSharedRef<SWidget> FSimpleFlipbookDetailsCustomization::CreateTextureNameWidget(
+        TSharedPtr<IPropertyHandle> PropertyHandle, const FText &OverrideText)
+    {
         auto PropertyNameWidget = PropertyHandle->CreatePropertyNameWidget();
-        if (OverrideText.IsEmpty()) {
+        if (OverrideText.IsEmpty())
+        {
             return PropertyNameWidget;
         }
 
@@ -157,10 +173,13 @@ namespace Simple2D {
         // clang-format on
     }
 
-    EVisibility FSimpleFlipbookDetailsCustomization::GetCustomPivotVisibility(TSharedPtr<IPropertyHandle> Property) {
-        if (Property.IsValid()) {
+    EVisibility FSimpleFlipbookDetailsCustomization::GetCustomPivotVisibility(TSharedPtr<IPropertyHandle> Property)
+    {
+        if (Property.IsValid())
+        {
             uint8 ValueAsByte;
-            if (auto Result = Property->GetValue(ValueAsByte); Result == FPropertyAccess::Success) {
+            if (auto Result = Property->GetValue(ValueAsByte); Result == FPropertyAccess::Success)
+            {
                 return static_cast<ESpritePivotMode::Type>(ValueAsByte) == ESpritePivotMode::Custom
                            ? EVisibility::Visible
                            : EVisibility::Collapsed;

@@ -24,20 +24,24 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(UPokemonBattleScreen)
 
-UPokemonBattleScreen *UPokemonBattleScreen::AddPokemonBattleScreenToStack(const UObject *WorldContextObject) {
+UPokemonBattleScreen *UPokemonBattleScreen::AddPokemonBattleScreenToStack(const UObject *WorldContextObject)
+{
     return URPGMenuUtilities::InjectScreenToStack<UPokemonBattleScreen>(WorldContextObject).GetPtrOrNull();
 }
 
-void UPokemonBattleScreen::NativeConstruct() {
+void UPokemonBattleScreen::NativeConstruct()
+{
     Super::NativeConstruct();
     SwapToPanelDisplay();
 }
 
-const TScriptInterface<IBattle> &UPokemonBattleScreen::GetBattle() const {
+const TScriptInterface<IBattle> &UPokemonBattleScreen::GetBattle() const
+{
     return CurrentBattle;
 }
 
-void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
+void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle)
+{
     CurrentBattle = Battle;
     Algo::ForEach(Panels, &UWidget::RemoveFromParent);
     Panels.Reset();
@@ -55,46 +59,56 @@ void UPokemonBattleScreen::SetBattle(const TScriptInterface<IBattle> &Battle) {
     ExpGainPane->SetBattle(CurrentBattle);
 }
 
-void UPokemonBattleScreen::ClearSelectingBattlers() {
+void UPokemonBattleScreen::ClearSelectingBattlers()
+{
     SelectingBattlers.Reset();
     SelectionIndex.Reset();
 }
 
-void UPokemonBattleScreen::SelectAction(const TScriptInterface<IBattler> &Battler) {
+void UPokemonBattleScreen::SelectAction(const TScriptInterface<IBattler> &Battler)
+{
     bMandatorySwitch = false;
     SelectingBattlers.Emplace(Battler);
-    if (!SelectionIndex.IsSet()) {
+    if (!SelectionIndex.IsSet())
+    {
         SelectionIndex.Emplace(0);
     }
 
-    if (!ActionSelect->IsVisible()) {
+    if (!ActionSelect->IsVisible())
+    {
         NextBattler(Battler);
     }
 }
 
-void UPokemonBattleScreen::PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler) {
+void UPokemonBattleScreen::PromptMandatorySwitch(const TScriptInterface<IBattler> &Battler)
+{
     bMandatorySwitch = true;
     SelectingBattlers.Emplace(Battler);
-    if (!SelectionIndex.IsSet()) {
+    if (!SelectionIndex.IsSet())
+    {
         SelectionIndex.Emplace(0);
     }
 
     OnMandatorySwitch();
 }
 
-UPokemonActionOptions *UPokemonBattleScreen::GetActionSelect() const {
+UPokemonActionOptions *UPokemonBattleScreen::GetActionSelect() const
+{
     return ActionSelect;
 }
 
-UBattleSwitchPane *UPokemonBattleScreen::GetBattleSwitchPane() const {
+UBattleSwitchPane *UPokemonBattleScreen::GetBattleSwitchPane() const
+{
     return BattleSwitchPane;
 }
 
-UExpGainPane *UPokemonBattleScreen::GetExpGainPane() const {
+UExpGainPane *UPokemonBattleScreen::GetExpGainPane() const
+{
     return ExpGainPane;
 }
 
-void UPokemonBattleScreen::SelectMove(const TScriptInterface<IBattler> &Battler) {
+void UPokemonBattleScreen::SelectMove(const TScriptInterface<IBattler> &Battler)
+{
     ActionSelect->DeactivateWidget();
     ActionSelect->SetVisibility(ESlateVisibility::Hidden);
     MoveSelect->SetBattler(Battler);
@@ -103,20 +117,24 @@ void UPokemonBattleScreen::SelectMove(const TScriptInterface<IBattler> &Battler)
     MoveSelect->ActivateWidget();
 }
 
-void UPokemonBattleScreen::Refresh() const {
-    for (auto &Panel : Panels) {
+void UPokemonBattleScreen::Refresh() const
+{
+    for (auto &Panel : Panels)
+    {
         Panel->Refresh();
     }
 }
 
-UPokemonBattlePanel *UPokemonBattleScreen::FindPanelForBattler(const TScriptInterface<IBattler> &Battler) const {
+UPokemonBattlePanel *UPokemonBattleScreen::FindPanelForBattler(const TScriptInterface<IBattler> &Battler) const
+{
     auto Find = Panels.FindByPredicate(
         [&Battler](const UPokemonBattlePanel *Panel) { return Panel->GetCurrentBattler() == Battler; });
     return Find != nullptr ? *Find : nullptr;
 }
 
 UE5Coro::TCoroutine<> UPokemonBattleScreen::DisplayExpForGain(UE5Coro::TLatentContext<const UObject> Context,
-                                                              TArray<FExpGainInfo> GainInfos) {
+                                                              TArray<FExpGainInfo> GainInfos)
+{
     ExpGainPane->GainExp(std::move(GainInfos));
     co_await Retro::BindToDelegateDispatch(OnExpGainComplete, [this] {
         SwapToExpGainDisplay();
@@ -128,20 +146,24 @@ UE5Coro::TCoroutine<> UPokemonBattleScreen::DisplayExpForGain(UE5Coro::TLatentCo
 }
 
 UE5Coro::TCoroutine<> UPokemonBattleScreen::AnimateHPChange(TScriptInterface<IBattler> Battler, float MaxDuration,
-                                                            FForceLatentCoroutine) {
+                                                            FForceLatentCoroutine)
+{
     auto Panel = FindPanelForBattler(Battler);
-    if (Panel == nullptr) {
+    if (Panel == nullptr)
+    {
         co_return;
     }
 
     co_await Panel->AnimateHP(MaxDuration);
 }
 
-void UPokemonBattleScreen::AddPanelsForSide(int32 Index, const TScriptInterface<IBattleSide> &Side) {
+void UPokemonBattleScreen::AddPanelsForSide(int32 Index, const TScriptInterface<IBattleSide> &Side)
+{
     Algo::ForEach(Side->GetBattlers(), std::bind_front(&UPokemonBattleScreen::CreateBattlePanel, this, Index));
 }
 
-void UPokemonBattleScreen::CreateBattlePanel(int32 Side, const TScriptInterface<IBattler> &Battler) {
+void UPokemonBattleScreen::CreateBattlePanel(int32 Side, const TScriptInterface<IBattler> &Battler)
+{
     check(PanelClasses.IsValidIndex(Side) && !PanelClasses[Side].IsNull())
     auto Panel = WidgetTree->ConstructWidget<UPokemonBattlePanel>(PanelClasses[Side].LoadSynchronous());
     Panel->SetBattler(Battler);
@@ -149,24 +171,28 @@ void UPokemonBattleScreen::CreateBattlePanel(int32 Side, const TScriptInterface<
     Panels.Emplace(Panel);
 }
 
-void UPokemonBattleScreen::NextBattler(const TScriptInterface<IBattler> &Battler) {
+void UPokemonBattleScreen::NextBattler(const TScriptInterface<IBattler> &Battler)
+{
     ActionSelect->SetBattler(Battler);
     ActionSelect->SetVisibility(ESlateVisibility::Visible);
     ActionSelect->SetIndex(0);
     ActionSelect->ActivateWidget();
 }
 
-void UPokemonBattleScreen::AdvanceToNextSelection() {
+void UPokemonBattleScreen::AdvanceToNextSelection()
+{
     check(SelectionIndex.IsSet())
     auto &SelIndex = SelectionIndex.GetValue();
     SelIndex++;
-    if (!bMandatorySwitch && SelectingBattlers.IsValidIndex(SelIndex)) {
+    if (!bMandatorySwitch && SelectingBattlers.IsValidIndex(SelIndex))
+    {
         NextBattler(SelectingBattlers[SelIndex]);
     }
 }
 
 void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Battler,
-                                          const TScriptInterface<IBattleMove> &Move) {
+                                          const TScriptInterface<IBattleMove> &Move)
+{
     // clang-format off
     auto Targets = Move->GetAllPossibleTargets() |
                    Retro::Ranges::Views::Transform(Retro::Construct<FTargetWithIndex>) |
@@ -178,19 +204,22 @@ void UPokemonBattleScreen::OnMoveSelected(const TScriptInterface<IBattler> &Batt
     AdvanceToNextSelection();
 }
 
-void UPokemonBattleScreen::SkipRemainingActions() {
+void UPokemonBattleScreen::SkipRemainingActions()
+{
     ActionSelect->DeactivateWidget();
     ActionSelect->SetVisibility(ESlateVisibility::Hidden);
     MoveSelect->DeactivateWidget();
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);
     auto &SelIndex = SelectionIndex.GetValue();
-    while (SelectingBattlers.IsValidIndex(SelIndex)) {
+    while (SelectingBattlers.IsValidIndex(SelIndex))
+    {
         CurrentBattle->QueueAction(MakeUnique<FBattleActionDoNothing>(SelectingBattlers[SelIndex]));
         SelIndex++;
     }
 }
 
-void UPokemonBattleScreen::OnMoveCanceled() {
+void UPokemonBattleScreen::OnMoveCanceled()
+{
     MoveSelect->DeactivateWidget();
     MoveSelect->SetVisibility(ESlateVisibility::Hidden);
     ActionSelect->ActivateWidget();
@@ -198,22 +227,26 @@ void UPokemonBattleScreen::OnMoveCanceled() {
 }
 
 void UPokemonBattleScreen::OnSwitchSelected(const TScriptInterface<IBattler> &Battler,
-                                            const TScriptInterface<IBattler> &Target) {
+                                            const TScriptInterface<IBattler> &Target)
+{
     CurrentBattle->QueueAction(MakeUnique<FBattleActionSwitchPokemon>(Battler, Target));
-    if (!bMandatorySwitch || *SelectionIndex == SelectingBattlers.Num() - 1) {
+    if (!bMandatorySwitch || *SelectionIndex == SelectingBattlers.Num() - 1)
+    {
         HideSwitchWindow();
     }
     AdvanceToNextSelection();
 }
 
 void UPokemonBattleScreen::OnUseItemOnPokemonSelected(FName ItemID, const TScriptInterface<IBattler> &User,
-                                                      const TScriptInterface<IBattler> &Target) {
+                                                      const TScriptInterface<IBattler> &Target)
+{
     CurrentBattle->QueueAction(
         MakeUnique<FBattleActionUseItem>(User, ItemID, FItemTarget(TWeakInterfacePtr<IBattler>(Target.GetObject()))));
     HideSwitchWindow();
     AdvanceToNextSelection();
 }
 
-void UPokemonBattleScreen::CompleteExpGain() {
+void UPokemonBattleScreen::CompleteExpGain()
+{
     OnExpGainComplete.Broadcast();
 }

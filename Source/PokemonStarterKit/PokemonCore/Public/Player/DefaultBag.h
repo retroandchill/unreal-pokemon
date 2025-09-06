@@ -14,7 +14,8 @@
  * The default implementation of the player's bag.
  */
 UCLASS(Blueprintable)
-class POKEMONCORE_API UDefaultBag : public UObject, public IBag {
+class POKEMONCORE_API UDefaultBag : public UObject, public IBag
+{
     GENERATED_BODY()
 
   public:

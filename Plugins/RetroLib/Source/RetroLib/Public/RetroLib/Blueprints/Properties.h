@@ -14,7 +14,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * Concept used to check that a property get actually get a value out using a static method.
      *
@@ -35,7 +36,8 @@ namespace Retro {
      */
     template <typename... T>
         requires((std::derived_from<T, FProperty> && CanGetValue<T>) && ...)
-    class TPropertyVisitor {
+    class TPropertyVisitor
+    {
       public:
         /**
          * Constructs a TPropertyVisitor with the provided property, initializing the TypeIndex.
@@ -44,7 +46,8 @@ namespace Retro {
          * @return An instance of TPropertyVisitor with the TypeIndex set based on the provided property.
          * @throws FInvalidArgumentException if the property type is not found within the predefined set of classes.
          */
-        explicit TPropertyVisitor(const FProperty *Property) : TypeIndex(GetTypeIndex(Property)) {
+        explicit TPropertyVisitor(const FProperty *Property) : TypeIndex(GetTypeIndex(Property))
+        {
         }
 
         /**
@@ -54,11 +57,13 @@ namespace Retro {
          * @return The index of the property type if found within the predefined set of classes.
          * @throws FInvalidArgumentException if the property type is not found within the predefined set of classes.
          */
-        static size_t GetTypeIndex(const FProperty *Property) {
+        static size_t GetTypeIndex(const FProperty *Property)
+        {
             static std::array Classes = {T::StaticClass()...};
             auto ValidClass =
                 std::ranges::find_if(Classes, [Property](const FFieldClass *Class) { return Property->IsA(Class); });
-            if (ValidClass == Classes.end()) {
+            if (ValidClass == Classes.end())
+            {
                 throw FInvalidArgumentException("Invalid property type!");
             }
 
@@ -66,7 +71,8 @@ namespace Retro {
         }
 
         template <typename F>
-        constexpr static decltype(auto) Visit(const FProperty *Property, F &&Functor) {
+        constexpr static decltype(auto) Visit(const FProperty *Property, F &&Functor)
+        {
             constexpr std::array Invocations = {&TPropertyVisitor::VisitProperty<T, F>...};
             return std::invoke(Invocations[GetTypeIndex(Property)], Property, std::forward<F>(Functor));
         }
@@ -81,7 +87,8 @@ namespace Retro {
          * @tparam F The signature of the functional callback
          */
         template <typename F>
-        constexpr decltype(auto) Visit(const uint8 *Data, F &&Functor) {
+        constexpr decltype(auto) Visit(const uint8 *Data, F &&Functor)
+        {
             constexpr std::array Invocations = {&TPropertyVisitor::VisitSingle<T, F>...};
             return std::invoke(Invocations[TypeIndex], Data, std::forward<F>(Functor));
         }
@@ -89,13 +96,15 @@ namespace Retro {
       private:
         template <typename U, typename F>
             requires(std::same_as<T, U> || ...)
-        constexpr static decltype(auto) VisitSingle(const uint8 *Data, F &&Functor) {
+        constexpr static decltype(auto) VisitSingle(const uint8 *Data, F &&Functor)
+        {
             return std::invoke(std::forward<F>(Functor), U::GetPropertyValue(Data));
         }
 
         template <typename U, typename F>
             requires(std::same_as<T, U> || ...)
-        constexpr static decltype(auto) VisitProperty(const FProperty *Property, F &&Functor) {
+        constexpr static decltype(auto) VisitProperty(const FProperty *Property, F &&Functor)
+        {
             return std::invoke(std::forward<F>(Functor), static_cast<const U *>(Property));
         }
 
@@ -146,12 +155,18 @@ namespace Retro {
     template <typename T>
         requires std::convertible_to<T, UObject *> || CanGetObject<T> ||
                  std::derived_from<std::remove_cvref_t<T>, FScriptInterface>
-    UObject *GetObject(T &&Object) {
-        if constexpr (std::convertible_to<T, UObject *>) {
+    UObject *GetObject(T &&Object)
+    {
+        if constexpr (std::convertible_to<T, UObject *>)
+        {
             return std::forward<T>(Object);
-        } else if constexpr (CanGetObject<T>) {
+        }
+        else if constexpr (CanGetObject<T>)
+        {
             return Object.Get();
-        } else if constexpr (std::derived_from<std::remove_cvref_t<T>, FScriptInterface>) {
+        }
+        else if constexpr (std::derived_from<std::remove_cvref_t<T>, FScriptInterface>)
+        {
             return Object.GetObject();
         }
 

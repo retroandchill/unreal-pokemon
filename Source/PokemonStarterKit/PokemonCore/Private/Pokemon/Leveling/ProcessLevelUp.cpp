@@ -4,7 +4,8 @@
 #include "Utilities/PokemonCoroutineDispatcher.h"
 
 UProcessLevelUp *UProcessLevelUp::ProcessLevelUp(const TScriptInterface<IPokemon> &Pokemon,
-                                                 const FLevelUpStatChanges &StatChanges, bool bShowMessages) {
+                                                 const FLevelUpStatChanges &StatChanges, bool bShowMessages)
+{
     auto Node = NewObject<UProcessLevelUp>();
     Node->SetWorldContext(Pokemon.GetObject());
     Node->Pokemon = Pokemon;
@@ -13,9 +14,11 @@ UProcessLevelUp *UProcessLevelUp::ProcessLevelUp(const TScriptInterface<IPokemon
     return Node;
 }
 
-UE5Coro::TCoroutine<> UProcessLevelUp::ExecuteCoroutine(FForceLatentCoroutine) {
+UE5Coro::TCoroutine<> UProcessLevelUp::ExecuteCoroutine(FForceLatentCoroutine)
+{
     auto &Dispatcher = IPokemonCoroutineDispatcher::Get(GetWorldContext());
-    if (bShowMessages) {
+    if (bShowMessages)
+    {
         co_await Dispatcher.ProcessLevelUp(Pokemon, StatChanges);
     }
     AfterLevelUp.Broadcast();

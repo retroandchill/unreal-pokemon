@@ -10,7 +10,8 @@ DECLARE_STATS_GROUP(TEXT("RPGMenus"), STATGROUP_RPGMenus, STATCAT_Advanced);
 /**
  * Module for the basic types of Windows used by the UI System
  */
-class FRPGMenusModule : public IModuleInterface {
+class FRPGMenusModule : public IModuleInterface
+{
   public:
     void StartupModule() override;
     void ShutdownModule() override;

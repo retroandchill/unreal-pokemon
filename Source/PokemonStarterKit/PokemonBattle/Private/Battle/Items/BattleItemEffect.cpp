@@ -12,17 +12,20 @@
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Utils/MakeStrong.h"
 
-UBattleItemEffect::UBattleItemEffect() {
+UBattleItemEffect::UBattleItemEffect()
+{
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
     AbilityTrigger.TriggerTag = Pokemon::Battle::Items::UsingItem;
 }
 
-const FItem &UBattleItemEffect::GetItem() const {
+const FItem &UBattleItemEffect::GetItem() const
+{
     return FDataManager::GetInstance().GetDataTable<FItem>().GetDataChecked(ItemID);
 }
 
 bool UBattleItemEffect::ShouldAbilityRespondToEvent(const FGameplayAbilityActorInfo *ActorInfo,
-                                                    const FGameplayEventData *Payload) const {
+                                                    const FGameplayEventData *Payload) const
+{
     auto ItemPayload = CastChecked<UUseItemPayload>(Payload->OptionalObject);
     return ItemPayload->Ability == this;
 }
@@ -30,7 +33,8 @@ bool UBattleItemEffect::ShouldAbilityRespondToEvent(const FGameplayAbilityActorI
 UE5Coro::GAS::FAbilityCoroutine UBattleItemEffect::ExecuteAbility(FGameplayAbilitySpecHandle Handle,
                                                                   const FGameplayAbilityActorInfo *ActorInfo,
                                                                   FGameplayAbilityActivationInfo ActivationInfo,
-                                                                  const FGameplayEventData *TriggerEventData) {
+                                                                  const FGameplayEventData *TriggerEventData)
+{
     ActorInfo->AbilitySystemComponent->AddLooseGameplayTag(Pokemon::Battle::Items::UsingItem);
     auto TargetDataCopy = TriggerEventData->TargetData.Data;
 
@@ -49,8 +53,10 @@ UE5Coro::GAS::FAbilityCoroutine UBattleItemEffect::ExecuteAbility(FGameplayAbili
                            Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<IBattler>) |
                            Retro::Ranges::Views::Transform(Retro::WrapPointer);
     // clang-format on
-    for (auto Target : PossibleTargets) {
-        if (!co_await IsTargetValid(Target)) {
+    for (auto Target : PossibleTargets)
+    {
+        if (!co_await IsTargetValid(Target))
+        {
             continue;
         }
 
@@ -58,22 +64,26 @@ UE5Coro::GAS::FAbilityCoroutine UBattleItemEffect::ExecuteAbility(FGameplayAbili
     }
 
     ActorInfo->AbilitySystemComponent->RemoveLooseGameplayTag(Pokemon::Battle::Items::UsingItem);
-    if (auto &ItemData = GetItem(); bShouldConsumeItem && ItemData.Consumable) {
+    if (auto &ItemData = GetItem(); bShouldConsumeItem && ItemData.Consumable)
+    {
         auto &Subsystem = UPokemonSubsystem::GetInstance(GetCurrentActorInfo()->AvatarActor.Get());
         Subsystem.GetBag()->RemoveItem(ItemID);
     }
 }
 
-UE5Coro::TCoroutine<bool> UBattleItemEffect::ApplyGlobalEffect(TScriptInterface<IBattler> User, FForceLatentCoroutine) {
+UE5Coro::TCoroutine<bool> UBattleItemEffect::ApplyGlobalEffect(TScriptInterface<IBattler> User, FForceLatentCoroutine)
+{
     co_return false;
 }
 
 UE5Coro::TCoroutine<bool> UBattleItemEffect::ApplyEffectToTarget(TScriptInterface<IBattler> User,
                                                                  TScriptInterface<IBattler> Target,
-                                                                 FForceLatentCoroutine) {
+                                                                 FForceLatentCoroutine)
+{
     co_return false;
 }
 
-UE5Coro::TCoroutine<bool> UBattleItemEffect::IsTargetValid(TScriptInterface<IBattler> Battler, FForceLatentCoroutine) {
+UE5Coro::TCoroutine<bool> UBattleItemEffect::IsTargetValid(TScriptInterface<IBattler> Battler, FForceLatentCoroutine)
+{
     co_return true;
 }

@@ -8,13 +8,14 @@
 #include "RetroLib/Ranges/Algorithm/To.h"
 
 FWildBattleOpponentInfo::FWildBattleOpponentInfo(const TSharedRef<FPokemonDTO> &PokemonInfo)
-    : OpposingPokemonInfo({PokemonInfo}) {
+    : OpposingPokemonInfo({PokemonInfo})
+{
 }
 
-UE5Coro::TCoroutine<TScriptInterface<IBattleSide>>
-FWildBattleOpponentInfo::CreateOpposingSide(TScriptInterface<IBattle> Battle, TSubclassOf<AActor> SideClass,
-                                            const FTransform &Transform, int32 ActivePokemonCount,
-                                            FForceLatentCoroutine) {
+UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> FWildBattleOpponentInfo::CreateOpposingSide(
+    TScriptInterface<IBattle> Battle, TSubclassOf<AActor> SideClass, const FTransform &Transform,
+    int32 ActivePokemonCount, FForceLatentCoroutine)
+{
     auto World = Battle.GetObject()->GetWorld();
     check(World != nullptr)
 

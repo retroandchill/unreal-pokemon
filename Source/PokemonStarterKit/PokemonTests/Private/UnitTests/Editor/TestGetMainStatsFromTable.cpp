@@ -9,7 +9,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetMainStatsFromTable, "Unit Tests.PokemonUtilities.TestGetMainStatsFromTable",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestGetMainStatsFromTable::RunTest(const FString &Parameters) {
+bool TestGetMainStatsFromTable::RunTest(const FString &Parameters)
+{
     auto StatTable = FDataManager::GetInstance().GetDataTable<FStat>().GetDataTable();
     auto Stats = UImportUtils::GetMainStatsFromTable(StatTable);
 

@@ -8,7 +8,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestWindowskinAssetActions, "Unit Tests.RPGMenus.TestWindowskinAssetActions",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestWindowskinAssetActions::RunTest(const FString &Parameters) {
+bool TestWindowskinAssetActions::RunTest(const FString &Parameters)
+{
     FWindowskinAssetActions AssetActions;
 
     UE_CHECK_EQUAL(TEXT("Windowskin"), AssetActions.GetName().ToString());

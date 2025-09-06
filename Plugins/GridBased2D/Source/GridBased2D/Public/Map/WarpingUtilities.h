@@ -12,7 +12,8 @@ struct FWarpDestination;
  * Utility library for functions related to warping around the map
  */
 UCLASS()
-class GRIDBASED2D_API UWarpingUtilities : public UBlueprintFunctionLibrary {
+class GRIDBASED2D_API UWarpingUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

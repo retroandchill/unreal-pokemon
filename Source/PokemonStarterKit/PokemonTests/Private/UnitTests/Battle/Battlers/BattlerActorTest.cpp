@@ -26,7 +26,8 @@ CORO_FUNCTIONS()
 
 END_DEFINE_SPEC(FBattlerActorTest);
 
-void FBattlerActorTest::Define() {
+void FBattlerActorTest::Define()
+{
     CoroIt("Stats", [this]() -> UE5Coro::TCoroutine<> {
         auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
@@ -66,7 +67,8 @@ void FBattlerActorTest::Define() {
         auto &PokemonTypes = Pokemon->GetTypes();
         auto BattlerTypes = Battler->GetTypes();
         CO_REQUIRE(PokemonTypes.Num() == BattlerTypes.Num());
-        for (int32 i = 0; i < BattlerTypes.Num(); i++) {
+        for (int32 i = 0; i < BattlerTypes.Num(); i++)
+        {
             CHECK(PokemonTypes[i] == BattlerTypes[i]);
         }
     });
@@ -97,7 +99,8 @@ void FBattlerActorTest::Define() {
 
         Battler->SelectActions();
         co_await AsyncThread([&SelectedAction] {
-            while (SelectedAction.IsEmpty()) {
+            while (SelectedAction.IsEmpty())
+            {
                 std::this_thread::yield();
             }
         });

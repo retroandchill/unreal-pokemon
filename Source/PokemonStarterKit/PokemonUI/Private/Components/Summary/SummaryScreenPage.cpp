@@ -2,14 +2,17 @@
 
 #include "Components/Summary/SummaryScreenPage.h"
 
-void USummaryScreenPage::OnPageShown() {
+void USummaryScreenPage::OnPageShown()
+{
     // No implementation by default
 }
 
-void USummaryScreenPage::OnPageHidden() {
+void USummaryScreenPage::OnPageHidden()
+{
     // No implementation by default
 }
 
-TSubclassOf<UCommonButtonStyle> USummaryScreenPage::GetTabButtonStyle() const {
+TSubclassOf<UCommonButtonStyle> USummaryScreenPage::GetTabButtonStyle() const
+{
     return TabButtonStyle;
 }

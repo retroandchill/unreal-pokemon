@@ -6,14 +6,16 @@
 #include "Battle/Battlers/BattlerHelpers.h"
 
 UGainExpOnFaint *UGainExpOnFaint::GainExpOnFaint(const UObject *WorldContextObject,
-                                                 const TArray<TScriptInterface<IBattler>> &Battlers) {
+                                                 const TArray<TScriptInterface<IBattler>> &Battlers)
+{
     auto Node = NewObject<UGainExpOnFaint>();
     Node->SetWorldContext(WorldContextObject);
     Node->Battlers = Battlers;
     return Node;
 }
 
-UE5Coro::TCoroutine<> UGainExpOnFaint::ExecuteCoroutine(FForceLatentCoroutine) {
+UE5Coro::TCoroutine<> UGainExpOnFaint::ExecuteCoroutine(FForceLatentCoroutine)
+{
     co_await UBattlerHelpers::GainExpOnFaint(GetWorldContext(), Battlers);
     OnComplete.Broadcast();
 }

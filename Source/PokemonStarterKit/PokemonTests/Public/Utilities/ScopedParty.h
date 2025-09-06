@@ -11,17 +11,20 @@
 
 class UTrainerHelpers;
 
-namespace Pokemon::Tests {
+namespace Pokemon::Tests
+{
     /**
      *
      */
-    class POKEMONTESTS_API FScopedParty {
+    class POKEMONTESTS_API FScopedParty
+    {
       public:
         template <std::ranges::input_range R>
             requires std::convertible_to<std::ranges::range_reference_t<R>, FPokemonDTO>
         explicit FScopedParty(const UObject *WorldContextObject, R &&Pokemon)
             : Trainer(UTrainerHelpers::GetPlayerCharacter(WorldContextObject).GetObject()),
-              Pokemon(CreatePokemon(WorldContextObject, std::forward<R>(Pokemon))) {
+              Pokemon(CreatePokemon(WorldContextObject, std::forward<R>(Pokemon)))
+        {
         }
 
         ~FScopedParty();
@@ -33,7 +36,8 @@ namespace Pokemon::Tests {
       private:
         template <std::ranges::input_range R>
             requires std::convertible_to<std::ranges::range_reference_t<R>, FPokemonDTO>
-        static TArray<TScriptInterface<IPokemon>> CreatePokemon(const UObject *WorldContextObject, R &&Pokemon) {
+        static TArray<TScriptInterface<IPokemon>> CreatePokemon(const UObject *WorldContextObject, R &&Pokemon)
+        {
             return std::forward<R>(Pokemon) |
                    Retro::Ranges::Views::Transform(
                        Retro::BindFront<&UPartyManagementHelpers::AddPokemonToParty>(WorldContextObject)) |

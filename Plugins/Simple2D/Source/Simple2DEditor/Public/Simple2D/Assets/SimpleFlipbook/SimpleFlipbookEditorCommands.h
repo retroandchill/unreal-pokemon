@@ -3,16 +3,19 @@
 #pragma once
 #include "Simple2D/Simple2DStyle.h"
 
-namespace Simple2D {
+namespace Simple2D
+{
     /**
      *
      */
-    class SIMPLE2DEDITOR_API FSimpleFlipbookEditorCommands : public TCommands<FSimpleFlipbookEditorCommands> {
+    class SIMPLE2DEDITOR_API FSimpleFlipbookEditorCommands : public TCommands<FSimpleFlipbookEditorCommands>
+    {
       protected:
         FSimpleFlipbookEditorCommands()
             : TCommands(TEXT("SimpleFlipbookEditor"),
                         NSLOCTEXT("Contexts", "SimpleFlipbookEditor", "Simple Flipbook Editor"), NAME_None,
-                        FSimple2DStyle::Get()->GetStyleSetName()) {
+                        FSimple2DStyle::Get()->GetStyleSetName())
+        {
         }
 
         void RegisterCommands() override;

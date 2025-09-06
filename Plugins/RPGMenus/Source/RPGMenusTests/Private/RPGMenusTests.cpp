@@ -2,10 +2,12 @@
 
 #define LOCTEXT_NAMESPACE "FRPGMenusTestsModule"
 
-void FRPGMenusTestsModule::StartupModule() {
+void FRPGMenusTestsModule::StartupModule()
+{
 }
 
-void FRPGMenusTestsModule::ShutdownModule() {
+void FRPGMenusTestsModule::ShutdownModule()
+{
 }
 
 #undef LOCTEXT_NAMESPACE

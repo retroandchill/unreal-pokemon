@@ -20,7 +20,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMoveSelectionChanged, const TScri
  * Widget that displays the Pokémon's moves in the UI.
  */
 UCLASS(Abstract)
-class POKEMONUI_API UMoveSelectWindow : public USelectableWidget {
+class POKEMONUI_API UMoveSelectWindow : public USelectableWidget
+{
     GENERATED_BODY()
 
   public:

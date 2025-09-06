@@ -6,7 +6,8 @@
 /**
  * Module that handles the Blueprint Nodes used by the Pokémon Starter Kit
  */
-class FPokemonBlueprintNodesModule : public IModuleInterface {
+class FPokemonBlueprintNodesModule : public IModuleInterface
+{
   public:
     void StartupModule() override;
     void ShutdownModule() override;

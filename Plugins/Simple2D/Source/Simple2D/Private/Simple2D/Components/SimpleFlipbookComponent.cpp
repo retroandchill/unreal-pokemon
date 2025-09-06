@@ -15,7 +15,8 @@
 
 DECLARE_CYCLE_STAT(TEXT("Tick Simple Flipbook"), STAT_TickSimpleFlipbook, STATGROUP_Simple2D);
 
-USimpleFlipbookComponent::USimpleFlipbookComponent() {
+USimpleFlipbookComponent::USimpleFlipbookComponent()
+{
     Super::SetCollisionProfileName(UCollisionProfile::BlockAllDynamic_ProfileName);
 
     CastShadow = false;
@@ -28,16 +29,20 @@ USimpleFlipbookComponent::USimpleFlipbookComponent() {
     bTickInEditor = true;
 }
 
-void USimpleFlipbookComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const {
+void USimpleFlipbookComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const
+{
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
     DOREPLIFETIME(USimpleFlipbookComponent, SourceFlipbook);
 }
 
-bool USimpleFlipbookComponent::SetFlipbook(USimpleFlipbook *NewFlipbook) {
-    if (NewFlipbook != SourceFlipbook) {
+bool USimpleFlipbookComponent::SetFlipbook(USimpleFlipbook *NewFlipbook)
+{
+    if (NewFlipbook != SourceFlipbook)
+    {
         // Don't allow changing the sprite if we are "static".
-        if (auto ComponentOwner = GetOwner(); ComponentOwner == nullptr || AreDynamicDataChangesAllowed()) {
+        if (auto ComponentOwner = GetOwner(); ComponentOwner == nullptr || AreDynamicDataChangesAllowed())
+        {
             SourceFlipbook = NewFlipbook;
 
             // We need to also reset the frame and time also
@@ -63,115 +68,141 @@ bool USimpleFlipbookComponent::SetFlipbook(USimpleFlipbook *NewFlipbook) {
     return false;
 }
 
-USimpleFlipbook *USimpleFlipbookComponent::GetFlipbook() {
+USimpleFlipbook *USimpleFlipbookComponent::GetFlipbook()
+{
     return SourceFlipbook;
 }
 
-void USimpleFlipbookComponent::SetSpriteColor(FLinearColor NewColor) {
+void USimpleFlipbookComponent::SetSpriteColor(FLinearColor NewColor)
+{
     // Can't set color on a static component
-    if (AreDynamicDataChangesAllowed() && (SpriteColor != NewColor)) {
+    if (AreDynamicDataChangesAllowed() && (SpriteColor != NewColor))
+    {
         SpriteColor = NewColor;
 
         MarkRenderDynamicDataDirty();
     }
 }
 
-void USimpleFlipbookComponent::Play() {
+void USimpleFlipbookComponent::Play()
+{
     Activate();
     bReversePlayback = false;
     bPlaying = true;
 }
 
-void USimpleFlipbookComponent::PlayFromStart() {
+void USimpleFlipbookComponent::PlayFromStart()
+{
     SetPlaybackPosition(0.0f);
     Play();
 }
 
-void USimpleFlipbookComponent::Reverse() {
+void USimpleFlipbookComponent::Reverse()
+{
     Activate();
     bReversePlayback = true;
     bPlaying = true;
 }
 
-void USimpleFlipbookComponent::ReverseFromEnd() {
+void USimpleFlipbookComponent::ReverseFromEnd()
+{
     SetPlaybackPosition(GetFlipbookLength());
     Reverse();
 }
 
-void USimpleFlipbookComponent::Stop() {
+void USimpleFlipbookComponent::Stop()
+{
     bPlaying = false;
 }
 
-bool USimpleFlipbookComponent::IsPlaying() const {
+bool USimpleFlipbookComponent::IsPlaying() const
+{
     return bPlaying;
 }
 
-bool USimpleFlipbookComponent::IsReversing() const {
+bool USimpleFlipbookComponent::IsReversing() const
+{
     return bPlaying && bReversePlayback;
 }
 
-void USimpleFlipbookComponent::SetPlaybackPositionInFrames(int32 NewFramePosition) {
+void USimpleFlipbookComponent::SetPlaybackPositionInFrames(int32 NewFramePosition)
+{
     const float Framerate = GetFlipbookFramerate();
     const float NewTime = (Framerate > 0.0f) ? (static_cast<float>(NewFramePosition) / Framerate) : 0.0f;
     SetPlaybackPosition(NewTime);
 }
 
-int32 USimpleFlipbookComponent::GetPlaybackPositionInFrames() const {
+int32 USimpleFlipbookComponent::GetPlaybackPositionInFrames() const
+{
     const float Framerate = GetFlipbookFramerate();
-    if (const int32 NumFrames = GetFlipbookLengthInFrames(); NumFrames > 0) {
+    if (const int32 NumFrames = GetFlipbookLengthInFrames(); NumFrames > 0)
+    {
         return FMath::Clamp<int32>(FMath::TruncToInt(AccumulatedTime * Framerate), 0, NumFrames - 1);
     }
 
     return 0;
 }
 
-void USimpleFlipbookComponent::SetPlaybackPosition(float NewPosition) {
+void USimpleFlipbookComponent::SetPlaybackPosition(float NewPosition)
+{
     float OldPosition = AccumulatedTime;
     AccumulatedTime = NewPosition;
 
-    if (OldPosition != AccumulatedTime) {
+    if (OldPosition != AccumulatedTime)
+    {
         CalculateCurrentFrame();
     }
 }
 
-float USimpleFlipbookComponent::GetPlaybackPosition() const {
+float USimpleFlipbookComponent::GetPlaybackPosition() const
+{
     return AccumulatedTime;
 }
 
-void USimpleFlipbookComponent::SetLooping(bool bNewLooping) {
+void USimpleFlipbookComponent::SetLooping(bool bNewLooping)
+{
     bLooping = bNewLooping;
 }
 
-bool USimpleFlipbookComponent::IsLooping() const {
+bool USimpleFlipbookComponent::IsLooping() const
+{
     return bLooping;
 }
 
-void USimpleFlipbookComponent::SetPlayRate(float NewRate) {
+void USimpleFlipbookComponent::SetPlayRate(float NewRate)
+{
     PlayRate = NewRate;
 }
 
-float USimpleFlipbookComponent::GetPlayRate() const {
+float USimpleFlipbookComponent::GetPlayRate() const
+{
     return PlayRate;
 }
 
-void USimpleFlipbookComponent::SetNewTime(float NewTime) {
+void USimpleFlipbookComponent::SetNewTime(float NewTime)
+{
     SetPlaybackPosition(NewTime);
 }
 
-float USimpleFlipbookComponent::GetFlipbookLength() const {
+float USimpleFlipbookComponent::GetFlipbookLength() const
+{
     return SourceFlipbook != nullptr ? SourceFlipbook->GetTotalDuration() : 0.0f;
 }
 
-int32 USimpleFlipbookComponent::GetFlipbookLengthInFrames() const {
+int32 USimpleFlipbookComponent::GetFlipbookLengthInFrames() const
+{
     return SourceFlipbook != nullptr ? SourceFlipbook->GetNumFrames() : 0;
 }
 
-float USimpleFlipbookComponent::GetFlipbookFramerate() const {
+float USimpleFlipbookComponent::GetFlipbookFramerate() const
+{
     return SourceFlipbook != nullptr ? SourceFlipbook->GetFramesPerSecond() : 15.0f;
 }
 
-void USimpleFlipbookComponent::OnRep_SourceFlipbook(USimpleFlipbook *OldFlipbook) {
-    if (OldFlipbook != SourceFlipbook) {
+void USimpleFlipbookComponent::OnRep_SourceFlipbook(USimpleFlipbook *OldFlipbook)
+{
+    if (OldFlipbook != SourceFlipbook)
+    {
         // Force SetFlipbook to change the animation (by default it won't change)
         USimpleFlipbook *NewFlipbook = SourceFlipbook;
         SourceFlipbook = nullptr;
@@ -180,12 +211,14 @@ void USimpleFlipbookComponent::OnRep_SourceFlipbook(USimpleFlipbook *OldFlipbook
     }
 }
 
-void USimpleFlipbookComponent::CalculateCurrentFrame() {
+void USimpleFlipbookComponent::CalculateCurrentFrame()
+{
     const int32 LastCachedFrame = CachedFrameIndex;
     CachedFrameIndex =
         (SourceFlipbook != nullptr) ? SourceFlipbook->GetKeyFrameIndexAtTime(AccumulatedTime) : INDEX_NONE;
 
-    if (CachedFrameIndex != LastCachedFrame) {
+    if (CachedFrameIndex != LastCachedFrame)
+    {
         // Update children transforms in case we have anything attached to an animated socket
         UpdateChildTransforms();
 
@@ -194,61 +227,84 @@ void USimpleFlipbookComponent::CalculateCurrentFrame() {
     }
 }
 
-void USimpleFlipbookComponent::TickFlipbook(float DeltaTime) {
+void USimpleFlipbookComponent::TickFlipbook(float DeltaTime)
+{
     bool bIsFinished = false;
 
-    if (bPlaying) {
+    if (bPlaying)
+    {
         ProcessPlaying(DeltaTime, bIsFinished);
     }
 
     // Notify user that the flipbook finished playing
-    if (bIsFinished) {
+    if (bIsFinished)
+    {
         OnFinishedPlaying.Broadcast();
     }
 }
 
-void USimpleFlipbookComponent::ProcessPlaying(float DeltaTime, bool &bIsFinished) {
+void USimpleFlipbookComponent::ProcessPlaying(float DeltaTime, bool &bIsFinished)
+{
     const float TimelineLength = GetFlipbookLength();
     const float EffectiveDeltaTime = DeltaTime * (bReversePlayback ? -PlayRate : PlayRate);
 
     float NewPosition = AccumulatedTime + EffectiveDeltaTime;
 
-    if (EffectiveDeltaTime > 0.0f) {
-        if (NewPosition > TimelineLength) {
-            if (bLooping) {
+    if (EffectiveDeltaTime > 0.0f)
+    {
+        if (NewPosition > TimelineLength)
+        {
+            if (bLooping)
+            {
                 // If looping, play to end, jump to start, and set target to somewhere near the beginning.
                 SetPlaybackPosition(TimelineLength);
                 SetPlaybackPosition(0.0f);
 
-                if (TimelineLength > 0.0f) {
-                    while (NewPosition > TimelineLength) {
+                if (TimelineLength > 0.0f)
+                {
+                    while (NewPosition > TimelineLength)
+                    {
                         NewPosition -= TimelineLength;
                     }
-                } else {
+                }
+                else
+                {
                     NewPosition = 0.0f;
                 }
-            } else {
+            }
+            else
+            {
                 // If not looping, snap to end and stop playing.
                 NewPosition = TimelineLength;
                 Stop();
                 bIsFinished = true;
             }
         }
-    } else {
-        if (NewPosition < 0.0f) {
-            if (bLooping) {
+    }
+    else
+    {
+        if (NewPosition < 0.0f)
+        {
+            if (bLooping)
+            {
                 // If looping, play to start, jump to end, and set target to somewhere near the end.
                 SetPlaybackPosition(0.0f);
                 SetPlaybackPosition(TimelineLength);
 
-                if (TimelineLength > 0.0f) {
-                    while (NewPosition < 0.0f) {
+                if (TimelineLength > 0.0f)
+                {
+                    while (NewPosition < 0.0f)
+                    {
                         NewPosition += TimelineLength;
                     }
-                } else {
+                }
+                else
+                {
                     NewPosition = 0.0f;
                 }
-            } else {
+            }
+            else
+            {
                 // If not looping, snap to start and stop playing.
                 NewPosition = 0.0f;
                 Stop();
@@ -260,7 +316,8 @@ void USimpleFlipbookComponent::ProcessPlaying(float DeltaTime, bool &bIsFinished
     SetPlaybackPosition(NewPosition);
 }
 
-void USimpleFlipbookComponent::FlipbookChangedPhysicsState() {
+void USimpleFlipbookComponent::FlipbookChangedPhysicsState()
+{
     // If the frame has changed and we're using animated collision, we need to recreate that state as well
     RecreatePhysicsState();
 
@@ -269,7 +326,8 @@ void USimpleFlipbookComponent::FlipbookChangedPhysicsState() {
 }
 
 void USimpleFlipbookComponent::TickComponent(float DeltaTime, enum ELevelTick TickType,
-                                             FActorComponentTickFunction *ThisTickFunction) {
+                                             FActorComponentTickFunction *ThisTickFunction)
+{
     SCOPE_CYCLE_COUNTER(STAT_TickSimpleFlipbook)
 
     // Advance time
@@ -279,8 +337,10 @@ void USimpleFlipbookComponent::TickComponent(float DeltaTime, enum ELevelTick Ti
     CalculateCurrentFrame();
 }
 
-void USimpleFlipbookComponent::SendRenderDynamicData_Concurrent() {
-    if (SceneProxy != nullptr) {
+void USimpleFlipbookComponent::SendRenderDynamicData_Concurrent()
+{
+    if (SceneProxy != nullptr)
+    {
         auto DrawCall = SourceFlipbook != nullptr ? SourceFlipbook->CreateDrawCallRecord(CachedFrameIndex)
                                                   : FSimpleFlipbookDrawCall();
         DrawCall.Color = SpriteColor.ToFColor(false);
@@ -291,18 +351,22 @@ void USimpleFlipbookComponent::SendRenderDynamicData_Concurrent() {
     }
 }
 
-const UObject *USimpleFlipbookComponent::AdditionalStatObject() const {
+const UObject *USimpleFlipbookComponent::AdditionalStatObject() const
+{
     return SourceFlipbook;
 }
 
 #if WITH_EDITOR
-void USimpleFlipbookComponent::CheckForErrors() {
+void USimpleFlipbookComponent::CheckForErrors()
+{
     Super::CheckForErrors();
 
     AActor *Owner = GetOwner();
 
-    for (int32 MaterialIndex = 0; MaterialIndex < GetNumMaterials(); ++MaterialIndex) {
-        if (auto Material = GetMaterial(MaterialIndex); Material != nullptr && !Material->IsTwoSided()) {
+    for (int32 MaterialIndex = 0; MaterialIndex < GetNumMaterials(); ++MaterialIndex)
+    {
+        if (auto Material = GetMaterial(MaterialIndex); Material != nullptr && !Material->IsTwoSided())
+        {
             FMessageLog("MapCheck")
                 .Warning()
                 ->AddToken(FUObjectToken::Create(Owner))
@@ -317,7 +381,8 @@ void USimpleFlipbookComponent::CheckForErrors() {
 }
 #endif
 
-FPrimitiveSceneProxy *USimpleFlipbookComponent::CreateSceneProxy() {
+FPrimitiveSceneProxy *USimpleFlipbookComponent::CreateSceneProxy()
+{
     auto NewProxy = MakeUnique<Simple2D::FSimpleFlipbookSceneProxy>(this);
 
     CalculateCurrentFrame();
@@ -332,8 +397,10 @@ FPrimitiveSceneProxy *USimpleFlipbookComponent::CreateSceneProxy() {
     return NewProxy.Release();
 }
 
-FBoxSphereBounds USimpleFlipbookComponent::CalcBounds(const FTransform &LocalToWorld) const {
-    if (SourceFlipbook != nullptr) {
+FBoxSphereBounds USimpleFlipbookComponent::CalcBounds(const FTransform &LocalToWorld) const
+{
+    if (SourceFlipbook != nullptr)
+    {
         // Graphics bounds.
         FBoxSphereBounds NewBounds = SourceFlipbook->GetRenderBounds().TransformBy(LocalToWorld);
 
@@ -348,9 +415,11 @@ FBoxSphereBounds USimpleFlipbookComponent::CalcBounds(const FTransform &LocalToW
 }
 
 void USimpleFlipbookComponent::GetUsedTextures(TArray<UTexture *> &OutTextures,
-                                               EMaterialQualityLevel::Type QualityLevel) {
+                                               EMaterialQualityLevel::Type QualityLevel)
+{
     // Get the texture referenced by each keyframe
-    if (SourceFlipbook != nullptr) {
+    if (SourceFlipbook != nullptr)
+    {
         OutTextures.AddUnique(SourceFlipbook->GetSourceTexture());
     }
 
@@ -358,17 +427,21 @@ void USimpleFlipbookComponent::GetUsedTextures(TArray<UTexture *> &OutTextures,
     Super::GetUsedTextures(OutTextures, QualityLevel);
 }
 
-UMaterialInterface *USimpleFlipbookComponent::GetMaterial(int32 MaterialIndex) const {
-    if (OverrideMaterials.IsValidIndex(MaterialIndex) && (OverrideMaterials[MaterialIndex] != nullptr)) {
+UMaterialInterface *USimpleFlipbookComponent::GetMaterial(int32 MaterialIndex) const
+{
+    if (OverrideMaterials.IsValidIndex(MaterialIndex) && (OverrideMaterials[MaterialIndex] != nullptr))
+    {
         return OverrideMaterials[MaterialIndex];
     }
-    if (SourceFlipbook != nullptr) {
+    if (SourceFlipbook != nullptr)
+    {
         return SourceFlipbook->GetDefaultMaterial();
     }
 
     return nullptr;
 }
 
-int32 USimpleFlipbookComponent::GetNumMaterials() const {
+int32 USimpleFlipbookComponent::GetNumMaterials() const
+{
     return FMath::Max<int32>(OverrideMaterials.Num(), 1);
 }

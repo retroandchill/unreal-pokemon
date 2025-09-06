@@ -14,7 +14,8 @@ class ITrainer;
  * Helper library for managing the player.
  */
 UCLASS(Blueprintable)
-class POKEMONCORE_API UTrainerHelpers : public UBlueprintFunctionLibrary {
+class POKEMONCORE_API UTrainerHelpers : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

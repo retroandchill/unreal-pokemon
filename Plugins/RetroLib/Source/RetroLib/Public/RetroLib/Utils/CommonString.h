@@ -6,7 +6,8 @@
 #include "RetroLib/Blueprints/Properties.h"
 #include <variant>
 
-namespace Retro {
+namespace Retro
+{
 
     /**
      * Concept that defines if a type can be converted to a common string.
@@ -35,22 +36,36 @@ namespace Retro {
      */
     template <typename T>
         requires Stringable<T>
-    FCommonString GetString(T &&Value) {
-        if constexpr (std::same_as<std::remove_cvref_t<T>, FName>) {
+    FCommonString GetString(T &&Value)
+    {
+        if constexpr (std::same_as<std::remove_cvref_t<T>, FName>)
+        {
             return FCommonString(Value.ToString());
-        } else if constexpr (std::same_as<std::remove_cvref_t<T>, FText>) {
-            if constexpr (std::is_lvalue_reference_v<T>) {
+        }
+        else if constexpr (std::same_as<std::remove_cvref_t<T>, FText>)
+        {
+            if constexpr (std::is_lvalue_reference_v<T>)
+            {
                 return FCommonString(FStringView(Value.ToString()));
-            } else {
+            }
+            else
+            {
                 return FCommonString(std::forward<T>(Value));
             }
-        } else if constexpr (std::same_as<std::remove_cvref_t<T>, FString>) {
-            if constexpr (std::is_lvalue_reference_v<T>) {
+        }
+        else if constexpr (std::same_as<std::remove_cvref_t<T>, FString>)
+        {
+            if constexpr (std::is_lvalue_reference_v<T>)
+            {
                 return FCommonString(FStringView(std::forward<T>(Value)));
-            } else {
+            }
+            else
+            {
                 return FCommonString(std::forward<T>(Value));
             }
-        } else {
+        }
+        else
+        {
             return FCommonString(FStringView(Value));
         }
     }
@@ -81,10 +96,14 @@ namespace Retro {
      */
     template <typename T>
         requires std::constructible_from<FCommonString, T> && (!std::same_as<std::remove_cvref_t<T>, FCommonString>)
-    FStringView GetStringView(T &&String) {
-        if constexpr (std::same_as<std::remove_cvref_t<T>, FText>) {
+    FStringView GetStringView(T &&String)
+    {
+        if constexpr (std::same_as<std::remove_cvref_t<T>, FText>)
+        {
             return String.ToString();
-        } else {
+        }
+        else
+        {
             return String;
         }
     }

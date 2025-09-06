@@ -17,7 +17,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Ranges {
+namespace Retro::Ranges
+{
 
     template <typename T, size_t N>
     concept ReturnableElement = std::is_reference_v<T> || std::move_constructible<std::tuple_element<N, T>>;
@@ -37,13 +38,15 @@ namespace Retro::Ranges {
         requires std::ranges::view<R> && HasTupleElement<std::ranges::range_value_t<R>, N> &&
                  HasTupleElement<std::remove_reference_t<std::ranges::range_reference_t<R>>, N> &&
                  ReturnableElement<std::ranges::range_reference_t<R>, N>
-    class TElementsView : public std::ranges::view_interface<TElementsView<R, N>> {
+    class TElementsView : public std::ranges::view_interface<TElementsView<R, N>>
+    {
 
         template <bool IsConst>
         struct TSentinel;
 
         template <bool IsConst>
-        struct TIterator {
+        struct TIterator
+        {
             using value_type = std::decay_t<std::tuple_element_t<N, std::ranges::range_value_t<R>>>;
             using difference_type = std::ranges::range_difference_t<R>;
             using single_pass = std::bool_constant<SinglePassIterator<std::ranges::iterator_t<R>>>;
@@ -60,15 +63,18 @@ namespace Retro::Ranges {
           public:
             constexpr TIterator() = default;
 
-            constexpr TIterator(ElementsViewType &View, FBeginTag) : View(&View), It(std::ranges::begin(View.Range)) {
+            constexpr TIterator(ElementsViewType &View, FBeginTag) : View(&View), It(std::ranges::begin(View.Range))
+            {
             }
 
-            constexpr TIterator(ElementsViewType &View, FEndTag) : View(&View), It(std::ranges::end(View.Range)) {
+            constexpr TIterator(ElementsViewType &View, FEndTag) : View(&View), It(std::ranges::end(View.Range))
+            {
             }
 
             template <bool Other>
                 requires IsConst && (!Other)
-            explicit constexpr TIterator(TIterator<Other> OtherIt) : View(OtherIt.View), It(std::move(OtherIt.It)) {
+            explicit constexpr TIterator(TIterator<Other> OtherIt) : View(OtherIt.View), It(std::move(OtherIt.It))
+            {
             }
 
             [[nodiscard]] constexpr decltype(auto) operator*() const noexcept(noexcept(get<N>(*It)))
@@ -79,22 +85,25 @@ namespace Retro::Ranges {
 
             [[nodiscard]] constexpr decltype(auto) operator*() const noexcept(
                 std::is_nothrow_move_constructible_v<std::tuple_element_t<N, std::ranges::range_reference_t<R>>> //
-                && noexcept(get<N>(*It))) {
+                && noexcept(get<N>(*It)))
+            {
                 using ElementType = std::remove_cv_t<std::tuple_element_t<N, std::ranges::range_reference_t<R>>>;
                 return static_cast<ElementType>(get<N>(*It));
             }
 
-            constexpr TIterator &operator++() noexcept(noexcept(++It)) {
+            constexpr TIterator &operator++() noexcept(noexcept(++It))
+            {
                 ++It;
                 return *this;
             }
 
-            constexpr void operator++(int) noexcept(noexcept(++It)) {
+            constexpr void operator++(int) noexcept(noexcept(++It))
+            {
                 ++It;
             }
 
-            constexpr TIterator
-            operator++(int) noexcept(noexcept(++It) && std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
+            constexpr TIterator operator++(int) noexcept(
+                noexcept(++It) && std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
                 requires std::ranges::forward_range<R>
             {
                 auto Temp = *this;
@@ -109,8 +118,8 @@ namespace Retro::Ranges {
                 return *this;
             }
 
-            constexpr TIterator
-            operator--(int) noexcept(noexcept(--It) && std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
+            constexpr TIterator operator--(int) noexcept(
+                noexcept(--It) && std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
                 requires std::ranges::bidirectional_range<R>
             {
                 auto temp = *this;
@@ -148,24 +157,27 @@ namespace Retro::Ranges {
                 return static_cast<ElementType>(get<N>(*(It + Index)));
             }
 
-            [[nodiscard]] friend constexpr bool
-            operator==(const TIterator &Left, const TIterator &Right) noexcept(noexcept(Left.It == Right.It))
+            [[nodiscard]] friend constexpr bool operator==(const TIterator &Left,
+                                                           const TIterator &Right) noexcept(noexcept(Left.It ==
+                                                                                                     Right.It))
                 requires std::equality_comparable<std::ranges::iterator_t<R>>
             {
                 return Left.It == Right.It;
             }
 
-            [[nodiscard]] friend constexpr auto
-            operator<=>(const TIterator &Left, const TIterator &Right) noexcept(noexcept(Left.It <=> Right.It))
+            [[nodiscard]] friend constexpr auto operator<=>(const TIterator &Left,
+                                                            const TIterator &Right) noexcept(noexcept(Left.It <=>
+                                                                                                      Right.It))
                 requires std::ranges::random_access_range<R> && std::three_way_comparable<std::ranges::iterator_t<R>>
             {
                 return Left.It <=> Right.It;
             }
 
-            [[nodiscard]] friend constexpr TIterator
-            operator+(const TIterator &Self, const difference_type Offset) noexcept(
-                noexcept(std::declval<std::ranges::iterator_t<R> &>() += Offset) &&
-                std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
+            [[nodiscard]] friend constexpr TIterator operator+(
+                const TIterator &Self,
+                const difference_type Offset) noexcept(noexcept(std::declval<std::ranges::iterator_t<R> &>() +=
+                                                                Offset) &&
+                                                       std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
                 requires std::ranges::random_access_range<R>
             {
                 auto Copy = Self;
@@ -184,10 +196,11 @@ namespace Retro::Ranges {
                 return Copy;
             }
 
-            [[nodiscard]] friend constexpr TIterator
-            operator-(const TIterator &Self, const difference_type Offset) noexcept(
-                noexcept(std::declval<std::ranges::iterator_t<R> &>() -= Offset) &&
-                std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
+            [[nodiscard]] friend constexpr TIterator operator-(
+                const TIterator &Self,
+                const difference_type Offset) noexcept(noexcept(std::declval<std::ranges::iterator_t<R> &>() -=
+                                                                Offset) &&
+                                                       std::is_nothrow_copy_constructible_v<std::ranges::iterator_t<R>>)
                 requires std::ranges::random_access_range<R>
             {
                 auto Copy = Self;
@@ -195,8 +208,8 @@ namespace Retro::Ranges {
                 return Copy;
             }
 
-            [[nodiscard]] friend constexpr difference_type
-            operator-(const TIterator &Left, const TIterator &Right) noexcept(noexcept(Left.It - Right.It))
+            [[nodiscard]] friend constexpr difference_type operator-(
+                const TIterator &Left, const TIterator &Right) noexcept(noexcept(Left.It - Right.It))
                 requires std::sized_sentinel_for<std::ranges::iterator_t<R>, std::ranges::iterator_t<R>>
             {
                 return Left.It - Right.It;
@@ -208,7 +221,8 @@ namespace Retro::Ranges {
         };
 
         template <bool IsConst>
-        struct TSentinel {
+        struct TSentinel
+        {
           private:
             friend struct TSentinel<!IsConst>;
             friend struct TIterator<IsConst>;
@@ -218,41 +232,47 @@ namespace Retro::Ranges {
 
           public:
             constexpr TSentinel() = default;
-            explicit constexpr TSentinel(ElementsViewType &View) : EndElement(std::ranges::end(View.Range)) {
+            explicit constexpr TSentinel(ElementsViewType &View) : EndElement(std::ranges::end(View.Range))
+            {
             }
 
             template <bool Other>
                 requires IsConst && (!Other)
-            explicit constexpr TSentinel(TSentinel<Other> OtherSen) : EndElement(std::move(OtherSen.EndElement)) {
+            explicit constexpr TSentinel(TSentinel<Other> OtherSen) : EndElement(std::move(OtherSen.EndElement))
+            {
             }
 
             template <bool Other>
                 requires std::sentinel_for<std::ranges::sentinel_t<R>, typename TIterator<Other>::IteratorType>
-            [[nodiscard]] friend constexpr bool
-            operator==(const TIterator<Other> &Left,
-                       const TSentinel &Right) noexcept(noexcept(GetIteratorValue(Left) == Right.EndElement)) {
+            [[nodiscard]] friend constexpr bool operator==(
+                const TIterator<Other> &Left,
+                const TSentinel &Right) noexcept(noexcept(GetIteratorValue(Left) == Right.EndElement))
+            {
                 return GetIteratorValue(Left) == Right.EndElement;
             }
 
             template <bool Other>
                 requires std::sized_sentinel_for<std::ranges::sentinel_t<R>, typename TIterator<Other>::IteratorType>
-            [[nodiscard]] friend constexpr std::ranges::range_difference_t<R>
-            operator-(const TIterator<Other> &Left,
-                      const TSentinel &Right) noexcept(noexcept(GetIteratorValue(Left) - Right.EndElement)) {
+            [[nodiscard]] friend constexpr std::ranges::range_difference_t<R> operator-(
+                const TIterator<Other> &Left,
+                const TSentinel &Right) noexcept(noexcept(GetIteratorValue(Left) - Right.EndElement))
+            {
                 return GetIteratorValue(Left) - Right.EndElement;
             }
 
             template <bool Other>
                 requires std::sized_sentinel_for<std::ranges::sentinel_t<R>, typename TIterator<Other>::IteratorType>
-            [[nodiscard]] friend constexpr std::ranges::range_difference_t<R>
-            operator-(const TSentinel &Left,
-                      const TIterator<Other> &Right) noexcept(noexcept(Left.EndElement - GetIteratorValue(Right))) {
+            [[nodiscard]] friend constexpr std::ranges::range_difference_t<R> operator-(
+                const TSentinel &Left,
+                const TIterator<Other> &Right) noexcept(noexcept(Left.EndElement - GetIteratorValue(Right)))
+            {
                 return Left.EndElement - GetIteratorValue(Right);
             }
 
           private:
             template <bool Other>
-            static constexpr decltype(auto) GetIteratorValue(const TIterator<Other> &It) noexcept {
+            static constexpr decltype(auto) GetIteratorValue(const TIterator<Other> &It) noexcept
+            {
                 return It.It;
             }
 
@@ -277,7 +297,8 @@ namespace Retro::Ranges {
          *
          * @param Range The range to be used for initializing the `ElementsView` instance.
          */
-        constexpr explicit TElementsView(R Range) : Range(std::move(Range)) {
+        constexpr explicit TElementsView(R Range) : Range(std::move(Range))
+        {
         }
 
         /**
@@ -305,7 +326,8 @@ namespace Retro::Ranges {
          *
          * @return `R` The moved underlying range.
          */
-        constexpr R base() && {
+        constexpr R base() &&
+        {
             return std::move(Range);
         }
 
@@ -320,9 +342,8 @@ namespace Retro::Ranges {
          * @return A constexpr object of type `Iterator<false>` pointing to the first element
          *         of the range.
          */
-        [[nodiscard]] constexpr TIterator<false>
-        begin() noexcept(noexcept(std::ranges::begin(Range)) &&
-                         std::is_nothrow_move_constructible_v<std::ranges::iterator_t<R>>)
+        [[nodiscard]] constexpr TIterator<false> begin() noexcept(
+            noexcept(std::ranges::begin(Range)) && std::is_nothrow_move_constructible_v<std::ranges::iterator_t<R>>)
             requires(!SimpleView<R>)
         {
             return TIterator<false>(*this, FBeginTag());
@@ -359,9 +380,12 @@ namespace Retro::Ranges {
                                                     std::is_nothrow_move_constructible_v<std::ranges::sentinel_t<R>>)
             requires(!SimpleView<R>)
         {
-            if constexpr (std::ranges::common_range<R>) {
+            if constexpr (std::ranges::common_range<R>)
+            {
                 return TIterator<false>(*this, FEndTag());
-            } else {
+            }
+            else
+            {
                 return TSentinel<false>(*this);
             }
         }
@@ -380,9 +404,12 @@ namespace Retro::Ranges {
                      std::is_nothrow_move_constructible_v<std::ranges::sentinel_t<const R>>)
             requires std::ranges::range<const R>
         {
-            if constexpr (std::ranges::common_range<const R>) {
+            if constexpr (std::ranges::common_range<const R>)
+            {
                 return TIterator<true>(*this, FEndTag());
-            } else {
+            }
+            else
+            {
                 return TSentinel<true>(*this);
             }
         }
@@ -423,9 +450,11 @@ namespace Retro::Ranges {
         R Range;
     };
 
-    namespace Views {
+    namespace Views
+    {
         template <size_t N>
-        struct ElementsFunction {
+        struct ElementsFunction
+        {
             /**
              * @brief Invokes the function call operator to transform the given range into an `ElementsView`.
              *
@@ -440,7 +469,8 @@ namespace Retro::Ranges {
                 requires std::ranges::viewable_range<R> && HasTupleElement<std::ranges::range_value_t<R>, N> &&
                          HasTupleElement<std::remove_reference_t<std::ranges::range_reference_t<R>>, N> &&
                          ReturnableElement<std::ranges::range_reference_t<R>, N>
-            constexpr auto operator()(R &&range) const {
+            constexpr auto operator()(R &&range) const
+            {
                 return TElementsView<std::ranges::views::all_t<R>, N>(std::ranges::views::all(std::forward<R>(range)));
             }
         };

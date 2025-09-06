@@ -4,17 +4,21 @@
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
-void UAudioPlaybackSubsystem::PlayBackgroundMusic(USoundBase *BGM, float VolumeMultiplier, float PitchMultiplier) {
-    if (BGM == nullptr) {
+void UAudioPlaybackSubsystem::PlayBackgroundMusic(USoundBase *BGM, float VolumeMultiplier, float PitchMultiplier)
+{
+    if (BGM == nullptr)
+    {
         return;
     }
 
     // Don't restart the music if its already playing
-    if (CurrentBackgroundMusic != nullptr && CurrentBackgroundMusic->GetSound() == BGM) {
+    if (CurrentBackgroundMusic != nullptr && CurrentBackgroundMusic->GetSound() == BGM)
+    {
         return;
     }
 
-    if (CurrentBackgroundMusic != nullptr) {
+    if (CurrentBackgroundMusic != nullptr)
+    {
         CurrentBackgroundMusic->Stop();
     }
 
@@ -22,17 +26,21 @@ void UAudioPlaybackSubsystem::PlayBackgroundMusic(USoundBase *BGM, float VolumeM
         UGameplayStatics::SpawnSound2D(this, BGM, VolumeMultiplier, PitchMultiplier, 0, nullptr, true);
 }
 
-void UAudioPlaybackSubsystem::PlayTempBackgroundMusic(USoundBase *BGM, float VolumeMultiplier, float PitchMultiplier) {
-    if (BGM == nullptr) {
+void UAudioPlaybackSubsystem::PlayTempBackgroundMusic(USoundBase *BGM, float VolumeMultiplier, float PitchMultiplier)
+{
+    if (BGM == nullptr)
+    {
         return;
     }
 
     // Don't restart the music if its already playing
-    if (CurrentBackgroundMusic != nullptr && CurrentBackgroundMusic->GetSound() == BGM) {
+    if (CurrentBackgroundMusic != nullptr && CurrentBackgroundMusic->GetSound() == BGM)
+    {
         return;
     }
 
-    if (CurrentBackgroundMusic != nullptr) {
+    if (CurrentBackgroundMusic != nullptr)
+    {
         CurrentBackgroundMusic->SetPaused(true);
         SuspendedBackgroundMusic.Emplace(CurrentBackgroundMusic);
     }
@@ -41,60 +49,76 @@ void UAudioPlaybackSubsystem::PlayTempBackgroundMusic(USoundBase *BGM, float Vol
         UGameplayStatics::SpawnSound2D(this, BGM, VolumeMultiplier, PitchMultiplier, 0, nullptr, true);
 }
 
-void UAudioPlaybackSubsystem::PauseBackgroundMusic() {
-    if (CurrentBackgroundMusic == nullptr) {
+void UAudioPlaybackSubsystem::PauseBackgroundMusic()
+{
+    if (CurrentBackgroundMusic == nullptr)
+    {
         return;
     }
     CurrentBackgroundMusic->SetPaused(true);
 }
 
-void UAudioPlaybackSubsystem::ResumeBackgroundMusic() {
-    if (CurrentBackgroundMusic == nullptr) {
+void UAudioPlaybackSubsystem::ResumeBackgroundMusic()
+{
+    if (CurrentBackgroundMusic == nullptr)
+    {
         return;
     }
     CurrentBackgroundMusic->SetPaused(false);
 }
 
-void UAudioPlaybackSubsystem::StopBackgroundMusic(float FadeOutDuration = 0) {
-    if (CurrentBackgroundMusic == nullptr) {
+void UAudioPlaybackSubsystem::StopBackgroundMusic(float FadeOutDuration = 0)
+{
+    if (CurrentBackgroundMusic == nullptr)
+    {
         return;
     }
 
     CurrentBackgroundMusic->OnAudioFinishedNative.AddWeakLambda(this, [this](const UAudioComponent *) {
-        if (!SuspendedBackgroundMusic.IsEmpty()) {
+        if (!SuspendedBackgroundMusic.IsEmpty())
+        {
             CurrentBackgroundMusic = SuspendedBackgroundMusic.Pop();
             CurrentBackgroundMusic->SetPaused(IsJinglePlaying());
         }
     });
 
-    if (FMath::IsNearlyZero(FadeOutDuration) || IsJinglePlaying()) {
+    if (FMath::IsNearlyZero(FadeOutDuration) || IsJinglePlaying())
+    {
         CurrentBackgroundMusic->Stop();
-    } else {
+    }
+    else
+    {
         CurrentBackgroundMusic->FadeOut(FadeOutDuration, 0.f);
     }
 
     CurrentBackgroundMusic = nullptr;
 }
 
-bool UAudioPlaybackSubsystem::IsMusicPlaying() const {
+bool UAudioPlaybackSubsystem::IsMusicPlaying() const
+{
     return CurrentBackgroundMusic != nullptr &&
            CurrentBackgroundMusic->GetPlayState() == EAudioComponentPlayState::Playing;
 }
 
-bool UAudioPlaybackSubsystem::IsMusicPaused() const {
+bool UAudioPlaybackSubsystem::IsMusicPaused() const
+{
     return CurrentBackgroundMusic != nullptr &&
            CurrentBackgroundMusic->GetPlayState() == EAudioComponentPlayState::Paused;
 }
 
-UAudioComponent *UAudioPlaybackSubsystem::GetCurrentMusic() const {
+UAudioComponent *UAudioPlaybackSubsystem::GetCurrentMusic() const
+{
     return CurrentBackgroundMusic;
 }
 
-void UAudioPlaybackSubsystem::PlayJingle(USoundBase *Jingle, float VolumeMultiplier, float PitchMultiplier) {
-    if (Jingle == nullptr) {
+void UAudioPlaybackSubsystem::PlayJingle(USoundBase *Jingle, float VolumeMultiplier, float PitchMultiplier)
+{
+    if (Jingle == nullptr)
+    {
         return;
     }
-    if (CurrentJingle != nullptr) {
+    if (CurrentJingle != nullptr)
+    {
         return;
     }
 
@@ -106,6 +130,7 @@ void UAudioPlaybackSubsystem::PlayJingle(USoundBase *Jingle, float VolumeMultipl
     });
 }
 
-bool UAudioPlaybackSubsystem::IsJinglePlaying() const {
+bool UAudioPlaybackSubsystem::IsJinglePlaying() const
+{
     return CurrentJingle != nullptr && CurrentJingle->GetPlayState() == EAudioComponentPlayState::Playing;
 }

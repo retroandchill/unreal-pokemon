@@ -11,7 +11,8 @@
  * Developer Settings for the Tile Replacer
  */
 UCLASS(Config = Editor, DefaultConfig, meta = (DisplayName = "Tile Replacer Settings"))
-class TILEREPLACER_API UTileReplacerSettings : public UDeveloperSettings {
+class TILEREPLACER_API UTileReplacerSettings : public UDeveloperSettings
+{
     GENERATED_BODY()
 
   public:

@@ -16,7 +16,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStatusEffectApplied, FActiveGamep
  *
  */
 UCLASS(meta = (HideThen))
-class POKEMONBATTLE_API UApplyStatusEffectToBattler : public UBlueprintCoroutineActionBase {
+class POKEMONBATTLE_API UApplyStatusEffectToBattler : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

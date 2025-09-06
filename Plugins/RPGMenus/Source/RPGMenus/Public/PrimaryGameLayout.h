@@ -16,7 +16,8 @@
  *
  */
 UCLASS()
-class RPGMENUS_API UPrimaryGameLayout : public UCommonUserWidget {
+class RPGMENUS_API UPrimaryGameLayout : public UCommonUserWidget
+{
     GENERATED_BODY()
 
   public:
@@ -24,7 +25,8 @@ class RPGMENUS_API UPrimaryGameLayout : public UCommonUserWidget {
     static UPrimaryGameLayout *Get(const APlayerController *PlayerController);
     static UPrimaryGameLayout *Get(ULocalPlayer *LocalPlayer);
 
-    bool IsDormant() const {
+    bool IsDormant() const
+    {
         return bIsDormant;
     }
 
@@ -33,7 +35,8 @@ class RPGMENUS_API UPrimaryGameLayout : public UCommonUserWidget {
     template <std::derived_from<UCommonActivatableWidget> T = UCommonActivatableWidget>
     UE5Coro::TCoroutine<T *> PushWidgetToLayerStackAsync(FGameplayTag LayerName,
                                                          TSoftClassPtr<T> ActivatableWidgetClass,
-                                                         bool bSuspendUntilInputComplete, FForceLatentCoroutine = {}) {
+                                                         bool bSuspendUntilInputComplete, FForceLatentCoroutine = {})
+    {
         static const FName PushingToWidgetLayer = "PushingWidgetToLayer";
         const FName SuspendInputToken =
             bSuspendUntilInputComplete
@@ -52,9 +55,11 @@ class RPGMENUS_API UPrimaryGameLayout : public UCommonUserWidget {
     }
 
     template <std::derived_from<UCommonActivatableWidget> T = UCommonActivatableWidget>
-    T *PushWidgetToLayerStack(FGameplayTag LayerName, TSubclassOf<T> WidgetClass) {
+    T *PushWidgetToLayerStack(FGameplayTag LayerName, TSubclassOf<T> WidgetClass)
+    {
         auto Layer = GetLayerWidget(LayerName);
-        if (Layer == nullptr) {
+        if (Layer == nullptr)
+        {
             return nullptr;
         }
 

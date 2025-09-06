@@ -11,7 +11,8 @@
  * Object that is used to check that the pocket name was dispatched.
  */
 UCLASS()
-class POKEMONTESTS_API UPocketNameDispatcher : public UObject {
+class POKEMONTESTS_API UPocketNameDispatcher : public UObject
+{
     GENERATED_BODY()
 
   public:

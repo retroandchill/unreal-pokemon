@@ -12,7 +12,8 @@ THIRD_PARTY_INCLUDES_END
 /**
  *
  */
-class FMockBattleAction : public IBattleAction {
+class FMockBattleAction : public IBattleAction
+{
   public:
     ~FMockBattleAction() override = default;
 

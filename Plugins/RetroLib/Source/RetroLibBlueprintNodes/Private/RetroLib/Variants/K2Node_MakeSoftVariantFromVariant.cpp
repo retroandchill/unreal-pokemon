@@ -8,12 +8,14 @@
 #include "RetroLib/Variants/VariantObjectStruct.h"
 #include "RetroLib/Variants/VariantObjectUtilities.h"
 
-void UK2Node_MakeSoftVariantFromVariant::Initialize(UScriptStruct *HardReference, UScriptStruct *SoftReference) {
+void UK2Node_MakeSoftVariantFromVariant::Initialize(UScriptStruct *HardReference, UScriptStruct *SoftReference)
+{
     HardReferenceType = HardReference;
     SoftReferenceType = SoftReference;
 }
 
-void UK2Node_MakeSoftVariantFromVariant::AllocateDefaultPins() {
+void UK2Node_MakeSoftVariantFromVariant::AllocateDefaultPins()
+{
     CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Struct,
               HardReferenceType != nullptr ? HardReferenceType.Get() : nullptr,
               HardReferenceType != nullptr ? HardReferenceType->GetFName() : FName("Struct"));
@@ -23,14 +25,16 @@ void UK2Node_MakeSoftVariantFromVariant::AllocateDefaultPins() {
     Super::AllocateDefaultPins();
 }
 
-FText UK2Node_MakeSoftVariantFromVariant::GetNodeTitle(ENodeTitleType::Type TitleType) const {
+FText UK2Node_MakeSoftVariantFromVariant::GetNodeTitle(ENodeTitleType::Type TitleType) const
+{
     auto StructName = SoftReferenceType != nullptr ? SoftReferenceType->GetDisplayNameText()
                                                    : FText::FromStringView(TEXT("<<INVALID>>"));
     return FText::FormatNamed(NSLOCTEXT("K2Node", "MakeSoftVariantFromVariant_GetNodeTitle", "Make {Output}"),
                               TEXT("Output"), StructName);
 }
 
-FText UK2Node_MakeSoftVariantFromVariant::GetTooltipText() const {
+FText UK2Node_MakeSoftVariantFromVariant::GetTooltipText() const
+{
     auto HardStructName = HardReferenceType != nullptr ? HardReferenceType->GetDisplayNameText()
                                                        : FText::FromStringView(TEXT("<<INVALID>>"));
     auto SoftStructName = SoftReferenceType != nullptr ? SoftReferenceType->GetDisplayNameText()
@@ -40,7 +44,8 @@ FText UK2Node_MakeSoftVariantFromVariant::GetTooltipText() const {
                               TEXT("Input"), HardStructName, TEXT("Output"), SoftStructName);
 }
 
-void UK2Node_MakeSoftVariantFromVariant::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
+void UK2Node_MakeSoftVariantFromVariant::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph)
+{
     Super::ExpandNode(CompilerContext, SourceGraph);
 
     // FUNCTION NODE
@@ -70,7 +75,8 @@ void UK2Node_MakeSoftVariantFromVariant::ExpandNode(FKismetCompilerContext &Comp
 }
 
 void UK2Node_MakeSoftVariantFromVariant::AddMenuOptionsForStruct(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
-                                                                 Retro::IVariantRegistration &Registration) const {
+                                                                 Retro::IVariantRegistration &Registration) const
+{
     using FCustomizeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate;
     auto CustomizeCallback = [](UEdGraphNode *Node, bool, UScriptStruct *Input, UScriptStruct *Output) {
         auto TypedNode = CastChecked<UK2Node_MakeSoftVariantFromVariant>(Node);

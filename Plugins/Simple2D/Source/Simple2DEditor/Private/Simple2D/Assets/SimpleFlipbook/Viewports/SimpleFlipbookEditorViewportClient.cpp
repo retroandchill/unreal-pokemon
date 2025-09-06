@@ -8,11 +8,13 @@
 #include "Simple2D/Settings/SimpleFlipbookEditorSettings.h"
 #include "Utils.h"
 
-namespace Simple2D {
+namespace Simple2D
+{
     FSimpleFlipbookEditorViewportClient::FSimpleFlipbookEditorViewportClient(
         const TAttribute<USimpleFlipbook *> &InFlipbookBeingEdited)
         : FlipbookBeingEdited(InFlipbookBeingEdited), FlipbookBeingEditedLastFrame(FlipbookBeingEdited.Get()),
-          AnimatedRenderComponent(NewObject<USimpleFlipbookComponent>()) {
+          AnimatedRenderComponent(NewObject<USimpleFlipbookComponent>())
+    {
         PreviewScene = &OwnedPreviewScene;
 
         SetRealtime(true);
@@ -26,19 +28,23 @@ namespace Simple2D {
         EngineShowFlags.SetCompositeEditorPrimitives(true);
     }
 
-    void FSimpleFlipbookEditorViewportClient::Draw(const FSceneView *View, FPrimitiveDrawInterface *PDI) {
+    void FSimpleFlipbookEditorViewportClient::Draw(const FSceneView *View, FPrimitiveDrawInterface *PDI)
+    {
         FEditorViewportClient::Draw(View, PDI);
 
-        if (bShowPivot && AnimatedRenderComponent.IsValid()) {
+        if (bShowPivot && AnimatedRenderComponent.IsValid())
+        {
             FUnrealEdUtils::DrawWidget(View, PDI, AnimatedRenderComponent->GetComponentTransform().ToMatrixWithScale(),
                                        0, 0, EAxisList::Screen, EWidgetMovementMode::WMM_Translate);
         }
     }
 
-    void FSimpleFlipbookEditorViewportClient::DrawCanvas(FViewport &InViewport, FSceneView &View, FCanvas &Canvas) {
+    void FSimpleFlipbookEditorViewportClient::DrawCanvas(FViewport &InViewport, FSceneView &View, FCanvas &Canvas)
+    {
         FEditorViewportClient::DrawCanvas(InViewport, View, Canvas);
 
-        if (const bool bIsHitTesting = Canvas.IsHitTesting(); !bIsHitTesting) {
+        if (const bool bIsHitTesting = Canvas.IsHitTesting(); !bIsHitTesting)
+        {
             Canvas.SetHitProxy(nullptr);
         }
 
@@ -55,9 +61,12 @@ namespace Simple2D {
         TextItem.Draw(&Canvas);
     }
 
-    void FSimpleFlipbookEditorViewportClient::Tick(float DeltaSeconds) {
-        if (AnimatedRenderComponent.IsValid()) {
-            if (auto *Flipbook = FlipbookBeingEdited.Get(); Flipbook != FlipbookBeingEditedLastFrame.Get()) {
+    void FSimpleFlipbookEditorViewportClient::Tick(float DeltaSeconds)
+    {
+        if (AnimatedRenderComponent.IsValid())
+        {
+            if (auto *Flipbook = FlipbookBeingEdited.Get(); Flipbook != FlipbookBeingEditedLastFrame.Get())
+            {
                 AnimatedRenderComponent->SetFlipbook(Flipbook);
                 AnimatedRenderComponent->UpdateBounds();
                 FlipbookBeingEditedLastFrame = Flipbook;
@@ -69,18 +78,21 @@ namespace Simple2D {
         OwnedPreviewScene.GetWorld()->Tick(LEVELTICK_All, DeltaSeconds);
     }
 
-    bool FSimpleFlipbookEditorViewportClient::InputKey(const FInputKeyEventArgs &EventArgs) {
+    bool FSimpleFlipbookEditorViewportClient::InputKey(const FInputKeyEventArgs &EventArgs)
+    {
         bool bHandled = false;
 
         // Pass keys to standard controls, if we didn't consume input
         return bHandled ? true : FEditorViewportClient::InputKey(EventArgs);
     }
 
-    FLinearColor FSimpleFlipbookEditorViewportClient::GetBackgroundColor() const {
+    FLinearColor FSimpleFlipbookEditorViewportClient::GetBackgroundColor() const
+    {
         return GetDefault<USimpleFlipbookEditorSettings>()->BackgroundColor;
     }
 
-    FBox FSimpleFlipbookEditorViewportClient::GetDesiredFocusBounds() const {
+    FBox FSimpleFlipbookEditorViewportClient::GetDesiredFocusBounds() const
+    {
         return AnimatedRenderComponent->Bounds.GetBox();
     }
 } // namespace Simple2D

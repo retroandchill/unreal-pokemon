@@ -17,7 +17,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDisplayMessageOutputPin);
  * Displays a message and waits for the player to press the advance button.
  */
 UCLASS(meta = (HideThen, HasDedicatedAsyncNode))
-class POKEMONUI_API UDisplayMessage : public UBlueprintCoroutineActionBase {
+class POKEMONUI_API UDisplayMessage : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

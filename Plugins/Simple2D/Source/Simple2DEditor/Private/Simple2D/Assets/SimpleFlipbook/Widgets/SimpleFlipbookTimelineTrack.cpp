@@ -7,9 +7,11 @@
 #include "Simple2D/Simple2DStyle.h"
 #include "SlateOptMacros.h"
 
-namespace Simple2D {
+namespace Simple2D
+{
 
-    TSharedPtr<SWidget> FKeyFrameDragDropOp::GetDefaultDecorator() const {
+    TSharedPtr<SWidget> FKeyFrameDragDropOp::GetDefaultDecorator() const
+    {
         const FLinearColor BorderColor = FLinearColor::White;
 
         return SNew(SBox)
@@ -22,40 +24,48 @@ namespace Simple2D {
                      .VAlign(VAlign_Center)[SNew(STextBlock).ColorAndOpacity(FLinearColor::Black).Text(BodyText)]];
     }
 
-    void FKeyFrameDragDropOp::OnDragged(const FDragDropEvent &DragDropEvent) {
-        if (CursorDecoratorWindow.IsValid()) {
+    void FKeyFrameDragDropOp::OnDragged(const FDragDropEvent &DragDropEvent)
+    {
+        if (CursorDecoratorWindow.IsValid())
+        {
             CursorDecoratorWindow->MoveWindowTo(DragDropEvent.GetScreenSpacePosition());
         }
     }
 
-    void FKeyFrameDragDropOp::Construct() {
+    void FKeyFrameDragDropOp::Construct()
+    {
         MouseCursor = EMouseCursor::GrabHandClosed;
         BodyText = FText::FormatOrdered(NSLOCTEXT("Simple2D", "SpriteIndex", "Index {0}"), SourceFrameIndex);
         FDragDropOperation::Construct();
     }
 
-    void FKeyFrameDragDropOp::OnDrop(bool bDropWasHandled, const FPointerEvent &MouseEvent) {
-        if (!bDropWasHandled) {
+    void FKeyFrameDragDropOp::OnDrop(bool bDropWasHandled, const FPointerEvent &MouseEvent)
+    {
+        if (!bDropWasHandled)
+        {
             // Add us back to our source, the drop fizzled
             InsertInFlipbook(SourceFlipbook.Get(), SourceFrameIndex);
             Transaction.Cancel();
         }
     }
 
-    void FKeyFrameDragDropOp::AppendToFlipbook(USimpleFlipbook *DestinationFlipbook) {
+    void FKeyFrameDragDropOp::AppendToFlipbook(USimpleFlipbook *DestinationFlipbook)
+    {
         DestinationFlipbook->Modify();
         FScopedSimpleFlipbookMutator EditLock(DestinationFlipbook);
         EditLock.KeyFrames.Add(KeyFrameData);
     }
 
-    void FKeyFrameDragDropOp::InsertInFlipbook(USimpleFlipbook *DestinationFlipbook, int32 Index) {
+    void FKeyFrameDragDropOp::InsertInFlipbook(USimpleFlipbook *DestinationFlipbook, int32 Index)
+    {
         DestinationFlipbook->Modify();
         FScopedSimpleFlipbookMutator EditLock(DestinationFlipbook);
         EditLock.KeyFrames.Insert(KeyFrameData, Index);
     }
 
     TSharedRef<FKeyFrameDragDropOp> FKeyFrameDragDropOp::New(int32 InWidth, USimpleFlipbook *InFlipbook,
-                                                             int32 InFrameIndex) {
+                                                             int32 InFrameIndex)
+    {
         // Create the drag-drop op containing the key
         auto Operation = MakeShared<FKeyFrameDragDropOp>(FInitTag(), InFlipbook->GetKeyFrameChecked(InFrameIndex),
                                                          InFrameIndex, InFlipbook, InWidth);
@@ -71,7 +81,8 @@ namespace Simple2D {
         return Operation;
     }
 
-    void SSimpleFlipbookKeyframeWidget::Construct(const FArguments &InArgs, int32 InFrameIndex) {
+    void SSimpleFlipbookKeyframeWidget::Construct(const FArguments &InArgs, int32 InFrameIndex)
+    {
         FrameIndex = InFrameIndex;
 
         SlateUnitsPerFrame = InArgs._SlateUnitsPerFrame;
@@ -106,18 +117,23 @@ namespace Simple2D {
     }
 
     FReply SSimpleFlipbookKeyframeWidget::OnMouseButtonDown(const FGeometry &MyGeometry,
-                                                            const FPointerEvent &MouseEvent) {
-        if (MouseEvent.GetEffectingButton() == EKeys::LeftMouseButton) {
+                                                            const FPointerEvent &MouseEvent)
+    {
+        if (MouseEvent.GetEffectingButton() == EKeys::LeftMouseButton)
+        {
             return FReply::Handled().DetectDrag(SharedThis(this), EKeys::LeftMouseButton);
         }
 
         return FReply::Unhandled();
     }
 
-    FReply SSimpleFlipbookKeyframeWidget::OnDragDetected(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent) {
-        if (MouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton)) {
+    FReply SSimpleFlipbookKeyframeWidget::OnDragDetected(const FGeometry &MyGeometry, const FPointerEvent &MouseEvent)
+    {
+        if (MouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton))
+        {
             if (auto *Flipbook = FlipbookBeingEdited.Get();
-                (Flipbook != nullptr) && Flipbook->IsValidKeyFrameIndex(FrameIndex)) {
+                (Flipbook != nullptr) && Flipbook->IsValidKeyFrameIndex(FrameIndex))
+            {
                 auto Operation = FKeyFrameDragDropOp::New(GetFrameWidth().Get(), Flipbook, FrameIndex);
 
                 return FReply::Handled().BeginDragDrop(Operation);
@@ -127,18 +143,22 @@ namespace Simple2D {
         return FReply::Unhandled();
     }
 
-    FReply SSimpleFlipbookKeyframeWidget::OnDrop(const FGeometry &MyGeometry, const FDragDropEvent &DragDropEvent) {
+    FReply SSimpleFlipbookKeyframeWidget::OnDrop(const FGeometry &MyGeometry, const FDragDropEvent &DragDropEvent)
+    {
         bool bWasDropHandled = false;
 
         if (auto *Flipbook = FlipbookBeingEdited.Get();
-            Flipbook != nullptr && Flipbook->IsValidKeyFrameIndex(FrameIndex)) {
+            Flipbook != nullptr && Flipbook->IsValidKeyFrameIndex(FrameIndex))
+        {
 
             auto Operation = DragDropEvent.GetOperation();
-            if (!Operation.IsValid()) {
+            if (!Operation.IsValid())
+            {
                 return FReply::Unhandled();
             }
 
-            if (Operation->IsOfType<FKeyFrameDragDropOp>()) {
+            if (Operation->IsOfType<FKeyFrameDragDropOp>())
+            {
                 const auto &FrameDragDropOp = StaticCastSharedPtr<FKeyFrameDragDropOp>(Operation);
                 FrameDragDropOp->InsertInFlipbook(Flipbook, FrameIndex);
                 bWasDropHandled = true;
@@ -149,8 +169,10 @@ namespace Simple2D {
     }
 
     FReply SSimpleFlipbookKeyframeWidget::KeyframeOnMouseButtonUp(const FGeometry &MyGeometry,
-                                                                  const FPointerEvent &MouseEvent) {
-        if (MouseEvent.GetEffectingButton() == EKeys::RightMouseButton) {
+                                                                  const FPointerEvent &MouseEvent)
+    {
+        if (MouseEvent.GetEffectingButton() == EKeys::RightMouseButton)
+        {
             TSharedRef<SWidget> MenuContents = GenerateContextMenu();
             FWidgetPath WidgetPath = MouseEvent.GetEventPath() != nullptr ? *MouseEvent.GetEventPath() : FWidgetPath();
             FSlateApplication::Get().PushMenu(AsShared(), WidgetPath, MenuContents, MouseEvent.GetScreenSpacePosition(),
@@ -162,16 +184,20 @@ namespace Simple2D {
         return FReply::Unhandled();
     }
 
-    FText SSimpleFlipbookKeyframeWidget::GetKeyframeText() const {
-        if (auto KeyFrame = GetKeyFrameData(); KeyFrame.IsSet()) {
+    FText SSimpleFlipbookKeyframeWidget::GetKeyframeText() const
+    {
+        if (auto KeyFrame = GetKeyFrameData(); KeyFrame.IsSet())
+        {
             return FText::FormatOrdered(NSLOCTEXT("Simple2D", "SpriteIndex", "Index {0}"), KeyFrame->Index);
         }
 
         return FText::GetEmpty();
     }
 
-    FText SSimpleFlipbookKeyframeWidget::GetKeyframeTooltip() const {
-        if (auto KeyFrame = GetKeyFrameData(); KeyFrame.IsSet()) {
+    FText SSimpleFlipbookKeyframeWidget::GetKeyframeTooltip() const
+    {
+        if (auto KeyFrame = GetKeyFrameData(); KeyFrame.IsSet())
+        {
             const FText SpriteLine =
                 (KeyFrame->Index != INDEX_NONE)
                     ? FText::FormatOrdered(NSLOCTEXT("Simple2D", "SpriteFrame", "Frame {0}"), KeyFrame->Index)
@@ -188,7 +214,8 @@ namespace Simple2D {
         return NSLOCTEXT("Simple2D", "KeyFrameTooltip_Invalid", "Invalid key frame index");
     }
 
-    TSharedRef<SWidget> SSimpleFlipbookKeyframeWidget::GenerateContextMenu() {
+    TSharedRef<SWidget> SSimpleFlipbookKeyframeWidget::GenerateContextMenu()
+    {
         const auto &Commands = FSimpleFlipbookEditorCommands::Get();
 
         OnSelectionChanged.ExecuteIfBound(FrameIndex);
@@ -217,17 +244,21 @@ namespace Simple2D {
         return MenuBuilder.MakeWidget();
     }
 
-    FOptionalSize SSimpleFlipbookKeyframeWidget::GetFrameWidth() const {
-        if (auto KeyFrame = GetKeyFrameData(); KeyFrame.IsSet()) {
+    FOptionalSize SSimpleFlipbookKeyframeWidget::GetFrameWidth() const
+    {
+        if (auto KeyFrame = GetKeyFrameData(); KeyFrame.IsSet())
+        {
             return FMath::Max<float>(0, KeyFrame->FrameRun * SlateUnitsPerFrame.Get());
         }
 
         return 1;
     }
 
-    TOptional<const FSimpleFlipbookKeyFrame &> SSimpleFlipbookKeyframeWidget::GetKeyFrameData() const {
+    TOptional<const FSimpleFlipbookKeyFrame &> SSimpleFlipbookKeyframeWidget::GetKeyFrameData() const
+    {
         if (auto *Flipbook = FlipbookBeingEdited.Get();
-            Flipbook != nullptr && Flipbook->IsValidKeyFrameIndex(FrameIndex)) {
+            Flipbook != nullptr && Flipbook->IsValidKeyFrameIndex(FrameIndex))
+        {
             return Flipbook->GetKeyFrameChecked(FrameIndex);
         }
 
@@ -235,7 +266,8 @@ namespace Simple2D {
     }
 
     void SSimpleFlipbookTimelineTrack::Construct(const FArguments &InArgs,
-                                                 const TSharedPtr<FUICommandList> &InCommandList) {
+                                                 const TSharedPtr<FUICommandList> &InCommandList)
+    {
         CommandList = InCommandList;
         SlateUnitsPerFrame = InArgs._SlateUnitsPerFrame;
         FlipbookBeingEdited = InArgs._FlipbookBeingEdited;
@@ -246,16 +278,19 @@ namespace Simple2D {
         Rebuild();
     }
 
-    void SSimpleFlipbookTimelineTrack::Rebuild() {
+    void SSimpleFlipbookTimelineTrack::Rebuild()
+    {
         MainBoxPtr->ClearChildren();
 
         // Create the sections for each keyframe
         auto *Flipbook = FlipbookBeingEdited.Get();
-        if (Flipbook == nullptr) {
+        if (Flipbook == nullptr)
+        {
             return;
         }
 
-        for (int32 KeyFrameIdx = 0; KeyFrameIdx < Flipbook->GetNumKeyFrames(); ++KeyFrameIdx) {
+        for (int32 KeyFrameIdx = 0; KeyFrameIdx < Flipbook->GetNumKeyFrames(); ++KeyFrameIdx)
+        {
             MainBoxPtr->AddSlot().AutoWidth()[SNew(SSimpleFlipbookKeyframeWidget, KeyFrameIdx)
                                                   .SlateUnitsPerFrame(this->SlateUnitsPerFrame)
                                                   .FlipbookBeingEdited(this->FlipbookBeingEdited)

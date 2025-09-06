@@ -13,19 +13,23 @@ class IPokemon;
 class UPartyMenuHandler;
 class ITrainer;
 
-struct POKEMONCORE_API FSelectedPokemonHandle {
+struct POKEMONCORE_API FSelectedPokemonHandle
+{
     FSelectedPokemonHandle(const TScriptInterface<IPartyScreen> &InScreen, const TScriptInterface<ITrainer> &InTrainer,
                            int32 InIndex);
 
-    const TScriptInterface<IPartyScreen> &GetScreen() const {
+    const TScriptInterface<IPartyScreen> &GetScreen() const
+    {
         return Screen;
     }
 
-    const TScriptInterface<ITrainer> &GetTrainer() const {
+    const TScriptInterface<ITrainer> &GetTrainer() const
+    {
         return Trainer;
     }
 
-    int32 GetIndex() const {
+    int32 GetIndex() const
+    {
         return Index;
     }
 
@@ -39,14 +43,16 @@ struct POKEMONCORE_API FSelectedPokemonHandle {
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
-class POKEMONCORE_API UPartyScreen : public UInterface {
+class POKEMONCORE_API UPartyScreen : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Generic screen class for any screens shown to the player
  */
-class POKEMONCORE_API IPartyScreen {
+class POKEMONCORE_API IPartyScreen
+{
     GENERATED_BODY()
 
   public:

@@ -16,7 +16,8 @@ class IPokemon;
  * The change to a single stat for a Pokémon
  */
 USTRUCT(BlueprintType)
-struct POKEMONCORE_API FStatChange {
+struct POKEMONCORE_API FStatChange
+{
     GENERATED_BODY()
 
     /**
@@ -38,7 +39,8 @@ struct POKEMONCORE_API FStatChange {
  * The change to the Exp. bar fill for a Pokémon
  */
 USTRUCT(BlueprintType)
-struct POKEMONCORE_API FExpPercentChange {
+struct POKEMONCORE_API FExpPercentChange
+{
     GENERATED_BODY()
 
     /**
@@ -58,7 +60,8 @@ struct POKEMONCORE_API FExpPercentChange {
  * The changes to a stat following a level up
  */
 USTRUCT(BlueprintType)
-struct POKEMONCORE_API FLevelUpStatChanges {
+struct POKEMONCORE_API FLevelUpStatChanges
+{
     GENERATED_BODY()
 
     /**
@@ -81,14 +84,16 @@ struct POKEMONCORE_API FLevelUpStatChanges {
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
-class UStatBlock : public UInterface {
+class UStatBlock : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Represents a the stat block for calculating the Pokémon's Stats
  */
-class POKEMONCORE_API IStatBlock {
+class POKEMONCORE_API IStatBlock
+{
     GENERATED_BODY()
 
   public:

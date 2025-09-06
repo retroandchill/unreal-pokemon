@@ -11,7 +11,8 @@
  *
  */
 UCLASS()
-class RPGMENUS_API ARPGPlayerController : public APlayerController {
+class RPGMENUS_API ARPGPlayerController : public APlayerController
+{
     GENERATED_BODY()
 
   public:

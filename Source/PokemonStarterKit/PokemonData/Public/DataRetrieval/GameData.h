@@ -7,7 +7,8 @@
 /**
  * Basic interface to manage getting data from a data table
  */
-class POKEMONDATA_API IGameData {
+class POKEMONDATA_API IGameData
+{
   public:
     virtual ~IGameData();
 

@@ -12,7 +12,8 @@ class UWindowskin;
  * Basic Window Widget class
  */
 UCLASS(BlueprintType, Category = Windows)
-class RPGMENUS_API UWindow : public UWidget {
+class RPGMENUS_API UWindow : public UWidget
+{
     GENERATED_BODY()
 
   public:

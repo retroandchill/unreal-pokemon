@@ -11,14 +11,16 @@ struct FNature;
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable)
-class UStatEntry : public UInterface {
+class UStatEntry : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Represents an individual stat entry on a Pokémon
  */
-class POKEMONCORE_API IStatEntry {
+class POKEMONCORE_API IStatEntry
+{
     GENERATED_BODY()
 
   public:

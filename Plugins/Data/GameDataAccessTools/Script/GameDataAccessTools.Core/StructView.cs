@@ -18,12 +18,13 @@ public readonly ref struct StructView<T>(IntPtr nativePtr)
             return GCHandleUtilities.GetObjectFromHandlePtr<UScriptStruct>(handle)!;
         }
     }
-    
+
     public StructView<T> FromNative(IntPtr nativeStruct) => new(nativeStruct);
 
-    public void ToNative(IntPtr dest) => UScriptStructExporter.CallNativeCopy(T.GetNativeClassPtr(), NativePtr, dest);
-    
+    public void ToNative(IntPtr dest) =>
+        UScriptStructExporter.CallNativeCopy(T.GetNativeClassPtr(), NativePtr, dest);
+
     public T Copy() => T.FromNative(NativePtr);
-    
+
     public static implicit operator T(StructView<T> view) => view.Copy();
 }

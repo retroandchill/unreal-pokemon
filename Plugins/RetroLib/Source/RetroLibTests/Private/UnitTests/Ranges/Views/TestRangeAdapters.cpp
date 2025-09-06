@@ -26,12 +26,14 @@ import RetroLib;
 #include <vector>
 #endif
 
-TEST_CASE_NAMED(FRuntimeRangeAdapterTest, "Unit Tests::RetroLib::Ranges::Views::Adapters::Runtime", "[ranges]") {
+TEST_CASE_NAMED(FRuntimeRangeAdapterTest, "Unit Tests::RetroLib::Ranges::Views::Adapters::Runtime", "[ranges]")
+{
     constexpr std::array Values = {1, 2, 3, 4, 5};
     constexpr auto IsEven = [](int i) { return i % 2 == 0; };
     constexpr auto DoubleValue = [](int i, int j) { return i * j; };
 
-    SECTION("Can use the regular functional operators") {
+    SECTION("Can use the regular functional operators")
+    {
         auto Filtered = Retro::Ranges::Views::Filter(Values, IsEven);
         auto Transformed = Retro::Ranges::Views::Transform(Filtered, Retro::BindBack(DoubleValue, 2));
 
@@ -43,7 +45,8 @@ TEST_CASE_NAMED(FRuntimeRangeAdapterTest, "Unit Tests::RetroLib::Ranges::Views::
         CHECK(It == Transformed.end());
     }
 
-    SECTION("Can use the range pipe syntax") {
+    SECTION("Can use the range pipe syntax")
+    {
         auto Transformed = Values | Retro::Ranges::Views::Filter(IsEven) |
                            Retro::Ranges::Views::Transform(Retro::BindBack(DoubleValue, 2));
 
@@ -56,12 +59,14 @@ TEST_CASE_NAMED(FRuntimeRangeAdapterTest, "Unit Tests::RetroLib::Ranges::Views::
     }
 }
 
-TEST_CASE_NAMED(FConstexprRangeAdapterTest, "Unit Tests::RetroLib::Ranges::Views::Adapters::Constexpr", "[ranges]") {
+TEST_CASE_NAMED(FConstexprRangeAdapterTest, "Unit Tests::RetroLib::Ranges::Views::Adapters::Constexpr", "[ranges]")
+{
     constexpr std::array Values = {1, 2, 3, 4, 5};
     constexpr auto IsEven = [](int i) { return i % 2 == 0; };
     constexpr auto DoubleValue = [](int i, int j) { return i * j; };
 
-    SECTION("Can use the regular functional operators") {
+    SECTION("Can use the regular functional operators")
+    {
         auto Filtered = Retro::Ranges::Views::Filter(Values, IsEven);
         auto Transformed = Retro::Ranges::Views::Transform(Filtered, Retro::BindBack<DoubleValue>(2));
 
@@ -73,7 +78,8 @@ TEST_CASE_NAMED(FConstexprRangeAdapterTest, "Unit Tests::RetroLib::Ranges::Views
         CHECK(It == Transformed.end());
     }
 
-    SECTION("Can use the range pipe syntax") {
+    SECTION("Can use the range pipe syntax")
+    {
         auto Transformed = Values | Retro::Ranges::Views::Filter(IsEven) |
                            Retro::Ranges::Views::Transform(Retro::BindBack<DoubleValue>(2));
 
@@ -86,91 +92,111 @@ TEST_CASE_NAMED(FConstexprRangeAdapterTest, "Unit Tests::RetroLib::Ranges::Views
     }
 }
 
-TEST_CASE_NAMED(FConcatViewTest, "Unit Tests::RetroLib::Ranges::Views::Concat", "[ranges]") {
+TEST_CASE_NAMED(FConcatViewTest, "Unit Tests::RetroLib::Ranges::Views::Concat", "[ranges]")
+{
     std::array Range1 = {1, 2, 3, 4, 5};
     std::vector Range2 = {6, 7, 8, 9, 10};
 
-    SECTION("Can concatenate and use with a ranged for loop") {
+    SECTION("Can concatenate and use with a ranged for loop")
+    {
         int Sum = 0;
-        for (decltype(auto) i : Retro::Ranges::Views::Concat(Range1, Range2)) {
+        for (decltype(auto) i : Retro::Ranges::Views::Concat(Range1, Range2))
+        {
             Sum += i;
         }
         CHECK(Sum == 55);
     }
 
-    SECTION("Can use an iterator based view setup") {
+    SECTION("Can use an iterator based view setup")
+    {
         auto View = Retro::Ranges::Views::Concat(Range1, Range2);
         int Sum = 0;
-        for (auto It = View.begin(); It != View.end(); ++It) {
+        for (auto It = View.begin(); It != View.end(); ++It)
+        {
             Sum += *It;
         }
         CHECK(Sum == 55);
     }
 
-    SECTION("Can use an iterator based view setup, using post-fix") {
+    SECTION("Can use an iterator based view setup, using post-fix")
+    {
         const auto View = Retro::Ranges::Views::Concat(Range1, Range2);
         int Sum = 0;
-        for (auto It = View.begin(); It != View.end(); It++) {
+        for (auto It = View.begin(); It != View.end(); It++)
+        {
             Sum += *It;
         }
         CHECK(Sum == 55);
     }
 
-    SECTION("Can concatenate and use with a range adaptor chain") {
+    SECTION("Can concatenate and use with a range adaptor chain")
+    {
         auto ViewChain = Retro::Ranges::Views::Concat(Range1, Range2) |
                          Retro::Ranges::Views::Filter([](int i) { return i % 2 == 0; });
         int Sum = 0;
-        for (int i : ViewChain) {
+        for (int i : ViewChain)
+        {
             Sum += i;
         }
         CHECK(Sum == 30);
     }
 
-    SECTION("Can iterate using a value based for loop") {
+    SECTION("Can iterate using a value based for loop")
+    {
         auto View = Retro::Ranges::Views::Concat(Range1, Range2);
         int Sum = 0;
-        for (size_t i = 0; i < View.size(); i++) {
+        for (size_t i = 0; i < View.size(); i++)
+        {
             Sum += View[i];
         }
         CHECK(Sum == 55);
     }
 
-    SECTION("Can use an iterator based view setup, skipping numbers") {
+    SECTION("Can use an iterator based view setup, skipping numbers")
+    {
         auto View = Retro::Ranges::Views::Concat(Range1, Range2);
         int Sum = 0;
-        for (auto It = View.begin(); It != View.end(); It += 2) {
+        for (auto It = View.begin(); It != View.end(); It += 2)
+        {
             Sum += *It;
         }
         CHECK(Sum == 25);
     }
 
-    SECTION("Can iterate a collection in reverse") {
+    SECTION("Can iterate a collection in reverse")
+    {
         int Sum = 0;
-        for (auto i : std::ranges::views::reverse(Retro::Ranges::Views::Concat(Range1, Range2))) {
+        for (auto i : std::ranges::views::reverse(Retro::Ranges::Views::Concat(Range1, Range2)))
+        {
             Sum += i;
         }
         CHECK(Sum == 55);
     }
 
-    SECTION("Can iterate a collection in reverse, using a post-fix") {
+    SECTION("Can iterate a collection in reverse, using a post-fix")
+    {
         auto View = Retro::Ranges::Views::Concat(Range1, Range2);
         int Sum = 0;
-        for (auto It = View.end() - 1; It != View.begin(); It--) {
+        for (auto It = View.end() - 1; It != View.begin(); It--)
+        {
             Sum += *It;
         }
         CHECK(Sum == 54);
     }
 
-    SECTION("Can iterate a collection in reverse, skipping steps") {
+    SECTION("Can iterate a collection in reverse, skipping steps")
+    {
         auto Reversed = std::ranges::views::reverse(Retro::Ranges::Views::Concat(Range1, Range2));
         int Sum = 0;
-        for (auto It = Reversed.begin(); It != Reversed.end(); It += 2) {
+        for (auto It = Reversed.begin(); It != Reversed.end(); It += 2)
+        {
             Sum += *It;
         }
         CHECK(Sum == 30);
     }
 
-    SECTION("Can get distance between iterators") {
+    SECTION("Can get distance between iterators")
+    {
         auto View = Retro::Ranges::Views::Concat(Range1, Range2);
         auto Iterator1 = View.begin();
         auto Iterator2 = View.begin() + 2;
@@ -191,17 +217,20 @@ TEST_CASE_NAMED(FConcatViewTest, "Unit Tests::RetroLib::Ranges::Views::Concat", 
     }
 }
 
-TEST_CASE_NAMED(FCacheLastViewTest, "Unit Tests::RetroLib::Ranges::Views::CacheLast", "[ranges]") {
+TEST_CASE_NAMED(FCacheLastViewTest, "Unit Tests::RetroLib::Ranges::Views::CacheLast", "[ranges]")
+{
     std::array Values = {1, 2, 3, 4, 5};
     constexpr auto Transformer = [](int Value) {
         std::vector<int> v;
-        for (int i = 0; i < Value; i++) {
+        for (int i = 0; i < Value; i++)
+        {
             v.push_back(i + 1);
         }
         return v;
     };
 
-    SECTION("Iterating through saves the value") {
+    SECTION("Iterating through saves the value")
+    {
         auto View = Values | std::ranges::views::transform(Transformer) | Retro::Ranges::Views::CacheLast;
 
         REQUIRE(View.size() == 5);
@@ -222,7 +251,8 @@ TEST_CASE_NAMED(FCacheLastViewTest, "Unit Tests::RetroLib::Ranges::Views::CacheL
         CHECK(It == View.end());
     }
 
-    SECTION("Can get the difference between iterators") {
+    SECTION("Can get the difference between iterators")
+    {
         auto View = Values | std::ranges::views::transform(Transformer) | Retro::Ranges::Views::CacheLast;
 
         REQUIRE(View.size() == 5);
@@ -231,19 +261,23 @@ TEST_CASE_NAMED(FCacheLastViewTest, "Unit Tests::RetroLib::Ranges::Views::CacheL
         CHECK(View.end() - View.begin() == 5);
     }
 
-    SECTION("The value can be accessed in a loop") {
+    SECTION("The value can be accessed in a loop")
+    {
         auto View = Values | std::ranges::views::transform(Transformer) | Retro::Ranges::Views::CacheLast;
 
         int Sum = 0;
-        for (auto vec : View) {
-            for (int i : vec) {
+        for (auto vec : View)
+        {
+            for (int i : vec)
+            {
                 Sum += i;
             }
         }
         CHECK(Sum == 35);
     }
 
-    SECTION("Convert to a vector an cache") {
+    SECTION("Convert to a vector an cache")
+    {
         // Here we're turning the collection into a span. This would emulate using ranges with a collection
         // type that isn't range-compatible.
         auto View = Values | std::ranges::views::transform(Transformer) | Retro::Ranges::Views::CacheLast |
@@ -251,15 +285,18 @@ TEST_CASE_NAMED(FCacheLastViewTest, "Unit Tests::RetroLib::Ranges::Views::CacheL
                     Retro::Ranges::Views::Join;
 
         int Sum = 0;
-        for (auto &i : View) {
+        for (auto &i : View)
+        {
             Sum += i;
         }
         CHECK(Sum == 35);
     }
 }
 
-TEST_CASE_NAMED(FJoinWithViewTest, "Unit Tests::RetroLib::Ranges::Views::JoinWith", "[ranges]") {
-    SECTION("Can splice a string together with a character") {
+TEST_CASE_NAMED(FJoinWithViewTest, "Unit Tests::RetroLib::Ranges::Views::JoinWith", "[ranges]")
+{
+    SECTION("Can splice a string together with a character")
+    {
         using namespace std::literals;
 
         std::array Strings = {"This"sv, "is"sv, "a"sv, "test."sv};
@@ -267,7 +304,8 @@ TEST_CASE_NAMED(FJoinWithViewTest, "Unit Tests::RetroLib::Ranges::Views::JoinWit
         CHECK(Joined == "This is a test.");
     }
 
-    SECTION("Can splice a string together with a string literal") {
+    SECTION("Can splice a string together with a string literal")
+    {
         using namespace std::literals;
 
         std::array Strings = {"1"sv, "2"sv, "3"sv, "4"sv};
@@ -277,14 +315,17 @@ TEST_CASE_NAMED(FJoinWithViewTest, "Unit Tests::RetroLib::Ranges::Views::JoinWit
     }
 }
 
-TEST_CASE_NAMED(FElementsTest, "Unit Tests::RetroLib::Ranges::Views::Elements", "[ranges]") {
-    SECTION("Can get the value of any tuple based collection") {
+TEST_CASE_NAMED(FElementsTest, "Unit Tests::RetroLib::Ranges::Views::Elements", "[ranges]")
+{
+    SECTION("Can get the value of any tuple based collection")
+    {
         std::array<std::tuple<int, int, int>, 3> Tuples = {
             {std::make_tuple(1, 2, 3), std::make_tuple(4, 5, 6), std::make_tuple(7, 8, 9)}};
 
         auto ValueView = Tuples | Retro::Ranges::Views::Elements<2>;
         int Sum = 0;
-        for (auto Value : ValueView) {
+        for (auto Value : ValueView)
+        {
             Sum += Value;
         }
         CHECK(Sum == 18);
@@ -295,7 +336,8 @@ TEST_CASE_NAMED(FElementsTest, "Unit Tests::RetroLib::Ranges::Views::Elements", 
         static_assert(std::ranges::random_access_range<decltype(ValueView)>);
         auto Reversed = ValueView | std::ranges::views::reverse;
         Sum = 0;
-        for (auto Value : Reversed) {
+        for (auto Value : Reversed)
+        {
             Sum += Value;
         }
         CHECK(Sum == 18);
@@ -304,18 +346,21 @@ TEST_CASE_NAMED(FElementsTest, "Unit Tests::RetroLib::Ranges::Views::Elements", 
         CHECK((ValueView.end() - ValueView.begin()) == ValueView.size());
     }
 
-    SECTION("Can get the keys of a map") {
+    SECTION("Can get the keys of a map")
+    {
         std::map<int, std::string> Map = {{1, "One"}, {2, "Two"}, {3, "Three"}};
 
         auto KeysView = Map | Retro::Ranges::Views::Keys;
         int Sum = 0;
-        for (auto Key : KeysView) {
+        for (auto Key : KeysView)
+        {
             Sum += Key;
         }
         CHECK(Sum == 6);
     }
 
-    SECTION("Can get the values of a map") {
+    SECTION("Can get the values of a map")
+    {
         std::map<int, std::string> Map = {{1, "One"}, {2, "Two"}, {3, "Three"}};
         auto ValuesView = Map | Retro::Ranges::Views::Values | Retro::Ranges::Views::JoinWith(", ") |
                           Retro::Ranges::To<std::string>();
@@ -324,28 +369,34 @@ TEST_CASE_NAMED(FElementsTest, "Unit Tests::RetroLib::Ranges::Views::Elements", 
     }
 }
 
-TEST_CASE_NAMED(FEnumerateViewTest, "Unit Tests::RetroLib::Ranges::Views::Enumerate", "[ranges]") {
+TEST_CASE_NAMED(FEnumerateViewTest, "Unit Tests::RetroLib::Ranges::Views::Enumerate", "[ranges]")
+{
     std::array Input = {'A', 'B', 'C', 'D'};
 
-    SECTION("Can enumerate using a function call") {
+    SECTION("Can enumerate using a function call")
+    {
         std::vector<std::tuple<size_t, char>> Values;
-        for (const auto [index, letter] : Retro::Ranges::Views::Enumerate(Input)) {
+        for (const auto [index, letter] : Retro::Ranges::Views::Enumerate(Input))
+        {
             Values.emplace_back(index, letter);
         }
         CHECK(Values == std::vector<std::tuple<size_t, char>>{{0, 'A'}, {1, 'B'}, {2, 'C'}, {3, 'D'}});
     }
 
-    SECTION("Can enumerate into a map") {
+    SECTION("Can enumerate into a map")
+    {
         auto AsMap = Retro::Ranges::To<std::map>(Input | Retro::Ranges::Views::Enumerate);
         CHECK(AsMap ==
               std::map<std::ranges::range_difference_t<decltype(Input)>, char>{{0, 'A'}, {1, 'B'}, {2, 'C'}, {3, 'D'}});
     }
 
-    SECTION("Can propagate a constant reference and increment the values accordingly") {
+    SECTION("Can propagate a constant reference and increment the values accordingly")
+    {
         std::vector Numbers = {1, 3, 5, 7};
 
         std::vector<int> Output;
-        for (auto [index, num] : Retro::Ranges::Views::Enumerate(Numbers)) {
+        for (auto [index, num] : Retro::Ranges::Views::Enumerate(Numbers))
+        {
             ++num;
             Output.emplace_back(Numbers[index]);
         }
@@ -353,21 +404,25 @@ TEST_CASE_NAMED(FEnumerateViewTest, "Unit Tests::RetroLib::Ranges::Views::Enumer
     }
 }
 
-TEST_CASE_NAMED(FReverseEnumerateTest, "Unit Tests::RetroLib::Ranges::Views::ReverseEnumerate", "[ranges]") {
+TEST_CASE_NAMED(FReverseEnumerateTest, "Unit Tests::RetroLib::Ranges::Views::ReverseEnumerate", "[ranges]")
+{
     constexpr static std::array Input = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'};
 
-    SECTION("Can reverse enumerate using some generated indices") {
+    SECTION("Can reverse enumerate using some generated indices")
+    {
         auto Pairs = std::ranges::views::iota(6, 12) | Retro::Ranges::Views::ReverseEnumerate(Input);
 
         int Count = 0;
-        for (auto [index, letter] : Pairs) {
+        for (auto [index, letter] : Pairs)
+        {
             CHECK(letter == Input[index]);
             Count++;
         }
         CHECK(Count == 6);
     }
 
-    SECTION("Can reverse enumerate into a map") {
+    SECTION("Can reverse enumerate into a map")
+    {
         auto Pairs = std::ranges::views::iota(2, 5) | Retro::Ranges::Views::ReverseEnumerate(Input) |
                      Retro::Ranges::Views::Transform(Retro::ConvertTuple<std::pair>) | Retro::Ranges::To<std::map>();
 

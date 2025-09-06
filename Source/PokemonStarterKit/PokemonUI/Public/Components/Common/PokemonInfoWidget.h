@@ -14,7 +14,8 @@ class IPokemon;
  * Abstract base class for a Widget that contains information about a particular Pokémon.
  */
 UCLASS(Abstract)
-class POKEMONUI_API UPokemonInfoWidget : public UCommonUserWidget {
+class POKEMONUI_API UPokemonInfoWidget : public UCommonUserWidget
+{
     GENERATED_BODY()
 
   public:
@@ -24,7 +25,8 @@ class POKEMONUI_API UPokemonInfoWidget : public UCommonUserWidget {
      * @return A reference to the current Pokémon.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Display)
-    const TScriptInterface<IPokemon> &GetPokemon() const {
+    const TScriptInterface<IPokemon> &GetPokemon() const
+    {
         return Pokemon;
     }
 

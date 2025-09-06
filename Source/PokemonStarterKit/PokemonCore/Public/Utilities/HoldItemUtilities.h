@@ -11,7 +11,8 @@
 class IPokemon;
 
 UENUM(BlueprintInternalUseOnly)
-enum class EHoldItemResult : uint8 {
+enum class EHoldItemResult : uint8
+{
     /**
      * This is executed when the Pokémon is holding an item.
      */
@@ -27,7 +28,8 @@ enum class EHoldItemResult : uint8 {
  * Utility class used to get the hold item of a given Pokémon.
  */
 UCLASS()
-class POKEMONCORE_API UHoldItemUtilities : public UBlueprintFunctionLibrary {
+class POKEMONCORE_API UHoldItemUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

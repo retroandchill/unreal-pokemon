@@ -14,11 +14,14 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Optionals {
+namespace Retro::Optionals
+{
 
-    struct FOrElseThrowInvoker {
+    struct FOrElseThrowInvoker
+    {
         template <OptionalType O>
-        constexpr decltype(auto) operator()(O &&Optional) const {
+        constexpr decltype(auto) operator()(O &&Optional) const
+        {
             return (*this)(std::forward<O>(Optional), [] { return std::bad_optional_access{}; });
         }
 
@@ -33,8 +36,10 @@ namespace Retro::Optionals {
          */
         template <OptionalType O, typename F>
             requires std::invocable<F> && std::derived_from<std::invoke_result_t<F>, std::exception>
-        constexpr decltype(auto) operator()(O &&optional, F &&functor) const {
-            if (HasValue(std::forward<O>(optional))) {
+        constexpr decltype(auto) operator()(O &&optional, F &&functor) const
+        {
+            if (HasValue(std::forward<O>(optional)))
+            {
                 return Get<O>(std::forward<O>(optional));
             }
 

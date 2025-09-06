@@ -13,7 +13,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestStorageBox, "Unit Tests.Storage.TestStorageBox",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestStorageBox::RunTest(const FString &Parameters) {
+bool TestStorageBox::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
     UPokemonSubsystem::GetInstance(World.Get()).StartNewGame();
@@ -27,7 +28,8 @@ bool TestStorageBox::RunTest(const FString &Parameters) {
     UE_CHECK_EQUAL(0, StorageSystem->GetCurrentBoxIndex());
     StorageSystem->SetCurrentBoxIndex(1);
     UE_CHECK_EQUAL(1, StorageSystem->GetCurrentBoxIndex());
-    for (int32 i = 0; i < StorageSystem->GetBoxCount(); i++) {
+    for (int32 i = 0; i < StorageSystem->GetBoxCount(); i++)
+    {
         UE_CHECK_EQUAL(Settings->BoxCapacity, StorageSystem->GetBox(i)->GetCapacity());
 
         auto BoxName = FText::FormatNamed(Settings->BoxNameFormat, TEXT("Index"), i + 1);
@@ -44,7 +46,8 @@ bool TestStorageBox::RunTest(const FString &Parameters) {
     UE_ASSERT_EQUAL(EDepositResult::Deposited, UStorageUtilities::DepositToBox(Box, Pokemon1, DepositIndex));
     UE_CHECK_EQUAL(0, DepositIndex);
 
-    for (int32 i = 1; i < 30; i++) {
+    for (int32 i = 1; i < 30; i++)
+    {
         auto FillerPokemon = UnrealInjector::NewInjectedDependency<IPokemon>(
             World.Get(), FPokemonDTO{.Species = TEXT("MAGIKARP"), .Level = 5}, Player);
         DepositIndex = INDEX_NONE;

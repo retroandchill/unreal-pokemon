@@ -9,7 +9,8 @@
 #include "AnimationActor.generated.h"
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
-class POKEMONBATTLE_API AAnimationActor : public AActor, public IBattleAnimation {
+class POKEMONBATTLE_API AAnimationActor : public AActor, public IBattleAnimation
+{
     GENERATED_BODY()
 
   public:

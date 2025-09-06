@@ -11,7 +11,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(DefaultAbilityBlockTest, "Unit Tests.Core.Pokemon.Abilities.DefaultAbilityBlockTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool DefaultAbilityBlockTest::RunTest(const FString &Parameters) {
+bool DefaultAbilityBlockTest::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     FPokemonDTO Pokemon1 = {.Species = FName("LUCARIO"), .Level = 78, .PersonalityValue = 0x39593A01};
     auto NewPokemon1 = UGamePokemon::Create(World.Get(), Pokemon1);

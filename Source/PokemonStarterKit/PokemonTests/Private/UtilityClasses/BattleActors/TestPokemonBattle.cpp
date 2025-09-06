@@ -4,7 +4,8 @@
 #include "TestActiveSide.h"
 #include "Utilities/ReflectionUtils.h"
 
-ATestPokemonBattle::ATestPokemonBattle() {
+ATestPokemonBattle::ATestPokemonBattle()
+{
     UReflectionUtils::SetPropertyValue<TSoftClassPtr<AActor>>(this, TEXT("BattleSideClass"),
                                                               ATestActiveSide::StaticClass());
 }

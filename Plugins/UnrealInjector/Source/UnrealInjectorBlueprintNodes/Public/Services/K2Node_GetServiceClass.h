@@ -25,7 +25,8 @@
  * @brief Get the service class through Unreal Engine's Blueprint visual scripting system.
  */
 UCLASS()
-class UNREALINJECTORBLUEPRINTNODES_API UK2Node_GetServiceClass : public UK2Node {
+class UNREALINJECTORBLUEPRINTNODES_API UK2Node_GetServiceClass : public UK2Node
+{
     GENERATED_BODY()
 
   public:

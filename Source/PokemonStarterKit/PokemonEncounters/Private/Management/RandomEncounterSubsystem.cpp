@@ -13,18 +13,22 @@
 #include "Utilities/TrainerHelpers.h"
 
 static float GetMultiplier(const UAbilitySystemComponent *AbilitySystemComponent,
-                           const FGameplayAttribute &GameplayAttribute) {
+                           const FGameplayAttribute &GameplayAttribute)
+{
     bool bFound;
     auto Multiplier = AbilitySystemComponent->GetGameplayAttributeValue(GameplayAttribute, bFound);
     return bFound ? Multiplier : 1.f;
 }
 
-void URandomEncounterSubsystem::SetEncounterData(AMapEncounterData *Data) {
+void URandomEncounterSubsystem::SetEncounterData(AMapEncounterData *Data)
+{
     EncounterData = Data;
 }
 
-bool URandomEncounterSubsystem::HasEncountersForType(const FGameplayTag &EncounterType) const {
-    if (!IsValid(EncounterData)) {
+bool URandomEncounterSubsystem::HasEncountersForType(const FGameplayTag &EncounterType) const
+{
+    if (!IsValid(EncounterData))
+    {
         return false;
     }
 
@@ -34,19 +38,23 @@ bool URandomEncounterSubsystem::HasEncountersForType(const FGameplayTag &Encount
                        });
 }
 
-bool URandomEncounterSubsystem::HasEncountersForTypeExact(const FGameplayTag &EncounterType) const {
+bool URandomEncounterSubsystem::HasEncountersForTypeExact(const FGameplayTag &EncounterType) const
+{
     return IsValid(EncounterData) && EncounterData->GetEncounters().Contains(EncounterType);
 }
 
 bool URandomEncounterSubsystem::RequestEncounterForType(const FGameplayTag &EncounterType,
-                                                        FRetrievedEncounter &Encounter, int32 ChanceRolls) const {
-    if (!IsValid(EncounterData)) {
+                                                        FRetrievedEncounter &Encounter, int32 ChanceRolls) const
+{
+    if (!IsValid(EncounterData))
+    {
         return false;
     }
 
     auto &Encounters = EncounterData->GetEncounters();
     auto Data = Encounters.Find(EncounterType);
-    if (Data == nullptr) {
+    if (Data == nullptr)
+    {
         return false;
     }
 
@@ -56,16 +64,20 @@ bool URandomEncounterSubsystem::RequestEncounterForType(const FGameplayTag &Enco
     Algo::ForEach(EncounterList, [&ChanceTotal](const FEncounterEntry &Entry) { ChanceTotal += Entry.Chance; });
 
     int32 RandomNumber = 0;
-    for (int32 i = 0; i < ChanceRolls; i++) {
-        if (int32 Value = FMath::Rand() % ChanceTotal; Value > RandomNumber) {
+    for (int32 i = 0; i < ChanceRolls; i++)
+    {
+        if (int32 Value = FMath::Rand() % ChanceTotal; Value > RandomNumber)
+        {
             RandomNumber = Value;
         }
     }
 
     const FEncounterEntry *EncounterEntry = nullptr;
-    for (const auto &Entry : EncounterList) {
+    for (const auto &Entry : EncounterList)
+    {
         RandomNumber -= Entry.Chance;
-        if (RandomNumber >= 0) {
+        if (RandomNumber >= 0)
+        {
             continue;
         }
 
@@ -80,14 +92,17 @@ bool URandomEncounterSubsystem::RequestEncounterForType(const FGameplayTag &Enco
 }
 
 bool URandomEncounterSubsystem::CheckEncounterTriggered(ACharacter *PlayerCharacter, const FGameplayTag &EncounterType,
-                                                        bool bRepelActive, bool bTriggeredByStep) {
-    if (bEncountersDisabled || !IsValid(EncounterData)) {
+                                                        bool bRepelActive, bool bTriggeredByStep)
+{
+    if (bEncountersDisabled || !IsValid(EncounterData))
+    {
         return false;
     }
 
     auto &Encounters = EncounterData->GetEncounters();
     auto Data = Encounters.Find(EncounterType);
-    if (Data == nullptr || Data->TriggerChance == 0) {
+    if (Data == nullptr || Data->TriggerChance == 0)
+    {
         return false;
     }
 
@@ -96,7 +111,8 @@ bool URandomEncounterSubsystem::CheckEncounterTriggered(ACharacter *PlayerCharac
 
     auto PlayerAbilities = PlayerCharacter->GetComponentByClass<UAbilitySystemComponent>();
     check(PlayerAbilities != nullptr)
-    if (bTriggeredByStep) {
+    if (bTriggeredByStep)
+    {
         EncounterChance += static_cast<float>(ChanceAccumulator / 200);
         EncounterChance *=
             GetMultiplier(PlayerAbilities, URandomEncounterAttributeSet::GetEncounterStepModifierAttribute());
@@ -110,22 +126,29 @@ bool URandomEncounterSubsystem::CheckEncounterTriggered(ACharacter *PlayerCharac
     // TODO: Trigger out of battle ability effects
 
     // Wild encounters are much less likely to happen for the first few steps after a previous wild encounter
-    if (bTriggeredByStep && static_cast<float>(StepCount) < MinStepsNeeded) {
+    if (bTriggeredByStep && static_cast<float>(StepCount) < MinStepsNeeded)
+    {
         StepCount++;
         if (FMath::Rand() % 100 >=
-            EncounterChance * 5 / static_cast<float>((Data->TriggerChance + ChanceAccumulator / 200))) {
+            EncounterChance * 5 / static_cast<float>((Data->TriggerChance + ChanceAccumulator / 200)))
+        {
             return false;
         }
     }
 
-    if (FMath::Rand() % 100 < EncounterChance) {
+    if (FMath::Rand() % 100 < EncounterChance)
+    {
         return true;
     }
 
-    if (bTriggeredByStep) {
-        if (bRepelActive) {
+    if (bTriggeredByStep)
+    {
+        if (bRepelActive)
+        {
             ChanceAccumulator = 0;
-        } else {
+        }
+        else
+        {
             ChanceAccumulator += Data->TriggerChance;
         }
     }
@@ -133,10 +156,13 @@ bool URandomEncounterSubsystem::CheckEncounterTriggered(ACharacter *PlayerCharac
     return false;
 }
 
-bool URandomEncounterSubsystem::AllowEncounter(const FRetrievedEncounter &Encounter, bool bRepelActive) {
-    if (bRepelActive) {
+bool URandomEncounterSubsystem::AllowEncounter(const FRetrievedEncounter &Encounter, bool bRepelActive)
+{
+    if (bRepelActive)
+    {
         if (auto FirstPokemon = UTrainerHelpers::GetPlayerCharacter(this)->GetPokemon(0);
-            FirstPokemon != nullptr && Encounter.Level < FirstPokemon->GetStatBlock()->GetLevel()) {
+            FirstPokemon != nullptr && Encounter.Level < FirstPokemon->GetStatBlock()->GetLevel())
+        {
             ChanceAccumulator = 0;
             return false;
         }

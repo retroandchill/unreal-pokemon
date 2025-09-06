@@ -12,7 +12,8 @@ class IObtainedBlock;
  *
  */
 UCLASS()
-class POKEMONCORE_API UTrainerInfoHelpers : public UBlueprintFunctionLibrary {
+class POKEMONCORE_API UTrainerInfoHelpers : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

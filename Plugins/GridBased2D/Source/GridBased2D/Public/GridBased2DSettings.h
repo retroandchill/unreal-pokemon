@@ -11,7 +11,8 @@
  * The Settings class for the Grid-Based 2D Module
  */
 UCLASS(Config = Game, DefaultConfig, meta = (DisplayName = "Grid-Based 2D"))
-class GRIDBASED2D_API UGridBased2DSettings : public UDeveloperSettings {
+class GRIDBASED2D_API UGridBased2DSettings : public UDeveloperSettings
+{
     GENERATED_BODY()
 
   public:

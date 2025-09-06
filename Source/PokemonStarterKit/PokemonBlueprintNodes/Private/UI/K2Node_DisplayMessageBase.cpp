@@ -8,11 +8,13 @@
 #include "Screens/TextDisplayScreen.h"
 #include "Utilities/RPGMenuUtilities.h"
 
-UK2Node_DisplayMessageBase::UK2Node_DisplayMessageBase(const FObjectInitializer &Initializer) : Super(Initializer) {
+UK2Node_DisplayMessageBase::UK2Node_DisplayMessageBase(const FObjectInitializer &Initializer) : Super(Initializer)
+{
     ProxyActivateFunctionName = GET_FUNCTION_NAME_CHECKED(UBlueprintAsyncActionBase, Activate);
 }
 
-void UK2Node_DisplayMessageBase::ReconnectOutputPin(FKismetCompilerContext &CompilerContext, UEdGraphPin *OutputPin) {
+void UK2Node_DisplayMessageBase::ReconnectOutputPin(FKismetCompilerContext &CompilerContext, UEdGraphPin *OutputPin)
+{
     if (OutputPin->LinkedTo.ContainsByPredicate([](const UEdGraphPin *const Link) {
             return Link->GetOwningNode()->GetClass()->ImplementsInterface(UMessageNode::StaticClass());
         }))
@@ -24,7 +26,8 @@ void UK2Node_DisplayMessageBase::ReconnectOutputPin(FKismetCompilerContext &Comp
     IntermediateNode->FunctionReference.SetExternalMember(FunctionName, URPGMenuUtilities::StaticClass());
     IntermediateNode->AllocateDefaultPins();
 
-    if (auto This_WorldContextPin = FindPin(TEXT("WorldContextObject")); This_WorldContextPin != nullptr) {
+    if (auto This_WorldContextPin = FindPin(TEXT("WorldContextObject")); This_WorldContextPin != nullptr)
+    {
         auto Intermediate_WorldContextPin = IntermediateNode->FindPinChecked(TEXT("WorldContextObject"));
         CompilerContext.CopyPinLinksToIntermediate(*This_WorldContextPin, *Intermediate_WorldContextPin);
     }
@@ -37,7 +40,8 @@ void UK2Node_DisplayMessageBase::ReconnectOutputPin(FKismetCompilerContext &Comp
 }
 
 void UK2Node_DisplayMessageBase::SupplyMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar,
-                                                   UFunction *FactoryFunc) const {
+                                                   UFunction *FactoryFunc) const
+{
     auto CustomizeCallback = [](UEdGraphNode *Node, [[maybe_unused]] bool bIsTemplateNode, UFunction *Factory) {
         auto TypedNode = CastChecked<UK2Node_DisplayMessageBase>(Node);
         auto ReturnProp = CastFieldChecked<FObjectProperty>(Factory->GetReturnProperty());

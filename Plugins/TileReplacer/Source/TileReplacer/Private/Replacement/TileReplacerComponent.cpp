@@ -16,13 +16,16 @@
             for (decltype(SizeC) VarC = 0; VarC < SizeC; VarC++)
 
 // Sets default values for this component's properties
-UTileReplacerComponent::UTileReplacerComponent() {
+UTileReplacerComponent::UTileReplacerComponent()
+{
     auto Settings = GetDefault<UTileReplacerSettings>();
     TileReplacementTable = Cast<UDataTable>(Settings->GetTileReplacementsTable().TryLoad());
 }
 
-void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent *TilemapComponent) {
-    if (TileReplacementTable == nullptr) {
+void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent *TilemapComponent)
+{
+    if (TileReplacementTable == nullptr)
+    {
         UE_LOG(LogBlueprint, Warning, TEXT("No tile replacement table set for component: %s"), *GetName())
         return;
     }
@@ -36,11 +39,13 @@ void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent *TilemapCompone
     TMap<FPaperTileInfo, FTileReplacement *> TileReplacements;
     TArray<FTileReplacement *> Replacements;
     TileReplacementTable->GetAllRows<FTileReplacement>(TEXT("TileReplacements"), Replacements);
-    for (auto Replacement : Replacements) {
+    for (auto Replacement : Replacements)
+    {
         TileReplacements.Add(Replacement->SourceTile, Replacement);
     }
 
-    TRIPLE_LOOP (i, SizeX, j, SizeY, k, SizeZ) {
+    TRIPLE_LOOP (i, SizeX, j, SizeY, k, SizeZ)
+    {
         auto Tile = TilemapComponent->GetTile(i, j, k);
         if (!Tile.IsValid())
             continue;
@@ -68,12 +73,15 @@ void UTileReplacerComponent::ReplaceTiles(UPaperTileMapComponent *TilemapCompone
     TilemapComponent->RebuildCollision();
 }
 
-void UTileReplacerComponent::RestoreCachedTiles(UPaperTileMapComponent *TileMapComponent) {
-    if (TileMapComponent == nullptr) {
+void UTileReplacerComponent::RestoreCachedTiles(UPaperTileMapComponent *TileMapComponent)
+{
+    if (TileMapComponent == nullptr)
+    {
         UE_LOG(LogBlueprint, Warning, TEXT("No tilemap component found for: %s"), *GetName())
         return;
     }
-    for (auto &Replacement : ReplacedTiles) {
+    for (auto &Replacement : ReplacedTiles)
+    {
         TileMapComponent->SetTile(Replacement.TileX, Replacement.TileY, Replacement.TileLayer,
                                   Replacement.OriginalTileInfo);
         Replacement.Replacement->Destroy();

@@ -5,7 +5,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestTypeMatchUps, "Unit Tests.Pokemon.TestTypeMatchUps",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestTypeMatchUps::RunTest(const FString &Parameters) {
+bool TestTypeMatchUps::RunTest(const FString &Parameters)
+{
     using namespace Pokemon::TypeEffectiveness;
     UE_CHECK_EQUAL(SuperEffectiveMultiplier, UTypeHelper::GetTypeEffectiveness("FIGHTING", "NORMAL"));
     UE_CHECK_EQUAL(NormalEffectiveMultiplier, UTypeHelper::GetTypeEffectiveness("ICE", "NORMAL"));

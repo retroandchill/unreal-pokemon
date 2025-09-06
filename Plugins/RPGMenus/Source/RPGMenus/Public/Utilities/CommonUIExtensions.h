@@ -13,7 +13,8 @@ class UCommonActivatableWidget;
  *
  */
 UCLASS()
-class RPGMENUS_API UCommonUIExtensions : public UBlueprintFunctionLibrary {
+class RPGMENUS_API UCommonUIExtensions : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

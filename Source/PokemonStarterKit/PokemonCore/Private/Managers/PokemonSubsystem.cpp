@@ -16,13 +16,15 @@
 #include "Storage/StorageSystem.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
 
-void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
+void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection)
+{
     Super::Initialize(Collection);
     CoroutineDispatcher = UnrealInjector::NewInjectedDependency<IPokemonCoroutineDispatcher>(this);
 
     GrowthRates.Empty();
     for (auto RegisteredTypes = Exp::FGrowthRateRegistry::GetInstance().GetAllRegisteredTypes();
-         auto Type : RegisteredTypes) {
+         auto Type : RegisteredTypes)
+    {
         GrowthRates.Add(Type, Exp::FGrowthRateRegistry::GetInstance().Construct(Type));
     }
 
@@ -32,22 +34,26 @@ void UPokemonSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
 #endif
 }
 
-UPokemonSubsystem &UPokemonSubsystem::GetInstance(const UObject *WorldContext) {
+UPokemonSubsystem &UPokemonSubsystem::GetInstance(const UObject *WorldContext)
+{
     auto GameInstance = UGameplayStatics::GetGameInstance(WorldContext);
     check(GameInstance != nullptr)
     return *GameInstance->GetSubsystem<UPokemonSubsystem>();
 }
 
-bool UPokemonSubsystem::Exists(const UObject *WorldContext) {
+bool UPokemonSubsystem::Exists(const UObject *WorldContext)
+{
     auto GameInstance = UGameplayStatics::GetGameInstance(WorldContext);
-    if (GameInstance == nullptr) {
+    if (GameInstance == nullptr)
+    {
         return false;
     }
 
     return GameInstance->GetSubsystem<UPokemonSubsystem>() != nullptr;
 }
 
-void UPokemonSubsystem::StartNewGame() {
+void UPokemonSubsystem::StartNewGame()
+{
     // TODO: Swap this instantiation with the actual trainer instantiation
     Player = UnrealInjector::NewInjectedDependency<ITrainer>(this, TEXT("POKEMONTRAINER_Nate"),
                                                              FText::FromStringView(TEXT("Nate")));
@@ -61,37 +67,45 @@ void UPokemonSubsystem::StartNewGame() {
     PlayerMetadata->StartNewGame();
 }
 
-const TScriptInterface<ITrainer> &UPokemonSubsystem::GetPlayer() const {
+const TScriptInterface<ITrainer> &UPokemonSubsystem::GetPlayer() const
+{
     return Player;
 }
 
-const TScriptInterface<IBag> &UPokemonSubsystem::GetBag() const {
+const TScriptInterface<IBag> &UPokemonSubsystem::GetBag() const
+{
     return Bag;
 }
 
-const TScriptInterface<IStorageSystem> &UPokemonSubsystem::GetStorageSystem() const {
+const TScriptInterface<IStorageSystem> &UPokemonSubsystem::GetStorageSystem() const
+{
     return StorageSystem;
 }
 
-UPlayerMetadata *UPokemonSubsystem::GetPlayerMetadata() const {
+UPlayerMetadata *UPokemonSubsystem::GetPlayerMetadata() const
+{
     return PlayerMetadata;
 }
 
-const Exp::IGrowthRate &UPokemonSubsystem::GetGrowthRate(FName GrowthRate) const {
+const Exp::IGrowthRate &UPokemonSubsystem::GetGrowthRate(FName GrowthRate) const
+{
     check(GrowthRates.Contains(GrowthRate))
     return *GrowthRates[GrowthRate];
 }
 
-FText UPokemonSubsystem::GetCurrentLocation() const {
+FText UPokemonSubsystem::GetCurrentLocation() const
+{
     return CurrentLocation;
 }
 
-void UPokemonSubsystem::SetCurrentLocation(const FText &LocationName) {
+void UPokemonSubsystem::SetCurrentLocation(const FText &LocationName)
+{
     CurrentLocation = LocationName;
 }
 
 void UPokemonSubsystem::CreateSaveData_Implementation(UEnhancedSaveGame *SaveGame,
-                                                      const FGameplayTagContainer &SaveTags) const {
+                                                      const FGameplayTagContainer &SaveTags) const
+{
     auto SaveData = NewObject<UPokemonSaveGame>();
     SaveData->PlayerCharacter = Player->ToDTO();
     SaveData->Bag = Bag->ToDTO();
@@ -115,7 +129,8 @@ void UPokemonSubsystem::CreateSaveData_Implementation(UEnhancedSaveGame *SaveGam
 }
 
 void UPokemonSubsystem::LoadSaveData_Implementation(const UEnhancedSaveGame *SaveGame,
-                                                    const FGameplayTagContainer &LoadTags) {
+                                                    const FGameplayTagContainer &LoadTags)
+{
     auto SaveData = SaveGame->LoadObjectFromSaveGame<UPokemonSaveGame>(Pokemon::Saving::PokemonCoreSaveData);
     Player = UnrealInjector::NewInjectedDependency<ITrainer>(this, SaveData->PlayerCharacter);
     Bag = UnrealInjector::NewInjectedDependency<IBag>(this, SaveData->Bag);
@@ -125,7 +140,8 @@ void UPokemonSubsystem::LoadSaveData_Implementation(const UEnhancedSaveGame *Sav
     PlayerMetadata->RepelSteps = SaveData->RepelSteps;
     PlayerResetLocation.Emplace(SaveData->ResetMap, SaveData->ResetLocation);
 
-    if (!LoadTags.HasTag(Pokemon::Saving::ChangeMapOnLoad)) {
+    if (!LoadTags.HasTag(Pokemon::Saving::ChangeMapOnLoad))
+    {
         return;
     }
 
@@ -133,28 +149,34 @@ void UPokemonSubsystem::LoadSaveData_Implementation(const UEnhancedSaveGame *Sav
     UGameplayStatics::OpenLevel(this, FName(*SaveData->CurrentMap));
 }
 
-void UPokemonSubsystem::AdjustPlayerTransformOnLoad(ACharacter *PlayerCharacter) {
-    if (LoadTransform.IsSet()) {
+void UPokemonSubsystem::AdjustPlayerTransformOnLoad(ACharacter *PlayerCharacter)
+{
+    if (LoadTransform.IsSet())
+    {
         PlayerCharacter->SetActorTransform(*LoadTransform);
         LoadTransform.Reset();
     }
 }
 
-bool UPokemonSubsystem::IsResetLocationSet() const {
+bool UPokemonSubsystem::IsResetLocationSet() const
+{
     return PlayerResetLocation.IsSet();
 }
 
-void UPokemonSubsystem::PerformPlayerReset() {
+void UPokemonSubsystem::PerformPlayerReset()
+{
     Player->HealParty();
     check(PlayerResetLocation.IsSet())
     LoadTransform.Emplace(PlayerResetLocation->GetPlayerTransform());
     UGameplayStatics::OpenLevel(this, FName(*PlayerResetLocation->GetMapName()));
 }
 
-void UPokemonSubsystem::SetPlayerResetLocation(const FString &MapName, const FTransform &Transform) {
+void UPokemonSubsystem::SetPlayerResetLocation(const FString &MapName, const FTransform &Transform)
+{
     PlayerResetLocation.Emplace(MapName, Transform);
 }
 
-void UPokemonSubsystem::SetPlayerResetLocationAsCurrentLocation(ACharacter *PlayerCharacter) {
+void UPokemonSubsystem::SetPlayerResetLocationAsCurrentLocation(ACharacter *PlayerCharacter)
+{
     SetPlayerResetLocation(GetWorld()->GetMapName(), PlayerCharacter->GetActorTransform());
 }

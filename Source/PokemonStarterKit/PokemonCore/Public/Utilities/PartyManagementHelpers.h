@@ -13,7 +13,8 @@ class IPokemon;
  * Helper class for things related to managing the player's party.
  */
 UCLASS()
-class POKEMONCORE_API UPartyManagementHelpers : public UBlueprintFunctionLibrary {
+class POKEMONCORE_API UPartyManagementHelpers : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

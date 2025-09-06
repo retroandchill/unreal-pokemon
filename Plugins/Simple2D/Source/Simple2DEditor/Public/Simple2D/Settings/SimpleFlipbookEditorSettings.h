@@ -11,7 +11,8 @@
  *
  */
 UCLASS(config = EditorPerProjectUserSettings)
-class SIMPLE2DEDITOR_API USimpleFlipbookEditorSettings : public UDeveloperSettings {
+class SIMPLE2DEDITOR_API USimpleFlipbookEditorSettings : public UDeveloperSettings
+{
     GENERATED_BODY()
 
   public:

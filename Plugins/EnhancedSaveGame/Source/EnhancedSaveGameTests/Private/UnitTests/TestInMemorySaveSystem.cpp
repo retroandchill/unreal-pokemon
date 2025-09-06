@@ -5,7 +5,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestInMemorySaveSystem, "Unit Tests.EnhancedSaveGame.TestInMemorySaveSystem",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestInMemorySaveSystem::RunTest(const FString &Parameters) {
+bool TestInMemorySaveSystem::RunTest(const FString &Parameters)
+{
     EnhancedSaveGame::FInMemorySaveGameSystem SaveSystem;
     UE_CHECK_FALSE(SaveSystem.PlatformHasNativeUI());
     UE_CHECK_FALSE(SaveSystem.DoesSaveSystemSupportMultipleUsers());
@@ -15,7 +16,8 @@ bool TestInMemorySaveSystem::RunTest(const FString &Parameters) {
 
     TArray<uint8> Data;
     Data.Reserve(100);
-    for (uint8 i = 0; i < 100; i++) {
+    for (uint8 i = 0; i < 100; i++)
+    {
         Data.Emplace(i);
     }
     UE_CHECK_TRUE(SaveSystem.SaveGame(false, SaveGameName, 0, Data));

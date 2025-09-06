@@ -13,7 +13,8 @@ THIRD_PARTY_INCLUDES_END
 /**
  *
  */
-class FMockBattleSide : public IBattleSide {
+class FMockBattleSide : public IBattleSide
+{
     DECLARE_MOCK_INTERFACE(FMockBattleSide)
 
   public:

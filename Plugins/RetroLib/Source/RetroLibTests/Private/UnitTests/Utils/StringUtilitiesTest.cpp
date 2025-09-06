@@ -2,7 +2,8 @@
 #include "Misc/AutomationTest.h"
 #include "TestAdapter.h"
 
-TEST_CASE_NAMED(FStringUtilsTest, "Unit Tests::RetroLib::StringUtilities", "[RetroLib][Strings]") {
+TEST_CASE_NAMED(FStringUtilsTest, "Unit Tests::RetroLib::StringUtilities", "[RetroLib][Strings]")
+{
 
     FString Word1 = TEXT("Jolene");
     FText Word2 = FText::FromStringView(TEXT("Ezra"));

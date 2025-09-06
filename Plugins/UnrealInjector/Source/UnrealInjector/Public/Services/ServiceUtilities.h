@@ -8,7 +8,8 @@
 
 class UService;
 
-namespace UnrealInjector {
+namespace UnrealInjector
+{
 
     /**
      * Retrieves a unique view of all available service classes.

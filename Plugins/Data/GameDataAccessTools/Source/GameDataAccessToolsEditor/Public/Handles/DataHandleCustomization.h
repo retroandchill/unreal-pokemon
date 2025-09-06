@@ -5,11 +5,11 @@
 #include "CoreMinimal.h"
 
 /**
- * 
+ *
  */
 class GAMEDATAACCESSTOOLSEDITOR_API FDataHandleCustomization final : public IPropertyTypeCustomization
 {
-public:
+  public:
     static TSharedRef<IPropertyTypeCustomization> MakeInstance();
 
     void CustomizeHeader(const TSharedRef<IPropertyHandle> PropertyHandle, FDetailWidgetRow &HeaderRow,
@@ -17,12 +17,12 @@ public:
     void CustomizeChildren(TSharedRef<IPropertyHandle> PropertyHandle, IDetailChildrenBuilder &ChildBuilder,
                            IPropertyTypeCustomizationUtils &CustomizationUtils) override;
 
-private:
+  private:
     bool IsEditEnabled() const;
     static TSharedRef<SWidget> GenerateComboBoxEntry(TSharedPtr<FString> Value);
     void OnComboBoxSelectionChanged(TSharedPtr<FString> NewSelection, ESelectInfo::Type SelectInfo);
     FText GetComboBoxEntryText() const;
-    
+
     TSharedPtr<IPropertyHandle> Handle;
     TSharedPtr<IPropertyHandle> WrappedProperty;
     TArray<TSharedPtr<FString>> ComboBoxOptions;

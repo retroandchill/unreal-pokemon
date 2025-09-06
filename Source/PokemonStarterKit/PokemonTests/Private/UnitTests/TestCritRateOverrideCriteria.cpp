@@ -6,7 +6,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestCritRateOverrideCriteria, "Unit Tests.TestCritRateOverrideCriteria",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestCritRateOverrideCriteria::RunTest(const FString &Parameters) {
+bool TestCritRateOverrideCriteria::RunTest(const FString &Parameters)
+{
     using enum ECriticalOverride;
     UE_CHECK_EQUAL(Normal, UMoveEvaluationHelpers::ApplyCriticalHitOverride(Normal, Normal));
     UE_CHECK_EQUAL(Always, UMoveEvaluationHelpers::ApplyCriticalHitOverride(Normal, Always));

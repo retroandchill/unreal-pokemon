@@ -11,7 +11,8 @@ THIRD_PARTY_INCLUDES_START
 #include <gmock/gmock.h>
 THIRD_PARTY_INCLUDES_END
 
-class FMockPartyScreen : public IPartyScreen {
+class FMockPartyScreen : public IPartyScreen
+{
     DECLARE_MOCK_INTERFACE(FMockPartyScreen)
 
   public:

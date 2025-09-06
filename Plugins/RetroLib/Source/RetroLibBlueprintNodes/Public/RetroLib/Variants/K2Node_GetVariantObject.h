@@ -11,7 +11,8 @@
  * Get the underlying object of a variant struct.
  */
 UCLASS()
-class RETROLIBBLUEPRINTNODES_API UK2Node_GetVariantObject : public UK2Node_VariantOperationBase {
+class RETROLIBBLUEPRINTNODES_API UK2Node_GetVariantObject : public UK2Node_VariantOperationBase
+{
     GENERATED_BODY()
 
   public:

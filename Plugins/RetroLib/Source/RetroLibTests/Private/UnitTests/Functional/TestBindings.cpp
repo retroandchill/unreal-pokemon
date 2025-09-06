@@ -15,17 +15,21 @@ import RetroLib;
 #include <vector>
 #endif
 
-static int Add(int A, int B) {
+static int Add(int A, int B)
+{
     return A + B;
 }
 
-static void AddToSharedBack(int A, std::shared_ptr<int> Ptr) {
+static void AddToSharedBack(int A, std::shared_ptr<int> Ptr)
+{
     *Ptr += A;
 }
 
-struct FunctionalObject {
+struct FunctionalObject
+{
 
-    std::vector<int> &operator()(std::vector<int> &Vector, int A, int B) const {
+    std::vector<int> &operator()(std::vector<int> &Vector, int A, int B) const
+    {
         Vector.emplace_back(A);
         Vector.emplace_back(B);
         return Vector;
@@ -34,26 +38,32 @@ struct FunctionalObject {
 
 constexpr FunctionalObject Functor;
 
-static int AddMany(int A, int B, int C, int D) {
+static int AddMany(int A, int B, int C, int D)
+{
     return A + B + C + D;
 }
 
-static int AddNumbers(int A, int B, int C) {
+static int AddNumbers(int A, int B, int C)
+{
     return A + B + C;
 }
 
-class TestClass {
+class TestClass
+{
 
   public:
-    int Method(int Value1, int Value2, int Value3) const {
+    int Method(int Value1, int Value2, int Value3) const
+    {
         return Value1 + Value2 + Value3;
     }
 
     int Member = 9;
 };
 
-TEST_CASE_NAMED(FBindBackTest, "Unit Tests::RetroLib::Functional::BindBack::Runtime", "[functional]") {
-    SECTION("Binding back to a single argument works") {
+TEST_CASE_NAMED(FBindBackTest, "Unit Tests::RetroLib::Functional::BindBack::Runtime", "[functional]")
+{
+    SECTION("Binding back to a single argument works")
+    {
         auto Binding = Retro::BindBack(Add, 4);
         CHECK(Binding(3) == 7);
         CHECK(std::as_const(Binding)(5) == 9);
@@ -63,7 +73,8 @@ TEST_CASE_NAMED(FBindBackTest, "Unit Tests::RetroLib::Functional::BindBack::Runt
         CHECK(WeakNumber.expired());
     }
 
-    SECTION("Binding two arguments works") {
+    SECTION("Binding two arguments works")
+    {
         std::vector<int> Elements;
         auto Binding = Retro::BindBack(Functor, 3, 4);
         CHECK(std::addressof(Elements) == std::addressof(Binding(Elements)));
@@ -74,7 +85,8 @@ TEST_CASE_NAMED(FBindBackTest, "Unit Tests::RetroLib::Functional::BindBack::Runt
         CHECK(Elements.size() == 6);
     }
 
-    SECTION("Binding back to more than two arguments works") {
+    SECTION("Binding back to more than two arguments works")
+    {
         auto Binding = Retro::BindBack(&AddMany, 4, 5, 6);
         CHECK(Binding(3) == 18);
         CHECK(std::as_const(Binding)(5) == 20);
@@ -82,8 +94,10 @@ TEST_CASE_NAMED(FBindBackTest, "Unit Tests::RetroLib::Functional::BindBack::Runt
     }
 }
 
-TEST_CASE_NAMED(FConstexprBindBackTest, "Unit Tests::RetroLib::Functional::BindBackRuntime", "[functional]") {
-    SECTION("Binding back to a single argument works") {
+TEST_CASE_NAMED(FConstexprBindBackTest, "Unit Tests::RetroLib::Functional::BindBackRuntime", "[functional]")
+{
+    SECTION("Binding back to a single argument works")
+    {
         auto Binding = Retro::BindBack<Add>(4);
         CHECK(Binding(3) == 7);
         CHECK(std::as_const(Binding)(5) == 9);
@@ -93,7 +107,8 @@ TEST_CASE_NAMED(FConstexprBindBackTest, "Unit Tests::RetroLib::Functional::BindB
         CHECK(WeakNumber.expired());
     }
 
-    SECTION("Binding two arguments works") {
+    SECTION("Binding two arguments works")
+    {
         std::vector<int> Elements;
         auto Binding = Retro::BindBack<Functor>(3, 4);
         CHECK(std::addressof(Elements) == std::addressof(Binding(Elements)));
@@ -104,7 +119,8 @@ TEST_CASE_NAMED(FConstexprBindBackTest, "Unit Tests::RetroLib::Functional::BindB
         CHECK(Elements.size() == 6);
     }
 
-    SECTION("Binding back to more than two arguments works") {
+    SECTION("Binding back to more than two arguments works")
+    {
         auto Binding = Retro::BindBack<AddMany>(4, 5, 6);
         CHECK(Binding(3) == 18);
         CHECK(std::as_const(Binding)(5) == 20);
@@ -112,22 +128,26 @@ TEST_CASE_NAMED(FConstexprBindBackTest, "Unit Tests::RetroLib::Functional::BindB
     }
 }
 
-TEST_CASE_NAMED(FConstexprBindFontTest, "Unit Tests::RetroLib::Functional::BindFront::Constexpr", "[functional]") {
-    SECTION("Can bind with one parameter") {
+TEST_CASE_NAMED(FConstexprBindFontTest, "Unit Tests::RetroLib::Functional::BindFront::Constexpr", "[functional]")
+{
+    SECTION("Can bind with one parameter")
+    {
         auto Binding = Retro::BindFront<&AddNumbers>(1);
         CHECK(Binding(2, 3) == 6);
         CHECK(std::as_const(Binding)(5, 4) == 10);
         CHECK(Retro::BindFront<&AddNumbers>(3)(5, 4) == 12);
     }
 
-    SECTION("Can bind with two parameters") {
+    SECTION("Can bind with two parameters")
+    {
         auto Binding = Retro::BindFront<&AddNumbers>(1, 2);
         CHECK(Binding(3) == 6);
         CHECK(std::as_const(Binding)(4) == 7);
         CHECK(Retro::BindFront<&AddNumbers>(3, 6)(5) == 14);
     }
 
-    SECTION("Can bind with three parameters") {
+    SECTION("Can bind with three parameters")
+    {
         auto Binding = Retro::BindFront<&AddNumbers>(1, 2, 3);
         CHECK(Binding() == 6);
         CHECK(std::as_const(Binding)() == 6);
@@ -135,14 +155,17 @@ TEST_CASE_NAMED(FConstexprBindFontTest, "Unit Tests::RetroLib::Functional::BindF
     }
 }
 
-TEST_CASE_NAMED(FRuntimeMethodBinding, "Unit Tests::RetroLib::Functional::BindMethod::Runtime", "[functional]") {
-    SECTION("Can bind to an object of the given type") {
+TEST_CASE_NAMED(FRuntimeMethodBinding, "Unit Tests::RetroLib::Functional::BindMethod::Runtime", "[functional]")
+{
+    SECTION("Can bind to an object of the given type")
+    {
         TestClass Object;
         auto Binding = Retro::BindMethod(Object, &TestClass::Method);
         CHECK(Binding(1, 2, 1) == 4);
     }
 
-    SECTION("Can bind to a raw pointer of an object") {
+    SECTION("Can bind to a raw pointer of an object")
+    {
         TestClass Object;
         auto Ptr = &Object;
         auto Binding = Retro::BindMethod(Ptr, &TestClass::Method, 5);
@@ -151,7 +174,8 @@ TEST_CASE_NAMED(FRuntimeMethodBinding, "Unit Tests::RetroLib::Functional::BindMe
         CHECK(Retro::BindMethod(Ptr, &TestClass::Method, 10)(5, 5) == 20);
     }
 
-    SECTION("Can bind to wrapped pointer object") {
+    SECTION("Can bind to wrapped pointer object")
+    {
         auto Object = std::make_shared<TestClass>();
         auto Binding = Retro::BindMethod(Object, &TestClass::Method, 5, 6);
         CHECK(Binding(4) == 15);
@@ -159,7 +183,8 @@ TEST_CASE_NAMED(FRuntimeMethodBinding, "Unit Tests::RetroLib::Functional::BindMe
         CHECK(Retro::BindMethod(Object, &TestClass::Method, 10, 12)(5) == 27);
     }
 
-    SECTION("Can bind to a reference wrapper object") {
+    SECTION("Can bind to a reference wrapper object")
+    {
         TestClass Object;
         auto Binding = Retro::BindMethod(std::ref(Object), &TestClass::Method, 5, 6, 4);
         CHECK(Binding() == 15);
@@ -168,15 +193,17 @@ TEST_CASE_NAMED(FRuntimeMethodBinding, "Unit Tests::RetroLib::Functional::BindMe
     }
 }
 
-TEST_CASE_NAMED(FConstexprMethodBindingTest, "Unit Tests::RetroLib::Functional::BindMethod::Constexpr",
-                "[functional]") {
-    SECTION("Can bind to an object of the given type") {
+TEST_CASE_NAMED(FConstexprMethodBindingTest, "Unit Tests::RetroLib::Functional::BindMethod::Constexpr", "[functional]")
+{
+    SECTION("Can bind to an object of the given type")
+    {
         TestClass Object;
         auto Binding = Retro::BindMethod<&TestClass::Method>(Object);
         CHECK(Binding(1, 2, 1) == 4);
     }
 
-    SECTION("Can bind to a raw pointer of an object") {
+    SECTION("Can bind to a raw pointer of an object")
+    {
         TestClass Object;
         auto Ptr = &Object;
         auto Binding = Retro::BindMethod<&TestClass::Method>(Ptr, 5);
@@ -185,7 +212,8 @@ TEST_CASE_NAMED(FConstexprMethodBindingTest, "Unit Tests::RetroLib::Functional::
         CHECK(Retro::BindMethod<&TestClass::Method>(Ptr, 10)(5, 5) == 20);
     }
 
-    SECTION("Can bind to wrapped pointer object") {
+    SECTION("Can bind to wrapped pointer object")
+    {
         auto Object = std::make_shared<TestClass>();
         auto Binding = Retro::BindMethod<&TestClass::Method>(Object, 5, 6);
         CHECK(Binding(4) == 15);
@@ -193,7 +221,8 @@ TEST_CASE_NAMED(FConstexprMethodBindingTest, "Unit Tests::RetroLib::Functional::
         CHECK(Retro::BindMethod<&TestClass::Method>(Object, 10, 12)(5) == 27);
     }
 
-    SECTION("Can bind to a reference wrapper object") {
+    SECTION("Can bind to a reference wrapper object")
+    {
         TestClass Object;
         auto Binding = Retro::BindMethod<&TestClass::Method>(std::reference_wrapper(Object), 5, 6, 4);
         CHECK(Binding() == 15);
@@ -202,8 +231,10 @@ TEST_CASE_NAMED(FConstexprMethodBindingTest, "Unit Tests::RetroLib::Functional::
     }
 }
 
-TEST_CASE_NAMED(FRuntimeCreateBindingTest, "Unit Tests::RetroLib::Functional::CreateBinding::Runtime", "[functional]") {
-    SECTION("Can bind a regular functor") {
+TEST_CASE_NAMED(FRuntimeCreateBindingTest, "Unit Tests::RetroLib::Functional::CreateBinding::Runtime", "[functional]")
+{
+    SECTION("Can bind a regular functor")
+    {
         auto Binding = Retro::CreateBinding(Add, 4);
         CHECK(Binding(3) == 7);
         CHECK(std::as_const(Binding)(5) == 9);
@@ -213,7 +244,8 @@ TEST_CASE_NAMED(FRuntimeCreateBindingTest, "Unit Tests::RetroLib::Functional::Cr
         CHECK(WeakNumber.expired());
     }
 
-    SECTION("Can bind a method using the object as the owner, or bind back without it") {
+    SECTION("Can bind a method using the object as the owner, or bind back without it")
+    {
         auto Object = std::make_shared<TestClass>();
         auto Binding = Retro::CreateBinding(Object, &TestClass::Method, 5, 6);
         CHECK(Binding(4) == 15);
@@ -221,7 +253,8 @@ TEST_CASE_NAMED(FRuntimeCreateBindingTest, "Unit Tests::RetroLib::Functional::Cr
         CHECK(Retro::CreateBinding(&TestClass::Method, 10, 12)(Object, 5) == 27);
     }
 
-    SECTION("Can bind to a member") {
+    SECTION("Can bind to a member")
+    {
         TestClass Object;
         auto Binding1 = Retro::CreateBinding(Object, &TestClass::Member);
         CHECK(Binding1() == 9);
@@ -229,7 +262,8 @@ TEST_CASE_NAMED(FRuntimeCreateBindingTest, "Unit Tests::RetroLib::Functional::Cr
         CHECK(Binding2(Object) == 9);
     }
 
-    SECTION("Can bind a functor and use tuples with it") {
+    SECTION("Can bind a functor and use tuples with it")
+    {
         static_assert(Retro::TupleLike<std::pair<int, int>>);
         auto Binding = Retro::CreateBinding(Add);
         CHECK(Binding(std::make_pair(3, 4)) == 7);
@@ -242,8 +276,10 @@ TEST_CASE_NAMED(FRuntimeCreateBindingTest, "Unit Tests::RetroLib::Functional::Cr
 }
 
 TEST_CASE_NAMED(FConstexprCreateBindingTest, "Unit Tests::RetroLib::Functional::CreateBinding::Constepxr",
-                "[functional]") {
-    SECTION("Can bind a regular functor") {
+                "[functional]")
+{
+    SECTION("Can bind a regular functor")
+    {
         auto Binding = Retro::CreateBinding<Add>(4);
         CHECK(Binding(3) == 7);
         CHECK(std::as_const(Binding)(5) == 9);
@@ -253,7 +289,8 @@ TEST_CASE_NAMED(FConstexprCreateBindingTest, "Unit Tests::RetroLib::Functional::
         CHECK(WeakNumber.expired());
     }
 
-    SECTION("Can bind a method using the this tag, or bind back without it") {
+    SECTION("Can bind a method using the this tag, or bind back without it")
+    {
         auto Object = std::make_shared<TestClass>();
         auto Binding = Retro::CreateBinding<&TestClass::Method>(Retro::TThis(Object), 5, 6);
         CHECK(Binding(4) == 15);
@@ -261,7 +298,8 @@ TEST_CASE_NAMED(FConstexprCreateBindingTest, "Unit Tests::RetroLib::Functional::
         CHECK(Retro::CreateBinding<&TestClass::Method>(10, 12)(Object, 5) == 27);
     }
 
-    SECTION("Can bind to a member") {
+    SECTION("Can bind to a member")
+    {
         TestClass Object;
         auto Binding1 = Retro::CreateBinding<&TestClass::Member>(Object);
         CHECK(Binding1() == 9);
@@ -269,7 +307,8 @@ TEST_CASE_NAMED(FConstexprCreateBindingTest, "Unit Tests::RetroLib::Functional::
         CHECK(Binding2(Object) == 9);
     }
 
-    SECTION("Can bind a functor and use tuples with it") {
+    SECTION("Can bind a functor and use tuples with it")
+    {
         auto Binding = Retro::CreateBinding<Add>();
         CHECK(Binding(std::make_pair(3, 4)) == 7);
         CHECK(std::as_const(Binding)(std::make_pair(5, 4)) == 9);

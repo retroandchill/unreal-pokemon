@@ -12,7 +12,8 @@ struct FMoveTarget;
  * The default implementation for a move
  */
 UCLASS()
-class POKEMONCORE_API UDefaultMove : public UObject, public IMove {
+class POKEMONCORE_API UDefaultMove : public UObject, public IMove
+{
     GENERATED_BODY()
 
   public:

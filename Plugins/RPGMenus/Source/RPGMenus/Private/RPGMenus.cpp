@@ -3,11 +3,13 @@
 
 DEFINE_LOG_CATEGORY(LogRPGMenus)
 
-void FRPGMenusModule::StartupModule() {
+void FRPGMenusModule::StartupModule()
+{
     // No special startup code needed
 }
 
-void FRPGMenusModule::ShutdownModule() {
+void FRPGMenusModule::ShutdownModule()
+{
     // No special shutdown code needed
 }
 

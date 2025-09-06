@@ -4,6 +4,7 @@
 #include "FunctionalTesting/ScopedFunctionalTest.h"
 #include "RetroLib/Utils/ScopedTimeDilationFactor.h"
 
-void UScopedTimeDilationComponent::AddScopedComponent(AScopedFunctionalTest &TestObject) {
+void UScopedTimeDilationComponent::AddScopedComponent(AScopedFunctionalTest &TestObject)
+{
     TestObject.AddScopedData<Retro::FScopedTimeDilationFactor>(this, TimeDilationFactor);
 }

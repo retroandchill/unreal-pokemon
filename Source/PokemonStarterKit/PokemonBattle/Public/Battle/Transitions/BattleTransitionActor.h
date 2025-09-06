@@ -12,7 +12,8 @@
  * The actor used to perform the battle transition.
  */
 UCLASS(Abstract)
-class POKEMONBATTLE_API ABattleTransitionActor : public AActor {
+class POKEMONBATTLE_API ABattleTransitionActor : public AActor
+{
     GENERATED_BODY()
 
   public:

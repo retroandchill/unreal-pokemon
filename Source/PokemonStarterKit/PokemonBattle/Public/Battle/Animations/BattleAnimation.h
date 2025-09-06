@@ -10,14 +10,16 @@
 
 // This class does not need to be modified.
 UINTERFACE()
-class UBattleAnimation : public UInterface {
+class UBattleAnimation : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Interface used for animations played in battle
  */
-class POKEMONBATTLE_API IBattleAnimation {
+class POKEMONBATTLE_API IBattleAnimation
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

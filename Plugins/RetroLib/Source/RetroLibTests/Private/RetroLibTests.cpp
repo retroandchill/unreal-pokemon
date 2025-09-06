@@ -1,10 +1,12 @@
 ﻿#include "RetroLibTests.h"
 
-void FRetroLibTestsModule::StartupModule() {
+void FRetroLibTestsModule::StartupModule()
+{
     // No special startup code
 }
 
-void FRetroLibTestsModule::ShutdownModule() {
+void FRetroLibTestsModule::ShutdownModule()
+{
     // No special shutdown code
 }
 

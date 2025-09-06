@@ -24,7 +24,8 @@ class IPokemon;
  * sprite.
  */
 UCLASS()
-class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler {
+class POKEMONBATTLE_API ABattlerActor : public AActor, public IBattler
+{
     GENERATED_BODY()
 
   public:

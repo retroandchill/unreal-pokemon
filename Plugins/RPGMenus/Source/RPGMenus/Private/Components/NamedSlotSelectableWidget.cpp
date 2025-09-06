@@ -5,29 +5,35 @@
 #include "Components/NamedSlot.h"
 #include "Components/RPGButtonBase.h"
 
-void UNamedSlotSelectableWidget::NativePreConstruct() {
+void UNamedSlotSelectableWidget::NativePreConstruct()
+{
     Super::NativePreConstruct();
     UpdateOptions();
 }
 
-void UNamedSlotSelectableWidget::UpdateOptions() {
+void UNamedSlotSelectableWidget::UpdateOptions()
+{
 #if WITH_EDITOR
-    if (ContentSlot == nullptr) {
+    if (ContentSlot == nullptr)
+    {
         return;
     }
 #endif
 
     auto ContentWidget = Cast<UPanelWidget>(ContentSlot->GetContent());
 #if WITH_EDITOR
-    if (ContentWidget == nullptr) {
+    if (ContentWidget == nullptr)
+    {
         return;
     }
 #endif
 
     ClearSelectableOptions(false);
-    for (int32 i = 0; i < ContentWidget->GetChildrenCount(); i++) {
+    for (int32 i = 0; i < ContentWidget->GetChildrenCount(); i++)
+    {
         auto Child = Cast<URPGButtonBase>(ContentWidget->GetChildAt(i));
-        if (Child == nullptr) {
+        if (Child == nullptr)
+        {
             continue;
         }
 
@@ -35,14 +41,16 @@ void UNamedSlotSelectableWidget::UpdateOptions() {
         Child->OnHovered().Clear();
 
         Child->UpdateVisibility();
-        if (!Child->IsVisible()) {
+        if (!Child->IsVisible())
+        {
             continue;
         }
 
         AddOptionToWidget(Child);
     }
 
-    if (GetIndex() != INDEX_NONE && GetIndex() >= GetItemCount()) {
+    if (GetIndex() != INDEX_NONE && GetIndex() >= GetItemCount())
+    {
         SetIndex(GetItemCount() - 1);
     }
 }

@@ -9,13 +9,15 @@
 #include "Storage/StorageBoxDTO.h"
 #include "Utilities/TrainerHelpers.h"
 
-TScriptInterface<IStorageBox> UDefaultStorageBox::Initialize(FText &&InitialName, int32 Capacity) {
+TScriptInterface<IStorageBox> UDefaultStorageBox::Initialize(FText &&InitialName, int32 Capacity)
+{
     DisplayName = std::move(InitialName);
     StoredPokemon.SetNum(Capacity);
     return this;
 }
 
-TScriptInterface<IStorageBox> UDefaultStorageBox::Initialize(const FStorageBoxDTO &DTO) {
+TScriptInterface<IStorageBox> UDefaultStorageBox::Initialize(const FStorageBoxDTO &DTO)
+{
     DisplayName = DTO.DisplayName;
 
     auto Player = UTrainerHelpers::GetPlayerCharacter(this);
@@ -36,7 +38,8 @@ TScriptInterface<IStorageBox> UDefaultStorageBox::Initialize(const FStorageBoxDT
     return this;
 }
 
-FStorageBoxDTO UDefaultStorageBox::ToDTO() const {
+FStorageBoxDTO UDefaultStorageBox::ToDTO() const
+{
     return {
         .DisplayName = DisplayName,
         // clang-format off
@@ -52,21 +55,26 @@ FStorageBoxDTO UDefaultStorageBox::ToDTO() const {
     };
 }
 
-const FText &UDefaultStorageBox::GetDisplayName() const {
+const FText &UDefaultStorageBox::GetDisplayName() const
+{
     return DisplayName;
 }
 
-void UDefaultStorageBox::SetDisplayName(FText NewName) {
+void UDefaultStorageBox::SetDisplayName(FText NewName)
+{
     DisplayName = std::move(NewName);
 }
 
-int32 UDefaultStorageBox::GetCapacity() const {
+int32 UDefaultStorageBox::GetCapacity() const
+{
     return StoredPokemon.Num();
 }
 
-TOptional<int32> UDefaultStorageBox::DepositToBox(const TScriptInterface<IPokemon> &Pokemon) {
+TOptional<int32> UDefaultStorageBox::DepositToBox(const TScriptInterface<IPokemon> &Pokemon)
+{
     int32 TargetIndex = StoredPokemon.IndexOfByKey(nullptr);
-    if (TargetIndex == INDEX_NONE) {
+    if (TargetIndex == INDEX_NONE)
+    {
         return TOptional<int32>();
     }
 
@@ -74,7 +82,8 @@ TOptional<int32> UDefaultStorageBox::DepositToBox(const TScriptInterface<IPokemo
     return TargetIndex;
 }
 
-bool UDefaultStorageBox::IsBoxFull() const {
+bool UDefaultStorageBox::IsBoxFull() const
+{
     // clang-format off
     return StoredPokemon |
            Retro::Ranges::Views::Transform(&TScriptInterface<IPokemon>::GetObject) |
@@ -82,14 +91,16 @@ bool UDefaultStorageBox::IsBoxFull() const {
     // clang-format on
 }
 
-TOptional<IPokemon &> UDefaultStorageBox::WithdrawFromBox(int32 BoxIndex) {
+TOptional<IPokemon &> UDefaultStorageBox::WithdrawFromBox(int32 BoxIndex)
+{
     check(StoredPokemon.IsValidIndex(BoxIndex))
     TOptional<IPokemon &> ExistingPokemon(StoredPokemon[BoxIndex].GetInterface());
     StoredPokemon[BoxIndex] = nullptr;
     return ExistingPokemon;
 }
 
-TOptional<IPokemon &> UDefaultStorageBox::SwapWithPokemon(int32 BoxIndex, const TScriptInterface<IPokemon> &Pokemon) {
+TOptional<IPokemon &> UDefaultStorageBox::SwapWithPokemon(int32 BoxIndex, const TScriptInterface<IPokemon> &Pokemon)
+{
     check(Pokemon != nullptr)
     check(StoredPokemon.IsValidIndex(BoxIndex))
     TOptional<IPokemon &> ExistingPokemon(StoredPokemon[BoxIndex].GetInterface());
@@ -97,11 +108,13 @@ TOptional<IPokemon &> UDefaultStorageBox::SwapWithPokemon(int32 BoxIndex, const 
     return ExistingPokemon;
 }
 
-TOptional<IPokemon &> UDefaultStorageBox::GetStoredPokemon(int32 Index) const {
+TOptional<IPokemon &> UDefaultStorageBox::GetStoredPokemon(int32 Index) const
+{
     check(StoredPokemon.IsValidIndex(Index))
     return Retro::Optionals::OfNullable(StoredPokemon[Index]);
 }
 
-const TArray<TScriptInterface<IPokemon>> &UDefaultStorageBox::GetStoredPokemon() const {
+const TArray<TScriptInterface<IPokemon>> &UDefaultStorageBox::GetStoredPokemon() const
+{
     return StoredPokemon;
 }

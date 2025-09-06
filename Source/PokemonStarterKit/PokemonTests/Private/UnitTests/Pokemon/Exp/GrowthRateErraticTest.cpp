@@ -18,7 +18,8 @@ constexpr std::array GErraticGrowthTable = {
 IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateErraticTest, "Unit Tests.Core.Exp.GrowthRateErraticTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-void GrowthRateErraticTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const {
+void GrowthRateErraticTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const
+{
     OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateErraticTest: Level = 1");
     OutTestCommands.Add("1");
 
@@ -53,7 +54,8 @@ void GrowthRateErraticTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray
     OutTestCommands.Add("100");
 }
 
-bool GrowthRateErraticTest::RunTest(const FString &Parameters) {
+bool GrowthRateErraticTest::RunTest(const FString &Parameters)
+{
     const int32 Level = FCString::Atoi(GetData(Parameters));
     Exp::FErratic GrowthRate;
     UE_ASSERT_EQUAL(GrowthRate.ExpForLevel(Level), GErraticGrowthTable[Level]);

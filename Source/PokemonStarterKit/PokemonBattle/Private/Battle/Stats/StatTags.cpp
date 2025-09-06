@@ -6,15 +6,18 @@
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "Species/Stat.h"
 
-namespace Pokemon::Battle::Stats {
+namespace Pokemon::Battle::Stats
+{
 
     const UE_DEFINE_GAMEPLAY_TAG(StagesTag, "Battle.Battler.Stats.Stages")
 
-        FLookup::FLookup() {
+        FLookup::FLookup()
+    {
         auto &DataManager = FDataManager::GetInstance();
         auto &TypeTable = DataManager.GetDataTable<FStat>();
         TypeTable.GetAllRows() | Retro::Ranges::ForEach([this](const FStat &Stat) {
-            if (Stat.Type == EPokemonStatType::Main) {
+            if (Stat.Type == EPokemonStatType::Main)
+            {
                 return;
             }
 
@@ -26,15 +29,19 @@ namespace Pokemon::Battle::Stats {
 
     FLookup::~FLookup() = default;
 
-    FLookup &FLookup::Get() {
+    FLookup &FLookup::Get()
+    {
         static FLookup Lookup;
         return Lookup;
     }
 
-    FText FLookup::FindStatNameFromGameplayCueTag(const FGameplayTag &Tag) const {
+    FText FLookup::FindStatNameFromGameplayCueTag(const FGameplayTag &Tag) const
+    {
         static auto &TypeTable = FDataManager::GetInstance().GetDataTable<FStat>();
-        for (auto &[ID, NativeTag] : GameplayCueTags) {
-            if (Tag == *NativeTag) {
+        for (auto &[ID, NativeTag] : GameplayCueTags)
+        {
+            if (Tag == *NativeTag)
+            {
                 auto Stat = TypeTable.GetData(ID);
                 check(Stat != nullptr)
                 return Stat->RealName;

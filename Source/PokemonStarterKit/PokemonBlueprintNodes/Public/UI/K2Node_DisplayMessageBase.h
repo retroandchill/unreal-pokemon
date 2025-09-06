@@ -12,7 +12,8 @@ class UTextDisplayScreen;
  * Basic template of any async node that requires the display of a message
  */
 UCLASS(Abstract)
-class POKEMONBLUEPRINTNODES_API UK2Node_DisplayMessageBase : public UK2Node_BaseAsyncTask, public IMessageNode {
+class POKEMONBLUEPRINTNODES_API UK2Node_DisplayMessageBase : public UK2Node_BaseAsyncTask, public IMessageNode
+{
     GENERATED_BODY()
 
   public:

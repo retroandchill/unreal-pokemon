@@ -9,7 +9,8 @@
 #include "RetroLib/Optionals/IfPresent.h"
 #include "RetroLib/Optionals/Transform.h"
 
-void UCameraSubsystem::OnWorldBeginPlay(UWorld &InWorld) {
+void UCameraSubsystem::OnWorldBeginPlay(UWorld &InWorld)
+{
     Super::OnWorldBeginPlay(InWorld);
 
     // clang-format off
@@ -23,11 +24,13 @@ void UCameraSubsystem::OnWorldBeginPlay(UWorld &InWorld) {
     // clang-format on
 }
 
-void UCameraSubsystem::Tick(float DeltaTime) {
+void UCameraSubsystem::Tick(float DeltaTime)
+{
     Super::Tick(DeltaTime);
     auto CameraRotation = PlayerCameraManager->GetCameraRotation();
     if (FVector2D NewRotation(CameraRotation.Yaw + ZRotationAdjustment, CameraRotation.Pitch);
-        !CurrentCameraAngle.Equals(NewRotation)) {
+        !CurrentCameraAngle.Equals(NewRotation))
+    {
         CurrentCameraAngle = NewRotation;
         OnCameraAngleChanged.Broadcast(CurrentCameraAngle);
     }
@@ -35,10 +38,12 @@ void UCameraSubsystem::Tick(float DeltaTime) {
 
 TStatId UCameraSubsystem::GetStatId() const {RETURN_QUICK_DECLARE_CYCLE_STAT(UCameraSubsystem, STATGROUP_Tickables)}
 
-FDelegateHandle UCameraSubsystem::BindToGetOnCameraAngleChanged(FOnCameraAngleChanged::FDelegate &&Binding) {
+FDelegateHandle UCameraSubsystem::BindToGetOnCameraAngleChanged(FOnCameraAngleChanged::FDelegate &&Binding)
+{
     return OnCameraAngleChanged.Add(std::move(Binding));
 }
 
-FVector2D UCameraSubsystem::GetCurrentCameraAngle() const {
+FVector2D UCameraSubsystem::GetCurrentCameraAngle() const
+{
     return CurrentCameraAngle;
 }

@@ -11,18 +11,22 @@
 #include "Services/GameServiceSubsystem.h"
 #include "Services/ServiceUtilities.h"
 
-void UK2Node_GetServiceClass::Initialize(const TSubclassOf<UService> &Service) {
+void UK2Node_GetServiceClass::Initialize(const TSubclassOf<UService> &Service)
+{
     ServiceClass = Service;
 }
 
-void UK2Node_GetServiceClass::AllocateDefaultPins() {
+void UK2Node_GetServiceClass::AllocateDefaultPins()
+{
     // If required add the world context pin
-    if (GetBlueprint()->ParentClass->HasMetaDataHierarchical(FBlueprintMetadata::MD_ShowWorldContextPin)) {
+    if (GetBlueprint()->ParentClass->HasMetaDataHierarchical(FBlueprintMetadata::MD_ShowWorldContextPin))
+    {
         CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Object, UObject::StaticClass(), TEXT("WorldContext"));
     }
 
     // Add blueprint pin
-    if (!IsValid(ServiceClass)) {
+    if (!IsValid(ServiceClass))
+    {
         CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Class, USubsystem::StaticClass(), TEXT("ServiceClass"));
     }
 
@@ -34,11 +38,13 @@ void UK2Node_GetServiceClass::AllocateDefaultPins() {
     Super::AllocateDefaultPins();
 }
 
-static FText ConvertFromStringView(FStringView View) {
+static FText ConvertFromStringView(FStringView View)
+{
     return FText::FromStringView(View);
 }
 
-FText UK2Node_GetServiceClass::GetNodeTitle(ENodeTitleType::Type TitleType) const {
+FText UK2Node_GetServiceClass::GetNodeTitle(ENodeTitleType::Type TitleType) const
+{
     // clang-format off
     auto Name = Retro::Optionals::OfNullable(ServiceClass) |
                 Retro::Optionals::Transform([](const TNonNullSubclassOf<UService>& Class) { return Class->GetDisplayNameText(); }) |
@@ -47,7 +53,8 @@ FText UK2Node_GetServiceClass::GetNodeTitle(ENodeTitleType::Type TitleType) cons
     return FText::FormatOrdered(NSLOCTEXT("UK2Node_GetServiceClass", "GetNodeTitle", "Get {0}"), Name);
 }
 
-FText UK2Node_GetServiceClass::GetTooltipText() const {
+FText UK2Node_GetServiceClass::GetTooltipText() const
+{
     // clang-format off
     return Retro::Optionals::OfNullable(ServiceClass) |
            Retro::Optionals::Transform([](const TNonNullSubclassOf<UService>& Class) { return Class->GetToolTipText(); }) |
@@ -55,7 +62,8 @@ FText UK2Node_GetServiceClass::GetTooltipText() const {
     // clang-format on
 }
 
-FText UK2Node_GetServiceClass::GetCompactNodeTitle() const {
+FText UK2Node_GetServiceClass::GetCompactNodeTitle() const
+{
     // clang-format off
     return Retro::Optionals::OfNullable(ServiceClass) |
            Retro::Optionals::Transform([](const TNonNullSubclassOf<UService>& Class) { return Class->GetDisplayNameText(); }) |
@@ -63,27 +71,33 @@ FText UK2Node_GetServiceClass::GetCompactNodeTitle() const {
     // clang-format on
 }
 
-bool UK2Node_GetServiceClass::ShouldDrawCompact() const {
+bool UK2Node_GetServiceClass::ShouldDrawCompact() const
+{
     return true;
 }
 
-bool UK2Node_GetServiceClass::IsNodePure() const {
+bool UK2Node_GetServiceClass::IsNodePure() const
+{
     return true;
 }
 
-FText UK2Node_GetServiceClass::GetMenuCategory() const {
+FText UK2Node_GetServiceClass::GetMenuCategory() const
+{
     return NSLOCTEXT("UK2Node_GetServiceClass", "GetMenuCategory", "DependencyInjection|Services");
 }
 
-FSlateIcon UK2Node_GetServiceClass::GetIconAndTint(FLinearColor &OutColor) const {
+FSlateIcon UK2Node_GetServiceClass::GetIconAndTint(FLinearColor &OutColor) const
+{
     OutColor = GetNodeTitleColor();
     static FSlateIcon Icon(FAppStyle::GetAppStyleSetName(), "Kismet.AllClasses.FunctionIcon");
     return Icon;
 }
 
-void UK2Node_GetServiceClass::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const {
+void UK2Node_GetServiceClass::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const
+{
     auto ActionKey = GetClass();
-    if (!ActionRegistrar.IsOpenForRegistration(ActionKey)) {
+    if (!ActionRegistrar.IsOpenForRegistration(ActionKey))
+    {
         return;
     }
 
@@ -93,7 +107,8 @@ void UK2Node_GetServiceClass::GetMenuActions(FBlueprintActionDatabaseRegistrar &
     // clang-format on
 }
 
-void UK2Node_GetServiceClass::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
+void UK2Node_GetServiceClass::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph)
+{
     Super::ExpandNode(CompilerContext, SourceGraph);
 
     // FUNCTION NODE
@@ -105,15 +120,19 @@ void UK2Node_GetServiceClass::ExpandNode(FKismetCompilerContext &CompilerContext
     static const FName WorldContext_ParamName(TEXT("WorldContext"));
     static const FName Class_ParamName(TEXT("ServiceClass"));
 
-    if (GetBlueprint()->ParentClass->HasMetaDataHierarchical(FBlueprintMetadata::MD_ShowWorldContextPin)) {
+    if (GetBlueprint()->ParentClass->HasMetaDataHierarchical(FBlueprintMetadata::MD_ShowWorldContextPin))
+    {
         CompilerContext.MovePinLinksToIntermediate(*FindPinChecked(WorldContext_ParamName),
                                                    *CallGetNode->FindPinChecked(WorldContext_ParamName));
     }
 
-    if (IsValid(ServiceClass)) {
+    if (IsValid(ServiceClass))
+    {
         auto ClassPin = CallGetNode->FindPinChecked(Class_ParamName);
         ClassPin->DefaultObject = ServiceClass;
-    } else {
+    }
+    else
+    {
         CompilerContext.MovePinLinksToIntermediate(*FindPinChecked(Class_ParamName),
                                                    *CallGetNode->FindPinChecked(Class_ParamName));
     }
@@ -128,7 +147,8 @@ void UK2Node_GetServiceClass::ExpandNode(FKismetCompilerContext &CompilerContext
 
 void UK2Node_GetServiceClass::AddMenuActionForType(const TSubclassOf<UService> &Type,
                                                    FBlueprintActionDatabaseRegistrar &ActionRegistrar,
-                                                   UClass *ActionKey) {
+                                                   UClass *ActionKey)
+{
     using FCustomizeDelegate = UBlueprintNodeSpawner::FCustomizeNodeDelegate;
     constexpr auto CustomizeCallback = [](UEdGraphNode *Node, bool, const TSubclassOf<UService> &Subclass) {
         auto TypedNode = CastChecked<UK2Node_GetServiceClass>(Node);

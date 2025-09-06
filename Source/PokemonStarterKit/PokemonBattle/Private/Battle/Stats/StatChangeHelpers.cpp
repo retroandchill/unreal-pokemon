@@ -15,16 +15,20 @@
 UE5Coro::TCoroutine<bool> UStatChangeHelpers::CanRaiseStat(UE5Coro::TLatentContext<const UObject> Context,
                                                            const TScriptInterface<IBattler> &Battler,
                                                            FMainBattleStatHandle Stat, bool bShowMessages,
-                                                           bool bIgnoreInversion) {
-    if (!bIgnoreInversion && Battler->GetAbilityComponent()->GetStatStages()->GetStatStageMultiplier() < 0) {
+                                                           bool bIgnoreInversion)
+{
+    if (!bIgnoreInversion && Battler->GetAbilityComponent()->GetStatStages()->GetStatStageMultiplier() < 0)
+    {
         co_return co_await CanLowerStat(Context, Battler, Stat, bShowMessages, true);
     }
 
-    if (!StatStageAtMax(Battler, Stat)) {
+    if (!StatStageAtMax(Battler, Stat))
+    {
         co_return true;
     }
 
-    if (bShowMessages) {
+    if (bShowMessages)
+    {
         auto Settings = GetDefault<UBattleMessageSettings>();
         co_await IPokemonCoroutineDispatcher::Get(Context.Target)
             .DisplayMessage(FText::FormatNamed(Settings->MaxStatMessage, "Pkmn", Battler->GetNickname(), "Stat",
@@ -37,16 +41,20 @@ UE5Coro::TCoroutine<bool> UStatChangeHelpers::CanRaiseStat(UE5Coro::TLatentConte
 UE5Coro::TCoroutine<bool> UStatChangeHelpers::CanLowerStat(UE5Coro::TLatentContext<const UObject> Context,
                                                            const TScriptInterface<IBattler> &Battler,
                                                            FMainBattleStatHandle Stat, bool bShowMessages,
-                                                           bool bIgnoreInversion) {
-    if (!bIgnoreInversion && Battler->GetAbilityComponent()->GetStatStages()->GetStatStageMultiplier() < 0) {
+                                                           bool bIgnoreInversion)
+{
+    if (!bIgnoreInversion && Battler->GetAbilityComponent()->GetStatStages()->GetStatStageMultiplier() < 0)
+    {
         co_return co_await CanRaiseStat(Context, Battler, Stat, bShowMessages, true);
     }
 
-    if (!StatStageAtMin(Battler, Stat)) {
+    if (!StatStageAtMin(Battler, Stat))
+    {
         co_return true;
     }
 
-    if (bShowMessages) {
+    if (bShowMessages)
+    {
         auto Settings = GetDefault<UBattleMessageSettings>();
         co_await IPokemonCoroutineDispatcher::Get(Context.Target)
             .DisplayMessage(FText::FormatNamed(Settings->MinStatMessage, "Pkmn", Battler->GetNickname(), "Stat",
@@ -56,7 +64,8 @@ UE5Coro::TCoroutine<bool> UStatChangeHelpers::CanLowerStat(UE5Coro::TLatentConte
     co_return false;
 }
 
-int32 UStatChangeHelpers::GetStatStageValue(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat) {
+int32 UStatChangeHelpers::GetStatStageValue(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat)
+{
     static auto &StatTable = FDataManager::GetInstance().GetInstance().GetDataTable<FStat>();
     auto StatData = StatTable.GetData(Stat);
     check(StatData != nullptr)
@@ -65,19 +74,23 @@ int32 UStatChangeHelpers::GetStatStageValue(const TScriptInterface<IBattler> &Ba
     return FMath::RoundToInt32(Stages);
 }
 
-bool UStatChangeHelpers::StatStageAtMax(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat) {
+bool UStatChangeHelpers::StatStageAtMax(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat)
+{
     static auto &StatInfo = GetDefault<UPokemonBattleSettings>()->StatStages;
     return GetStatStageValue(Battler, Stat) >= StatInfo.Num();
 }
 
-bool UStatChangeHelpers::StatStageAtMin(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat) {
+bool UStatChangeHelpers::StatStageAtMin(const TScriptInterface<IBattler> &Battler, FMainBattleStatHandle Stat)
+{
     static auto &StatInfo = GetDefault<UPokemonBattleSettings>()->StatStages;
     return GetStatStageValue(Battler, Stat) <= -StatInfo.Num();
 }
 
 TOptional<FText> UStatChangeHelpers::GetStatChangeMessage(const TScriptInterface<IBattler> &Battler,
-                                                          const FText &StatName, int32 Change) {
-    if (Change == 0) {
+                                                          const FText &StatName, int32 Change)
+{
+    if (Change == 0)
+    {
         return {};
     }
 
@@ -100,7 +113,8 @@ TOptional<FText> UStatChangeHelpers::GetStatChangeMessage(const TScriptInterface
 
 UE5Coro::TCoroutine<int32> UStatChangeHelpers::ChangeBattlerStatStages(const TScriptInterface<IBattler> &Battler,
                                                                        FName Stat, int32 Stages,
-                                                                       UGameplayAbility *Ability) {
+                                                                       UGameplayAbility *Ability)
+{
     static auto &StatTable = FDataManager::GetInstance().GetDataTable<FStat>();
     auto StatData = StatTable.GetData(Stat);
     check(StatData != nullptr)
@@ -126,16 +140,20 @@ UE5Coro::TCoroutine<int32> UStatChangeHelpers::ChangeBattlerStatStages(const TSc
     Modifier.ModifierMagnitude = FGameplayEffectModifierMagnitude(Calculation);
 
     FGameplayEffectContextHandle Context;
-    if (Ability != nullptr) {
+    if (Ability != nullptr)
+    {
         Context = Ability->MakeEffectContext(Ability->GetCurrentAbilitySpecHandle(), Ability->GetCurrentActorInfo());
-    } else {
+    }
+    else
+    {
         Context = AbilityComponent->MakeEffectContext();
     }
     FGameplayEffectSpec NewSpec(StatChangeEffect, Context, 1);
     NewSpec.SetSetByCallerMagnitude(Pokemon::Battle::Stats::StagesTag, static_cast<float>(ActualChange));
     AbilityComponent->ApplyGameplayEffectSpecToSelf(NewSpec);
 
-    if (auto ChangeMessage = GetStatChangeMessage(Battler, StatData->RealName, ActualChange); ChangeMessage.IsSet()) {
+    if (auto ChangeMessage = GetStatChangeMessage(Battler, StatData->RealName, ActualChange); ChangeMessage.IsSet())
+    {
         co_await IPokemonCoroutineDispatcher::Get(Battler.GetObject()).DisplayMessage(*ChangeMessage);
     }
 

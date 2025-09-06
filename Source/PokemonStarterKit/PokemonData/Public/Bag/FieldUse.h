@@ -10,7 +10,8 @@
  * Represents the different options for how an item can be used in the field
  */
 UENUM(BlueprintType)
-enum class EFieldUse : uint8 {
+enum class EFieldUse : uint8
+{
     /**
      * Not usable in the field
      */

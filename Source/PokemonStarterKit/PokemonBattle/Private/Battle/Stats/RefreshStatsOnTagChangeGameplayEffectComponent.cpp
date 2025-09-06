@@ -7,7 +7,8 @@
 #include "PokemonBattleModule.h"
 
 bool URefreshStatsOnTagChangeGameplayEffectComponent::OnActiveGameplayEffectAdded(
-    FActiveGameplayEffectsContainer &ActiveGEContainer, FActiveGameplayEffect &ActiveGE) const {
+    FActiveGameplayEffectsContainer &ActiveGEContainer, FActiveGameplayEffect &ActiveGE) const
+{
     auto ASC = ActiveGEContainer.Owner;
     check(ASC != nullptr)
 
@@ -18,13 +19,16 @@ bool URefreshStatsOnTagChangeGameplayEffectComponent::OnActiveGameplayEffectAdde
     // Quick method of appending a TArray to another TArray with no duplicates.
     auto AppendUnique = [](TArray<FGameplayTag> &Destination, const TArray<FGameplayTag> &Source) {
         // Make sure the array won't allocate during the loop
-        if (Destination.GetSlack() < Source.Num()) {
+        if (Destination.GetSlack() < Source.Num())
+        {
             Destination.Reserve(Destination.Num() + Source.Num());
         }
         const TConstArrayView<FGameplayTag> PreModifiedDestinationView{Destination.GetData(), Destination.Num()};
 
-        for (const FGameplayTag &Tag : Source) {
-            if (!Algo::Find(PreModifiedDestinationView, Tag)) {
+        for (const FGameplayTag &Tag : Source)
+        {
+            if (!Algo::Find(PreModifiedDestinationView, Tag))
+            {
                 Destination.Emplace(Tag);
             }
         }
@@ -32,12 +36,14 @@ bool URefreshStatsOnTagChangeGameplayEffectComponent::OnActiveGameplayEffectAdde
 
     // We should gather a list of tags to listen on events for
     TArray<FGameplayTag> GameplayTagsToBind;
-    for (const auto &[AffectedAttribute, AffectingTags] : StatsToUpdate) {
+    for (const auto &[AffectedAttribute, AffectingTags] : StatsToUpdate)
+    {
         AppendUnique(GameplayTagsToBind, AffectingTags.GetGameplayTagArray());
     }
 
     TArray<TTuple<FGameplayTag, FDelegateHandle>> AllBoundEvents;
-    for (const FGameplayTag &Tag : GameplayTagsToBind) {
+    for (const FGameplayTag &Tag : GameplayTagsToBind)
+    {
         FOnGameplayEffectTagCountChanged &OnTagEvent =
             ASC->RegisterGameplayTagEvent(Tag, EGameplayTagEventType::NewOrRemoved);
         FDelegateHandle Handle =
@@ -54,10 +60,13 @@ bool URefreshStatsOnTagChangeGameplayEffectComponent::OnActiveGameplayEffectAdde
 }
 
 void URefreshStatsOnTagChangeGameplayEffectComponent::OnTagChanged(const FGameplayTag GameplayTag, int32 NewCount,
-                                                                   FActiveGameplayEffectHandle ActiveGEHandle) const {
+                                                                   FActiveGameplayEffectHandle ActiveGEHandle) const
+{
     auto OwningComponent = ActiveGEHandle.GetOwningAbilitySystemComponent();
-    for (const auto &[AffectedAttribute, AffectingTags] : StatsToUpdate) {
-        if (!AffectingTags.HasTag(GameplayTag)) {
+    for (const auto &[AffectedAttribute, AffectingTags] : StatsToUpdate)
+    {
+        if (!AffectingTags.HasTag(GameplayTag))
+        {
             continue;
         }
 
@@ -69,8 +78,10 @@ void URefreshStatsOnTagChangeGameplayEffectComponent::OnTagChanged(const FGamepl
 
 void URefreshStatsOnTagChangeGameplayEffectComponent::OnGameplayEffectRemoved(
     const FGameplayEffectRemovalInfo &GERemovalInfo, UAbilitySystemComponent *ASC,
-    TArray<TTuple<FGameplayTag, FDelegateHandle>> AllBoundEvents) const {
-    for (const auto &[Key, Value] : AllBoundEvents) {
+    TArray<TTuple<FGameplayTag, FDelegateHandle>> AllBoundEvents) const
+{
+    for (const auto &[Key, Value] : AllBoundEvents)
+    {
         const bool bSuccess = ASC->UnregisterGameplayTagEvent(Value, Key, EGameplayTagEventType::NewOrRemoved);
         UE_CLOG(!bSuccess, LogBattle, Error,
                 TEXT("%s tried to unregister GameplayTagEvent '%s' on GameplayEffect '%s' but failed."), *GetName(),

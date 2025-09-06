@@ -5,7 +5,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(ItemMethodTests, "Unit Tests.Data.Bag.ItemMethodTests",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool ItemMethodTests::RunTest(const FString &Parameters) {
+bool ItemMethodTests::RunTest(const FString &Parameters)
+{
     FItem FakeItem;
 
     FakeItem.ShowQuantity = false;

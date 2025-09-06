@@ -16,7 +16,8 @@ class ALevelStreamingVolume;
 class IBattle;
 
 USTRUCT()
-struct POKEMONBATTLE_API FLevelStreamingVolumeState {
+struct POKEMONBATTLE_API FLevelStreamingVolumeState
+{
     GENERATED_BODY()
 
     UPROPERTY()
@@ -34,7 +35,8 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FBattleFinished, EBattleResult);
  * Subsystem used to control transitions to and from the battle scene
  */
 UCLASS()
-class POKEMONBATTLE_API UBattleTransitionSubsystem : public UWorldSubsystem {
+class POKEMONBATTLE_API UBattleTransitionSubsystem : public UWorldSubsystem
+{
     GENERATED_BODY()
 
   public:

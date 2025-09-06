@@ -3,11 +3,13 @@
 #include "DesktopPlatformModule.h"
 #include "PokemonDataSettings.h"
 
-TArray<FStat> UImportUtils::GetMainStatsFromTable(const UDataTable *const DataTable) {
+TArray<FStat> UImportUtils::GetMainStatsFromTable(const UDataTable *const DataTable)
+{
     TArray<FStat *> References;
     DataTable->GetAllRows(TEXT("UImportUtils::GetMainStatsFromTable"), References);
     TArray<FStat> Ret;
-    for (const auto Ref : References) {
+    for (const auto Ref : References)
+    {
         if (Ref->Type == EPokemonStatType::Battle)
             continue;
 
@@ -17,9 +19,11 @@ TArray<FStat> UImportUtils::GetMainStatsFromTable(const UDataTable *const DataTa
     return Ret;
 }
 
-FText UImportUtils::SelectFile(const FString &FileTypes) {
+FText UImportUtils::SelectFile(const FString &FileTypes)
+{
     auto DesktopPlatform = FDesktopPlatformModule::Get();
-    if (DesktopPlatform == nullptr) {
+    if (DesktopPlatform == nullptr)
+    {
         return FText::FromStringView(TEXT(""));
     }
 
@@ -27,13 +31,15 @@ FText UImportUtils::SelectFile(const FString &FileTypes) {
     TArray<FString> SelectedFiles;
     DesktopPlatform->OpenFileDialog(WindowHandle, TEXT("Select a File"), FPaths::GetProjectFilePath(), TEXT(""),
                                     FileTypes, EFileDialogFlags::None, SelectedFiles);
-    if (SelectedFiles.IsEmpty()) {
+    if (SelectedFiles.IsEmpty())
+    {
         return FText::FromStringView(TEXT(""));
     }
 
     return FText::FromStringView(SelectedFiles[0]);
 }
 
-const TMap<uint8, FName> &UImportUtils::GetPocketNames() {
+const TMap<uint8, FName> &UImportUtils::GetPocketNames()
+{
     return GetDefault<UPokemonDataSettings>()->PocketNames;
 }

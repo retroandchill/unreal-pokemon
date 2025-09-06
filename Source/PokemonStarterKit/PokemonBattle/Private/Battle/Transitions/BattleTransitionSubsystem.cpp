@@ -11,34 +11,39 @@
 #include "Kismet/GameplayStatics.h"
 #include "Managers/PokemonSubsystem.h"
 
-void UBattleTransitionSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
+void UBattleTransitionSubsystem::Initialize(FSubsystemCollectionBase &Collection)
+{
     Super::Initialize(Collection);
     BattleMap = GetDefault<UPokemonBattleSettings>()->DefaultBattleScene;
 }
 
-void UBattleTransitionSubsystem::SetBattleMap(const TSoftObjectPtr<UWorld> &NewBattleMap) {
+void UBattleTransitionSubsystem::SetBattleMap(const TSoftObjectPtr<UWorld> &NewBattleMap)
+{
     BattleMap = NewBattleMap;
 }
 
-void UBattleTransitionSubsystem::SetRegisteredBattle(const TScriptInterface<IBattle> &Battle) {
+void UBattleTransitionSubsystem::SetRegisteredBattle(const TScriptInterface<IBattle> &Battle)
+{
     RegisteredBattle = Battle;
 }
 
-UE5Coro::TCoroutine<EBattleResult>
-UBattleTransitionSubsystem::InitiateBattle(FBattleInfo Info, TSubclassOf<ABattleTransitionActor> Transition,
-                                           FForceLatentCoroutine) {
+UE5Coro::TCoroutine<EBattleResult> UBattleTransitionSubsystem::InitiateBattle(
+    FBattleInfo Info, TSubclassOf<ABattleTransitionActor> Transition, FForceLatentCoroutine)
+{
     auto PlayerController = GetWorld()->GetGameInstance()->GetPrimaryPlayerController(false);
     PlayerController->GetPawn()->DisableInput(PlayerController);
     static auto &BattleLevelOffset = GetDefault<UPokemonBattleSettings>()->BattleSceneOffset;
     ABattleTransitionActor *CurrentTransition = nullptr;
-    if (Transition != nullptr) {
+    if (Transition != nullptr)
+    {
         CurrentTransition = GetWorld()->SpawnActor<ABattleTransitionActor>(Transition);
     }
 
     TArray<FLevelStreamingVolumeState> StreamingStates;
     TArray<AActor *> LevelStreamingVolumes;
     UGameplayStatics::GetAllActorsOfClass(this, ALevelStreamingVolume::StaticClass(), LevelStreamingVolumes);
-    for (auto Actor : LevelStreamingVolumes) {
+    for (auto Actor : LevelStreamingVolumes)
+    {
         auto &[Volume, bDisabled] = StreamingStates.Emplace_GetRef();
         Volume = CastChecked<ALevelStreamingVolume>(Actor);
         bDisabled = Volume->bDisabled;
@@ -49,11 +54,13 @@ UBattleTransitionSubsystem::InitiateBattle(FBattleInfo Info, TSubclassOf<ABattle
     ULevelStreamingDynamic *Battlefield = ULevelStreamingDynamic::LoadLevelInstanceBySoftObjectPtr(
         this, BattleMap, BattleLevelOffset, FRotator(), bSuccess);
     check(bSuccess)
-    if (Battlefield->IsLevelVisible()) {
+    if (Battlefield->IsLevelVisible())
+    {
         co_await ABattleTransitionActor::Execute(CurrentTransition);
-    } else {
-        co_await WhenAll(Battlefield->OnLevelShown,
-                         ABattleTransitionActor::Execute(CurrentTransition));
+    }
+    else
+    {
+        co_await WhenAll(Battlefield->OnLevelShown, ABattleTransitionActor::Execute(CurrentTransition));
     }
 
     check(RegisteredBattle.IsValid())
@@ -67,12 +74,14 @@ UBattleTransitionSubsystem::InitiateBattle(FBattleInfo Info, TSubclassOf<ABattle
 
 UE5Coro::TCoroutine<> UBattleTransitionSubsystem::ExitBattle(ULevelStreamingDynamic *Battlefield,
                                                              const TArray<FLevelStreamingVolumeState> &StreamingStates,
-                                                             FForceLatentCoroutine) const {
+                                                             FForceLatentCoroutine) const
+{
     check(Battlefield != nullptr)
     FLatentActionInfo LatentActionInfo;
     UGameplayStatics::UnloadStreamLevelBySoftObjectPtr(this, Battlefield->GetWorldAsset(), LatentActionInfo, false);
 
-    for (const auto &[Volume, bDisabled] : StreamingStates) {
+    for (const auto &[Volume, bDisabled] : StreamingStates)
+    {
         Volume->bDisabled = bDisabled;
     }
 

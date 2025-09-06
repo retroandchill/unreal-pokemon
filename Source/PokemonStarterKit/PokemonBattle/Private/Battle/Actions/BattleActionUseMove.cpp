@@ -10,28 +10,34 @@
 FBattleActionUseMove::FBattleActionUseMove(const TScriptInterface<IBattler> &BattlerIn,
                                            const TScriptInterface<IBattleMove> &MoveIn,
                                            TArray<FTargetWithIndex> &&TargetsIn)
-    : FBattleActionBase(BattlerIn), Move(MoveIn), Targets(std::move(TargetsIn)) {
+    : FBattleActionBase(BattlerIn), Move(MoveIn), Targets(std::move(TargetsIn))
+{
 }
 
-void FBattleActionUseMove::AddReferencedObjects(FReferenceCollector &Collector) {
+void FBattleActionUseMove::AddReferencedObjects(FReferenceCollector &Collector)
+{
     FBattleActionBase::AddReferencedObjects(Collector);
     Collector.AddReferencedObject(Move.GetObjectRef());
 }
 
-FString FBattleActionUseMove::GetReferencerName() const {
+FString FBattleActionUseMove::GetReferencerName() const
+{
     return TEXT("FBattleActionUseMove");
 }
 
-int32 FBattleActionUseMove::GetPriority() const {
+int32 FBattleActionUseMove::GetPriority() const
+{
     return Move->GetPriority();
 }
 
-FText FBattleActionUseMove::GetActionMessage() const {
+FText FBattleActionUseMove::GetActionMessage() const
+{
     return FText::Format(FText::FromStringView(TEXT("{0} used {1}!")),
                          {GetBattler()->GetNickname(), Move->GetDisplayName()});
 }
 
-UE5Coro::TCoroutine<> FBattleActionUseMove::Execute() {
+UE5Coro::TCoroutine<> FBattleActionUseMove::Execute()
+{
     auto AttributeSet = GetBattler()->GetAbilityComponent()->GetCoreAttributes();
     check(AttributeSet != nullptr)
     Move->PayCost(FMath::FloorToInt32(AttributeSet->GetMoveCost()));
@@ -39,6 +45,7 @@ UE5Coro::TCoroutine<> FBattleActionUseMove::Execute() {
     co_await FBattleActionBase::Execute();
 }
 
-UE5Coro::TCoroutine<> FBattleActionUseMove::ActivateAbility() {
+UE5Coro::TCoroutine<> FBattleActionUseMove::ActivateAbility()
+{
     return Move->TryActivateMove(Targets);
 }

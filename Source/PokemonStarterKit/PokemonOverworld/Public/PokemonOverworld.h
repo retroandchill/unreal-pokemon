@@ -3,7 +3,8 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FPokemonOverworldModule : public IModuleInterface {
+class FPokemonOverworldModule : public IModuleInterface
+{
   public:
     void StartupModule() override;
     void ShutdownModule() override;

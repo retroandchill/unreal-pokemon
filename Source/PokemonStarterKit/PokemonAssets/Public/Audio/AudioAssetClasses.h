@@ -9,7 +9,8 @@
 /**
  * Namespace for anything related to audio assets.
  */
-namespace Pokemon::Assets::Audio {
+namespace Pokemon::Assets::Audio
+{
 
     /**
      * Asset class for Pokémon cries.

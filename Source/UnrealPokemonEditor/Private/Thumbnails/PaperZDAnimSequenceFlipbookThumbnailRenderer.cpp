@@ -8,9 +8,11 @@ constexpr float DOWN_ANGLE = 180.f;
 
 void UPaperZDAnimSequenceFlipbookThumbnailRenderer::Draw(UObject *Object, int32 X, int32 Y, uint32 Width, uint32 Height,
                                                          FRenderTarget *RenderTarget, FCanvas *Canvas,
-                                                         bool bAdditionalViewFamily) {
+                                                         bool bAdditionalViewFamily)
+{
     auto Sequence = Cast<UPaperZDAnimSequence_Flipbook>(Object);
-    if (Sequence->GetAnimDataSourceProperty() == nullptr) {
+    if (Sequence->GetAnimDataSourceProperty() == nullptr)
+    {
         return;
     }
 

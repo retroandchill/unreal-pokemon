@@ -12,7 +12,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestHandlePinFactory, "Unit Tests.Data.TestHandlePinFactory",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestHandlePinFactory::RunTest(const FString &Parameters) {
+bool TestHandlePinFactory::RunTest(const FString &Parameters)
+{
     MakeTestableBP(TestBP, TestGraph);
 
     FDataHandlePinFactory PinFactory;

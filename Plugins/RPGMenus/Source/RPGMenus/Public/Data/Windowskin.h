@@ -10,7 +10,8 @@
  * Represents a valid Windowskin the the editor
  */
 UCLASS(BlueprintType, HideCategories = (Object))
-class RPGMENUS_API UWindowskin : public UObject {
+class RPGMENUS_API UWindowskin : public UObject
+{
     GENERATED_BODY()
 
   public:

@@ -13,14 +13,16 @@ struct FGameplayTagContainer;
 
 // This class does not need to be modified.
 UINTERFACE()
-class MAPMETADATA_API UTerrain : public UInterface {
+class MAPMETADATA_API UTerrain : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Interface to an actor type that represents a type of terrain
  */
-class MAPMETADATA_API ITerrain {
+class MAPMETADATA_API ITerrain
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

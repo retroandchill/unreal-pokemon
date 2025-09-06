@@ -21,12 +21,14 @@
 #include "Utilities/ScopedScreen.h"
 #include "Utilities/WidgetTestUtilities.h"
 
-AGivePokemonItemTest::AGivePokemonItemTest() {
+AGivePokemonItemTest::AGivePokemonItemTest()
+{
     LogWarningHandling = EFunctionalTestLogHandling::OutputIgnored;
     LogErrorHandling = EFunctionalTestLogHandling::OutputIgnored;
 }
 
-UE5Coro::TCoroutine<> AGivePokemonItemTest::RunTest(FForceLatentCoroutine) {
+UE5Coro::TCoroutine<> AGivePokemonItemTest::RunTest(FForceLatentCoroutine)
+{
     Retro::FScopedTimeDilationFactor TimeDilation(this, 8);
     FPokemonDTO DemoPokemon = {.Species = "Pikachu", .Level = 25};
     Pokemon::Tests::FScopedParty Party(this, Retro::Ranges::Views::Single(std::ref(DemoPokemon)));

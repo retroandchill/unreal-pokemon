@@ -38,7 +38,8 @@
  * @return TArray<FString> A list of formatted sprite resolution strings based on the provided parameters and subfolder.
  */
 USTRUCT(BlueprintType)
-struct POKEMONASSETS_API FPokemonAssetParams {
+struct POKEMONASSETS_API FPokemonAssetParams
+{
     GENERATED_BODY()
 
     /**

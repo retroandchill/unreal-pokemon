@@ -14,7 +14,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnScreenTransitionFinished);
  * Game Mode class used to define the information about all of the characters in the game
  */
 UCLASS(Blueprintable)
-class GRIDBASED2D_API AGridBasedGameModeBase : public AGameMode {
+class GRIDBASED2D_API AGridBasedGameModeBase : public AGameMode
+{
     GENERATED_BODY()
 
   public:

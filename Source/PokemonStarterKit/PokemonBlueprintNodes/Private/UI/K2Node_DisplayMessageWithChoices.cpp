@@ -9,10 +9,12 @@
 #include "Nodes/DisplayMessageWithChoices.h"
 
 UK2Node_DisplayMessageWithChoices::UK2Node_DisplayMessageWithChoices(const FObjectInitializer &ObjectInitializer)
-    : Super(ObjectInitializer) {
+    : Super(ObjectInitializer)
+{
 }
 
-void UK2Node_DisplayMessageWithChoices::AllocateDefaultPins() {
+void UK2Node_DisplayMessageWithChoices::AllocateDefaultPins()
+{
     Super::AllocateDefaultPins();
     static const FName Choices_ParamName(TEXT("Choices"));
     static const FName OnChoiceSelected_ParamName(TEXT("OnChoiceSelected"));
@@ -24,13 +26,15 @@ void UK2Node_DisplayMessageWithChoices::AllocateDefaultPins() {
     FindPinChecked(Index_ParamName)->bHidden = true;
     FindPinChecked(Choice_ParamName)->bHidden = true;
 
-    for (int i = 0; i < ChoiceCount; i++) {
+    for (int i = 0; i < ChoiceCount; i++)
+    {
         AddInputAndOutputPin(i);
     }
 }
 
 void UK2Node_DisplayMessageWithChoices::GetNodeContextMenuActions(UToolMenu *Menu,
-                                                                  UGraphNodeContextMenuContext *Context) const {
+                                                                  UGraphNodeContextMenuContext *Context) const
+{
     Super::GetNodeContextMenuActions(Menu, Context);
 
     static const FName DisplayMessageWithChoicesNodeName(TEXT("DisplayMessageWithChoices"));
@@ -38,7 +42,8 @@ void UK2Node_DisplayMessageWithChoices::GetNodeContextMenuActions(UToolMenu *Men
         NSLOCTEXT("K2Node", "DisplayMessageWithChoices", "Display Message /w Choices");
 
     // Add the option to remove a pin via the context menu
-    if (CanRemovePin(Context->Pin)) {
+    if (CanRemovePin(Context->Pin))
+    {
         FToolMenuSection &Section = Menu->AddSection(DisplayMessageWithChoicesNodeName, DisplayMessageWithChoicesStr);
         Section.AddMenuEntry(
             "RemovePin", NSLOCTEXT("K2Node", "RemovePin", "Remove pin"),
@@ -46,7 +51,9 @@ void UK2Node_DisplayMessageWithChoices::GetNodeContextMenuActions(UToolMenu *Men
             FUIAction(FExecuteAction::CreateUObject(const_cast<UK2Node_DisplayMessageWithChoices *>(this),
                                                     &UK2Node_DisplayMessageWithChoices::RemoveInputPin,
                                                     const_cast<UEdGraphPin *>(Context->Pin))));
-    } else if (CanAddPin()) {
+    }
+    else if (CanAddPin())
+    {
         FToolMenuSection &Section = Menu->AddSection(DisplayMessageWithChoicesNodeName, DisplayMessageWithChoicesStr);
         Section.AddMenuEntry(
             "AddPin", NSLOCTEXT("K2Node", "AddPin", "Add pin"),
@@ -56,13 +63,15 @@ void UK2Node_DisplayMessageWithChoices::GetNodeContextMenuActions(UToolMenu *Men
     }
 }
 
-void UK2Node_DisplayMessageWithChoices::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const {
+void UK2Node_DisplayMessageWithChoices::GetMenuActions(FBlueprintActionDatabaseRegistrar &ActionRegistrar) const
+{
     auto FactoryFunc = UDisplayMessageWithChoices::StaticClass()->FindFunctionByName("DisplayMessageWithChoices");
     check(FactoryFunc != nullptr)
     SupplyMenuActions(ActionRegistrar, FactoryFunc);
 }
 
-void UK2Node_DisplayMessageWithChoices::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) {
+void UK2Node_DisplayMessageWithChoices::ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph)
+{
     auto ChoicesArrayNode = CompilerContext.SpawnIntermediateNode<UK2Node_MakeArray>(this, SourceGraph);
     ChoicesArrayNode->AllocateDefaultPins();
 
@@ -70,14 +79,16 @@ void UK2Node_DisplayMessageWithChoices::ExpandNode(FKismetCompilerContext &Compi
     // remove any pins that we added, and add them back after that part has been compiled
     TArray<UEdGraphPin *> DynamicPins;
 
-    for (int32 i = 0; i < ChoiceCount; i++) {
+    for (int32 i = 0; i < ChoiceCount; i++)
+    {
         auto ChoicePinName = FName(*(FString("Choice") + FString::FromInt(i)));
         auto ChoicePin = FindPinChecked(ChoicePinName);
 
         auto IndexPinName = FName(*(FString("[") + FString::FromInt(i) + "]"));
         auto IndexPin = ChoicesArrayNode->FindPin(IndexPinName);
 
-        if (IndexPin == nullptr) {
+        if (IndexPin == nullptr)
+        {
             ChoicesArrayNode->AddInputPin();
             IndexPin = ChoicesArrayNode->FindPinChecked(IndexPinName);
         }
@@ -105,14 +116,16 @@ void UK2Node_DisplayMessageWithChoices::ExpandNode(FKismetCompilerContext &Compi
     OnChoiceSelectedPin->MakeLinkTo(SwitchInputPin);
     ChoiceSelectedPin->MakeLinkTo(SwitchOnPin);
 
-    for (int32 i = 0; i < ChoiceCount; i++) {
+    for (int32 i = 0; i < ChoiceCount; i++)
+    {
         auto ChoiceOutputPinName = FName(*(FString("Choice") + FString::FromInt(i) + "_Output"));
         auto ChoiceOutputPin = FindPinChecked(ChoiceOutputPinName);
 
         auto CasePinName = ChoiceSwitchNode->GetPinNameGivenIndex(i);
         auto CasePin = ChoiceSwitchNode->FindPin(CasePinName);
 
-        if (CasePin == nullptr) {
+        if (CasePin == nullptr)
+        {
             ChoiceSwitchNode->AddPinToSwitchNode();
             CasePin = ChoiceSwitchNode->FindPinChecked(CasePinName);
         }
@@ -126,24 +139,28 @@ void UK2Node_DisplayMessageWithChoices::ExpandNode(FKismetCompilerContext &Compi
 
     Super::ExpandNode(CompilerContext, SourceGraph);
 
-    for (auto Pin : DynamicPins) {
+    for (auto Pin : DynamicPins)
+    {
         Pins.Add(Pin);
     }
 
     BreakAllNodeLinks();
 }
 
-void UK2Node_DisplayMessageWithChoices::AddInputPin() {
+void UK2Node_DisplayMessageWithChoices::AddInputPin()
+{
     AddInputAndOutputPin(ChoiceCount);
     ChoiceCount++;
 }
 
-void UK2Node_DisplayMessageWithChoices::RemoveInputPin(UEdGraphPin *Pin) {
+void UK2Node_DisplayMessageWithChoices::RemoveInputPin(UEdGraphPin *Pin)
+{
     if (!CanRemovePin(Pin))
         return;
 
     Modify();
-    if (FRegexMatcher Matcher(FRegexPattern("Choice(\\d+)"), Pin->GetFName().ToString()); Matcher.FindNext()) {
+    if (FRegexMatcher Matcher(FRegexPattern("Choice(\\d+)"), Pin->GetFName().ToString()); Matcher.FindNext())
+    {
         RemovePin(FindPinChecked(FName(*(FString("Choice" + Matcher.GetCaptureGroup(1) + "_Output")))));
     }
     RemovePin(Pin);
@@ -151,7 +168,8 @@ void UK2Node_DisplayMessageWithChoices::RemoveInputPin(UEdGraphPin *Pin) {
     FBlueprintEditorUtils::MarkBlueprintAsStructurallyModified(GetBlueprint());
 }
 
-bool UK2Node_DisplayMessageWithChoices::CanRemovePin(const UEdGraphPin *Pin) const {
+bool UK2Node_DisplayMessageWithChoices::CanRemovePin(const UEdGraphPin *Pin) const
+{
     if (Pin == nullptr)
         return false;
 
@@ -159,7 +177,8 @@ bool UK2Node_DisplayMessageWithChoices::CanRemovePin(const UEdGraphPin *Pin) con
     return PinName.Contains("Choice");
 }
 
-void UK2Node_DisplayMessageWithChoices::AddInputAndOutputPin(int Index) {
+void UK2Node_DisplayMessageWithChoices::AddInputAndOutputPin(int Index)
+{
     FString PinName = FString::Format(TEXT("Choice{Index}"), FStringFormatNamedArguments({{TEXT("Index"), Index}}));
     CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Text, FName(*PinName));
 

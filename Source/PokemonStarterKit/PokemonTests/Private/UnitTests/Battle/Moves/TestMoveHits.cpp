@@ -22,7 +22,8 @@ BEGIN_DEFINE_SPEC(FTestMoveHits, "Unit Tests.Battle.Moves.TestMoveHits",
 CORO_FUNCTIONS()
 END_DEFINE_SPEC(FTestMoveHits);
 
-void FTestMoveHits::Define() {
+void FTestMoveHits::Define()
+{
     CoroIt("CertainHit", [this]() -> UE5Coro::TCoroutine<> {
         auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
         auto Pokemon1 = UnrealInjector::NewInjectedDependency<IPokemon>(

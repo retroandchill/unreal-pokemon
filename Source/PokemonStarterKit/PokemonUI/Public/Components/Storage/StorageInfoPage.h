@@ -16,14 +16,16 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnSelectedPokemonChanged, TOptional<IPokemo
 
 // This class does not need to be modified.
 UINTERFACE(BlueprintType, Blueprintable)
-class UStorageInfoPage : public UInterface {
+class UStorageInfoPage : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Interface for a basic page in the storage system.
  */
-class POKEMONUI_API IStorageInfoPage {
+class POKEMONUI_API IStorageInfoPage
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

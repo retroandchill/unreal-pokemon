@@ -14,7 +14,8 @@
  * Represents the data for an Item
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "PBS"))
-struct POKEMONDATA_API FItem : public FIndexedTableRow {
+struct POKEMONDATA_API FItem : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -180,7 +181,8 @@ struct POKEMONDATA_API FItem : public FIndexedTableRow {
 };
 
 USTRUCT(BlueprintType, meta = (DisableSplitPin))
-struct POKEMONDATA_API FItemHandle {
+struct POKEMONDATA_API FItemHandle
+{
     GENERATED_BODY()
     DECLARE_DATA_HANDLE(FItemHandle, FItem)
 
@@ -195,7 +197,8 @@ struct POKEMONDATA_API FItemHandle {
  * Thin wrapper around a Pocket name, that forces the user to select a pocket name.
  */
 USTRUCT(BlueprintType, meta = (DisableSplitPin))
-struct POKEMONDATA_API FPocketKey {
+struct POKEMONDATA_API FPocketKey
+{
     GENERATED_BODY()
 
     /**
@@ -214,7 +217,8 @@ struct POKEMONDATA_API FPocketKey {
  * @param Key The key structure
  * @return The return type in question
  */
-inline uint32 GetTypeHash(const FPocketKey &Key) {
+inline uint32 GetTypeHash(const FPocketKey &Key)
+{
     return GetTypeHash(Key.PocketName);
 }
 
@@ -222,7 +226,8 @@ inline uint32 GetTypeHash(const FPocketKey &Key) {
  * Blueprint function library for getting item data out.
  */
 UCLASS()
-class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UItemHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

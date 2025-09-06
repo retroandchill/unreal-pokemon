@@ -3,14 +3,16 @@
 #include "Screens/TextDisplayScreen.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
 
-UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObject, FText Message) {
+UDisplayMessage *UDisplayMessage::DisplayMessage(const UObject *WorldContextObject, FText Message)
+{
     auto Node = NewObject<UDisplayMessage>();
     Node->SetWorldContext(WorldContextObject);
     Node->Message = std::move(Message);
     return Node;
 }
 
-UE5Coro::TCoroutine<> UDisplayMessage::ExecuteCoroutine(FForceLatentCoroutine) {
+UE5Coro::TCoroutine<> UDisplayMessage::ExecuteCoroutine(FForceLatentCoroutine)
+{
     auto &Dispatcher = IPokemonCoroutineDispatcher::Get(GetWorldContext());
     co_await Dispatcher.DisplayMessage(Message);
     OnConfirm.Broadcast();

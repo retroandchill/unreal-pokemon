@@ -12,7 +12,8 @@
  * Nature Power
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FEnvironment : public FIndexedTableRow {
+struct POKEMONDATA_API FEnvironment : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**

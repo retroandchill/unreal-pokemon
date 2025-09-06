@@ -8,7 +8,8 @@
 #include "Player/PlayerMetadata.h"
 #include "TimerManager.h"
 
-void USaveGameCard::NativeConstruct() {
+void USaveGameCard::NativeConstruct()
+{
     Super::NativeConstruct();
 
     UpdateTimeLabels();
@@ -23,7 +24,8 @@ void USaveGameCard::NativeConstruct() {
     UpdatePlaytimeText(Playtime);
 }
 
-void USaveGameCard::UpdateTimeLabels() {
+void USaveGameCard::UpdateTimeLabels()
+{
     auto Now = FDateTime::Now();
     DateText->SetText(FText::FromString(Now.ToFormattedString(*DateFormat)));
     TimeText->SetText(FText::FromString(Now.ToFormattedString(TEXT("%H:%M"))));
@@ -34,6 +36,7 @@ void USaveGameCard::UpdateTimeLabels() {
                           Seconds, false);
 }
 
-void USaveGameCard::UpdatePlaytimeText(float Playtime) {
+void USaveGameCard::UpdatePlaytimeText(float Playtime)
+{
     PlaytimeText->SetText(FText::FromString(FTimespan::FromSeconds(Playtime).ToString(TEXT("%h:%m")).RightChop(1)));
 }

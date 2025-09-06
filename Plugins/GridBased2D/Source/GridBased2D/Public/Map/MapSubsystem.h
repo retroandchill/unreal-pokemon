@@ -20,7 +20,8 @@ class IInteractable;
  * Subsystem that handles the traversal between various maps as well as the music within a given map.
  */
 UCLASS()
-class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem {
+class GRIDBASED2D_API UMapSubsystem : public UGameInstanceSubsystem
+{
     GENERATED_BODY()
 
   public:

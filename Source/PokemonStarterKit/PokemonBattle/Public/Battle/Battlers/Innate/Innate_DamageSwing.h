@@ -11,7 +11,8 @@
  * Apply a [85%, 100%] damage swing to the move's damage
  */
 UCLASS()
-class POKEMONBATTLE_API UInnate_DamageSwing : public UGameplayAbility {
+class POKEMONBATTLE_API UInnate_DamageSwing : public UGameplayAbility
+{
     GENERATED_BODY()
 
   public:

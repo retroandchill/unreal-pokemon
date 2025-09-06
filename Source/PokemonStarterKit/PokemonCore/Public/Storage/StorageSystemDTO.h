@@ -12,7 +12,8 @@
  *
  */
 USTRUCT(BlueprintType)
-struct POKEMONCORE_API FStorageSystemDTO {
+struct POKEMONCORE_API FStorageSystemDTO
+{
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere)

@@ -13,7 +13,8 @@ class UBattleSideAbilitySystemComponent;
 class IBattle;
 
 USTRUCT()
-struct POKEMONBATTLE_API FTrainerParty {
+struct POKEMONBATTLE_API FTrainerParty
+{
     GENERATED_BODY()
 
     UPROPERTY()
@@ -24,7 +25,8 @@ struct POKEMONBATTLE_API FTrainerParty {
  * An active side of the combat system in battle
  */
 UCLASS(Abstract)
-class POKEMONBATTLE_API AActiveSide : public AActor, public IBattleSide {
+class POKEMONBATTLE_API AActiveSide : public AActor, public IBattleSide
+{
     GENERATED_BODY()
 
   public:

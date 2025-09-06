@@ -11,7 +11,8 @@
  * Settings for all the Pokémon UI related windows.
  */
 UCLASS(Config = Game, DefaultConfig, DisplayName = "Pokémon UI")
-class POKEMONUI_API UPokemonUISettings : public UDeveloperSettings {
+class POKEMONUI_API UPokemonUISettings : public UDeveloperSettings
+{
     GENERATED_BODY()
 
   public:

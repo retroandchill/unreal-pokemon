@@ -5,7 +5,8 @@ using UnrealSharp.GameplayTags;
 
 namespace GameDataAccessTools.Core;
 
-public interface IGameDataRepository<T> where T : struct, IGameDataEntry, MarshalledStruct<T>
+public interface IGameDataRepository<T>
+    where T : struct, IGameDataEntry, MarshalledStruct<T>
 {
     UScriptStruct EntryStruct { get; }
 

@@ -11,7 +11,8 @@
  *
  */
 UCLASS()
-class RETROLIBBLUEPRINTNODES_API UK2Node_CastSoftVariantToSoftVariant : public UK2Node_VariantCastBase {
+class RETROLIBBLUEPRINTNODES_API UK2Node_CastSoftVariantToSoftVariant : public UK2Node_VariantCastBase
+{
     GENERATED_BODY()
 
   public:

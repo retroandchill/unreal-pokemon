@@ -11,7 +11,8 @@
  *
  */
 UCLASS(Abstract, Blueprintable, BlueprintType)
-class POKEMONBATTLE_API UBlueprintableBattleItemEffect : public UBattleItemEffect {
+class POKEMONBATTLE_API UBlueprintableBattleItemEffect : public UBattleItemEffect
+{
     GENERATED_BODY()
 
   protected:

@@ -4,7 +4,8 @@
 #include "Pokemon/Pokemon.h"
 #include "Pokemon/Stats/StatBlock.h"
 
-UGainExp *UGainExp::GainExp(const TScriptInterface<IPokemon> &Pokemon, int32 ExpAmount, bool bShowMessages) {
+UGainExp *UGainExp::GainExp(const TScriptInterface<IPokemon> &Pokemon, int32 ExpAmount, bool bShowMessages)
+{
     auto Node = NewObject<UGainExp>();
     Node->SetWorldContext(Pokemon.GetObject());
     Node->Pokemon = Pokemon;
@@ -13,7 +14,8 @@ UGainExp *UGainExp::GainExp(const TScriptInterface<IPokemon> &Pokemon, int32 Exp
     return Node;
 }
 
-UE5Coro::TCoroutine<> UGainExp::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine) {
+UE5Coro::TCoroutine<> UGainExp::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine)
+{
     co_await Pokemon->GetStatBlock()->GainExp(ExpAmount, bShowMessages);
     AfterExpGain.Broadcast();
 }

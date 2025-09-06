@@ -9,14 +9,18 @@
 
 class FTexture;
 
-namespace Simple2D {
+namespace Simple2D
+{
     /** A Paper2D sprite vertex. */
-    struct SIMPLE2D_API FSimpleFlipbookTangents {
-        FORCEINLINE static FPackedNormal GetPackedNormalX() {
+    struct SIMPLE2D_API FSimpleFlipbookTangents
+    {
+        FORCEINLINE static FPackedNormal GetPackedNormalX()
+        {
             return PackedNormalX;
         }
 
-        FORCEINLINE static FPackedNormal GetPackedNormalZ() {
+        FORCEINLINE static FPackedNormal GetPackedNormalZ()
+        {
             return PackedNormalZ;
         }
 
@@ -32,7 +36,8 @@ namespace Simple2D {
     /**
      *
      */
-    struct SIMPLE2D_API FFlipbookRenderSection {
+    struct SIMPLE2D_API FFlipbookRenderSection
+    {
         UMaterialInterface *Material = nullptr;
         UTexture *BaseTexture = nullptr;
         FAdditionalSpriteTextureArray AdditionalTextures;
@@ -49,12 +54,16 @@ namespace Simple2D {
 
         template <typename T>
         void AddVerticesFromDrawCallRecord(const FSpriteDrawCallRecord &Record, int32 StartIndexWithinRecord,
-                                           int32 NumVertsToCopy, TArray<FDynamicMeshVertex, T> &Vertices) {
-            if (NumVertices == 0) {
+                                           int32 NumVertsToCopy, TArray<FDynamicMeshVertex, T> &Vertices)
+        {
+            if (NumVertices == 0)
+            {
                 VertexOffset = Vertices.Num();
                 BaseTexture = Record.BaseTexture;
                 AdditionalTextures = Record.AdditionalTextures;
-            } else {
+            }
+            else
+            {
                 checkSlow((VertexOffset + NumVertices) == Vertices.Num());
                 checkSlow(BaseTexture == Record.BaseTexture);
                 // Note: Not checking AdditionalTextures for now, since checking BaseTexture should catch most bugs
@@ -65,7 +74,8 @@ namespace Simple2D {
 
             const FColor VertColor(Record.Color);
             for (int32 VertexIndex = StartIndexWithinRecord; VertexIndex < StartIndexWithinRecord + NumVertsToCopy;
-                 ++VertexIndex) {
+                 ++VertexIndex)
+            {
                 const FVector4 &SourceVert = Record.RenderVerts[VertexIndex];
 
                 const FVector Pos((PaperAxisX * SourceVert.X) + (PaperAxisY * SourceVert.Y) + Record.Destination);

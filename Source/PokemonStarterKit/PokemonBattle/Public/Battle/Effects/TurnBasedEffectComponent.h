@@ -20,7 +20,8 @@ class UAbilitySystemComponent;
  * game turns.
  */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class POKEMONBATTLE_API UTurnBasedEffectComponent : public UActorComponent {
+class POKEMONBATTLE_API UTurnBasedEffectComponent : public UActorComponent
+{
     GENERATED_BODY()
 
   public:
@@ -32,7 +33,8 @@ class POKEMONBATTLE_API UTurnBasedEffectComponent : public UActorComponent {
      * @return A pointer to the AbilitySystemComponent.
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UAbilitySystemComponent *GetAbilitySystemComponent() const {
+    UAbilitySystemComponent *GetAbilitySystemComponent() const
+    {
         return AbilitySystemComponent;
     }
 
@@ -58,7 +60,8 @@ class POKEMONBATTLE_API UTurnBasedEffectComponent : public UActorComponent {
      * @param Trigger The specific turn duration trigger to filter effects by.
      * @return A collection of active gameplay effects filtered to include only those with the specified trigger.
      */
-    auto GetAllTurnBasedEffectsForTrigger(ETurnDurationTrigger Trigger) {
+    auto GetAllTurnBasedEffectsForTrigger(ETurnDurationTrigger Trigger)
+    {
         // clang-format off
         return ActiveTurnBasedEffects |
                Retro::Ranges::Views::Values |

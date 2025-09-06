@@ -12,7 +12,8 @@ struct FStatBlockDTO;
  * The default stat calculator, which uses the formulas from the main series games
  */
 UCLASS()
-class POKEMONCORE_API UDefaultStatBlock : public UObject, public IStatBlock {
+class POKEMONCORE_API UDefaultStatBlock : public UObject, public IStatBlock
+{
     GENERATED_BODY()
 
   public:

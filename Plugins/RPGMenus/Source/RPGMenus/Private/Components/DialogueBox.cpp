@@ -7,7 +7,8 @@
 #include "Framework/Text/SlateTextLayout.h"
 #include "TimerManager.h"
 
-void UDialogueBox::PlayLine(const FText &InLine) {
+void UDialogueBox::PlayLine(const FText &InLine)
+{
     check(GetWorld() != nullptr)
 
     FTimerManager &TimerManager = GetWorld()->GetTimerManager();
@@ -21,8 +22,10 @@ void UDialogueBox::PlayLine(const FText &InLine) {
     Segments.Empty();
     CachedSegmentText.Empty();
 
-    if (CurrentLine.IsEmpty()) {
-        if (IsValid(LineText)) {
+    if (CurrentLine.IsEmpty())
+    {
+        if (IsValid(LineText))
+        {
             LineText->SetText(FText::GetEmpty());
         }
 
@@ -31,8 +34,11 @@ void UDialogueBox::PlayLine(const FText &InLine) {
         OnLineFinishedPlaying();
 
         SetVisibility(ESlateVisibility::Hidden);
-    } else {
-        if (IsValid(LineText)) {
+    }
+    else
+    {
+        if (IsValid(LineText))
+        {
             LineText->SetText(FText::GetEmpty());
         }
 
@@ -47,12 +53,14 @@ void UDialogueBox::PlayLine(const FText &InLine) {
     }
 }
 
-void UDialogueBox::SkipToLineEnd() {
+void UDialogueBox::SkipToLineEnd()
+{
     FTimerManager &TimerManager = GetWorld()->GetTimerManager();
     TimerManager.ClearTimer(LetterTimer);
 
     CurrentLetterIndex = MaxLetterIndex - 1;
-    if (IsValid(LineText)) {
+    if (IsValid(LineText))
+    {
         LineText->SetText(FText::FromString(CalculateSegments()));
     }
 
@@ -61,47 +69,60 @@ void UDialogueBox::SkipToLineEnd() {
     OnLineFinishedPlaying();
 }
 
-FDelegateHandle UDialogueBox::BindToOnLineFinishedPlaying(FOnLineFinishedPlaying::FDelegate &&Callback) {
+FDelegateHandle UDialogueBox::BindToOnLineFinishedPlaying(FOnLineFinishedPlaying::FDelegate &&Callback)
+{
     return LineFinishedPlayingDelegate.Add(std::move(Callback));
 }
 
-UDialogueTextBlock *UDialogueBox::GetLineText() const {
+UDialogueTextBlock *UDialogueBox::GetLineText() const
+{
     return LineText;
 }
 
-float UDialogueBox::GetLetterPlayTime() const {
+float UDialogueBox::GetLetterPlayTime() const
+{
     return LetterPlayTime;
 }
 
-void UDialogueBox::SetLetterPlayTime(float NewPlayTime) {
+void UDialogueBox::SetLetterPlayTime(float NewPlayTime)
+{
     LetterPlayTime = NewPlayTime;
 }
 
-float UDialogueBox::GetEndHoldTime() const {
+float UDialogueBox::GetEndHoldTime() const
+{
     return EndHoldTime;
 }
 
-void UDialogueBox::SetEndHoldTime(float NewHoldTime) {
+void UDialogueBox::SetEndHoldTime(float NewHoldTime)
+{
     EndHoldTime = NewHoldTime;
 }
 
-void UDialogueBox::PlayNextLetter() {
-    if (Segments.IsEmpty()) {
+void UDialogueBox::PlayNextLetter()
+{
+    if (Segments.IsEmpty())
+    {
         CalculateWrappedString();
     }
 
     FString WrappedString = CalculateSegments();
 
     // TODO: How do we keep indexing of text i18n-friendly?
-    if (CurrentLetterIndex < MaxLetterIndex) {
-        if (IsValid(LineText)) {
+    if (CurrentLetterIndex < MaxLetterIndex)
+    {
+        if (IsValid(LineText))
+        {
             LineText->SetText(FText::FromString(WrappedString));
         }
 
         OnPlayLetter();
         ++CurrentLetterIndex;
-    } else {
-        if (IsValid(LineText)) {
+    }
+    else
+    {
+        if (IsValid(LineText))
+        {
             LineText->SetText(FText::FromString(CalculateSegments()));
         }
 
@@ -115,8 +136,10 @@ void UDialogueBox::PlayNextLetter() {
     }
 }
 
-void UDialogueBox::CalculateWrappedString() {
-    if (!IsValid(LineText) || !LineText->GetTextLayout().IsValid()) {
+void UDialogueBox::CalculateWrappedString()
+{
+    if (!IsValid(LineText) || !LineText->GetTextLayout().IsValid())
+    {
         Segments.Add(FDialogueTextSegment{CurrentLine.ToString()});
         MaxLetterIndex = Segments[0].Text.Len();
         return;
@@ -133,8 +156,10 @@ void UDialogueBox::CalculateWrappedString() {
     Layout->UpdateIfNeeded();
 
     bool bHasWrittenText = false;
-    for (const FTextLayout::FLineView &View : Layout->GetLineViews()) {
-        for (TSharedRef<ILayoutBlock> Block : View.Blocks) {
+    for (const FTextLayout::FLineView &View : Layout->GetLineViews())
+    {
+        for (TSharedRef<ILayoutBlock> Block : View.Blocks)
+        {
             TSharedRef<IRun> Run = Block->GetRun();
 
             FDialogueTextSegment Segment;
@@ -144,7 +169,8 @@ void UDialogueBox::CalculateWrappedString() {
             // have actual text inside them) result in the run containing a zero width space instead of
             // nothing. This messes up our checks for whether the text is empty or not, which doesn't
             // have an effect on image decorators but might cause issues for other custom ones.
-            if (Segment.Text.Len() == 1 && Segment.Text[0] == 0x200B) {
+            if (Segment.Text.Len() == 1 && Segment.Text[0] == 0x200B)
+            {
                 Segment.Text.Empty();
             }
 
@@ -154,12 +180,14 @@ void UDialogueBox::CalculateWrappedString() {
             // A segment with a named run should still take up time for the typewriter effect.
             MaxLetterIndex += FMath::Max(Segment.Text.Len(), Segment.RunInfo.Name.IsEmpty() ? 0 : 1);
 
-            if (!Segment.Text.IsEmpty() || !Segment.RunInfo.Name.IsEmpty()) {
+            if (!Segment.Text.IsEmpty() || !Segment.RunInfo.Name.IsEmpty())
+            {
                 bHasWrittenText = true;
             }
         }
 
-        if (bHasWrittenText) {
+        if (bHasWrittenText)
+        {
             Segments.Add(FDialogueTextSegment{TEXT("\n")});
             ++MaxLetterIndex;
         }
@@ -169,16 +197,19 @@ void UDialogueBox::CalculateWrappedString() {
     LineText->SetText(LineText->GetText());
 }
 
-FString UDialogueBox::CalculateSegments() {
+FString UDialogueBox::CalculateSegments()
+{
     FString Result = CachedSegmentText;
 
     int32 Idx = CachedLetterIndex;
-    while (Idx <= CurrentLetterIndex && CurrentSegmentIndex < Segments.Num()) {
+    while (Idx <= CurrentLetterIndex && CurrentSegmentIndex < Segments.Num())
+    {
         const FDialogueTextSegment &Segment = Segments[CurrentSegmentIndex];
         ProcessSegmentTags(Result, Idx, Segment);
 
         bool bIsSegmentComplete = true;
-        if (!Segment.Text.IsEmpty()) {
+        if (!Segment.Text.IsEmpty())
+        {
             int32 LettersLeft = CurrentLetterIndex - Idx + 1;
             bIsSegmentComplete = LettersLeft >= Segment.Text.Len();
             LettersLeft = FMath::Min(LettersLeft, Segment.Text.Len());
@@ -186,12 +217,14 @@ FString UDialogueBox::CalculateSegments() {
 
             Result += Segment.Text.Mid(0, LettersLeft);
 
-            if (!Segment.RunInfo.Name.IsEmpty()) {
+            if (!Segment.RunInfo.Name.IsEmpty())
+            {
                 Result += TEXT("</>");
             }
         }
 
-        if (!bIsSegmentComplete) {
+        if (!bIsSegmentComplete)
+        {
             break;
         }
 
@@ -203,20 +236,27 @@ FString UDialogueBox::CalculateSegments() {
     return Result;
 }
 
-void UDialogueBox::ProcessSegmentTags(FString &Result, int32 &Idx, const FDialogueTextSegment &Segment) {
-    if (!Segment.RunInfo.Name.IsEmpty()) {
+void UDialogueBox::ProcessSegmentTags(FString &Result, int32 &Idx, const FDialogueTextSegment &Segment)
+{
+    if (!Segment.RunInfo.Name.IsEmpty())
+    {
         Result += FString::Printf(TEXT("<%s"), *Segment.RunInfo.Name);
 
-        if (!Segment.RunInfo.MetaData.IsEmpty()) {
-            for (const TTuple<FString, FString> &MetaData : Segment.RunInfo.MetaData) {
+        if (!Segment.RunInfo.MetaData.IsEmpty())
+        {
+            for (const TTuple<FString, FString> &MetaData : Segment.RunInfo.MetaData)
+            {
                 Result += FString::Printf(TEXT(" %s=\"%s\""), *MetaData.Key, *MetaData.Value);
             }
         }
 
-        if (Segment.Text.IsEmpty()) {
+        if (Segment.Text.IsEmpty())
+        {
             Result += TEXT("/>");
             ++Idx; // This still takes up an index for the typewriter effect.
-        } else {
+        }
+        else
+        {
             Result += TEXT(">");
         }
     }

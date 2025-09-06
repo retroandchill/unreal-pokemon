@@ -2,11 +2,13 @@
 
 DEFINE_LOG_CATEGORY(LogBattleUI)
 
-void FPokemonBattleUIModule::StartupModule() {
+void FPokemonBattleUIModule::StartupModule()
+{
     // No special startup required
 }
 
-void FPokemonBattleUIModule::ShutdownModule() {
+void FPokemonBattleUIModule::ShutdownModule()
+{
     // No special shutdown required
 }
 

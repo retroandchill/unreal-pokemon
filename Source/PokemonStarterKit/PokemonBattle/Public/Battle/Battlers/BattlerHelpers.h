@@ -18,7 +18,8 @@ struct FGameplayAbilityActorInfo;
  * Library of helper functions used for battlers
  */
 UCLASS()
-class POKEMONBATTLE_API UBattlerHelpers : public UBlueprintFunctionLibrary {
+class POKEMONBATTLE_API UBattlerHelpers : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

@@ -15,7 +15,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * Marks a code path as unreachable and informs the compiler optimizer of this fact.
      * This can be useful to improve optimization and remove dead code paths.
@@ -26,7 +27,8 @@ namespace Retro {
      *
      * The attribute `[[noreturn]]` indicates that the function will not return control to the caller.
      */
-    RETROLIB_EXPORT [[noreturn]] inline void Unreachable() {
+    RETROLIB_EXPORT [[noreturn]] inline void Unreachable()
+    {
 #if defined(_MSC_VER) && !defined(__clang__) // MSVC
         __assume(false);
 #else // GCC, Clang

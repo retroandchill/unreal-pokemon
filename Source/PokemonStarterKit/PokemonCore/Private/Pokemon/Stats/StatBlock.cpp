@@ -3,15 +3,19 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(IStatBlock)
 
-int32 FStatChange::Diff() const {
+int32 FStatChange::Diff() const
+{
     return After - Before;
 }
 
-FLevelUpStatChanges &FLevelUpStatChanges::operator+=(const FLevelUpStatChanges &Other) {
+FLevelUpStatChanges &FLevelUpStatChanges::operator+=(const FLevelUpStatChanges &Other)
+{
     LevelChange.Before = FMath::Min(LevelChange.Before, Other.LevelChange.Before);
     LevelChange.After = FMath::Max(LevelChange.After, Other.LevelChange.After);
-    for (auto &[ID, StatChange] : Other.StatChanges) {
-        if (!StatChanges.Contains(ID)) {
+    for (auto &[ID, StatChange] : Other.StatChanges)
+    {
+        if (!StatChanges.Contains(ID))
+        {
             continue;
         }
 

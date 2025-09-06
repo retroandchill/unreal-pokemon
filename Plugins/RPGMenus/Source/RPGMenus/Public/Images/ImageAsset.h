@@ -19,7 +19,8 @@ USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FImageAsset
 #if CPP
     : Retro::TVariantObject<UTexture2D, UTexture2DDynamic, UMaterialInterface, ISlateTextureAtlasInterface,
-                            UPaperFlipbook, USimpleFlipbook> {
+                            UPaperFlipbook, USimpleFlipbook>
+{
 #else
 {
 #endif
@@ -40,7 +41,8 @@ RETRO_DECLARE_VARIANT_OBJECT_STRUCT(FImageAsset);
 USTRUCT(BlueprintType, NoExport, meta = (HiddenByDefault, DisableSplitPin))
 struct FSoftImageAsset
 #if CPP
-    : Retro::TSoftVariantObject<FImageAsset> {
+    : Retro::TSoftVariantObject<FImageAsset>
+{
 #else
 {
 #endif
@@ -59,11 +61,13 @@ struct FSoftImageAsset
 RETRO_DECLARE_SOFT_VARIANT_OBJECT_STRUCT(FSoftImageAsset);
 
 template <>
-struct RPGMENUS_API TBaseStructure<FImageAsset> {
+struct RPGMENUS_API TBaseStructure<FImageAsset>
+{
     static UScriptStruct *Get();
 };
 
 template <>
-struct RPGMENUS_API TBaseStructure<FSoftImageAsset> {
+struct RPGMENUS_API TBaseStructure<FSoftImageAsset>
+{
     static UScriptStruct *Get();
 };

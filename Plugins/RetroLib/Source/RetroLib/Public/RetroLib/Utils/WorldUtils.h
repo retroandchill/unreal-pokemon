@@ -4,7 +4,8 @@
 #include "Kismet/GameplayStatics.h"
 
 #ifdef __UNREAL__
-namespace Retro {
+namespace Retro
+{
     template <typename T>
     concept HasGetWorld = requires(T &&Obj) {
         { std::forward<T>(Obj).GetWorld() } -> std::convertible_to<UWorld *>;
@@ -15,15 +16,18 @@ namespace Retro {
         { *std::forward<T>(Obj) } -> HasGetWorld;
     };
 
-    struct FGetWorldInvoker {
+    struct FGetWorldInvoker
+    {
 
         template <HasGetWorld T>
-        constexpr UWorld *operator()(T &&Obj) const {
+        constexpr UWorld *operator()(T &&Obj) const
+        {
             return std::forward<T>(Obj).GetWorld();
         }
 
         template <HasGetWorldPtr T>
-        constexpr UWorld *operator()(T &&Obj) const {
+        constexpr UWorld *operator()(T &&Obj) const
+        {
             check(IsValidPtr(Obj))
             return (*this)(*std::forward<T>(Obj));
         }
@@ -41,24 +45,29 @@ namespace Retro {
         { *std::forward<T>(Obj) } -> HasGetGameInstance;
     };
 
-    struct FGetGameInstanceInvoker {
+    struct FGetGameInstanceInvoker
+    {
 
         template <HasGetGameInstance T>
-        constexpr UGameInstance *operator()(T &&Obj) const {
+        constexpr UGameInstance *operator()(T &&Obj) const
+        {
             return std::forward<T>(Obj).GetGameInstance();
         }
 
         template <HasGetGameInstancePtr T>
-        constexpr UGameInstance *operator()(T &&Obj) const {
+        constexpr UGameInstance *operator()(T &&Obj) const
+        {
             check(IsValidPtr(Obj))
             return (*this)(*std::forward<T>(Obj));
         }
 
-        UGameInstance *operator()(const UObject *Obj) const {
+        UGameInstance *operator()(const UObject *Obj) const
+        {
             return UGameplayStatics::GetGameInstance(Obj);
         }
 
-        UGameInstance *operator()(const UObject &Obj) const {
+        UGameInstance *operator()(const UObject &Obj) const
+        {
             return UGameplayStatics::GetGameInstance(&Obj);
         }
     };
@@ -76,15 +85,18 @@ namespace Retro {
     };
 
     template <std::derived_from<USubsystem> S>
-    struct TGetSubsystemInvoker {
+    struct TGetSubsystemInvoker
+    {
 
         template <HasGetSubsystem<S> T>
-        constexpr auto operator()(T &&Obj) const {
+        constexpr auto operator()(T &&Obj) const
+        {
             return std::forward<T>(Obj).template GetSubsystem<S>();
         }
 
         template <HasGetSubsystemPtr<S> T>
-        constexpr auto operator()(T &&Obj) const {
+        constexpr auto operator()(T &&Obj) const
+        {
             check(IsValidPtr(Obj))
             return (*this)(*std::forward<T>(Obj));
         }

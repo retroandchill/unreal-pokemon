@@ -10,7 +10,8 @@
  * Represents an evolution method on an individual species
  */
 USTRUCT(BlueprintType)
-struct POKEMONDATA_API FEvolutionMethod {
+struct POKEMONDATA_API FEvolutionMethod
+{
     GENERATED_BODY()
 
     /**

@@ -11,11 +11,16 @@
 #define UE_CHECK_EQUAL(Expected, Actual) AssertEqual(*this, TEXT(#Actual), Expected, Actual)
 #define UE_CHECK_NOT_EQUAL(Expected, Actual) AssertNotEqual(*this, TEXT(#Actual), Expected, Actual)
 #define UE_CHECK_THROWS(ExceptionType, ...)                                                                            \
-    try {                                                                                                              \
+    try                                                                                                                \
+    {                                                                                                                  \
         __VA_ARGS__;                                                                                                   \
-    } catch (const ExceptionType &) {                                                                                  \
+    }                                                                                                                  \
+    catch (const ExceptionType &)                                                                                      \
+    {                                                                                                                  \
         UE_LOG(LogAutomationTest, Display, TEXT("Caught expcted exception type: %s"), TEXT(#ExceptionType))            \
-    } catch (const std::exception &Exception) {                                                                        \
+    }                                                                                                                  \
+    catch (const std::exception &Exception)                                                                            \
+    {                                                                                                                  \
         FString Message = ANSI_TO_TCHAR(Exception.what());                                                             \
         AddError(FString::Printf(TEXT("Caught unexpected exception: %s"), *Message));                                  \
     }
@@ -51,7 +56,8 @@ concept CanAssertEqual = requires(FAutomationTestBase &TestObject, const TCHAR *
  * @param Condition The condition that is being evaluated.
  * @return Did the assert succeed?
  */
-FORCEINLINE bool AssertTrue(FAutomationTestBase &TestObject, FStringView What, bool Condition) {
+FORCEINLINE bool AssertTrue(FAutomationTestBase &TestObject, FStringView What, bool Condition)
+{
     return TestObject.TestTrue(What.GetData(), Condition);
 }
 
@@ -63,7 +69,8 @@ FORCEINLINE bool AssertTrue(FAutomationTestBase &TestObject, FStringView What, b
  * @param Condition The condition that is being evaluated.
  * @return Did the assert succeed?
  */
-FORCEINLINE bool AssertFalse(FAutomationTestBase &TestObject, FStringView What, bool Condition) {
+FORCEINLINE bool AssertFalse(FAutomationTestBase &TestObject, FStringView What, bool Condition)
+{
     return TestObject.TestFalse(What.GetData(), Condition);
 }
 
@@ -77,7 +84,8 @@ FORCEINLINE bool AssertFalse(FAutomationTestBase &TestObject, FStringView What, 
  */
 template <typename PointerType>
     requires std::is_pointer_v<PointerType>
-FORCEINLINE bool AssertNull(FAutomationTestBase &TestObject, FStringView What, PointerType Pointer) {
+FORCEINLINE bool AssertNull(FAutomationTestBase &TestObject, FStringView What, PointerType Pointer)
+{
     return TestObject.TestNull(What.GetData(), Pointer);
 }
 
@@ -91,7 +99,8 @@ FORCEINLINE bool AssertNull(FAutomationTestBase &TestObject, FStringView What, P
  */
 template <typename PointerType>
     requires std::is_pointer_v<PointerType>
-FORCEINLINE bool AssertNotNull(FAutomationTestBase &TestObject, FStringView What, PointerType Pointer) {
+FORCEINLINE bool AssertNotNull(FAutomationTestBase &TestObject, FStringView What, PointerType Pointer)
+{
     return TestObject.TestNotNull(What.GetData(), Pointer);
 }
 
@@ -107,7 +116,8 @@ FORCEINLINE bool AssertNotNull(FAutomationTestBase &TestObject, FStringView What
  */
 template <typename A, typename B>
     requires CanAssertEqual<A, B>
-FORCEINLINE bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, const A &Expected, const B &Actual) {
+FORCEINLINE bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, const A &Expected, const B &Actual)
+{
     return TestObject.TestEqual(What.GetData(), Actual, Expected);
 }
 
@@ -120,7 +130,8 @@ FORCEINLINE bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, 
  * @return Did the assert succeed?
  */
 FORCEINLINE bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, FStringView Expected,
-                             FStringView Actual) {
+                             FStringView Actual)
+{
     return TestObject.TestEqual(What.GetData(), Actual.GetData(), Expected.GetData());
 }
 
@@ -135,7 +146,8 @@ FORCEINLINE bool AssertEqual(FAutomationTestBase &TestObject, FStringView What, 
  */
 template <typename ValueType>
 FORCEINLINE bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView What, const ValueType &Expected,
-                                const ValueType &Actual) {
+                                const ValueType &Actual)
+{
     return TestObject.TestNotEqual(What.GetData(), Actual, Expected);
 }
 
@@ -148,7 +160,8 @@ FORCEINLINE bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView Wha
  * @return Did the assert succeed?
  */
 FORCEINLINE bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView What, FStringView Expected,
-                                FStringView Actual) {
+                                FStringView Actual)
+{
     return TestObject.TestEqual(What.GetData(), Actual.GetData(), Expected.GetData());
 }
 
@@ -158,6 +171,7 @@ FORCEINLINE bool AssertNotEqual(FAutomationTestBase &TestObject, FStringView Wha
  * @param bSuccess Did the test succeed.
  * @return The necessary return value of the test.
  */
-FORCEINLINE bool ConcludeTest(FAutomationTestBase &TestObject, bool bSuccess) {
+FORCEINLINE bool ConcludeTest(FAutomationTestBase &TestObject, bool bSuccess)
+{
     return bSuccess;
 }

@@ -12,7 +12,8 @@
  * Node for handling the cast of an object to a variant.
  */
 UCLASS()
-class RETROLIBBLUEPRINTNODES_API UK2Node_CastObjectToVariant : public UK2Node_VariantCastBase {
+class RETROLIBBLUEPRINTNODES_API UK2Node_CastObjectToVariant : public UK2Node_VariantCastBase
+{
     GENERATED_BODY()
 
   public:

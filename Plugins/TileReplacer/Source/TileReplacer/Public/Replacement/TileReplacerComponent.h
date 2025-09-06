@@ -16,7 +16,8 @@ class UDataTable;
  * Actor component used for replacing specific tiles in a tilemap with an animated actor instead.
  */
 UCLASS(ClassGroup = ("Animated Tiles"), meta = (BlueprintSpawnableComponent))
-class TILEREPLACER_API UTileReplacerComponent : public UActorComponent {
+class TILEREPLACER_API UTileReplacerComponent : public UActorComponent
+{
     GENERATED_BODY()
 
   public:

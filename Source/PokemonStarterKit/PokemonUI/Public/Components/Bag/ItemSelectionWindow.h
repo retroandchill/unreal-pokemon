@@ -31,7 +31,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnNoItemSelected);
  * Window for selecting an item from a particular pocket.
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONUI_API UItemSelectionWindow : public USelectableWidget {
+class POKEMONUI_API UItemSelectionWindow : public USelectableWidget
+{
     GENERATED_BODY()
 
   public:

@@ -32,11 +32,13 @@
  * - Facilitate the integration of custom cast logic in derived classes.
  */
 UCLASS(Abstract)
-class RETROLIBBLUEPRINTNODES_API UK2Node_VariantCastBase : public UK2Node_VariantOperationBase {
+class RETROLIBBLUEPRINTNODES_API UK2Node_VariantCastBase : public UK2Node_VariantOperationBase
+{
     GENERATED_BODY()
 
   protected:
-    struct FCastFunctionInfo {
+    struct FCastFunctionInfo
+    {
         UK2Node *CastNode = nullptr;
         UEdGraphPin *InputPin = nullptr;
         UEdGraphPin *OutputPin = nullptr;
@@ -52,16 +54,19 @@ class RETROLIBBLUEPRINTNODES_API UK2Node_VariantCastBase : public UK2Node_Varian
     void ExpandNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph) override;
 
   protected:
-    virtual void CreateInputAndOutputPins() ABSTRACT_METHOD
+    virtual void CreateInputAndOutputPins()
+    ABSTRACT_METHOD
     UEdGraphPin *GetCastFailedPin() const;
 
     virtual void MakeAdditionalPinLinks(UK2Node &CallPerformCast) const;
-    virtual UEdGraphPin *GetInputPin() const ABSTRACT_METHOD
-    virtual UEdGraphPin *GetOutputPin() const ABSTRACT_METHOD
+    virtual UEdGraphPin *GetInputPin() const
+    ABSTRACT_METHOD
+    virtual UEdGraphPin *GetOutputPin() const
+    ABSTRACT_METHOD
     UEdGraphPin *GetCastSucceededPin() const;
 
     virtual FCastFunctionInfo GetPerformCastNode(FKismetCompilerContext &CompilerContext, UEdGraph *SourceGraph)
-        ABSTRACT_METHOD
+    ABSTRACT_METHOD
 
   private:
     void TogglePurity();

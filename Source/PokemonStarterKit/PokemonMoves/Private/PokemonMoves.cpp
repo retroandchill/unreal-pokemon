@@ -1,10 +1,12 @@
 ﻿#include "PokemonMoves.h"
 
-void FPokemonMovesModule::StartupModule() {
+void FPokemonMovesModule::StartupModule()
+{
     // No startup code
 }
 
-void FPokemonMovesModule::ShutdownModule() {
+void FPokemonMovesModule::ShutdownModule()
+{
     // No shutdown code
 }
 

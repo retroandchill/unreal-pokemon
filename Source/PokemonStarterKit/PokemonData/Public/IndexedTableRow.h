@@ -11,7 +11,8 @@
  *
  */
 USTRUCT(BlueprintInternalUseOnly)
-struct POKEMONDATA_API FIndexedTableRow : public FTableRowBase {
+struct POKEMONDATA_API FIndexedTableRow : public FTableRowBase
+{
     GENERATED_BODY()
 
     /**

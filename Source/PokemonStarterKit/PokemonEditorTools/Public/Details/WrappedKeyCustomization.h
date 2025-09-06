@@ -7,7 +7,8 @@
 /**
  * Customization info about a wrapper class used for a key value.
  */
-class POKEMONEDITORTOOLS_API FWrappedKeyCustomization : public IPropertyTypeCustomization {
+class POKEMONEDITORTOOLS_API FWrappedKeyCustomization : public IPropertyTypeCustomization
+{
   public:
     /**
      * Create a new instance of this class with the wrapped property

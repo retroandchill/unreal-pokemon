@@ -50,7 +50,8 @@
     ClassName() = default;                                                                                             \
                                                                                                                        \
   private:                                                                                                             \
-    ClassName(UObject *InObject, size_t InTypeIndex) : Base(InObject, InTypeIndex) {                                   \
+    ClassName(UObject *InObject, size_t InTypeIndex) : Base(InObject, InTypeIndex)                                     \
+    {                                                                                                                  \
     }                                                                                                                  \
     template <typename... T>                                                                                           \
         requires((std::derived_from<T, UObject> || Retro::UnrealInterface<T>) && ...)                                  \
@@ -58,7 +59,8 @@
                                                                                                                        \
   public:                                                                                                              \
     using Base::Base;                                                                                                  \
-    void Reset() {                                                                                                     \
+    void Reset()                                                                                                       \
+    {                                                                                                                  \
         SetUnchecked(nullptr);                                                                                         \
     }
 
@@ -67,9 +69,11 @@
     ClassName() = default;                                                                                             \
                                                                                                                        \
   private:                                                                                                             \
-    ClassName(const TSoftObjectPtr<> &Object, size_t Index) : Base(Object, Index) {                                    \
+    ClassName(const TSoftObjectPtr<> &Object, size_t Index) : Base(Object, Index)                                      \
+    {                                                                                                                  \
     }                                                                                                                  \
-    ClassName(TSoftObjectPtr<> &&Object, size_t Index) : Base(std::move(Object), Index) {                              \
+    ClassName(TSoftObjectPtr<> &&Object, size_t Index) : Base(std::move(Object), Index)                                \
+    {                                                                                                                  \
     }                                                                                                                  \
     template <Retro::VariantObject U>                                                                                  \
     friend struct TSoftVariantObject;                                                                                  \
@@ -84,11 +88,15 @@
  */
 #define RETRO_DECLARE_VARIANT_OBJECT_STRUCT(StructName)                                                                \
     template <>                                                                                                        \
-    struct Retro::TVariantObjectTraits<StructName> : Retro::TVariantObjectTraits<StructName::Base> {}
+    struct Retro::TVariantObjectTraits<StructName> : Retro::TVariantObjectTraits<StructName::Base>                     \
+    {                                                                                                                  \
+    }
 
 #define RETRO_DECLARE_SOFT_VARIANT_OBJECT_STRUCT(StructName)                                                           \
     template <>                                                                                                        \
-    struct Retro::TIsSoftVariantObject<StructName> : std::true_type {}
+    struct Retro::TIsSoftVariantObject<StructName> : std::true_type                                                    \
+    {                                                                                                                  \
+    }
 
 /**
  * Perform the static registration of the struct type. This is required to allow a variant struct to be accessible to
@@ -116,7 +124,8 @@
 #define P_GET_RESULT(Type, Name) auto &Name = *static_cast<Type *>(RESULT_PARAM)
 
 #define CUSTOM_THUNK_STUB(RetType, Method, ...)                                                                        \
-    RetType Method(__VA_ARGS__) {                                                                                      \
+    RetType Method(__VA_ARGS__)                                                                                        \
+    {                                                                                                                  \
         check(false) Retro::Unreachable();                                                                             \
     }
 
@@ -157,30 +166,36 @@
     DelegateType MemberName;                                                                                           \
                                                                                                                        \
   protected:                                                                                                           \
-    DelegateType &Get##MemberName() {                                                                                  \
+    DelegateType &Get##MemberName()                                                                                    \
+    {                                                                                                                  \
         return MemberName;                                                                                             \
     }                                                                                                                  \
-    const DelegateType &Get##MemberName() const {                                                                      \
+    const DelegateType &Get##MemberName() const                                                                        \
+    {                                                                                                                  \
         return MemberName;                                                                                             \
     }                                                                                                                  \
                                                                                                                        \
   public:                                                                                                              \
     template <typename F, typename... A>                                                                               \
         requires Retro::Delegates::CanAddFree<DelegateType, F, A...>                                                   \
-    FDelegateHandle BindTo##MemberName(F &&Functor, A &&...Args) {                                                     \
+    FDelegateHandle BindTo##MemberName(F &&Functor, A &&...Args)                                                       \
+    {                                                                                                                  \
         return MemberName | Retro::Delegates::Add(std::forward<F>(Functor), std::forward<A>(Args)...);                 \
     }                                                                                                                  \
     template <typename O, typename F, typename... A>                                                                   \
         requires Retro::Delegates::CanAddMember<DelegateType, O, F, A...>                                              \
-    FDelegateHandle BindTo##MemberName(O &&Object, F &&Functor, A &&...Args) {                                         \
+    FDelegateHandle BindTo##MemberName(O &&Object, F &&Functor, A &&...Args)                                           \
+    {                                                                                                                  \
         return MemberName |                                                                                            \
                Retro::Delegates::Add(std::forward<O>(Object), std::forward<F>(Functor), std::forward<A>(Args)...);     \
     }                                                                                                                  \
-    void RemoveFrom##MemberName(FDelegateHandle Handle) {                                                              \
+    void RemoveFrom##MemberName(FDelegateHandle Handle)                                                                \
+    {                                                                                                                  \
         MemberName.Remove(Handle);                                                                                     \
     }                                                                                                                  \
     template <typename T>                                                                                              \
-    void RemoveAllFrom##MemberName(T *Value) {                                                                         \
+    void RemoveAllFrom##MemberName(T *Value)                                                                           \
+    {                                                                                                                  \
         MemberName.RemoveAll(Value);                                                                                   \
     }
 
@@ -213,7 +228,8 @@
 #endif
 
 #define DECLARE_STATIC_REGISTRY(Export, Name, ...)                                                                     \
-    class Export Name : public __VA_ARGS__ {                                                                           \
+    class Export Name : public __VA_ARGS__                                                                             \
+    {                                                                                                                  \
         Name() = default;                                                                                              \
         ~Name() = default;                                                                                             \
                                                                                                                        \
@@ -222,7 +238,8 @@
     };
 
 #define DEFINE_STATIC_REGISTRY(Name)                                                                                   \
-    Name &Name::GetInstance() {                                                                                        \
+    Name &Name::GetInstance()                                                                                          \
+    {                                                                                                                  \
         static Name Instance;                                                                                          \
         return Instance;                                                                                               \
     }
@@ -235,7 +252,8 @@
   private:
 
 #define IMPLEMENT_ABSTRACT_METATYPE(Class)                                                                             \
-    FName Class::ClassName() {                                                                                         \
+    FName Class::ClassName()                                                                                           \
+    {                                                                                                                  \
         static const FName ClassName = TEXT(#Class);                                                                   \
         return ClassName;                                                                                              \
     }
@@ -247,10 +265,12 @@
   private:
 
 #define IMPLEMENT_DERIVED_METATYPE(Class)                                                                              \
-    FName Class::GetClassName() const {                                                                                \
+    FName Class::GetClassName() const                                                                                  \
+    {                                                                                                                  \
         return ClassName();                                                                                            \
     }                                                                                                                  \
-    FName Class::ClassName() {                                                                                         \
+    FName Class::ClassName()                                                                                           \
+    {                                                                                                                  \
         static const FName ClassName = TEXT(#Class);                                                                   \
         return ClassName;                                                                                              \
     }

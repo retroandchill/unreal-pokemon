@@ -12,7 +12,8 @@
  *
  */
 UCLASS(Config = Game, DefaultConfig, DisplayName = "Pokémon Standard Messages")
-class POKEMONCORE_API UPokemonMessageSettings : public UDeveloperSettings {
+class POKEMONCORE_API UPokemonMessageSettings : public UDeveloperSettings
+{
     GENERATED_BODY()
 
   public:

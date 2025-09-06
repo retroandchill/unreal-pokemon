@@ -13,7 +13,8 @@
  * Settings related to the day/night cycle
  */
 UCLASS(Config = Game, DefaultConfig, meta = (DisplayName = "Day/Night Cycle"))
-class DAYNIGHTCYCLE_API UDayNightCycleSettings : public UDeveloperSettings {
+class DAYNIGHTCYCLE_API UDayNightCycleSettings : public UDeveloperSettings
+{
     GENERATED_BODY()
 
   public:

@@ -14,7 +14,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSaveWindowExit);
  * Prompt the player to save the game and then continue based on the result.
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API UPromptSaveGame : public UBlueprintCoroutineActionBase {
+class POKEMONUI_API UPromptSaveGame : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

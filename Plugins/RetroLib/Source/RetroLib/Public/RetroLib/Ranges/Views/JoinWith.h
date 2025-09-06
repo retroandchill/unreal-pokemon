@@ -21,29 +21,36 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Ranges {
+namespace Retro::Ranges
+{
     template <typename I>
-    struct TStoreInner {
+    struct TStoreInner
+    {
         TNonPropagatingCache<std::remove_cv_t<I>> Inner;
 
         template <typename O>
-        constexpr auto &&UpdateInner(O &&It) {
+        constexpr auto &&UpdateInner(O &&It)
+        {
             return Inner.EmplaceDeref(It);
         }
 
-        constexpr I &GetInner(auto) {
+        constexpr I &GetInner(auto)
+        {
             return *Inner;
         }
     };
 
-    struct FPassThroughInner {
+    struct FPassThroughInner
+    {
         template <typename O>
-        static constexpr auto &&UpdateInner(O &&It) noexcept(noexcept(*std::forward<O>(It))) {
+        static constexpr auto &&UpdateInner(O &&It) noexcept(noexcept(*std::forward<O>(It)))
+        {
             return *std::forward<O>(It);
         }
 
         template <typename O>
-        static constexpr decltype(auto) GetInner(O &&It) {
+        static constexpr decltype(auto) GetInner(O &&It)
+        {
             return *std::forward<O>(It);
         }
     };
@@ -68,13 +75,15 @@ namespace Retro::Ranges {
     RETROLIB_EXPORT template <std::ranges::input_range R, std::ranges::forward_range P>
         requires std::ranges::view<R> && std::ranges::input_range<std::ranges::range_reference_t<R>> &&
                      std::ranges::view<P> && Concatable<std::ranges::range_reference_t<R>, P>
-    class TJoinWithView : public std::ranges::view_interface<TJoinWithView<R, P>>, private TJoinViewInner<R> {
+    class TJoinWithView : public std::ranges::view_interface<TJoinWithView<R, P>>, private TJoinViewInner<R>
+    {
         using OuterType = std::ranges::views::all_t<R>;
         using InnerType = std::ranges::views::all_t<std::ranges::range_reference_t<R>>;
         using SizeType =
             std::common_type_t<std::ranges::range_difference_t<InnerType>, std::ranges::range_difference_t<P>>;
 
-        class FIterator {
+        class FIterator
+        {
           public:
             using value_type = std::common_type_t<std::ranges::range_value_t<InnerType>, std::ranges::range_value_t<P>>;
             using reference =
@@ -86,25 +95,31 @@ namespace Retro::Ranges {
 
             constexpr FIterator() = default;
 
-            constexpr explicit FIterator(TJoinWithView &Range)
-                : Range(&Range), OuterIt(std::ranges::begin(Range.Outer)) {
-                if (OuterIt != std::ranges::end(Range.Outer)) {
+            constexpr explicit FIterator(TJoinWithView &Range) : Range(&Range), OuterIt(std::ranges::begin(Range.Outer))
+            {
+                if (OuterIt != std::ranges::end(Range.Outer))
+                {
                     auto &&Inner = Range.UpdateInner(OuterIt);
                     Current.template emplace<1>(std::ranges::begin(Inner));
                     Satisfy();
                 }
             }
 
-            constexpr bool operator==(std::default_sentinel_t) const {
+            constexpr bool operator==(std::default_sentinel_t) const
+            {
                 return OuterIt == std::ranges::end(Range->Outer);
             }
 
-            constexpr FIterator &operator++() {
-                if (Current.index() == 0) {
+            constexpr FIterator &operator++()
+            {
+                if (Current.index() == 0)
+                {
                     auto &It = std::get<0>(Current);
                     RETROLIB_ASSERT(It != std::ranges::end(Range->Contraction));
                     ++It;
-                } else {
+                }
+                else
+                {
                     auto &It = std::get<1>(Current);
 #ifndef NDEBUG
                     auto &&Inner = Range->GetInner(OuterIt);
@@ -116,20 +131,25 @@ namespace Retro::Ranges {
                 return *this;
             }
 
-            constexpr void operator++(int) {
+            constexpr void operator++(int)
+            {
                 ++*this;
             }
 
-            constexpr reference operator*() const & {
-                if (Current.index() == 0) {
+            constexpr reference operator*() const &
+            {
+                if (Current.index() == 0)
+                {
                     return *std::get<0>(Current);
                 }
 
                 return *std::get<1>(Current);
             }
 
-            constexpr rvalue_reference operator*() && {
-                if (Current.index() == 0) {
+            constexpr rvalue_reference operator*() &&
+            {
+                if (Current.index() == 0)
+                {
                     return std::move(*std::get<0>(Current));
                 }
 
@@ -137,22 +157,30 @@ namespace Retro::Ranges {
             }
 
           private:
-            void Satisfy() {
-                while (true) {
-                    if (Current.index() == 0) {
-                        if (std::get<0>(Current) != std::ranges::end(Range->Contraction)) {
+            void Satisfy()
+            {
+                while (true)
+                {
+                    if (Current.index() == 0)
+                    {
+                        if (std::get<0>(Current) != std::ranges::end(Range->Contraction))
+                        {
                             break;
                         }
 
                         auto &&Inner = Range->UpdateInner(OuterIt);
                         Current.template emplace<1>(std::ranges::begin(Inner));
-                    } else {
-                        if (auto &&Inner = Range->GetInner(OuterIt); std::get<1>(Current) != std::ranges::end(Inner)) {
+                    }
+                    else
+                    {
+                        if (auto &&Inner = Range->GetInner(OuterIt); std::get<1>(Current) != std::ranges::end(Inner))
+                        {
                             break;
                         }
 
                         ++OuterIt;
-                        if (OuterIt == std::ranges::end(Range->Outer)) {
+                        if (OuterIt == std::ranges::end(Range->Outer))
+                        {
                             break;
                         }
 
@@ -187,7 +215,8 @@ namespace Retro::Ranges {
          *
          * @return A constructed instance of JoinWithView with the specified values.
          */
-        constexpr TJoinWithView(R Outer, P Contraction) : Outer(std::move(Outer)), Contraction(std::move(Contraction)) {
+        constexpr TJoinWithView(R Outer, P Contraction) : Outer(std::move(Outer)), Contraction(std::move(Contraction))
+        {
         }
 
         /**
@@ -215,7 +244,8 @@ namespace Retro::Ranges {
          *
          * @return `R` The moved underlying range.
          */
-        constexpr R base() && {
+        constexpr R base() &&
+        {
             return std::move(Outer);
         }
 
@@ -228,7 +258,8 @@ namespace Retro::Ranges {
          *
          * @return An iterator positioned at the beginning of the container.
          */
-        constexpr FIterator begin() {
+        constexpr FIterator begin()
+        {
             return FIterator(*this);
         }
 
@@ -239,7 +270,8 @@ namespace Retro::Ranges {
          *
          * @return The default sentinel of type std::default_sentinel_t.
          */
-        constexpr std::default_sentinel_t end() {
+        constexpr std::default_sentinel_t end()
+        {
             return std::default_sentinel;
         }
 
@@ -256,7 +288,8 @@ namespace Retro::Ranges {
                      std::ranges::sized_range<P> && std::ranges::forward_range<OuterType>
         {
             SizeType size = (std::ranges::size(Outer) - 1) * std::ranges::size(Contraction);
-            for (auto &&it : Outer) {
+            for (auto &&it : Outer)
+            {
                 size += std::ranges::size(std::forward<decltype(it)>(it));
             }
             return size;
@@ -284,8 +317,10 @@ namespace Retro::Ranges {
     template <std::ranges::input_range R, std::ranges::forward_range P>
     TJoinWithView(R &&, P &&) -> TJoinWithView<std::ranges::views::all_t<R>, std::ranges::views::all_t<P>>;
 
-    namespace Views {
-        struct FJoinWithInvoker {
+    namespace Views
+    {
+        struct FJoinWithInvoker
+        {
             /**
              * @brief Creates a JoinWithView by joining a range with a contraction element.
              *
@@ -301,7 +336,8 @@ namespace Retro::Ranges {
                 requires std::ranges::viewable_range<R> &&
                          std::ranges::input_range<std::ranges::range_reference_t<R>> &&
                          std::ranges::viewable_range<P> && Concatable<std::ranges::range_reference_t<R>, P>
-            constexpr auto operator()(R &&Range, P &&Contraction) const {
+            constexpr auto operator()(R &&Range, P &&Contraction) const
+            {
                 return TJoinWithView(std::ranges::views::all(std::forward<R>(Range)),
                                      std::ranges::views::all(std::forward<P>(Contraction)));
             }
@@ -321,7 +357,8 @@ namespace Retro::Ranges {
                 requires std::ranges::viewable_range<R> &&
                          std::ranges::input_range<std::ranges::range_reference_t<R>> &&
                          std::convertible_to<P, std::ranges::range_value_t<std::ranges::range_reference_t<R>>>
-            constexpr auto operator()(R &&Range, P &&Contraction) const {
+            constexpr auto operator()(R &&Range, P &&Contraction) const
+            {
                 return (*this)(std::forward<R>(Range), std::ranges::views::single(std::forward<P>(Contraction)));
             }
 
@@ -330,7 +367,8 @@ namespace Retro::Ranges {
                          std::ranges::input_range<std::ranges::range_reference_t<R>> &&
                          std::convertible_to<P, std::ranges::range_value_t<std::ranges::range_reference_t<R>>> &&
                          std::constructible_from<std::basic_string_view<P>, const P *>
-            constexpr auto operator()(R &&Range, const P *Contraction) const {
+            constexpr auto operator()(R &&Range, const P *Contraction) const
+            {
                 return (*this)(std::forward<R>(Range), std::basic_string_view<P>(Contraction));
             }
         };

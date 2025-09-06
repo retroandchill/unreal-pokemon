@@ -11,7 +11,8 @@
 #include "RetroLib/Utils/Construct.h"
 #include <functional>
 
-void UAIBattlerController::ActionSelection(const TScriptInterface<IBattler> &Battler) const {
+void UAIBattlerController::ActionSelection(const TScriptInterface<IBattler> &Battler) const
+{
     // Doing this async is probably overkill, but as the AI gets more complicated and adds more conditions that it
     // needs to evaluate we're going to want to have this be on a separate thread to avoid frame dips while the AI
     // is choosing a move. Ideally we want these threads to resolve quickly (or at least faster than the player can
@@ -38,15 +39,18 @@ void UAIBattlerController::ActionSelection(const TScriptInterface<IBattler> &Bat
     });
 }
 
-void UAIBattlerController::InitiateForcedSwitch(const TScriptInterface<IBattler> &Battler) const {
+void UAIBattlerController::InitiateForcedSwitch(const TScriptInterface<IBattler> &Battler) const
+{
     AsyncTask(ENamedThreads::AnyThread, std::bind_front(&UAIBattlerController::ChoosePokemonToSwitchTo, this, Battler));
 }
 
-void UAIBattlerController::BindOnActionReady(FActionReady &&QueueAction) {
+void UAIBattlerController::BindOnActionReady(FActionReady &&QueueAction)
+{
     ActionReady = std::move(QueueAction);
 }
 
-void UAIBattlerController::ChoosePokemonToSwitchTo(TScriptInterface<IBattler> Battler) const {
+void UAIBattlerController::ChoosePokemonToSwitchTo(TScriptInterface<IBattler> Battler) const
+{
     auto &CurrentHandler = Battler->GetWrappedPokemon()->GetCurrentHandler();
     check(CurrentHandler != nullptr)
 

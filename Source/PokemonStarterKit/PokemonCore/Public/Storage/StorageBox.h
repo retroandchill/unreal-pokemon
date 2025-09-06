@@ -12,14 +12,16 @@ class IPokemon;
 struct FStorageBoxDTO;
 // This class does not need to be modified.
 UINTERFACE(BlueprintType, NotBlueprintable)
-class UStorageBox : public UInterface {
+class UStorageBox : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Defines a "Box" in the Pokémon storage system
  */
-class POKEMONCORE_API IStorageBox {
+class POKEMONCORE_API IStorageBox
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

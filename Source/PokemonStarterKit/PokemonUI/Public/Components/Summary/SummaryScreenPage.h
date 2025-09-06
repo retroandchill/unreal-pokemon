@@ -18,7 +18,8 @@ class IPokemon;
  * Abstract declaration of a page on the summary screen.
  */
 UCLASS(Abstract)
-class POKEMONUI_API USummaryScreenPage : public UPokemonInfoWidget {
+class POKEMONUI_API USummaryScreenPage : public UPokemonInfoWidget
+{
     GENERATED_BODY()
 
   public:

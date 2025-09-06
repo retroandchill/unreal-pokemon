@@ -14,7 +14,8 @@ class IPokemon;
  *
  */
 UCLASS()
-class POKEMONCORE_API UDefaultStorageBox : public UObject, public IStorageBox {
+class POKEMONCORE_API UDefaultStorageBox : public UObject, public IStorageBox
+{
     GENERATED_BODY()
 
   public:

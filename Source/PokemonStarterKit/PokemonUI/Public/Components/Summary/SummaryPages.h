@@ -14,7 +14,8 @@ class USummaryScreenPage;
  * Struct that contains a list of characteristics.
  */
 USTRUCT(BlueprintType)
-struct POKEMONUI_API FCharacteristicList {
+struct POKEMONUI_API FCharacteristicList
+{
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Characteristics")
@@ -28,7 +29,8 @@ class UWidgetSwitcher;
  * The widget that controls allowing the player to scroll between pages on the summary screen.
  */
 UCLASS(Abstract)
-class POKEMONUI_API USummaryPages : public UPokemonInfoWidget {
+class POKEMONUI_API USummaryPages : public UPokemonInfoWidget
+{
     GENERATED_BODY()
 
   protected:

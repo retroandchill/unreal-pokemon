@@ -15,7 +15,8 @@ struct FItem;
  * Ability that handles the effect of the item being used in battle.
  */
 UCLASS(BlueprintType)
-class POKEMONBATTLE_API UBattleItemEffect : public UUE5CoroGameplayAbility {
+class POKEMONBATTLE_API UBattleItemEffect : public UUE5CoroGameplayAbility
+{
     GENERATED_BODY()
 
   public:
@@ -55,8 +56,9 @@ class POKEMONBATTLE_API UBattleItemEffect : public UUE5CoroGameplayAbility {
      * @param
      * @return Was the effect successfully applied? If none of these checks return true, this item will not be consumed.
      */
-    virtual UE5Coro::TCoroutine<bool>
-    ApplyEffectToTarget(TScriptInterface<IBattler> User, TScriptInterface<IBattler> Target, FForceLatentCoroutine = {});
+    virtual UE5Coro::TCoroutine<bool> ApplyEffectToTarget(TScriptInterface<IBattler> User,
+                                                          TScriptInterface<IBattler> Target,
+                                                          FForceLatentCoroutine = {});
 
     /**
      * Check if an individual target for the item is valid

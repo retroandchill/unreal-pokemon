@@ -18,7 +18,8 @@ constexpr std::array GFluctuatingGrowthTable = {
 IMPLEMENT_COMPLEX_AUTOMATION_TEST(GrowthRateFluctuatingTest, "Unit Tests.Core.Exp.GrowthRateFluctuatingTest",
                                   EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-void GrowthRateFluctuatingTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const {
+void GrowthRateFluctuatingTest::GetTests(TArray<FString> &OutBeautifiedNames, TArray<FString> &OutTestCommands) const
+{
     OutBeautifiedNames.Add("Unit Tests.Core.Exp.GrowthRateFluctuatingTest: Level = 1");
     OutTestCommands.Add("1");
 
@@ -47,7 +48,8 @@ void GrowthRateFluctuatingTest::GetTests(TArray<FString> &OutBeautifiedNames, TA
     OutTestCommands.Add("100");
 }
 
-bool GrowthRateFluctuatingTest::RunTest(const FString &Parameters) {
+bool GrowthRateFluctuatingTest::RunTest(const FString &Parameters)
+{
     const int32 Level = FCString::Atoi(GetData(Parameters));
 
     Exp::FFluctuating GrowthRate;

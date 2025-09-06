@@ -19,7 +19,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAfterExpGain);
  * Gain the specified amount of experience for a Pokémon
  */
 UCLASS(meta = (HideThen))
-class POKEMONCORE_API UGainExp : public UBlueprintCoroutineActionBase {
+class POKEMONCORE_API UGainExp : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

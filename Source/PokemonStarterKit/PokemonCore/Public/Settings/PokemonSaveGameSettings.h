@@ -13,7 +13,8 @@ class UPokemonSaveGame;
  * The settings for saving the game.
  */
 UCLASS(Config = Game, DefaultConfig, DisplayName = "Pokémon Save Files")
-class POKEMONCORE_API UPokemonSaveGameSettings : public UDeveloperSettings {
+class POKEMONCORE_API UPokemonSaveGameSettings : public UDeveloperSettings
+{
     GENERATED_BODY()
 
   public:

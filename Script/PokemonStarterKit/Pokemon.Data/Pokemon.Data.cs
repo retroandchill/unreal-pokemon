@@ -4,13 +4,7 @@ namespace Pokemon.Data;
 
 public class FPokemonDataModule : IModuleInterface
 {
-    public void StartupModule()
-    {
+    public void StartupModule() { }
 
-    }
-
-    public void ShutdownModule()
-    {
-
-    }
+    public void ShutdownModule() { }
 }

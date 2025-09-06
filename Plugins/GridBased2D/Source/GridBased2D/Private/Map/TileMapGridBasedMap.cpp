@@ -7,7 +7,8 @@
 #include "Replacement/TileReplacerComponent.h"
 
 // Sets default values
-ATileMapGridBasedMap::ATileMapGridBasedMap() {
+ATileMapGridBasedMap::ATileMapGridBasedMap()
+{
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
 
@@ -27,47 +28,55 @@ ATileMapGridBasedMap::ATileMapGridBasedMap() {
 }
 
 #if WITH_EDITOR
-void ATileMapGridBasedMap::PostInitProperties() {
+void ATileMapGridBasedMap::PostInitProperties()
+{
     Super::PostInitProperties();
     SetUpMapLocation();
 }
 
-void ATileMapGridBasedMap::PostReinitProperties() {
+void ATileMapGridBasedMap::PostReinitProperties()
+{
     Super::PostReinitProperties();
     SetUpMapLocation();
 }
 
-void ATileMapGridBasedMap::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) {
+void ATileMapGridBasedMap::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent)
+{
     Super::PostEditChangeProperty(PropertyChangedEvent);
     SetUpMapLocation();
 }
 
-void ATileMapGridBasedMap::PostLoad() {
+void ATileMapGridBasedMap::PostLoad()
+{
     Super::PostLoad();
     SetUpMapLocation();
 }
 
-void ATileMapGridBasedMap::PostEditMove(bool bFinished) {
+void ATileMapGridBasedMap::PostEditMove(bool bFinished)
+{
     Super::PostEditMove(bFinished);
     SetUpMapLocation(bFinished);
 }
 #endif
 
-void ATileMapGridBasedMap::RefreshTileData() {
+void ATileMapGridBasedMap::RefreshTileData()
+{
 #if WITH_EDITORONLY_DATA
     TileReplacer->RestoreCachedTiles(TileMapComponent);
     TileReplacer->ReplaceTiles(TileMapComponent);
 #endif
 }
 
-void ATileMapGridBasedMap::ClearTileReplacements() {
+void ATileMapGridBasedMap::ClearTileReplacements()
+{
 
 #if WITH_EDITORONLY_DATA
     TileReplacer->RestoreCachedTiles(TileMapComponent);
 #endif
 }
 
-FIntRect ATileMapGridBasedMap::GetBounds() const {
+FIntRect ATileMapGridBasedMap::GetBounds() const
+{
     auto RealLocation = GetActorLocation();
     auto GridSize = UGridUtils::GetGridSize(this);
     int32 X = FMath::FloorToInt32(RealLocation.X / GridSize);
@@ -75,9 +84,11 @@ FIntRect ATileMapGridBasedMap::GetBounds() const {
     return FIntRect(X, Y, X + TileMapComponent->TileMap->MapWidth, Y + TileMapComponent->TileMap->MapHeight);
 }
 
-void ATileMapGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
+void ATileMapGridBasedMap::SetUpMapLocation(bool bFinishedMoving)
+{
     const UPaperTileMap *TileMap = TileMapComponent->TileMap;
-    if (TileMap == nullptr) {
+    if (TileMap == nullptr)
+    {
         return;
     }
 
@@ -90,7 +101,8 @@ void ATileMapGridBasedMap::SetUpMapLocation(bool bFinishedMoving) {
         LowestLayerZ - static_cast<double>(TileMap->SeparationPerLayer) * (TotalLayers - PlayerLevelLayer) - 1;
     TileMapComponent->SetRelativeLocation(MapLocation);
 
-    if (bFinishedMoving) {
+    if (bFinishedMoving)
+    {
         auto Position = GetActorLocation();
         Position.Z = 0.0;
         SetActorLocation(Position);

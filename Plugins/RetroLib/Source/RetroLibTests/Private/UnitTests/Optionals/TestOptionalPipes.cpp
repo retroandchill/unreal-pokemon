@@ -28,14 +28,18 @@ import std;
 #include <array>
 #endif
 
-namespace Retro::Testing::Optionals {
-    struct DataStruct {
+namespace Retro::Testing::Optionals
+{
+    struct DataStruct
+    {
         int Member;
     };
 } // namespace Retro::Testing::Optionals
 
-TEST_CASE_NAMED(FFilterOptionalTest, "Unit Tests::RetroLib::Optionals::Filter", "[optionals]") {
-    SECTION("Can filter on a constant functor") {
+TEST_CASE_NAMED(FFilterOptionalTest, "Unit Tests::RetroLib::Optionals::Filter", "[optionals]")
+{
+    SECTION("Can filter on a constant functor")
+    {
         constexpr auto IsEven = [](int X, int Y) { return X % Y == 0; };
         std::optional Odd = 3;
         std::optional Even = 4;
@@ -55,7 +59,8 @@ TEST_CASE_NAMED(FFilterOptionalTest, "Unit Tests::RetroLib::Optionals::Filter", 
         CHECK_FALSE(FilteredEmptyRvalue.has_value());
     }
 
-    SECTION("Can filter on a runtime functor") {
+    SECTION("Can filter on a runtime functor")
+    {
         auto GreaterThan = [](int x, int y) { return x > y; };
         std::optional Odd = 3;
         std::optional Even = 4;
@@ -77,9 +82,11 @@ TEST_CASE_NAMED(FFilterOptionalTest, "Unit Tests::RetroLib::Optionals::Filter", 
     }
 }
 
-TEST_CASE_NAMED(FTransformOptionalTest, "Unit Tests::RetroLib::Optionals::Transform", "[optionals]") {
+TEST_CASE_NAMED(FTransformOptionalTest, "Unit Tests::RetroLib::Optionals::Transform", "[optionals]")
+{
     constexpr auto MultiplyValue = [](int x, int y) { return x * y; };
-    SECTION("Can transform using a constant functor") {
+    SECTION("Can transform using a constant functor")
+    {
         std::optional Value = 3;
         auto Transformed = Value | Retro::Optionals::Transform(Retro::BindBack<MultiplyValue>(2));
         CHECK(Transformed.has_value());
@@ -90,14 +97,16 @@ TEST_CASE_NAMED(FTransformOptionalTest, "Unit Tests::RetroLib::Optionals::Transf
         CHECK_FALSE(EmptyTransformed.has_value());
     }
 
-    SECTION("Can transform using a runtime defined functor") {
+    SECTION("Can transform using a runtime defined functor")
+    {
         std::optional Value = 6;
         auto Transformed = Value | Retro::Optionals::Transform(Retro::BindBack(MultiplyValue, 5));
         CHECK(Transformed.has_value());
         CHECK(Transformed.value() == 30);
     }
 
-    SECTION("Can transform a value returning a reference to hold said reference") {
+    SECTION("Can transform a value returning a reference to hold said reference")
+    {
         std::array Values = {1, 2, 3, 4, 5};
         std::optional Index = 4;
         auto Transformed =
@@ -106,10 +115,12 @@ TEST_CASE_NAMED(FTransformOptionalTest, "Unit Tests::RetroLib::Optionals::Transf
         CHECK(Transformed.value() == 5);
     }
 
-    SECTION("Can transform a value returning a pointer to hold a reference to that pointer") {
+    SECTION("Can transform a value returning a pointer to hold a reference to that pointer")
+    {
         std::array Values = {1, 2, 3, 4, 5};
         auto Transformer = [&Values](int i) {
-            if (Values.size() > i) {
+            if (Values.size() > i)
+            {
                 return &Values[i];
             }
 
@@ -126,10 +137,13 @@ TEST_CASE_NAMED(FTransformOptionalTest, "Unit Tests::RetroLib::Optionals::Transf
     }
 }
 
-TEST_CASE_NAMED(FAndThenOptionalTest, "Unit Tests::RetroLib::Optionals::AndThen", "[optionals]") {
-    SECTION("Can return an optional of the same type") {
+TEST_CASE_NAMED(FAndThenOptionalTest, "Unit Tests::RetroLib::Optionals::AndThen", "[optionals]")
+{
+    SECTION("Can return an optional of the same type")
+    {
         constexpr auto Mapper = [](int x) {
-            if (x > 0) {
+            if (x > 0)
+            {
                 return std::optional(x * 2);
             }
 
@@ -147,9 +161,11 @@ TEST_CASE_NAMED(FAndThenOptionalTest, "Unit Tests::RetroLib::Optionals::AndThen"
         CHECK_FALSE(Mapped3.has_value());
     }
 
-    SECTION("Can return an optional of a different type") {
+    SECTION("Can return an optional of a different type")
+    {
         constexpr auto Mapper = [](int x) {
-            if (x > 0) {
+            if (x > 0)
+            {
                 return std::optional(x * 2);
             }
 
@@ -168,7 +184,8 @@ TEST_CASE_NAMED(FAndThenOptionalTest, "Unit Tests::RetroLib::Optionals::AndThen"
     }
 }
 
-TEST_CASE_NAMED(FOptionalOrElseThrowTest, "Unit Tests::RetroLib::Optionals::OrElseThrow", "[optionals]") {
+TEST_CASE_NAMED(FOptionalOrElseThrowTest, "Unit Tests::RetroLib::Optionals::OrElseThrow", "[optionals]")
+{
     std::optional Value1 = 4;
     CHECK_NOTHROW(Value1 | Retro::Optionals::OrElseThrow());
 
@@ -182,13 +199,15 @@ TEST_CASE_NAMED(FOptionalOrElseThrowTest, "Unit Tests::RetroLib::Optionals::OrEl
                     std::runtime_error);
 }
 
-TEST_CASE_NAMED(FOptionalGetTest, "Unit Tests::RetroLib::Optionals::Value", "[optionals]") {
+TEST_CASE_NAMED(FOptionalGetTest, "Unit Tests::RetroLib::Optionals::Value", "[optionals]")
+{
     std::optional Value1 = 4;
     auto Result = Value1 | Retro::Optionals::Value;
     CHECK(Result == 4);
 }
 
-TEST_CASE_NAMED(FOptionalPtrOrNullTest, "Unit Tests::RetroLib::Optionals::PtrOrNull", "[optionals]") {
+TEST_CASE_NAMED(FOptionalPtrOrNullTest, "Unit Tests::RetroLib::Optionals::PtrOrNull", "[optionals]")
+{
     std::optional Value1 = 4;
     auto Result1 = Value1 | Retro::Optionals::PtrOrNull;
     REQUIRE(Result1 != nullptr);
@@ -205,7 +224,8 @@ TEST_CASE_NAMED(FOptionalPtrOrNullTest, "Unit Tests::RetroLib::Optionals::PtrOrN
     CHECK(Result4 == Result1);
 }
 
-TEST_CASE_NAMED(FOptionalIsSetTest, "Unit Tests::RetroLib::Optionals::IsSet", "[optionals]") {
+TEST_CASE_NAMED(FOptionalIsSetTest, "Unit Tests::RetroLib::Optionals::IsSet", "[optionals]")
+{
     std::optional Value1 = 4;
     CHECK(Value1 | Retro::Optionals::IsSet);
 
@@ -214,8 +234,10 @@ TEST_CASE_NAMED(FOptionalIsSetTest, "Unit Tests::RetroLib::Optionals::IsSet", "[
 }
 
 #ifdef __UNREAL__
-TEST_CASE_NAMED(FOptionalToTest, "Unit Tests::RetroLib::Optionals::To", "[optionals]") {
-    SECTION("Can convert between two optionals holding the same parameter") {
+TEST_CASE_NAMED(FOptionalToTest, "Unit Tests::RetroLib::Optionals::To", "[optionals]")
+{
+    SECTION("Can convert between two optionals holding the same parameter")
+    {
         std::optional Value1 = 34;
         auto Value2 = Value1 | Retro::Optionals::To<TOptional>();
         CHECK(Value2.IsSet());
@@ -226,7 +248,8 @@ TEST_CASE_NAMED(FOptionalToTest, "Unit Tests::RetroLib::Optionals::To", "[option
         CHECK_FALSE(Value4.IsSet());
     }
 
-    SECTION("Can convert between two unlike optional types") {
+    SECTION("Can convert between two unlike optional types")
+    {
         std::optional Value1 = 34;
         auto Value2 = Value1 | Retro::Optionals::To<TOptional<double>>();
         CHECK(Value2.IsSet());
@@ -237,7 +260,8 @@ TEST_CASE_NAMED(FOptionalToTest, "Unit Tests::RetroLib::Optionals::To", "[option
         CHECK_FALSE(Value4.IsSet());
     }
 
-    SECTION("Can convert from a reference-wrapped optional to a raw reference optional") {
+    SECTION("Can convert from a reference-wrapped optional to a raw reference optional")
+    {
         int RefValue = 34;
         std::optional Value1 = std::ref(RefValue);
         auto Value2 = Value1 | Retro::Optionals::To<TOptional>();
@@ -249,7 +273,8 @@ TEST_CASE_NAMED(FOptionalToTest, "Unit Tests::RetroLib::Optionals::To", "[option
         CHECK_FALSE(Value4.IsSet());
     }
 
-    SECTION("Can convert from a raw reference optional to a reference-wrapped optional") {
+    SECTION("Can convert from a raw reference optional to a reference-wrapped optional")
+    {
         int RefValue = 34;
         TOptional<int &> Value1 = RefValue;
         auto Value2 = Value1 | Retro::Optionals::To<std::optional>();
@@ -263,8 +288,10 @@ TEST_CASE_NAMED(FOptionalToTest, "Unit Tests::RetroLib::Optionals::To", "[option
 }
 #endif
 
-TEST_CASE_NAMED(FOptionalOrElseValueTest, "Unit Tests::RetroLib::Optionals::OrElseValue", "[optionals]") {
-    SECTION("Can get the value of a value type out") {
+TEST_CASE_NAMED(FOptionalOrElseValueTest, "Unit Tests::RetroLib::Optionals::OrElseValue", "[optionals]")
+{
+    SECTION("Can get the value of a value type out")
+    {
         std::optional Value1 = 34;
         auto Value2 = Value1 | Retro::Optionals::OrElseGet([] { return 5; });
         CHECK(Value2 == 34);
@@ -274,7 +301,8 @@ TEST_CASE_NAMED(FOptionalOrElseValueTest, "Unit Tests::RetroLib::Optionals::OrEl
         CHECK(Value4 == 5);
     }
 
-    SECTION("Can get the value of a reference type out") {
+    SECTION("Can get the value of a reference type out")
+    {
         int RefValue = 34;
         int AltValue = 45;
         std::optional<std::reference_wrapper<int>> Value1 = RefValue;
@@ -286,7 +314,8 @@ TEST_CASE_NAMED(FOptionalOrElseValueTest, "Unit Tests::RetroLib::Optionals::OrEl
         CHECK(Value4 == 45);
     }
 
-    SECTION("Can collapse two different types") {
+    SECTION("Can collapse two different types")
+    {
         int RefValue = 34;
         std::optional<std::reference_wrapper<int>> Value1 = RefValue;
         decltype(auto) Value2 = Value1 | Retro::Optionals::OrElseGet([] { return 50.0; });
@@ -297,7 +326,8 @@ TEST_CASE_NAMED(FOptionalOrElseValueTest, "Unit Tests::RetroLib::Optionals::OrEl
         CHECK(Value4 == 50.0);
     }
 
-    SECTION("Can get an optional out of the call") {
+    SECTION("Can get an optional out of the call")
+    {
         std::optional Value1 = 34;
         auto Value2 = Value1 | Retro::Optionals::OrElse([] { return std::optional(5); });
         REQUIRE(Value2.has_value());
@@ -310,8 +340,10 @@ TEST_CASE_NAMED(FOptionalOrElseValueTest, "Unit Tests::RetroLib::Optionals::OrEl
     }
 }
 
-TEST_CASE_NAMED(FOptionalOrElseTest, "Unit Tests::RetroLib::Optionals::OrElse", "[optionals]") {
-    SECTION("Can get basic values out") {
+TEST_CASE_NAMED(FOptionalOrElseTest, "Unit Tests::RetroLib::Optionals::OrElse", "[optionals]")
+{
+    SECTION("Can get basic values out")
+    {
         std::optional Value1 = 34;
         auto Value2 = Value1 | Retro::Optionals::OrElseValue(5);
         CHECK(Value2 == 34);
@@ -321,7 +353,8 @@ TEST_CASE_NAMED(FOptionalOrElseTest, "Unit Tests::RetroLib::Optionals::OrElse", 
         CHECK(Value4 == 5);
     }
 
-    SECTION("Can get references out") {
+    SECTION("Can get references out")
+    {
         int RefValue = 34;
         int AltValue = 45;
         std::optional<std::reference_wrapper<int>> Value1 = RefValue;
@@ -334,8 +367,10 @@ TEST_CASE_NAMED(FOptionalOrElseTest, "Unit Tests::RetroLib::Optionals::OrElse", 
     }
 }
 
-TEST_CASE_NAMED(FOptionalIfPresentTest, "Unit Tests::RetroLib::Optionals::IfPresent", "[optionals]") {
-    SECTION("Can execute if a value is present of do nothing") {
+TEST_CASE_NAMED(FOptionalIfPresentTest, "Unit Tests::RetroLib::Optionals::IfPresent", "[optionals]")
+{
+    SECTION("Can execute if a value is present of do nothing")
+    {
         int Sum = 0;
         std::optional Value1 = 34;
         Value1 | Retro::Optionals::IfPresent([&Sum](int Value) { Sum += Value; });
@@ -344,7 +379,8 @@ TEST_CASE_NAMED(FOptionalIfPresentTest, "Unit Tests::RetroLib::Optionals::IfPres
         CHECK(Sum == 34);
     }
 
-    SECTION("Can execute if a value is not present") {
+    SECTION("Can execute if a value is not present")
+    {
         int Sum = 0;
         std::optional Value1 = 34;
         Value1 | Retro::Optionals::IfNotPresent([&Sum] { Sum += 5; });
@@ -353,7 +389,8 @@ TEST_CASE_NAMED(FOptionalIfPresentTest, "Unit Tests::RetroLib::Optionals::IfPres
         CHECK(Sum == 5);
     }
 
-    SECTION("Can execute if a value is present, otherwise doing an alternate action") {
+    SECTION("Can execute if a value is present, otherwise doing an alternate action")
+    {
         int Sum = 0;
         std::optional Value1 = 34;
         Value1 | Retro::Optionals::IfPresentOrElse([&Sum](int Value) { Sum += Value; }, [&Sum] { Sum += 5; });
@@ -363,10 +400,12 @@ TEST_CASE_NAMED(FOptionalIfPresentTest, "Unit Tests::RetroLib::Optionals::IfPres
     }
 }
 
-TEST_CASE_NAMED(FOptionalMemberReferenceTest, "Unit Tests::RetroLib::Optionals::MemberReference", "[optionals]") {
+TEST_CASE_NAMED(FOptionalMemberReferenceTest, "Unit Tests::RetroLib::Optionals::MemberReference", "[optionals]")
+{
     using namespace Retro::Testing::Optionals;
 
-    SECTION("Can use the member as a runtime pointer") {
+    SECTION("Can use the member as a runtime pointer")
+    {
         std::optional Value = DataStruct{3};
 
         auto Result = Value | Retro::Optionals::Transform(&DataStruct::Member);
@@ -374,7 +413,8 @@ TEST_CASE_NAMED(FOptionalMemberReferenceTest, "Unit Tests::RetroLib::Optionals::
         CHECK(Result.value() == 3);
     }
 
-    SECTION("Can use the member as a compile time pointer") {
+    SECTION("Can use the member as a compile time pointer")
+    {
         std::optional Value = DataStruct{3};
 
         auto Result = Value | Retro::Optionals::Transform(&DataStruct::Member);

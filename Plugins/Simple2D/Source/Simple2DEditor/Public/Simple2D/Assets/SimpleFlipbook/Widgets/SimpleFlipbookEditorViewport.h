@@ -8,15 +8,18 @@
 
 class USimpleFlipbook;
 
-namespace Simple2D {
+namespace Simple2D
+{
 
     /**
      *
      */
     class SIMPLE2DEDITOR_API SSimpleFlipbookEditorViewport : public SEditorViewport,
-                                                             public ICommonEditorViewportToolbarInfoProvider {
+                                                             public ICommonEditorViewportToolbarInfoProvider
+    {
       public:
-        SLATE_BEGIN_ARGS(SSimpleFlipbookEditorViewport) : _FlipbookBeingEdited(nullptr) {
+        SLATE_BEGIN_ARGS(SSimpleFlipbookEditorViewport) : _FlipbookBeingEdited(nullptr)
+            {
             }
             SLATE_ATTRIBUTE(USimpleFlipbook *, FlipbookBeingEdited)
 
@@ -34,7 +37,8 @@ namespace Simple2D {
             TSharedPtr<FExtender> GetExtenders() const override;
             void OnFloatingButtonClicked() override;
 
-            auto *GetPreviewComponent() const {
+            auto *GetPreviewComponent() const
+            {
                 return EditorViewportClient->GetPreviewComponent();
             }
 

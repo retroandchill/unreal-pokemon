@@ -14,7 +14,8 @@ class UCommonTextBlock;
  * Selectable option that contains a display text that can be updated
  */
 UCLASS(Abstract)
-class RPGMENUS_API UDisplayTextOption : public URPGButtonBase {
+class RPGMENUS_API UDisplayTextOption : public URPGButtonBase
+{
     GENERATED_BODY()
 
   protected:

@@ -14,7 +14,8 @@ class IPokemon;
  * Take a Pokémon's hold item and return it to the bag
  */
 UCLASS(meta = (HideThen))
-class POKEMONUI_API UTakeItemFromPokemon : public UBlueprintCoroutineActionBase {
+class POKEMONUI_API UTakeItemFromPokemon : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

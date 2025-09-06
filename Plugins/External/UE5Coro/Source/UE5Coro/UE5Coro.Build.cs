@@ -33,30 +33,22 @@ using UnrealBuildTool;
 
 public class UE5Coro : UE5CoroModuleRules
 {
-	public UE5Coro(ReadOnlyTargetRules Target)
-		: base(Target)
-	{
-		PublicDependencyModuleNames.AddRange(new[]
-		{
-			"HTTP",
-		});
+    public UE5Coro(ReadOnlyTargetRules Target)
+        : base(Target)
+    {
+        PublicDependencyModuleNames.AddRange(new[] { "HTTP" });
 
-		PrivateDefinitions.Add("UE5CORO_PRIVATE_ALLOW_DIRECT_INCLUDE");
-	}
+        PrivateDefinitions.Add("UE5CORO_PRIVATE_ALLOW_DIRECT_INCLUDE");
+    }
 }
 
 public abstract class UE5CoroModuleRules : ModuleRules
 {
-	protected UE5CoroModuleRules(ReadOnlyTargetRules Target)
-		: base(Target)
-	{
-		bUseUnity = false;
+    protected UE5CoroModuleRules(ReadOnlyTargetRules Target)
+        : base(Target)
+    {
+        bUseUnity = false;
 
-		PublicDependencyModuleNames.AddRange(new[]
-		{
-			"Core",
-			"CoreUObject",
-			"Engine",
-		});
-	}
+        PublicDependencyModuleNames.AddRange(new[] { "Core", "CoreUObject", "Engine" });
+    }
 }

@@ -11,7 +11,8 @@
 #include "Battle/Tags.h"
 #include "Utilities/PokemonCoroutineDispatcher.h"
 
-USwitchAction::USwitchAction() {
+USwitchAction::USwitchAction()
+{
     auto &AbilityTrigger = AbilityTriggers.Emplace_GetRef();
     AbilityTrigger.TriggerTag = Pokemon::Battle::SwitchOut;
 }
@@ -19,7 +20,8 @@ USwitchAction::USwitchAction() {
 UE5Coro::GAS::FAbilityCoroutine USwitchAction::ExecuteAbility(FGameplayAbilitySpecHandle Handle,
                                                               const FGameplayAbilityActorInfo *ActorInfo,
                                                               FGameplayAbilityActivationInfo ActivationInfo,
-                                                              const FGameplayEventData *TriggerEventData) {
+                                                              const FGameplayEventData *TriggerEventData)
+{
     // If this is not triggered by an event throw an exception
     check(TriggerEventData != nullptr)
     auto Payload = CastChecked<const USwitchPokemonPayload>(TriggerEventData->OptionalObject);
@@ -32,7 +34,8 @@ UE5Coro::GAS::FAbilityCoroutine USwitchAction::ExecuteAbility(FGameplayAbilitySp
     SwapTarget = Battler->GetOwningSide()->GetTrainerParty(OwningTrainer)[SwitchTargetIndex];
     auto &AnimationGetter = UBattleAnimationGetter::Get(Battler);
     auto &Dispatcher = IPokemonCoroutineDispatcher::Get(Battler);
-    if (!Battler->IsFainted()) {
+    if (!Battler->IsFainted())
+    {
         co_await Dispatcher.DisplayMessage(Battler->GetRecallMessage());
     }
     co_await IBattleAnimation::PlayAnimation(AnimationGetter.GetRecallAnimation(Battler));
@@ -42,7 +45,8 @@ UE5Coro::GAS::FAbilityCoroutine USwitchAction::ExecuteAbility(FGameplayAbilitySp
 
 UE5Coro::TCoroutine<> USwitchAction::SwapWithTarget(const TScriptInterface<IBattler> &SwappingFrom,
                                                     UBattleAnimationGetter &AnimationGetter,
-                                                    IPokemonCoroutineDispatcher &Dispatcher) {
+                                                    IPokemonCoroutineDispatcher &Dispatcher)
+{
     auto &ActorInfo = *GetCurrentActorInfo();
     auto Battler = CastChecked<IBattler>(ActorInfo.AvatarActor);
     Battler->HideSprite();
@@ -60,7 +64,8 @@ UE5Coro::TCoroutine<> USwitchAction::SwapWithTarget(const TScriptInterface<IBatt
     co_await IBattleAnimation::PlayAnimation(AnimationGetter.GetSendOutAnimation(SwapTarget, SwappingFrom));
 }
 
-UE5Coro::TCoroutine<> USwitchAction::TriggerOnSendOut() {
+UE5Coro::TCoroutine<> USwitchAction::TriggerOnSendOut()
+{
     auto &Battle = SwapTarget->GetOwningSide()->GetOwningBattle();
     co_await Battle->OnBattlersEnteringBattle(Retro::Ranges::Views::Single(SwapTarget));
 }

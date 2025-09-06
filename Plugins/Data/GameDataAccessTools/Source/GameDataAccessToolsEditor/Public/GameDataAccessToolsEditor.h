@@ -9,8 +9,9 @@ class FGameDataRepositoryActions;
 
 class GAMEDATAACCESSTOOLSEDITOR_API IGameDataAccessToolsEditorModule : public IModuleInterface
 {
-public:
-    static IGameDataAccessToolsEditorModule& Get();
+  public:
+    static IGameDataAccessToolsEditorModule &Get();
 
-    virtual TArray<TObjectPtr<const UGameDataEntrySerializer>> GetAvailableSerializers(TSubclassOf<UGameDataRepository> RepositoryClass) const = 0;
+    virtual TArray<TObjectPtr<const UGameDataEntrySerializer>> GetAvailableSerializers(
+        TSubclassOf<UGameDataRepository> RepositoryClass) const = 0;
 };

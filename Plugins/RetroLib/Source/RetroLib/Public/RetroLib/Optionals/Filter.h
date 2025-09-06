@@ -14,10 +14,12 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Optionals {
+namespace Retro::Optionals
+{
 
     RETROLIB_EXPORT template <OptionalType O>
-    struct TConstructEmpty {
+    struct TConstructEmpty
+    {
         constexpr O operator()() const
             requires std::is_default_constructible_v<O>
         {
@@ -26,7 +28,8 @@ namespace Retro::Optionals {
     };
 
     template <ExpectedType O>
-    struct TConstructEmpty<O> {
+    struct TConstructEmpty<O>
+    {
         constexpr O operator()() const
             requires std::is_default_constructible_v<TErrorType<O>>
         {
@@ -35,13 +38,15 @@ namespace Retro::Optionals {
 
         template <typename E>
             requires std::convertible_to<E, TErrorType<O>>
-        constexpr O operator()(E &&Error) const {
+        constexpr O operator()(E &&Error) const
+        {
             return PassError<O>(std::forward<E>(Error));
         }
 
         template <typename F>
             requires std::invocable<F> && std::convertible_to<std::invoke_result_t<F>, TErrorType<O>>
-        constexpr O operator()(F &&Supplier) const {
+        constexpr O operator()(F &&Supplier) const
+        {
             return PassError<O>(std::invoke(std::forward<F>(Supplier)));
         }
     };
@@ -56,7 +61,8 @@ namespace Retro::Optionals {
         } -> std::same_as<std::remove_cvref_t<O>>;
     };
 
-    struct FFilterInvoker {
+    struct FFilterInvoker
+    {
         /**
          * @brief Applies the given functor to the value within an optional-like object and returns the optional based
          * on the functor's result.
@@ -76,15 +82,19 @@ namespace Retro::Optionals {
          */
         template <OptionalType O, typename F, typename... A>
             requires std::is_invocable_r_v<bool, F, TCommonReference<O>> && Filterable<O, A...>
-        constexpr auto operator()(O &&Optional, F &&Functor, A &&...Args) const {
-            if constexpr (std::is_lvalue_reference_v<O>) {
+        constexpr auto operator()(O &&Optional, F &&Functor, A &&...Args) const
+        {
+            if constexpr (std::is_lvalue_reference_v<O>)
+            {
                 using FilteredType = decltype(MakeOptionalReference(std::forward<O>(Optional)));
                 static_assert(Filterable<FilteredType>);
                 return HasValue(std::forward<O>(Optional)) &&
                                std::invoke(std::forward<F>(Functor), Get<O>(std::forward<O>(Optional)))
                            ? MakeOptionalReference(std::forward<O>(Optional))
                            : ConstructEmpty<FilteredType>(std::forward<A>(Args)...);
-            } else {
+            }
+            else
+            {
                 return HasValue(std::forward<O>(Optional)) &&
                                std::invoke(std::forward<F>(Functor), Get<O>(std::forward<O>(Optional)))
                            ? O(std::forward<O>(Optional))

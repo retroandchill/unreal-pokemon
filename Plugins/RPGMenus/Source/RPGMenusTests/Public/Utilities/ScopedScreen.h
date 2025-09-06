@@ -5,38 +5,47 @@
 #include "CoreMinimal.h"
 #include "Screens/Screen.h"
 
-namespace RPG::Menus {
+namespace RPG::Menus
+{
     /**
      *
      */
     template <std::derived_from<UScreen> T>
-    class TScopedScreen {
+    class TScopedScreen
+    {
       public:
-        explicit TScopedScreen(T *Screen) : Screen(Screen) {
+        explicit TScopedScreen(T *Screen) : Screen(Screen)
+        {
         }
 
-        ~TScopedScreen() {
-            if (Screen.IsValid()) {
+        ~TScopedScreen()
+        {
+            if (Screen.IsValid())
+            {
                 Screen->CloseScreen();
             }
         }
 
         UE_NONCOPYABLE(TScopedScreen)
 
-        T &Get() const {
+        T &Get() const
+        {
             check(Screen.IsValid())
             return *Screen;
         }
 
-        T &operator*() const {
+        T &operator*() const
+        {
             return Get();
         }
 
-        T *operator->() const {
+        T *operator->() const
+        {
             return &Get();
         }
 
-        operator T *() const {
+        operator T *() const
+        {
             return &Get();
         }
 

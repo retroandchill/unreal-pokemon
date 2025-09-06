@@ -12,7 +12,8 @@
  *
  */
 UCLASS()
-class POKEMONCORE_API UDefaultStorageSystem : public UObject, public IStorageSystem {
+class POKEMONCORE_API UDefaultStorageSystem : public UObject, public IStorageSystem
+{
     GENERATED_BODY()
 
   public:

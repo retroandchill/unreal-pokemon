@@ -9,7 +9,8 @@
 
 #include "K2Node_VariantOperationBase.generated.h"
 
-namespace Retro {
+namespace Retro
+{
     class IVariantRegistration;
 }
 
@@ -17,7 +18,8 @@ namespace Retro {
  *
  */
 UCLASS(Abstract)
-class RETROLIBBLUEPRINTNODES_API UK2Node_VariantOperationBase : public UK2Node {
+class RETROLIBBLUEPRINTNODES_API UK2Node_VariantOperationBase : public UK2Node
+{
     GENERATED_BODY()
 
   public:

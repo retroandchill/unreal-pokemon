@@ -7,11 +7,13 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(UTextDisplayScreen)
 
-UTextDisplayScreen *UTextDisplayScreen::AddTextDisplayScreenToOverlay(const UObject *WorldContextObject) {
+UTextDisplayScreen *UTextDisplayScreen::AddTextDisplayScreenToOverlay(const UObject *WorldContextObject)
+{
     return URPGMenuUtilities::InjectScreenToOverlay<UTextDisplayScreen>(WorldContextObject).GetPtrOrNull();
 }
 
-void UTextDisplayScreen::NativeConstruct() {
+void UTextDisplayScreen::NativeConstruct()
+{
     Super::NativeConstruct();
     if (MessageWindow == nullptr)
         return;
@@ -24,7 +26,8 @@ void UTextDisplayScreen::NativeConstruct() {
     CommandWindow->GetOnCommandSelected().AddUniqueDynamic(this, &UTextDisplayScreen::ProcessSelectedChoice);
 }
 
-void UTextDisplayScreen::SetText(FText TextToDisplay) {
+void UTextDisplayScreen::SetText(FText TextToDisplay)
+{
     check(MessageWindow != nullptr)
     bAdvancedMessage = false;
     MessageWindow->ClearDisplayText();
@@ -33,7 +36,8 @@ void UTextDisplayScreen::SetText(FText TextToDisplay) {
     MessageWindow->ActivateWidget();
 }
 
-void UTextDisplayScreen::DisplayChoices(FText TextToDisplay, const TArray<FText> &Choices) {
+void UTextDisplayScreen::DisplayChoices(FText TextToDisplay, const TArray<FText> &Choices)
+{
     check(MessageWindow != nullptr && CommandWindow != nullptr)
     bAdvancedMessage = false;
     MessageWindow->ClearDisplayText();
@@ -41,21 +45,25 @@ void UTextDisplayScreen::DisplayChoices(FText TextToDisplay, const TArray<FText>
 
     CommandWindow->SetVisibility(ESlateVisibility::Collapsed);
     TArray<TObjectPtr<UCommand>> Commands;
-    for (const auto &Choice : Choices) {
+    for (const auto &Choice : Choices)
+    {
         Commands.Add(UCommand::CreateBasicCommand(Choice));
     }
     CommandWindow->SetCommands(std::move(Commands));
     CommandWindow->ActivateWidget();
 }
 
-void UTextDisplayScreen::ClearDisplayText() {
+void UTextDisplayScreen::ClearDisplayText()
+{
     check(MessageWindow != nullptr)
     MessageWindow->ClearDisplayText();
     CommandWindow->SetVisibility(ESlateVisibility::Collapsed);
 }
 
-void UTextDisplayScreen::AdvanceToNextMessage() {
-    if (bAdvancedMessage) {
+void UTextDisplayScreen::AdvanceToNextMessage()
+{
+    if (bAdvancedMessage)
+    {
         return;
     }
 
@@ -64,30 +72,36 @@ void UTextDisplayScreen::AdvanceToNextMessage() {
     NextMessage.Broadcast();
 }
 
-void UTextDisplayScreen::DisplayChoicePrompt() {
+void UTextDisplayScreen::DisplayChoicePrompt()
+{
     CommandWindow->SetIndex(0);
     CommandWindow->SetVisibility(ESlateVisibility::Visible);
     CommandWindow->ActivateWidget();
     MessageWindow->DeactivateWidget();
 }
 
-void UTextDisplayScreen::ProcessSelectedChoice(int32 Index, UCommand *Choice) {
+void UTextDisplayScreen::ProcessSelectedChoice(int32 Index, UCommand *Choice)
+{
     ProcessChoice.Broadcast(Index, Choice->GetID());
     CommandWindow->DeactivateWidget();
 }
 
-UE5Coro::TCoroutine<UCommonActivatableWidget *> UTextDisplayScreen::AwaitInputPrompt(FForceLatentCoroutine) const {
+UE5Coro::TCoroutine<UCommonActivatableWidget *> UTextDisplayScreen::AwaitInputPrompt(FForceLatentCoroutine) const
+{
     co_await UE5Coro::Latent::Until([this] { return MessageWindow->IsAwaitingInput(); });
-    if (CommandWindow->IsVisible()) {
+    if (CommandWindow->IsVisible())
+    {
         co_return CommandWindow;
     }
 
     co_return MessageWindow;
 }
 
-UE5Coro::TCoroutine<> UTextDisplayScreen::CheckIfMoreTextIsAdded(FForceLatentCoroutine) {
+UE5Coro::TCoroutine<> UTextDisplayScreen::CheckIfMoreTextIsAdded(FForceLatentCoroutine)
+{
     co_await UE5Coro::Latent::NextTick();
-    if (bAdvancedMessage) {
+    if (bAdvancedMessage)
+    {
         CloseScreen();
     }
 }

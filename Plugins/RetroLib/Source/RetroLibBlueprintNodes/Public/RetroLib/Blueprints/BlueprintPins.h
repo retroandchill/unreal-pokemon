@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 
-namespace Retro {
+namespace Retro
+{
     static const FName PN_CastSucceeded = "bSucceeded";
     static const FName PN_True = "True";
     static const FName PN_False = "False";

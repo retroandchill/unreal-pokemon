@@ -26,9 +26,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterMovementStateChange, boo
  * Component used to handle the movement of an actor along a fixed size grid.
  */
 UCLASS(ClassGroup = (Movement), meta = (BlueprintSpawnableComponent))
-class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent,
-                                                    public IWithinMap,
-                                                    public IGridBasedMovement {
+class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent, public IWithinMap, public IGridBasedMovement
+{
     GENERATED_BODY()
 
   public:

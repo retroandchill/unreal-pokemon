@@ -13,7 +13,8 @@ class IBattleSide;
 /**
  * Abstract class for the basic information about a wild battle
  */
-class POKEMONBATTLE_API IBattleOpponentInfo {
+class POKEMONBATTLE_API IBattleOpponentInfo
+{
 
   public:
     virtual ~IBattleOpponentInfo() = default;
@@ -27,16 +28,19 @@ class POKEMONBATTLE_API IBattleOpponentInfo {
      * @param
      * @return The created side
      */
-    virtual UE5Coro::TCoroutine<TScriptInterface<IBattleSide>>
-    CreateOpposingSide(TScriptInterface<IBattle> Battle, TSubclassOf<AActor> SideClass, const FTransform &Transform,
-                       int32 ActivePokemonCount = 1, FForceLatentCoroutine = {}) = 0;
+    virtual UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> CreateOpposingSide(TScriptInterface<IBattle> Battle,
+                                                                                  TSubclassOf<AActor> SideClass,
+                                                                                  const FTransform &Transform,
+                                                                                  int32 ActivePokemonCount = 1,
+                                                                                  FForceLatentCoroutine = {}) = 0;
 };
 
 /**
  * Struct that wraps around a handle for opponent info
  */
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FBattleOpponentInfoHandle {
+struct POKEMONBATTLE_API FBattleOpponentInfoHandle
+{
     GENERATED_BODY()
 
     /**
@@ -48,9 +52,12 @@ struct POKEMONBATTLE_API FBattleOpponentInfoHandle {
      * Create the opposing side of battle with this information
      * @return The created side
      */
-    FORCEINLINE UE5Coro::TCoroutine<TScriptInterface<IBattleSide>>
-    CreateOpposingSide(TScriptInterface<IBattle> Battle, TSubclassOf<AActor> SideClass, const FTransform &Transform,
-                       int32 ActivePokemonCount = 1, FForceLatentCoroutine = {}) const {
+    FORCEINLINE UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> CreateOpposingSide(TScriptInterface<IBattle> Battle,
+                                                                                      TSubclassOf<AActor> SideClass,
+                                                                                      const FTransform &Transform,
+                                                                                      int32 ActivePokemonCount = 1,
+                                                                                      FForceLatentCoroutine = {}) const
+    {
         return Data->CreateOpposingSide(Battle, SideClass, Transform, ActivePokemonCount);
     }
 };

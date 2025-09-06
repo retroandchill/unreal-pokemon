@@ -10,7 +10,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TrainerPartyTest, "Unit Tests.Core.Trainers.TrainerPartyTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TrainerPartyTest::RunTest(const FString &Parameters) {
+bool TrainerPartyTest::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
     auto Trainer =

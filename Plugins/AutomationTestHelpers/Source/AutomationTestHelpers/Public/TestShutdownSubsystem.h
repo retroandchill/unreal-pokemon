@@ -17,7 +17,8 @@ class FTestShutdownOutputDevice;
  * @param Collection - A reference to the subsystem collection.
  */
 UCLASS()
-class AUTOMATIONTESTHELPERS_API UTestShutdownSubsystem : public UEditorSubsystem, public FTickableEditorObject {
+class AUTOMATIONTESTHELPERS_API UTestShutdownSubsystem : public UEditorSubsystem, public FTickableEditorObject
+{
     GENERATED_BODY()
 
   public:

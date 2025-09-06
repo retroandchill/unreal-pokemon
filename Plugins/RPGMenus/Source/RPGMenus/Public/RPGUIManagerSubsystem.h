@@ -14,7 +14,8 @@ class UScreen;
  * Subsystem for managing the UI of the RPG Menus Plugin.
  */
 UCLASS(DisplayName = "RPG UI Manager Subsystem", Config = Game)
-class RPGMENUS_API URPGUIManagerSubsystem : public UGameInstanceSubsystem {
+class RPGMENUS_API URPGUIManagerSubsystem : public UGameInstanceSubsystem
+{
     GENERATED_BODY()
 
   public:
@@ -24,10 +25,12 @@ class RPGMENUS_API URPGUIManagerSubsystem : public UGameInstanceSubsystem {
 
     static URPGUIManagerSubsystem &Get(const UObject *WorldContext);
 
-    const UGameUIPolicy *GetCurrentUIPolicy() const {
+    const UGameUIPolicy *GetCurrentUIPolicy() const
+    {
         return CurrentPolicy;
     }
-    UGameUIPolicy *GetCurrentUIPolicy() {
+    UGameUIPolicy *GetCurrentUIPolicy()
+    {
         return CurrentPolicy;
     }
 
@@ -61,17 +64,21 @@ class RPGMENUS_API URPGUIManagerSubsystem : public UGameInstanceSubsystem {
     uint32 ActiveScreenCount = 0;
 };
 
-namespace RPG::Menus {
-    struct FGetCurrentUIPolicyInvoker {
+namespace RPG::Menus
+{
+    struct FGetCurrentUIPolicyInvoker
+    {
         template <typename T>
             requires std::same_as<std::remove_const_t<T>, URPGUIManagerSubsystem>
-        constexpr auto operator()(T &Manager) const {
+        constexpr auto operator()(T &Manager) const
+        {
             return Manager.GetCurrentUIPolicy();
         }
 
         template <typename T>
             requires std::same_as<std::remove_const_t<T>, URPGUIManagerSubsystem>
-        constexpr auto operator()(T *Manager) const {
+        constexpr auto operator()(T *Manager) const
+        {
             return Manager->GetCurrentUIPolicy();
         }
     };

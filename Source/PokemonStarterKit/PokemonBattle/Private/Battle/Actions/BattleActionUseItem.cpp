@@ -19,38 +19,46 @@
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/MakeWeak.h"
 
-FItemTarget::FItemTarget(TWeakInterfacePtr<IBattler> &&Battler) {
+FItemTarget::FItemTarget(TWeakInterfacePtr<IBattler> &&Battler)
+{
     Data.Set<TWeakInterfacePtr<IBattler>>(std::move(Battler));
 }
 
-FItemTarget::FItemTarget(TWeakInterfacePtr<IBattleMove> &&Move) {
+FItemTarget::FItemTarget(TWeakInterfacePtr<IBattleMove> &&Move)
+{
     Data.Set<TWeakInterfacePtr<IBattleMove>>(std::move(Move));
 }
 
-FItemTarget::FItemTarget(FTargetWithIndex &&Target) {
+FItemTarget::FItemTarget(FTargetWithIndex &&Target)
+{
     Data.Set<FTargetWithIndex>(std::move(Target));
 }
 
 FBattleActionUseItem::FBattleActionUseItem(const TScriptInterface<IBattler> &Battler, FName ItemID,
                                            FItemTarget &&ItemTarget)
-    : FBattleActionBase(Battler), ItemID(ItemID), ItemTarget(std::move(ItemTarget)) {
+    : FBattleActionBase(Battler), ItemID(ItemID), ItemTarget(std::move(ItemTarget))
+{
 }
 
-FString FBattleActionUseItem::GetReferencerName() const {
+FString FBattleActionUseItem::GetReferencerName() const
+{
     return TEXT("FBattleActionUseItem");
 }
 
-int32 FBattleActionUseItem::GetPriority() const {
+int32 FBattleActionUseItem::GetPriority() const
+{
     return GetDefault<UPokemonBattleSettings>()->SwitchPriority;
 }
 
-FText FBattleActionUseItem::GetActionMessage() const {
+FText FBattleActionUseItem::GetActionMessage() const
+{
     auto &ItemData = FDataManager::GetInstance().GetDataTable<FItem>().GetDataChecked(ItemID);
     return FText::Format(FText::FromStringView(TEXT("{0} used {1}!")),
                          {GetBattler()->GetWrappedPokemon()->GetCurrentHandler()->GetTrainerName(), ItemData.RealName});
 }
 
-UE5Coro::TCoroutine<> FBattleActionUseItem::ActivateAbility() {
+UE5Coro::TCoroutine<> FBattleActionUseItem::ActivateAbility()
+{
     auto EffectClass = Pokemon::Battle::Items::FindBattleItemEffect(ItemID);
     auto &Owner = GetBattler();
     auto AbilityComponent = Owner->GetAbilityComponent();
@@ -75,13 +83,18 @@ UE5Coro::TCoroutine<> FBattleActionUseItem::ActivateAbility() {
     EventData.OptionalObject = Payload;
     auto TargetData = MakeShared<FGameplayAbilityTargetData_ActorArray>();
     TArray<TScriptInterface<IBattler>> Targets;
-    if (auto AsBattler = ItemTarget.Data.TryGet<TWeakInterfacePtr<IBattler>>(); AsBattler != nullptr) {
+    if (auto AsBattler = ItemTarget.Data.TryGet<TWeakInterfacePtr<IBattler>>(); AsBattler != nullptr)
+    {
         Targets.Emplace(AsBattler->ToScriptInterface());
-    } else if (auto AsMove = ItemTarget.Data.TryGet<TWeakInterfacePtr<IBattleMove>>(); AsMove != nullptr) {
+    }
+    else if (auto AsMove = ItemTarget.Data.TryGet<TWeakInterfacePtr<IBattleMove>>(); AsMove != nullptr)
+    {
         auto &MoveOwner = AsMove->Get()->GetOwningBattler();
         Targets.Emplace(MoveOwner);
         Payload->TargetedMoves.Add(MoveOwner->GetInternalId(), AsMove->ToScriptInterface());
-    } else if (auto AsTargetWithIndex = ItemTarget.Data.TryGet<FTargetWithIndex>(); AsTargetWithIndex != nullptr) {
+    }
+    else if (auto AsTargetWithIndex = ItemTarget.Data.TryGet<FTargetWithIndex>(); AsTargetWithIndex != nullptr)
+    {
         Targets.Emplace(AsTargetWithIndex->SwapIfNecessary());
     }
 

@@ -13,7 +13,8 @@ class IStorageBox;
  * The result of a box deposit
  */
 UENUM()
-enum class EDepositResult : uint8 {
+enum class EDepositResult : uint8
+{
     /**
      * The Pokémon was successfully deposited
      */
@@ -26,7 +27,8 @@ enum class EDepositResult : uint8 {
 };
 
 UENUM()
-enum class EWithdrawResult : uint8 {
+enum class EWithdrawResult : uint8
+{
     /**
      * A Pokémon was successfully withdrawn
      */
@@ -42,7 +44,8 @@ enum class EWithdrawResult : uint8 {
  * Utility library for the Pokémon storage system.
  */
 UCLASS()
-class POKEMONCORE_API UStorageUtilities : public UBlueprintFunctionLibrary {
+class POKEMONCORE_API UStorageUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

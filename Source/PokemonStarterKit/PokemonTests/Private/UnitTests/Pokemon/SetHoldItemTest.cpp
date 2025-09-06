@@ -7,7 +7,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(SetHoldItemTest, "Unit Tests.Core.Pokemon.SetHoldItemTest",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool SetHoldItemTest::RunTest(const FString &Parameters) {
+bool SetHoldItemTest::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
 
     UPokemonSubsystem::GetInstance(World.Get()).StartNewGame();

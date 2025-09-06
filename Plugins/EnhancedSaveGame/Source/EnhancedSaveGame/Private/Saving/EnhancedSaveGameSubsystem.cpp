@@ -12,7 +12,8 @@
 #include "Services/GameServiceSubsystem.h"
 #endif
 
-UEnhancedSaveGameSubsystem &UEnhancedSaveGameSubsystem::Get(const UObject *WorldContext) {
+UEnhancedSaveGameSubsystem &UEnhancedSaveGameSubsystem::Get(const UObject *WorldContext)
+{
     // clang-format off
     return Retro::Optionals::OfNullable(WorldContext) |
            Retro::Optionals::Transform([](const UObject& O) { return UGameplayStatics::GetGameInstance(&O); }) |
@@ -23,7 +24,8 @@ UEnhancedSaveGameSubsystem &UEnhancedSaveGameSubsystem::Get(const UObject *World
     // clang-format on
 }
 
-UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame(const FGameplayTagContainer &SaveTags) const {
+UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame(const FGameplayTagContainer &SaveTags) const
+{
     UE_LOG(LogEnhancedSaveGame, Log, TEXT("Generating the save game object"));
     auto SaveGame = NewObject<UEnhancedSaveGame>(GetGameInstance());
     auto Subsystems = GetGameInstance()->GetSubsystemArrayCopy<UGameInstanceSubsystem>();
@@ -48,7 +50,8 @@ UEnhancedSaveGame *UEnhancedSaveGameSubsystem::CreateSaveGame(const FGameplayTag
 }
 
 void UEnhancedSaveGameSubsystem::LoadSaveGame(const UEnhancedSaveGame *SaveGame,
-                                              const FGameplayTagContainer &LoadTags) const {
+                                              const FGameplayTagContainer &LoadTags) const
+{
     auto Subsystems = GetGameInstance()->GetSubsystemArrayCopy<UGameInstanceSubsystem>();
     // clang-format off
     Subsystems |

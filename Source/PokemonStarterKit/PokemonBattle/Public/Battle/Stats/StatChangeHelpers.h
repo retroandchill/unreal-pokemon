@@ -16,7 +16,8 @@ class IBattler;
  * Struct that contains the change to a stat's value
  */
 USTRUCT(BlueprintType)
-struct FBattleStatChangeValue {
+struct FBattleStatChangeValue
+{
     GENERATED_BODY()
 
     /**
@@ -37,7 +38,8 @@ struct FBattleStatChangeValue {
  * Helper library for working with stat changes and find the correct tag
  */
 UCLASS()
-class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary {
+class POKEMONBATTLE_API UStatChangeHelpers : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

@@ -10,16 +10,19 @@
 #include "Simple2D/Components/SimpleFlipbookComponent.h"
 #include "Simple2DEditor.h"
 
-namespace Simple2D {
+namespace Simple2D
+{
 
-    namespace FlipbookTabs {
+    namespace FlipbookTabs
+    {
         const FName DetailsID = TEXT("Details");
         const FName ViewportID = TEXT("Viewport");
     } // namespace FlipbookTabs
 
     const FName FlipbookEditorAppName = FName(TEXT("FlipbookEditorApp"));
 
-    void FSimpleFlipbookEditor::RegisterTabSpawners(const TSharedRef<FTabManager> &InTabManager) {
+    void FSimpleFlipbookEditor::RegisterTabSpawners(const TSharedRef<FTabManager> &InTabManager)
+    {
         WorkspaceMenuCategory = InTabManager->AddLocalWorkspaceMenuCategory(
             NSLOCTEXT("Simple2D", "WorkspaceMenu_FlipbookEditor", "Flipbook Editor"));
         auto WorkspaceMenuCategoryRef = WorkspaceMenuCategory.ToSharedRef();
@@ -41,44 +44,53 @@ namespace Simple2D {
             .SetIcon(FSlateIcon(FAppStyle::GetAppStyleSetName(), "LevelEditor.Tabs.Details"));
     }
 
-    void FSimpleFlipbookEditor::UnregisterTabSpawners(const TSharedRef<FTabManager> &InTabManager) {
+    void FSimpleFlipbookEditor::UnregisterTabSpawners(const TSharedRef<FTabManager> &InTabManager)
+    {
         FAssetEditorToolkit::UnregisterTabSpawners(InTabManager);
 
         InTabManager->UnregisterTabSpawner(FlipbookTabs::ViewportID);
         InTabManager->UnregisterTabSpawner(FlipbookTabs::DetailsID);
     }
 
-    FName FSimpleFlipbookEditor::GetToolkitFName() const {
+    FName FSimpleFlipbookEditor::GetToolkitFName() const
+    {
         return "SimpleFlipbookEditor";
     }
 
-    FText FSimpleFlipbookEditor::GetBaseToolkitName() const {
+    FText FSimpleFlipbookEditor::GetBaseToolkitName() const
+    {
         return NSLOCTEXT("Simple2D", "SimpleFlipbookEditorAppLabel", "Simple Flipbook Editor");
     }
 
-    FText FSimpleFlipbookEditor::GetToolkitName() const {
+    FText FSimpleFlipbookEditor::GetToolkitName() const
+    {
         return FText::FromString(FlipbookBeingEdited->GetName());
     }
 
-    FText FSimpleFlipbookEditor::GetToolkitToolTipText() const {
+    FText FSimpleFlipbookEditor::GetToolkitToolTipText() const
+    {
         return GetToolTipTextForObject(FlipbookBeingEdited);
     }
 
-    FLinearColor FSimpleFlipbookEditor::GetWorldCentricTabColorScale() const {
+    FLinearColor FSimpleFlipbookEditor::GetWorldCentricTabColorScale() const
+    {
         return FLinearColor::White;
     }
 
-    FString FSimpleFlipbookEditor::GetWorldCentricTabPrefix() const {
+    FString FSimpleFlipbookEditor::GetWorldCentricTabPrefix() const
+    {
         return TEXT("SimpleFlipbookEditor");
     }
 
-    void FSimpleFlipbookEditor::AddReferencedObjects(FReferenceCollector &Collector) {
+    void FSimpleFlipbookEditor::AddReferencedObjects(FReferenceCollector &Collector)
+    {
         Collector.AddReferencedObject(FlipbookBeingEdited);
     }
 
     void FSimpleFlipbookEditor::InitFlipbookEditor(const EToolkitMode::Type Mode,
                                                    const TSharedPtr<IToolkitHost> &InitToolkitHost,
-                                                   USimpleFlipbook *InitFlipbook) {
+                                                   USimpleFlipbook *InitFlipbook)
+    {
         GEditor->GetEditorSubsystem<UAssetEditorSubsystem>()->CloseOtherEditors(InitFlipbook, this);
         FlipbookBeingEdited = InitFlipbook;
         CurrentSelectedKeyframe = INDEX_NONE;
@@ -115,13 +127,15 @@ namespace Simple2D {
         RegenerateMenusAndToolbars();
     }
 
-    USimpleFlipbookComponent *FSimpleFlipbookEditor::GetPreviewComponent() const {
+    USimpleFlipbookComponent *FSimpleFlipbookEditor::GetPreviewComponent() const
+    {
         auto *PreviewComponent = ViewportPtr->GetPreviewComponent();
         check(PreviewComponent != nullptr);
         return PreviewComponent;
     }
 
-    void FSimpleFlipbookEditor::BindCommands() {
+    void FSimpleFlipbookEditor::BindCommands()
+    {
         const auto &Commands = FSimpleFlipbookEditorCommands::Get();
 
         const TSharedRef<FUICommandList> &UICommandList = GetToolkitCommands();
@@ -148,14 +162,18 @@ namespace Simple2D {
                                  FExecuteAction::CreateSP(this, &FSimpleFlipbookEditor::AddKeyFrameAtCurrentTime));
     }
 
-    void FSimpleFlipbookEditor::ExtendMenu() {
+    void FSimpleFlipbookEditor::ExtendMenu()
+    {
         // Does nothing
     }
 
-    void FSimpleFlipbookEditor::ExtendToolbar() {
+    void FSimpleFlipbookEditor::ExtendToolbar()
+    {
         constexpr auto FillToolbar = [](FToolBarBuilder &ToolbarBuilder) {
             ToolbarBuilder.BeginSection("Command");
-            { ToolbarBuilder.AddToolBarButton(FSimpleFlipbookEditorCommands::Get().AddKeyFrame); }
+            {
+                ToolbarBuilder.AddToolBarButton(FSimpleFlipbookEditorCommands::Get().AddKeyFrame);
+            }
             ToolbarBuilder.EndSection();
         };
 
@@ -170,7 +188,8 @@ namespace Simple2D {
         AddToolbarExtender(Paper2DEditorModule->GetFlipbookEditorToolBarExtensibilityManager()->GetAllExtenders());
     }
 
-    TSharedRef<SDockTab> FSimpleFlipbookEditor::SpawnTab_Viewport(const FSpawnTabArgs &) {
+    TSharedRef<SDockTab> FSimpleFlipbookEditor::SpawnTab_Viewport(const FSpawnTabArgs &)
+    {
         ViewInputMin = 0.0f;
         ViewInputMax = GetTotalSequenceLength();
         LastObservedSequenceLength = ViewInputMax;
@@ -212,7 +231,8 @@ namespace Simple2D {
              + SVerticalBox::Slot().Padding(0, 8, 0, 0).AutoHeight()[ScrubControl]];
     }
 
-    TSharedRef<SDockTab> FSimpleFlipbookEditor::SpawnTab_Details(const FSpawnTabArgs &) {
+    TSharedRef<SDockTab> FSimpleFlipbookEditor::SpawnTab_Details(const FSpawnTabArgs &)
+    {
         auto FlipbookEditorPtr = SharedThis(this);
 
         // Spawn the tab
@@ -221,9 +241,11 @@ namespace Simple2D {
                       "Details"))[SNew(SSimpleFlipbookPropertiesTabsBody, FlipbookEditorPtr.ToSharedPtr())];
     }
 
-    void FSimpleFlipbookEditor::DeleteSelection() {
+    void FSimpleFlipbookEditor::DeleteSelection()
+    {
 
-        if (FlipbookBeingEdited->IsValidKeyFrameIndex(CurrentSelectedKeyframe)) {
+        if (FlipbookBeingEdited->IsValidKeyFrameIndex(CurrentSelectedKeyframe))
+        {
             const FScopedTransaction Transaction(NSLOCTEXT("SImple2D", "DeleteKeyframeTransaction", "Delete Keyframe"));
             FlipbookBeingEdited->Modify();
 
@@ -234,8 +256,10 @@ namespace Simple2D {
         }
     }
 
-    void FSimpleFlipbookEditor::DuplicateSelection() {
-        if (!FlipbookBeingEdited->IsValidKeyFrameIndex(CurrentSelectedKeyframe)) {
+    void FSimpleFlipbookEditor::DuplicateSelection()
+    {
+        if (!FlipbookBeingEdited->IsValidKeyFrameIndex(CurrentSelectedKeyframe))
+        {
             return;
         }
 
@@ -251,15 +275,18 @@ namespace Simple2D {
         CurrentSelectedKeyframe = INDEX_NONE;
     }
 
-    void FSimpleFlipbookEditor::SetSelection(int32 NewSelection) {
+    void FSimpleFlipbookEditor::SetSelection(int32 NewSelection)
+    {
         CurrentSelectedKeyframe = NewSelection;
     }
 
-    bool FSimpleFlipbookEditor::HasValidSelection() const {
+    bool FSimpleFlipbookEditor::HasValidSelection() const
+    {
         return FlipbookBeingEdited->IsValidKeyFrameIndex(CurrentSelectedKeyframe);
     }
 
-    void FSimpleFlipbookEditor::AddKeyFrameAtCurrentTime() {
+    void FSimpleFlipbookEditor::AddKeyFrameAtCurrentTime()
+    {
         const FScopedTransaction Transaction(NSLOCTEXT("Simple2D", "InsertKeyFrameTransaction", "Insert Key Frame"));
         FlipbookBeingEdited->Modify();
 
@@ -272,7 +299,8 @@ namespace Simple2D {
         EditLock.KeyFrames.Insert(NewFrame, ClampedIndex);
     }
 
-    void FSimpleFlipbookEditor::AddNewKeyFrameAtEnd() {
+    void FSimpleFlipbookEditor::AddNewKeyFrameAtEnd()
+    {
         const FScopedTransaction Transaction(NSLOCTEXT("Simple2D", "AddKeyFrameTransaction", "Add Key Frame"));
         FlipbookBeingEdited->Modify();
 
@@ -281,8 +309,10 @@ namespace Simple2D {
         new (EditLock.KeyFrames) FSimpleFlipbookKeyFrame();
     }
 
-    void FSimpleFlipbookEditor::AddNewKeyFrameBefore() {
-        if (FlipbookBeingEdited->IsValidKeyFrameIndex(CurrentSelectedKeyframe)) {
+    void FSimpleFlipbookEditor::AddNewKeyFrameBefore()
+    {
+        if (FlipbookBeingEdited->IsValidKeyFrameIndex(CurrentSelectedKeyframe))
+        {
             const FScopedTransaction Transaction(
                 NSLOCTEXT("Simple2D", "InsertKeyFrameBeforeTransaction", "Insert Key Frame Before"));
             FlipbookBeingEdited->Modify();
@@ -296,8 +326,10 @@ namespace Simple2D {
         }
     }
 
-    void FSimpleFlipbookEditor::AddNewKeyFrameAfter() {
-        if (!FlipbookBeingEdited->IsValidKeyFrameIndex(CurrentSelectedKeyframe)) {
+    void FSimpleFlipbookEditor::AddNewKeyFrameAfter()
+    {
+        if (!FlipbookBeingEdited->IsValidKeyFrameIndex(CurrentSelectedKeyframe))
+        {
             return;
         }
 
@@ -313,17 +345,23 @@ namespace Simple2D {
         CurrentSelectedKeyframe = INDEX_NONE;
     }
 
-    FReply FSimpleFlipbookEditor::OnClick_Forward() {
+    FReply FSimpleFlipbookEditor::OnClick_Forward()
+    {
         auto *PreviewComponent = GetPreviewComponent();
 
         const bool bIsReverse = PreviewComponent->IsReversing();
-        if (const bool bIsPlaying = PreviewComponent->IsPlaying(); bIsReverse && bIsPlaying) {
+        if (const bool bIsPlaying = PreviewComponent->IsPlaying(); bIsReverse && bIsPlaying)
+        {
             // Play forwards instead of backwards
             PreviewComponent->Play();
-        } else if (bIsPlaying) {
+        }
+        else if (bIsPlaying)
+        {
             // Was already playing forwards, so pause
             PreviewComponent->Stop();
-        } else {
+        }
+        else
+        {
             // Was paused, start playing
             PreviewComponent->Play();
         }
@@ -331,32 +369,40 @@ namespace Simple2D {
         return FReply::Handled();
     }
 
-    FReply FSimpleFlipbookEditor::OnClick_Forward_Step() {
+    FReply FSimpleFlipbookEditor::OnClick_Forward_Step()
+    {
         GetPreviewComponent()->Stop();
         SetCurrentFrame(GetCurrentFrame() + 1);
         return FReply::Handled();
     }
 
-    FReply FSimpleFlipbookEditor::OnClick_Forward_End() {
+    FReply FSimpleFlipbookEditor::OnClick_Forward_End()
+    {
         auto *PreviewComponent = GetPreviewComponent();
         PreviewComponent->Stop();
         PreviewComponent->SetPlaybackPosition(PreviewComponent->GetFlipbookLength());
         return FReply::Handled();
     }
 
-    FReply FSimpleFlipbookEditor::OnClick_Backward() {
+    FReply FSimpleFlipbookEditor::OnClick_Backward()
+    {
         auto *PreviewComponent = GetPreviewComponent();
 
         const bool bIsReverse = PreviewComponent->IsReversing();
         const bool bIsPlaying = PreviewComponent->IsPlaying();
 
-        if (bIsReverse && bIsPlaying) {
+        if (bIsReverse && bIsPlaying)
+        {
             // Was already playing backwards, so pause
             PreviewComponent->Stop();
-        } else if (bIsPlaying) {
+        }
+        else if (bIsPlaying)
+        {
             // Play backwards instead of forwards
             PreviewComponent->Reverse();
-        } else {
+        }
+        else
+        {
             // Was paused, start reversing
             PreviewComponent->Reverse();
         }
@@ -364,64 +410,78 @@ namespace Simple2D {
         return FReply::Handled();
     }
 
-    FReply FSimpleFlipbookEditor::OnClick_Backward_Step() {
+    FReply FSimpleFlipbookEditor::OnClick_Backward_Step()
+    {
         GetPreviewComponent()->Stop();
         SetCurrentFrame(GetCurrentFrame() - 1);
         return FReply::Handled();
     }
 
-    FReply FSimpleFlipbookEditor::OnClick_Backward_End() {
+    FReply FSimpleFlipbookEditor::OnClick_Backward_End()
+    {
         auto *PreviewComponent = GetPreviewComponent();
         PreviewComponent->Stop();
         PreviewComponent->SetPlaybackPosition(0.0f);
         return FReply::Handled();
     }
 
-    FReply FSimpleFlipbookEditor::OnClick_ToggleLoop() {
+    FReply FSimpleFlipbookEditor::OnClick_ToggleLoop()
+    {
         auto PreviewComponent = GetPreviewComponent();
         PreviewComponent->SetLooping(!PreviewComponent->IsLooping());
         return FReply::Handled();
     }
 
-    uint32 FSimpleFlipbookEditor::GetTotalFrameCount() const {
+    uint32 FSimpleFlipbookEditor::GetTotalFrameCount() const
+    {
         return FlipbookBeingEdited->GetNumFrames();
     }
 
-    uint32 FSimpleFlipbookEditor::GetTotalFrameCountPlusOne() const {
+    uint32 FSimpleFlipbookEditor::GetTotalFrameCountPlusOne() const
+    {
         return FlipbookBeingEdited->GetNumFrames() + 1;
     }
 
-    float FSimpleFlipbookEditor::GetTotalSequenceLength() const {
+    float FSimpleFlipbookEditor::GetTotalSequenceLength() const
+    {
         return FlipbookBeingEdited->GetTotalDuration();
     }
 
-    float FSimpleFlipbookEditor::GetPlaybackPosition() const {
+    float FSimpleFlipbookEditor::GetPlaybackPosition() const
+    {
         return GetPreviewComponent()->GetPlaybackPosition();
     }
 
-    void FSimpleFlipbookEditor::SetPlaybackPosition(float NewTime) {
+    void FSimpleFlipbookEditor::SetPlaybackPosition(float NewTime)
+    {
         NewTime = FMath::Clamp<float>(NewTime, 0.0f, GetTotalSequenceLength());
         GetPreviewComponent()->SetPlaybackPosition(NewTime);
     }
 
-    bool FSimpleFlipbookEditor::IsLooping() const {
+    bool FSimpleFlipbookEditor::IsLooping() const
+    {
         return GetPreviewComponent()->IsLooping();
     }
 
-    EPlaybackMode::Type FSimpleFlipbookEditor::GetPlaybackMode() const {
-        if (const auto *PreviewComponent = GetPreviewComponent(); PreviewComponent->IsPlaying()) {
+    EPlaybackMode::Type FSimpleFlipbookEditor::GetPlaybackMode() const
+    {
+        if (const auto *PreviewComponent = GetPreviewComponent(); PreviewComponent->IsPlaying())
+        {
             return PreviewComponent->IsReversing() ? EPlaybackMode::PlayingReverse : EPlaybackMode::PlayingForward;
         }
 
         return EPlaybackMode::Stopped;
     }
 
-    float FSimpleFlipbookEditor::GetViewRangeMin() const {
+    float FSimpleFlipbookEditor::GetViewRangeMin() const
+    {
         return ViewInputMin;
     }
 
-    float FSimpleFlipbookEditor::GetViewRangeMax() const {
-        if (const float SequenceLength = GetTotalSequenceLength(); SequenceLength != LastObservedSequenceLength) {
+    float FSimpleFlipbookEditor::GetViewRangeMax() const
+    {
+        if (const float SequenceLength = GetTotalSequenceLength(); SequenceLength != LastObservedSequenceLength)
+        {
             LastObservedSequenceLength = SequenceLength;
             ViewInputMin = 0.0f;
             ViewInputMax = SequenceLength;
@@ -430,7 +490,8 @@ namespace Simple2D {
         return ViewInputMax;
     }
 
-    void FSimpleFlipbookEditor::SetViewRange(float NewMin, float NewMax) {
+    void FSimpleFlipbookEditor::SetViewRange(float NewMin, float NewMax)
+    {
         ViewInputMin = FMath::Max<float>(NewMin, 0.0f);
         ViewInputMax = FMath::Min<float>(NewMax, GetTotalSequenceLength());
     }

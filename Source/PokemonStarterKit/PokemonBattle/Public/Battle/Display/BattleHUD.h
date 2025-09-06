@@ -13,14 +13,16 @@ class IBattler;
 class IBattleAction;
 // This class does not need to be modified.
 UINTERFACE()
-class POKEMONBATTLE_API UBattleHUD : public UInterface {
+class POKEMONBATTLE_API UBattleHUD : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  *
  */
-class POKEMONBATTLE_API IBattleHUD {
+class POKEMONBATTLE_API IBattleHUD
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

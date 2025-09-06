@@ -11,14 +11,16 @@ class IGridMovable;
 class AGameCharacter;
 // This class does not need to be modified.
 UINTERFACE()
-class UInteractable : public UInterface {
+class UInteractable : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Represents an object that is interactable within the world.
  */
-class GRIDBASED2D_API IInteractable {
+class GRIDBASED2D_API IInteractable
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

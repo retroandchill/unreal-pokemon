@@ -12,7 +12,8 @@
  *
  */
 UCLASS()
-class POKEMONUI_API UPokemonCoroutineDispatcherImpl : public UObject, public IPokemonCoroutineDispatcher {
+class POKEMONUI_API UPokemonCoroutineDispatcherImpl : public UObject, public IPokemonCoroutineDispatcher
+{
     GENERATED_BODY()
 
   public:
@@ -26,8 +27,8 @@ class POKEMONUI_API UPokemonCoroutineDispatcherImpl : public UObject, public IPo
                                                    FText CancelOption = NSLOCTEXT("PokemonUI", "PromptNo", "No"),
                                                    FForceLatentCoroutine = {}) const override;
 
-    UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>>
-        SelectPokemonFromParty(FForceLatentCoroutine = {}) const override;
+    UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>> SelectPokemonFromParty(
+        FForceLatentCoroutine = {}) const override;
 
     UE5Coro::TCoroutine<TOptional<FSelectedItemHandle>> SelectItemFromBag(const FItemFilter &Filter,
                                                                           FForceLatentCoroutine = {}) const override;

@@ -11,7 +11,8 @@
  * Struct used to store warp destination information
  */
 USTRUCT(BlueprintType)
-struct GRIDBASED2D_API FWarpDestination {
+struct GRIDBASED2D_API FWarpDestination
+{
     GENERATED_BODY()
 
     /**

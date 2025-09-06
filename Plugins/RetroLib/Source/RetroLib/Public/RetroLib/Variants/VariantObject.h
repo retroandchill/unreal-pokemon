@@ -19,17 +19,21 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
 
     RETROLIB_EXPORT template <typename... T>
         requires((std::derived_from<T, UObject> || UnrealInterface<T>) && ...)
     struct TVariantObject;
 
     template <typename>
-    struct TVariantObjectTraits : FInvalidType {};
+    struct TVariantObjectTraits : FInvalidType
+    {
+    };
 
     template <typename... T>
-    struct TVariantObjectTraits<TVariantObject<T...>> : FValidType {
+    struct TVariantObjectTraits<TVariantObject<T...>> : FValidType
+    {
         using Types = std::tuple<std::nullptr_t, T...>;
     };
 
@@ -66,7 +70,8 @@ namespace Retro {
      */
     template <typename... T>
         requires((std::derived_from<T, UObject> || UnrealInterface<T>) && ...)
-    struct TVariantObject {
+    struct TVariantObject
+    {
         static constexpr bool bHasIntrusiveUnsetOptionalState = true;
         using IntrusiveUnsetOptionalStateType = TVariantObject;
 
@@ -84,7 +89,8 @@ namespace Retro {
          */
         template <typename U>
             requires std::convertible_to<U, UObject *> && (std::same_as<T, U> || ...)
-        explicit TVariantObject(U *Object) : ContainedObject(Object), TypeIndex(GetTypeIndex<U>()) {
+        explicit TVariantObject(U *Object) : ContainedObject(Object), TypeIndex(GetTypeIndex<U>())
+        {
             check(Object != nullptr)
         }
 
@@ -96,7 +102,8 @@ namespace Retro {
         template <typename U>
             requires UnrealInterface<U> && (std::same_as<T, U> || ...)
         explicit TVariantObject(const TScriptInterface<U> &Object)
-            : ContainedObject(Object.GetObject()), TypeIndex(GetTypeIndex<U>()) {
+            : ContainedObject(Object.GetObject()), TypeIndex(GetTypeIndex<U>())
+        {
             check(Object != nullptr)
         }
 
@@ -104,7 +111,8 @@ namespace Retro {
          * Attempt to construct a new object from the given object. will raise a fatal error if the wrong type.
          * @param Object The object to construct from
          */
-        explicit TVariantObject(UObject *Object) : ContainedObject(Object), TypeIndex(GetTypeIndex(Object).GetValue()) {
+        explicit TVariantObject(UObject *Object) : ContainedObject(Object), TypeIndex(GetTypeIndex(Object).GetValue())
+        {
         }
 
         /**
@@ -112,11 +120,13 @@ namespace Retro {
          * @param Object The inteface to construct from
          */
         explicit TVariantObject(const FScriptInterface &Object)
-            : ContainedObject(Object.GetObject()), TypeIndex(GetTypeIndex(Object.GetObject()).GetValue()) {
+            : ContainedObject(Object.GetObject()), TypeIndex(GetTypeIndex(Object.GetObject()).GetValue())
+        {
         }
 
       protected:
-        TVariantObject(UObject *InObject, size_t InIndex) : ContainedObject(InObject), TypeIndex(InIndex) {
+        TVariantObject(UObject *InObject, size_t InIndex) : ContainedObject(InObject), TypeIndex(InIndex)
+        {
         }
 
       public:
@@ -124,7 +134,8 @@ namespace Retro {
          * Access any of the members on UObject, regardless of the underlying type.
          * @return The underlying object
          */
-        UObject *operator->() const {
+        UObject *operator->() const
+        {
             return ContainedObject;
         }
 
@@ -132,17 +143,20 @@ namespace Retro {
          * Dereference the underlying UObject, regardless of the underlying type.
          * @return The underlying object
          */
-        UObject &operator*() const {
+        UObject &operator*() const
+        {
             return *ContainedObject;
         }
 
         constexpr friend bool operator==(const TVariantObject &A, const TVariantObject &B) = default;
 
-        constexpr friend bool operator==(const TVariantObject &A, const UObject *B) {
+        constexpr friend bool operator==(const TVariantObject &A, const UObject *B)
+        {
             return A.ContainedObject == B;
         }
 
-        constexpr friend bool operator==(const UObject *A, const TVariantObject &B) {
+        constexpr friend bool operator==(const UObject *A, const TVariantObject &B)
+        {
             return A == B.ContainedObject;
         }
 
@@ -150,11 +164,13 @@ namespace Retro {
          * Equality operator against a null value.
          * @return Is the variant null?
          */
-        constexpr friend bool operator==(const TVariantObject &A, std::nullptr_t) {
+        constexpr friend bool operator==(const TVariantObject &A, std::nullptr_t)
+        {
             return !A.IsValid();
         }
 
-        constexpr friend bool operator==(std::nullptr_t, const TVariantObject &B) {
+        constexpr friend bool operator==(std::nullptr_t, const TVariantObject &B)
+        {
             return !B.IsValid();
         }
 
@@ -165,7 +181,8 @@ namespace Retro {
          */
         template <typename U>
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
-        constexpr bool IsType() const {
+        constexpr bool IsType() const
+        {
             return TypeIndex == GetTypeIndex<U>();
         }
 
@@ -173,13 +190,15 @@ namespace Retro {
          * Runs a check to ensure that the contained state is valid.
          * @return The state is valid
          */
-        constexpr bool IsValid() const {
+        constexpr bool IsValid() const
+        {
             return !IsType<std::nullptr_t>() && ContainedObject != nullptr;
         }
 
         template <VariantObject U>
             requires ConvertibleVariantObjects<TVariantObject, U>
-        constexpr auto Convert() const {
+        constexpr auto Convert() const
+        {
             constexpr auto TypeMapping = Retro::VariantIndexMapping<TVariantObject, U>;
             check(TypeIndex < TypeMapping.size())
             return TypeMapping[TypeIndex] | Optionals::To<TOptional>() |
@@ -196,7 +215,8 @@ namespace Retro {
          */
         template <typename F>
             requires(std::invocable<F, T *> && ...)
-        decltype(auto) Visit(F &&Functor) const {
+        decltype(auto) Visit(F &&Functor) const
+        {
             check(TypeIndex != GetTypeIndex<std::nullptr_t>())
             static constexpr std::array VisitFunctions = {&TVariantObject::VisitSingle<T, F>...};
             return std::invoke(VisitFunctions[TypeIndex - 1], ContainedObject, std::forward<F>(Functor));
@@ -205,7 +225,8 @@ namespace Retro {
       private:
         template <typename U, typename F>
             requires(std::same_as<T, U> || ...) && std::invocable<F, U *>
-        static constexpr decltype(auto) VisitSingle(UObject *Object, F &&Functor) {
+        static constexpr decltype(auto) VisitSingle(UObject *Object, F &&Functor)
+        {
             return std::invoke(std::forward<F>(Functor), std::bit_cast<U *>(Object));
         }
 
@@ -214,7 +235,8 @@ namespace Retro {
          * Get the raw TObjectPtr object, used mainly for linking this type to the garbage collector if needed
          * @return The raw object pointer
          */
-        TObjectPtr<UObject> &GetObjectPtr() {
+        TObjectPtr<UObject> &GetObjectPtr()
+        {
             return ContainedObject;
         }
 
@@ -222,7 +244,8 @@ namespace Retro {
          * Get the raw TObjectPtr object, used mainly for linking this type to the garbage collector if needed
          * @return The raw object pointer
          */
-        const TObjectPtr<UObject> &GetObjectPtr() const {
+        const TObjectPtr<UObject> &GetObjectPtr() const
+        {
             return ContainedObject;
         }
 
@@ -234,7 +257,8 @@ namespace Retro {
          */
         template <typename U>
             requires(std::same_as<T, U> || ...)
-        U &Get() const {
+        U &Get() const
+        {
             return *CastChecked<U>(ContainedObject);
         }
 
@@ -242,7 +266,8 @@ namespace Retro {
          * Get a reference to the held value, will raise a fatal error if null.
          * @return A reference to the value
          */
-        UObject &Get() const {
+        UObject &Get() const
+        {
             check(::IsValid(ContainedObject))
             return *ContainedObject;
         }
@@ -254,8 +279,10 @@ namespace Retro {
          */
         template <typename U>
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
-        TOptional<U &> TryGet() const {
-            if (TypeIndex != GetTypeIndex<U>()) {
+        TOptional<U &> TryGet() const
+        {
+            if (TypeIndex != GetTypeIndex<U>())
+            {
                 return TOptional<U &>();
             }
 
@@ -266,7 +293,8 @@ namespace Retro {
          * Try to get the underlying object.
          * @return The underlying object
          */
-        TOptional<UObject &> TryGet() const {
+        TOptional<UObject &> TryGet() const
+        {
             return Optionals::OfNullable(ContainedObject);
         }
 
@@ -277,7 +305,8 @@ namespace Retro {
          */
         template <typename U>
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
-        static constexpr uint64 GetTypeIndex() {
+        static constexpr uint64 GetTypeIndex()
+        {
             constexpr std::array<bool, sizeof...(T) + 1> TypesMatch = {std::same_as<U, std::nullptr_t>,
                                                                        std::same_as<U, T>...};
             auto Find = std::ranges::find_if(TypesMatch, [](bool Matches) { return Matches; });
@@ -290,7 +319,8 @@ namespace Retro {
          * @param Object The object to check
          * @return The type index (if found)
          */
-        static TOptional<uint64> GetTypeIndex(const UObject *Object) {
+        static TOptional<uint64> GetTypeIndex(const UObject *Object)
+        {
             constexpr std::array TypeChecks = {&TVariantObject::IsValidType<std::nullptr_t>,
                                                &TVariantObject::IsValidType<T>...};
             auto Find = std::ranges::find_if(TypeChecks, [Object](auto &&Callback) { return Callback(Object); });
@@ -302,7 +332,8 @@ namespace Retro {
          * @param Data The asset to check
          * @return The type index (if found)
          */
-        static TOptional<uint64> GetTypeIndex(const FAssetData &Data) {
+        static TOptional<uint64> GetTypeIndex(const FAssetData &Data)
+        {
             constexpr std::array TypeChecks = {&TVariantObject::IsAssetTypeValid<std::nullptr_t>,
                                                &TVariantObject::IsAssetTypeValid<T>...};
             auto Find =
@@ -310,7 +341,8 @@ namespace Retro {
             return Find != TypeChecks.end() ? std::distance(TypeChecks.begin(), Find) : TOptional<uint64>();
         }
 
-        static TOptional<uint64> GetTypeIndexForClass(const UClass *Class) {
+        static TOptional<uint64> GetTypeIndexForClass(const UClass *Class)
+        {
             constexpr std::array TypeChecks = {&TVariantObject::IsClassValid<std::nullptr_t>,
                                                &TVariantObject::IsClassValid<T>...};
             auto Find = std::ranges::find_if(TypeChecks, [Class](auto &&Callback) { return Callback(Class); });
@@ -321,7 +353,8 @@ namespace Retro {
          * Get the type index of this varaint
          * @return The type index of this varaint
          */
-        uint64 GetTypeIndex() const {
+        uint64 GetTypeIndex() const
+        {
             return TypeIndex;
         }
 
@@ -331,7 +364,8 @@ namespace Retro {
          * @return Is this a valid type
          */
         template <typename U>
-        static constexpr bool StaticIsValidType() {
+        static constexpr bool StaticIsValidType()
+        {
             return (std::same_as<T, U> || ...);
         }
 
@@ -343,24 +377,36 @@ namespace Retro {
          */
         template <typename U>
             requires std::same_as<U, std::nullptr_t> || (std::same_as<T, U> || ...)
-        static constexpr bool IsAssetTypeValid(const FAssetData &Data) {
-            if constexpr (std::same_as<U, std::nullptr_t>) {
+        static constexpr bool IsAssetTypeValid(const FAssetData &Data)
+        {
+            if constexpr (std::same_as<U, std::nullptr_t>)
+            {
                 return !Data.IsValid();
-            } else if constexpr (UnrealInterface<U>) {
+            }
+            else if constexpr (UnrealInterface<U>)
+            {
                 return Data.GetClass()->ImplementsInterface(U::UClassType::StaticClass());
-            } else {
+            }
+            else
+            {
                 return Data.IsInstanceOf<U>();
             }
         }
 
         template <typename U>
             requires std::same_as<U, std::nullptr_t> || (std::same_as<T, U> || ...)
-        static constexpr bool IsClassValid(const UClass *Class) {
-            if constexpr (std::same_as<U, std::nullptr_t>) {
+        static constexpr bool IsClassValid(const UClass *Class)
+        {
+            if constexpr (std::same_as<U, std::nullptr_t>)
+            {
                 return Class == nullptr;
-            } else if constexpr (UnrealInterface<U>) {
+            }
+            else if constexpr (UnrealInterface<U>)
+            {
                 return Class->ImplementsInterface(U::UClassType::StaticClass());
-            } else {
+            }
+            else
+            {
                 return Class->IsChildOf<U>();
             }
         }
@@ -370,12 +416,15 @@ namespace Retro {
          * @param Object The object data to check against
          * @return Is this object of a valid type
          */
-        static bool IsValidType(const UObject *Object) {
+        static bool IsValidType(const UObject *Object)
+        {
             return GetTypeIndex(Object).IsSet();
         }
 
-        static bool IsValidType(const UClass *Class) {
-            if (Class == nullptr) {
+        static bool IsValidType(const UClass *Class)
+        {
+            if (Class == nullptr)
+            {
                 return true;
             }
 
@@ -388,7 +437,8 @@ namespace Retro {
          * Get the array of all classes that are usable by this variant type.
          * @return The array of all classes that are usable by this variant type.
          */
-        static TArray<UClass *> GetTypeClasses() {
+        static TArray<UClass *> GetTypeClasses()
+        {
             return {GetClass<T>()...};
         }
 
@@ -399,7 +449,8 @@ namespace Retro {
          */
         template <typename U>
             requires std::is_base_of_v<UObject, U> && (std::same_as<T, U> || ...)
-        void Set(U *Object) {
+        void Set(U *Object)
+        {
             ContainedObject = Object;
             TypeIndex = GetTypeIndex<U>();
         }
@@ -411,7 +462,8 @@ namespace Retro {
          */
         template <typename U>
             requires UnrealInterface<U> && (std::same_as<T, U> || ...)
-        void Set(const TScriptInterface<U> &Object) {
+        void Set(const TScriptInterface<U> &Object)
+        {
             ContainedObject = Object.GetObject();
             TypeIndex = GetTypeIndex<U>();
         }
@@ -420,7 +472,8 @@ namespace Retro {
          * Set the value of this variant
          * @param Object The object to set
          */
-        void Set(UObject *Object) {
+        void Set(UObject *Object)
+        {
             ContainedObject = Object;
             TypeIndex = GetTypeIndex(Object).GetValue();
         }
@@ -429,7 +482,8 @@ namespace Retro {
          * Set the value of this variant
          * @param Object The object to set
          */
-        void Set(const FScriptInterface &Object) {
+        void Set(const FScriptInterface &Object)
+        {
             ContainedObject = Object.GetObject();
             TypeIndex = GetTypeIndex(Object.GetObject()).GetValue();
         }
@@ -438,45 +492,61 @@ namespace Retro {
         /**
          * Perform an unchecked set of a null value (this is used internally for declared variant object structs)
          */
-        void SetUnchecked(std::nullptr_t) {
+        void SetUnchecked(std::nullptr_t)
+        {
             ContainedObject = nullptr;
             TypeIndex = GetTypeIndex<std::nullptr_t>();
         }
 
       private:
-        explicit TVariantObject(FIntrusiveUnsetOptionalState) : ContainedObject(nullptr) {
+        explicit TVariantObject(FIntrusiveUnsetOptionalState) : ContainedObject(nullptr)
+        {
         }
 
-        TVariantObject &operator=(FIntrusiveUnsetOptionalState) {
+        TVariantObject &operator=(FIntrusiveUnsetOptionalState)
+        {
             ContainedObject = nullptr;
             TypeIndex = GetTypeIndex<std::nullptr_t>();
             return *this;
         }
 
-        bool operator==(FIntrusiveUnsetOptionalState) const {
+        bool operator==(FIntrusiveUnsetOptionalState) const
+        {
             return !IsValid();
         }
 
         template <typename U>
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
-        static constexpr bool IsValidType(const UObject *Object) {
-            if constexpr (std::is_same_v<std::nullptr_t, U>) {
+        static constexpr bool IsValidType(const UObject *Object)
+        {
+            if constexpr (std::is_same_v<std::nullptr_t, U>)
+            {
                 return Object == nullptr;
-            } else if constexpr (UnrealInterface<U>) {
+            }
+            else if constexpr (UnrealInterface<U>)
+            {
                 return Object->Implements<typename U::UClassType>();
-            } else {
+            }
+            else
+            {
                 return Object->IsA<U>();
             }
         }
 
         template <typename U>
             requires std::same_as<std::nullptr_t, U> || (std::same_as<T, U> || ...)
-        static constexpr UClass *GetUnrealClassType() {
-            if constexpr (std::is_same_v<std::nullptr_t, U>) {
+        static constexpr UClass *GetUnrealClassType()
+        {
+            if constexpr (std::is_same_v<std::nullptr_t, U>)
+            {
                 return nullptr;
-            } else if constexpr (UnrealInterface<U>) {
+            }
+            else if constexpr (UnrealInterface<U>)
+            {
                 return U::UClassType::StaticClass();
-            } else {
+            }
+            else
+            {
                 return U::StaticClass();
             }
         }

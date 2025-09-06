@@ -16,7 +16,8 @@ constexpr int32 FEMALE_CHANCE_MAX = 255;
  * Represents the Gender Ratio for a Specific Pokémon
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FGenderRatio : public FIndexedTableRow {
+struct POKEMONDATA_API FGenderRatio : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -42,7 +43,8 @@ struct POKEMONDATA_API FGenderRatio : public FIndexedTableRow {
  * Blueprint function library for getting gender ratio data out.
  */
 UCLASS()
-class POKEMONDATA_API UGenderRatioHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UGenderRatioHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

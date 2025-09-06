@@ -13,14 +13,16 @@ class IPokemon;
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable, BlueprintType)
-class UAbilityBlock : public UInterface {
+class UAbilityBlock : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * This is the interface used for handling a Pokémon's ability.
  */
-class POKEMONCORE_API IAbilityBlock {
+class POKEMONCORE_API IAbilityBlock
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

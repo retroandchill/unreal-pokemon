@@ -11,6 +11,7 @@
  * UObject class that is used to stand-in for a mock.
  */
 UCLASS()
-class AUTOMATIONTESTHELPERS_API UMockedObject : public UObject {
+class AUTOMATIONTESTHELPERS_API UMockedObject : public UObject
+{
     GENERATED_BODY()
 };

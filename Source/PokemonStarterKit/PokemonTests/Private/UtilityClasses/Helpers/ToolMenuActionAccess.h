@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 
-class FPopulateMenuBuilderWithToolMenuEntry {
+class FPopulateMenuBuilderWithToolMenuEntry
+{
 
   public:
-    static void ExecuteOption(const FToolMenuEntry &Entry) {
+    static void ExecuteOption(const FToolMenuEntry &Entry)
+    {
         Entry.Action.GetUIAction()->Execute();
     }
 };

@@ -13,7 +13,8 @@ struct FPokemonDTO;
  * Utility class for personality value related operations
  */
 UCLASS()
-class POKEMONCORE_API UPersonalityValueUtils : public UBlueprintFunctionLibrary {
+class POKEMONCORE_API UPersonalityValueUtils : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

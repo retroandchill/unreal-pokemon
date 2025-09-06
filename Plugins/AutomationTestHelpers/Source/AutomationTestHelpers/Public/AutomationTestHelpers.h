@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FAutomationTestHelpersModule : public IModuleInterface {
+class FAutomationTestHelpersModule : public IModuleInterface
+{
   public:
     /** IModuleInterface implementation */
     void StartupModule() override;

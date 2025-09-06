@@ -2,6 +2,7 @@
 #include "Species/BodyColor.h"
 #include "DataManager.h"
 
-TArray<FName> UBodyColorHelper::GetBodyColorNames() {
+TArray<FName> UBodyColorHelper::GetBodyColorNames()
+{
     return FDataManager::GetInstance().GetDataTable<FBodyColor>().GetTableRowNames();
 }

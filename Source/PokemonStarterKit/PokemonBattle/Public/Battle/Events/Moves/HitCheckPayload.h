@@ -14,7 +14,8 @@ class IBattleMove;
  * The struct that holds the actual payload data
  */
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FHitCheckData {
+struct POKEMONBATTLE_API FHitCheckData
+{
     GENERATED_BODY()
 
     /**
@@ -61,7 +62,8 @@ struct POKEMONBATTLE_API FHitCheckData {
  * The event payload for a hit check.
  */
 UCLASS(BlueprintType)
-class POKEMONBATTLE_API UHitCheckPayload : public UObject, public ITargetedMoveEventPayload {
+class POKEMONBATTLE_API UHitCheckPayload : public UObject, public ITargetedMoveEventPayload
+{
     GENERATED_BODY()
 
   public:

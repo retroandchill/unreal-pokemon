@@ -6,7 +6,8 @@
 #include "Assets/AssetClass.h"
 #include "Field/FieldItemEffect.h"
 
-namespace Pokemon::Items {
+namespace Pokemon::Items
+{
 
     UE_DECLARE_BLUEPRINT_CLASS_EXPORTED(POKEMONITEMS_API, FieldItemEffects, UFieldItemEffect);
 

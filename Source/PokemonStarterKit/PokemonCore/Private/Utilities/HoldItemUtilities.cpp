@@ -4,19 +4,24 @@
 #include "Pokemon/Pokemon.h"
 
 void UHoldItemUtilities::GetHeldItem(const TScriptInterface<IPokemon> &Pokemon, FItem &HeldItem,
-                                     EHoldItemResult &Branches) {
+                                     EHoldItemResult &Branches)
+{
     using enum EHoldItemResult;
 
-    if (Pokemon == nullptr) {
+    if (Pokemon == nullptr)
+    {
         UE_LOG(LogBlueprint, Error, TEXT("Get Held Item called on an invalid Pokémon reference!"))
         Branches = NoHeldItem;
         return;
     }
 
-    if (auto FoundHeldItem = Pokemon->GetHoldItem(); FoundHeldItem.IsSet()) {
+    if (auto FoundHeldItem = Pokemon->GetHoldItem(); FoundHeldItem.IsSet())
+    {
         Branches = HasItem;
         HeldItem = *FoundHeldItem;
-    } else {
+    }
+    else
+    {
         Branches = NoHeldItem;
     }
 }

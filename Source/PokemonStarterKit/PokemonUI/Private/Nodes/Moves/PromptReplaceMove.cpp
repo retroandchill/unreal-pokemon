@@ -6,7 +6,8 @@
 
 UPromptReplaceMove *UPromptReplaceMove::PromptReplaceMove(const UObject *WorldContextObject,
                                                           const TScriptInterface<IPokemon> &Pokemon,
-                                                          const FMoveHandle &Move) {
+                                                          const FMoveHandle &Move)
+{
     auto Node = NewObject<UPromptReplaceMove>();
     Node->SetWorldContext(WorldContextObject);
     Node->Pokemon = Pokemon;
@@ -14,10 +15,14 @@ UPromptReplaceMove *UPromptReplaceMove::PromptReplaceMove(const UObject *WorldCo
     return Node;
 }
 
-UE5Coro::TCoroutine<> UPromptReplaceMove::ExecuteCoroutine(FForceLatentCoroutine) {
-    if (co_await IPokemonCoroutineDispatcher::Get(GetWorldContext()).PromptReplaceMove(Pokemon, Move)) {
+UE5Coro::TCoroutine<> UPromptReplaceMove::ExecuteCoroutine(FForceLatentCoroutine)
+{
+    if (co_await IPokemonCoroutineDispatcher::Get(GetWorldContext()).PromptReplaceMove(Pokemon, Move))
+    {
         MoveLearned.Broadcast();
-    } else {
+    }
+    else
+    {
         MoveNotLearned.Broadcast();
     }
 }

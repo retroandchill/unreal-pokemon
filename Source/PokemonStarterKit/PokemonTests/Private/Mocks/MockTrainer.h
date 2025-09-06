@@ -14,7 +14,8 @@ THIRD_PARTY_INCLUDES_END
 /**
  *
  */
-class FMockTrainer : public ITrainer {
+class FMockTrainer : public ITrainer
+{
     DECLARE_MOCK_INTERFACE(FMockTrainer)
 
   public:

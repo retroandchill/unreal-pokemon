@@ -7,7 +7,8 @@
 
 DEFINE_INJECTABLE_DEPENDENCY(UBattleAnimationGetter)
 
-UBattleAnimationGetter &UBattleAnimationGetter::Get(const UObject *WorldContext) {
+UBattleAnimationGetter &UBattleAnimationGetter::Get(const UObject *WorldContext)
+{
     auto GameInstance = UGameplayStatics::GetGameInstance(WorldContext);
     check(IsValid(GameInstance))
     auto Subsystem = GameInstance->GetSubsystem<UBattleSubsystem>();

@@ -15,15 +15,20 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     template <VariantObject T>
     struct TSoftVariantObject;
 
     template <typename>
-    struct TIsSoftVariantObject : std::false_type {};
+    struct TIsSoftVariantObject : std::false_type
+    {
+    };
 
     template <typename... T>
-    struct TIsSoftVariantObject<TSoftVariantObject<T...>> : std::true_type {};
+    struct TIsSoftVariantObject<TSoftVariantObject<T...>> : std::true_type
+    {
+    };
 
     /**
      * Checks if the given type is a soft variant object.
@@ -48,7 +53,8 @@ namespace Retro {
      * @tparam T The variant object that dictates the data for this variant
      */
     RETROLIB_EXPORT template <VariantObject T>
-    struct TSoftVariantObject {
+    struct TSoftVariantObject
+    {
         using FHardReference = T;
 
         static constexpr bool bHasIntrusiveUnsetOptionalState = true;
@@ -62,7 +68,8 @@ namespace Retro {
         template <typename... A>
             requires std::constructible_from<TSoftObjectPtr<>, A...> && (!PackSameAs<TSoftVariantObject, A...>)
         explicit TSoftVariantObject(A &&...Args)
-            : Ptr(std::forward<A>(Args)...), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue()) {
+            : Ptr(std::forward<A>(Args)...), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue())
+        {
         }
 
         /**
@@ -70,18 +77,22 @@ namespace Retro {
          * @param Object The object to set from
          */
         explicit TSoftVariantObject(const T &Object)
-            : Ptr(&Object.Get()), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue()) {
+            : Ptr(&Object.Get()), TypeIndex(T::GetTypeIndex(GetAssetData()).GetValue())
+        {
         }
 
       protected:
-        TSoftVariantObject(const TSoftObjectPtr<> &Object, size_t Index) : Ptr(Object), TypeIndex(Index) {
+        TSoftVariantObject(const TSoftObjectPtr<> &Object, size_t Index) : Ptr(Object), TypeIndex(Index)
+        {
         }
 
-        TSoftVariantObject(TSoftObjectPtr<> &&Object, size_t Index) : Ptr(std::move(Object)), TypeIndex(Index) {
+        TSoftVariantObject(TSoftObjectPtr<> &&Object, size_t Index) : Ptr(std::move(Object)), TypeIndex(Index)
+        {
         }
 
       public:
-        constexpr uint64 GetTypeIndex() const {
+        constexpr uint64 GetTypeIndex() const
+        {
             return TypeIndex;
         }
 
@@ -89,7 +100,8 @@ namespace Retro {
          * Returns asset name string, leaving off the /package/path part
          * @return the asset name string, leaving off the /package/path part
          */
-        FString GetAssetName() const {
+        FString GetAssetName() const
+        {
             return Ptr.GetAssetName();
         }
 
@@ -97,7 +109,8 @@ namespace Retro {
          * Returns /package/path string, leaving off the asset name
          * @return /package/path string, leaving off the asset name
          */
-        FString GetLongPackageName() const {
+        FString GetLongPackageName() const
+        {
             return Ptr.GetAssetName();
         }
 
@@ -105,7 +118,8 @@ namespace Retro {
          * Hash function
          * @return The hash for this type
          */
-        uint32 GetPtrTypeHash() const {
+        uint32 GetPtrTypeHash() const
+        {
             return GetTypeHash(Ptr);
         }
 
@@ -113,7 +127,8 @@ namespace Retro {
          * Test if this points to a live UObject
          * @return if this points to a live UObject
          */
-        bool IsValid() const {
+        bool IsValid() const
+        {
             return Ptr.IsValid();
         }
 
@@ -125,8 +140,10 @@ namespace Retro {
          */
         template <typename U>
             requires(T::template StaticIsValidType<T>())
-        TOptional<U &> LoadSynchronous() const {
-            if (TypeIndex != T::template GetTypeIndex<U>()) {
+        TOptional<U &> LoadSynchronous() const
+        {
+            if (TypeIndex != T::template GetTypeIndex<U>())
+            {
                 return TOptional<U &>();
             }
 
@@ -137,9 +154,11 @@ namespace Retro {
          * Synchronously load (if necessary) and return the asset object represented by this asset ptr
          * @return the asset object represented by this asset ptr
          */
-        TOptional<T> LoadSynchronous() const {
+        TOptional<T> LoadSynchronous() const
+        {
             auto Result = Ptr.LoadSynchronous();
-            if (Result == nullptr || !T::IsValidType(Result)) {
+            if (Result == nullptr || !T::IsValidType(Result))
+            {
                 return TOptional<T>();
             }
 
@@ -153,8 +172,10 @@ namespace Retro {
          */
         template <typename U>
             requires(T::template StaticIsValidType<T>())
-        UE5Coro::TCoroutine<TOptional<U &>> LoadAsync() const {
-            if (TypeIndex != T::template GetTypeIndex<U>()) {
+        UE5Coro::TCoroutine<TOptional<U &>> LoadAsync() const
+        {
+            if (TypeIndex != T::template GetTypeIndex<U>())
+            {
                 co_return TOptional<U &>();
             }
 
@@ -165,9 +186,11 @@ namespace Retro {
          * Perform an asynchronous load of the given object.
          * @return The handle for the async load
          */
-        UE5Coro::TCoroutine<TOptional<T>> LoadAsync() const {
+        UE5Coro::TCoroutine<TOptional<T>> LoadAsync() const
+        {
             auto Object = co_await UE5Coro::Latent::AsyncLoadObject(Ptr);
-            if (Object == nullptr || !T::IsValidType(Object)) {
+            if (Object == nullptr || !T::IsValidType(Object))
+            {
                 co_return TOptional<T>();
             }
 
@@ -179,7 +202,8 @@ namespace Retro {
          * Set the value from the given hard reference
          * @param Object Hard reference to set from
          */
-        void Set(const T &Object) {
+        void Set(const T &Object)
+        {
             Ptr = Object.TryGet().GetPtrOrNull();
             TypeIndex = Object.GetTypeIndex();
         }
@@ -188,7 +212,8 @@ namespace Retro {
          * Set the value from the given soft pointer
          * @param Object The soft object to set from
          */
-        void Set(const TSoftObjectPtr<> &Object) {
+        void Set(const TSoftObjectPtr<> &Object)
+        {
             Ptr = Object;
             TypeIndex = T::GetTypeIndex(GetAssetData()).GetValue();
         }
@@ -197,7 +222,8 @@ namespace Retro {
          * Returns the SoftObjectPath that is wrapped by this TSoftVariantObject
          * @return The SoftObjectPath that is wrapped by this TSoftVariantObject
          */
-        const FSoftObjectPath &ToSoftObjectPath() const {
+        const FSoftObjectPath &ToSoftObjectPath() const
+        {
             return Ptr.ToSoftObjectPath();
         }
 
@@ -205,7 +231,8 @@ namespace Retro {
          * Returns the SoftObjectPtr that is wrapped by this TSoftVariantObject
          * @return The SoftObjectPtr that is wrapped by this TSoftVariantObject
          */
-        const TSoftObjectPtr<> &ToSoftObjectPtr() const {
+        const TSoftObjectPtr<> &ToSoftObjectPtr() const
+        {
             return Ptr;
         }
 
@@ -213,7 +240,8 @@ namespace Retro {
          * Returns string representation of reference, in form /package/path.assetname
          * @return The string representation of reference, in form /package/path.assetname
          */
-        FString ToString() const {
+        FString ToString() const
+        {
             return Ptr.ToString();
         }
 
@@ -221,7 +249,8 @@ namespace Retro {
          * Equality operator against the unset optional state
          * @return Is this an unset value
          */
-        bool operator==(FIntrusiveUnsetOptionalState) const {
+        bool operator==(FIntrusiveUnsetOptionalState) const
+        {
             return Ptr.IsNull();
         }
 
@@ -230,7 +259,8 @@ namespace Retro {
          * @param Object The object to check against
          * @return The type index of the asset
          */
-        static TOptional<uint64> GetTypeIndex(const TSoftObjectPtr<> &Object) {
+        static TOptional<uint64> GetTypeIndex(const TSoftObjectPtr<> &Object)
+        {
             const auto &AssetManager = UAssetManager::Get();
             FAssetData Data;
             AssetManager.GetAssetDataForPath(Object.ToSoftObjectPath(), Data);
@@ -239,7 +269,8 @@ namespace Retro {
 
         template <SoftVariantObject U>
             requires ConvertibleVariantObjects<T, typename U::FHardReference>
-        constexpr auto Convert() const & {
+        constexpr auto Convert() const &
+        {
             constexpr auto TypeMapping = Retro::VariantIndexMapping<T, typename U::FHardReference>;
             check(TypeIndex < TypeMapping.size())
             return TypeMapping[TypeIndex] | Optionals::To<TOptional>() |
@@ -248,7 +279,8 @@ namespace Retro {
 
         template <SoftVariantObject U>
             requires ConvertibleVariantObjects<T, typename U::FHardReference>
-        constexpr auto Convert() && noexcept {
+        constexpr auto Convert() && noexcept
+        {
             constexpr auto TypeMapping = Retro::VariantIndexMapping<T, typename U::FHardReference>;
             check(TypeIndex < TypeMapping.size())
             return TypeMapping[TypeIndex] | Optionals::To<TOptional>() |
@@ -268,15 +300,18 @@ namespace Retro {
         template <VariantObject U>
         friend struct TSoftVariantObject;
 
-        explicit TSoftVariantObject(FIntrusiveUnsetOptionalState) {
+        explicit TSoftVariantObject(FIntrusiveUnsetOptionalState)
+        {
         }
 
-        TSoftVariantObject &operator=(FIntrusiveUnsetOptionalState) {
+        TSoftVariantObject &operator=(FIntrusiveUnsetOptionalState)
+        {
             Ptr.Reset();
             return *this;
         }
 
-        FAssetData GetAssetData() const {
+        FAssetData GetAssetData() const
+        {
             auto &AssetManager = UAssetManager::Get();
             FAssetData Data;
             AssetManager.GetAssetDataForPath(ToSoftObjectPath(), Data);

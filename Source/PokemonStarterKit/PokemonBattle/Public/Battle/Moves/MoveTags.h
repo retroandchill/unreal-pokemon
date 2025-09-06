@@ -7,7 +7,8 @@
 #include "Moves/MoveDamageCategory.h"
 #include "NativeGameplayTags.h"
 
-namespace Pokemon::Battle::Moves {
+namespace Pokemon::Battle::Moves
+{
 
     /**
      * Tag applied to a battler while they're using a move
@@ -141,7 +142,8 @@ namespace Pokemon::Battle::Moves {
     /**
      * Singleton object that handles converting user-defined move tags into GameplayTags
      */
-    class POKEMONBATTLE_API FLookup {
+    class POKEMONBATTLE_API FLookup
+    {
         FLookup();
         ~FLookup();
 
@@ -157,7 +159,8 @@ namespace Pokemon::Battle::Moves {
          * @param TagName The name of tag to search for
          * @return The found tag
          */
-        FORCEINLINE const FNativeGameplayTag &GetTag(FName TagName) const {
+        FORCEINLINE const FNativeGameplayTag &GetTag(FName TagName) const
+        {
             return *Tags.FindChecked(TagName);
         }
 

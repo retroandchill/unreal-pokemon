@@ -2,19 +2,23 @@
 #include "Data/Command.h"
 #include "Data/CommandCondition.h"
 
-FName UCommand::GetID() const {
+FName UCommand::GetID() const
+{
     return ID;
 }
 
-FText UCommand::GetText_Implementation() const {
+FText UCommand::GetText_Implementation() const
+{
     return Text;
 }
 
-bool UCommand::IsEnabled() const {
+bool UCommand::IsEnabled() const
+{
     return Condition.IsSet() ? Condition.GetValue()->IsEnabled() : true;
 }
 
-UCommand *UCommand::CreateBasicCommand(const FText &Text) {
+UCommand *UCommand::CreateBasicCommand(const FText &Text)
+{
     auto Command = NewObject<UCommand>();
 
     auto NormalizedText = Text.ToString();
@@ -26,7 +30,8 @@ UCommand *UCommand::CreateBasicCommand(const FText &Text) {
     return Command;
 }
 
-UCommand *UCommand::CreateBasicCommand(FName ID, const FText &Text, UObject *Handler) {
+UCommand *UCommand::CreateBasicCommand(FName ID, const FText &Text, UObject *Handler)
+{
     auto Command = NewObject<UCommand>();
 
     Command->ID = ID;
@@ -36,10 +41,12 @@ UCommand *UCommand::CreateBasicCommand(FName ID, const FText &Text, UObject *Han
     return Command;
 }
 
-void UCommand::ExecuteCommand_Implementation(APlayerController *Controller) {
+void UCommand::ExecuteCommand_Implementation(APlayerController *Controller)
+{
     // No implementation in this class, this is simply used by the child classes to handle the effects
 }
 
-FText UCommand::GetOriginalText() const {
+FText UCommand::GetOriginalText() const
+{
     return Text;
 }

@@ -16,7 +16,8 @@ struct FGameplayEffectRemovalInfo;
  * Container of the stat affecting attributes
  */
 USTRUCT(BlueprintType)
-struct POKEMONBATTLE_API FStatUpdateInfo {
+struct POKEMONBATTLE_API FStatUpdateInfo
+{
     GENERATED_BODY()
 
     /**
@@ -36,7 +37,8 @@ struct POKEMONBATTLE_API FStatUpdateInfo {
  * Mark stat values as dirty upon a stat change
  */
 UCLASS(DisplayName = "Refresh Stats on Tag Change")
-class POKEMONBATTLE_API URefreshStatsOnTagChangeGameplayEffectComponent : public UGameplayEffectComponent {
+class POKEMONBATTLE_API URefreshStatsOnTagChangeGameplayEffectComponent : public UGameplayEffectComponent
+{
     GENERATED_BODY()
 
   public:

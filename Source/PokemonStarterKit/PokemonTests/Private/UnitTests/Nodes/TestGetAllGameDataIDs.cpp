@@ -22,7 +22,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_NodeTile,
                                  "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.NodeTitle",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestGetAllGameDataIDs_NodeTile::RunTest(const FString &Parameters) {
+bool TestGetAllGameDataIDs_NodeTile::RunTest(const FString &Parameters)
+{
     using enum ENodeTitleType::Type;
     FBlueprintActionDatabase::Get().RefreshAll();
 
@@ -43,7 +44,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_TooltipText,
                                  "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.TooltipText",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestGetAllGameDataIDs_TooltipText::RunTest(const FString &Parameters) {
+bool TestGetAllGameDataIDs_TooltipText::RunTest(const FString &Parameters)
+{
     FBlueprintActionDatabase::Get().RefreshAll();
 
     MakeTestableBP(TestBP, TestGraph);
@@ -63,7 +65,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_MenuCategory,
                                  "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.MenuCategory",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestGetAllGameDataIDs_MenuCategory::RunTest(const FString &Parameters) {
+bool TestGetAllGameDataIDs_MenuCategory::RunTest(const FString &Parameters)
+{
     FBlueprintActionDatabase::Get().RefreshAll();
 
     MakeTestableBP(TestBP, TestGraph);
@@ -82,7 +85,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_IconAndTint,
                                  "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.IconAndTint",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestGetAllGameDataIDs_IconAndTint::RunTest(const FString &Parameters) {
+bool TestGetAllGameDataIDs_IconAndTint::RunTest(const FString &Parameters)
+{
     FBlueprintActionDatabase::Get().RefreshAll();
 
     MakeTestableBP(TestBP, TestGraph);
@@ -104,7 +108,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_MenuActions,
                                  "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.MenuActions",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestGetAllGameDataIDs_MenuActions::RunTest(const FString &Parameters) {
+bool TestGetAllGameDataIDs_MenuActions::RunTest(const FString &Parameters)
+{
     FBlueprintActionDatabase::Get().RefreshAll();
     auto Actions = FBlueprintActionDatabase::Get().GetAllActions();
     UE_ASSERT_TRUE(Actions.Contains(UK2Node_GetAllGameDataIDs::StaticClass()));
@@ -121,7 +126,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetAllGameDataIDs_ExecuteNode,
                                  "Unit Tests.PokemonData.Nodes.TestGetAllGameDataIDs.NodeExecution",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestGetAllGameDataIDs_ExecuteNode::RunTest(const FString &Parameters) {
+bool TestGetAllGameDataIDs_ExecuteNode::RunTest(const FString &Parameters)
+{
     auto DispatcherClass = UBlueprintTestUtils::LoadBlueprintClassByName(TEST_GET_GAME_DATA_IDS);
     UE_ASSERT_NOT_NULL(DispatcherClass);
     auto Dispatcher = NewObject<UObject>(GEngine, DispatcherClass);

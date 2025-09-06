@@ -5,7 +5,8 @@
 #include "Battle/Moves/BattleMoveFunctionCode.h"
 #include "RetroLib/Optionals/OrElseValue.h"
 
-TSubclassOf<UBattleMoveFunctionCode> Pokemon::Battle::Moves::LookupMoveEffectClass(FName FunctionCode) {
+TSubclassOf<UBattleMoveFunctionCode> Pokemon::Battle::Moves::LookupMoveEffectClass(FName FunctionCode)
+{
     // clang-format off
     return Classes::MoveEffects.LoadClass(FunctionCode) |
            Retro::Optionals::OrElseValue(UBattleMoveFunctionCode::StaticClass());

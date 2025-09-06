@@ -19,7 +19,8 @@ class UInputAction;
  *
  */
 UCLASS(Abstract)
-class POKEMONUI_API USummaryTabWidget : public UCommonUserWidget {
+class POKEMONUI_API USummaryTabWidget : public UCommonUserWidget
+{
     GENERATED_BODY()
 
   protected:

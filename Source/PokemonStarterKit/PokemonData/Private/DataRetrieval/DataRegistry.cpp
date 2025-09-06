@@ -5,18 +5,21 @@ FDataRegistry::FDataRegistry() = default;
 
 FDataRegistry::~FDataRegistry() = default;
 
-FDataRegistry &FDataRegistry::GetInstance() {
+FDataRegistry &FDataRegistry::GetInstance()
+{
     static FDataRegistry DataRegistry;
     return DataRegistry;
 }
 
 TUniquePtr<IGameData> FDataRegistry::CreateDataTableProxy(const UScriptStruct *StructType,
-                                                          const TObjectPtr<UDataTable> &DataTable) const {
+                                                          const TObjectPtr<UDataTable> &DataTable) const
+{
     check(StructType != nullptr)
     return Registry.Construct(StructType->GetFName(), DataTable);
 }
 
-bool FDataRegistry::IsTypeRegistered(const UScriptStruct *StructType) const {
+bool FDataRegistry::IsTypeRegistered(const UScriptStruct *StructType) const
+{
     check(StructType != nullptr)
     return Registry.IsTypeRegistered(StructType->GetFName());
 }

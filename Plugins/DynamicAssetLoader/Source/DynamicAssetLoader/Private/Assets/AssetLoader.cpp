@@ -8,9 +8,11 @@
 #include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Utils/CommonString.h"
 
-FString UAssetLoader::CreateSearchKey(FStringView BasePackageName, FStringView AssetName) {
+FString UAssetLoader::CreateSearchKey(FStringView BasePackageName, FStringView AssetName)
+{
     FStringView Prefix;
-    if (int32 CharIndex; AssetName.FindLastChar('/', CharIndex)) {
+    if (int32 CharIndex; AssetName.FindLastChar('/', CharIndex))
+    {
         int32 PrefixLength = CharIndex + 1;
         Prefix = AssetName.SubStr(0, PrefixLength);
         AssetName = AssetName.RightChop(PrefixLength);
@@ -20,7 +22,8 @@ FString UAssetLoader::CreateSearchKey(FStringView BasePackageName, FStringView A
 }
 
 EAssetLoadResult UAssetLoader::FindAssetByName(const UClass *AssetClass, const FDirectoryPath &BasePackageName,
-                                               const FString &AssetName, UObject *&FoundAsset) {
+                                               const FString &AssetName, UObject *&FoundAsset)
+{
     FoundAsset = FindAssetByName(BasePackageName, AssetName) |
                  Retro::Optionals::Filter([&AssetClass](const UObject &Object) { return Object.IsA(AssetClass); }) |
                  Retro::Optionals::PtrOrNull;
@@ -28,7 +31,8 @@ EAssetLoadResult UAssetLoader::FindAssetByName(const UClass *AssetClass, const F
 }
 
 EAssetLoadResult UAssetLoader::LookupAssetByName(const UClass *AssetClass, const FDirectoryPath &BasePackageName,
-                                                 const FString &AssetName, TSoftObjectPtr<> &FoundAsset) {
+                                                 const FString &AssetName, TSoftObjectPtr<> &FoundAsset)
+{
     // clang-format off
     FoundAsset = LookupAssetByName(BasePackageName, AssetName) |
                  Retro::Optionals::Filter(Retro::BindBack<&TSoftObjectRef<>::IsAssetOfType>(AssetClass)) |
@@ -38,19 +42,23 @@ EAssetLoadResult UAssetLoader::LookupAssetByName(const UClass *AssetClass, const
 }
 
 CUSTOM_THUNK_STUB(EAssetLoadResult, UAssetLoader::LoadDynamicAsset, FName, const FString &, UObject *&)
-DEFINE_FUNCTION(UAssetLoader::execLoadDynamicAsset) {
+DEFINE_FUNCTION(UAssetLoader::execLoadDynamicAsset)
+{
     P_GET_PROPERTY(FNameProperty, Identifier)
     P_GET_WILDCARD_PARAM(AssetNameProp, AssetNameData)
     P_GET_WILDCARD_PARAM(OutputProp, Output)
     P_FINISH
 
-    try {
-        if (OutputProp == nullptr || Output == nullptr) {
+    try
+    {
+        if (OutputProp == nullptr || Output == nullptr)
+        {
             throw Retro::FInvalidArgumentException("The out parameter was not provided!");
         }
 
         auto Registration = UE::Assets::FAssetClassRegistry::Get().GetAssetClassRegistration(Identifier);
-        if (!Registration.IsSet()) {
+        if (!Registration.IsSet())
+        {
             throw Retro::FInvalidArgumentException("The provided asset type is not a valid asset");
         }
 
@@ -62,25 +70,31 @@ DEFINE_FUNCTION(UAssetLoader::execLoadDynamicAsset) {
         Result = Registration->LoadAsset(AssetName, *OutputProp, Output) ? EAssetLoadResult::Found
                                                                          : EAssetLoadResult::NotFound;
         P_NATIVE_END;
-    } catch (const Retro::FBlueprintException &Exception) {
+    }
+    catch (const Retro::FBlueprintException &Exception)
+    {
         ConvertException(Exception);
     }
 }
 
 CUSTOM_THUNK_STUB(EAssetLoadResult, UAssetLoader::LookupDynamicAsset, FName, const FString &, TSoftObjectPtr<> &)
-DEFINE_FUNCTION(UAssetLoader::execLookupDynamicAsset) {
+DEFINE_FUNCTION(UAssetLoader::execLookupDynamicAsset)
+{
     P_GET_PROPERTY(FNameProperty, Identifier)
     P_GET_WILDCARD_PARAM(AssetNameProp, AssetNameData)
     P_GET_WILDCARD_PARAM(OutputProp, Output)
     P_FINISH
 
-    try {
-        if (OutputProp == nullptr || Output == nullptr) {
+    try
+    {
+        if (OutputProp == nullptr || Output == nullptr)
+        {
             throw Retro::FInvalidArgumentException("The out parameter was not provided!");
         }
 
         auto Registration = UE::Assets::FAssetClassRegistry::Get().GetAssetClassRegistration(Identifier);
-        if (!Registration.IsSet()) {
+        if (!Registration.IsSet())
+        {
             throw Retro::FInvalidArgumentException("The provided asset type is not a valid asset");
         }
 
@@ -92,13 +106,16 @@ DEFINE_FUNCTION(UAssetLoader::execLookupDynamicAsset) {
         Result = Registration->LookupAsset(AssetName, *OutputProp, Output) ? EAssetLoadResult::Found
                                                                            : EAssetLoadResult::NotFound;
         P_NATIVE_END;
-    } catch (const Retro::FBlueprintException &Exception) {
+    }
+    catch (const Retro::FBlueprintException &Exception)
+    {
         ConvertException(Exception);
     }
 }
 
 EAssetLoadResult UAssetLoader::LookupBlueprintClassByName(UClass *BaseClass, const FDirectoryPath &BasePackageName,
-                                                          const FString &AssetName, UClass *&FoundClass) {
+                                                          const FString &AssetName, UClass *&FoundClass)
+{
     FoundClass = LookupBlueprintClassByName(BasePackageName, AssetName) |
                  Retro::Optionals::Filter([&BaseClass](const UClass *Class) { return Class->IsChildOf(BaseClass); }) |
                  Retro::Optionals::PtrOrNull;
@@ -106,7 +123,8 @@ EAssetLoadResult UAssetLoader::LookupBlueprintClassByName(UClass *BaseClass, con
 }
 
 EAssetLoadResult UAssetLoader::ResolveAsset(UClass *AssetClass, const FDirectoryPath &BasePackageName,
-                                            const TArray<FString> &Keys, UObject *&FoundAsset) {
+                                            const TArray<FString> &Keys, UObject *&FoundAsset)
+{
     FoundAsset = ResolveAsset(BasePackageName, Keys) |
                  Retro::Optionals::Filter([&AssetClass](const UObject &Object) { return Object.IsA(AssetClass); }) |
                  Retro::Optionals::PtrOrNull;
@@ -114,7 +132,8 @@ EAssetLoadResult UAssetLoader::ResolveAsset(UClass *AssetClass, const FDirectory
 }
 
 EAssetLoadResult UAssetLoader::ResolveClass(UClass *AssetClass, const FDirectoryPath &BasePackageName,
-                                            const TArray<FString> &Keys, UClass *&FoundClass) {
+                                            const TArray<FString> &Keys, UClass *&FoundClass)
+{
     FoundClass = ResolveClass(BasePackageName, Keys) |
                  Retro::Optionals::Filter([&AssetClass](const UObject *Object) { return Object->IsA(AssetClass); }) |
                  Retro::Optionals::PtrOrNull;

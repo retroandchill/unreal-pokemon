@@ -11,7 +11,8 @@
  *
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONBATTLEITEMS_API UBattleItemEffect_CureAllStatuses : public UBattleItemEffect {
+class POKEMONBATTLEITEMS_API UBattleItemEffect_CureAllStatuses : public UBattleItemEffect
+{
     GENERATED_BODY()
 
   protected:

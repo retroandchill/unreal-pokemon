@@ -12,13 +12,15 @@ class UBattleAnimationGetter;
  *
  */
 UCLASS()
-class POKEMONBATTLE_API UBattleSubsystem : public UGameInstanceSubsystem {
+class POKEMONBATTLE_API UBattleSubsystem : public UGameInstanceSubsystem
+{
     GENERATED_BODY()
 
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
-    UBattleAnimationGetter &GetAnimationGetter() const {
+    UBattleAnimationGetter &GetAnimationGetter() const
+    {
         check(AnimationGetter != nullptr);
         return *AnimationGetter;
     }

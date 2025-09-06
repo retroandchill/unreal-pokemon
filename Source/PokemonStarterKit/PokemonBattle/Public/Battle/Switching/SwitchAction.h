@@ -16,7 +16,8 @@ class IPokemonCoroutineDispatcher;
  * Base gameplay ability class for the switch action in battle.
  */
 UCLASS(BlueprintType)
-class POKEMONBATTLE_API USwitchAction : public UUE5CoroGameplayAbility {
+class POKEMONBATTLE_API USwitchAction : public UUE5CoroGameplayAbility
+{
     GENERATED_BODY()
 
   public:

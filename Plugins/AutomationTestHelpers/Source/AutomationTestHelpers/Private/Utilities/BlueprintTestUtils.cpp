@@ -3,10 +3,12 @@
 #include "Utilities/BlueprintTestUtils.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 
-UClass *UBlueprintTestUtils::LoadBlueprintClassByName(FStringView ClassName) {
+UClass *UBlueprintTestUtils::LoadBlueprintClassByName(FStringView ClassName)
+{
     auto WidgetBlueprintAsset = FAssetRegistryModule::GetRegistry().GetAssetByObjectPath(FSoftObjectPath(ClassName));
     auto WidgetBlueprint = Cast<UBlueprint>(WidgetBlueprintAsset.GetAsset());
-    if (WidgetBlueprint == nullptr) {
+    if (WidgetBlueprint == nullptr)
+    {
         return nullptr;
     }
 

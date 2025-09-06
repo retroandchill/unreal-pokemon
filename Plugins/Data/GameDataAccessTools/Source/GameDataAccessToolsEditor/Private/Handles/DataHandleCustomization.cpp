@@ -1,30 +1,28 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Handles/DataHandleCustomization.h"
-
 #include "DetailWidgetRow.h"
 #include "SSearchableComboBox.h"
-
 
 TSharedRef<IPropertyTypeCustomization> FDataHandleCustomization::MakeInstance()
 {
     return MakeShared<FDataHandleCustomization>();
 }
 
-void FDataHandleCustomization::CustomizeHeader(const TSharedRef<IPropertyHandle> PropertyHandle, FDetailWidgetRow& HeaderRow,
-    IPropertyTypeCustomizationUtils& CustomizationUtils)
+void FDataHandleCustomization::CustomizeHeader(const TSharedRef<IPropertyHandle> PropertyHandle,
+                                               FDetailWidgetRow &HeaderRow,
+                                               IPropertyTypeCustomizationUtils &CustomizationUtils)
 {
     Handle = PropertyHandle;
 
     // The C# class wraps an FName so in this case
     WrappedProperty = PropertyHandle->GetChildHandle("ID");
-    TArray<void*> RawData;
+    TArray<void *> RawData;
     WrappedProperty->AccessRawData(RawData);
     TSet<FName> SelectedValues;
-    for (const auto& RawValue : RawData)
+    for (const auto &RawValue : RawData)
     {
-        SelectedValues.Add(*static_cast<FName*>(RawValue));
+        SelectedValues.Add(*static_cast<FName *>(RawValue));
     }
 
     const auto StructProperty = CastFieldChecked<FStructProperty>(PropertyHandle->GetProperty());
@@ -34,12 +32,13 @@ void FDataHandleCustomization::CustomizeHeader(const TSharedRef<IPropertyHandle>
     TArray<FName> Options;
     FFrame NewStack(CDO, TargetFunction, &Options, nullptr, TargetFunction->ChildProperties);
     TargetFunction->Invoke(CDO, NewStack, &Options);
-    
-    Algo::Transform(Options, ComboBoxOptions, [](const FName& InName) { return MakeShared<FString>(InName.ToString()); });
+
+    Algo::Transform(Options, ComboBoxOptions,
+                    [](const FName &InName) { return MakeShared<FString>(InName.ToString()); });
 
     const int32 DefaultIndex = SelectedValues.Num() == 1 ? Options.Find(*SelectedValues.begin()) : INDEX_NONE;
     CurrentSelection = DefaultIndex != INDEX_NONE ? ComboBoxOptions[DefaultIndex] : nullptr;
-    
+
     // clang-format off
     HeaderRow.NameContent()
         [
@@ -65,7 +64,8 @@ void FDataHandleCustomization::CustomizeHeader(const TSharedRef<IPropertyHandle>
 }
 
 void FDataHandleCustomization::CustomizeChildren(TSharedRef<IPropertyHandle> PropertyHandle,
-    IDetailChildrenBuilder& ChildBuilder, IPropertyTypeCustomizationUtils& CustomizationUtils)
+                                                 IDetailChildrenBuilder &ChildBuilder,
+                                                 IPropertyTypeCustomizationUtils &CustomizationUtils)
 {
     // No children customization
 }
@@ -77,17 +77,15 @@ bool FDataHandleCustomization::IsEditEnabled() const
 
 TSharedRef<SWidget> FDataHandleCustomization::GenerateComboBoxEntry(TSharedPtr<FString> Value)
 {
-    return SNew(STextBlock)
-        .Text(FText::FromString(*Value))
-        .Font(FAppStyle::GetFontStyle("PropertyWindow.NormalFont"));
+    return SNew(STextBlock).Text(FText::FromString(*Value)).Font(FAppStyle::GetFontStyle("PropertyWindow.NormalFont"));
 }
 
 void FDataHandleCustomization::OnComboBoxSelectionChanged(TSharedPtr<FString> NewSelection, ESelectInfo::Type)
 {
     CurrentSelection = NewSelection;
-    TArray<void*> OuterStructs;
+    TArray<void *> OuterStructs;
     Handle->AccessRawData(OuterStructs);
-    
+
     WrappedProperty->NotifyPreChange();
     for (const auto Struct : OuterStructs)
     {

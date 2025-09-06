@@ -23,7 +23,8 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnMoveForgetComplete, bool);
  * The screen used for having a Pokémon request to forget a move
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONUI_API UMoveForgetScreen : public UScreen {
+class POKEMONUI_API UMoveForgetScreen : public UScreen
+{
     GENERATED_BODY()
 
   public:

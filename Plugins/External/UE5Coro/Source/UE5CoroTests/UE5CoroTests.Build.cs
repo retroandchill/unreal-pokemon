@@ -33,13 +33,9 @@ using UnrealBuildTool;
 
 public class UE5CoroTests : UE5CoroModuleRules
 {
-	public UE5CoroTests(ReadOnlyTargetRules Target)
-		: base(Target)
-	{
-		PublicDependencyModuleNames.AddRange(new[]
-		{
-			"HTTP",
-			"UE5Coro",
-		});
-	}
+    public UE5CoroTests(ReadOnlyTargetRules Target)
+        : base(Target)
+    {
+        PublicDependencyModuleNames.AddRange(new[] { "HTTP", "UE5Coro" });
+    }
 }

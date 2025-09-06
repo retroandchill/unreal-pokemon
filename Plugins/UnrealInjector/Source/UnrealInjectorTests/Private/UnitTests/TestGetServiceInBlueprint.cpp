@@ -8,7 +8,8 @@
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(TestGetServiceInBlueprint, "Unit Tests.DependencyInjection.TestGetServiceInBlueprint",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool TestGetServiceInBlueprint::RunTest(const FString &Parameters) {
+bool TestGetServiceInBlueprint::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto UtilityClass = LoadClass<UObject>(
         nullptr, TEXT("/UnrealInjector/Tests/Resources/TestContextTestObject.TestContextTestObject_C"));

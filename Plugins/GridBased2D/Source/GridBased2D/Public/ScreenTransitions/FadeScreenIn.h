@@ -13,7 +13,8 @@
  * Async Node for fading the screen in
  */
 UCLASS()
-class GRIDBASED2D_API UFadeScreenIn : public UBlueprintCoroutineActionBase {
+class GRIDBASED2D_API UFadeScreenIn : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

@@ -6,59 +6,74 @@
 #include "CommonTextBlock.h"
 #include "Input/UIActionBinding.h"
 
-void UPokemonActionBoundButton::NativeConstruct() {
+void UPokemonActionBoundButton::NativeConstruct()
+{
     Super::NativeConstruct();
 
-    if (auto InputSubsystem = GetInputSubsystem(); InputSubsystem != nullptr) {
+    if (auto InputSubsystem = GetInputSubsystem(); InputSubsystem != nullptr)
+    {
         InputSubsystem->OnInputMethodChangedNative.AddUObject(this, &ThisClass::HandleInputMethodChanged);
         HandleInputMethodChanged(InputSubsystem->GetCurrentInputType());
     }
 }
 
-void UPokemonActionBoundButton::SetRepresentedAction(FUIActionBindingHandle InBindingHandle) {
-    if (auto OldBinding = FUIActionBinding::FindBinding(BindingHandle); OldBinding != nullptr) {
+void UPokemonActionBoundButton::SetRepresentedAction(FUIActionBindingHandle InBindingHandle)
+{
+    if (auto OldBinding = FUIActionBinding::FindBinding(BindingHandle); OldBinding != nullptr)
+    {
         OldBinding->OnHoldActionProgressed.RemoveAll(this);
     }
 
     BindingHandle = InBindingHandle;
     UpdateInputActionWidget();
 
-    if (auto NewBinding = FUIActionBinding::FindBinding(InBindingHandle); NewBinding != nullptr) {
+    if (auto NewBinding = FUIActionBinding::FindBinding(InBindingHandle); NewBinding != nullptr)
+    {
         NewBinding->OnHoldActionProgressed.AddUObject(this, &UPokemonActionBoundButton::NativeOnActionProgress);
     }
 }
 
-void UPokemonActionBoundButton::NativeOnClicked() {
+void UPokemonActionBoundButton::NativeOnClicked()
+{
     Super::NativeOnClicked();
-    if (auto ActionBinding = FUIActionBinding::FindBinding(BindingHandle); ActionBinding != nullptr) {
+    if (auto ActionBinding = FUIActionBinding::FindBinding(BindingHandle); ActionBinding != nullptr)
+    {
         ActionBinding->OnExecuteAction.ExecuteIfBound();
     }
 }
 
-void UPokemonActionBoundButton::NativeOnCurrentTextStyleChanged() {
+void UPokemonActionBoundButton::NativeOnCurrentTextStyleChanged()
+{
     Super::NativeOnCurrentTextStyleChanged();
 
-    if (Text_ActionName != nullptr) {
+    if (Text_ActionName != nullptr)
+    {
         Text_ActionName->SetStyle(GetCurrentTextStyleClass());
     }
 }
 
-void UPokemonActionBoundButton::UpdateInputActionWidget() {
-    if (InputActionWidget != nullptr) { // optional bound widget
+void UPokemonActionBoundButton::UpdateInputActionWidget()
+{
+    if (InputActionWidget != nullptr)
+    { // optional bound widget
         InputActionWidget->SetInputActionBinding(BindingHandle);
 
         FText ActionDisplayName;
-        if (auto Binding = FUIActionBinding::FindBinding(BindingHandle); Binding != nullptr) {
+        if (auto Binding = FUIActionBinding::FindBinding(BindingHandle); Binding != nullptr)
+        {
             ActionDisplayName = Binding->ActionDisplayName;
         }
 
-        if (ActionDisplayName.IsEmpty()) {
+        if (ActionDisplayName.IsEmpty())
+        {
             ActionDisplayName = BindingHandle.GetDisplayName();
         }
-        if (BindingHandle.IsValid()) {
+        if (BindingHandle.IsValid())
+        {
             const auto BoundWidget = BindingHandle.GetBoundWidget();
             if (auto BindingOwner = BoundWidget ? BoundWidget->GetOwningLocalPlayer() : nullptr;
-                ensure(BindingOwner != nullptr) && BindingOwner != GetOwningLocalPlayer()) {
+                ensure(BindingOwner != nullptr) && BindingOwner != GetOwningLocalPlayer())
+            {
                 int32 BoundPlayerIndex =
                     FSlateApplication::Get().GetUserIndexForController(BindingOwner->GetControllerId());
                 ActionDisplayName = FText::FormatNamed(
@@ -67,7 +82,8 @@ void UPokemonActionBoundButton::UpdateInputActionWidget() {
             }
         }
 
-        if (Text_ActionName != nullptr) {
+        if (Text_ActionName != nullptr)
+        {
             Text_ActionName->SetText(ActionDisplayName);
         }
 
@@ -75,15 +91,18 @@ void UPokemonActionBoundButton::UpdateInputActionWidget() {
     }
 }
 
-UCommonTextBlock *UPokemonActionBoundButton::GetActionNameText() const {
+UCommonTextBlock *UPokemonActionBoundButton::GetActionNameText() const
+{
     return Text_ActionName;
 }
 
-void UPokemonActionBoundButton::HandleInputMethodChanged(ECommonInputType NewInputMethod) {
+void UPokemonActionBoundButton::HandleInputMethodChanged(ECommonInputType NewInputMethod)
+{
     using enum ECommonInputType;
 
     TSubclassOf<UCommonButtonStyle> NewStyle;
-    switch (NewInputMethod) {
+    switch (NewInputMethod)
+    {
     case Gamepad:
         NewStyle = GamepadStyle;
         break;
@@ -95,7 +114,8 @@ void UPokemonActionBoundButton::HandleInputMethodChanged(ECommonInputType NewInp
         break;
     }
 
-    if (NewStyle != nullptr) {
+    if (NewStyle != nullptr)
+    {
         SetStyle(NewStyle);
     }
 }

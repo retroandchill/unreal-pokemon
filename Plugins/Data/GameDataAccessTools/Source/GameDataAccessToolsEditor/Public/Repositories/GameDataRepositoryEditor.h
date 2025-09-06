@@ -12,13 +12,12 @@ class UGameDataRepository;
 
 struct FSelectedRow
 {
-	int32 Index;
-	FName CurrentName;
+    int32 Index;
+    FName CurrentName;
 
-	FSelectedRow(const int32 InIndex, const FName InCurrentName)
-		: Index(InIndex), CurrentName(InCurrentName)
-	{
-	}
+    FSelectedRow(const int32 InIndex, const FName InCurrentName) : Index(InIndex), CurrentName(InCurrentName)
+    {
+    }
 };
 
 /**
@@ -26,40 +25,40 @@ struct FSelectedRow
  */
 class GAMEDATAACCESSTOOLSEDITOR_API FGameDataRepositoryEditor final : public FAssetEditorToolkit
 {
-public:
-	void Initialize(const EToolkitMode::Type Mode, const TSharedPtr<IToolkitHost>& InitToolkitHost,
-	                UGameDataRepository* Asset);
-	void RegisterTabSpawners(const TSharedRef<FTabManager>& InTabManager) override;
-	void UnregisterTabSpawners(const TSharedRef<FTabManager>& InTabManager) override;
+  public:
+    void Initialize(const EToolkitMode::Type Mode, const TSharedPtr<IToolkitHost> &InitToolkitHost,
+                    UGameDataRepository *Asset);
+    void RegisterTabSpawners(const TSharedRef<FTabManager> &InTabManager) override;
+    void UnregisterTabSpawners(const TSharedRef<FTabManager> &InTabManager) override;
 
-	FName GetToolkitFName() const override;
-	FText GetBaseToolkitName() const override;
-	FString GetWorldCentricTabPrefix() const override;
-	FLinearColor GetWorldCentricTabColorScale() const override;
+    FName GetToolkitFName() const override;
+    FText GetBaseToolkitName() const override;
+    FString GetWorldCentricTabPrefix() const override;
+    FLinearColor GetWorldCentricTabColorScale() const override;
 
-private:
-	void FillToolbar(FToolBarBuilder& ToolbarBuilder);
+  private:
+    void FillToolbar(FToolBarBuilder &ToolbarBuilder);
 
-	TSharedRef<SWidget> ImportMenuEntries();
-	void ImportGameDataRepository(const UGameDataEntrySerializer* Serializer) const;
+    TSharedRef<SWidget> ImportMenuEntries();
+    void ImportGameDataRepository(const UGameDataEntrySerializer *Serializer) const;
 
-	bool CanAddEntry() const;
-	bool CanMoveEntryUp() const;
-	bool CanMoveEntryDown() const;
-	bool CanDeleteEntry() const;
+    bool CanAddEntry() const;
+    bool CanMoveEntryUp() const;
+    bool CanMoveEntryDown() const;
+    bool CanDeleteEntry() const;
 
-	void OnEntrySelected(const TSharedPtr<FEntryRowData>& Entry);
-	TArray<TSharedPtr<FEntryRowData>> OnGetEntries() const;
-	void OnAddEntry() const;
-	void OnDeleteEntry();
-	void OnMoveEntryUp();
-	void OnMoveEntryDown();
-	void RefreshList() const;
-	void OnPropertyChanged(const FPropertyChangedEvent& PropertyChangedEvent);
-	
-	TObjectPtr<UGameDataRepository> GameDataRepository;
-	TSharedPtr<SGameDataRepositoryEntrySelector> EntrySelector;
-	TSharedPtr<IStructureDetailsView> DetailsView;
-	TOptional<FSelectedRow> CurrentRow;
-	TArray<TObjectPtr<const UGameDataEntrySerializer>> Serializers;
+    void OnEntrySelected(const TSharedPtr<FEntryRowData> &Entry);
+    TArray<TSharedPtr<FEntryRowData>> OnGetEntries() const;
+    void OnAddEntry() const;
+    void OnDeleteEntry();
+    void OnMoveEntryUp();
+    void OnMoveEntryDown();
+    void RefreshList() const;
+    void OnPropertyChanged(const FPropertyChangedEvent &PropertyChangedEvent);
+
+    TObjectPtr<UGameDataRepository> GameDataRepository;
+    TSharedPtr<SGameDataRepositoryEntrySelector> EntrySelector;
+    TSharedPtr<IStructureDetailsView> DetailsView;
+    TOptional<FSelectedRow> CurrentRow;
+    TArray<TObjectPtr<const UGameDataEntrySerializer>> Serializers;
 };

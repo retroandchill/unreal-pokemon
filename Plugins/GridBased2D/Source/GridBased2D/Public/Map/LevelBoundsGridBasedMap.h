@@ -12,7 +12,8 @@
  * computations.
  */
 UCLASS(Blueprintable, ClassGroup = (Map))
-class GRIDBASED2D_API ALevelBoundsGridBasedMap : public AGridBasedMapBase {
+class GRIDBASED2D_API ALevelBoundsGridBasedMap : public AGridBasedMapBase
+{
     GENERATED_BODY()
 
   protected:

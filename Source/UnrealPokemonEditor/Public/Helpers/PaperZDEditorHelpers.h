@@ -14,7 +14,8 @@ class UPaperZDAnimationSource;
  *
  */
 UCLASS()
-class UNREALPOKEMONEDITOR_API UPaperZDEditorHelpers : public UBlueprintFunctionLibrary {
+class UNREALPOKEMONEDITOR_API UPaperZDEditorHelpers : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

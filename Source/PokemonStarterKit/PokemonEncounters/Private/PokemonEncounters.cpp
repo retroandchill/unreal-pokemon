@@ -1,10 +1,12 @@
 ﻿#include "PokemonEncounters.h"
 
-void FPokemonEncountersModule::StartupModule() {
+void FPokemonEncountersModule::StartupModule()
+{
     // No implementation needed
 }
 
-void FPokemonEncountersModule::ShutdownModule() {
+void FPokemonEncountersModule::ShutdownModule()
+{
     // No implementation needed
 }
 

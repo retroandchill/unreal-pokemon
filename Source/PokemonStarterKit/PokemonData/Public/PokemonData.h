@@ -7,7 +7,8 @@
 /**
  * Module that handles the loading of Data for a Pokémon game
  */
-class FPokemonDataModule final : public IModuleInterface {
+class FPokemonDataModule final : public IModuleInterface
+{
   public:
     void StartupModule() override;
     void ShutdownModule() override;

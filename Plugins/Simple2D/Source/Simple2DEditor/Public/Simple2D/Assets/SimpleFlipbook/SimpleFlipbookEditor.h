@@ -8,13 +8,15 @@
 
 class USimpleFlipbookComponent;
 
-namespace Simple2D {
+namespace Simple2D
+{
     class SSimpleFlipbookEditorViewport;
 
     /**
      *
      */
-    class SIMPLE2DEDITOR_API FSimpleFlipbookEditor : public FAssetEditorToolkit, public FGCObject {
+    class SIMPLE2DEDITOR_API FSimpleFlipbookEditor : public FAssetEditorToolkit, public FGCObject
+    {
       public:
         void RegisterTabSpawners(const TSharedRef<FTabManager> &InTabManager) override;
         void UnregisterTabSpawners(const TSharedRef<FTabManager> &InTabManager) override;
@@ -28,38 +30,47 @@ namespace Simple2D {
 
         void AddReferencedObjects(FReferenceCollector &Collector) override;
 
-        FString GetReferencerName() const override {
+        FString GetReferencerName() const override
+        {
             return TEXT("Simple2D::FSimpleFlipbookEditor");
         }
 
         void InitFlipbookEditor(const EToolkitMode::Type Mode, const TSharedPtr<IToolkitHost> &InitToolkitHost,
                                 USimpleFlipbook *InitFlipbook);
 
-        USimpleFlipbook *GetFlipbookBeingEdited() const {
+        USimpleFlipbook *GetFlipbookBeingEdited() const
+        {
             return FlipbookBeingEdited;
         }
 
         USimpleFlipbookComponent *GetPreviewComponent() const;
 
       private:
-        float GetFramesPerSecond() const {
+        float GetFramesPerSecond() const
+        {
             return FlipbookBeingEdited->GetFramesPerSecond();
         }
 
-        int32 GetCurrentFrame() const {
+        int32 GetCurrentFrame() const
+        {
             const int32 TotalLengthInFrames = GetTotalFrameCount();
-            if (TotalLengthInFrames == 0) {
+            if (TotalLengthInFrames == 0)
+            {
                 return INDEX_NONE;
             }
 
             return FMath::Clamp<int32>((int32)(GetPlaybackPosition() * GetFramesPerSecond()), 0, TotalLengthInFrames);
         }
 
-        void SetCurrentFrame(int32 NewIndex) {
-            if (const int32 TotalLengthInFrames = GetTotalFrameCount(); TotalLengthInFrames > 0) {
+        void SetCurrentFrame(int32 NewIndex)
+        {
+            if (const int32 TotalLengthInFrames = GetTotalFrameCount(); TotalLengthInFrames > 0)
+            {
                 int32 ClampedIndex = FMath::Clamp<int32>(NewIndex, 0, TotalLengthInFrames);
                 SetPlaybackPosition(ClampedIndex / GetFramesPerSecond());
-            } else {
+            }
+            else
+            {
                 SetPlaybackPosition(0.0f);
             }
         }

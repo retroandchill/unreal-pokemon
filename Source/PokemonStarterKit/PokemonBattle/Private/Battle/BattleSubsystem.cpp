@@ -4,7 +4,8 @@
 #include "Battle/Animations/BattleAnimationGetter.h"
 #include "Lookup/InjectionUtilities.h"
 
-void UBattleSubsystem::Initialize(FSubsystemCollectionBase &Collection) {
+void UBattleSubsystem::Initialize(FSubsystemCollectionBase &Collection)
+{
     Super::Initialize(Collection);
 
     AnimationGetter = UnrealInjector::NewInjectedDependency<UBattleAnimationGetter>(this);

@@ -11,12 +11,15 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro::Optionals {
+namespace Retro::Optionals
+{
 
-    struct FErrorPtrOrNullInvoker {
+    struct FErrorPtrOrNullInvoker
+    {
 
         template <ExpectedType O>
-        constexpr auto operator()(O &&Optional) const {
+        constexpr auto operator()(O &&Optional) const
+        {
             return HasValue(std::forward<O>(Optional)) ? nullptr : GetPtrFromRef(GetError(std::forward<O>(Optional)));
         }
     };

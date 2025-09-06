@@ -16,23 +16,27 @@
 #include "Trainers/Trainer.h"
 #include "Trainers/TrainerType.h"
 
-static void SwapForNonFaintedBattler(uint8 Start, TArray<TScriptInterface<IBattler>> &BattleParty) {
-    for (uint8 j = Start + 1; j < BattleParty.Num(); j++) {
-        if (auto &Substitute = BattleParty[j]; !Substitute->IsFainted()) {
+static void SwapForNonFaintedBattler(uint8 Start, TArray<TScriptInterface<IBattler>> &BattleParty)
+{
+    for (uint8 j = Start + 1; j < BattleParty.Num(); j++)
+    {
+        if (auto &Substitute = BattleParty[j]; !Substitute->IsFainted())
+        {
             BattleParty.Swap(Start, j);
         }
     }
 }
 
-AActiveSide::AActiveSide() {
+AActiveSide::AActiveSide()
+{
     AbilitySystemComponent = CreateDefaultSubobject<UBattleSideAbilitySystemComponent>(FName("AbilitySystemComponent"));
     TurnBasedEffectComponent = CreateDefaultSubobject<UTurnBasedEffectComponent>(FName("TurnBasedEffectsComponent"));
 }
 
 UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScriptInterface<IBattle> Battle,
                                                                            TArray<TScriptInterface<IPokemon>> Pokemon,
-                                                                           bool ShowBackSprites,
-                                                                           FForceLatentCoroutine) {
+                                                                           bool ShowBackSprites, FForceLatentCoroutine)
+{
     InternalId = FGuid::NewGuid();
     OwningBattle = Battle;
     SideSize = 1;
@@ -43,7 +47,8 @@ UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScri
 
     auto BattlerActorClass = co_await UE5Coro::Latent::AsyncLoadClass(BattlerClass);
     TArray<FText> Nicknames;
-    for (auto &Pkmn : Pokemon) {
+    for (auto &Pkmn : Pokemon)
+    {
         auto Battler = GetWorld()->SpawnActor<AActor>(BattlerActorClass, GetBattlerSpawnPosition(0));
         co_await Battlers.Emplace_GetRef(Battler)->Initialize(Side, Pkmn, true);
         Battler->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
@@ -60,7 +65,8 @@ UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScri
 UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScriptInterface<IBattle> Battle,
                                                                            TScriptInterface<ITrainer> Trainer,
                                                                            uint8 PokemonCount, bool ShowBackSprites,
-                                                                           FForceLatentCoroutine) {
+                                                                           FForceLatentCoroutine)
+{
     InternalId = FGuid::NewGuid();
     OwningBattle = Battle;
     SideSize = PokemonCount;
@@ -72,7 +78,8 @@ UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScri
     auto &Party = Trainer->GetParty();
     auto &BattleParty = TrainerParties.Add(Trainer->GetInternalId()).Battlers;
     auto LoadedBattlerClass = co_await UE5Coro::Latent::AsyncLoadClass(BattlerClass);
-    for (uint8 i = 0; i < Party.Num(); i++) {
+    for (uint8 i = 0; i < Party.Num(); i++)
+    {
         auto SpawnPosition = i < PokemonCount ? GetBattlerSpawnPosition(i) : GetTransform();
         auto Battler = GetWorld()->SpawnActor<AActor>(LoadedBattlerClass, SpawnPosition);
         co_await BattleParty.Emplace_GetRef(Battler)->Initialize(Side, Party.IsValidIndex(i) ? Party[i] : nullptr,
@@ -80,14 +87,17 @@ UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScri
         Battler->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepWorld, true));
     }
 
-    for (uint8 i = 0; i < BattleParty.Num(); i++) {
-        if (BattleParty[i]->IsFainted()) {
+    for (uint8 i = 0; i < BattleParty.Num(); i++)
+    {
+        if (BattleParty[i]->IsFainted())
+        {
             SwapForNonFaintedBattler(i, BattleParty);
         }
 
         auto &Battler = BattleParty[i];
         check(!Battler->IsFainted())
-        if (i < PokemonCount) {
+        if (i < PokemonCount)
+        {
             Battlers.Emplace(Battler);
         }
     }
@@ -102,12 +112,14 @@ UE5Coro::TCoroutine<TScriptInterface<IBattleSide>> AActiveSide::Initialize(TScri
     co_return Side;
 }
 
-void AActiveSide::BeginPlay() {
+void AActiveSide::BeginPlay()
+{
     Super::BeginPlay();
     AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 
-void AActiveSide::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+void AActiveSide::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
     Super::EndPlay(EndPlayReason);
     // clang-format off
     Battlers |
@@ -118,73 +130,90 @@ void AActiveSide::EndPlay(const EEndPlayReason::Type EndPlayReason) {
     // clang-format on
 }
 
-const FGuid &AActiveSide::GetInternalId() const {
+const FGuid &AActiveSide::GetInternalId() const
+{
     return InternalId;
 }
 
-const TScriptInterface<IBattle> &AActiveSide::GetOwningBattle() const {
+const TScriptInterface<IBattle> &AActiveSide::GetOwningBattle() const
+{
     return OwningBattle;
 }
 
-UTurnBasedEffectComponent *AActiveSide::GetTurnBasedEffectComponent() const {
+UTurnBasedEffectComponent *AActiveSide::GetTurnBasedEffectComponent() const
+{
     return TurnBasedEffectComponent;
 }
 
-Retro::TGenerator<UTurnBasedEffectComponent *> AActiveSide::GetChildEffectComponents() const {
+Retro::TGenerator<UTurnBasedEffectComponent *> AActiveSide::GetChildEffectComponents() const
+{
     co_yield TurnBasedEffectComponent;
     co_yield Retro::Ranges::TElementsOf(Battlers |
                                         Retro::Ranges::Views::Transform(&IBattler::GetTurnBasedEffectComponent));
 }
 
-uint8 AActiveSide::GetSideSize() const {
+uint8 AActiveSide::GetSideSize() const
+{
     return SideSize;
 }
 
-const FText &AActiveSide::GetIntroText() const {
+const FText &AActiveSide::GetIntroText() const
+{
     return IntroMessageText;
 }
 
-const TOptional<FText> &AActiveSide::GetSendOutText() const {
+const TOptional<FText> &AActiveSide::GetSendOutText() const
+{
     return SendOutText;
 }
 
-bool AActiveSide::ShowBackSprites() const {
+bool AActiveSide::ShowBackSprites() const
+{
     return bShowBackSprites;
 }
 
-void AActiveSide::SendOutBattlers() const {
+void AActiveSide::SendOutBattlers() const
+{
     Battlers | Retro::Ranges::ForEach(Retro::BindBack<&IBattler::ShowSprite>(FVector()));
 }
 
-const TArray<TScriptInterface<IBattler>> &AActiveSide::GetBattlers() const {
+const TArray<TScriptInterface<IBattler>> &AActiveSide::GetBattlers() const
+{
     return Battlers;
 }
 
-const TArray<TScriptInterface<ITrainer>> &AActiveSide::GetTrainers() const {
+const TArray<TScriptInterface<ITrainer>> &AActiveSide::GetTrainers() const
+{
     return Trainers;
 }
 
-const TArray<TScriptInterface<IBattler>> &
-AActiveSide::GetTrainerParty(const TScriptInterface<ITrainer> &Trainer) const {
+const TArray<TScriptInterface<IBattler>> &AActiveSide::GetTrainerParty(const TScriptInterface<ITrainer> &Trainer) const
+{
     return TrainerParties.FindChecked(Trainer->GetInternalId()).Battlers;
 }
 
-void AActiveSide::SwapBattlerPositions(const TScriptInterface<ITrainer> &Trainer, int32 IndexA, int32 IndexB) {
+void AActiveSide::SwapBattlerPositions(const TScriptInterface<ITrainer> &Trainer, int32 IndexA, int32 IndexB)
+{
     auto &BattlerArray = TrainerParties.FindChecked(Trainer->GetInternalId()).Battlers;
     BattlerArray.Swap(IndexA, IndexB);
 
-    if (auto BattlePartyIndex = Battlers.Find(BattlerArray[IndexB]); BattlePartyIndex != INDEX_NONE) {
+    if (auto BattlePartyIndex = Battlers.Find(BattlerArray[IndexB]); BattlePartyIndex != INDEX_NONE)
+    {
         Battlers[BattlePartyIndex] = BattlerArray[IndexA];
     }
 }
 
-bool AActiveSide::CanBattle() const {
-    if (Algo::AnyOf(Battlers, &IBattler::IsNotFainted)) {
+bool AActiveSide::CanBattle() const
+{
+    if (Algo::AnyOf(Battlers, &IBattler::IsNotFainted))
+    {
         return true;
     }
 
-    for (auto &[ID, Party] : TrainerParties) {
-        if (Algo::AnyOf(Party.Battlers, &IBattler::IsNotFainted)) {
+    for (auto &[ID, Party] : TrainerParties)
+    {
+        if (Algo::AnyOf(Party.Battlers, &IBattler::IsNotFainted))
+        {
             return true;
         }
     }

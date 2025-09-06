@@ -6,7 +6,8 @@
 
 class UBattleMoveFunctionCode;
 
-namespace Pokemon::Battle::Moves {
+namespace Pokemon::Battle::Moves
+{
 
     /**
      * Lookup a move effect by its function code

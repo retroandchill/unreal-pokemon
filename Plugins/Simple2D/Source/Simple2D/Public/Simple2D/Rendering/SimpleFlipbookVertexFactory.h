@@ -2,12 +2,14 @@
 
 #pragma once
 
-namespace Simple2D {
+namespace Simple2D
+{
     class FSimpleFlipbookVertexBuffer;
     /**
      *
      */
-    class SIMPLE2D_API FSimpleFlipbookVertexFactory : public FLocalVertexFactory {
+    class SIMPLE2D_API FSimpleFlipbookVertexFactory : public FLocalVertexFactory
+    {
       public:
         explicit FSimpleFlipbookVertexFactory(ERHIFeatureLevel::Type FeatureLevel);
 

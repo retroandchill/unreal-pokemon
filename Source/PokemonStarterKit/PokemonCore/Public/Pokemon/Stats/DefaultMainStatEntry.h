@@ -10,7 +10,8 @@
  * Represents the calculation implementation of the default main stat
  */
 UCLASS()
-class POKEMONCORE_API UDefaultMainStatEntry : public UDefaultStatEntry {
+class POKEMONCORE_API UDefaultMainStatEntry : public UDefaultStatEntry
+{
     GENERATED_BODY()
 
   public:

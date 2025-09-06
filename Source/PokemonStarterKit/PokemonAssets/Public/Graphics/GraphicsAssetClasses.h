@@ -10,7 +10,8 @@
 /**
  * Settings for all Pokémon graphical assets
  */
-namespace Pokemon::Assets::Graphics {
+namespace Pokemon::Assets::Graphics
+{
 
     /**
      * Asset class for Pokémon battle sprites.

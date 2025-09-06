@@ -14,7 +14,8 @@
  * Utility library for operations involving Strings (and Text)
  */
 UCLASS()
-class RETROLIB_API UStringUtilities : public UBlueprintFunctionLibrary {
+class RETROLIB_API UStringUtilities : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:
@@ -84,7 +85,8 @@ class RETROLIB_API UStringUtilities : public UBlueprintFunctionLibrary {
 
     template <std::ranges::input_range R>
         requires std::convertible_to<std::ranges::range_value_t<R>, FText>
-    static FText JoinText(R &&Lines) {
+    static FText JoinText(R &&Lines)
+    {
         // clang-format off
         return FText::FromString(Lines |
                                  Retro::Ranges::Views::Transform(&FText::ToString) |

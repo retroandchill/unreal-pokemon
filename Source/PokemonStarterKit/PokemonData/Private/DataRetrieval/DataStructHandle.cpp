@@ -8,30 +8,36 @@
 #include <bit>
 
 #if WITH_METADATA
-bool Pokemon::Data::IsValidDataTableStruct(const UScriptStruct *Struct) {
-    if (Struct == nullptr) {
+bool Pokemon::Data::IsValidDataTableStruct(const UScriptStruct *Struct)
+{
+    if (Struct == nullptr)
+    {
         return false;
     }
 
     auto RowProperty = Struct->FindPropertyByName(DataStructRowID);
-    if (RowProperty == nullptr || RowProperty->GetCPPType() != TEXT("FName")) {
+    if (RowProperty == nullptr || RowProperty->GetCPPType() != TEXT("FName"))
+    {
         return false;
     }
 
     auto Options = RowProperty->GetMetaData("GetOptions");
     if (auto GetOptionsFunction = FindObject<UFunction>(nullptr, *Options, true);
-        GetOptionsFunction == nullptr || !GetOptionsFunction->HasAnyFunctionFlags(FUNC_Static)) {
+        GetOptionsFunction == nullptr || !GetOptionsFunction->HasAnyFunctionFlags(FUNC_Static))
+    {
         return false;
     }
 
     return true;
 }
 
-struct FGetOptionsParams {
+struct FGetOptionsParams
+{
     TArray<FName> ReturnValue;
 };
 
-TArray<TSharedPtr<FString>> Pokemon::Data::FStructWrapper::GetStructOptions() const {
+TArray<TSharedPtr<FString>> Pokemon::Data::FStructWrapper::GetStructOptions() const
+{
     check(Struct.get() != nullptr)
     auto StructClass = GetStruct();
     check(StructClass != nullptr)
@@ -56,7 +62,8 @@ TArray<TSharedPtr<FString>> Pokemon::Data::FStructWrapper::GetStructOptions() co
 }
 #endif
 
-FName Pokemon::Data::FStructWrapper::GetRowID() const {
+FName Pokemon::Data::FStructWrapper::GetRowID() const
+{
     check(Struct.get() != nullptr)
     auto StructClass = GetStruct();
     check(StructClass != nullptr)
@@ -68,7 +75,8 @@ FName Pokemon::Data::FStructWrapper::GetRowID() const {
     return TPropertyTypeFundamentals<FName>::GetPropertyValue(PropertyContainer);
 }
 
-void Pokemon::Data::FStructWrapper::SetRowID(FName RowID) {
+void Pokemon::Data::FStructWrapper::SetRowID(FName RowID)
+{
     check(Struct.get() != nullptr)
     auto StructClass = GetStruct();
     check(StructClass != nullptr)
@@ -80,14 +88,17 @@ void Pokemon::Data::FStructWrapper::SetRowID(FName RowID) {
     TPropertyTypeFundamentals<FName>::SetPropertyValue(PropertyContainer, RowID);
 }
 
-FString Pokemon::Data::FStructWrapper::ExportText() const {
+FString Pokemon::Data::FStructWrapper::ExportText() const
+{
     FString Ret;
     GetStruct()->ExportText(Ret, Struct.get(), Struct.get(), nullptr, PPF_None, nullptr);
     return Ret;
 }
 
-void Pokemon::Data::FStructWrapper::FromExportString(FStringView ExportString, int32 PortFlags) {
-    if (ExportString.IsEmpty()) {
+void Pokemon::Data::FStructWrapper::FromExportString(FStringView ExportString, int32 PortFlags)
+{
+    if (ExportString.IsEmpty())
+    {
         return;
     }
 
@@ -101,12 +112,14 @@ void Pokemon::Data::FStructWrapper::FromExportString(FStringView ExportString, i
                             StructClass->GetFName().ToString(), true);
 }
 
-bool UDataStructHandleUtilities::NotEqual_HandleHandle(const FDataStructHandle &, FName) {
+bool UDataStructHandleUtilities::NotEqual_HandleHandle(const FDataStructHandle &, FName)
+{
     check(false)
     return false;
 }
 
-DEFINE_FUNCTION(UDataStructHandleUtilities::execNotEqual_HandleHandle) {
+DEFINE_FUNCTION(UDataStructHandleUtilities::execNotEqual_HandleHandle)
+{
     P_GET_STRUCT_REF(FDataStructHandle, DataHandle)
     P_GET_PROPERTY(FNameProperty, Other)
     P_FINISH

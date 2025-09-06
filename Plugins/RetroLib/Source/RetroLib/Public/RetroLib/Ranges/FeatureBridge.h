@@ -15,7 +15,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * For some reason `range_common_reference_t` is missing on the linux clang builder, so this should add that
      * missing concept.

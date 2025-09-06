@@ -16,7 +16,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnComponentRotated, const FVector2D
  * Camera component used to rotate the player towards the camera
  */
 UCLASS(ClassGroup = (Camera), meta = (BlueprintSpawnableComponent))
-class GRIDBASED2D_API UCameraFacingRotatorComponent : public UActorComponent {
+class GRIDBASED2D_API UCameraFacingRotatorComponent : public UActorComponent
+{
     GENERATED_BODY()
 
   public:
@@ -33,7 +34,8 @@ class GRIDBASED2D_API UCameraFacingRotatorComponent : public UActorComponent {
      * @return The component used for rotation
      */
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    USceneComponent *GetRotatedComponent() const {
+    USceneComponent *GetRotatedComponent() const
+    {
         return RotatedComponent;
     }
 
@@ -42,7 +44,8 @@ class GRIDBASED2D_API UCameraFacingRotatorComponent : public UActorComponent {
      * @param NewRotatedComponent The component used for rotation
      */
     UFUNCTION(BlueprintCallable, BlueprintINTERNALUseOnly)
-    void SetRotatedComponent(USceneComponent *NewRotatedComponent) {
+    void SetRotatedComponent(USceneComponent *NewRotatedComponent)
+    {
         RotatedComponent = NewRotatedComponent;
     }
 

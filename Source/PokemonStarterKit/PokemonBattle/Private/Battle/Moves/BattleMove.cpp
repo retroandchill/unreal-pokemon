@@ -4,7 +4,8 @@
 #include "Battle/Battlers/Battler.h"
 #include "Battle/BattleSide.h"
 
-static int32 GetTargetIndex(const TScriptInterface<IBattler> &Battler) {
+static int32 GetTargetIndex(const TScriptInterface<IBattler> &Battler)
+{
     auto &Battlers = Battler->GetOwningSide()->GetBattlers();
     auto OwnIndex = Battlers.Find(Battler);
     check(Battlers.IsValidIndex(OwnIndex))
@@ -12,11 +13,14 @@ static int32 GetTargetIndex(const TScriptInterface<IBattler> &Battler) {
 }
 
 FTargetWithIndex::FTargetWithIndex(const TScriptInterface<IBattler> &Battler)
-    : Target(Battler.GetObject()), BattlerIndex(GetTargetIndex(Battler)) {
+    : Target(Battler.GetObject()), BattlerIndex(GetTargetIndex(Battler))
+{
 }
 
-TScriptInterface<IBattler> FTargetWithIndex::SwapIfNecessary() const {
-    if (!Target.IsValid()) {
+TScriptInterface<IBattler> FTargetWithIndex::SwapIfNecessary() const
+{
+    if (!Target.IsValid())
+    {
         return nullptr;
     }
 

@@ -11,7 +11,8 @@
  * Perform a checked conversion to a soft variant object from a wildcard soft object.
  */
 UCLASS()
-class RETROLIBBLUEPRINTNODES_API UK2Node_CastSoftObjectToSoftVariant : public UK2Node_VariantCastBase {
+class RETROLIBBLUEPRINTNODES_API UK2Node_CastSoftObjectToSoftVariant : public UK2Node_VariantCastBase
+{
     GENERATED_BODY()
 
   public:

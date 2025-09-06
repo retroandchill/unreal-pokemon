@@ -15,7 +15,8 @@ class UPaperTileSet;
  * Struct row for tile replacement data
  */
 USTRUCT(BlueprintType)
-struct TILEREPLACER_API FTileReplacement : public FTableRowBase {
+struct TILEREPLACER_API FTileReplacement : public FTableRowBase
+{
     GENERATED_BODY()
 
     /**

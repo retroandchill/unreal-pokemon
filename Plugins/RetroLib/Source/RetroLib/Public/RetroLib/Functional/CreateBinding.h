@@ -16,18 +16,22 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     /**
      * @brief Struct tag to signify the usage of the `this` parameter in a functional type.
      */
     RETROLIB_EXPORT template <typename T>
-    struct TThis {
+    struct TThis
+    {
         T Value;
 
-        constexpr explicit TThis(const T &Value) : Value(Value) {
+        constexpr explicit TThis(const T &Value) : Value(Value)
+        {
         }
 
-        constexpr explicit TThis(T &&Value) : Value(std::move(Value)) {
+        constexpr explicit TThis(T &&Value) : Value(std::move(Value))
+        {
         }
     };
 
@@ -40,7 +44,8 @@ namespace Retro {
      * execution.
      */
     RETROLIB_EXPORT template <HasFunctionCallOperator F>
-    struct TWrappedFunctor {
+    struct TWrappedFunctor
+    {
         /**
          * @brief Constructs a WrappedFunctor by forwarding the given functor.
          *
@@ -48,7 +53,8 @@ namespace Retro {
          */
         template <typename T>
             requires std::constructible_from<F, T> && (!std::same_as<std::decay_t<T>, TWrappedFunctor>)
-        constexpr explicit TWrappedFunctor(T &&Functor) : Functor(std::forward<T>(Functor)) {
+        constexpr explicit TWrappedFunctor(T &&Functor) : Functor(std::forward<T>(Functor))
+        {
         }
 
         /**
@@ -64,7 +70,8 @@ namespace Retro {
          */
         template <typename... A>
             requires std::invocable<F &, A...>
-        constexpr decltype(auto) operator()(A &&...Args) & noexcept(std::is_nothrow_invocable_v<F &, A...>) {
+        constexpr decltype(auto) operator()(A &&...Args) & noexcept(std::is_nothrow_invocable_v<F &, A...>)
+        {
             return std::invoke(Functor, std::forward<A>(Args)...);
         }
 
@@ -81,8 +88,8 @@ namespace Retro {
          */
         template <typename... A>
             requires std::invocable<const F &, A...>
-        constexpr decltype(auto)
-        operator()(A &&...Args) const & noexcept(std::is_nothrow_invocable_v<const F &, A...>) {
+        constexpr decltype(auto) operator()(A &&...Args) const & noexcept(std::is_nothrow_invocable_v<const F &, A...>)
+        {
             return std::invoke(Functor, std::forward<A>(Args)...);
         }
 
@@ -99,7 +106,8 @@ namespace Retro {
          */
         template <typename... A>
             requires std::invocable<F, A...>
-        constexpr decltype(auto) operator()(A &&...Args) && noexcept(std::is_nothrow_invocable_v<F, A...>) {
+        constexpr decltype(auto) operator()(A &&...Args) && noexcept(std::is_nothrow_invocable_v<F, A...>)
+        {
             return std::invoke(std::move(Functor), std::forward<A>(Args)...);
         }
 
@@ -114,7 +122,8 @@ namespace Retro {
          */
         template <typename U>
             requires CanApply<F &, U>
-        constexpr decltype(auto) operator()(U &&Args) & noexcept(NoThrowApplicable<F &, U>) {
+        constexpr decltype(auto) operator()(U &&Args) & noexcept(NoThrowApplicable<F &, U>)
+        {
             return std::apply(Functor, std::forward<U>(Args));
         }
 
@@ -129,7 +138,8 @@ namespace Retro {
          */
         template <typename U>
             requires CanApply<const F &, U>
-        constexpr decltype(auto) operator()(U &&Args) const & noexcept(NoThrowApplicable<const F &, U>) {
+        constexpr decltype(auto) operator()(U &&Args) const & noexcept(NoThrowApplicable<const F &, U>)
+        {
             return std::apply(Functor, std::forward<U>(Args));
         }
 
@@ -144,7 +154,8 @@ namespace Retro {
          */
         template <typename U>
             requires CanApply<F, U>
-        constexpr decltype(auto) operator()(U &&Args) && noexcept(NoThrowApplicable<F, U>) {
+        constexpr decltype(auto) operator()(U &&Args) && noexcept(NoThrowApplicable<F, U>)
+        {
             return std::apply(std::move(Functor), std::forward<U>(Args));
         }
 
@@ -175,10 +186,14 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename F, typename... A>
         requires HasFunctionCallOperator<std::decay_t<F>>
-    constexpr auto CreateBinding(F &&Functor, A &&...Args) {
-        if constexpr (sizeof...(A) == 0) {
+    constexpr auto CreateBinding(F &&Functor, A &&...Args)
+    {
+        if constexpr (sizeof...(A) == 0)
+        {
             return TWrappedFunctor(std::forward<F>(Functor));
-        } else {
+        }
+        else
+        {
             return TWrappedFunctor(BindBack(std::forward<F>(Functor), std::forward<A>(Args)...));
         }
     }
@@ -196,7 +211,8 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <typename C, typename F, typename... A>
         requires Member<F>
-    constexpr auto CreateBinding(C &&Obj, F &&Functor, A &&...Args) {
+    constexpr auto CreateBinding(C &&Obj, F &&Functor, A &&...Args)
+    {
         return TWrappedFunctor(BindMethod(std::forward<C>(Obj), std::forward<F>(Functor), std::forward<A>(Args)...));
     }
 
@@ -213,10 +229,14 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <auto Functor, typename... A>
         requires(IsValidFunctorObject(Functor))
-    constexpr auto CreateBinding(A &&...Args) {
-        if constexpr (sizeof...(A) == 0) {
+    constexpr auto CreateBinding(A &&...Args)
+    {
+        if constexpr (sizeof...(A) == 0)
+        {
             return TWrappedFunctor(BindFunctor<Functor>());
-        } else {
+        }
+        else
+        {
             return TWrappedFunctor(BindBack<Functor>(std::forward<A>(Args)...));
         }
     }
@@ -233,12 +253,15 @@ namespace Retro {
      */
     RETROLIB_EXPORT template <auto Functor, typename C, typename... A>
         requires Member<decltype(Functor)>
-    constexpr auto CreateBinding(TThis<C> Obj, A &&...Args) {
+    constexpr auto CreateBinding(TThis<C> Obj, A &&...Args)
+    {
         return TWrappedFunctor(BindMethod<Functor>(std::move(Obj.Value), std::forward<A>(Args)...));
     }
 
     RETROLIB_EXPORT template <typename>
-    struct TAdditionalBindingTypes : FInvalidType {};
+    struct TAdditionalBindingTypes : FInvalidType
+    {
+    };
 
     RETROLIB_EXPORT template <typename F, typename... A>
     concept HasExtenededBinding =
@@ -250,7 +273,8 @@ namespace Retro {
 
     RETROLIB_EXPORT template <typename F, typename... A>
         requires HasExtenededBinding<F, A...>
-    constexpr auto CreateBinding(F &&Functor, A &&...Args) {
+    constexpr auto CreateBinding(F &&Functor, A &&...Args)
+    {
         return TAdditionalBindingTypes<std::decay_t<F>>::Bind(std::forward<F>(Functor), std::forward<A>(Args)...);
     }
 

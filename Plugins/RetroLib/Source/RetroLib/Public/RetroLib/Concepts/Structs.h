@@ -11,7 +11,8 @@
 #define RETROLIB_EXPORT
 #endif
 
-namespace Retro {
+namespace Retro
+{
     RETROLIB_EXPORT template <typename T>
     concept CoreStructType = requires {
         { TBaseStructure<std::remove_cvref_t<T>>::Get() } -> std::same_as<UScriptStruct *>;
@@ -30,10 +31,14 @@ namespace Retro {
 
     RETROLIB_EXPORT template <typename T>
         requires UEStruct<T>
-    constexpr UScriptStruct *GetScriptStruct() {
-        if constexpr (Retro::DeclaredStruct<T>) {
+    constexpr UScriptStruct *GetScriptStruct()
+    {
+        if constexpr (Retro::DeclaredStruct<T>)
+        {
             return T::StaticStruct();
-        } else {
+        }
+        else
+        {
             return TBaseStructure<T>::Get();
         }
     }

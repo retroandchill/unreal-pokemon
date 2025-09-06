@@ -20,7 +20,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSelectedBattlerChanged, const TSc
  * The pane that holds the battler options for switching in combat
  */
 UCLASS(Abstract)
-class POKEMONBATTLEUI_API UBattleSwitchPane : public USelectableWidget {
+class POKEMONBATTLEUI_API UBattleSwitchPane : public USelectableWidget
+{
     GENERATED_BODY()
 
   public:

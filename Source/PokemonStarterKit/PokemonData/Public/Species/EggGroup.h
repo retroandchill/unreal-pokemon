@@ -11,7 +11,8 @@
  * Represents an Egg Group for the game
  */
 USTRUCT(BlueprintType, meta = (DatabaseType = "Hardcoded"))
-struct POKEMONDATA_API FEggGroup : public FIndexedTableRow {
+struct POKEMONDATA_API FEggGroup : public FIndexedTableRow
+{
     GENERATED_BODY()
 
     /**
@@ -31,7 +32,8 @@ struct POKEMONDATA_API FEggGroup : public FIndexedTableRow {
  * Blueprint function library for getting egg group data out.
  */
 UCLASS()
-class POKEMONDATA_API UEggGroupHelper : public UBlueprintFunctionLibrary {
+class POKEMONDATA_API UEggGroupHelper : public UBlueprintFunctionLibrary
+{
     GENERATED_BODY()
 
   public:

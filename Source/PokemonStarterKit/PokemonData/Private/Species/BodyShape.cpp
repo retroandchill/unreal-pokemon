@@ -2,6 +2,7 @@
 #include "Species/BodyShape.h"
 #include "DataManager.h"
 
-TArray<FName> UBodyShapeHelper::GetBodyShapeNames() {
+TArray<FName> UBodyShapeHelper::GetBodyShapeNames()
+{
     return FDataManager::GetInstance().GetDataTable<FBodyShape>().GetTableRowNames();
 }

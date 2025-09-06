@@ -11,7 +11,8 @@
  * Node to handle getting the game data out of the editor
  */
 UCLASS()
-class POKEMONBLUEPRINTNODES_API UK2Node_GetGameData : public UK2Node, public ISelectDataRow {
+class POKEMONBLUEPRINTNODES_API UK2Node_GetGameData : public UK2Node, public ISelectDataRow
+{
     GENERATED_BODY()
 
   public:

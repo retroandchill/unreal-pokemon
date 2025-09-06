@@ -17,7 +17,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDisplayMessageWithChoicesOutputPin
  * Command for displaying a message with choices associated with it
  */
 UCLASS(meta = (HideThen, HasDedicatedAsyncNode))
-class POKEMONUI_API UDisplayMessageWithChoices : public UBlueprintCoroutineActionBase {
+class POKEMONUI_API UDisplayMessageWithChoices : public UBlueprintCoroutineActionBase
+{
     GENERATED_BODY()
 
   public:

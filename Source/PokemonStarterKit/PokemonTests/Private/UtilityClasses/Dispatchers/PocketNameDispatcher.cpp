@@ -2,6 +2,7 @@
 
 #include "PocketNameDispatcher.h"
 
-void UPocketNameDispatcher::OnReceivePocket(FName Pocket) {
+void UPocketNameDispatcher::OnReceivePocket(FName Pocket)
+{
     CurrentPocket = Pocket;
 }

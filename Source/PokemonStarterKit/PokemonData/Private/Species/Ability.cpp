@@ -2,14 +2,17 @@
 #include "Species/Ability.h"
 #include "DataManager.h"
 
-TArray<FName> UAbilityHelper::GetAbilityNames() {
+TArray<FName> UAbilityHelper::GetAbilityNames()
+{
     return FDataManager::GetInstance().GetDataTable<FAbility>().GetTableRowNames();
 }
 
-FName UAbilityHelper::ConvertAbilityHandleHandleToName(const FAbilityHandle &Struct) {
+FName UAbilityHelper::ConvertAbilityHandleHandleToName(const FAbilityHandle &Struct)
+{
     return Struct;
 }
 
-FAbilityHandle UAbilityHelper::ConvertNameToAbilityHandle(FName Name) {
+FAbilityHandle UAbilityHelper::ConvertNameToAbilityHandle(FName Name)
+{
     return Name;
 }

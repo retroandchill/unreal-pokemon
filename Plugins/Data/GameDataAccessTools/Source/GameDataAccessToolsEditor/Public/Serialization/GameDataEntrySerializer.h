@@ -4,37 +4,38 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+
 #include "GameDataEntrySerializer.generated.h"
 
 class UGameDataRepository;
 
 /**
- * 
+ *
  */
 UCLASS(Abstract, NotBlueprintable, NotBlueprintType)
 class GAMEDATAACCESSTOOLSEDITOR_API UGameDataEntrySerializer : public UObject
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
-	UFUNCTION(BlueprintNativeEvent, Category = "Serialization")
-	bool Supports(TSubclassOf<UGameDataRepository> RepositoryClass);
+    // Add interface functions to this class. This is the class that will be inherited to implement this interface.
+  public:
+    UFUNCTION(BlueprintNativeEvent, Category = "Serialization")
+    bool Supports(TSubclassOf<UGameDataRepository> RepositoryClass);
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Serialization")
-	FText GetFormatName() const;
+    UFUNCTION(BlueprintNativeEvent, Category = "Serialization")
+    FText GetFormatName() const;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Serialization")
-	FString GetFileExtensionText() const;
+    UFUNCTION(BlueprintNativeEvent, Category = "Serialization")
+    FString GetFileExtensionText() const;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Serialization")
-	bool Serialize(const FString& FilePath, const UGameDataRepository* Repository, FString& ErrorMessage) const;
+    UFUNCTION(BlueprintNativeEvent, Category = "Serialization")
+    bool Serialize(const FString &FilePath, const UGameDataRepository *Repository, FString &ErrorMessage) const;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Serialization")
-	bool Deserialize(const FString& FilePath, UGameDataRepository* Repository, FString& ErrorMessage) const;
+    UFUNCTION(BlueprintNativeEvent, Category = "Serialization")
+    bool Deserialize(const FString &FilePath, UGameDataRepository *Repository, FString &ErrorMessage) const;
 
-protected:
-	static FScriptArrayHelper& GetGameDataEntries(const UGameDataRepository* Repository);
-	static FArrayProperty* GetGameDataEntriesProperty(const UGameDataRepository* Repository);
-	static void MoveEntries(UGameDataRepository* Repository, FScriptArray& Entries);
+  protected:
+    static FScriptArrayHelper &GetGameDataEntries(const UGameDataRepository *Repository);
+    static FArrayProperty *GetGameDataEntriesProperty(const UGameDataRepository *Repository);
+    static void MoveEntries(UGameDataRepository *Repository, FScriptArray &Entries);
 };

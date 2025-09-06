@@ -16,7 +16,8 @@
  * to indicate the presence or absence of a value.
  */
 UENUM(BlueprintType)
-enum class ESetStatus : uint8 {
+enum class ESetStatus : uint8
+{
     /**
      * The value is set.
      */
@@ -28,31 +29,37 @@ enum class ESetStatus : uint8 {
     NotSet
 };
 
-namespace Retro::Optionals {
-    namespace Detail {
+namespace Retro::Optionals
+{
+    namespace Detail
+    {
         template <typename>
         struct TBlueprintOptionalGetter;
 
         template <typename T>
             requires(!std::is_reference_v<T>)
-        struct TBlueprintOptionalGetter<TOptional<T>> {
+        struct TBlueprintOptionalGetter<TOptional<T>>
+        {
             using ValueType = std::remove_const_t<T>;
         };
 
         template <typename T>
-        struct TBlueprintOptionalGetter<TOptional<T &>> {
+        struct TBlueprintOptionalGetter<TOptional<T &>>
+        {
             using ValueType = std::remove_const_t<T>;
         };
 
         template <typename T>
             requires std::derived_from<T, UObject>
-        struct TBlueprintOptionalGetter<TOptional<T &>> {
+        struct TBlueprintOptionalGetter<TOptional<T &>>
+        {
             using ValueType = std::remove_const_t<T> *;
         };
 
         template <typename T>
             requires UnrealInterface<T>
-        struct TBlueprintOptionalGetter<TOptional<T &>> {
+        struct TBlueprintOptionalGetter<TOptional<T &>>
+        {
             using ValueType = TScriptInterface<std::remove_const_t<T>>;
         };
     } // namespace Detail
@@ -84,16 +91,23 @@ namespace Retro::Optionals {
      */
     template <typename T>
         requires BlueprintCompatibleOptional<T>
-    constexpr ESetStatus GetBlueprintOptionalValue(T &&Optional, TBlueprintOutParameter<T> &OutParam) {
-        if (!Optional.IsSet()) {
+    constexpr ESetStatus GetBlueprintOptionalValue(T &&Optional, TBlueprintOutParameter<T> &OutParam)
+    {
+        if (!Optional.IsSet())
+        {
             return ESetStatus::NotSet;
         }
 
-        if constexpr (UnrealInterface<TBlueprintOutParameter<T>>) {
+        if constexpr (UnrealInterface<TBlueprintOutParameter<T>>)
+        {
             OutParam = std::forward<T>(Optional).GetValue()._getUObject();
-        } else if constexpr (std::derived_from<TBlueprintOutParameter<T>, UObject>) {
+        }
+        else if constexpr (std::derived_from<TBlueprintOutParameter<T>, UObject>)
+        {
             OutParam = std::forward<T>(Optional).GetPtrOrNull();
-        } else {
+        }
+        else
+        {
             OutParam = std::forward<T>(Optional).GetValue();
         }
         return ESetStatus::IsSet;

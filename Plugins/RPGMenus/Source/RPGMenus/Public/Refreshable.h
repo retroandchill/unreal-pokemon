@@ -9,14 +9,16 @@
 
 // This class does not need to be modified.
 UINTERFACE(NotBlueprintable)
-class RPGMENUS_API URefreshable : public UInterface {
+class RPGMENUS_API URefreshable : public UInterface
+{
     GENERATED_BODY()
 };
 
 /**
  * Represents a UI component that can be refreshed updating its contents on command.
  */
-class RPGMENUS_API IRefreshable {
+class RPGMENUS_API IRefreshable
+{
     GENERATED_BODY()
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.

@@ -23,7 +23,8 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FExitSaveScreen, bool);
  * The screen used to save the game.
  */
 UCLASS(Abstract)
-class POKEMONUI_API USaveScreen : public UScreen {
+class POKEMONUI_API USaveScreen : public UScreen
+{
     GENERATED_BODY()
 
   public:

@@ -12,7 +12,8 @@
  *
  */
 UCLASS(DisplayName = "Message on Apply")
-class POKEMONBATTLE_API UApplyMessageGameplayEffectComponent : public UGameplayEffectComponent {
+class POKEMONBATTLE_API UApplyMessageGameplayEffectComponent : public UGameplayEffectComponent
+{
     GENERATED_BODY()
 
   public:

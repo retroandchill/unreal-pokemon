@@ -7,7 +7,8 @@
  * The different target options a move can have
  */
 UENUM(BlueprintType)
-enum class ETargetCount : uint8 {
+enum class ETargetCount : uint8
+{
     /**
      * The move has no explicit target. This means the target is either the user or the move has some other special
      * property when it comes to its target.

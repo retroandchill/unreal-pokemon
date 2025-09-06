@@ -3,15 +3,18 @@
 #include "Details/WrappedKeyCustomization.h"
 #include "DetailWidgetRow.h"
 
-FWrappedKeyCustomization::FWrappedKeyCustomization(FName Property) : PropertyName(Property) {
+FWrappedKeyCustomization::FWrappedKeyCustomization(FName Property) : PropertyName(Property)
+{
 }
 
-TSharedRef<IPropertyTypeCustomization> FWrappedKeyCustomization::MakeInstance(FName PropertyName) {
+TSharedRef<IPropertyTypeCustomization> FWrappedKeyCustomization::MakeInstance(FName PropertyName)
+{
     return MakeShared<FWrappedKeyCustomization>(PropertyName);
 }
 
 void FWrappedKeyCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> PropertyHandle, FDetailWidgetRow &HeaderRow,
-                                               IPropertyTypeCustomizationUtils &CustomizationUtils) {
+                                               IPropertyTypeCustomizationUtils &CustomizationUtils)
+{
     // clang-format off
     HeaderRow.NameContent()
         [
@@ -26,6 +29,7 @@ void FWrappedKeyCustomization::CustomizeHeader(TSharedRef<IPropertyHandle> Prope
 
 void FWrappedKeyCustomization::CustomizeChildren(TSharedRef<IPropertyHandle> PropertyHandle,
                                                  IDetailChildrenBuilder &ChildBuilder,
-                                                 IPropertyTypeCustomizationUtils &CustomizationUtils) {
+                                                 IPropertyTypeCustomizationUtils &CustomizationUtils)
+{
     // We don't need to display anything here
 }

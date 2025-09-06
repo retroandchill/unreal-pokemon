@@ -13,7 +13,8 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(PokemonSummaryPagesTest_Moves,
                                  "Unit Tests.UI.Summary.Components.PokemonSummaryPagesTest.Moves",
                                  EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
 
-bool PokemonSummaryPagesTest_Moves::RunTest(const FString &Parameters) {
+bool PokemonSummaryPagesTest_Moves::RunTest(const FString &Parameters)
+{
     auto [DudOverlay, World, GameInstance] = UWidgetTestUtilities::CreateTestWorld();
     auto Subclasses = UReflectionUtils::GetAllSubclassesOfClass<UPokemonMovesPage>();
     UE_ASSERT_NOT_EQUAL(0, Subclasses.Num());

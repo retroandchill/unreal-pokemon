@@ -2,10 +2,12 @@
 
 #include "GridBased2DSettings.h"
 
-double UGridBased2DSettings::GetGridSize() const {
+double UGridBased2DSettings::GetGridSize() const
+{
     return GridSize;
 }
 
-const FSoftObjectPath &UGridBased2DSettings::GetTerrainTagDataTable() const {
+const FSoftObjectPath &UGridBased2DSettings::GetTerrainTagDataTable() const
+{
     return TerrainTagDataTable;
 }
