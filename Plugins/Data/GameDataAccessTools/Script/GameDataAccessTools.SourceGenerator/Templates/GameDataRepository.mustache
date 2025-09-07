@@ -24,6 +24,12 @@ partial class {{AssetClassName}} : {{#IsStatic}}IStaticGameDataRepository{{/IsSt
         }
     }
 
+    public bool IsValidEntry(FName id)
+    {
+        var nativeEntry = GameDataRepositoryExporter.CallGetEntryByID(NativeObject, id);
+        return nativeEntry != IntPtr.Zero;
+    }
+
     public StructView<{{EntryName}}> GetEntry(FName id)
     {
         return TryGetEntry(id, out var entry) ? entry : throw new KeyNotFoundException();

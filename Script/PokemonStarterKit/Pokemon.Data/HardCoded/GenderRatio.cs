@@ -120,6 +120,10 @@ public readonly partial struct FGenderRatio : IGameDataEntry
 [UsedImplicitly]
 public partial class UGenderRatioRepository : UStaticGameDataRepository;
 
+[UStruct]
+[DataHandle(typeof(GameData), nameof(GameData.GenderRatios))]
+public readonly partial record struct FGenderRatioHandle;
+
 public static class GenderRatioExtensions
 {
     private const string LocalizationNamespace = "GameData.GenderRatio";

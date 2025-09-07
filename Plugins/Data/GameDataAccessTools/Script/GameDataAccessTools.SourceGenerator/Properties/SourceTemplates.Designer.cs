@@ -126,10 +126,7 @@ namespace GameAccessTools.SourceGenerator.Properties {
         ///    public static partial {{Type}} {{Name}} =&gt; U{{../ClassName}}Manager.Instance.{{Name}};
         ///    {{/Repositories}}
         ///
-        ///}
-        ///
-        ///[UClass]
-        ///p [rest of string was truncated]&quot;;.
+        ///}.
         /// </summary>
         internal static string GameDataProviderTemplate {
             get {
@@ -158,6 +155,28 @@ namespace GameAccessTools.SourceGenerator.Properties {
         internal static string GameDataRepositoryTemplate {
             get {
                 return ResourceManager.GetString("GameDataRepositoryTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #nullable enable
+        ///using UnrealSharp;
+        ///using GameDataAccessTools.Core;
+        ///
+        ///namespace {{Namespace}};
+        ///
+        ///readonly partial record struct {{StructName}}(FName ID) : IDataHandle&lt;{{EntryType}}&gt;{{#Convertables}}, IEquatable&lt;{{Type}}&gt;{{/Convertables}}
+        ///{
+        ///    {{#WithRepository}}
+        ///    public static UScriptStruct EntryStruct =&gt; {{Provider}}.{{Repository}}.EntryStruct;
+        ///
+        ///    static IEnumerable&lt;FDataHandleEntry&gt; IDataHandle.Entries =&gt; Entries.ToArray();
+        ///
+        ///    public static ValueEnumerable&lt;StructArrayValueEnumerator&lt;{{E [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string RepositoryDataHandleTemplate {
+            get {
+                return ResourceManager.GetString("RepositoryDataHandleTemplate", resourceCulture);
             }
         }
         

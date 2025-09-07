@@ -15,6 +15,8 @@ public interface IGameDataRepository<T>
 
     int NumEntries { get; }
 
+    bool IsValidEntry(FName id);
+
     StructView<T> GetEntry(FName id);
 
     StructView<T> GetEntry(int index);

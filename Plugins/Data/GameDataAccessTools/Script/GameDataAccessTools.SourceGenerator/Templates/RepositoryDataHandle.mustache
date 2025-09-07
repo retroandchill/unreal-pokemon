@@ -1,0 +1,110 @@
+﻿#nullable enable
+using UnrealSharp;
+using UnrealSharp.CoreUObject;
+using GameDataAccessTools.Core;
+using GameDataAccessTools.Core.Views;
+using ZLinq;
+
+namespace {{Namespace}};
+
+readonly partial record struct {{StructName}}(FName ID) : IDataHandle<{{EntryType}}>{{#Convertables}}, IEquatable<{{Type}}>{{/Convertables}}
+{
+    {{#WithRepository}}
+    public static UScriptStruct EntryStruct => {{Provider}}.{{Repository}}.EntryStruct;
+
+    static IEnumerable<FDataHandleEntry> IDataHandle.Entries => Entries.ToArray();
+
+    public static ValueEnumerable<StructArrayValueEnumerator<{{EntryType}}, FDataHandleEntry>, FDataHandleEntry> Entries
+    {
+        get
+        {
+            return {{Provider}}.{{Repository}}.Entries
+                .AsValueEnumerable(v => new FDataHandleEntry(v.ID{{#HasDisplayName}}, v.Name{{/HasDisplayName}}));
+        }
+    }
+
+    public bool IsValid => {{Provider}}.{{Repository}}.IsValidEntry(ID);
+
+    public StructView<{{EntryType}}> Entry => {{Provider}}.{{Repository}}.GetEntry(ID);
+    {{/WithRepository}}
+    
+    public static implicit operator {{StructName}}(in {{EntryType}} entry) 
+    {
+        var handle = new {{StructName}}(entry.ID);
+        if (!handle.IsValid)
+        {
+            throw new InvalidOperationException($"Cannot convert entry with ID of {entry.ID} because said ID is not valid");
+        }
+        return handle;
+    } 
+
+    public static implicit operator {{StructName}}(StructView<{{EntryType}}> entry)
+    {
+        var handle = new {{StructName}}(entry.ID);
+        if (!handle.IsValid)
+        {
+            throw new InvalidOperationException($"Cannot convert entry with ID of {entry.ID} because said ID is not valid");
+        }
+        return handle;
+    }
+    
+    public static implicit operator {{StructName}}(FName name) 
+    {
+        var handle = new {{StructName}}(name);
+        if (!handle.IsValid)
+        {
+            throw new InvalidOperationException($"Cannot convert Name of '{name}' because said ID is not valid");
+        }
+        return handle;
+    }
+
+    public static implicit operator FName({{StructName}} handle) => handle.ID;
+
+    {{#Convertables}}
+    public static implicit operator {{../StructName}}({{Type}} other)
+    {
+        var handle = new {{StructName}}(other.ID);
+        if (!handle.IsValid)
+        {
+            throw new InvalidOperationException($"Cannot convert entry with ID of '{other.ID}' because said ID is not valid");
+        }
+        return handle;
+    }
+
+    {{/Convertables}}
+    public bool Equals(FName other)
+    {
+        return ID.Equals(other);
+    }
+
+    {{#Convertables}}
+    public bool Equals({{Type}} other)
+    {
+        return ID.Equals(other.ID);
+    }
+
+    {{/Convertables}}
+    public static bool operator ==({{StructName}} left, FName right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=({{StructName}} left, FName right)
+    {
+        return !(left == right);
+    }
+
+    {{#Convertables}}
+    public static bool operator ==({{../StructName}} left, {{Type}} right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=({{../StructName}} left, {{Type}} right)
+    {
+        return !(left == right);
+    }
+
+    {{/Convertables}}
+}
+                                                                          

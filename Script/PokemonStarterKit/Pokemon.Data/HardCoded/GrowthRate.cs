@@ -7,6 +7,7 @@ using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameDataAccessTools;
+using ZLinq;
 
 namespace Pokemon.Data.HardCoded;
 
@@ -33,6 +34,10 @@ public readonly partial struct FGrowthRate : IGameDataEntry
 [GameDataRepository<FGrowthRate>]
 [UsedImplicitly]
 public partial class UGrowthRateRepository : UStaticGameDataRepository;
+
+[UStruct]
+[DataHandle(typeof(GameData), nameof(GameData.GrowthRates))]
+public readonly partial record struct FGrowthRateHandle;
 
 public static class GrowthRateExtensions
 {

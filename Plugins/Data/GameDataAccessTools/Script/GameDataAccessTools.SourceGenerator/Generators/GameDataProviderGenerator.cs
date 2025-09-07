@@ -75,7 +75,7 @@ public class GameDataProviderGenerator : IIncrementalGenerator
             .OfType<IPropertySymbol>()
             .Where(p => p.IsStatic)
             .Where(p => p.DeclaredAccessibility == Accessibility.Public)
-            .Where(p => p.Type is INamedTypeSymbol namedType && IsGameDataRepository(namedType))
+            .Where(p => p.Type is INamedTypeSymbol namedType && namedType.IsGameDataRepository())
             .Where(p => p.GetMethod is not null && p.SetMethod is null)
             .Where(p =>
                 p.DeclaringSyntaxReferences.Select(r => r.GetSyntax())
@@ -88,7 +88,7 @@ public class GameDataProviderGenerator : IIncrementalGenerator
                 Name = x.Name,
                 SingularName = GetSingularName(x),
                 RepositoryClassName = x.Type.ToDisplayString(),
-                EntryType = GetEntryType(x.Type),
+                EntryType = x.Type.GetEntryType(),
                 HasAsset = HasAsset(x.Type),
             })
             .ToImmutableArray();
@@ -118,40 +118,6 @@ public class GameDataProviderGenerator : IIncrementalGenerator
             $"{classSymbol.Name}.g.cs",
             handlebars.Compile(SourceTemplates.GameDataProviderTemplate)(templateParams)
         );
-    }
-
-    private static bool IsGameDataRepository(INamedTypeSymbol type)
-    {
-        if (
-            !type.AllInterfaces.Any(i =>
-                i.IsGenericType
-                && i.ConstructedFrom.ToDisplayString() == SourceContextNames.IGameDataRepository
-            ) && !type.HasAttribute(typeof(GameDataRepositoryAttribute<>))
-        )
-        {
-            return false;
-        }
-
-        for (var baseType = type.BaseType; baseType is not null; baseType = baseType.BaseType)
-        {
-            if (baseType.ToDisplayString() == SourceContextNames.UGameDataRepository)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static ITypeSymbol GetEntryType(ITypeSymbol type)
-    {
-        return type.AllInterfaces.Where(i =>
-                    i.IsGenericType
-                    && i.ConstructedFrom.ToDisplayString() == SourceContextNames.IGameDataRepository
-                )
-                .Select(i => i.TypeArguments.Single())
-                .SingleOrDefault()
-            ?? type.GetAttributes().GetGameDataRepositoryInfos().Single().EntryType;
     }
 
     private static string GetSingularName(IPropertySymbol propertySymbol)
