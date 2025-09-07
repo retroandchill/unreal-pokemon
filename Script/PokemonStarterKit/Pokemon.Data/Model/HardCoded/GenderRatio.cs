@@ -6,7 +6,7 @@ using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.GameDataAccessTools;
 
-namespace Pokemon.Data.HardCoded;
+namespace Pokemon.Data.Model.HardCoded;
 
 [UEnum]
 public enum EPokemonGender : byte

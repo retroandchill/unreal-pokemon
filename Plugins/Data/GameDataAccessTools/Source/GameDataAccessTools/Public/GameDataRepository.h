@@ -48,10 +48,18 @@ class GAMEDATAACCESSTOOLS_API UGameDataRepository : public UObject
 #endif
 
   protected:
+    void PostInitProperties() override;
+
     void PostLoad() override;
 
     uint8 *AddNewEntry(FName ID);
 
+    uint8 *AddNewEntry(FName ID, const uint8 *Data);
+
+  private:
+    uint8 *AddNewEntryInternal(FName ID);
+
+  protected:
     void RemoveEntryAtIndex(int32 Index);
 
     void SwapEntries(int32 Index1, int32 Index2);

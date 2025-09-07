@@ -1,15 +1,13 @@
 ﻿using GameAccessTools.SourceGenerator.Attributes;
 using GameDataAccessTools.Core;
 using GameDataAccessTools.Core.Utilities;
-using GameDataAccessTools.Core.Views;
 using JetBrains.Annotations;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameDataAccessTools;
-using ZLinq;
 
-namespace Pokemon.Data.HardCoded;
+namespace Pokemon.Data.Model.HardCoded;
 
 [UStruct]
 [CreateStructView]

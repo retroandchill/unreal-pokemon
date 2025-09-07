@@ -1,14 +1,20 @@
 ﻿#include "GameDataRepository.h"
 #include "LogGameDataAccessTools.h"
 
-void UGameDataRepository::PostLoad()
+void UGameDataRepository::PostInitProperties()
 {
-    UObject::PostLoad();
+    UObject::PostInitProperties();
+    if (GetClass()->HasAnyClassFlags(CLASS_Abstract))
+    {
+        return;
+    }
+
     GameDataEntriesProperty = CastField<FArrayProperty>(GetClass()->FindPropertyByName(FName(DataEntriesProperty)));
     if (GameDataEntriesProperty == nullptr)
     {
         UE_LOG(LogGameDataAccessTools, Error, TEXT("Class %s must have an Array Property named %s"),
                *GetClass()->GetName(), DataEntriesProperty.GetData());
+        return;
     }
 
     StructProperty = CastFieldChecked<FStructProperty>(GameDataEntriesProperty->Inner);
@@ -16,10 +22,11 @@ void UGameDataRepository::PostLoad()
     {
         UE_LOG(LogGameDataAccessTools, Error, TEXT("Array Property %s must have a Struct Property"),
                *GameDataEntriesProperty->GetName());
+        return;
     }
 
     DataArray = &GameDataEntriesProperty->GetPropertyValue_InContainer(this);
-    GameDataEntries = MakeUnique<FScriptArrayHelper>(GameDataEntriesProperty, &DataArray);
+    GameDataEntries = MakeUnique<FScriptArrayHelper>(GameDataEntriesProperty, DataArray);
 
     IDProperty = CastFieldChecked<FNameProperty>(StructProperty->Struct->FindPropertyByName(FName(EntryIDProperty)));
     if (IDProperty == nullptr)
@@ -35,11 +42,37 @@ void UGameDataRepository::PostLoad()
         UE_LOG(LogGameDataAccessTools, Error, TEXT("Struct Property %s must have an Int Property named %s"),
                *StructProperty->GetName(), EntryRowIndexProperty.GetData());
     }
+}
 
+void UGameDataRepository::PostLoad()
+{
+    UObject::PostLoad();
     RebuildIndices();
 }
 
 uint8 *UGameDataRepository::AddNewEntry(const FName ID)
+{
+    auto *Entry = AddNewEntryInternal(ID);
+    const int32 NewIndex = GameDataEntries->Num() - 1;
+    IDProperty->SetValue_InContainer(Entry, ID);
+    RowIndexProperty->SetPropertyValue_InContainer(Entry, NewIndex);
+    RowIndices.Add(ID, NewIndex);
+    return Entry;
+}
+
+uint8 *UGameDataRepository::AddNewEntry(const FName ID, const uint8 *Data)
+{
+    auto *Entry = AddNewEntryInternal(ID);
+    const int32 NewIndex = GameDataEntries->Num() - 1;
+    StructProperty->Struct->CopyScriptStruct(Entry, Data);
+    IDProperty->SetValue_InContainer(Entry, ID);
+    RowIndexProperty->SetPropertyValue_InContainer(Entry, NewIndex);
+    RowIndices.Add(ID, NewIndex);
+    return Entry;
+}
+
+// ReSharper disable once CppMemberFunctionMayBeConst
+uint8 *UGameDataRepository::AddNewEntryInternal(const FName ID)
 {
     if (!ensureMsgf(!ID.IsNone(), TEXT("ID for a row may not be empty")))
     {
@@ -53,11 +86,7 @@ uint8 *UGameDataRepository::AddNewEntry(const FName ID)
     }
 
     const int32 NewIndex = GameDataEntries->AddValue();
-    auto *Entry = GameDataEntries->GetElementPtr(NewIndex);
-    IDProperty->SetValue_InContainer(Entry, ID);
-    RowIndexProperty->SetPropertyValue_InContainer(Entry, NewIndex);
-    RowIndices.Add(ID, NewIndex);
-    return Entry;
+    return GameDataEntries->GetElementPtr(NewIndex);
 }
 
 void UGameDataRepository::RemoveEntryAtIndex(const int32 Index)
@@ -185,13 +214,6 @@ DEFINE_FUNCTION(UStaticGameDataRepository::execTryRegisterEntryInternal)
     P_NATIVE_BEGIN
 
     const auto ID = Self->GetIDProperty()->GetPropertyValue_InContainer(DataStructStruct);
-    if (!Self->VerifyRowNameUnique(ID))
-    {
-        UE_LOG(LogGameDataAccessTools, Error, TEXT("Cannot use ID '%s', as it is already in use"), *ID.ToString())
-        *static_cast<bool *>(RESULT_PARAM) = false;
-        return;
-    }
-
     auto *NewEntry = Self->AddNewEntry(ID);
     Self->GetEntryStruct()->CopyScriptStruct(NewEntry, DataStructStruct);
     *static_cast<bool *>(RESULT_PARAM) = true;

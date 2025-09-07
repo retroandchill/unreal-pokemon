@@ -1,5 +1,5 @@
 ﻿using GameAccessTools.SourceGenerator.Attributes;
-using Pokemon.Data.HardCoded;
+using Pokemon.Data.Model.HardCoded;
 
 namespace Pokemon.Data;
 

@@ -13,6 +13,9 @@
     <Reference Include="UnrealSharp">
       <HintPath>..\..\..\Plugins\UnrealSharp\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
     </Reference>
+    <Reference Include="UnrealSharp.Binds">
+      <HintPath>..\..\..\Plugins\UnrealSharp\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Binds.dll</HintPath>
+    </Reference>
     <Reference Include="UnrealSharp.Core">
       <HintPath>..\..\..\Plugins\UnrealSharp\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
     </Reference>
@@ -27,5 +30,8 @@
       ReferenceOutputAssembly="false"
     />
     <ProjectReference Include="..\..\UnrealPokemon.Glue\UnrealPokemon.Glue.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
   </ItemGroup>
 </Project>

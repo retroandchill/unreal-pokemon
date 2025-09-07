@@ -9,6 +9,7 @@
 #include "DataRetrieval/DataRegistry.h"
 #include "Exp/GrowthRateData.h"
 #include "Field/Weather.h"
+#include "Interop/PokemonDataManagedCallbacks.h"
 #include "Moves/MoveData.h"
 #include "Moves/Target.h"
 #include "Species/Ability.h"
@@ -22,8 +23,6 @@
 #include "Species/SpeciesData.h"
 #include "Species/Stat.h"
 #include "Trainers/TrainerType.h"
-
-constexpr auto GLoctextNamespace = "FPokemonDataModule";
 
 void FPokemonDataModule::StartupModule()
 {
@@ -50,6 +49,8 @@ void FPokemonDataModule::StartupModule()
     DataRegistry.RegisterStruct<FItem>();
     DataRegistry.RegisterStruct<FSpeciesData>();
     DataRegistry.RegisterStruct<FTrainerType>();
+
+    FCoreDelegates::OnPostEngineInit.AddLambda([] { FPokemonDataManagedCallbacks::Get().CreateDataManager(); });
 }
 
 void FPokemonDataModule::ShutdownModule()
