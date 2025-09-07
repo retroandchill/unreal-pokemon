@@ -9,7 +9,7 @@ public class FPokemonDataModule : IModuleInterface
     {
         UGameDataManager.Startup();
 
-        UGameDataManager.Instance.AddGrowthRates();
+        UGameDataManager.Instance.AddGrowthRates().AddGenderRatios();
     }
 
     public void ShutdownModule() { }

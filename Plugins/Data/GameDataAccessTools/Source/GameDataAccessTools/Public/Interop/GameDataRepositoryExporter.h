@@ -12,7 +12,7 @@ class UGameDataRepository;
 /**
  *
  */
-UCLASS()
+UCLASS(meta = (SkipGlueGeneration))
 class GAMEDATAACCESSTOOLS_API UGameDataRepositoryExporter : public UObject
 {
     GENERATED_BODY()

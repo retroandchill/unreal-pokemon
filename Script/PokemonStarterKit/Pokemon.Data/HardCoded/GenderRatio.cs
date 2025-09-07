@@ -1,5 +1,6 @@
 ﻿using GameAccessTools.SourceGenerator.Attributes;
 using GameDataAccessTools.Core;
+using GameDataAccessTools.Core.Utilities;
 using JetBrains.Annotations;
 using UnrealSharp;
 using UnrealSharp.Attributes;
@@ -53,6 +54,8 @@ public readonly partial struct FGenderRatioData
     public static FGenderRatioData SingleGender(EPokemonGender gender) => new(gender);
 
     public static FGenderRatioData FemaleChance(byte chance) => new(chance);
+
+    public static implicit operator FGenderRatioData(EPokemonGender gender) => SingleGender(gender);
 
     public bool IsSingleGender => _specialGenderRatio != ESpecialGenderRatio.None;
 
@@ -117,4 +120,104 @@ public readonly partial struct FGenderRatio : IGameDataEntry
 [UsedImplicitly]
 public partial class UGenderRatioRepository : UStaticGameDataRepository;
 
-public static class GenderRatioExtensions { }
+public static class GenderRatioExtensions
+{
+    private const string LocalizationNamespace = "GameData.GenderRatio";
+
+    public static UGameDataManager AddGenderRatios(this UGameDataManager manager)
+    {
+        manager.GenderRatios.RegisterEntry(
+            new FGenderRatio
+            {
+                ID = FGenderRatio.AlwaysMale,
+                Name = FText.Localized(LocalizationNamespace, "AlwaysMale", "Always Male"),
+                Ratio = EPokemonGender.Male,
+            }
+        );
+
+        manager.GenderRatios.RegisterEntry(
+            new FGenderRatio
+            {
+                ID = FGenderRatio.AlwaysFemale,
+                Name = FText.Localized(LocalizationNamespace, "AlwaysFemale", "Always Female"),
+                Ratio = EPokemonGender.Female,
+            }
+        );
+
+        manager.GenderRatios.RegisterEntry(
+            new FGenderRatio
+            {
+                ID = FGenderRatio.Genderless,
+                Name = FText.Localized(LocalizationNamespace, "Genderless", "Genderless"),
+                Ratio = EPokemonGender.Genderless,
+            }
+        );
+
+        manager.GenderRatios.RegisterEntry(
+            new FGenderRatio
+            {
+                ID = FGenderRatio.FemaleOneEighth,
+                Name = FText.Localized(
+                    LocalizationNamespace,
+                    "FemaleOneEighth",
+                    "Female One Eighth"
+                ),
+                Ratio = FGenderRatioData.FemaleChance(32),
+            }
+        );
+
+        manager.GenderRatios.RegisterEntry(
+            new FGenderRatio
+            {
+                ID = FGenderRatio.Female25Percent,
+                Name = FText.Localized(
+                    LocalizationNamespace,
+                    "Female25Percent",
+                    "Female 25 Percent"
+                ),
+                Ratio = FGenderRatioData.FemaleChance(64),
+            }
+        );
+
+        manager.GenderRatios.RegisterEntry(
+            new FGenderRatio
+            {
+                ID = FGenderRatio.Female50Percent,
+                Name = FText.Localized(
+                    LocalizationNamespace,
+                    "Female50Percent",
+                    "Female 50 Percent"
+                ),
+                Ratio = FGenderRatioData.FemaleChance(128),
+            }
+        );
+
+        manager.GenderRatios.RegisterEntry(
+            new FGenderRatio
+            {
+                ID = FGenderRatio.Female75Percent,
+                Name = FText.Localized(
+                    LocalizationNamespace,
+                    "Female75Percent",
+                    "Female 75 Percent"
+                ),
+                Ratio = FGenderRatioData.FemaleChance(192),
+            }
+        );
+
+        manager.GenderRatios.RegisterEntry(
+            new FGenderRatio
+            {
+                ID = FGenderRatio.FemaleSevenEighths,
+                Name = FText.Localized(
+                    LocalizationNamespace,
+                    "FemaleSevenEighths",
+                    "Female Seven Eighths"
+                ),
+                Ratio = FGenderRatioData.FemaleChance(224),
+            }
+        );
+
+        return manager;
+    }
+}

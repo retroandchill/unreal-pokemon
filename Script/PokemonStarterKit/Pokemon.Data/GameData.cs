@@ -7,4 +7,5 @@ namespace Pokemon.Data;
 public static partial class GameData
 {
     public static partial UGrowthRateRepository GrowthRates { get; }
+    public static partial UGenderRatioRepository GenderRatios { get; }
 }

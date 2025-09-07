@@ -6,6 +6,7 @@
     <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableDynamicLoading>true</EnableDynamicLoading>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants>WITH_EDITOR</DefineConstants>

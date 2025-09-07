@@ -1,5 +1,6 @@
 ﻿using GameAccessTools.SourceGenerator.Attributes;
 using GameDataAccessTools.Core;
+using GameDataAccessTools.Core.Utilities;
 using GameDataAccessTools.Core.Views;
 using JetBrains.Annotations;
 using UnrealSharp;
@@ -35,19 +36,49 @@ public partial class UGrowthRateRepository : UStaticGameDataRepository;
 
 public static class GrowthRateExtensions
 {
+    private const string LocalizationNamespace = "GameData.GrowthRate";
+
     public static UGameDataManager AddGrowthRates(this UGameDataManager manager)
     {
         manager.GrowthRates.RegisterEntry(
-            new FGrowthRate { ID = FGrowthRate.Medium, Name = "Medium" }
+            new FGrowthRate
+            {
+                ID = FGrowthRate.Medium,
+                Name = FText.Localized(LocalizationNamespace, "Medium", "Medium"),
+            }
         );
+
         manager.GrowthRates.RegisterEntry(
-            new FGrowthRate { ID = FGrowthRate.Fluctuating, Name = "Fluctuating" }
+            new FGrowthRate
+            {
+                ID = FGrowthRate.Fluctuating,
+                Name = FText.Localized(LocalizationNamespace, "Fluctuating", "Fluctuating"),
+            }
         );
+
         manager.GrowthRates.RegisterEntry(
-            new FGrowthRate { ID = FGrowthRate.Parabolic, Name = "Parabolic" }
+            new FGrowthRate
+            {
+                ID = FGrowthRate.Parabolic,
+                Name = FText.Localized(LocalizationNamespace, "Parabolic", "Parabolic"),
+            }
         );
-        manager.GrowthRates.RegisterEntry(new FGrowthRate { ID = FGrowthRate.Fast, Name = "Fast" });
-        manager.GrowthRates.RegisterEntry(new FGrowthRate { ID = FGrowthRate.Slow, Name = "Slow" });
+
+        manager.GrowthRates.RegisterEntry(
+            new FGrowthRate
+            {
+                ID = FGrowthRate.Fast,
+                Name = FText.Localized(LocalizationNamespace, "Fast", "Fast"),
+            }
+        );
+
+        manager.GrowthRates.RegisterEntry(
+            new FGrowthRate
+            {
+                ID = FGrowthRate.Slow,
+                Name = FText.Localized(LocalizationNamespace, "Slow", "Slow"),
+            }
+        );
 
         return manager;
     }
