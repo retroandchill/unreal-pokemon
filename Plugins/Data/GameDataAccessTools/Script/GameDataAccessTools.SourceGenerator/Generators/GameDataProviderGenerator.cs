@@ -107,6 +107,14 @@ public class GameDataProviderGenerator : IIncrementalGenerator
         handlebars.Configuration.TextEncoder = null;
 
         context.AddSource(
+            $"{classSymbol.Name}Settings.g.cs",
+            handlebars.Compile(SourceTemplates.GameDataProviderSettingsTemplate)(templateParams)
+        );
+        context.AddSource(
+            $"{classSymbol.Name}Manager.g.cs",
+            handlebars.Compile(SourceTemplates.GameDataProviderManagerTemplate)(templateParams)
+        );
+        context.AddSource(
             $"{classSymbol.Name}.g.cs",
             handlebars.Compile(SourceTemplates.GameDataProviderTemplate)(templateParams)
         );

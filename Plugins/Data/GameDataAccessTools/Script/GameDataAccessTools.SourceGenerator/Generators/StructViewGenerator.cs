@@ -104,7 +104,7 @@ public class StructViewGenerator : IIncrementalGenerator
         handlebars.Configuration.TextEncoder = null;
 
         context.AddSource(
-            $"{templateParams.EngineName}Extensions.g.cs",
+            $"{templateParams.EngineName}ViewExtensions.g.cs",
             handlebars.Compile(SourceTemplates.StructViewExtensionsTemplate)(templateParams)
         );
     }

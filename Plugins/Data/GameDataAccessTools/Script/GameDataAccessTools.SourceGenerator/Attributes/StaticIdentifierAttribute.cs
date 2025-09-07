@@ -7,7 +7,7 @@ using GameDataAccessTools.Core;
 
 namespace GameAccessTools.SourceGenerator.Attributes;
 
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 #if GAME_DATA_ACCESS_TOOLS_GENERATOR
 [IncludeFile]
 #endif

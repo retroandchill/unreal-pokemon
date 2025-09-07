@@ -1,0 +1,23 @@
+#nullable enable
+using System.Diagnostics.CodeAnalysis;
+using UnrealSharp;
+using UnrealSharp.Engine;
+using UnrealSharp.Attributes;
+using UnrealSharp.CoreUObject;
+using UnrealSharp.DeveloperSettings;
+using UnrealSharp.GameDataAccessTools;
+using GameDataAccessTools.Core;
+
+namespace {{Namespace}};
+
+[UClass(ClassFlags.DefaultConfig, {{#HasDisplayName}}DisplayName = "{{DisplayName}}", {{/HasDisplayName}}ConfigCategory = "{{ConfigCategory}}")]
+public partial class U{{ClassName}}Settings : UDeveloperSettings 
+{
+    {{#AssetRepositories}}
+    {{#HasAsset}}
+    [UProperty(PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config, Category = "RepositoryAssets")]
+    public TSoftObjectPtr<{{RepositoryClassName}}> {{Name}} { get; }
+    {{/HasAsset}}
+        
+    {{/AssetRepositories}}
+}

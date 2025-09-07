@@ -73,29 +73,36 @@ public class StaticIdentifierGenerator : IIncrementalGenerator
             return;
         }
 
-        var info = classSymbol
-            .GetAttributes()
-            .Single(x => x.AttributeClass?.Name == "StaticIdentifierAttribute");
-
-        var structType = info.AttributeClass!.TypeArguments[0];
-
         var templateParams = new
         {
             Namespace = classSymbol.ContainingNamespace.ToDisplayString(),
             ClassName = classSymbol.Name,
-            ExtendedClass = structType.ToDisplayString(),
-            Properties = info.ConstructorArguments[0]
-                .Values.Select(x => x.Value)
-                .OfType<string>()
-                .Select(x => new { Identifier = x })
-                .ToImmutableArray(),
+            Extensions = classSymbol
+                .GetAttributes()
+                .Where(x => x.AttributeClass?.Name == "StaticIdentifierAttribute")
+                .Select(info =>
+                    (
+                        Extended: info.AttributeClass!.TypeArguments[0],
+                        Properties: info.ConstructorArguments[0].Values
+                    )
+                )
+                .Select(x => new
+                {
+                    ExtendedClass = x.Extended.ToDisplayString(),
+                    EngineName = x.Extended.Name[1..],
+                    Properties = x
+                        .Properties.Select(t => t.Value)
+                        .OfType<string>()
+                        .Select(t => new { Identifier = t })
+                        .ToImmutableArray(),
+                }),
         };
 
         var handlebars = Handlebars.Create();
         handlebars.Configuration.TextEncoder = null;
 
         context.AddSource(
-            $"{classSymbol.Name}.{structType.Name[1..]}.Identifiers.g.cs",
+            $"{classSymbol.Name}.Identifiers.g.cs",
             handlebars.Compile(SourceTemplates.StaticIdentifiersTemplate)(templateParams)
         );
     }

@@ -1,10 +1,19 @@
-using System.Text.RegularExpressions;
+using GameAccessTools.SourceGenerator.Attributes;
 using GameAccessTools.SourceGenerator.Model;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Retro.SourceGeneratorUtilities.Utilities.Attributes;
 
 namespace GameAccessTools.SourceGenerator.Utilities;
+
+public enum CollectionType
+{
+    List,
+    Set,
+    Dictionary,
+    Span,
+    Optional,
+}
 
 public static class PropertyAccessUtilities
 {
@@ -16,7 +25,10 @@ public static class PropertyAccessUtilities
             IPropertySymbol propertySymbol => propertySymbol.Type,
             _ => throw new InvalidOperationException(),
         };
-        var (type, marshaller) = propertyType.GetMarshallerName();
+
+        var (type, marshaller) = propertyType.GetMarshallerName(
+            symbol.HasAttribute<AsValueAttribute>()
+        );
         return new AccessiblePropertyInfo(
             symbol.DeclaredAccessibility.GetAccessModifier(),
             type,
@@ -64,7 +76,10 @@ public static class PropertyAccessUtilities
             .Any(a => a is not null && a.Body is null);
     }
 
-    private static MarshalledPropertyInfo GetMarshallerName(this ITypeSymbol typeSymbol)
+    private static MarshalledPropertyInfo GetMarshallerName(
+        this ITypeSymbol typeSymbol,
+        bool asValue
+    )
     {
         switch (typeSymbol.SpecialType)
         {
@@ -98,52 +113,26 @@ public static class PropertyAccessUtilities
                     switch (genericType.MetadataName)
                     {
                         case "IReadOnlyList`1" or "IList`1":
-                            if (typeArguments[0].IsBlittableType())
-                            {
-                                return new MarshalledPropertyInfo(
-                                    $"ReadOnlySpan<{typeArguments[0]}>",
-                                    new MarshallerInfo(
-                                        $"SpanMarshaller<{typeArguments[0]}>",
-                                        MarshallerType.Regular,
-                                        typeArguments[0].GetMarshallerName().MarshallerInfo.Name
-                                    )
+                            return typeArguments[0]
+                                .GetCollectionMarshallerInfo(
+                                    typeArguments[0].IsBlittableType()
+                                        ? CollectionType.Span
+                                        : CollectionType.List,
+                                    asValue
                                 );
-                            }
-
-                            return new MarshalledPropertyInfo(
-                                $"ArrayView<{typeArguments[0]}>",
-                                new MarshallerInfo(
-                                    $"ArrayViewMarshaller<{typeArguments[0]}>",
-                                    MarshallerType.View,
-                                    typeArguments[0].GetMarshallerName().MarshallerInfo.Name
-                                )
-                            );
                         case "TNativeArray`1" or "ReadOnlySpan`1":
-                            return new MarshalledPropertyInfo(
-                                $"ReadOnlySpan<{typeArguments[0]}>",
-                                new MarshallerInfo(
-                                    $"SpanMarshaller<{typeArguments[0]}>",
-                                    MarshallerType.Regular,
-                                    typeArguments[0].GetMarshallerName().MarshallerInfo.Name
-                                )
-                            );
+                            return typeArguments[0]
+                                .GetCollectionMarshallerInfo(CollectionType.Span, asValue);
                         case "IReadOnlyDictionary`2" or "IDictionary`2":
-                            return new MarshalledPropertyInfo(
-                                $"IReadOnlyDictionary<{typeArguments[0]}, {typeArguments[1]}>",
-                                new MarshallerInfo(
-                                    $"MapCopyMarshaller<{typeArguments[0]}, {typeArguments[1]}>",
-                                    typeArguments[0].GetMarshallerName().MarshallerInfo.Name,
-                                    typeArguments[1].GetMarshallerName().MarshallerInfo.Name
-                                )
-                            );
+                            return typeArguments[0]
+                                .GetCollectionMarshallerInfo(
+                                    CollectionType.Dictionary,
+                                    asValue,
+                                    typeArguments[1]
+                                );
                         case "IReadOnlySet`1" or "ISet`1":
-                            return new MarshalledPropertyInfo(
-                                $"IReadOnlySet<{typeArguments[0]}>",
-                                new MarshallerInfo(
-                                    $"SetCopyMarshaller<{typeArguments[0]}>",
-                                    typeArguments[0].GetMarshallerName().MarshallerInfo.Name
-                                )
-                            );
+                            return typeArguments[0]
+                                .GetCollectionMarshallerInfo(CollectionType.Set, asValue);
                         case "TSubclassOf`1":
                             return new MarshalledPropertyInfo(
                                 typeSymbol.ToDisplayString(),
@@ -167,13 +156,8 @@ public static class PropertyAccessUtilities
                                 new MarshallerInfo($"SoftClassMarshaller<{typeArguments[0]}>")
                             );
                         case "Option`1":
-                            return new MarshalledPropertyInfo(
-                                typeSymbol.ToDisplayString(),
-                                new MarshallerInfo(
-                                    $"OptionMarshaller<{typeArguments[0]}>",
-                                    typeArguments[0].GetMarshallerName().MarshallerInfo.Name
-                                )
-                            );
+                            return typeArguments[0]
+                                .GetCollectionMarshallerInfo(CollectionType.Optional, true);
                     }
                 }
 
@@ -233,7 +217,7 @@ public static class PropertyAccessUtilities
                     .GetAttributes()
                     .SingleOrDefault(attr =>
                         attr.AttributeClass?.ToDisplayString()
-                        == "UnrealSharp.Attributes.UStructAttribute"
+                        == SourceContextNames.UStructAttribute
                     );
                 if (structAttribute is null)
                 {
@@ -246,6 +230,14 @@ public static class PropertyAccessUtilities
                             : new MarshallerInfo(
                                 $"ManagedObjectMarshaller<{typeSymbol.ToDisplayString()}>"
                             )
+                    );
+                }
+
+                if (asValue)
+                {
+                    return new MarshalledPropertyInfo(
+                        typeSymbol.ToDisplayString(),
+                        new MarshallerInfo($"StructMarshaller<{typeSymbol.ToDisplayString()}>")
                     );
                 }
 
@@ -301,5 +293,78 @@ public static class PropertyAccessUtilities
                 == "UnrealSharp.Core.Attributes.BlittableTypeAttribute"
             );
         return blittableAttribute is not null;
+    }
+
+    private static MarshalledPropertyInfo GetCollectionMarshallerInfo(
+        this ITypeSymbol innerType,
+        CollectionType type,
+        bool asValue,
+        ITypeSymbol? valueType = null
+    )
+    {
+        switch (type)
+        {
+            case CollectionType.List:
+                if (asValue)
+                {
+                    return new MarshalledPropertyInfo(
+                        $"ArrayView<{innerType}>",
+                        new MarshallerInfo(
+                            $"ArrayViewMarshaller<{innerType}>",
+                            MarshallerType.View,
+                            innerType.GetMarshallerName(asValue).MarshallerInfo.Name
+                        )
+                    );
+                }
+
+                return new MarshalledPropertyInfo(
+                    $"IReadOnlyList<{innerType}>",
+                    new MarshallerInfo(
+                        $"ArrayCopyMarshaller<{innerType}>",
+                        MarshallerType.View,
+                        innerType.GetMarshallerName(true).MarshallerInfo.Name
+                    )
+                );
+            case CollectionType.Set:
+                return new MarshalledPropertyInfo(
+                    $"IReadOnlySet<{innerType}>",
+                    new MarshallerInfo(
+                        $"SetCopyMarshaller<{innerType}>",
+                        innerType.GetMarshallerName(true).MarshallerInfo.Name
+                    )
+                );
+            case CollectionType.Dictionary:
+                if (valueType is null)
+                {
+                    throw new ArgumentException("Value type must be specified for dictionary");
+                }
+                return new MarshalledPropertyInfo(
+                    $"IReadOnlyDictionary<{innerType}, {valueType}>",
+                    new MarshallerInfo(
+                        $"MapCopyMarshaller<{innerType}, {valueType}>",
+                        innerType.GetMarshallerName(true).MarshallerInfo.Name,
+                        valueType.GetMarshallerName(true).MarshallerInfo.Name
+                    )
+                );
+            case CollectionType.Span:
+                return new MarshalledPropertyInfo(
+                    $"ReadOnlySpan<{innerType}>",
+                    new MarshallerInfo(
+                        $"SpanMarshaller<{innerType}>",
+                        MarshallerType.Regular,
+                        innerType.GetMarshallerName(true).MarshallerInfo.Name
+                    )
+                );
+            case CollectionType.Optional:
+                return new MarshalledPropertyInfo(
+                    $"Option<{innerType}>",
+                    new MarshallerInfo(
+                        $"OptionMarshaller<{innerType}>",
+                        innerType.GetMarshallerName(true).MarshallerInfo.Name
+                    )
+                );
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
     }
 }

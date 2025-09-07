@@ -5,14 +5,17 @@ namespace {{Namespace}};
 
 static partial class {{ClassName}}
 {
+    {{#Extensions}}
     {{#Properties}}
-    private static readonly FName _identifier_{{Identifier}} = "{{Identifier}}";
+    private static readonly FName {{../EngineName}}_{{Identifier}} = "{{Identifier}}";
     {{/Properties}}
     
-    extension({{ExtendedClass}} extended)
+    extension({{ExtendedClass}})
     {
         {{#Properties}}
-        public static FName {{Identifier}} => _identifier_{{Identifier}};
+        public static FName {{Identifier}} => {{../EngineName}}_{{Identifier}};
         {{/Properties}}
     }
+
+    {{/Extensions}}
 }

@@ -72,8 +72,64 @@ namespace GameAccessTools.SourceGenerator.Properties {
         ///
         ///namespace {{Namespace}};
         ///
+        ///[UClass]
+        ///public partial class U{{ClassName}}Manager : UGameDataManagerBase 
+        ///{
+        ///    private static U{{ClassName}}Manager? _instance = null;
+        ///    
+        ///    public static U{{ClassName}}Manager Instance =&gt; _in [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string GameDataProviderManagerTemplate {
+            get {
+                return ResourceManager.GetString("GameDataProviderManagerTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #nullable enable
+        ///using System.Diagnostics.CodeAnalysis;
+        ///using UnrealSharp;
+        ///using UnrealSharp.Engine;
+        ///using UnrealSharp.Attributes;
+        ///using UnrealSharp.CoreUObject;
+        ///using UnrealSharp.DeveloperSettings;
+        ///using UnrealSharp.GameDataAccessTools;
+        ///using GameDataAccessTools.Core;
+        ///
+        ///namespace {{Namespace}};
+        ///
         ///[UClass(ClassFlags.DefaultConfig, {{#HasDisplayName}}DisplayName = &quot;{{DisplayName}}&quot;, {{/HasDisplayName}}ConfigCategory = &quot;{{ConfigCategory}}&quot;)]
         ///public partial class U{{ClassName}}Settings : UDeveloperS [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string GameDataProviderSettingsTemplate {
+            get {
+                return ResourceManager.GetString("GameDataProviderSettingsTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #nullable enable
+        ///using System.Diagnostics.CodeAnalysis;
+        ///using UnrealSharp;
+        ///using UnrealSharp.Engine;
+        ///using UnrealSharp.Attributes;
+        ///using UnrealSharp.CoreUObject;
+        ///using UnrealSharp.DeveloperSettings;
+        ///using UnrealSharp.GameDataAccessTools;
+        ///using GameDataAccessTools.Core;
+        ///
+        ///namespace {{Namespace}};
+        ///
+        ///public static partial class {{ClassName}} 
+        ///{
+        ///    {{#Repositories}}
+        ///    public static partial {{Type}} {{Name}} =&gt; U{{../ClassName}}Manager.Instance.{{Name}};
+        ///    {{/Repositories}}
+        ///
+        ///}
+        ///
+        ///[UClass]
+        ///p [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GameDataProviderTemplate {
             get {
@@ -115,16 +171,16 @@ namespace GameAccessTools.SourceGenerator.Properties {
         ///{
         ///    {{#Extensions}}
         ///    {{#Properties}}
-        ///    private static readonly FName _identifier_{{PropertyName}}_{{../Index}} = &quot;{{Identifier}}&quot;;
+        ///    private static readonly FName {{../EngineName}}_{{Identifier}} = &quot;{{Identifier}}&quot;;
         ///    {{/Properties}}
         ///    
-        ///    extension({{ExtendedClass}} extended)
+        ///    extension({{ExtendedClass}})
         ///    {
         ///        {{#Properties}}
-        ///        public static partial FName {{PropertyName}} =&gt; _identifier_{{PropertyName}}_{{../Index}};
+        ///        public static FName {{Identifier}} =&gt; {{../EngineName}}_{{Identifier}};
         ///        {{/Properties}}
         ///    }
-        ///    
+        ///
         ///    {{/Extensions}}
         ///}.
         /// </summary>
