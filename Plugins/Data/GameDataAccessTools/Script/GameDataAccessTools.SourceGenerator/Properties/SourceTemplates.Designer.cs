@@ -65,16 +65,15 @@ namespace GameAccessTools.SourceGenerator.Properties {
         ///using UnrealSharp;
         ///using UnrealSharp.Engine;
         ///using UnrealSharp.Attributes;
-        ///using UnrealSharp.Attributes.MetaTags;
         ///using UnrealSharp.CoreUObject;
         ///using UnrealSharp.DeveloperSettings;
-        ///using UnrealSharp.GameplayTags;
-        ///using UnrealSharp.StaticVars;
-        ///using GameDataAccessTools.Core.DataRetrieval;
+        ///using UnrealSharp.GameDataAccessTools;
+        ///using GameDataAccessTools.Core;
         ///
         ///namespace {{Namespace}};
         ///
-        ///[UClass(ClassFlags.DefaultConfig, {{#HasDisplayName}}DisplayName = &quot;{{DisplayName}}&quot;, {{/HasDisplayName}}ConfigCategory = {{C [rest of string was truncated]&quot;;.
+        ///[UClass(ClassFlags.DefaultConfig, {{#HasDisplayName}}DisplayName = &quot;{{DisplayName}}&quot;, {{/HasDisplayName}}ConfigCategory = &quot;{{ConfigCategory}}&quot;)]
+        ///public partial class U{{ClassName}}Settings : UDeveloperS [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GameDataProviderTemplate {
             get {
@@ -103,6 +102,35 @@ namespace GameAccessTools.SourceGenerator.Properties {
         internal static string GameDataRepositoryTemplate {
             get {
                 return ResourceManager.GetString("GameDataRepositoryTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #nullable enable
+        ///using UnrealSharp;
+        ///
+        ///namespace {{Namespace}};
+        ///
+        ///static partial class {{ClassName}}
+        ///{
+        ///    {{#Extensions}}
+        ///    {{#Properties}}
+        ///    private static readonly FName _identifier_{{PropertyName}}_{{../Index}} = &quot;{{Identifier}}&quot;;
+        ///    {{/Properties}}
+        ///    
+        ///    extension({{ExtendedClass}} extended)
+        ///    {
+        ///        {{#Properties}}
+        ///        public static partial FName {{PropertyName}} =&gt; _identifier_{{PropertyName}}_{{../Index}};
+        ///        {{/Properties}}
+        ///    }
+        ///    
+        ///    {{/Extensions}}
+        ///}.
+        /// </summary>
+        internal static string StaticIdentifiersTemplate {
+            get {
+                return ResourceManager.GetString("StaticIdentifiersTemplate", resourceCulture);
             }
         }
         

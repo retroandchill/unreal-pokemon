@@ -1,0 +1,18 @@
+﻿#nullable enable
+using UnrealSharp;
+
+namespace {{Namespace}};
+
+static partial class {{ClassName}}
+{
+    {{#Properties}}
+    private static readonly FName _identifier_{{Identifier}} = "{{Identifier}}";
+    {{/Properties}}
+    
+    extension({{ExtendedClass}} extended)
+    {
+        {{#Properties}}
+        public static FName {{Identifier}} => _identifier_{{Identifier}};
+        {{/Properties}}
+    }
+}
