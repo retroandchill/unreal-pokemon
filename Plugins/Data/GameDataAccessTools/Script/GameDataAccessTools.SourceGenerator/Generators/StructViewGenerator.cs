@@ -37,8 +37,7 @@ public class StructViewGenerator : IIncrementalGenerator
             {
                 // Get all assembly attributes
                 return compilation
-                    .Assembly.GetAttributes()
-                    .GetCreateStructViewInfos()
+                    .Assembly.GetCreateStructViewInfos()
                     .Select(x => x.Type)
                     .OfType<INamedTypeSymbol>();
             }

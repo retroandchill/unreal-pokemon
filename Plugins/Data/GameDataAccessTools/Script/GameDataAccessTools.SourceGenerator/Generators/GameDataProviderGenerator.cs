@@ -68,7 +68,7 @@ public class GameDataProviderGenerator : IIncrementalGenerator
             return;
         }
 
-        var dataProviderInfo = classSymbol.GetAttributes().GetGameDataProviderInfos().Single();
+        var dataProviderInfo = classSymbol.GetGameDataProviderInfo();
 
         var repositories = classSymbol
             .GetMembers()
@@ -122,14 +122,12 @@ public class GameDataProviderGenerator : IIncrementalGenerator
 
     private static string GetSingularName(IPropertySymbol propertySymbol)
     {
-        var explicitName = propertySymbol
-            .GetAttributes()
-            .GetSingularNameInfos()
-            .Select(x => x.Name)
-            .SingleOrDefault();
-        if (!string.IsNullOrWhiteSpace(explicitName))
+        if (
+            propertySymbol.TryGetSingularNameInfo(out var nameInfo)
+            && !string.IsNullOrWhiteSpace(nameInfo.Name)
+        )
         {
-            return explicitName;
+            return nameInfo.Name;
         }
 
         return propertySymbol.Name.EndsWith("s") ? propertySymbol.Name[0..^1] : propertySymbol.Name;

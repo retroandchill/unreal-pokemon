@@ -10,7 +10,10 @@ namespace GameAccessTools.SourceGenerator.Attributes;
 #if GAME_DATA_ACCESS_TOOLS_GENERATOR
 [IncludeFile]
 #endif
-internal abstract class DataHandleBaseAttribute : Attribute;
+internal abstract class DataHandleBaseAttribute : Attribute
+{
+    public Type[] ComparableTypes { get; init; } = [];
+}
 
 [AttributeUsage(AttributeTargets.Struct)]
 internal class DataHandleAttribute(Type provider, string repositoryName) : DataHandleBaseAttribute
@@ -22,8 +25,7 @@ internal class DataHandleAttribute(Type provider, string repositoryName) : DataH
 [AttributeUsage(AttributeTargets.Struct)]
 internal class DataHandleAttribute<T> : DataHandleBaseAttribute
 #if GAME_DATA_ACCESS_TOOLS_GENERATOR
-    where T : struct
+    where T : struct;
 #else
-    where T : struct, IGameDataEntry, MarshalledStruct<T>
+    where T : struct, IGameDataEntry, MarshalledStruct<T>;
 #endif
-{ }

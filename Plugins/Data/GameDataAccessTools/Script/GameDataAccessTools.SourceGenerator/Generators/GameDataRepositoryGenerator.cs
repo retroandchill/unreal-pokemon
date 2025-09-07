@@ -131,7 +131,7 @@ internal class GameDataRepositoryGenerator : IIncrementalGenerator
             return;
         }
 
-        var repositoryInfo = classSymbol.GetAttributes().GetGameDataRepositoryInfos().Single();
+        var repositoryInfo = classSymbol.GetGameDataRepositoryInfo();
 
         var templateParams = new
         {

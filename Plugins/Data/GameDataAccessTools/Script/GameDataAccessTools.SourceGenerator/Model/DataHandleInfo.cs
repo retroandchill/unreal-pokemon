@@ -6,7 +6,10 @@ using Retro.SourceGeneratorUtilities.Utilities.Attributes;
 namespace GameAccessTools.SourceGenerator.Model;
 
 [AttributeInfoType<DataHandleBaseAttribute>]
-public record DataHandleBaseInfo;
+public record DataHandleBaseInfo
+{
+    public ITypeSymbol[] ComparableTypes { get; init; } = [];
+}
 
 [AttributeInfoType<DataHandleAttribute>]
 public record DataHandleInfo(ITypeSymbol Type, string RepositoryName) : DataHandleBaseInfo;

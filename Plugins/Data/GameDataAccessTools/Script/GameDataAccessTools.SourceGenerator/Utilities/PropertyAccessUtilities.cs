@@ -161,20 +161,33 @@ public static class PropertyAccessUtilities
                     }
                 }
 
-                if (typeSymbol.TypeKind == TypeKind.Enum)
+                switch (typeSymbol.TypeKind)
                 {
-                    return new MarshalledPropertyInfo(
-                        typeSymbol.ToDisplayString(),
-                        new MarshallerInfo($"EnumMarshaller<{typeSymbol.ToDisplayString()}>")
-                    );
-                }
-
-                if (typeSymbol.TypeKind == TypeKind.Interface)
-                {
-                    return new MarshalledPropertyInfo(
-                        typeSymbol.ToDisplayString(),
-                        new MarshallerInfo($"{typeSymbol.Name}Marshaller")
-                    );
+                    case TypeKind.Enum:
+                        return new MarshalledPropertyInfo(
+                            typeSymbol.ToDisplayString(),
+                            new MarshallerInfo($"EnumMarshaller<{typeSymbol.ToDisplayString()}>")
+                        );
+                    case TypeKind.Interface:
+                        return new MarshalledPropertyInfo(
+                            typeSymbol.ToDisplayString(),
+                            new MarshallerInfo($"{typeSymbol.Name}Marshaller")
+                        );
+                    case TypeKind.Unknown:
+                    case TypeKind.Array:
+                    case TypeKind.Class:
+                    case TypeKind.Delegate:
+                    case TypeKind.Dynamic:
+                    case TypeKind.Error:
+                    case TypeKind.Module:
+                    case TypeKind.Pointer:
+                    case TypeKind.Struct:
+                    case TypeKind.TypeParameter:
+                    case TypeKind.Submission:
+                    case TypeKind.FunctionPointer:
+                    case TypeKind.Extension:
+                    default:
+                        break;
                 }
 
                 if (typeSymbol.ToDisplayString() == "UnrealSharp.FText")
@@ -193,24 +206,22 @@ public static class PropertyAccessUtilities
                     );
                 }
 
-                if (typeSymbol.MetadataName == "TMulticastDelegate`1")
+                switch (typeSymbol.MetadataName)
                 {
-                    return new MarshalledPropertyInfo(
-                        typeSymbol.ToDisplayString(),
-                        new MarshallerInfo(
-                            $"MulticastDelegateMarshaller<{typeSymbol.ToDisplayString()}>"
-                        )
-                    );
-                }
-
-                if (typeSymbol.MetadataName == "TDelegate`1")
-                {
-                    return new MarshalledPropertyInfo(
-                        typeSymbol.ToDisplayString(),
-                        new MarshallerInfo(
-                            $"SingleDelegateMarshaller<{typeSymbol.ToDisplayString()}>"
-                        )
-                    );
+                    case "TMulticastDelegate`1":
+                        return new MarshalledPropertyInfo(
+                            typeSymbol.ToDisplayString(),
+                            new MarshallerInfo(
+                                $"MulticastDelegateMarshaller<{typeSymbol.ToDisplayString()}>"
+                            )
+                        );
+                    case "TDelegate`1":
+                        return new MarshalledPropertyInfo(
+                            typeSymbol.ToDisplayString(),
+                            new MarshallerInfo(
+                                $"SingleDelegateMarshaller<{typeSymbol.ToDisplayString()}>"
+                            )
+                        );
                 }
 
                 var structAttribute = typeSymbol
@@ -281,7 +292,7 @@ public static class PropertyAccessUtilities
         var structAttribute = typeSymbol
             .GetAttributes()
             .SingleOrDefault(attr =>
-                attr.AttributeClass?.ToDisplayString() == "UnrealSharp.Attributes.UStructAttribute"
+                attr.AttributeClass?.ToDisplayString() == SourceContextNames.UStructAttribute
             );
         if (structAttribute is null)
             return false;
@@ -289,10 +300,33 @@ public static class PropertyAccessUtilities
         var blittableAttribute = typeSymbol
             .GetAttributes()
             .SingleOrDefault(attr =>
-                attr.AttributeClass?.ToDisplayString()
-                == "UnrealSharp.Core.Attributes.BlittableTypeAttribute"
+                attr.AttributeClass?.ToDisplayString() == SourceContextNames.BlittableTypeAttribute
             );
-        return blittableAttribute is not null;
+        if (blittableAttribute is not null)
+        {
+            return true;
+        }
+
+        var generatedTypeAttribute = typeSymbol
+            .GetAttributes()
+            .SingleOrDefault(attr =>
+                attr.AttributeClass?.ToDisplayString() == SourceContextNames.GeneratedTypeAttribute
+            );
+
+        if (generatedTypeAttribute is not null)
+        {
+            return false;
+        }
+
+        return typeSymbol
+            .GetMembers()
+            .OfType<IFieldSymbol>()
+            .All(f =>
+                f.GetAttributes()
+                    .Any(a =>
+                        a.AttributeClass?.ToDisplayString() == SourceContextNames.UPropertyAttribute
+                    ) && f.Type.IsBlittableType()
+            );
     }
 
     private static MarshalledPropertyInfo GetCollectionMarshallerInfo(
@@ -308,28 +342,28 @@ public static class PropertyAccessUtilities
                 if (asValue)
                 {
                     return new MarshalledPropertyInfo(
-                        $"ArrayView<{innerType}>",
+                        $"IReadOnlyList<{innerType.TransformedType(asValue)}>",
                         new MarshallerInfo(
-                            $"ArrayViewMarshaller<{innerType}>",
-                            MarshallerType.View,
-                            innerType.GetMarshallerName(asValue).MarshallerInfo.Name
+                            $"ArrayCopyMarshaller<{innerType.TransformedType(asValue)}>",
+                            MarshallerType.Instanced,
+                            innerType.GetMarshallerName(true).MarshallerInfo.Name
                         )
                     );
                 }
 
                 return new MarshalledPropertyInfo(
-                    $"IReadOnlyList<{innerType}>",
+                    $"ArrayView<{innerType.TransformedType(asValue)}>",
                     new MarshallerInfo(
-                        $"ArrayCopyMarshaller<{innerType}>",
+                        $"ArrayViewMarshaller<{innerType.TransformedType(asValue)}>",
                         MarshallerType.View,
-                        innerType.GetMarshallerName(true).MarshallerInfo.Name
+                        innerType.GetMarshallerName(asValue).MarshallerInfo.Name
                     )
                 );
             case CollectionType.Set:
                 return new MarshalledPropertyInfo(
-                    $"IReadOnlySet<{innerType}>",
+                    $"IReadOnlySet<{innerType.TransformedType(asValue)}>",
                     new MarshallerInfo(
-                        $"SetCopyMarshaller<{innerType}>",
+                        $"SetCopyMarshaller<{innerType.TransformedType(asValue)}>",
                         innerType.GetMarshallerName(true).MarshallerInfo.Name
                     )
                 );
@@ -339,9 +373,9 @@ public static class PropertyAccessUtilities
                     throw new ArgumentException("Value type must be specified for dictionary");
                 }
                 return new MarshalledPropertyInfo(
-                    $"IReadOnlyDictionary<{innerType}, {valueType}>",
+                    $"IReadOnlyDictionary<{innerType.TransformedType(asValue)}, {valueType.TransformedType(asValue)}>",
                     new MarshallerInfo(
-                        $"MapCopyMarshaller<{innerType}, {valueType}>",
+                        $"MapCopyMarshaller<{innerType.TransformedType(asValue)}, {valueType.TransformedType(asValue)}>",
                         innerType.GetMarshallerName(true).MarshallerInfo.Name,
                         valueType.GetMarshallerName(true).MarshallerInfo.Name
                     )
@@ -366,5 +400,20 @@ public static class PropertyAccessUtilities
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
+    }
+
+    private static string TransformedType(this ITypeSymbol typeSymbol, bool asValue)
+    {
+        if (asValue)
+            return typeSymbol.ToDisplayString();
+
+        var structAttribute = typeSymbol
+            .GetAttributes()
+            .SingleOrDefault(attr =>
+                attr.AttributeClass?.ToDisplayString() == SourceContextNames.UStructAttribute
+            );
+        return structAttribute is not null
+            ? $"StructView<{typeSymbol}>"
+            : typeSymbol.ToDisplayString();
     }
 }

@@ -44,7 +44,23 @@ public class FPokemonDataModule : IModuleInterface
         UGameDataManager.Startup();
 
         var manager = UGameDataManager.Instance;
-        manager.AddGrowthRates().AddGenderRatios();
+        manager
+            .AddGrowthRates()
+            .AddGenderRatios()
+            .AddEggGroups()
+            .AddBodyShapes()
+            .AddBodyColors()
+            .AddHabitats()
+            .AddEvolutions()
+            .AddStats()
+            .AddNatures()
+            .AddStatuses()
+            .AddFieldWeathers()
+            .AddEncounterTypes()
+            .AddEnvironments()
+            .AddBattleWeathers()
+            .AddBattleTerrains()
+            .AddTargets();
         OnGameDataManagerCreated?.Invoke(manager);
     }
 }

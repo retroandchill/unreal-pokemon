@@ -25,6 +25,7 @@ public readonly partial struct FGrowthRate : IGameDataEntry
 
     [UsedImplicitly]
     [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [DisplayName]
     public required FText Name { get; init; }
 }
 

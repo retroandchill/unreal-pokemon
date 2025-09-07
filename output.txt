@@ -1,0 +1,252 @@
+"User",
+"NearAlly",
+"UserOrNearAlly",
+"AllAllies",
+"UserAndAllies",
+"NearFoe",
+"RandomNearFoe",
+"AllNearFoes",
+"Foe",
+"AllFoes",
+"NearOther",
+"AllNearOthers",
+"Other",
+"AllBattlers",
+"UserSide",
+"FoeSide",
+"BothSides",
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.None,
+        Name = FText.Localized(LocalizationNamespace, "None", "None"),
+        NumTargets = 0,
+        TargetsFoe = False,
+        TargetsAll = False,
+        AffectsFoeSide = False,
+        LongRange = False,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.User,
+        Name = FText.Localized(LocalizationNamespace, "User", "User"),
+        NumTargets = 0,
+        TargetsFoe = False,
+        TargetsAll = False,
+        AffectsFoeSide = False,
+        LongRange = False,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.NearAlly,
+        Name = FText.Localized(LocalizationNamespace, "NearAlly", "Near Ally"),
+        NumTargets = 1,
+        TargetsFoe = False,
+        TargetsAll = False,
+        AffectsFoeSide = False,
+        LongRange = False,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.UserOrNearAlly,
+        Name = FText.Localized(LocalizationNamespace, "UserOrNearAlly", "User or Near Ally"),
+        NumTargets = 1,
+        TargetsFoe = False,
+        TargetsAll = False,
+        AffectsFoeSide = False,
+        LongRange = False,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.AllAllies,
+        Name = FText.Localized(LocalizationNamespace, "AllAllies", "All Allies"),
+        NumTargets = 2,
+        TargetsFoe = False,
+        TargetsAll = True,
+        AffectsFoeSide = False,
+        LongRange = True,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.UserAndAllies,
+        Name = FText.Localized(LocalizationNamespace, "UserAndAllies", "User and Allies"),
+        NumTargets = 2,
+        TargetsFoe = False,
+        TargetsAll = False,
+        AffectsFoeSide = False,
+        LongRange = True,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.NearFoe,
+        Name = FText.Localized(LocalizationNamespace, "NearFoe", "Near Foe"),
+        NumTargets = 1,
+        TargetsFoe = True,
+        TargetsAll = False,
+        AffectsFoeSide = False,
+        LongRange = False,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.RandomNearFoe,
+        Name = FText.Localized(LocalizationNamespace, "RandomNearFoe", "Random Near Foe"),
+        NumTargets = 1,
+        TargetsFoe = True,
+        TargetsAll = False,
+        AffectsFoeSide = False,
+        LongRange = False,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.AllNearFoes,
+        Name = FText.Localized(LocalizationNamespace, "AllNearFoes", "All Near Foes"),
+        NumTargets = 2,
+        TargetsFoe = True,
+        TargetsAll = False,
+        AffectsFoeSide = False,
+        LongRange = False,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.Foe,
+        Name = FText.Localized(LocalizationNamespace, "Foe", "Foe"),
+        NumTargets = 1,
+        TargetsFoe = True,
+        TargetsAll = False,
+        AffectsFoeSide = False,
+        LongRange = True,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.AllFoes,
+        Name = FText.Localized(LocalizationNamespace, "AllFoes", "All Foes"),
+        NumTargets = 2,
+        TargetsFoe = True,
+        TargetsAll = False,
+        AffectsFoeSide = False,
+        LongRange = True,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.NearOther,
+        Name = FText.Localized(LocalizationNamespace, "NearOther", "Near Other"),
+        NumTargets = 1,
+        TargetsFoe = True,
+        TargetsAll = False,
+        AffectsFoeSide = False,
+        LongRange = False,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.AllNearOthers,
+        Name = FText.Localized(LocalizationNamespace, "AllNearOthers", "All Near Others"),
+        NumTargets = 2,
+        TargetsFoe = True,
+        TargetsAll = False,
+        AffectsFoeSide = False,
+        LongRange = False,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.Other,
+        Name = FText.Localized(LocalizationNamespace, "Other", "Other"),
+        NumTargets = 1,
+        TargetsFoe = True,
+        TargetsAll = False,
+        AffectsFoeSide = False,
+        LongRange = True,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.AllBattlers,
+        Name = FText.Localized(LocalizationNamespace, "AllBattlers", "All Battlers"),
+        NumTargets = 2,
+        TargetsFoe = True,
+        TargetsAll = True,
+        AffectsFoeSide = False,
+        LongRange = True,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.UserSide,
+        Name = FText.Localized(LocalizationNamespace, "UserSide", "User Side"),
+        NumTargets = 0,
+        TargetsFoe = False,
+        TargetsAll = False,
+        AffectsFoeSide = False,
+        LongRange = False,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.FoeSide,
+        Name = FText.Localized(LocalizationNamespace, "FoeSide", "Foe Side"),
+        NumTargets = 0,
+        TargetsFoe = False,
+        TargetsAll = False,
+        AffectsFoeSide = True,
+        LongRange = False,
+    }
+);
+
+manager.Targets.RegisterEntry(
+    new FTarget
+    {
+        ID = FTarget.BothSides,
+        Name = FText.Localized(LocalizationNamespace, "BothSides", "Both Sides"),
+        NumTargets = 0,
+        TargetsFoe = False,
+        TargetsAll = False,
+        AffectsFoeSide = True,
+        LongRange = False,
+    }
+);
+

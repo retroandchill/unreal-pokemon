@@ -27,7 +27,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Retro.SourceGeneratorUtilities" Version="0.1.2" />
+    <PackageReference Include="Retro.SourceGeneratorUtilities" Version="0.1.4" />
     <PackageReference Include="RhoMicro.CodeAnalysis.UtilityGenerators" Version="22.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

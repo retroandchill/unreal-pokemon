@@ -3,6 +3,7 @@ using UnrealSharp;
 using UnrealSharp.CoreUObject;
 using GameDataAccessTools.Core;
 using GameDataAccessTools.Core.Views;
+using GameDataAccessTools.Core.Utilities;
 using ZLinq;
 
 namespace {{Namespace}};
@@ -19,13 +20,16 @@ readonly partial record struct {{StructName}}(FName ID) : IDataHandle<{{EntryTyp
         get
         {
             return {{Provider}}.{{Repository}}.Entries
-                .AsValueEnumerable(v => new FDataHandleEntry(v.ID{{#HasDisplayName}}, v.Name{{/HasDisplayName}}));
+                .AsValueEnumerable(v => new FDataHandleEntry(v.ID{{#HasDisplayName}}, v.{{DisplayNameProperty}}{{/HasDisplayName}}));
         }
     }
 
     public bool IsValid => {{Provider}}.{{Repository}}.IsValidEntry(ID);
 
     public StructView<{{EntryType}}> Entry => {{Provider}}.{{Repository}}.GetEntry(ID);
+    {{/WithRepository}}
+    {{^WithRepository}}
+    public static UScriptStruct EntryStruct => {{EntryType}}.StaticStruct;
     {{/WithRepository}}
     
     public static implicit operator {{StructName}}(in {{EntryType}} entry) 

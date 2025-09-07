@@ -107,6 +107,7 @@ public readonly partial struct FGenderRatio : IGameDataEntry
 
     [UsedImplicitly]
     [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [DisplayName]
     public required FText Name { get; init; }
 
     [field: UProperty(PropertyFlags.BlueprintReadOnly)]

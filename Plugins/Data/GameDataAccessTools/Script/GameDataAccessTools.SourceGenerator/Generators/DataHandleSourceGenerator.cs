@@ -1,4 +1,5 @@
-﻿using GameAccessTools.SourceGenerator.Attributes;
+﻿using System.Collections.Immutable;
+using GameAccessTools.SourceGenerator.Attributes;
 using GameAccessTools.SourceGenerator.Model;
 using GameAccessTools.SourceGenerator.Properties;
 using GameAccessTools.SourceGenerator.Utilities;
@@ -66,12 +67,7 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
             isValidType = false;
         }
 
-        DataHandleBaseInfo? dataHandleInfo = null;
-        try
-        {
-            dataHandleInfo = structSymbol.GetAttributes().GetDataHandleBaseInfos().Single();
-        }
-        catch (InvalidOperationException)
+        if (!structSymbol.TryGetDataHandleBaseInfo(out var dataHandleInfo))
         {
             context.ReportDiagnostic(
                 Diagnostic.Create(
@@ -90,7 +86,7 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
             isValidType = false;
         }
 
-        if (!isValidType || dataHandleInfo is null)
+        if (!isValidType)
         {
             return;
         }
@@ -104,11 +100,13 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
                     structSymbol,
                     GetEntryType(providerRepository),
                     providerRepository.Type,
-                    providerRepository.RepositoryName
+                    providerRepository.RepositoryName,
+                    GetConvertibleTypes(dataHandleInfo)
                 ),
                 DataHandleInfoOneParam specificType => new ExplicitDataHandleTemplate(
                     structSymbol,
-                    specificType.EntryType
+                    specificType.EntryType,
+                    GetConvertibleTypes(dataHandleInfo)
                 ),
                 _ => throw new InvalidOperationException(
                     $"Unknown DataHandleInfo type: {dataHandleInfo.GetType().Name}"
@@ -174,5 +172,15 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
         }
 
         return typeSymbol.GetEntryType();
+    }
+
+    private static ImmutableArray<ConvertibleType> GetConvertibleTypes(DataHandleBaseInfo info)
+    {
+        return
+        [
+            .. info
+                .ComparableTypes.Where(t => t.HasAttribute<DataHandleBaseAttribute>())
+                .Select(t => new ConvertibleType(t)),
+        ];
     }
 }

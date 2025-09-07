@@ -13,7 +13,7 @@ namespace GameAccessTools.SourceGenerator.Attributes;
 #endif
 internal class CreateStructViewAttribute : Attribute;
 
-[AttributeUsage(AttributeTargets.Assembly)]
+[AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
 internal class CreateStructViewAttribute<T> : Attribute
 #if GAME_DATA_ACCESS_TOOLS_GENERATOR
     where T : struct;

@@ -13,5 +13,8 @@ public static class SourceContextNames
     public const string UClassAttribute = "UnrealSharp.Attributes.UClassAttribute";
     public const string UStructAttribute = "UnrealSharp.Attributes.UStructAttribute";
     public const string UPropertyAttribute = "UnrealSharp.Attributes.UPropertyAttribute";
-    public const string UMetaDataAttribute = "UnrealSharp.Attributes.UMetaDataAttribute";
+    public const string BlittableTypeAttribute =
+        "UnrealSharp.Core.Attributes.BlittableTypeAttribute";
+    public const string GeneratedTypeAttribute =
+        "UnrealSharp.Core.Attributes.GeneratedTypeAttribute";
 }
