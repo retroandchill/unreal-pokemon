@@ -8,6 +8,10 @@ using UnrealSharp.GameDataAccessTools;
 
 namespace Pokemon.Data.HardCoded;
 
+[UClass]
+[GameDataRepository<FGrowthRate>]
+public partial class UGrowthRateRepository : UStaticGameDataRepository;
+
 [UStruct]
 [CreateStructView]
 public readonly partial struct FGrowthRate : IGameDataEntry
@@ -40,10 +44,6 @@ public readonly partial struct FGrowthRate : IGameDataEntry
 
     public Func<int, int>? ExpFormula { get; init; }
 }
-
-[UClass]
-[GameDataRepository<FGrowthRate>]
-public partial class UGrowthRateRepository : UStaticGameDataRepository;
 
 public static partial class GrowthRateViewExtensions
 {

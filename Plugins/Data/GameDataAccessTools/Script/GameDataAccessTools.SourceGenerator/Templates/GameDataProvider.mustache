@@ -1,0 +1,95 @@
+#nullable enable
+using System.Diagnostics.CodeAnalysis;
+using UnrealSharp;
+using UnrealSharp.Engine;
+using UnrealSharp.Attributes;
+using UnrealSharp.CoreUObject;
+using UnrealSharp.DeveloperSettings;
+using UnrealSharp.GameDataAccessTools;
+using GameDataAccessTools.Core;
+
+namespace {{Namespace}};
+
+[UClass(ClassFlags.DefaultConfig, {{#HasDisplayName}}DisplayName = "{{DisplayName}}", {{/HasDisplayName}}ConfigCategory = "{{ConfigCategory}}")]
+public partial class U{{ClassName}}Settings : UDeveloperSettings 
+{
+    {{#AssetRepositories}}
+    {{#HasAsset}}
+    [UProperty(PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config, Category = "RepositoryAssets")]
+    public TSoftObjectPtr<{{RepositoryClassName}}> {{Name}} { get; }
+    {{/HasAsset}}
+        
+    {{/AssetRepositories}}
+}
+
+public static partial class {{ClassName}} 
+{
+    {{#Repositories}}
+    public static partial {{Type}} {{Name}} => U{{../ClassName}}Manager.Instance.{{Name}};
+    {{/Repositories}}
+
+}
+
+[UClass]
+public partial class U{{ClassName}}Manager : UGameDataManagerBase 
+{
+    private static U{{ClassName}}Manager? _instance = null;
+    
+    public static U{{ClassName}}Manager Instance => _instance ?? throw new InvalidOperationException("U{{ClassName}}Manager is not active");
+
+    {{#Repositories}}
+    {{#HasAsset}}
+    [UProperty]
+    private {{RepositoryClassName}}? {{Name}}Asset { get; set; }
+
+    public {{RepositoryClassName}} {{Name}}
+    {
+        get 
+        {
+            {{Name}}Asset ??= LoadRepository(UObject.GetDefault<U{{ClassName}}Settings>().{{Name}});
+            return {{Name}}Asset;
+        }
+    }    
+
+    {{/HasAsset}}
+    {{^HasAsset}}
+    [UProperty]
+    public {{RepositoryClassName}} {{Name}} { get; private set; } = null!;
+
+    {{/HasAsset}}
+    {{/Repositories}}    
+
+    public static void Startup()
+    {
+        if (_instance is not null)
+        {
+            throw new InvalidOperationException("U{{ClassName}}Manager has already be initialized");
+        }
+
+        _instance = Create<U{{ClassName}}Manager>("{{ClassName}}Manager");
+    }
+
+    public static void Shutdown() 
+    {
+        if (_instance is null)
+        {
+            throw new InvalidOperationException("U{{ClassName}}Manager is not active initialized");
+        }
+
+        _instance.Destroy();
+        _instance = null;
+    }
+    
+    protected override void Initialize()
+    {
+        var settings = UObject.GetDefault<U{{ClassName}}Settings>();
+        {{#Repositories}}
+        {{#HasAsset}}
+        {{Name}}Asset = TryLoadRepository(settings.{{Name}});
+        {{/HasAsset}}
+        {{^HasAsset}}
+        {{Name}} = NewObject<{{RepositoryClassName}}>(this);    
+        {{/HasAsset}}
+        {{/Repositories}}
+    }
+}

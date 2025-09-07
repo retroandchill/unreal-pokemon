@@ -131,13 +131,13 @@ internal class GameDataRepositoryGenerator : IIncrementalGenerator
             return;
         }
 
-        var gameDataEntryInfo = classSymbol.GetAttributes().GetGameDataRepositoryInfos().Single();
+        var repositoryInfo = classSymbol.GetAttributes().GetGameDataRepositoryInfos().Single();
 
         var templateParams = new
         {
             Namespace = classSymbol.ContainingNamespace.ToDisplayString(),
             AssetClassName = classSymbol.Name,
-            EntryName = gameDataEntryInfo.EntryType.ToDisplayString(),
+            EntryName = repositoryInfo.EntryType.ToDisplayString(),
             IsStatic = isStatic,
         };
 

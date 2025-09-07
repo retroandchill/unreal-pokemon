@@ -61,8 +61,8 @@
   <data name="GameDataRepositoryTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
         <value>..\Templates\GameDataRepository.mustache;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </data>
-  <data name="GameDataRepositoryProviderTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Templates\GameDataRepositoryProvider.mustache;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="GameDataProviderTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Templates\GameDataProvider.mustache;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
     <data name="StructViewExtensionsTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
         <value>..\Templates\StructViewExtensions.mustache;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

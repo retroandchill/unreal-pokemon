@@ -74,30 +74,31 @@ namespace GameAccessTools.SourceGenerator.Properties {
         ///
         ///namespace {{Namespace}};
         ///
-        ///[UClass(ClassFlags.DefaultConfig, {{#HasDisplayName}}DisplayName = &quot;{{DisplayName}}&quot;, {{/HasDisplayName}}ConfigCategory = &quot;Ga [rest of string was truncated]&quot;;.
+        ///[UClass(ClassFlags.DefaultConfig, {{#HasDisplayName}}DisplayName = &quot;{{DisplayName}}&quot;, {{/HasDisplayName}}ConfigCategory = {{C [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string GameDataRepositoryProviderTemplate {
+        internal static string GameDataProviderTemplate {
             get {
-                return ResourceManager.GetString("GameDataRepositoryProviderTemplate", resourceCulture);
+                return ResourceManager.GetString("GameDataProviderTemplate", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to #nullable enable
-        ///using System.Collections.Immutable;
-        ///using System.Diagnostics.CodeAnalysis;
         ///using UnrealSharp;
         ///using UnrealSharp.Attributes;
-        ///using UnrealSharp.CoreUObject;
-        ///using UnrealSharp.GameDataAccessTools;
-        ///using UnrealSharp.GameplayTags;
-        ///using GameDataAccessTools.Core.DataRetrieval;
+        ///using GameDataAccessTools.Core;
+        ///using GameDataAccessTools.Core.Interop;
+        ///using GameDataAccessTools.Core.Marshallers;
+        ///using GameDataAccessTools.Core.Views;
         ///
         ///namespace {{Namespace}};
         ///
-        ///[UClass]
-        ///public partial class {{AssetClassName}} : UGameDataRepository, IGameDataRepository&lt;{{EntryName}}&gt; {
-        ///    public TSubclassOf&lt;{{EntryName}}&gt; EntryClass { get; } = new(typeof({{ [rest of string was truncated]&quot;;.
+        ///partial class {{AssetClassName}} : {{#IsStatic}}IStaticGameDataRepository{{/IsStatic}}{{^IsStatic}}IGameDataRepository{{/IsStatic}}&lt;{{EntryName}}&gt; 
+        ///{
+        ///    [UProperty]
+        ///    private TArray&lt;{{EntryName}}&gt; DataEntries { get; }
+        ///
+        ///    private static ArrayView [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string GameDataRepositoryTemplate {
             get {
@@ -118,15 +119,14 @@ namespace GameAccessTools.SourceGenerator.Properties {
         ///
         ///namespace {{Namespace}};
         ///
-        ///public static class {{EngineName}}ViewExtensions
+        ///public static partial class {{EngineName}}ViewExtensions
         ///{
         ///    extension(StructView&lt;{{StructName}}&gt; structView) 
         ///    {
         ///        {{#Properties}}
-        ///        public {{Type}} {{Name}}
+        ///        {{Access}}{{Type}} {{Name}}
         ///        {
-        ///            get
-        ///    [rest of string was truncated]&quot;;.
+        ///          [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string StructViewExtensionsTemplate {
             get {

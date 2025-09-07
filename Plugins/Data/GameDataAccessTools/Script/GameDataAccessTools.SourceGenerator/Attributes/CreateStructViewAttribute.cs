@@ -11,10 +11,10 @@ namespace GameAccessTools.SourceGenerator.Attributes;
 #if GAME_DATA_ACCESS_TOOLS_GENERATOR
 [IncludeFile]
 #endif
-public class CreateStructViewAttribute : Attribute;
+internal class CreateStructViewAttribute : Attribute;
 
 [AttributeUsage(AttributeTargets.Assembly)]
-public class CreateStructViewAttribute<T> : Attribute
+internal class CreateStructViewAttribute<T> : Attribute
 #if GAME_DATA_ACCESS_TOOLS_GENERATOR
     where T : struct;
 #else
