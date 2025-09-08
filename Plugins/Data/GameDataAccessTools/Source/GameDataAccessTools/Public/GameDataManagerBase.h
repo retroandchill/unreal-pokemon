@@ -7,6 +7,7 @@
 
 #include "GameDataManagerBase.generated.h"
 
+class UAssetGameDataRepository;
 /**
  *
  */

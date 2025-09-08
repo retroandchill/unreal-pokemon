@@ -3,19 +3,19 @@ using UnrealSharp;
 
 namespace {{Namespace}};
 
-static partial class {{ClassName}}
+{{#Extensions}}
+public static partial class {{../ClassName}}_{{EngineName}}
 {
-    {{#Extensions}}
     {{#Properties}}
     private static readonly FName {{../EngineName}}_{{Identifier}} = "{{Identifier}}";
     {{/Properties}}
-    
+        
     extension({{ExtendedClass}})
     {
         {{#Properties}}
         public static FName {{Identifier}} => {{../EngineName}}_{{Identifier}};
         {{/Properties}}
     }
-
-    {{/Extensions}}
 }
+
+{{/Extensions}}

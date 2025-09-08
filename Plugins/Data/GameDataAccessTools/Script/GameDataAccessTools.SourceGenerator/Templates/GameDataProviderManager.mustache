@@ -26,7 +26,7 @@ public partial class U{{ClassName}}Manager : UGameDataManagerBase
     {
         get 
         {
-            {{Name}}Asset ??= LoadRepository(UObject.GetDefault<U{{ClassName}}Settings>().{{Name}});
+            {{Name}}Asset ??= LoadRepository(UObject.GetDefault<U{{../ClassName}}Settings>().{{Name}});
             return {{Name}}Asset;
         }
     }    
@@ -71,5 +71,16 @@ public partial class U{{ClassName}}Manager : UGameDataManagerBase
         {{Name}} = NewObject<{{RepositoryClassName}}>(this);    
         {{/HasAsset}}
         {{/Repositories}}
+    }
+
+    private static T? TryLoadRepository<T>(TSoftObjectPtr<T> ptr) where T : UAssetGameDataRepository
+    {
+        if (ptr.IsNull) return null;
+        return ptr.LoadSynchronous();
+    }
+
+    private static T LoadRepository<T>(TSoftObjectPtr<T> ptr) where T : UAssetGameDataRepository
+    {
+        return TryLoadRepository(ptr) ?? throw new InvalidOperationException("Could not load repository");
     }
 }

@@ -11,7 +11,7 @@
 /**
  *
  */
-UCLASS(meta = (InternalType, SkipGlueGeneration))
+UCLASS()
 class GAMEDATAACCESSTOOLS_API ULocalizationExporter : public UObject
 {
     GENERATED_BODY()

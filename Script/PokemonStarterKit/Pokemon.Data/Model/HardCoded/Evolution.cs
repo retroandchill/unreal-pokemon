@@ -2,6 +2,7 @@
 using GameDataAccessTools.Core;
 using GameDataAccessTools.Core.Utilities;
 using JetBrains.Annotations;
+using Pokemon.Data.Model.PBS;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
@@ -9,60 +10,49 @@ using UnrealSharp.CoreUObject;
 using UnrealSharp.Engine;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
+using FMoveHandle = UnrealSharp.PokemonData.FMoveHandle;
 
 namespace Pokemon.Data.Model.HardCoded;
 
 [UStruct]
 public readonly record struct FIntEvolutionConditionData
 {
-    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
     public int Parameter { get; init; }
 }
 
 [UStruct]
 public readonly partial record struct FMoveEvolutionConditionData
 {
-    [UProperty(
-        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
-        DisplayName = "Move ID"
-    )]
-    public FGameplayTag MoveId { get; init; }
+    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    public FMoveHandle MoveID { get; init; }
 }
 
 [UStruct]
 public readonly record struct FTypeEvolutionConditionData
 {
-    [UProperty(
-        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
-        DisplayName = "Type ID"
-    )]
-    public FGameplayTag TypeId { get; init; }
+    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    public FTypeHandle TypeID { get; init; }
 }
 
 [UStruct]
 public readonly record struct FItemEvolutionConditionData
 {
-    [UProperty(
-        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
-        DisplayName = "Item ID"
-    )]
-    public FGameplayTag ItemId { get; init; }
+    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    public FItemHandle ItemID { get; init; }
 }
 
 [UStruct]
 public readonly record struct FSpeciesEvolutionConditionData
 {
-    [UProperty(
-        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
-        DisplayName = "Species ID"
-    )]
-    public FGameplayTag SpeciesId { get; init; }
+    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    public FGameplayTag SpeciesID { get; init; }
 }
 
 [UStruct]
 public readonly record struct FLocationEvolutionConditionData
 {
-    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
     public TSoftObjectPtr<UWorld> Level { get; init; }
 }
 

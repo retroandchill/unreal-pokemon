@@ -13,11 +13,11 @@ namespace {{Namespace}};
 [UClass(ClassFlags.DefaultConfig, {{#HasDisplayName}}DisplayName = "{{DisplayName}}", {{/HasDisplayName}}ConfigCategory = "{{ConfigCategory}}")]
 public partial class U{{ClassName}}Settings : UDeveloperSettings 
 {
-    {{#AssetRepositories}}
+    {{#Repositories}}
     {{#HasAsset}}
     [UProperty(PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config, Category = "RepositoryAssets")]
     public TSoftObjectPtr<{{RepositoryClassName}}> {{Name}} { get; }
+    
     {{/HasAsset}}
-        
-    {{/AssetRepositories}}
+    {{/Repositories}}
 }

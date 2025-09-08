@@ -44,4 +44,10 @@ public record AccessiblePropertyInfo(string Access, string Type, string Name)
     public bool MarshallerIsView => MarshallerInfo.IsView;
 
     public bool MarshallerHasValue => MarshallerInfo.HasValue;
+
+    public string? GetterBody { get; init; }
+
+    public bool HasGetterBody => GetterBody is not null;
+
+    public bool HasBackingField { get; init; } = true;
 }

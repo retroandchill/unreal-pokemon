@@ -1,5 +1,6 @@
 ﻿using GameAccessTools.SourceGenerator.Attributes;
 using Pokemon.Data.Model.HardCoded;
+using Pokemon.Data.Model.PBS;
 
 namespace Pokemon.Data;
 
@@ -22,4 +23,9 @@ public static partial class GameData
     public static partial UBattleWeatherRepository BattleWeathers { get; }
     public static partial UBattleTerrainRepository BattleTerrains { get; }
     public static partial UTargetRepository Targets { get; }
+
+    public static partial UTypeRepository Types { get; }
+    public static partial UAbilityRepository Abilities { get; }
+    public static partial UMoveRepository Moves { get; }
+    public static partial UItemRepository Items { get; }
 }

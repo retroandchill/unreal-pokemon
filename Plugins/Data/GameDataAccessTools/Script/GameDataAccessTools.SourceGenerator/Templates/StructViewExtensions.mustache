@@ -1,4 +1,5 @@
 #nullable enable
+using LanguageExt;
 using UnrealSharp;
 using UnrealSharp.Core;
 using UnrealSharp.Core.Marshallers;
@@ -15,7 +16,8 @@ public static partial class {{EngineName}}ViewExtensions
     extension(StructView<{{StructName}}> structView) 
     {
         {{#Properties}}
-        {{Access}}{{Type}} {{Name}}
+        {{#HasBackingField}}
+        {{#HasGetterBody}}private {{/HasGetterBody}}{{^HasGetterBody}}{{Access}}{{/HasGetterBody}}{{Type}} {{Name}}{{#HasGetterBody}}_BackingField{{/HasGetterBody}}
         {
             get
             {
@@ -34,27 +36,40 @@ public static partial class {{EngineName}}ViewExtensions
                 {{/MarshallerInstanced}}
             }
         }
+            
+        {{/HasBackingField}}
+        {{#HasGetterBody}}
+        {{Access}}{{Type}} {{Name}}
+        {
+            get 
+            {{GetterBody}}
+        }
         
+        {{/HasGetterBody}}    
         {{/Properties}}
     }
 
     private static readonly IntPtr NativeClassPtr;
     public static int NativeDataSize { get; }
 
-    {{#Properties}}
+    {{#Properties}} 
+    {{#HasBackingField}} 
     private static int {{Name}}_Offset;
     {{#MarshallerInstanced}}
     private static IntPtr {{Name}}_NativeProperty;
     private static {{MarshallerInfo.Name}}? {{Name}}_Marshaller = null;
     {{/MarshallerInstanced}}
+    {{/HasBackingField}}
     {{/Properties}}
 
     static {{EngineName}}ViewExtensions()
     {
         NativeClassPtr = UCoreUObjectExporter.CallGetNativeStructFromName(typeof({{StructName}}).GetAssemblyName(), "{{Namespace}}", "{{EngineName}}");
         {{#Properties}}
+        {{#HasBackingField}}
         {{^MarshallerInstanced}}IntPtr {{/MarshallerInstanced}}{{Name}}_NativeProperty = FPropertyExporter.CallGetNativePropertyFromName(NativeClassPtr, "{{Name}}");
         {{Name}}_Offset = FPropertyExporter.CallGetPropertyOffset({{Name}}_NativeProperty);
+        {{/HasBackingField}}
         {{/Properties}}
         NativeDataSize = UScriptStructExporter.CallGetNativeStructSize(NativeClassPtr);
     }
