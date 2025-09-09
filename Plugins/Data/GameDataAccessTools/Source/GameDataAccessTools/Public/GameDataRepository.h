@@ -45,6 +45,11 @@ class GAMEDATAACCESSTOOLS_API UGameDataRepository : public UObject
     {
         return GameDataEntries->IsValidIndex(Index) ? GameDataEntries->GetElementPtr(Index) : nullptr;
     }
+
+    bool IsValidRepository() const
+    {
+        return bValidRepository;
+    }
 #endif
 
   protected:
@@ -91,6 +96,10 @@ class GAMEDATAACCESSTOOLS_API UGameDataRepository : public UObject
     FNameProperty *IDProperty = nullptr;
     FIntProperty *RowIndexProperty = nullptr;
     TMap<FName, int32> RowIndices;
+
+#if WITH_EDITOR
+    bool bValidRepository = false;
+#endif
 };
 
 /**

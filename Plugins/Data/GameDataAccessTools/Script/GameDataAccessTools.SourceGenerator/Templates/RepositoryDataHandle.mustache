@@ -1,6 +1,8 @@
 ﻿#nullable enable
 using UnrealSharp;
+using UnrealSharp.Attributes;
 using UnrealSharp.CoreUObject;
+using UnrealSharp.GameDataAccessTools;
 using GameDataAccessTools.Core;
 using GameDataAccessTools.Core.Views;
 using GameDataAccessTools.Core.Utilities;
@@ -8,7 +10,7 @@ using ZLinq;
 
 namespace {{Namespace}};
 
-readonly partial record struct {{StructName}}(FName ID) : IDataHandle<{{EntryType}}>{{#Convertables}}, IEquatable<{{Type}}>{{/Convertables}}
+readonly partial record struct {{StructName}}([field: UProperty(PropertyFlags.EditAnywhere)] FName ID) : IDataHandle<{{EntryType}}>{{#Convertables}}, IEquatable<{{Type}}>{{/Convertables}}
 {
     {{#WithRepository}}
     public static UScriptStruct EntryStruct => {{Provider}}.{{Repository}}.EntryStruct;

@@ -3,6 +3,7 @@
 #include "Repositories/GameDataRepositoryFactory.h"
 #include "ClassViewerFilter.h"
 #include "ClassViewerModule.h"
+#include "CSManager.h"
 #include "GameDataRepository.h"
 #include "Kismet2/SClassPickerDialog.h"
 
@@ -17,14 +18,13 @@ class FGameDataRepositoryFilter final : public IClassViewerFilter
             return false;
         }
 
-        const auto DataEntriesProperty = CastField<FArrayProperty>(InClass->FindPropertyByName(TEXT("DataEntries")));
-        if (DataEntriesProperty == nullptr)
+        const auto *CDO = InClass->GetDefaultObject<UAssetGameDataRepository>();
+        if (CDO == nullptr)
         {
             return false;
         }
 
-        const auto InnerProperty = CastField<FStructProperty>(DataEntriesProperty->Inner);
-        return InnerProperty != nullptr;
+        return CDO->IsValidRepository();
     }
 
     bool IsUnloadedClassAllowed(const FClassViewerInitializationOptions &InInitOptions,

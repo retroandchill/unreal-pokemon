@@ -4,7 +4,7 @@ using Pokemon.Data.Model.PBS;
 
 namespace Pokemon.Data;
 
-[GameDataProvider]
+[GameDataProvider(Category = "Game")]
 public static partial class GameData
 {
     public static partial UGrowthRateRepository GrowthRates { get; }

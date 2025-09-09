@@ -2,15 +2,9 @@
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.CoreUObject;
+using UnrealSharp.GameDataAccessTools;
 
 namespace GameDataAccessTools.Core;
-
-[UStruct]
-public readonly partial record struct FDataHandleEntry(FName ID, FText DisplayName)
-{
-    public FDataHandleEntry(FName id)
-        : this(id, id.ToString()) { }
-}
 
 public interface IDataHandle : IEquatable<FName>
 {

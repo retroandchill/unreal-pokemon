@@ -1,6 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Handles/DataHandlePropertyIdentifier.h"
+#include "Interop/GameDataTypeManagedCallbacks.h"
 #include "TypeGenerator/CSScriptStruct.h"
 
 bool FDataHandlePropertyIdentifier::IsPropertyTypeCustomized(const IPropertyHandle &PropertyHandle) const
@@ -12,5 +13,10 @@ bool FDataHandlePropertyIdentifier::IsPropertyTypeCustomized(const IPropertyHand
         return false;
     }
 
-    return ManagedStruct->HasMetaData("DataHandle") && ManagedStruct->FindPropertyByName("Id") != nullptr;
+    if (CastField<FNameProperty>(ManagedStruct->FindPropertyByName("ID")) == nullptr) {
+        return false;
+    }
+
+    const auto ManagedType = ManagedStruct->GetManagedTypeInfo<>()->GetManagedTypeHandle();
+    return FGameDataTypeManagedCallbacks::Get().IsValidGameDataHandle(*ManagedType);
 }

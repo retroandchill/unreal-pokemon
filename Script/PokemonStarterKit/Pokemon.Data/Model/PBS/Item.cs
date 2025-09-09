@@ -1,7 +1,6 @@
 ﻿using GameAccessTools.SourceGenerator.Attributes;
 using GameDataAccessTools.Core;
 using JetBrains.Annotations;
-using LanguageExt;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.GameDataAccessTools;
@@ -120,7 +119,7 @@ public readonly partial struct FItem() : IGameDataEntry
     {
         get => !field.Empty ? field : Name;
         init;
-    }
+    } = FText.None;
 
     [UsedImplicitly]
     [field: UProperty(
@@ -132,7 +131,7 @@ public readonly partial struct FItem() : IGameDataEntry
     {
         get => !field.Empty ? field : NamePlural;
         init;
-    }
+    } = FText.None;
 
     [UsedImplicitly]
     [field: UProperty(

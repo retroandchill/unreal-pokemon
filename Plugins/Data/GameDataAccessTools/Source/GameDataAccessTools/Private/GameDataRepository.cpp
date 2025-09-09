@@ -28,11 +28,17 @@ void UGameDataRepository::PostInitProperties()
     DataArray = &GameDataEntriesProperty->GetPropertyValue_InContainer(this);
     GameDataEntries = MakeUnique<FScriptArrayHelper>(GameDataEntriesProperty, DataArray);
 
+#if WITH_EDITOR
+    bValidRepository = true;
+#endif
     IDProperty = CastFieldChecked<FNameProperty>(StructProperty->Struct->FindPropertyByName(FName(EntryIDProperty)));
     if (IDProperty == nullptr)
     {
         UE_LOG(LogGameDataAccessTools, Error, TEXT("Struct Property %s must have a Name Property named %s"),
                *StructProperty->GetName(), EntryIDProperty.GetData());
+#if WITH_EDITOR
+        bValidRepository = false;
+#endif
     }
 
     RowIndexProperty =
@@ -41,6 +47,9 @@ void UGameDataRepository::PostInitProperties()
     {
         UE_LOG(LogGameDataAccessTools, Error, TEXT("Struct Property %s must have an Int Property named %s"),
                *StructProperty->GetName(), EntryRowIndexProperty.GetData());
+#if WITH_EDITOR
+        bValidRepository = false;
+#endif
     }
 }
 

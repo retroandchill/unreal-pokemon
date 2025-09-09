@@ -1,8 +1,11 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Handles/DataHandleCustomization.h"
+#include "DataHandle.h"
 #include "DetailWidgetRow.h"
 #include "SSearchableComboBox.h"
+#include "Interop/GameDataTypeManagedCallbacks.h"
+#include "TypeGenerator/CSScriptStruct.h"
 
 TSharedRef<IPropertyTypeCustomization> FDataHandleCustomization::MakeInstance()
 {
@@ -26,17 +29,39 @@ void FDataHandleCustomization::CustomizeHeader(const TSharedRef<IPropertyHandle>
     }
 
     const auto StructProperty = CastFieldChecked<FStructProperty>(PropertyHandle->GetProperty());
-    const auto OptionsSource = StructProperty->Struct->GetMetaData("OptionsSource");
-    const auto TargetFunction = FindObject<UFunction>(nullptr, *OptionsSource);
-    const auto CDO = TargetFunction->GetOuterUClass()->GetDefaultObject();
-    TArray<FName> Options;
-    FFrame NewStack(CDO, TargetFunction, &Options, nullptr, TargetFunction->ChildProperties);
-    TargetFunction->Invoke(CDO, NewStack, &Options);
 
-    Algo::Transform(Options, ComboBoxOptions,
-                    [](const FName &InName) { return MakeShared<FString>(InName.ToString()); });
+    const auto *CSStruct = CastChecked<UCSScriptStruct>(StructProperty->Struct);
+    const auto ManagedStructType = CSStruct->GetManagedTypeInfo<>()->GetManagedTypeHandle();
+    
+    if (AllowsNone())
+    {
+        ComboBoxOptions.Emplace(MakeShared<FString>(TEXT("")));
+    }
+    for (auto BaseOptions = FGameDataTypeManagedCallbacks::Get().GetDataHandleOptions(*ManagedStructType); const auto &Entry : BaseOptions)
+    {
+        auto &DisplayNameString = Entry.DisplayName.ToString();
 
-    const int32 DefaultIndex = SelectedValues.Num() == 1 ? Options.Find(*SelectedValues.begin()) : INDEX_NONE;
+        Options.Emplace(DisplayNameString, Entry);
+        ComboBoxOptions.Emplace(MakeShared<FString>(DisplayNameString));
+    }
+    
+    int32 DefaultIndex = INDEX_NONE;
+    if (SelectedValues.Num() == 1)
+    {
+        const auto CurrentValue = *SelectedValues.begin();
+        for (int32 i = 0; i < ComboBoxOptions.Num(); i++)
+        {
+            const auto &Option = *ComboBoxOptions[i];
+            if (const auto* ExistingOption = Options.Find(Option); ExistingOption != nullptr && ExistingOption->ID != CurrentValue)
+            {
+                continue;
+            }
+            
+            DefaultIndex = i;
+            break;
+        }
+    }
+    
     CurrentSelection = DefaultIndex != INDEX_NONE ? ComboBoxOptions[DefaultIndex] : nullptr;
 
     // clang-format off
@@ -72,12 +97,14 @@ void FDataHandleCustomization::CustomizeChildren(TSharedRef<IPropertyHandle> Pro
 
 bool FDataHandleCustomization::IsEditEnabled() const
 {
-    return Handle->IsValidHandle() && Handle->GetProperty()->HasAnyPropertyFlags(CPF_Edit);
+    return Handle->IsValidHandle() && Handle->IsEditable();
+
 }
 
 TSharedRef<SWidget> FDataHandleCustomization::GenerateComboBoxEntry(TSharedPtr<FString> Value)
 {
-    return SNew(STextBlock).Text(FText::FromString(*Value)).Font(FAppStyle::GetFontStyle("PropertyWindow.NormalFont"));
+    
+    return SNew(STextBlock).Text(GetComboBoxEntryText(Value)).Font(FAppStyle::GetFontStyle("PropertyWindow.NormalFont"));
 }
 
 void FDataHandleCustomization::OnComboBoxSelectionChanged(TSharedPtr<FString> NewSelection, ESelectInfo::Type)
@@ -89,7 +116,8 @@ void FDataHandleCustomization::OnComboBoxSelectionChanged(TSharedPtr<FString> Ne
     WrappedProperty->NotifyPreChange();
     for (const auto Struct : OuterStructs)
     {
-        auto Name = FName(*NewSelection);
+        const auto *Entry = Options.Find(*NewSelection);
+        auto Name = Entry != nullptr ? Entry->ID : NAME_None;
         WrappedProperty->GetProperty()->SetValue_InContainer(Struct, &Name);
     }
     WrappedProperty->NotifyPostChange(EPropertyChangeType::ValueSet);
@@ -97,5 +125,29 @@ void FDataHandleCustomization::OnComboBoxSelectionChanged(TSharedPtr<FString> Ne
 
 FText FDataHandleCustomization::GetComboBoxEntryText() const
 {
-    return CurrentSelection != nullptr ? FText::FromString(*CurrentSelection) : FText::GetEmpty();
+    return CurrentSelection != nullptr ? GetComboBoxEntryText(CurrentSelection) : FText::GetEmpty();
+}
+
+FText FDataHandleCustomization::GetComboBoxEntryText(const TSharedPtr<FString>& Value)
+{
+    return Value != nullptr && !Value->IsEmpty() ? FText::FromString(*Value) : NSLOCTEXT("FDataHandleCustomization", "None", "<None>");
+}
+
+bool FDataHandleCustomization::AllowsNone() const
+{
+    if (const auto* MapProperty = CastField<FMapProperty>(Handle->GetMetaDataProperty()))
+    {
+        if (const auto *ThisProperty = Handle->GetProperty(); ThisProperty == MapProperty->KeyProp)
+        {
+            // Do not allow none to be selected for map keys
+            return false;
+        }
+    }
+    
+    if (Handle->HasMetaData(TEXT("AllowNone")))
+    {
+        return true;
+    }
+
+    return false;
 }
