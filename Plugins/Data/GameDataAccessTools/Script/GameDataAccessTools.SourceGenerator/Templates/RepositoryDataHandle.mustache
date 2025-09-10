@@ -36,32 +36,17 @@ readonly partial record struct {{StructName}}([field: UProperty(PropertyFlags.Ed
     
     public static implicit operator {{StructName}}(in {{EntryType}} entry) 
     {
-        var handle = new {{StructName}}(entry.ID);
-        if (!handle.IsValid)
-        {
-            throw new InvalidOperationException($"Cannot convert entry with ID of {entry.ID} because said ID is not valid");
-        }
-        return handle;
+        return new {{StructName}}(entry.ID);
     } 
 
     public static implicit operator {{StructName}}(StructView<{{EntryType}}> entry)
     {
-        var handle = new {{StructName}}(entry.ID);
-        if (!handle.IsValid)
-        {
-            throw new InvalidOperationException($"Cannot convert entry with ID of {entry.ID} because said ID is not valid");
-        }
-        return handle;
+        return new {{StructName}}(entry.ID);
     }
     
     public static implicit operator {{StructName}}(FName name) 
     {
-        var handle = new {{StructName}}(name);
-        if (!handle.IsValid)
-        {
-            throw new InvalidOperationException($"Cannot convert Name of '{name}' because said ID is not valid");
-        }
-        return handle;
+        return new {{StructName}}(name);
     }
 
     public static implicit operator FName({{StructName}} handle) => handle.ID;
@@ -69,12 +54,7 @@ readonly partial record struct {{StructName}}([field: UProperty(PropertyFlags.Ed
     {{#Convertables}}
     public static implicit operator {{../StructName}}({{Type}} other)
     {
-        var handle = new {{StructName}}(other.ID);
-        if (!handle.IsValid)
-        {
-            throw new InvalidOperationException($"Cannot convert entry with ID of '{other.ID}' because said ID is not valid");
-        }
-        return handle;
+        return new {{StructName}}(other.ID);
     }
 
     {{/Convertables}}

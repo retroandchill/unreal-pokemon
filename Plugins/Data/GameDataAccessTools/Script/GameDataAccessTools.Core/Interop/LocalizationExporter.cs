@@ -12,4 +12,6 @@ public static unsafe partial class LocalizationExporter
         char*,
         out FTextData,
         void> CreateLocalizedText;
+
+    private static readonly delegate* unmanaged<char*, out FTextData, void> FromLocalizedString;
 }

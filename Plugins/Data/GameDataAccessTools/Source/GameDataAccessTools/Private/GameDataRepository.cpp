@@ -72,6 +72,8 @@ uint8 *UGameDataRepository::AddNewEntry(const FName ID)
 uint8 *UGameDataRepository::AddNewEntry(const FName ID, const uint8 *Data)
 {
     auto *Entry = AddNewEntryInternal(ID);
+    if (Entry == nullptr) return nullptr;
+    
     const int32 NewIndex = GameDataEntries->Num() - 1;
     StructProperty->Struct->CopyScriptStruct(Entry, Data);
     IDProperty->SetValue_InContainer(Entry, ID);
@@ -200,7 +202,7 @@ TOptional<FName> UGameDataRepository::GenerateUniqueRowName() const
 }
 
 // ReSharper disable once CppMemberFunctionMayBeStatic
-bool UStaticGameDataRepository::TryRegisterEntryInternal(const int32 &)
+bool UStaticGameDataRepository::TryRegisterEntryInternal(const int32 &, FString&)
 {
     checkf(false, TEXT("This should never get called"));
     return false;
@@ -212,18 +214,28 @@ DEFINE_FUNCTION(UStaticGameDataRepository::execTryRegisterEntryInternal)
     Stack.StepCompiledIn<FStructProperty>(nullptr);
     const auto DataStructProperty = CastFieldChecked<FStructProperty>(Stack.MostRecentProperty);
     const auto *DataStructStruct = Stack.MostRecentPropertyAddress;
-
-    if (DataStructProperty->Struct != Self->GetEntryStruct())
-    {
-        UE_LOG(LogGameDataAccessTools, Fatal, TEXT("Provided struct type does not match the struct of the class"));
-    }
+    P_GET_PROPERTY_REF(FStrProperty, OutError);
 
     P_FINISH;
 
     P_NATIVE_BEGIN
 
+    if (DataStructProperty->Struct != Self->GetEntryStruct())
+    {
+        OutError = TEXT("Provided struct type does not match the struct of the class");
+        *static_cast<bool *>(RESULT_PARAM) = false;
+        return;
+    }
+
     const auto ID = Self->GetIDProperty()->GetPropertyValue_InContainer(DataStructStruct);
     auto *NewEntry = Self->AddNewEntry(ID);
+    if (NewEntry == nullptr)
+    {
+        OutError = FString::Printf(TEXT("ID '%s' is already in use"), *ID.ToString());
+        *static_cast<bool *>(RESULT_PARAM) = false;
+        return;
+    }
+    
     Self->GetEntryStruct()->CopyScriptStruct(NewEntry, DataStructStruct);
     *static_cast<bool *>(RESULT_PARAM) = true;
 

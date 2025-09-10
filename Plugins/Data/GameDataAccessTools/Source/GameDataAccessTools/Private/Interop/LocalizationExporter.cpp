@@ -7,3 +7,11 @@ void ULocalizationExporter::CreateLocalizedText(const TCHAR *Namespace, const TC
 {
     OutText = FText::AsLocalizable_Advanced(Namespace, Key, DefaultValue);
 }
+
+void ULocalizationExporter::FromLocalizedString(const TCHAR *LocalizedString, FText &OutText)
+{
+    if (!FTextStringHelper::ReadFromBuffer(LocalizedString, OutText))
+    {
+        OutText = FText::FromString(LocalizedString);
+    }
+}

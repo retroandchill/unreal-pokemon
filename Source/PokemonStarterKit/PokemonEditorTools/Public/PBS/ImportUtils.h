@@ -38,4 +38,7 @@ class POKEMONEDITORTOOLS_API UImportUtils : public UBlueprintFunctionLibrary
      */
     UFUNCTION(BlueprintPure, Category = "Editor|Data")
     static const TMap<uint8, FName> &GetPocketNames();
+
+    UFUNCTION(meta = (ScriptMethod))
+    static bool TryAddGameplayTagToIni(FName TagSource, const FString& TagName, FString& Error);
 };

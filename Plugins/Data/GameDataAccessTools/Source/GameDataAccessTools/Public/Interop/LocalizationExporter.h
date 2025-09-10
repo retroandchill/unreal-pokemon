@@ -20,4 +20,7 @@ class GAMEDATAACCESSTOOLS_API ULocalizationExporter : public UObject
     UNREALSHARP_FUNCTION()
     static void CreateLocalizedText(const TCHAR *Namespace, const TCHAR *Key, const TCHAR *DefaultValue,
                                     FText &OutText);
+
+    UNREALSHARP_FUNCTION()
+    static void FromLocalizedString(const TCHAR *LocalizedString, FText &OutText);
 };

@@ -21,22 +21,22 @@ struct FScopedArrayDeleter
     FScriptArrayHelper &Helper;
 };
 
-bool UGameDataEntryJsonSerializer::Supports_Implementation(TSubclassOf<UAssetGameDataRepository> RepositoryClass)
+bool UGameDataEntryJsonSerializer::Supports(TSubclassOf<UAssetGameDataRepository> RepositoryClass)
 {
     return true;
 }
 
-FString UGameDataEntryJsonSerializer::GetFileExtensionText_Implementation() const
+FString UGameDataEntryJsonSerializer::GetFileExtensionText() const
 {
     return TEXT("JSON file |*.json|");
 }
 
-FText UGameDataEntryJsonSerializer::GetFormatName_Implementation() const
+FText UGameDataEntryJsonSerializer::GetFormatName() const
 {
     return NSLOCTEXT("GameDataEntryJsonSerializer", "FormatName", "JSON");
 }
 
-bool UGameDataEntryJsonSerializer::Serialize_Implementation(const FString &FilePath,
+bool UGameDataEntryJsonSerializer::Serialize(const FString &FilePath,
                                                             const UAssetGameDataRepository *Repository,
                                                             FString &ErrorMessage) const
 {
@@ -73,7 +73,7 @@ bool UGameDataEntryJsonSerializer::Serialize_Implementation(const FString &FileP
     return true;
 }
 
-bool UGameDataEntryJsonSerializer::Deserialize_Implementation(const FString &FilePath,
+bool UGameDataEntryJsonSerializer::Deserialize(const FString &FilePath,
                                                               UAssetGameDataRepository *Repository,
                                                               FString &ErrorMessage) const
 {

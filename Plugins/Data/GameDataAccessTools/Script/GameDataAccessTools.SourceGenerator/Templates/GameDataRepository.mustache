@@ -74,7 +74,13 @@ partial class {{AssetClassName}} : {{#IsStatic}}IStaticGameDataRepository{{/IsSt
 
     public bool TryRegisterEntry({{EntryName}} entry)
     {
-        return TryRegisterEntryInternal(entry);
+        if (!TryRegisterEntryInternal(entry, out var error))
+        {
+            LogGameDataAccessToolsCore.LogError(error);
+            return false;
+        }
+
+        return true;
     }
     {{/IsStatic}} 
 }

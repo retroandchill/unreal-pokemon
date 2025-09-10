@@ -9,6 +9,8 @@ namespace GameDataAccessTools.Core;
 public interface IGameDataRepository<T>
     where T : struct, IGameDataEntry, MarshalledStruct<T>
 {
+    IntPtr NativeObject { get; }
+    
     UScriptStruct EntryStruct { get; }
 
     ArrayView<StructView<T>> Entries { get; }

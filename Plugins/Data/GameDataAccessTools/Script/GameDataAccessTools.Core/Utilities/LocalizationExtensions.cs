@@ -34,5 +34,19 @@ public static class LocalizationExtensions
                 return result;
             }
         }
+
+        public static FText FromLocalizedString(ReadOnlySpan<char> localizedString)
+        {
+            unsafe
+            {
+                fixed (char* ptr = localizedString)
+                {
+                    LocalizationExporter.CallFromLocalizedString(ptr, out var textData);
+                    var result = TextMarshaller.FromNative((IntPtr)(&textData), 0);
+                    textData.ObjectPointer.Release();
+                    return result;
+                }
+            }
+        }
     }
 }

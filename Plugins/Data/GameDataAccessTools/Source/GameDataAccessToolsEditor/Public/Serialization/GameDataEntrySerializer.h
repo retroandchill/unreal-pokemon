@@ -19,23 +19,17 @@ class GAMEDATAACCESSTOOLSEDITOR_API UGameDataEntrySerializer : public UObject
 
     // Add interface functions to this class. This is the class that will be inherited to implement this interface.
   public:
-    UFUNCTION(BlueprintNativeEvent, Category = "Serialization")
-    bool Supports(TSubclassOf<UAssetGameDataRepository> RepositoryClass);
-
-    UFUNCTION(BlueprintNativeEvent, Category = "Serialization")
-    FText GetFormatName() const;
-
-    UFUNCTION(BlueprintNativeEvent, Category = "Serialization")
-    FString GetFileExtensionText() const;
-
-    UFUNCTION(BlueprintNativeEvent, Category = "Serialization")
-    bool Serialize(const FString &FilePath, const UAssetGameDataRepository *Repository, FString &ErrorMessage) const;
-
-    UFUNCTION(BlueprintNativeEvent, Category = "Serialization")
-    bool Deserialize(const FString &FilePath, UAssetGameDataRepository *Repository, FString &ErrorMessage) const;
+    virtual bool Supports(TSubclassOf<UAssetGameDataRepository> RepositoryClass);
+    virtual FText GetFormatName() const;
+    virtual FString GetFileExtensionText() const;
+    virtual bool Serialize(const FString &FilePath, const UAssetGameDataRepository *Repository, FString &ErrorMessage) const;
+    virtual bool Deserialize(const FString &FilePath, UAssetGameDataRepository *Repository, FString &ErrorMessage) const;
 
   protected:
     static FScriptArrayHelper &GetGameDataEntries(const UAssetGameDataRepository *Repository);
     static FArrayProperty *GetGameDataEntriesProperty(const UAssetGameDataRepository *Repository);
     static void MoveEntries(UAssetGameDataRepository *Repository, FScriptArray &Entries);
+
+private:
+    friend class UGameDataEntrySerializerExporter;
 };

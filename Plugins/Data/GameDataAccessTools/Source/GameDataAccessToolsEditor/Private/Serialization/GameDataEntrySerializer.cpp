@@ -2,25 +2,25 @@
 #include "Serialization/GameDataEntrySerializer.h"
 #include "GameDataRepository.h"
 
-bool UGameDataEntrySerializer::Supports_Implementation(TSubclassOf<UAssetGameDataRepository> RepositoryClass)
+bool UGameDataEntrySerializer::Supports(TSubclassOf<UAssetGameDataRepository> RepositoryClass)
 {
     PURE_VIRTUAL(UGameDataEntrySerializer::Supports_Implementation);
     return false;
 }
 
-FText UGameDataEntrySerializer::GetFormatName_Implementation() const
+FText UGameDataEntrySerializer::GetFormatName() const
 {
     PURE_VIRTUAL(UGameDataEntrySerializer::GetFormatName_Implementation);
     return FText::GetEmpty();
 }
 
-FString UGameDataEntrySerializer::GetFileExtensionText_Implementation() const
+FString UGameDataEntrySerializer::GetFileExtensionText() const
 {
     PURE_VIRTUAL(UGameDataEntrySerializer::GetFileExtensionText_Implementation);
     return TEXT("");
 }
 
-bool UGameDataEntrySerializer::Serialize_Implementation(const FString &FilePath,
+bool UGameDataEntrySerializer::Serialize(const FString &FilePath,
                                                         const UAssetGameDataRepository *Repository,
                                                         FString &ErrorMessage) const
 {
@@ -28,7 +28,7 @@ bool UGameDataEntrySerializer::Serialize_Implementation(const FString &FilePath,
     return false;
 }
 
-bool UGameDataEntrySerializer::Deserialize_Implementation(const FString &FilePath, UAssetGameDataRepository *Repository,
+bool UGameDataEntrySerializer::Deserialize(const FString &FilePath, UAssetGameDataRepository *Repository,
                                                           FString &ErrorMessage) const
 {
     PURE_VIRTUAL(UGameDataEntrySerializer::Deserialize_Implementation);
