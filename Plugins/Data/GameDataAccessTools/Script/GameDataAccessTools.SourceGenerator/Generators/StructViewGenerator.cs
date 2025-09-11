@@ -6,6 +6,7 @@ using GameAccessTools.SourceGenerator.Properties;
 using GameAccessTools.SourceGenerator.Utilities;
 using HandlebarsDotNet;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Retro.SourceGeneratorUtilities.Utilities.Attributes;
 using Retro.SourceGeneratorUtilities.Utilities.Types;
@@ -105,8 +106,38 @@ public class StructViewGenerator : IIncrementalGenerator
             return;
         }
 
+
+        HashSet<string> usedNamespaces =
+        [
+            "using LanguageExt;",
+            "using UnrealSharp;",
+            "using UnrealSharp.Core;",
+            "using UnrealSharp.Core.Marshallers;",
+            "using UnrealSharp.CoreUObject;",
+            "using UnrealSharp.Interop;",
+            "using GameDataAccessTools.Core;",
+            "using GameDataAccessTools.Core.Views;",
+            "using GameDataAccessTools.Core.Marshallers;",
+            "using GameDataAccessTools.Core.Utilities;"
+        ];
+
+        foreach (var ns in structType.DeclaringSyntaxReferences
+                     .Select(x => x.GetSyntax())
+                     .OfType<StructDeclarationSyntax>()
+                     .Select(x => x.SyntaxTree)
+                     .Select(syntaxTree => syntaxTree.GetRoot())
+                     .OfType<CompilationUnitSyntax>()
+                     .Select(x => x.Usings)
+                     .Select(x => x.ToString()))
+        {
+            usedNamespaces.Add(ns);
+        }
+
         var templateParams = new
         {
+            Usings = usedNamespaces
+                .Select(x => new UsingDeclaration(x))
+                .ToImmutableArray(),
             Namespace = structType.ContainingNamespace.ToDisplayString(),
             StructName = structType.Name,
             EngineName = structType.Name[1..],
@@ -153,12 +184,14 @@ public class StructViewGenerator : IIncrementalGenerator
         // Create rewriter with semantic model
         var rewriter = new MemberAccessRewriter(semanticModel, structType, propertySymbol.Name);
 
+        var isExpressionBody = false;
         string getterBody;
         if (propertySyntax.ExpressionBody != null)
         {
             // Handle expression-bodied property
             var rewrittenExpression = rewriter.Visit(propertySyntax.ExpressionBody.Expression);
-            getterBody = $"     => {rewrittenExpression};";
+            getterBody = rewrittenExpression.ToString();
+            isExpressionBody = true;
         }
         else if (propertySyntax.AccessorList != null)
         {
@@ -173,13 +206,19 @@ public class StructViewGenerator : IIncrementalGenerator
             {
                 // Handle expression-bodied accessor
                 var rewrittenExpression = rewriter.Visit(getAccessor.ExpressionBody.Expression);
-                getterBody = $"=> {rewrittenExpression};";
+                getterBody = rewrittenExpression.ToString();
+                isExpressionBody = true;
             }
             else if (getAccessor.Body != null)
             {
                 // Handle block body
                 var rewrittenBlock = rewriter.Visit(getAccessor.Body);
-                getterBody = rewrittenBlock.ToString();
+                
+                // This is a hack to get around the fact that extension blocks will have one additional level of
+                // indentation compared to a top-level struct declaration, so indenting every line after the first
+                // by 4 spaces will make the generated code look better.
+                getterBody = string.Join("\n", rewrittenBlock.ToString().Split('\n')
+                    .Select((x, i) => i == 0 ? x : $"    {x}"));
             }
             else
             {
@@ -198,6 +237,7 @@ public class StructViewGenerator : IIncrementalGenerator
                 .GetMembers()
                 .OfType<IFieldSymbol>()
                 .Any(f => SymbolEqualityComparer.Default.Equals(f.AssociatedSymbol, member)),
+            IsExpressionBody = isExpressionBody
         };
 
         return baseInfo;

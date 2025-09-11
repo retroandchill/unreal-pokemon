@@ -262,4 +262,9 @@ namespace Pokemon.Data;
     "FoeSide",
     "BothSides"
 )]
-public static partial class IdentifierConstants;
+public static partial class IdentifierConstants
+{
+    public const string FunctionCodeTag = "Battle.Move.FunctionCode";
+    public const string BattleUseTag = "Battle.Item.Use";
+    public const string PocketTag = "Item.Pocket";
+}

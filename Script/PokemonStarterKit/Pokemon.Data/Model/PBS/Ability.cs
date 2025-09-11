@@ -15,21 +15,18 @@ namespace Pokemon.Data.Model.PBS;
 [CreateStructView]
 public readonly partial struct FAbility() : IGameDataEntry
 {
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Identification"
     )]
     public required FName ID { get; init; }
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere,
         Category = "Identification"
     )]
     public int RowIndex { get; init; }
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Display"
@@ -37,14 +34,12 @@ public readonly partial struct FAbility() : IGameDataEntry
     [DisplayName]
     public FText Name { get; init; } = "Unnamed";
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Display"
     )]
     public FText Description { get; init; } = "???";
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Metadata"

@@ -8,7 +8,7 @@ namespace Pokemon.Editor.Serialization.Mappers;
     RequiredMappingStrategy = RequiredMappingStrategy.Target,
     PreferParameterlessConstructors = false
 )]
-public static partial class PbsDataMapper
+public static partial class TypeMapper
 {
     public static partial FType ToType(this TypeInfo typeInfo);
     

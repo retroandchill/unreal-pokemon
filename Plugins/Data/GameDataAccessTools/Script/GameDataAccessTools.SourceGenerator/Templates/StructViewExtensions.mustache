@@ -1,13 +1,7 @@
 #nullable enable
-using LanguageExt;
-using UnrealSharp;
-using UnrealSharp.Core;
-using UnrealSharp.Core.Marshallers;
-using UnrealSharp.CoreUObject;
-using UnrealSharp.Interop;
-using GameDataAccessTools.Core;
-using GameDataAccessTools.Core.Views;
-using GameDataAccessTools.Core.Marshallers;
+{{#Usings}}
+{{Declaration}}
+{{/Usings}}
 
 namespace {{Namespace}};
 
@@ -41,8 +35,10 @@ public static partial class {{EngineName}}ViewExtensions
         {{#HasGetterBody}}
         {{Access}}{{Type}} {{Name}}
         {
-            get 
+            get{{#IsExpressionBody}} => {{GetterBody}};{{/IsExpressionBody}}
+            {{^IsExpressionBody}}
             {{GetterBody}}
+            {{/IsExpressionBody}}
         }
         
         {{/HasGetterBody}}    

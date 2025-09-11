@@ -50,4 +50,6 @@ public record AccessiblePropertyInfo(string Access, string Type, string Name)
     public bool HasGetterBody => GetterBody is not null;
 
     public bool HasBackingField { get; init; } = true;
+
+    public bool IsExpressionBody { get; init; } = false;
 }

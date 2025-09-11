@@ -33,21 +33,18 @@ public enum EDamageType : byte
 [CreateStructView]
 public readonly partial struct FMove() : IGameDataEntry
 {
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Identification"
     )]
     public required FName ID { get; init; }
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere,
         Category = "Identification"
     )]
     public int RowIndex { get; init; }
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Display"
@@ -55,14 +52,12 @@ public readonly partial struct FMove() : IGameDataEntry
     [GameAccessTools.SourceGenerator.Attributes.DisplayName]
     public FText Name { get; init; } = "Unnamed";
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Display"
     )]
     public FText Description { get; init; } = "???";
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Classification"
@@ -70,21 +65,18 @@ public readonly partial struct FMove() : IGameDataEntry
     [AsValue]
     public FTypeHandle Type { get; init; }
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Classification"
     )]
     public EDamageCategory Category { get; init; } = EDamageCategory.Status;
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Stats"
     )]
     public EDamageType DamageType { get; init; }
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Stats"
@@ -98,7 +90,6 @@ public readonly partial struct FMove() : IGameDataEntry
     [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Stats")]
     public bool AlwaysHits { get; init; }
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Stats"
@@ -108,10 +99,8 @@ public readonly partial struct FMove() : IGameDataEntry
     [field: UIMin("1")]
     [field: UIMax("100")]
     [field: EditCondition($"!{nameof(AlwaysHits)}")]
-    [field: EditConditionHides]
     public int Accuracy { get; init; } = 100;
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Stats"
@@ -120,14 +109,12 @@ public readonly partial struct FMove() : IGameDataEntry
     [field: UIMin("1")]
     public int TotalPP { get; init; } = 5;
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "BattleUsage"
     )]
     public int Priority { get; init; } = 0;
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "BattleUsage"
@@ -135,21 +122,19 @@ public readonly partial struct FMove() : IGameDataEntry
     [AsValue]
     public FTargetHandle Target { get; init; }
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Effect"
     )]
-    public FName FunctionCode { get; init; }
+    [Categories(IdentifierConstants.FunctionCodeTag)]
+    public FGameplayTag FunctionCode { get; init; }
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Effect"
     )]
     public bool GuaranteedEffect { get; init; } = true;
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Effect"
@@ -162,7 +147,6 @@ public readonly partial struct FMove() : IGameDataEntry
     [field: EditConditionHides]
     public int EffectChance { get; init; } = 30;
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Metadata"

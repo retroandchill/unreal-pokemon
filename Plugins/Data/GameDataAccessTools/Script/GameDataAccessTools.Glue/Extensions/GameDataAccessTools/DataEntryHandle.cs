@@ -8,16 +8,11 @@ public partial record struct FDataHandleEntry
     public FDataHandleEntry(FName id, FText displayName)
     {
         ID = id;
-        DisplayName = !IsEmptyText(displayName) ? displayName : id.ToString();
+        DisplayName = !displayName.IsNullOrWhitespace() ? displayName : id.ToString();
     }
     
     [SetsRequiredMembers]
     public FDataHandleEntry(FName id) : this(id, FText.None)
     {
-    }
-
-    private static bool IsEmptyText(FText text)
-    {
-        return text.Empty || text == FText.None || text.AsReadOnlySpan().IsWhiteSpace();
     }
 }

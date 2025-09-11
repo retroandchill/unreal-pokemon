@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Script", "Script", "{0BB39A05-1926-C2B2-7003-8EB281EB5439}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pokemon.Editor", "Pokemon.Editor\Pokemon.Editor.csproj", "{01423C9F-B643-4B83-858B-9811A0DA4DEA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pokemon.Editor", "PokemonStarterKit\Pokemon.Editor\Pokemon.Editor.csproj", "{01423C9F-B643-4B83-858B-9811A0DA4DEA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnrealPokemon.Glue", "UnrealPokemon.Glue\UnrealPokemon.Glue.csproj", "{1270561D-B26C-45D8-990F-DEA40D634635}"
 EndProject

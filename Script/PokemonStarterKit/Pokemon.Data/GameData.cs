@@ -28,4 +28,5 @@ public static partial class GameData
     public static partial UAbilityRepository Abilities { get; }
     public static partial UMoveRepository Moves { get; }
     public static partial UItemRepository Items { get; }
+    public static partial UBerryPlantRepository BerryPlants { get; }
 }

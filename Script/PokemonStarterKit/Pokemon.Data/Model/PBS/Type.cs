@@ -14,21 +14,18 @@ namespace Pokemon.Data.Model.PBS;
 [CreateStructView]
 public readonly partial struct FType() : IGameDataEntry
 {
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Identification"
     )]
     public required FName ID { get; init; }
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere,
         Category = "Identification"
     )]
     public int RowIndex { get; init; }
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Display"
@@ -38,42 +35,36 @@ public readonly partial struct FType() : IGameDataEntry
 
     public bool IsPhysicalType => !IsSpecialType;
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Type Info"
     )]
     public bool IsSpecialType { get; init; } = false;
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Type Info"
     )]
     public bool IsPseudoType { get; init; } = false;
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Type Info"
     )]
     public IReadOnlyList<FTypeHandle> Weaknesses { get; init; } = [];
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Type Info"
     )]
     public IReadOnlyList<FTypeHandle> Resistances { get; init; } = [];
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Type Info"
     )]
     public IReadOnlyList<FTypeHandle> Immunities { get; init; } = [];
 
-    [UsedImplicitly]
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Metadata"

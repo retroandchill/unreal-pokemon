@@ -191,6 +191,7 @@ void FGameDataRepositoryEditor::ImportGameDataRepository(const UGameDataEntrySer
         SlowTask.MakeDialog(false);
         if (FString ErrorMessage; Serializer->Deserialize(FileName, GameDataRepository, ErrorMessage))
         {
+            GameDataRepository->RebuildIndices();
             RefreshList();
             FMessageDialog::Open(EAppMsgType::Ok,
                                  NSLOCTEXT("GameDataRepository", "ImportSuccessful", "Import was successful!"));

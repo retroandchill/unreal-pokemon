@@ -1,6 +1,9 @@
-﻿using UnrealSharp;
+﻿using Pokemon.Data;
+using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.DeveloperSettings;
+using UnrealSharp.GameplayTags;
 
 namespace Pokemon.Editor;
 
@@ -12,4 +15,13 @@ public class UPokemonEditorSettings : UDeveloperSettings
         Category = "Serializers"
     )]
     public FName NewGameplayTagsPath { get; }
+    
+    [UProperty(
+        PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
+        Category = "Pbs"
+    )]
+    [ClampMin("1")]
+    [UIMax("1")]
+    [Categories(IdentifierConstants.PocketTag)]
+    public IReadOnlyDictionary<int, FGameplayTag> PocketNumberToGameplayTag { get; }
 }
