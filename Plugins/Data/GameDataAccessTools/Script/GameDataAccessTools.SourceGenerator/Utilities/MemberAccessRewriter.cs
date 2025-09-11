@@ -7,37 +7,81 @@ namespace GameAccessTools.SourceGenerator.Utilities;
 public class MemberAccessRewriter(
     SemanticModel semanticModel,
     INamedTypeSymbol containingType,
-    string propertyName
+    string? propertyName = null
 ) : CSharpSyntaxRewriter
 {
-    private readonly SemanticModel _semanticModel = semanticModel;
-    private readonly INamedTypeSymbol _containingType = containingType;
-    private readonly string _propertyName = propertyName;
-
-    public override SyntaxNode? VisitBlock(BlockSyntax node)
+    public override SyntaxNode VisitBlock(BlockSyntax node)
     {
         // Process each statement in the block
-        var newStatements = node.Statements.Select(s => (StatementSyntax)Visit(s)!);
+        var newStatements = node.Statements.Select(s => (StatementSyntax)Visit(s));
         return node.WithStatements(SyntaxFactory.List(newStatements));
     }
 
-    public override SyntaxNode? VisitReturnStatement(ReturnStatementSyntax node)
+    public override SyntaxNode VisitReturnStatement(ReturnStatementSyntax node)
     {
         if (node.Expression == null)
             return node;
 
-        var rewrittenExpression = (ExpressionSyntax)Visit(node.Expression)!;
+        var rewrittenExpression = (ExpressionSyntax)Visit(node.Expression);
         return node.WithExpression(rewrittenExpression);
     }
+    
+    public override SyntaxNode VisitGenericName(GenericNameSyntax node)
+    {
+        // Visit type arguments first
+        var newTypeArgs = node.TypeArgumentList.Arguments.Select(Visit).OfType<TypeSyntax>();
+        var newTypeArgList = node.TypeArgumentList.WithArguments(SyntaxFactory.SeparatedList(newTypeArgs));
+        
+        return node.WithTypeArgumentList(newTypeArgList);
+    }
 
-    public override SyntaxNode? VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
+    public override SyntaxNode VisitInvocationExpression(InvocationExpressionSyntax node)
+    {
+        // First visit any arguments
+        var arguments = node.ArgumentList.Arguments.Select(a => 
+            a.WithExpression((ExpressionSyntax)Visit(a.Expression)));
+        
+        var newArgumentList = node.ArgumentList.WithArguments(SyntaxFactory.SeparatedList(arguments));
+
+        SimpleNameSyntax? simpleName = node.Expression switch
+        {
+            IdentifierNameSyntax identifier => identifier,
+            GenericNameSyntax generic => generic,
+            _ => null
+        };
+        
+        if (simpleName == null)
+        {
+            var visitedExpression = (ExpressionSyntax)Visit(node.Expression)!;
+            return node.WithExpression(visitedExpression)
+                .WithArgumentList(newArgumentList);
+        }
+
+        // Get symbol info for the method being called
+        if (semanticModel.GetSymbolInfo(node.Expression).Symbol is not IMethodSymbol methodSymbol || methodSymbol.IsStatic || 
+            !SymbolEqualityComparer.Default.Equals(methodSymbol.ContainingType, containingType))
+        {
+            return node.WithArgumentList(newArgumentList);
+        }
+
+        // Add structView prefix
+        return node.WithExpression(
+            SyntaxFactory.MemberAccessExpression(
+                SyntaxKind.SimpleMemberAccessExpression,
+                SyntaxFactory.IdentifierName("structView"),
+                simpleName
+            )
+        ).WithArgumentList(newArgumentList);
+    }
+
+    public override SyntaxNode VisitMemberAccessExpression(MemberAccessExpressionSyntax node)
     {
         // First visit and transform the expression part (left side)
         var newExpression = Visit(node.Expression);
 
         // Not a member of our struct, preserve the original structure
         if (!IsMemberOfOurStruct(node.Expression))
-            return node.Update((ExpressionSyntax)newExpression!, node.OperatorToken, node.Name);
+            return node.Update((ExpressionSyntax)newExpression, node.OperatorToken, node.Name);
 
         // If this is a member of our struct, prefix with structView
         if (newExpression is MemberAccessExpressionSyntax syntax)
@@ -62,11 +106,16 @@ public class MemberAccessRewriter(
         );
     }
 
-    public override SyntaxNode? VisitIdentifierName(IdentifierNameSyntax node)
+    public override SyntaxNode VisitIdentifierName(IdentifierNameSyntax node)
     {
         // Skip if we're already part of a qualified access
         if (node.Parent is MemberAccessExpressionSyntax { Expression: IdentifierNameSyntax })
             return node;
+        
+        // Skip if this is a parameter, type parameter, or local variable
+        if (IsNotTransformable(node))
+            return node;
+
 
         // Check if standalone identifier is a member
         if (IsMemberOfOurStruct(node))
@@ -83,12 +132,12 @@ public class MemberAccessRewriter(
 
     public override SyntaxNode? VisitFieldExpression(FieldExpressionSyntax node)
     {
-        if (node.Token.IsKind(SyntaxKind.FieldKeyword))
+        if (node.Token.IsKind(SyntaxKind.FieldKeyword) && propertyName is not null)
         {
             return SyntaxFactory.MemberAccessExpression(
                 SyntaxKind.SimpleMemberAccessExpression,
                 SyntaxFactory.IdentifierName("structView"),
-                SyntaxFactory.IdentifierName($"{_propertyName}_BackingField")
+                SyntaxFactory.IdentifierName($"{propertyName}_BackingField")
             );
         }
 
@@ -97,9 +146,29 @@ public class MemberAccessRewriter(
 
     private bool IsMemberOfOurStruct(ExpressionSyntax expression)
     {
-        var symbolInfo = _semanticModel.GetSymbolInfo(expression);
+        var symbolInfo = semanticModel.GetSymbolInfo(expression);
         var symbol = symbolInfo.Symbol;
-        return symbol?.ContainingType != null
-            && SymbolEqualityComparer.Default.Equals(symbol.ContainingType, _containingType);
+
+        // For properties, fields, and methods
+        if (symbol?.ContainingType != null && 
+            SymbolEqualityComparer.Default.Equals(symbol.ContainingType, containingType))
+        {
+            return symbol switch
+            {
+                IPropertySymbol => true,
+                IFieldSymbol => true,
+                IMethodSymbol { IsStatic: false } => true,
+                _ => false
+            };
+        }
+
+        return false;
     }
+    
+    private bool IsNotTransformable(IdentifierNameSyntax node)
+    {
+        var symbol = semanticModel.GetSymbolInfo(node).Symbol;
+        return symbol is IParameterSymbol or ITypeParameterSymbol or ILocalSymbol;
+    }
+
 }

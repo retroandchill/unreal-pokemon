@@ -151,6 +151,14 @@ public class StructViewGenerator : IIncrementalGenerator
                 )
                 .Select(x => CreatePropertyInfo(x, structType, semanticModel))
                 .ToImmutableArray(),
+            Methods = structType
+                .GetMembers()
+                .Where(s => !s.IsStatic)
+                .OfType<IMethodSymbol>()
+                .Where(x => x.MethodKind == MethodKind.Ordinary)
+                .Select(x => TranslateMethod(x, structType, semanticModel))
+                .Where(x => x is not null)
+                .ToImmutableArray()
         };
 
         var handlebars = Handlebars.Create();
@@ -213,12 +221,8 @@ public class StructViewGenerator : IIncrementalGenerator
             {
                 // Handle block body
                 var rewrittenBlock = rewriter.Visit(getAccessor.Body);
-                
-                // This is a hack to get around the fact that extension blocks will have one additional level of
-                // indentation compared to a top-level struct declaration, so indenting every line after the first
-                // by 4 spaces will make the generated code look better.
-                getterBody = string.Join("\n", rewrittenBlock.ToString().Split('\n')
-                    .Select((x, i) => i == 0 ? x : $"    {x}"));
+
+                getterBody = IndentBody(rewrittenBlock);
             }
             else
             {
@@ -241,5 +245,72 @@ public class StructViewGenerator : IIncrementalGenerator
         };
 
         return baseInfo;
+    }
+
+    private static string IndentBody(SyntaxNode rewrittenBlock)
+    {
+        string getterBody;
+        // This is a hack to get around the fact that extension blocks will have one additional level of
+        // indentation compared to a top-level struct declaration, so indenting every line after the first
+        // by 4 spaces will make the generated code look better.
+        getterBody = string.Join("\n", rewrittenBlock.ToString().Split('\n')
+            .Select((x, i) => i == 0 ? x : $"    {x}"));
+        return getterBody;
+    }
+
+    private static TranslatedMethod? TranslateMethod(IMethodSymbol methodSymbol, 
+                                                     INamedTypeSymbol structType,
+                                                     SemanticModel? semanticModel)
+    {
+        if (semanticModel is null)
+        {
+            return null;
+        }
+
+        // Get the property syntax
+        var methodSyntax = methodSymbol.DeclaringSyntaxReferences
+            .Select(x => x.GetSyntax())
+            .OfType<MethodDeclarationSyntax>()
+            .FirstOrDefault(x => x.ExpressionBody is not null || x.Body is not null);
+        if (methodSyntax is null) return null;
+
+        try
+        {
+            // Create rewriter with semantic model
+            var rewriter = new MemberAccessRewriter(semanticModel, structType);
+
+            string methodBody;
+            if (methodSyntax.ExpressionBody is not null)
+            {
+                var rewrittenExpression = rewriter.Visit(methodSyntax.ExpressionBody.Expression);
+                methodBody = rewrittenExpression.ToString();
+                return new TranslatedMethod(methodSyntax.Modifiers.ToString(),
+                    methodSyntax.ReturnType.ToString(),
+                    methodSyntax.Identifier.ToString(),
+                    methodSyntax.TypeParameterList?.ToString(),
+                    methodSyntax.ParameterList.ToString(),
+                    methodSyntax.ConstraintClauses.ToString(),
+                    methodBody,
+                    true);
+            }
+
+            if (methodSyntax.Body is null) return null;
+
+            // Handle block body
+            var rewrittenBlock = rewriter.Visit(methodSyntax.Body);
+            methodBody = IndentBody(rewrittenBlock);
+            return new TranslatedMethod(methodSyntax.Modifiers.ToString(),
+                methodSyntax.ReturnType.ToString(),
+                methodSyntax.Identifier.ToString(),
+                methodSyntax.TypeParameterList?.ToString(),
+                methodSyntax.ParameterList.ToString(),
+                methodSyntax.ConstraintClauses.ToString(),
+                methodBody);
+
+            // We shouldn't get here but just to be safe
+        } catch (Exception)
+        {
+            return null;
+        }
     }
 }

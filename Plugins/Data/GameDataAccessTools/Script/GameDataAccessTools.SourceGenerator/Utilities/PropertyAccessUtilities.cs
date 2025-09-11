@@ -361,9 +361,9 @@ public static class PropertyAccessUtilities
                 );
             case CollectionType.Set:
                 return new MarshalledPropertyInfo(
-                    $"IReadOnlySet<{innerType.TransformedType(asValue)}>",
+                    $"IReadOnlySet<{innerType.TransformedType(true)}>",
                     new MarshallerInfo(
-                        $"SetCopyMarshaller<{innerType.TransformedType(asValue)}>",
+                        $"SetCopyMarshaller<{innerType.TransformedType(true)}>",
                         innerType.GetMarshallerName(true).MarshallerInfo.Name
                     )
                 );
@@ -373,9 +373,9 @@ public static class PropertyAccessUtilities
                     throw new ArgumentException("Value type must be specified for dictionary");
                 }
                 return new MarshalledPropertyInfo(
-                    $"IReadOnlyDictionary<{innerType.TransformedType(asValue)}, {valueType.TransformedType(asValue)}>",
+                    $"IReadOnlyDictionary<{innerType.TransformedType(true)}, {valueType.TransformedType(true)}>",
                     new MarshallerInfo(
-                        $"MapCopyMarshaller<{innerType.TransformedType(asValue)}, {valueType.TransformedType(asValue)}>",
+                        $"MapCopyMarshaller<{innerType.TransformedType(true)}, {valueType.TransformedType(true)}>",
                         innerType.GetMarshallerName(true).MarshallerInfo.Name,
                         valueType.GetMarshallerName(true).MarshallerInfo.Name
                     )

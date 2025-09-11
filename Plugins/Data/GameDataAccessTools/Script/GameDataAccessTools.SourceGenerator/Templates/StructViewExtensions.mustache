@@ -43,6 +43,13 @@ public static partial class {{EngineName}}ViewExtensions
         
         {{/HasGetterBody}}    
         {{/Properties}}
+        {{#Methods}}  
+        {{Modifiers}} {{ReturnType}} {{Name}}{{TypeParams}}{{ParameterList}} {{Constraints}}{{#IsExpressionBody}} => {{Body}};{{/IsExpressionBody}}
+        {{^IsExpressionBody}}
+        {{Body}}
+        {{/IsExpressionBody}}
+
+        {{/Methods}}
     }
 
     private static readonly IntPtr NativeClassPtr;
