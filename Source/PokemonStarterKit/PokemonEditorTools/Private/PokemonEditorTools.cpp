@@ -2,6 +2,7 @@
 #include "Bag/Item.h"
 #include "Battle/Status.h"
 #include "Details/DataHandleCustomization.h"
+#include "Details/EvolutionConditionDetails.h"
 #include "Details/WrappedKeyCustomization.h"
 #include "Moves/MoveData.h"
 #include "Pins/DataHandlePinFactory.h"
@@ -36,11 +37,18 @@ void FPokemonEditorToolsModule::StartupModule()
     REGISTER_WRAPPED_PROPERTY(PropertyModule, SpeciesHandle, RowID);
     REGISTER_WRAPPED_PROPERTY(PropertyModule, MoveHandle, RowID);
     REGISTER_WRAPPED_PROPERTY(PropertyModule, AbilityHandle, RowID);
+
+    EvolutionConditionPropertyIdentifier = MakeShared<FEvolutionConditionPropertyIdentifier>();
+    PropertyModule.RegisterCustomPropertyTypeLayout(
+        "StructProperty",
+        FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FEvolutionConditionDetails::MakeInstance),
+        EvolutionConditionPropertyIdentifier);
 }
 
 void FPokemonEditorToolsModule::ShutdownModule()
 {
-    // No shutdown required
+    auto &PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+    PropertyModule.UnregisterCustomPropertyTypeLayout("StructProperty", EvolutionConditionPropertyIdentifier);
 }
 
 IMPLEMENT_MODULE(FPokemonEditorToolsModule, PokemonEditorTools)

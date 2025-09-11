@@ -18,6 +18,7 @@ public class PokemonData : ModuleRules
                 "GameplayAbilities",
                 "RetroLib",
                 "UnrealSharpBinds",
+                "CommonUtilities",
             }
         );
 

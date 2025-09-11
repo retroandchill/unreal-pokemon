@@ -8,4 +8,7 @@ class FPokemonEditorToolsModule : public IModuleInterface
   public:
     void StartupModule() override;
     void ShutdownModule() override;
+
+  private:
+    TSharedPtr<class FEvolutionConditionPropertyIdentifier> EvolutionConditionPropertyIdentifier;
 };

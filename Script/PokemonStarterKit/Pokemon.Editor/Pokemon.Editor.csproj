@@ -9,6 +9,7 @@
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="CaseConverter" Version="2.0.1" />
     <PackageReference Include="CsvHelper" Version="33.1.0" />
     <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
     <PackageReference Include="Retro.ReadOnlyParams" Version="1.0.0" />

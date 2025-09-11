@@ -273,6 +273,9 @@ void FGameDataRepositoryEditor::OnAddEntry() const
 
     GameDataRepository->AddNewEntry(*RowName);
     RefreshList();
+
+    // ReSharper disable once CppExpressionWithoutSideEffects
+    GameDataRepository->MarkPackageDirty();
 }
 
 void FGameDataRepositoryEditor::OnDeleteEntry()
@@ -292,6 +295,9 @@ void FGameDataRepositoryEditor::OnDeleteEntry()
         CurrentRow.Emplace(NewIndex, GameDataRepository->IDProperty->GetPropertyValue_InContainer(CurrentEntry));
     }
     RefreshList();
+
+    // ReSharper disable once CppExpressionWithoutSideEffects
+    GameDataRepository->MarkPackageDirty();
 }
 
 void FGameDataRepositoryEditor::OnMoveEntryUp()
@@ -302,6 +308,9 @@ void FGameDataRepositoryEditor::OnMoveEntryUp()
     const auto *CurrentEntry = GameDataRepository->GetMutableEntryAtIndex(Entry.Index - 1);
     CurrentRow.Emplace(Entry.Index - 1, GameDataRepository->IDProperty->GetPropertyValue_InContainer(CurrentEntry));
     RefreshList();
+
+    // ReSharper disable once CppExpressionWithoutSideEffects
+    GameDataRepository->MarkPackageDirty();
 }
 
 void FGameDataRepositoryEditor::OnMoveEntryDown()
@@ -312,6 +321,9 @@ void FGameDataRepositoryEditor::OnMoveEntryDown()
     const auto *CurrentEntry = GameDataRepository->GetMutableEntryAtIndex(Entry.Index + 1);
     CurrentRow.Emplace(Entry.Index + 1, GameDataRepository->IDProperty->GetPropertyValue_InContainer(CurrentEntry));
     RefreshList();
+
+    // ReSharper disable once CppExpressionWithoutSideEffects
+    GameDataRepository->MarkPackageDirty();
 }
 
 void FGameDataRepositoryEditor::RefreshList() const
@@ -325,6 +337,9 @@ void FGameDataRepositoryEditor::RefreshList() const
 
 void FGameDataRepositoryEditor::OnPropertyChanged(const FPropertyChangedEvent &PropertyChangedEvent)
 {
+    // ReSharper disable once CppExpressionWithoutSideEffects
+    GameDataRepository->MarkPackageDirty();
+
     if (PropertyChangedEvent.GetPropertyName() != UGameDataRepository::EntryIDProperty)
     {
         return;

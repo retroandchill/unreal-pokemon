@@ -32,6 +32,8 @@ public class PokemonEditorTools : ModuleRules
                 "RetroLib",
                 "GameplayTagsEditor",
                 "GameplayTags",
+                "UnrealSharpCore",
+                "StructUtilsEditor",
             }
         );
     }

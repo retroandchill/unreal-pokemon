@@ -116,14 +116,14 @@ void FDataHandleCustomization::OnComboBoxSelectionChanged(TSharedPtr<FString> Ne
     TArray<void *> OuterStructs;
     Handle->AccessRawData(OuterStructs);
 
-    WrappedProperty->NotifyPreChange();
+    Handle->NotifyPreChange();
     for (const auto Struct : OuterStructs)
     {
         const auto *Entry = Options.Find(*NewSelection);
         auto Name = Entry != nullptr ? Entry->ID : NAME_None;
         WrappedProperty->GetProperty()->SetValue_InContainer(Struct, &Name);
     }
-    WrappedProperty->NotifyPostChange(EPropertyChangeType::ValueSet);
+    Handle->NotifyPostChange(EPropertyChangeType::ValueSet);
 }
 
 FText FDataHandleCustomization::GetComboBoxEntryText() const

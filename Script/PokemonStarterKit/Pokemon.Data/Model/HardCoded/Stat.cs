@@ -56,6 +56,9 @@ public readonly partial struct FStat : IGameDataEntry
     [UsedImplicitly]
     [field: UProperty(PropertyFlags.BlueprintReadOnly, DisplayName = "PBS Order")]
     public int PBSOrder { get; init; }
+
+    public bool IsMainStat => StatType is EStatType.Main or EStatType.MainBattle;
+    public bool IsBattleStat => StatType is EStatType.Battle or EStatType.MainBattle;
 }
 
 [UClass]

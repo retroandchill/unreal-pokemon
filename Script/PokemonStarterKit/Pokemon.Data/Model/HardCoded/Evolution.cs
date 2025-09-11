@@ -10,7 +10,6 @@ using UnrealSharp.CoreUObject;
 using UnrealSharp.Engine;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
-using FMoveHandle = UnrealSharp.PokemonData.FMoveHandle;
 
 namespace Pokemon.Data.Model.HardCoded;
 

@@ -224,6 +224,19 @@ public static class PropertyAccessUtilities
                         );
                 }
 
+                var classAttribute = typeSymbol
+                    .GetAttributes()
+                    .SingleOrDefault(attr =>
+                        attr.AttributeClass?.ToDisplayString() == SourceContextNames.UClassAttribute
+                    );
+                if (classAttribute is not null)
+                {
+                    return new MarshalledPropertyInfo(
+                        typeSymbol.ToDisplayString(),
+                        new MarshallerInfo($"ObjectMarshaller<{typeSymbol.ToDisplayString()}>")
+                    );
+                }
+
                 var structAttribute = typeSymbol
                     .GetAttributes()
                     .SingleOrDefault(attr =>

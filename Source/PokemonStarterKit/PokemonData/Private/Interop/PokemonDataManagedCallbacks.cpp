@@ -17,3 +17,15 @@ void FPokemonDataManagedCallbacks::CreateDataManager() const
 {
     Callbacks.StartDataManager();
 }
+
+tl::expected<UScriptStruct *, FString> FPokemonDataManagedCallbacks::GetEvolutionConditionClass(
+    const uint8 *Handle) const
+{
+    FString Error;
+    if (UScriptStruct * Result; Callbacks.GetEvolutionConditionClass(Handle, &Result, &Error))
+    {
+        return Result;
+    }
+
+    return tl::unexpected(MoveTemp(Error));
+}

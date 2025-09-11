@@ -85,7 +85,7 @@ public readonly partial struct FEvolutionCondition
     public FInstancedStruct Parameters { get; init; }
 
     public bool IsValid =>
-        Method.IsValid && ReferenceEquals(Method.Entry.Parameters, Parameters.StructType);
+        Method.IsValid && ReferenceEquals(Method.Entry.Parameter, Parameters.StructType);
 
     public T GetData<T>()
         where T : struct, MarshalledStruct<T>
@@ -255,6 +255,7 @@ public readonly partial struct FSpecies() : IGameDataEntry
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Breeding"
     )]
+    [field: UMetaData(Metadata.AllowNone)]
     public FItemHandle Incense { get; init; }
 
     [field: UProperty(
