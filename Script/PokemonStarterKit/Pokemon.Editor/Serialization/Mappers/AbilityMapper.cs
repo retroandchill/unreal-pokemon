@@ -11,6 +11,6 @@ namespace Pokemon.Editor.Serialization.Mappers;
 public static partial class AbilityMapper
 {
     public static partial FAbility ToAbility(this AbilityInfo abilityInfo);
-    
+
     public static partial AbilityInfo ToAbilityInfo(this FAbility ability);
 }

@@ -11,6 +11,6 @@ namespace Pokemon.Editor.Serialization.Mappers;
 public static partial class TypeMapper
 {
     public static partial FType ToType(this TypeInfo typeInfo);
-    
+
     public static partial TypeInfo ToTypeInfo(this FType type);
 }

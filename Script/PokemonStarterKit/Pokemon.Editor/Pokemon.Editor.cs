@@ -17,29 +17,36 @@ public class FPokemonEditorModule : IModuleInterface
     {
         PbsSerializer.Initialize();
 
-        PbsSerializer.Instance
-            .RegisterSerializer(new MappingPbsSerializer<TypeInfo, FType>(
-                x => x.ToType(),
-                x => x.ToTypeInfo()))
-            .RegisterSerializer(new MappingPbsSerializer<AbilityInfo, FAbility>(
-                x => x.ToAbility(),
-                x => x.ToAbilityInfo()))
-            .RegisterSerializer(new MappingPbsSerializer<MoveInfo, FMove>(
-                x => x.ToMove(),
-                x => x.ToMoveInfo()))
-            .RegisterSerializer(new MappingPbsSerializer<ItemInfo, FItem>(
-                x => x.ToItem(),
-                x => x.ToItemInfo()))
-            .RegisterSerializer(new MappingPbsSerializer<BerryPlantInfo, FBerryPlant>(
-                x => x.ToBerryPlant(),
-                x => x.ToBerryPlantInfo()));
+        PbsSerializer
+            .Instance.RegisterSerializer(
+                new MappingPbsSerializer<TypeInfo, FType>(x => x.ToType(), x => x.ToTypeInfo())
+            )
+            .RegisterSerializer(
+                new MappingPbsSerializer<AbilityInfo, FAbility>(
+                    x => x.ToAbility(),
+                    x => x.ToAbilityInfo()
+                )
+            )
+            .RegisterSerializer(
+                new MappingPbsSerializer<MoveInfo, FMove>(x => x.ToMove(), x => x.ToMoveInfo())
+            )
+            .RegisterSerializer(
+                new MappingPbsSerializer<ItemInfo, FItem>(x => x.ToItem(), x => x.ToItemInfo())
+            )
+            .RegisterSerializer(
+                new MappingPbsSerializer<BerryPlantInfo, FBerryPlant>(
+                    x => x.ToBerryPlant(),
+                    x => x.ToBerryPlantInfo()
+                )
+            );
     }
 
     public void ShutdownModule()
     {
         PbsSerializer.Shutdown();
 
-        PbsSerializer.Instance.RemoveSerializer<FType>()
+        PbsSerializer
+            .Instance.RemoveSerializer<FType>()
             .RemoveSerializer<FAbility>()
             .RemoveSerializer<FMove>()
             .RemoveSerializer<FItem>()

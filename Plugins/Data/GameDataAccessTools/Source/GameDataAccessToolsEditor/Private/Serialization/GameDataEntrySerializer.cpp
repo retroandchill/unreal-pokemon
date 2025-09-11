@@ -20,16 +20,15 @@ FString UGameDataEntrySerializer::GetFileExtensionText() const
     return TEXT("");
 }
 
-bool UGameDataEntrySerializer::Serialize(const FString &FilePath,
-                                                        const UAssetGameDataRepository *Repository,
-                                                        FString &ErrorMessage) const
+bool UGameDataEntrySerializer::Serialize(const FString &FilePath, const UAssetGameDataRepository *Repository,
+                                         FString &ErrorMessage) const
 {
     PURE_VIRTUAL(UGameDataEntrySerializer::Serialize_Implementation);
     return false;
 }
 
 bool UGameDataEntrySerializer::Deserialize(const FString &FilePath, UAssetGameDataRepository *Repository,
-                                                          FString &ErrorMessage) const
+                                           FString &ErrorMessage) const
 {
     PURE_VIRTUAL(UGameDataEntrySerializer::Deserialize_Implementation);
     return false;

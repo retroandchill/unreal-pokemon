@@ -26,7 +26,7 @@ public record ItemInfo
 
     [PbsLocalizedText("PokemonItems", "{0}_PortionDisplayNamePlural")]
     public FText PortionNamePlural { get; init; } = FText.None;
-    
+
     public bool? ShowQuantity { get; init; }
 
     [PbsLocalizedText("PokemonItems", "{0}_Description")]
@@ -54,7 +54,7 @@ public record ItemInfo
 
     [PbsName("Consumable")]
     public bool? IsConsumable { get; init; }
-    
+
     public FName Move { get; init; }
 
     [PbsName("Flags")]

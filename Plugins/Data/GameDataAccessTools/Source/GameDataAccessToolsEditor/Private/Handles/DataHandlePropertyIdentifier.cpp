@@ -13,7 +13,8 @@ bool FDataHandlePropertyIdentifier::IsPropertyTypeCustomized(const IPropertyHand
         return false;
     }
 
-    if (CastField<FNameProperty>(ManagedStruct->FindPropertyByName("ID")) == nullptr) {
+    if (CastField<FNameProperty>(ManagedStruct->FindPropertyByName("ID")) == nullptr)
+    {
         return false;
     }
 

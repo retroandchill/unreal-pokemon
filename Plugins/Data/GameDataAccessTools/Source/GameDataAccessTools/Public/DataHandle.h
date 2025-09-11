@@ -3,10 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "DataHandle.generated.h"
 
 /**
- * 
+ *
  */
 USTRUCT(meta = (RecordStruct, UseProperties, ReadOnly))
 struct FDataHandleEntry

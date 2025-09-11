@@ -36,9 +36,8 @@ FText UGameDataEntryJsonSerializer::GetFormatName() const
     return NSLOCTEXT("GameDataEntryJsonSerializer", "FormatName", "JSON");
 }
 
-bool UGameDataEntryJsonSerializer::Serialize(const FString &FilePath,
-                                                            const UAssetGameDataRepository *Repository,
-                                                            FString &ErrorMessage) const
+bool UGameDataEntryJsonSerializer::Serialize(const FString &FilePath, const UAssetGameDataRepository *Repository,
+                                             FString &ErrorMessage) const
 {
     auto &GameDataEntries = GetGameDataEntries(Repository);
 
@@ -73,9 +72,8 @@ bool UGameDataEntryJsonSerializer::Serialize(const FString &FilePath,
     return true;
 }
 
-bool UGameDataEntryJsonSerializer::Deserialize(const FString &FilePath,
-                                                              UAssetGameDataRepository *Repository,
-                                                              FString &ErrorMessage) const
+bool UGameDataEntryJsonSerializer::Deserialize(const FString &FilePath, UAssetGameDataRepository *Repository,
+                                               FString &ErrorMessage) const
 {
     FString JsonString;
     if (!FFileHelper::LoadFileToString(JsonString, *FilePath))

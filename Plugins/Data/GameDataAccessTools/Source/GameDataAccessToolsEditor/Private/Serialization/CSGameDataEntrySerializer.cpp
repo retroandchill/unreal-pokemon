@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Serialization/CSGameDataEntrySerializer.h"
 
 bool UCSGameDataEntrySerializer::Supports(const TSubclassOf<UAssetGameDataRepository> RepositoryClass)
@@ -19,13 +18,13 @@ FText UCSGameDataEntrySerializer::GetFormatName() const
 }
 
 bool UCSGameDataEntrySerializer::Serialize(const FString &FilePath, const UAssetGameDataRepository *Repository,
-    FString &ErrorMessage) const
+                                           FString &ErrorMessage) const
 {
     return K2_Serialize(FilePath, Repository, ErrorMessage);
 }
 
 bool UCSGameDataEntrySerializer::Deserialize(const FString &FilePath, UAssetGameDataRepository *Repository,
-    FString &ErrorMessage) const
+                                             FString &ErrorMessage) const
 {
     return K2_Deserialize(FilePath, Repository, ErrorMessage);
 }

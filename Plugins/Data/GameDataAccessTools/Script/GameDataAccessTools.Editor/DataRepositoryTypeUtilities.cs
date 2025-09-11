@@ -9,16 +9,17 @@ public static class DataRepositoryTypeUtilities
 {
     public static bool IsGameDataHandle(this Type managedStructType)
     {
-        return managedStructType.GetInterfaces()
-            .Any(i => i == typeof(IDataHandle));
+        return managedStructType.GetInterfaces().Any(i => i == typeof(IDataHandle));
     }
 
     public static IEnumerable<FDataHandleEntry> GetDataHandleEntries(this Type managedStructType)
     {
-        var genericMethod = typeof(DataRepositoryTypeUtilities)
-            .GetMethod(nameof(GetDataHandleEntriesInternal), BindingFlags.NonPublic | BindingFlags.Static);
+        var genericMethod = typeof(DataRepositoryTypeUtilities).GetMethod(
+            nameof(GetDataHandleEntriesInternal),
+            BindingFlags.NonPublic | BindingFlags.Static
+        );
         ArgumentNullException.ThrowIfNull(genericMethod);
-        
+
         var instancedGeneric = genericMethod.MakeGenericMethod(managedStructType);
         ArgumentNullException.ThrowIfNull(instancedGeneric);
 
@@ -37,7 +38,8 @@ public static class DataRepositoryTypeUtilities
         }
     }
 
-    private static IEnumerable<FDataHandleEntry> GetDataHandleEntriesInternal<T>() where T : IDataHandle
+    private static IEnumerable<FDataHandleEntry> GetDataHandleEntriesInternal<T>()
+        where T : IDataHandle
     {
         return T.Entries;
     }

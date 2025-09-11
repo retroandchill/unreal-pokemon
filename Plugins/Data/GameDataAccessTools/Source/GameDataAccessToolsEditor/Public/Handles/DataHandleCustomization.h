@@ -23,7 +23,7 @@ class GAMEDATAACCESSTOOLSEDITOR_API FDataHandleCustomization final : public IPro
     static TSharedRef<SWidget> GenerateComboBoxEntry(TSharedPtr<FString> Value);
     void OnComboBoxSelectionChanged(TSharedPtr<FString> NewSelection, ESelectInfo::Type SelectInfo);
     FText GetComboBoxEntryText() const;
-    static FText GetComboBoxEntryText(const TSharedPtr<FString> & Value);
+    static FText GetComboBoxEntryText(const TSharedPtr<FString> &Value);
     bool AllowsNone() const;
 
     TSharedPtr<IPropertyHandle> Handle;

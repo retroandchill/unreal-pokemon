@@ -54,11 +54,13 @@ public record AccessiblePropertyInfo(string Access, string Type, string Name)
     public bool IsExpressionBody { get; init; } = false;
 }
 
-public record TranslatedMethod(string Modifiers, 
-                               string ReturnType, 
-                               string Name, 
-                               string? TypeParams,
-                               string ParameterList, 
-                               string Constraints, 
-                               string Body, 
-                               bool IsExpressionBody = false);
+public record TranslatedMethod(
+    string Modifiers,
+    string ReturnType,
+    string Name,
+    string? TypeParams,
+    string ParameterList,
+    string Constraints,
+    string Body,
+    bool IsExpressionBody = false
+);

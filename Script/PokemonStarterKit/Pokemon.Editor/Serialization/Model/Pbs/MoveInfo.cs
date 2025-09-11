@@ -20,7 +20,7 @@ public record MoveInfo
 
     [PbsLocalizedText("PokemonMoves", "{0}_Description")]
     public FText Description { get; init; } = "???";
-    
+
     public FName Type { get; init; }
 
     public EDamageCategory Category { get; init; } = EDamageCategory.Status;
@@ -35,7 +35,7 @@ public record MoveInfo
     public int TotalPP { get; init; } = 5;
 
     public int Priority { get; init; }
-    
+
     public FName Target { get; init; }
 
     [PbsGameplayTag(IdentifierConstants.FunctionCodeTag, Create = true)]

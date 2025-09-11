@@ -26,22 +26,31 @@ public readonly partial struct FBerryPlant() : IGameDataEntry
     )]
     public int RowIndex { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Growth")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Growth"
+    )]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     public int HoursPerStage { get; init; } = 3;
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Growth")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Growth"
+    )]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     public int DryingPerHour { get; init; } = 15;
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Growth")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Growth"
+    )]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     [AsValue]
     public FInt32Range Yield { get; init; }
-    
+
     public int MinimumYield => Yield.LowerBound.Value;
 
     public int MaximumYield => Yield.UpperBound.Value;
@@ -53,6 +62,9 @@ public readonly partial struct FBerryPlant() : IGameDataEntry
 public partial class UBerryPlantRepository : UAssetGameDataRepository;
 
 [UStruct]
-[DataHandle(typeof(GameData), nameof(GameData.BerryPlants),
-    ComparableTypes = [typeof(FItemHandle)])]
+[DataHandle(
+    typeof(GameData),
+    nameof(GameData.BerryPlants),
+    ComparableTypes = [typeof(FItemHandle)]
+)]
 public readonly partial record struct FBerryPlantHandle;

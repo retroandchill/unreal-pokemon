@@ -29,9 +29,9 @@ public class PokemonEditorTools : ModuleRules
                 "BlueprintGraph",
                 "ToolWidgets",
                 "PokemonBlueprintNodes",
-                "RetroLib", 
+                "RetroLib",
                 "GameplayTagsEditor",
-                "GameplayTags"
+                "GameplayTags",
             }
         );
     }

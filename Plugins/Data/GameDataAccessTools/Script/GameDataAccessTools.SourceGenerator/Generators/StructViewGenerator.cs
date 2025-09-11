@@ -106,7 +106,6 @@ public class StructViewGenerator : IIncrementalGenerator
             return;
         }
 
-
         HashSet<string> usedNamespaces =
         [
             "using LanguageExt;",
@@ -118,26 +117,26 @@ public class StructViewGenerator : IIncrementalGenerator
             "using GameDataAccessTools.Core;",
             "using GameDataAccessTools.Core.Views;",
             "using GameDataAccessTools.Core.Marshallers;",
-            "using GameDataAccessTools.Core.Utilities;"
+            "using GameDataAccessTools.Core.Utilities;",
         ];
 
-        foreach (var ns in structType.DeclaringSyntaxReferences
-                     .Select(x => x.GetSyntax())
-                     .OfType<StructDeclarationSyntax>()
-                     .Select(x => x.SyntaxTree)
-                     .Select(syntaxTree => syntaxTree.GetRoot())
-                     .OfType<CompilationUnitSyntax>()
-                     .Select(x => x.Usings)
-                     .Select(x => x.ToString()))
+        foreach (
+            var ns in structType
+                .DeclaringSyntaxReferences.Select(x => x.GetSyntax())
+                .OfType<StructDeclarationSyntax>()
+                .Select(x => x.SyntaxTree)
+                .Select(syntaxTree => syntaxTree.GetRoot())
+                .OfType<CompilationUnitSyntax>()
+                .Select(x => x.Usings)
+                .Select(x => x.ToString())
+        )
         {
             usedNamespaces.Add(ns);
         }
 
         var templateParams = new
         {
-            Usings = usedNamespaces
-                .Select(x => new UsingDeclaration(x))
-                .ToImmutableArray(),
+            Usings = usedNamespaces.Select(x => new UsingDeclaration(x)).ToImmutableArray(),
             Namespace = structType.ContainingNamespace.ToDisplayString(),
             StructName = structType.Name,
             EngineName = structType.Name[1..],
@@ -158,7 +157,7 @@ public class StructViewGenerator : IIncrementalGenerator
                 .Where(x => x.MethodKind == MethodKind.Ordinary)
                 .Select(x => TranslateMethod(x, structType, semanticModel))
                 .Where(x => x is not null)
-                .ToImmutableArray()
+                .ToImmutableArray(),
         };
 
         var handlebars = Handlebars.Create();
@@ -241,7 +240,7 @@ public class StructViewGenerator : IIncrementalGenerator
                 .GetMembers()
                 .OfType<IFieldSymbol>()
                 .Any(f => SymbolEqualityComparer.Default.Equals(f.AssociatedSymbol, member)),
-            IsExpressionBody = isExpressionBody
+            IsExpressionBody = isExpressionBody,
         };
 
         return baseInfo;
@@ -253,14 +252,18 @@ public class StructViewGenerator : IIncrementalGenerator
         // This is a hack to get around the fact that extension blocks will have one additional level of
         // indentation compared to a top-level struct declaration, so indenting every line after the first
         // by 4 spaces will make the generated code look better.
-        getterBody = string.Join("\n", rewrittenBlock.ToString().Split('\n')
-            .Select((x, i) => i == 0 ? x : $"    {x}"));
+        getterBody = string.Join(
+            "\n",
+            rewrittenBlock.ToString().Split('\n').Select((x, i) => i == 0 ? x : $"    {x}")
+        );
         return getterBody;
     }
 
-    private static TranslatedMethod? TranslateMethod(IMethodSymbol methodSymbol, 
-                                                     INamedTypeSymbol structType,
-                                                     SemanticModel? semanticModel)
+    private static TranslatedMethod? TranslateMethod(
+        IMethodSymbol methodSymbol,
+        INamedTypeSymbol structType,
+        SemanticModel? semanticModel
+    )
     {
         if (semanticModel is null)
         {
@@ -268,11 +271,12 @@ public class StructViewGenerator : IIncrementalGenerator
         }
 
         // Get the property syntax
-        var methodSyntax = methodSymbol.DeclaringSyntaxReferences
-            .Select(x => x.GetSyntax())
+        var methodSyntax = methodSymbol
+            .DeclaringSyntaxReferences.Select(x => x.GetSyntax())
             .OfType<MethodDeclarationSyntax>()
             .FirstOrDefault(x => x.ExpressionBody is not null || x.Body is not null);
-        if (methodSyntax is null) return null;
+        if (methodSyntax is null)
+            return null;
 
         try
         {
@@ -284,31 +288,37 @@ public class StructViewGenerator : IIncrementalGenerator
             {
                 var rewrittenExpression = rewriter.Visit(methodSyntax.ExpressionBody.Expression);
                 methodBody = rewrittenExpression.ToString();
-                return new TranslatedMethod(methodSyntax.Modifiers.ToString(),
+                return new TranslatedMethod(
+                    methodSyntax.Modifiers.ToString(),
                     methodSyntax.ReturnType.ToString(),
                     methodSyntax.Identifier.ToString(),
                     methodSyntax.TypeParameterList?.ToString(),
                     methodSyntax.ParameterList.ToString(),
                     methodSyntax.ConstraintClauses.ToString(),
                     methodBody,
-                    true);
+                    true
+                );
             }
 
-            if (methodSyntax.Body is null) return null;
+            if (methodSyntax.Body is null)
+                return null;
 
             // Handle block body
             var rewrittenBlock = rewriter.Visit(methodSyntax.Body);
             methodBody = IndentBody(rewrittenBlock);
-            return new TranslatedMethod(methodSyntax.Modifiers.ToString(),
+            return new TranslatedMethod(
+                methodSyntax.Modifiers.ToString(),
                 methodSyntax.ReturnType.ToString(),
                 methodSyntax.Identifier.ToString(),
                 methodSyntax.TypeParameterList?.ToString(),
                 methodSyntax.ParameterList.ToString(),
                 methodSyntax.ConstraintClauses.ToString(),
-                methodBody);
+                methodBody
+            );
 
             // We shouldn't get here but just to be safe
-        } catch (Exception)
+        }
+        catch (Exception)
         {
             return null;
         }

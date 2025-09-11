@@ -21,7 +21,7 @@ class GAMEDATAACCESSTOOLSEDITOR_API UGameDataEntryJsonSerializer : public UGameD
     FString GetFileExtensionText() const override;
     FText GetFormatName() const override;
     bool Serialize(const FString &FilePath, const UAssetGameDataRepository *Repository,
-                                  FString &ErrorMessage) const override;
+                   FString &ErrorMessage) const override;
     bool Deserialize(const FString &FilePath, UAssetGameDataRepository *Repository,
-        FString &ErrorMessage) const override;
+                     FString &ErrorMessage) const override;
 };

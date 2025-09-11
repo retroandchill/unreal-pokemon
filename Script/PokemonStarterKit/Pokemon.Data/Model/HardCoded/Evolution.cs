@@ -108,7 +108,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.Level,
                 Name = FText.Localized(LocalizationNamespace, "Level", "Level"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -117,7 +117,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelMale,
                 Name = FText.Localized(LocalizationNamespace, "LevelMale", "LevelMale"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -126,7 +126,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelFemale,
                 Name = FText.Localized(LocalizationNamespace, "LevelFemale", "LevelFemale"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -135,7 +135,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelDay,
                 Name = FText.Localized(LocalizationNamespace, "LevelDay", "LevelDay"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -144,7 +144,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelNight,
                 Name = FText.Localized(LocalizationNamespace, "LevelNight", "LevelNight"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -153,7 +153,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelMorning,
                 Name = FText.Localized(LocalizationNamespace, "LevelMorning", "LevelMorning"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -162,7 +162,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelAfternoon,
                 Name = FText.Localized(LocalizationNamespace, "LevelAfternoon", "LevelAfternoon"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -171,7 +171,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelEvening,
                 Name = FText.Localized(LocalizationNamespace, "LevelEvening", "LevelEvening"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -180,7 +180,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelNoWeather,
                 Name = FText.Localized(LocalizationNamespace, "LevelNoWeather", "LevelNoWeather"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -189,7 +189,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelSun,
                 Name = FText.Localized(LocalizationNamespace, "LevelSun", "LevelSun"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -198,7 +198,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelRain,
                 Name = FText.Localized(LocalizationNamespace, "LevelRain", "LevelRain"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -207,7 +207,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelSnow,
                 Name = FText.Localized(LocalizationNamespace, "LevelSnow", "LevelSnow"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -216,7 +216,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelSandstorm,
                 Name = FText.Localized(LocalizationNamespace, "LevelSandstorm", "LevelSandstorm"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -225,7 +225,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelCycling,
                 Name = FText.Localized(LocalizationNamespace, "LevelCycling", "LevelCycling"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -234,7 +234,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelSurfing,
                 Name = FText.Localized(LocalizationNamespace, "LevelSurfing", "LevelSurfing"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -243,7 +243,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelDiving,
                 Name = FText.Localized(LocalizationNamespace, "LevelDiving", "LevelDiving"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -252,7 +252,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LevelDarkness,
                 Name = FText.Localized(LocalizationNamespace, "LevelDarkness", "LevelDarkness"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -260,8 +260,12 @@ public static class EvolutionExtensions
             new FEvolution
             {
                 ID = FEvolution.LevelDarkInParty,
-                Name = FText.Localized(LocalizationNamespace, "LevelDarkInParty", "LevelDarkInParty"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Name = FText.Localized(
+                    LocalizationNamespace,
+                    "LevelDarkInParty",
+                    "LevelDarkInParty"
+                ),
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -270,7 +274,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.AttackGreater,
                 Name = FText.Localized(LocalizationNamespace, "AttackGreater", "AttackGreater"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -279,7 +283,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.AtkDefEqual,
                 Name = FText.Localized(LocalizationNamespace, "AtkDefEqual", "AtkDefEqual"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -288,7 +292,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.DefenseGreater,
                 Name = FText.Localized(LocalizationNamespace, "DefenseGreater", "DefenseGreater"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -297,7 +301,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.Silcoon,
                 Name = FText.Localized(LocalizationNamespace, "Silcoon", "Silcoon"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -306,7 +310,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.Cascoon,
                 Name = FText.Localized(LocalizationNamespace, "Cascoon", "Cascoon"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -315,7 +319,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.Ninjask,
                 Name = FText.Localized(LocalizationNamespace, "Ninjask", "Ninjask"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -324,7 +328,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.Shedinja,
                 Name = FText.Localized(LocalizationNamespace, "Shedinja", "Shedinja"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -373,7 +377,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.HappinessMove,
                 Name = FText.Localized(LocalizationNamespace, "HappinessMove", "HappinessMove"),
-                Parameter = FMoveEvolutionConditionData.StaticStruct
+                Parameter = FMoveEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -381,8 +385,12 @@ public static class EvolutionExtensions
             new FEvolution
             {
                 ID = FEvolution.HappinessMoveType,
-                Name = FText.Localized(LocalizationNamespace, "HappinessMoveType", "HappinessMoveType"),
-                Parameter = FTypeEvolutionConditionData.StaticStruct
+                Name = FText.Localized(
+                    LocalizationNamespace,
+                    "HappinessMoveType",
+                    "HappinessMoveType"
+                ),
+                Parameter = FTypeEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -390,8 +398,12 @@ public static class EvolutionExtensions
             new FEvolution
             {
                 ID = FEvolution.HappinessHoldItem,
-                Name = FText.Localized(LocalizationNamespace, "HappinessHoldItem", "HappinessHoldItem"),
-                Parameter = FItemEvolutionConditionData.StaticStruct
+                Name = FText.Localized(
+                    LocalizationNamespace,
+                    "HappinessHoldItem",
+                    "HappinessHoldItem"
+                ),
+                Parameter = FItemEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -399,7 +411,7 @@ public static class EvolutionExtensions
             new FEvolution
             {
                 ID = FEvolution.MaxHappiness,
-                Name = FText.Localized(LocalizationNamespace, "MaxHappiness", "MaxHappiness")
+                Name = FText.Localized(LocalizationNamespace, "MaxHappiness", "MaxHappiness"),
             }
         );
 
@@ -408,7 +420,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.Beauty,
                 Name = FText.Localized(LocalizationNamespace, "Beauty", "Beauty"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -417,7 +429,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.HoldItem,
                 Name = FText.Localized(LocalizationNamespace, "HoldItem", "HoldItem"),
-                Parameter = FItemEvolutionConditionData.StaticStruct
+                Parameter = FItemEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -426,7 +438,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.HoldItemMale,
                 Name = FText.Localized(LocalizationNamespace, "HoldItemMale", "HoldItemMale"),
-                Parameter = FItemEvolutionConditionData.StaticStruct
+                Parameter = FItemEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -435,7 +447,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.HoldItemFemale,
                 Name = FText.Localized(LocalizationNamespace, "HoldItemFemale", "HoldItemFemale"),
-                Parameter = FItemEvolutionConditionData.StaticStruct
+                Parameter = FItemEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -444,7 +456,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.DayHoldItem,
                 Name = FText.Localized(LocalizationNamespace, "DayHoldItem", "DayHoldItem"),
-                Parameter = FItemEvolutionConditionData.StaticStruct
+                Parameter = FItemEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -453,7 +465,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.NightHoldItem,
                 Name = FText.Localized(LocalizationNamespace, "NightHoldItem", "NightHoldItem"),
-                Parameter = FItemEvolutionConditionData.StaticStruct
+                Parameter = FItemEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -461,8 +473,12 @@ public static class EvolutionExtensions
             new FEvolution
             {
                 ID = FEvolution.HoldItemHappiness,
-                Name = FText.Localized(LocalizationNamespace, "HoldItemHappiness", "HoldItemHappiness"),
-                Parameter = FItemEvolutionConditionData.StaticStruct
+                Name = FText.Localized(
+                    LocalizationNamespace,
+                    "HoldItemHappiness",
+                    "HoldItemHappiness"
+                ),
+                Parameter = FItemEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -471,7 +487,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.HasMove,
                 Name = FText.Localized(LocalizationNamespace, "HasMove", "HasMove"),
-                Parameter = FMoveEvolutionConditionData.StaticStruct
+                Parameter = FMoveEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -480,7 +496,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.HasMoveType,
                 Name = FText.Localized(LocalizationNamespace, "HasMoveType", "HasMoveType"),
-                Parameter = FTypeEvolutionConditionData.StaticStruct
+                Parameter = FTypeEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -489,7 +505,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.HasInParty,
                 Name = FText.Localized(LocalizationNamespace, "HasInParty", "HasInParty"),
-                Parameter = FSpeciesEvolutionConditionData.StaticStruct
+                Parameter = FSpeciesEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -498,7 +514,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.Location,
                 Name = FText.Localized(LocalizationNamespace, "Location", "Location"),
-                Parameter = FLocationEvolutionConditionData.StaticStruct
+                Parameter = FLocationEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -507,7 +523,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.LocationFlag,
                 Name = FText.Localized(LocalizationNamespace, "LocationFlag", "LocationFlag"),
-                Parameter = FLocationFlagEvolutionConditionData.StaticStruct
+                Parameter = FLocationFlagEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -516,7 +532,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.Region,
                 Name = FText.Localized(LocalizationNamespace, "Region", "Region"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -525,7 +541,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.Item,
                 Name = FText.Localized(LocalizationNamespace, "Item", "Item"),
-                Parameter = FItemEvolutionConditionData.StaticStruct
+                Parameter = FItemEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -534,7 +550,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.ItemMale,
                 Name = FText.Localized(LocalizationNamespace, "ItemMale", "ItemMale"),
-                Parameter = FItemEvolutionConditionData.StaticStruct
+                Parameter = FItemEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -543,7 +559,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.ItemFemale,
                 Name = FText.Localized(LocalizationNamespace, "ItemFemale", "ItemFemale"),
-                Parameter = FItemEvolutionConditionData.StaticStruct
+                Parameter = FItemEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -552,7 +568,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.ItemDay,
                 Name = FText.Localized(LocalizationNamespace, "ItemDay", "ItemDay"),
-                Parameter = FItemEvolutionConditionData.StaticStruct
+                Parameter = FItemEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -561,7 +577,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.ItemNight,
                 Name = FText.Localized(LocalizationNamespace, "ItemNight", "ItemNight"),
-                Parameter = FItemEvolutionConditionData.StaticStruct
+                Parameter = FItemEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -570,7 +586,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.ItemHappiness,
                 Name = FText.Localized(LocalizationNamespace, "ItemHappiness", "ItemHappiness"),
-                Parameter = FItemEvolutionConditionData.StaticStruct
+                Parameter = FItemEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -578,7 +594,7 @@ public static class EvolutionExtensions
             new FEvolution
             {
                 ID = FEvolution.Trade,
-                Name = FText.Localized(LocalizationNamespace, "Trade", "Trade")
+                Name = FText.Localized(LocalizationNamespace, "Trade", "Trade"),
             }
         );
 
@@ -586,7 +602,7 @@ public static class EvolutionExtensions
             new FEvolution
             {
                 ID = FEvolution.TradeMale,
-                Name = FText.Localized(LocalizationNamespace, "TradeMale", "TradeMale")
+                Name = FText.Localized(LocalizationNamespace, "TradeMale", "TradeMale"),
             }
         );
 
@@ -594,7 +610,7 @@ public static class EvolutionExtensions
             new FEvolution
             {
                 ID = FEvolution.TradeFemale,
-                Name = FText.Localized(LocalizationNamespace, "TradeFemale", "TradeFemale")
+                Name = FText.Localized(LocalizationNamespace, "TradeFemale", "TradeFemale"),
             }
         );
 
@@ -602,7 +618,7 @@ public static class EvolutionExtensions
             new FEvolution
             {
                 ID = FEvolution.TradeDay,
-                Name = FText.Localized(LocalizationNamespace, "TradeDay", "TradeDay")
+                Name = FText.Localized(LocalizationNamespace, "TradeDay", "TradeDay"),
             }
         );
 
@@ -610,7 +626,7 @@ public static class EvolutionExtensions
             new FEvolution
             {
                 ID = FEvolution.TradeNight,
-                Name = FText.Localized(LocalizationNamespace, "TradeNight", "TradeNight")
+                Name = FText.Localized(LocalizationNamespace, "TradeNight", "TradeNight"),
             }
         );
 
@@ -619,7 +635,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.TradeItem,
                 Name = FText.Localized(LocalizationNamespace, "TradeItem", "TradeItem"),
-                Parameter = FItemEvolutionConditionData.StaticStruct
+                Parameter = FItemEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -628,7 +644,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.TradeSpecies,
                 Name = FText.Localized(LocalizationNamespace, "TradeSpecies", "TradeSpecies"),
-                Parameter = FSpeciesEvolutionConditionData.StaticStruct
+                Parameter = FSpeciesEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -636,8 +652,12 @@ public static class EvolutionExtensions
             new FEvolution
             {
                 ID = FEvolution.BattleDealCriticalHit,
-                Name = FText.Localized(LocalizationNamespace, "BattleDealCriticalHit", "BattleDealCriticalHit"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Name = FText.Localized(
+                    LocalizationNamespace,
+                    "BattleDealCriticalHit",
+                    "BattleDealCriticalHit"
+                ),
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -646,7 +666,7 @@ public static class EvolutionExtensions
             {
                 ID = FEvolution.Event,
                 Name = FText.Localized(LocalizationNamespace, "Event", "Event"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 
@@ -654,8 +674,12 @@ public static class EvolutionExtensions
             new FEvolution
             {
                 ID = FEvolution.EventAfterDamageTaken,
-                Name = FText.Localized(LocalizationNamespace, "EventAfterDamageTaken", "EventAfterDamageTaken"),
-                Parameter = FIntEvolutionConditionData.StaticStruct
+                Name = FText.Localized(
+                    LocalizationNamespace,
+                    "EventAfterDamageTaken",
+                    "EventAfterDamageTaken"
+                ),
+                Parameter = FIntEvolutionConditionData.StaticStruct,
             }
         );
 

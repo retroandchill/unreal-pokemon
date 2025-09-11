@@ -128,7 +128,10 @@ public readonly partial struct FItem() : IGameDataEntry
         init;
     } = FText.None;
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Display"
+    )]
     public bool ShowQuantity
     {
         get => field && IsImportant;
@@ -140,25 +143,37 @@ public readonly partial struct FItem() : IGameDataEntry
         Category = "Display"
     )]
     public FText Description { get; init; } = "???";
-    
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "BagInfo")]
+
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "BagInfo"
+    )]
     [field: Categories(IdentifierConstants.PocketTag)]
     public FGameplayTag Pocket { get; init; }
-    
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Price")]
+
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Price"
+    )]
     public bool CanSell { get; init; } = true;
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Price")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Price"
+    )]
     [field: EditCondition(nameof(CanSell))]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     public int Price { get; init; } = 0;
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Price")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Price"
+    )]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     public int SellPrice { get; init; } = 0;
-    
+
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         DisplayName = "BP Price",
@@ -169,28 +184,43 @@ public readonly partial struct FItem() : IGameDataEntry
     [field: UIMin("1")]
     public int BPPrice { get; init; } = 1;
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Usage")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Usage"
+    )]
     public EFieldUse FieldUse { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Usage")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Usage"
+    )]
     public EBattleUse BattleUse { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Usage")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Usage"
+    )]
     [field: Categories(IdentifierConstants.BattleUseTag)]
     [field: EditCondition(
         $"{nameof(BattleUse)} != {nameof(EBattleUse)}::{nameof(EBattleUse.NoBattleUse)}"
     )]
     [field: EditConditionHides]
     public FGameplayTagContainer BattleUsageCategories { get; init; }
-    
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Usage")]
+
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Usage"
+    )]
     public bool IsConsumable { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Usage")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Usage"
+    )]
     [field: EditCondition(
         $"{nameof(FieldUse)} == FieldUse::{nameof(EFieldUse.TM)} || "
-        + $"{nameof(FieldUse)} == FieldUse::{nameof(EFieldUse.TR)} || "
-        + $"{nameof(FieldUse)} == FieldUse::{nameof(EFieldUse.HM)}"
+            + $"{nameof(FieldUse)} == FieldUse::{nameof(EFieldUse.TR)} || "
+            + $"{nameof(FieldUse)} == FieldUse::{nameof(EFieldUse.HM)}"
     )]
     [field: EditConditionHides]
     [field: UMetaData(Metadata.AllowNone)]
@@ -201,7 +231,7 @@ public readonly partial struct FItem() : IGameDataEntry
         Category = "Metadata"
     )]
     public FGameplayTagContainer Tags { get; init; }
-    
+
     [UsedImplicitly]
     public bool IsTM => FieldUse == EFieldUse.TM;
 
@@ -246,7 +276,7 @@ public readonly partial struct FItem() : IGameDataEntry
 
     [UsedImplicitly]
     public bool IsMegaStone => Tags.HasTag(GameplayTags.Data_Item_MegaStone);
-    
+
     [UsedImplicitly]
     public bool IsScent => Tags.HasTag(GameplayTags.Data_Item_Scent);
 

@@ -12,7 +12,7 @@ public static class InstancedStructExtensions
     {
         public UScriptStruct? StructType => instancedStruct.ScriptStruct;
     }
-    
+
     extension(StructView<FInstancedStruct> structView)
     {
         public UScriptStruct? StructType
@@ -21,40 +21,49 @@ public static class InstancedStructExtensions
             {
                 unsafe
                 {
-                    var structData = (FInstancedStructData*) structView.NativePtr;
-                    var nativeStruct = FInstancedStructExporter.CallGetNativeStruct(ref *structData);
+                    var structData = (FInstancedStructData*)structView.NativePtr;
+                    var nativeStruct = FInstancedStructExporter.CallGetNativeStruct(
+                        ref *structData
+                    );
                     var handle = FCSManagerExporter.CallFindManagedObject(nativeStruct);
                     return GCHandleUtilities.GetObjectFromHandlePtr<UScriptStruct>(handle);
                 }
             }
         }
-        
+
         public bool IsA(UScriptStruct scriptStruct)
         {
             return structView.IsA(scriptStruct.NativeObject);
         }
 
-        public bool IsA<T>() where T : struct, MarshalledStruct<T>
+        public bool IsA<T>()
+            where T : struct, MarshalledStruct<T>
         {
-            return structView.IsA(T.GetNativeClassPtr()); 
+            return structView.IsA(T.GetNativeClassPtr());
         }
 
         private bool IsA(IntPtr scriptStruct)
         {
             unsafe
             {
-                var structData = (FInstancedStructData*) structView.NativePtr;
+                var structData = (FInstancedStructData*)structView.NativePtr;
                 var nativeStruct = FInstancedStructExporter.CallGetNativeStruct(ref *structData);
                 return nativeStruct == scriptStruct;
             }
         }
-        
-        public T Get<T>() where T : struct, MarshalledStruct<T>
+
+        public T Get<T>()
+            where T : struct, MarshalledStruct<T>
         {
-            return structView.TryGet(out T value) ? value : throw new InvalidOperationException($"Failed to get {typeof(T).Name} from instanced struct.");  
+            return structView.TryGet(out T value)
+                ? value
+                : throw new InvalidOperationException(
+                    $"Failed to get {typeof(T).Name} from instanced struct."
+                );
         }
 
-        public bool TryGet<T>(out T value) where T : struct, MarshalledStruct<T>
+        public bool TryGet<T>(out T value)
+            where T : struct, MarshalledStruct<T>
         {
             if (!structView.IsA<T>())
             {
@@ -64,7 +73,7 @@ public static class InstancedStructExtensions
 
             unsafe
             {
-                var structData = (FInstancedStructData*) structView.NativePtr;
+                var structData = (FInstancedStructData*)structView.NativePtr;
                 value = T.FromNative(FInstancedStructExporter.CallGetMemory(ref *structData));
                 return true;
             }

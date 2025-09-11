@@ -257,7 +257,8 @@ public static partial class PbsCompiler
                 sectionName
             );
 
-            return FText.Localized(schema.LocalizedTextNamespace.Value.Namespace,
+            return FText.Localized(
+                schema.LocalizedTextNamespace.Value.Namespace,
                 localizationKey,
                 input
             );

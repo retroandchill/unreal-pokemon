@@ -15,7 +15,7 @@ public class UPokemonEditorSettings : UDeveloperSettings
         Category = "Serializers"
     )]
     public FName NewGameplayTagsPath { get; }
-    
+
     [UProperty(
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "Pbs"

@@ -109,8 +109,6 @@ UCLASS(Abstract)
 class GAMEDATAACCESSTOOLS_API UAssetGameDataRepository : public UGameDataRepository
 {
     GENERATED_BODY()
-
-    
 };
 
 UCLASS(Abstract)
@@ -120,7 +118,7 @@ class GAMEDATAACCESSTOOLS_API UStaticGameDataRepository : public UGameDataReposi
 
   protected:
     UFUNCTION(CustomThunk, meta = (ScriptMethod, CustomStructureParam = DataStruct))
-    bool TryRegisterEntryInternal(const int32 &DataStruct, FString& OutError);
+    bool TryRegisterEntryInternal(const int32 &DataStruct, FString &OutError);
 
     DECLARE_FUNCTION(execTryRegisterEntryInternal);
 

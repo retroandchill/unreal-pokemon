@@ -22,14 +22,16 @@ class GAMEDATAACCESSTOOLSEDITOR_API UGameDataEntrySerializer : public UObject
     virtual bool Supports(TSubclassOf<UAssetGameDataRepository> RepositoryClass);
     virtual FText GetFormatName() const;
     virtual FString GetFileExtensionText() const;
-    virtual bool Serialize(const FString &FilePath, const UAssetGameDataRepository *Repository, FString &ErrorMessage) const;
-    virtual bool Deserialize(const FString &FilePath, UAssetGameDataRepository *Repository, FString &ErrorMessage) const;
+    virtual bool Serialize(const FString &FilePath, const UAssetGameDataRepository *Repository,
+                           FString &ErrorMessage) const;
+    virtual bool Deserialize(const FString &FilePath, UAssetGameDataRepository *Repository,
+                             FString &ErrorMessage) const;
 
   protected:
     static FScriptArrayHelper &GetGameDataEntries(const UAssetGameDataRepository *Repository);
     static FArrayProperty *GetGameDataEntriesProperty(const UAssetGameDataRepository *Repository);
     static void MoveEntries(UAssetGameDataRepository *Repository, FScriptArray &Entries);
 
-private:
+  private:
     friend class UGameDataEntrySerializerExporter;
 };

@@ -5,19 +5,19 @@
 #include "CoreMinimal.h"
 #include "CSBindsManager.h"
 #include "UObject/Object.h"
+
 #include "GameDataEntrySerializerExporter.generated.h"
 
 class UAssetGameDataRepository;
 /**
- * 
+ *
  */
 UCLASS()
 class GAMEDATAACCESSTOOLSEDITOR_API UGameDataEntrySerializerExporter : public UObject
 {
     GENERATED_BODY()
 
-public:
+  public:
     UNREALSHARP_FUNCTION()
-    static void AddToStagingArray(FScriptArray& StagingArray, UAssetGameDataRepository* Repository, const uint8* Data);
-
+    static void AddToStagingArray(FScriptArray &StagingArray, UAssetGameDataRepository *Repository, const uint8 *Data);
 };

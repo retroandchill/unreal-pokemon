@@ -10,9 +10,8 @@ public partial record struct FDataHandleEntry
         ID = id;
         DisplayName = !displayName.IsNullOrWhitespace() ? displayName : id.ToString();
     }
-    
+
     [SetsRequiredMembers]
-    public FDataHandleEntry(FName id) : this(id, FText.None)
-    {
-    }
+    public FDataHandleEntry(FName id)
+        : this(id, FText.None) { }
 }

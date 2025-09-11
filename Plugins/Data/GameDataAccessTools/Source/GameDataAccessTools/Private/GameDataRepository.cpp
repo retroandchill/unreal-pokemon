@@ -72,8 +72,9 @@ uint8 *UGameDataRepository::AddNewEntry(const FName ID)
 uint8 *UGameDataRepository::AddNewEntry(const FName ID, const uint8 *Data)
 {
     auto *Entry = AddNewEntryInternal(ID);
-    if (Entry == nullptr) return nullptr;
-    
+    if (Entry == nullptr)
+        return nullptr;
+
     const int32 NewIndex = GameDataEntries->Num() - 1;
     StructProperty->Struct->CopyScriptStruct(Entry, Data);
     IDProperty->SetValue_InContainer(Entry, ID);
@@ -202,7 +203,7 @@ TOptional<FName> UGameDataRepository::GenerateUniqueRowName() const
 }
 
 // ReSharper disable once CppMemberFunctionMayBeStatic
-bool UStaticGameDataRepository::TryRegisterEntryInternal(const int32 &, FString&)
+bool UStaticGameDataRepository::TryRegisterEntryInternal(const int32 &, FString &)
 {
     checkf(false, TEXT("This should never get called"));
     return false;
@@ -235,7 +236,7 @@ DEFINE_FUNCTION(UStaticGameDataRepository::execTryRegisterEntryInternal)
         *static_cast<bool *>(RESULT_PARAM) = false;
         return;
     }
-    
+
     Self->GetEntryStruct()->CopyScriptStruct(NewEntry, DataStructStruct);
     *static_cast<bool *>(RESULT_PARAM) = true;
 

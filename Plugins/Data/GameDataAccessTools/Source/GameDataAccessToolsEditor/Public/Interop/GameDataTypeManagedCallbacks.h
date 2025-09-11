@@ -8,22 +8,22 @@
 
 struct FGameDataTypeManagedActions
 {
-    using FIsValidGameDataHandle = bool(__stdcall*)(FGCHandleIntPtr);
-    using FGetDataHandleOptions = void(__stdcall*)(FGCHandleIntPtr, TArray<FDataHandleEntry>*);
+    using FIsValidGameDataHandle = bool(__stdcall *)(FGCHandleIntPtr);
+    using FGetDataHandleOptions = void(__stdcall *)(FGCHandleIntPtr, TArray<FDataHandleEntry> *);
 
     FIsValidGameDataHandle IsValidGameDataHandle = nullptr;
     FGetDataHandleOptions GetDataHandleOptions = nullptr;
 };
 
 /**
- * 
+ *
  */
 class GAMEDATAACCESSTOOLSEDITOR_API FGameDataTypeManagedCallbacks
 {
     FGameDataTypeManagedCallbacks() = default;
     ~FGameDataTypeManagedCallbacks() = default;
 
-public:
+  public:
     static FGameDataTypeManagedCallbacks &Get();
 
     void SetActions(const FGameDataTypeManagedActions &Callbacks)
@@ -31,13 +31,13 @@ public:
         Actions = Callbacks;
     }
 
-    bool IsValidGameDataHandle(const FGCHandle& Handle) const
+    bool IsValidGameDataHandle(const FGCHandle &Handle) const
     {
         return Actions.IsValidGameDataHandle(Handle.GetHandle());
     }
 
-    TArray<FDataHandleEntry> GetDataHandleOptions(const FGCHandle& Handle) const;
+    TArray<FDataHandleEntry> GetDataHandleOptions(const FGCHandle &Handle) const;
 
-private:
+  private:
     FGameDataTypeManagedActions Actions;
 };

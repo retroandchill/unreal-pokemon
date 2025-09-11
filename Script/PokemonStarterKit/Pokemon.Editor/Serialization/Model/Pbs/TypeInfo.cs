@@ -14,9 +14,9 @@ public record TypeInfo
 
     [PbsLocalizedText("PokemonTypes", "{0}_Name")]
     public FText Name { get; init; } = "Unnamed";
-    
+
     public bool IsSpecialType { get; init; }
-    
+
     public bool IsPseudoType { get; init; }
 
     public IReadOnlyList<FName> Weaknesses { get; init; } = [];

@@ -1,5 +1,6 @@
 ﻿using GameAccessTools.SourceGenerator.Attributes;
 using GameDataAccessTools.Core;
+using GameDataAccessTools.Core.Utilities;
 using JetBrains.Annotations;
 using LanguageExt;
 using Pokemon.Data.Model.HardCoded;
@@ -9,7 +10,6 @@ using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
-using GameDataAccessTools.Core.Utilities;
 
 namespace Pokemon.Data.Model.PBS;
 
@@ -84,12 +84,17 @@ public readonly partial struct FEvolutionCondition
     )]
     public FInstancedStruct Parameters { get; init; }
 
-    public bool IsValid => Method.IsValid && ReferenceEquals(Method.Entry.Parameters, Parameters.StructType);
+    public bool IsValid =>
+        Method.IsValid && ReferenceEquals(Method.Entry.Parameters, Parameters.StructType);
 
     public T GetData<T>()
         where T : struct, MarshalledStruct<T>
     {
-        return TryGetData<T>(out var data) ? data : throw new InvalidOperationException($"Evolution condition data is not of type {typeof(T)}");
+        return TryGetData<T>(out var data)
+            ? data
+            : throw new InvalidOperationException(
+                $"Evolution condition data is not of type {typeof(T)}"
+            );
     }
 
     public bool TryGetData<T>(out T data)
@@ -120,40 +125,59 @@ public readonly partial struct FSpecies() : IGameDataEntry
         Category = "Identification"
     )]
     public int RowIndex { get; init; }
-    
+
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Display"
     )]
     [GameAccessTools.SourceGenerator.Attributes.DisplayName]
     public FText Name { get; init; } = "Unnamed";
-    
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
+
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Display"
+    )]
     public Option<FText> FormName { get; init; }
-    
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Basic")]
+
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Basic"
+    )]
     public IReadOnlyList<FTypeHandle> Types { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Stats")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Stats"
+    )]
     [field: ClampMin("1")]
     [field: UIMin("1")]
-    public IReadOnlyDictionary<FMainStatHandle, int> BaseStats { get; init; } = new Dictionary<FMainStatHandle, int>()
-    {
-        [FStat.HP] = 1,
-        [FStat.ATTACK] = 1,
-        [FStat.DEFENSE] = 1,
-        [FStat.SPECIAL_ATTACK] = 1,
-        [FStat.SPECIAL_DEFENSE] = 1,
-        [FStat.SPEED] = 1
-    };
+    public IReadOnlyDictionary<FMainStatHandle, int> BaseStats { get; init; } =
+        new Dictionary<FMainStatHandle, int>()
+        {
+            [FStat.HP] = 1,
+            [FStat.ATTACK] = 1,
+            [FStat.DEFENSE] = 1,
+            [FStat.SPECIAL_ATTACK] = 1,
+            [FStat.SPECIAL_DEFENSE] = 1,
+            [FStat.SPEED] = 1,
+        };
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Basic")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Basic"
+    )]
     public FGenderRatioHandle GenderRatio { get; init; } = FGenderRatio.Female50Percent;
-    
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Stats")]
+
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Stats"
+    )]
     public FGrowthRateHandle GrowthRate { get; init; } = FGrowthRate.Medium;
-    
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Drops")]
+
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Drops"
+    )]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     public int BaseExp { get; init; }
@@ -167,12 +191,18 @@ public readonly partial struct FSpecies() : IGameDataEntry
     [field: UIMin("0")]
     public IReadOnlyDictionary<FMainStatHandle, int> EVYield { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Capture")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Capture"
+    )]
     [field: ClampMin("3")]
     [field: UIMin("3")]
     public int CatchRate { get; init; } = 255;
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Basic")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Basic"
+    )]
     [field: ClampMin("0")]
     [field: UIMin("0")]
     public int BaseHappiness { get; init; } = 70;
@@ -189,27 +219,48 @@ public readonly partial struct FSpecies() : IGameDataEntry
     )]
     public IReadOnlyList<FAbilityHandle> HiddenAbilities { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Moves")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Moves"
+    )]
     public IReadOnlyList<FLevelUpMove> Moves { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Moves")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Moves"
+    )]
     public IReadOnlyList<FMoveHandle> TutorMoves { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Moves")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Moves"
+    )]
     public IReadOnlyList<FMoveHandle> EggMoves { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Breeding")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Breeding"
+    )]
     public IReadOnlyList<FEggGroupHandle> EggGroups { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Breeding")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Breeding"
+    )]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     public int HatchSteps { get; init; } = 1;
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Breeding")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Breeding"
+    )]
     public FItemHandle Incense { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Breeding")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Breeding"
+    )]
     public IReadOnlyList<FSpeciesHandle> Offspring { get; init; }
 
     [field: UProperty(
@@ -218,46 +269,82 @@ public readonly partial struct FSpecies() : IGameDataEntry
     )]
     public IReadOnlyList<FEvolutionCondition> Evolutions { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Pokédex"
+    )]
     [field: ClampMin("0")]
     [field: UIMin("0")]
     public float Height { get; init; } = 1;
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Pokédex"
+    )]
     [field: ClampMin("0")]
     [field: UIMin("0")]
     public float Weight { get; init; } = 1;
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Pokédex"
+    )]
     public FBodyColorHandle BodyColor { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Pokédex"
+    )]
     public FBodyShapeHandle BodyShape { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Pokédex"
+    )]
     public FHabitatHandle Habitat { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Pokédex"
+    )]
     public FText Category { get; init; } = "???";
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Pokédex"
+    )]
     public FText Pokedex { get; init; } = "???";
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Drops")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Drops"
+    )]
     public IReadOnlyList<FItemHandle> WildHoldItemCommon { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Drops")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Drops"
+    )]
     public IReadOnlyList<FItemHandle> WildHoldItemUncommon { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Drops")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Drops"
+    )]
     public IReadOnlyList<FItemHandle> WildHoldItemRare { get; init; }
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Metadata"
+    )]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     public int Generation { get; init; } = 1;
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Metadata"
+    )]
     public FGameplayTagContainer Tags { get; init; }
 }
 

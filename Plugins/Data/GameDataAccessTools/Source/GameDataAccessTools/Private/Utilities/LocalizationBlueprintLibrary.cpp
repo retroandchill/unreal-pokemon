@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Utilities/LocalizationBlueprintLibrary.h"
 
 FString ULocalizationBlueprintLibrary::ToLocalizedString(const FText &Text)

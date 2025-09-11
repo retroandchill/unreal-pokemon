@@ -7,5 +7,8 @@ namespace GameDataAccessTools.Editor.Interop;
 public static unsafe partial class GameDataTypeCallbacksExporter
 {
     private static readonly delegate* unmanaged<ref GameDataTypeManagedActions, void> SetActions;
-    private static readonly delegate* unmanaged<ref UnmanagedArray, IntPtr, void> AddActionInformation;
+    private static readonly delegate* unmanaged<
+        ref UnmanagedArray,
+        IntPtr,
+        void> AddActionInformation;
 }

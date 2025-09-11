@@ -1,10 +1,8 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Interop/GameDataTypeManagedCallbacks.h"
 
-
-FGameDataTypeManagedCallbacks & FGameDataTypeManagedCallbacks::Get()
+FGameDataTypeManagedCallbacks &FGameDataTypeManagedCallbacks::Get()
 {
     static FGameDataTypeManagedCallbacks Instance;
     return Instance;
