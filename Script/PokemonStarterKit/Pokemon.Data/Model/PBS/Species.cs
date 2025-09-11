@@ -9,6 +9,7 @@ using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
+using GameDataAccessTools.Core.Utilities;
 
 namespace Pokemon.Data.Model.PBS;
 
@@ -81,10 +82,9 @@ public readonly partial struct FEvolutionCondition
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere | PropertyFlags.Instanced
     )]
-    [AsValue]
     public FInstancedStruct Parameters { get; init; }
 
-    public bool IsValid => Method.IsValid && ReferenceEquals(Method.Entry.Parameters, Parameters.ScriptStruct);
+    public bool IsValid => Method.IsValid && ReferenceEquals(Method.Entry.Parameters, Parameters.StructType);
 
     public T GetData<T>()
         where T : struct, MarshalledStruct<T>
