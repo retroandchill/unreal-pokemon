@@ -1,6 +1,6 @@
 ﻿import json
 
-FILE = 'Target'
+FILE = 'Evolution'
 
 def main():
     with open('output.txt', 'w') as fout:

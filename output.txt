@@ -1,252 +1,1088 @@
-"User",
-"NearAlly",
-"UserOrNearAlly",
-"AllAllies",
-"UserAndAllies",
-"NearFoe",
-"RandomNearFoe",
-"AllNearFoes",
-"Foe",
-"AllFoes",
-"NearOther",
-"AllNearOthers",
-"Other",
-"AllBattlers",
-"UserSide",
-"FoeSide",
-"BothSides",
+"Level",
+"LevelMale",
+"LevelFemale",
+"LevelDay",
+"LevelNight",
+"LevelMorning",
+"LevelAfternoon",
+"LevelEvening",
+"LevelNoWeather",
+"LevelSun",
+"LevelRain",
+"LevelSnow",
+"LevelSandstorm",
+"LevelCycling",
+"LevelSurfing",
+"LevelDiving",
+"LevelDarkness",
+"LevelDarkInParty",
+"AttackGreater",
+"AtkDefEqual",
+"DefenseGreater",
+"Silcoon",
+"Cascoon",
+"Ninjask",
+"Shedinja",
+"Happiness",
+"HappinessMale",
+"HappinessFemale",
+"HappinessDay",
+"HappinessNight",
+"HappinessMove",
+"HappinessMoveType",
+"HappinessHoldItem",
+"MaxHappiness",
+"Beauty",
+"HoldItem",
+"HoldItemMale",
+"HoldItemFemale",
+"DayHoldItem",
+"NightHoldItem",
+"HoldItemHappiness",
+"HasMove",
+"HasMoveType",
+"HasInParty",
+"Location",
+"LocationFlag",
+"Region",
+"Item",
+"ItemMale",
+"ItemFemale",
+"ItemDay",
+"ItemNight",
+"ItemHappiness",
+"Trade",
+"TradeMale",
+"TradeFemale",
+"TradeDay",
+"TradeNight",
+"TradeItem",
+"TradeSpecies",
+"BattleDealCriticalHit",
+"Event",
+"EventAfterDamageTaken",
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.None,
+        ID = FEvolution.None,
         Name = FText.Localized(LocalizationNamespace, "None", "None"),
-        NumTargets = 0,
-        TargetsFoe = False,
-        TargetsAll = False,
-        AffectsFoeSide = False,
-        LongRange = False,
+        Parameter = None,
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.User,
-        Name = FText.Localized(LocalizationNamespace, "User", "User"),
-        NumTargets = 0,
-        TargetsFoe = False,
-        TargetsAll = False,
-        AffectsFoeSide = False,
-        LongRange = False,
+        ID = FEvolution.Level,
+        Name = FText.Localized(LocalizationNamespace, "Level", "Level"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307217918 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:72>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.NearAlly,
-        Name = FText.Localized(LocalizationNamespace, "NearAlly", "Near Ally"),
-        NumTargets = 1,
-        TargetsFoe = False,
-        TargetsAll = False,
-        AffectsFoeSide = False,
-        LongRange = False,
+        ID = FEvolution.LevelMale,
+        Name = FText.Localized(LocalizationNamespace, "LevelMale", "LevelMale"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307217828 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:80>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.UserOrNearAlly,
-        Name = FText.Localized(LocalizationNamespace, "UserOrNearAlly", "User or Near Ally"),
-        NumTargets = 1,
-        TargetsFoe = False,
-        TargetsAll = False,
-        AffectsFoeSide = False,
-        LongRange = False,
+        ID = FEvolution.LevelFemale,
+        Name = FText.Localized(LocalizationNamespace, "LevelFemale", "LevelFemale"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307217738 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:88>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.AllAllies,
-        Name = FText.Localized(LocalizationNamespace, "AllAllies", "All Allies"),
-        NumTargets = 2,
-        TargetsFoe = False,
-        TargetsAll = True,
-        AffectsFoeSide = False,
-        LongRange = True,
+        ID = FEvolution.LevelDay,
+        Name = FText.Localized(LocalizationNamespace, "LevelDay", "LevelDay"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307217648 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:96>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.UserAndAllies,
-        Name = FText.Localized(LocalizationNamespace, "UserAndAllies", "User and Allies"),
-        NumTargets = 2,
-        TargetsFoe = False,
-        TargetsAll = False,
-        AffectsFoeSide = False,
-        LongRange = True,
+        ID = FEvolution.LevelNight,
+        Name = FText.Localized(LocalizationNamespace, "LevelNight", "LevelNight"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307217558 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:104>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.NearFoe,
-        Name = FText.Localized(LocalizationNamespace, "NearFoe", "Near Foe"),
-        NumTargets = 1,
-        TargetsFoe = True,
-        TargetsAll = False,
-        AffectsFoeSide = False,
-        LongRange = False,
+        ID = FEvolution.LevelMorning,
+        Name = FText.Localized(LocalizationNamespace, "LevelMorning", "LevelMorning"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307217468 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:112>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.RandomNearFoe,
-        Name = FText.Localized(LocalizationNamespace, "RandomNearFoe", "Random Near Foe"),
-        NumTargets = 1,
-        TargetsFoe = True,
-        TargetsAll = False,
-        AffectsFoeSide = False,
-        LongRange = False,
+        ID = FEvolution.LevelAfternoon,
+        Name = FText.Localized(LocalizationNamespace, "LevelAfternoon", "LevelAfternoon"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307217378 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:120>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.AllNearFoes,
-        Name = FText.Localized(LocalizationNamespace, "AllNearFoes", "All Near Foes"),
-        NumTargets = 2,
-        TargetsFoe = True,
-        TargetsAll = False,
-        AffectsFoeSide = False,
-        LongRange = False,
+        ID = FEvolution.LevelEvening,
+        Name = FText.Localized(LocalizationNamespace, "LevelEvening", "LevelEvening"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307217288 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:128>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.Foe,
-        Name = FText.Localized(LocalizationNamespace, "Foe", "Foe"),
-        NumTargets = 1,
-        TargetsFoe = True,
-        TargetsAll = False,
-        AffectsFoeSide = False,
-        LongRange = True,
+        ID = FEvolution.LevelNoWeather,
+        Name = FText.Localized(LocalizationNamespace, "LevelNoWeather", "LevelNoWeather"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307217198 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:136>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.AllFoes,
-        Name = FText.Localized(LocalizationNamespace, "AllFoes", "All Foes"),
-        NumTargets = 2,
-        TargetsFoe = True,
-        TargetsAll = False,
-        AffectsFoeSide = False,
-        LongRange = True,
+        ID = FEvolution.LevelSun,
+        Name = FText.Localized(LocalizationNamespace, "LevelSun", "LevelSun"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x00000253072170a8 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:144>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.NearOther,
-        Name = FText.Localized(LocalizationNamespace, "NearOther", "Near Other"),
-        NumTargets = 1,
-        TargetsFoe = True,
-        TargetsAll = False,
-        AffectsFoeSide = False,
-        LongRange = False,
+        ID = FEvolution.LevelRain,
+        Name = FText.Localized(LocalizationNamespace, "LevelRain", "LevelRain"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307216fb8 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:153>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.AllNearOthers,
-        Name = FText.Localized(LocalizationNamespace, "AllNearOthers", "All Near Others"),
-        NumTargets = 2,
-        TargetsFoe = True,
-        TargetsAll = False,
-        AffectsFoeSide = False,
-        LongRange = False,
+        ID = FEvolution.LevelSnow,
+        Name = FText.Localized(LocalizationNamespace, "LevelSnow", "LevelSnow"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307216ec8 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:162>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.Other,
-        Name = FText.Localized(LocalizationNamespace, "Other", "Other"),
-        NumTargets = 1,
-        TargetsFoe = True,
-        TargetsAll = False,
-        AffectsFoeSide = False,
-        LongRange = True,
+        ID = FEvolution.LevelSandstorm,
+        Name = FText.Localized(LocalizationNamespace, "LevelSandstorm", "LevelSandstorm"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307216dd8 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:171>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.AllBattlers,
-        Name = FText.Localized(LocalizationNamespace, "AllBattlers", "All Battlers"),
-        NumTargets = 2,
-        TargetsFoe = True,
-        TargetsAll = True,
-        AffectsFoeSide = False,
-        LongRange = True,
+        ID = FEvolution.LevelCycling,
+        Name = FText.Localized(LocalizationNamespace, "LevelCycling", "LevelCycling"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307216ce8 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:180>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.UserSide,
-        Name = FText.Localized(LocalizationNamespace, "UserSide", "User Side"),
-        NumTargets = 0,
-        TargetsFoe = False,
-        TargetsAll = False,
-        AffectsFoeSide = False,
-        LongRange = False,
+        ID = FEvolution.LevelSurfing,
+        Name = FText.Localized(LocalizationNamespace, "LevelSurfing", "LevelSurfing"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307216bf8 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:188>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.FoeSide,
-        Name = FText.Localized(LocalizationNamespace, "FoeSide", "Foe Side"),
-        NumTargets = 0,
-        TargetsFoe = False,
-        TargetsAll = False,
-        AffectsFoeSide = True,
-        LongRange = False,
+        ID = FEvolution.LevelDiving,
+        Name = FText.Localized(LocalizationNamespace, "LevelDiving", "LevelDiving"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307216b08 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:196>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
     }
 );
 
-manager.Targets.RegisterEntry(
-    new FTarget
+manager.Evolutions.RegisterEntry(
+    new FEvolution
     {
-        ID = FTarget.BothSides,
-        Name = FText.Localized(LocalizationNamespace, "BothSides", "Both Sides"),
-        NumTargets = 0,
-        TargetsFoe = False,
-        TargetsAll = False,
-        AffectsFoeSide = True,
-        LongRange = False,
+        ID = FEvolution.LevelDarkness,
+        Name = FText.Localized(LocalizationNamespace, "LevelDarkness", "LevelDarkness"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307216a18 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:204>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.LevelDarkInParty,
+        Name = FText.Localized(LocalizationNamespace, "LevelDarkInParty", "LevelDarkInParty"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307216928 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:212>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.AttackGreater,
+        Name = FText.Localized(LocalizationNamespace, "AttackGreater", "AttackGreater"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307216838 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:220>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.AtkDefEqual,
+        Name = FText.Localized(LocalizationNamespace, "AtkDefEqual", "AtkDefEqual"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307216748 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:228>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.DefenseGreater,
+        Name = FText.Localized(LocalizationNamespace, "DefenseGreater", "DefenseGreater"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307216658 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:236>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.Silcoon,
+        Name = FText.Localized(LocalizationNamespace, "Silcoon", "Silcoon"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307216568 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:244>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.Cascoon,
+        Name = FText.Localized(LocalizationNamespace, "Cascoon", "Cascoon"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307216478 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:252>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.Ninjask,
+        Name = FText.Localized(LocalizationNamespace, "Ninjask", "Ninjask"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = "#<Proc:0x0000025307216388 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:260>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.Shedinja,
+        Name = FText.Localized(LocalizationNamespace, "Shedinja", "Shedinja"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = "#<Proc:0x0000025307216298 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:268>",
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.Happiness,
+        Name = FText.Localized(LocalizationNamespace, "Happiness", "Happiness"),
+        Parameter = None,
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x00000253072161d0 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:280>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.HappinessMale,
+        Name = FText.Localized(LocalizationNamespace, "HappinessMale", "HappinessMale"),
+        Parameter = None,
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x0000025307216108 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:288>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.HappinessFemale,
+        Name = FText.Localized(LocalizationNamespace, "HappinessFemale", "HappinessFemale"),
+        Parameter = None,
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x0000025307216040 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:296>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.HappinessDay,
+        Name = FText.Localized(LocalizationNamespace, "HappinessDay", "HappinessDay"),
+        Parameter = None,
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x0000025307215f78 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:304>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.HappinessNight,
+        Name = FText.Localized(LocalizationNamespace, "HappinessNight", "HappinessNight"),
+        Parameter = None,
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x0000025307215eb0 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:312>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.HappinessMove,
+        Name = FText.Localized(LocalizationNamespace, "HappinessMove", "HappinessMove"),
+        Parameter = "Move",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x0000025307215de8 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:321>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.HappinessMoveType,
+        Name = FText.Localized(LocalizationNamespace, "HappinessMoveType", "HappinessMoveType"),
+        Parameter = "Type",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x0000025307215d20 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:332>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.HappinessHoldItem,
+        Name = FText.Localized(LocalizationNamespace, "HappinessHoldItem", "HappinessHoldItem"),
+        Parameter = "Item",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x0000025307215c58 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:343>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = "#<Proc:0x0000025307215c30 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:346>",
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.MaxHappiness,
+        Name = FText.Localized(LocalizationNamespace, "MaxHappiness", "MaxHappiness"),
+        Parameter = None,
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x0000025307215b68 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:356>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.Beauty,
+        Name = FText.Localized(LocalizationNamespace, "Beauty", "Beauty"),
+        Parameter = "Integer",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x0000025307215a78 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:365>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.HoldItem,
+        Name = FText.Localized(LocalizationNamespace, "HoldItem", "HoldItem"),
+        Parameter = "Item",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x00000253072159b0 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:374>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = "#<Proc:0x0000025307215988 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:377>",
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.HoldItemMale,
+        Name = FText.Localized(LocalizationNamespace, "HoldItemMale", "HoldItemMale"),
+        Parameter = "Item",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x00000253072158c0 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:388>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = "#<Proc:0x0000025307215898 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:391>",
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.HoldItemFemale,
+        Name = FText.Localized(LocalizationNamespace, "HoldItemFemale", "HoldItemFemale"),
+        Parameter = "Item",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x00000253072157d0 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:402>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = "#<Proc:0x00000253072157a8 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:405>",
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.DayHoldItem,
+        Name = FText.Localized(LocalizationNamespace, "DayHoldItem", "DayHoldItem"),
+        Parameter = "Item",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x00000253072156e0 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:416>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = "#<Proc:0x00000253072156b8 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:419>",
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.NightHoldItem,
+        Name = FText.Localized(LocalizationNamespace, "NightHoldItem", "NightHoldItem"),
+        Parameter = "Item",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x00000253072155f0 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:430>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = "#<Proc:0x00000253072155c8 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:433>",
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.HoldItemHappiness,
+        Name = FText.Localized(LocalizationNamespace, "HoldItemHappiness", "HoldItemHappiness"),
+        Parameter = "Item",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x0000025307215500 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:444>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = "#<Proc:0x00000253072154d8 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:447>",
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.HasMove,
+        Name = FText.Localized(LocalizationNamespace, "HasMove", "HasMove"),
+        Parameter = "Move",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x0000025307215410 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:458>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.HasMoveType,
+        Name = FText.Localized(LocalizationNamespace, "HasMoveType", "HasMoveType"),
+        Parameter = "Type",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x0000025307215348 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:467>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.HasInParty,
+        Name = FText.Localized(LocalizationNamespace, "HasInParty", "HasInParty"),
+        Parameter = "Species",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x0000025307215280 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:476>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.Location,
+        Name = FText.Localized(LocalizationNamespace, "Location", "Location"),
+        Parameter = "Integer",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x0000025307215190 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:485>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.LocationFlag,
+        Name = FText.Localized(LocalizationNamespace, "LocationFlag", "LocationFlag"),
+        Parameter = "String",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x00000253072150a0 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:494>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.Region,
+        Name = FText.Localized(LocalizationNamespace, "Region", "Region"),
+        Parameter = "Integer",
+        AnyLevelUp = True,
+        LevelUpProc = "#<Proc:0x0000025307214fb0 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:503>",
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.Item,
+        Name = FText.Localized(LocalizationNamespace, "Item", "Item"),
+        Parameter = "Item",
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = "#<Proc:0x0000025307214ee8 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:515>",
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.ItemMale,
+        Name = FText.Localized(LocalizationNamespace, "ItemMale", "ItemMale"),
+        Parameter = "Item",
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = "#<Proc:0x0000025307214e20 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:523>",
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.ItemFemale,
+        Name = FText.Localized(LocalizationNamespace, "ItemFemale", "ItemFemale"),
+        Parameter = "Item",
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = "#<Proc:0x0000025307214d58 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:531>",
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.ItemDay,
+        Name = FText.Localized(LocalizationNamespace, "ItemDay", "ItemDay"),
+        Parameter = "Item",
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = "#<Proc:0x0000025307214c90 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:539>",
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.ItemNight,
+        Name = FText.Localized(LocalizationNamespace, "ItemNight", "ItemNight"),
+        Parameter = "Item",
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = "#<Proc:0x0000025307214bc8 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:547>",
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.ItemHappiness,
+        Name = FText.Localized(LocalizationNamespace, "ItemHappiness", "ItemHappiness"),
+        Parameter = "Item",
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = "#<Proc:0x0000025307214b00 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:555>",
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.Trade,
+        Name = FText.Localized(LocalizationNamespace, "Trade", "Trade"),
+        Parameter = None,
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = None,
+        OnTradeProc = "#<Proc:0x0000025307214a38 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:565>",
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.TradeMale,
+        Name = FText.Localized(LocalizationNamespace, "TradeMale", "TradeMale"),
+        Parameter = None,
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = None,
+        OnTradeProc = "#<Proc:0x0000025307214970 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:572>",
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.TradeFemale,
+        Name = FText.Localized(LocalizationNamespace, "TradeFemale", "TradeFemale"),
+        Parameter = None,
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = None,
+        OnTradeProc = "#<Proc:0x00000253072148a8 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:579>",
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.TradeDay,
+        Name = FText.Localized(LocalizationNamespace, "TradeDay", "TradeDay"),
+        Parameter = None,
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = None,
+        OnTradeProc = "#<Proc:0x00000253072147e0 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:586>",
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.TradeNight,
+        Name = FText.Localized(LocalizationNamespace, "TradeNight", "TradeNight"),
+        Parameter = None,
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = None,
+        OnTradeProc = "#<Proc:0x0000025307214718 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:593>",
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.TradeItem,
+        Name = FText.Localized(LocalizationNamespace, "TradeItem", "TradeItem"),
+        Parameter = "Item",
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = None,
+        OnTradeProc = "#<Proc:0x0000025307214650 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:601>",
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = "#<Proc:0x0000025307214628 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:604>",
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.TradeSpecies,
+        Name = FText.Localized(LocalizationNamespace, "TradeSpecies", "TradeSpecies"),
+        Parameter = "Species",
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = None,
+        OnTradeProc = "#<Proc:0x0000025307214560 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:614>",
+        AfterBattleProc = None,
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.BattleDealCriticalHit,
+        Name = FText.Localized(LocalizationNamespace, "BattleDealCriticalHit", "BattleDealCriticalHit"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = "#<Proc:0x0000025307214470 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:625>",
+        EventProc = None,
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.Event,
+        Name = FText.Localized(LocalizationNamespace, "Event", "Event"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = None,
+        EventProc = "#<Proc:0x0000025307214358 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:657>",
+        AfterEvolutionProc = None,
+    }
+);
+
+manager.Evolutions.RegisterEntry(
+    new FEvolution
+    {
+        ID = FEvolution.EventAfterDamageTaken,
+        Name = FText.Localized(LocalizationNamespace, "EventAfterDamageTaken", "EventAfterDamageTaken"),
+        Parameter = "Integer",
+        AnyLevelUp = False,
+        LevelUpProc = None,
+        UseItemProc = None,
+        OnTradeProc = None,
+        AfterBattleProc = "#<Proc:0x0000025307214268 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:665>",
+        EventProc = "#<Proc:0x0000025307214240 D:/dev/pokemon-essentials-plugins/Data/Scripts/010_Data/001_Hardcoded data/007_Evolution.rb:673>",
+        AfterEvolutionProc = None,
     }
 );
 
