@@ -63,10 +63,18 @@ EDataValidationResult URPGEntity::IsDataValid(FDataValidationContext &Context) c
 
     return Result;
 }
+
+void URPGEntity::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent)
+{
+    UObject::PostEditChangeProperty(PropertyChangedEvent);
+
+    GatherComponentReferences();
+    DiscoverAndBindInitFunctions();
+}
 #endif
 
 // ReSharper disable once CppMemberFunctionMayBeStatic
-void URPGEntity::InitializeComponents(int32 &){checkf(false, TEXT("This should never be called"))}
+void URPGEntity::InitializeComponents(const int32 &){checkf(false, TEXT("This should never be called"))}
 
 DEFINE_FUNCTION(URPGEntity::execInitializeComponents)
 {
@@ -76,24 +84,31 @@ DEFINE_FUNCTION(URPGEntity::execInitializeComponents)
     auto *ParamsStruct = Stack.MostRecentPropertyAddress;
 
     P_NATIVE_BEGIN
-    if (ParamsProperty->Struct != Self->GetEntityStruct())
+    Self->InitializeComponents(FStructView(ParamsProperty->Struct, ParamsStruct));
+    P_NATIVE_END
+}
+
+void URPGEntity::InitializeComponents(const FStructView Params)
+{
+    if (Params.GetScriptStruct() != GetEntityStruct())
     {
-        UE_LOG(LogRPGCore, Error, TEXT("Invalid params struct for entity %s"), *Self->GetName());
+        UE_LOG(LogRPGCore, Error, TEXT("Invalid params struct for entity %s"), *GetName());
         return;
     }
 
-    for (const auto Component : Self->Components)
+    for (const auto Component : Components)
     {
         if (Component->InitDelegate.IsBound())
         {
-            Component->InitDelegate.Execute(FStructView(ParamsProperty->Struct, ParamsStruct));
+            Component->InitDelegate.Execute(Params);
         }
     }
-    P_NATIVE_END
 }
 
 void URPGEntity::GatherComponentReferences()
 {
+    Components.Reset();
+    
     for (TFieldIterator<FProperty> PropIt(GetClass()); PropIt; ++PropIt)
     {
         const auto *ObjProp = CastField<FObjectProperty>(*PropIt);
@@ -133,6 +148,8 @@ void URPGEntity::DiscoverAndBindInitFunction(URPGComponent *Component, const USc
         BindComponentFunction(Component, *Function);
         return;
     }
+
+    Component->InitDelegate.Unbind();
 
     for (TFieldIterator<UFunction> FuncIt(Component->GetClass()); FuncIt; ++FuncIt)
     {

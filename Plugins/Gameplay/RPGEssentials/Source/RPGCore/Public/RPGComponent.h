@@ -5,42 +5,48 @@
 #include "CoreMinimal.h"
 #include "StructUtils/StructView.h"
 #include "UObject/Object.h"
-
 #include "RPGComponent.generated.h"
 
 class URPGEntity;
+
 /**
+ * @brief Abstract base class for RPG components.
  *
+ * Represents a modular and extendable component system for RPG entities. It is designed to be used
+ * as a blueprintable base class for defining various types of components that interact with RPG entities.
+ *
+ * @note This class should not be instantiated directly. Extend it to define specific components.
  */
 UCLASS(Abstract, DisplayName = "RPG Component", EditInlineNew)
 class RPGCORE_API URPGComponent : public UObject
 {
     GENERATED_BODY()
 
-  public:
+public:
     DECLARE_DELEGATE_OneParam(FInitComponent, FStructView);
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    URPGEntity *GetOwningEntity() const
+    URPGEntity* GetOwningEntity() const
     {
         return OwningEntity;
     }
 
     UFUNCTION(BlueprintPure, Category = "RPG Component",
-              meta = (DeterminesOutputType = ComponentClass, DynamicOutputParam = ReturnValue))
+        meta = (DeterminesOutputType = ComponentClass, DynamicOutputParam = ReturnValue))
     URPGComponent *GetSiblingComponent(TSubclassOf<URPGComponent> ComponentClass) const;
 
     template <std::derived_from<URPGComponent> T>
-    T *GetSiblingComponent(const TSubclassOf<URPGComponent> ComponentClass = T::StaticClass()) const
+    T* GetSiblingComponent(const TSubclassOf<URPGComponent> ComponentClass = T::StaticClass()) const
     {
         return CastChecked<T>(GetSiblingComponent(ComponentClass));
     }
-
-  private:
+    
+    
+private:
     FInitComponent InitDelegate;
 
     UPROPERTY(BlueprintGetter = GetOwningEntity, Category = "RPG Component")
     TObjectPtr<URPGEntity> OwningEntity;
-
+    
     friend class URPGEntity;
 };
