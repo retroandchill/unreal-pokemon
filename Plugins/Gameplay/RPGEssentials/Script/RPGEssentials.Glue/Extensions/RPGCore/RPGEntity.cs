@@ -16,4 +16,9 @@ public partial class URPGEntity
                 $"Entity {this} does not have component {componentClass}"
             );
     }
+
+    protected void InitializeComponents()
+    {
+        DefaultInitializeComponents();
+    }
 }

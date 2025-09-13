@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Structs/UnrealStruct.h"
 #include "StructUtils/StructView.h"
 #include "UObject/Object.h"
 
@@ -33,7 +34,7 @@ struct RPGCORE_API FRPGComponentInitializer
 };
 
 // ReSharper disable once CppUE4CodingStandardNamingViolationWarning
-#define BindInitFunctionDynamic(Type, FunctionName) BindInitFunction(FindFieldChecked<UFunction>(Type::StaticClass(), GET_FUNCTION_NAME_CHECKED(Type, FunctionName))
+#define BindInitFunctionDynamic(Type, FunctionName) BindInitFunction(FindFieldChecked<UFunction>(Type::StaticClass(), &Type::FunctionName, GET_FUNCTION_NAME_CHECKED(Type, FunctionName))
 
 /**
  * @brief Abstract base class for RPG components.
@@ -49,6 +50,8 @@ class RPGCORE_API URPGComponent : public UObject
     GENERATED_BODY()
 
   public:
+    void PreInitialize(URPGEntity *InOwningEntity);
+
     void Initialize(const FStructView Data)
     {
         InitFunction.Execute(this, Data);
@@ -57,6 +60,13 @@ class RPGCORE_API URPGComponent : public UObject
     void BindInitFunction(UFunction *Function)
     {
         InitFunction = Function;
+    }
+
+    template <std::derived_from<URPGComponent> UserClass, UEStruct T>
+    void BindInitFunction(const TSubclassOf<URPGComponent> ComponentClass, void (UserClass::*)(T),
+                          const FName FunctionName)
+    {
+        BindInitFunction(FindFieldChecked<UFunction>(ComponentClass, FunctionName));
     }
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
@@ -75,7 +85,19 @@ class RPGCORE_API URPGComponent : public UObject
         return CastChecked<T>(GetSiblingComponent(ComponentClass));
     }
 
+  protected:
+    virtual void NativePreInitialize()
+    {
+    }
+
+    UFUNCTION(BlueprintImplementableEvent, DisplayName = "Pre-Initialize", Category = "RPG Component",
+              meta = (ScriptName = "PreInitialize"))
+    void K2_PreInitialize();
+
   private:
+    UFUNCTION(meta = (ScriptMethod))
+    UFunction *BindInitFunctionInternal(const FName FunctionName);
+
     UPROPERTY(EditAnywhere, Category = "Initialization")
     FRPGComponentInitializer InitFunction;
 

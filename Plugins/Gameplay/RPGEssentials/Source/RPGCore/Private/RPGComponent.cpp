@@ -21,7 +21,24 @@ void FRPGComponentInitializer::Execute(URPGComponent *Component, const FStructVi
     Component->ProcessEvent(InitFunction, Data.GetMemory());
 }
 
+void URPGComponent::PreInitialize(URPGEntity *InOwningEntity)
+{
+    OwningEntity = InOwningEntity;
+    NativePreInitialize();
+    K2_PreInitialize();
+}
+
 URPGComponent *URPGComponent::GetSiblingComponent(const TSubclassOf<URPGComponent> ComponentClass) const
 {
     return OwningEntity->GetComponent(ComponentClass);
+}
+
+UFunction *URPGComponent::BindInitFunctionInternal(const FName FunctionName)
+{
+    auto *FoundFunction = FindUField<UFunction>(GetClass(), FunctionName);
+    if (FoundFunction != nullptr)
+    {
+        InitFunction = FRPGComponentInitializer(FoundFunction);
+    }
+    return FoundFunction;
 }

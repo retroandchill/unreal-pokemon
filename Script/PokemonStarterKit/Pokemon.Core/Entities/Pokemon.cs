@@ -22,7 +22,7 @@ public class UPokemon : URPGEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
-    public UIdentityComponent IdentityComponent { get; }
+    public UIdentityComponent IdentityComponent { get; private set; }
 
     public static UPokemon Create(UObject outer, FSpeciesHandle species, int level)
     {
@@ -34,5 +34,11 @@ public class UPokemon : URPGEntity
         var newPokemon = NewObject<UPokemon>(outer);
         newPokemon.InitializeComponents(@params);
         return newPokemon;
+    }
+
+    protected override void CreateRequiredComponents()
+    {
+        IdentityComponent = CreateComponent<UIdentityComponent>();
+        IdentityComponent.BindInitFunction<FPokemonInitParams>(IdentityComponent.Initialize);
     }
 }

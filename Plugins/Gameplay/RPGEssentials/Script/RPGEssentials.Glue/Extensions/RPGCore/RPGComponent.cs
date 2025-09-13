@@ -16,4 +16,19 @@ public partial class URPGComponent
                 $"Entity {this} does not have component {componentClass}"
             );
     }
+
+    public void BindInitFunction<TStruct>(Action<TStruct> initFunction)
+        where TStruct : struct, MarshalledStruct<TStruct>
+    {
+        if (initFunction.Target is not URPGComponent component || !ReferenceEquals(component, this))
+        {
+            throw new InvalidOperationException("Function must be bound to this component");
+        }
+
+        var result = BindInitFunctionInternal(initFunction.Method.Name);
+        if (result is null)
+        {
+            throw new InvalidOperationException("Failed to bind init function");
+        }
+    }
 }

@@ -4,42 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "RangeV3.h"
+#include "Structs/UnrealStruct.h"
 #include "StructUtils/StructView.h"
 #include "UObject/Object.h"
 
 #include "RPGEntity.generated.h"
 
 class URPGComponent;
-
-template <typename T>
-concept CoreStructType = requires {
-    { TBaseStructure<std::remove_cvref_t<T>>::Get() } -> std::same_as<UScriptStruct *>;
-};
-
-/**
- * Concept for any USTRUCT in the editor.
- */
-template <typename T>
-concept DeclaredStruct = requires {
-    { std::remove_cvref_t<T>::StaticStruct() } -> std::same_as<UScriptStruct *>;
-};
-
-template <typename T>
-concept UEStruct = CoreStructType<T> || DeclaredStruct<T>;
-
-template <typename T>
-    requires UEStruct<T>
-constexpr UScriptStruct *GetScriptStruct()
-{
-    if constexpr (DeclaredStruct<T>)
-    {
-        return std::remove_cvref_t<T>::StaticStruct();
-    }
-    else
-    {
-        return TBaseStructure<std::remove_cvref_t<T>>::Get();
-    }
-}
 
 /**
  *
@@ -69,6 +40,13 @@ class RPGCORE_API URPGEntity : public UObject
     void PostInitProperties() override;
     void PostLoad() override;
 
+    UFUNCTION(BlueprintImplementableEvent, Category = "RPG Entity")
+    void CreateRequiredComponents();
+
+    UFUNCTION(BlueprintCallable, Category = "RPG Entity",
+              meta = (DeterminesOutputType = ComponentClass, DynamicOutputParam = ReturnValue))
+    URPGComponent *CreateComponent(TSubclassOf<URPGComponent> ComponentClass);
+
     virtual const UScriptStruct *NativeGetEntityStruct() const
     {
         return nullptr;
@@ -89,6 +67,8 @@ class RPGCORE_API URPGEntity : public UObject
 
     DECLARE_FUNCTION(execInitializeComponents);
 
+    void InitializeComponents();
+
     void InitializeComponents(FStructView Params);
 
     template <UEStruct T>
@@ -98,6 +78,9 @@ class RPGCORE_API URPGEntity : public UObject
     }
 
   private:
+    UFUNCTION(meta = (ScriptMethod))
+    void DefaultInitializeComponents();
+
     void GatherComponentReferences();
 
     FORCEINLINE auto GetAllComponents() const

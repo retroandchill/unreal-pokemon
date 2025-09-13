@@ -33,6 +33,23 @@ void URPGEntity::PostInitProperties()
 {
     UObject::PostInitProperties();
 
+    if (HasAnyFlags(RF_ClassDefaultObject) || !HasAnyFlags(RF_NeedInitialization))
+    {
+        // Because of the way C# classes are loaded we need to defer this if we're still
+        // loading the engine.
+        if (GEngine != nullptr && GEngine->IsInitialized())
+        {
+            CreateRequiredComponents();
+        }
+        else
+        {
+            FCoreDelegates::OnPostEngineInit.AddWeakLambda(this, [this] {
+                CreateRequiredComponents();
+                GatherComponentReferences();
+            });
+        }
+    }
+
     GatherComponentReferences();
 }
 
@@ -41,6 +58,11 @@ void URPGEntity::PostLoad()
     UObject::PostLoad();
 
     GatherComponentReferences();
+}
+
+URPGComponent *URPGEntity::CreateComponent(const TSubclassOf<URPGComponent> ComponentClass)
+{
+    return NewObject<URPGComponent>(this, ComponentClass);
 }
 
 #if WITH_EDITOR
@@ -104,19 +126,36 @@ DEFINE_FUNCTION(URPGEntity::execInitializeComponents)
     P_NATIVE_END
 }
 
+void URPGEntity::InitializeComponents()
+{
+    InitializeComponents(FStructView());
+}
+
 // ReSharper disable once CppMemberFunctionMayBeConst
 void URPGEntity::InitializeComponents(const FStructView Params)
 {
-    if (Params.GetScriptStruct() != GetEntityStruct())
+    auto *EntityStruct = GetEntityStruct();
+    bool bCallParameterizedInit = EntityStruct != nullptr;
+    if (bCallParameterizedInit && EntityStruct != Params.GetScriptStruct())
     {
         UE_LOG(LogRPGCore, Error, TEXT("Invalid params struct for entity %s"), *GetName());
-        return;
+        bCallParameterizedInit = false;
     }
 
     for (URPGComponent *Component : GetAllComponents())
     {
-        Component->Initialize(Params);
+        Component->PreInitialize(this);
+
+        if (bCallParameterizedInit)
+        {
+            Component->Initialize(Params);
+        }
     }
+}
+
+void URPGEntity::DefaultInitializeComponents()
+{
+    InitializeComponents();
 }
 
 void URPGEntity::GatherComponentReferences()

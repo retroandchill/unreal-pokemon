@@ -32,7 +32,7 @@ public class UIdentityComponent : URPGComponent
 
     [UFunction]
     [UMetaData("RPGInitFunction")]
-    private void Initialize(FPokemonInitParams initParams)
+    public void Initialize(FPokemonInitParams initParams)
     {
         Species = initParams.Species;
         PersonalityValue =
