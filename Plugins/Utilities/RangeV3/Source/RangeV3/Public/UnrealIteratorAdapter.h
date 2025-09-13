@@ -96,7 +96,12 @@ class TUnrealIteratorAdapter
         return !Iterator;
     }
 
-    auto operator*() const
+    decltype(auto) operator*()
+    {
+        return *Iterator;
+    }
+
+    decltype(auto) operator*() const
     {
         return *Iterator;
     }
@@ -150,7 +155,8 @@ class TUnrealIteratorRange
     TUnrealIteratorAdapter<T> Iterator;
 };
 
-template <std::derived_from<FField> T>
+template <typename T>
+    requires std::derived_from<T, FField> || std::derived_from<T, UField>
 using TFieldView = TUnrealIteratorRange<TFieldIterator<T>>;
 
 namespace ranges

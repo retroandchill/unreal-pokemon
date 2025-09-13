@@ -26,6 +26,10 @@ struct RPGCORE_API FRPGComponentInitializer
   private:
     UPROPERTY()
     TObjectPtr<UFunction> InitFunction;
+
+#if WITH_EDITOR
+    friend class FRPGComponentInitializerCustomization;
+#endif
 };
 
 // ReSharper disable once CppUE4CodingStandardNamingViolationWarning
@@ -72,7 +76,7 @@ class RPGCORE_API URPGComponent : public UObject
     }
 
   private:
-    UPROPERTY(EditAnywhere, Category = "RPG Component")
+    UPROPERTY(EditAnywhere, Category = "Initialization")
     FRPGComponentInitializer InitFunction;
 
     UPROPERTY(BlueprintGetter = GetOwningEntity, Category = "RPG Component")

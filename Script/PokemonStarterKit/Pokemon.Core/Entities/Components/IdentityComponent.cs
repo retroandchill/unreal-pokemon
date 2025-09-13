@@ -6,6 +6,7 @@ using UnrealSharp.RPGCore;
 namespace Pokemon.Core.Entities.Components;
 
 [UClass]
+[UMetaData("HideCategories", "Identity")]
 public class UIdentityComponent : URPGComponent
 {
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Identity")]

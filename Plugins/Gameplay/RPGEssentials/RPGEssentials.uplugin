@@ -18,6 +18,11 @@
 			"Name": "RPGCore",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "RPGEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	]
 }
