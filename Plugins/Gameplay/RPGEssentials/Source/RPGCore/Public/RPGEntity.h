@@ -66,6 +66,7 @@ class RPGCORE_API URPGEntity : public UObject
 
   protected:
     void PostInitProperties() override;
+    void PostLoad() override;
 
     virtual const UScriptStruct *NativeGetEntityStruct() const
     {
@@ -98,12 +99,9 @@ class RPGCORE_API URPGEntity : public UObject
   private:
     void GatherComponentReferences();
 
-    void DiscoverAndBindInitFunctions();
-
-    static void DiscoverAndBindInitFunction(URPGComponent *Component, const UScriptStruct *ExpectedStruct);
-
-    static void BindComponentFunction(URPGComponent *Component, UFunction *Function);
-
     UPROPERTY()
-    TArray<TObjectPtr<URPGComponent>> Components;
+    TArray<TObjectPtr<URPGComponent>> RequiredComponents;
+
+    UPROPERTY(EditDefaultsOnly, Instanced, Category = "Components")
+    TArray<TObjectPtr<URPGComponent>> AdditionalComponents;
 };

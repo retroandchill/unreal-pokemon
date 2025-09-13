@@ -1,3 +1,6 @@
 [submodule "Plugins/UnrealSharp/UnrealSharp"]
 	path = Plugins/UnrealSharp/UnrealSharp
 	url = https://github.com/retroandchill/UnrealSharp.git
+[submodule "Plugins/Utilities/RangeV3/Source/ThirdParty/RangeV3Library/range-v3"]
+	path = Plugins/Utilities/RangeV3/Source/ThirdParty/RangeV3Library/range-v3
+	url = https://github.com/ericniebler/range-v3.git

@@ -17,7 +17,7 @@ const UScriptStruct *URPGEntity::GetEntityStruct() const
 
 URPGComponent *URPGEntity::GetComponent(const TSubclassOf<URPGComponent> ComponentClass) const
 {
-    for (auto Component : Components)
+    for (auto Component : RequiredComponents)
     {
         if (Component->IsA(ComponentClass))
         {
@@ -33,7 +33,13 @@ void URPGEntity::PostInitProperties()
     UObject::PostInitProperties();
 
     GatherComponentReferences();
-    DiscoverAndBindInitFunctions();
+}
+
+void URPGEntity::PostLoad()
+{
+    UObject::PostLoad();
+
+    GatherComponentReferences();
 }
 
 #if WITH_EDITOR
@@ -69,7 +75,6 @@ void URPGEntity::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEv
     UObject::PostEditChangeProperty(PropertyChangedEvent);
 
     GatherComponentReferences();
-    DiscoverAndBindInitFunctions();
 }
 #endif
 
@@ -96,18 +101,15 @@ void URPGEntity::InitializeComponents(const FStructView Params)
         return;
     }
 
-    for (const auto Component : Components)
+    for (const auto Component : RequiredComponents)
     {
-        if (Component->InitDelegate.IsBound())
-        {
-            Component->InitDelegate.Execute(Params);
-        }
+        Component->Initialize(Params);
     }
 }
 
 void URPGEntity::GatherComponentReferences()
 {
-    Components.Reset();
+    RequiredComponents.Reset();
     
     for (TFieldIterator<FProperty> PropIt(GetClass()); PropIt; ++PropIt)
     {
@@ -118,71 +120,7 @@ void URPGEntity::GatherComponentReferences()
         if (auto *Component = Cast<URPGComponent>(ObjProp->GetObjectPropertyValue_InContainer(this));
             Component != nullptr)
         {
-            Components.Add(Component);
+            RequiredComponents.Add(Component);
         }
     }
-}
-
-void URPGEntity::DiscoverAndBindInitFunctions()
-{
-    auto *ExpectedStruct = GetEntityStruct();
-    if (ExpectedStruct == nullptr)
-    {
-        return;
-    }
-
-    for (auto Component : Components)
-    {
-        DiscoverAndBindInitFunction(Component, ExpectedStruct);
-    }
-}
-
-void URPGEntity::DiscoverAndBindInitFunction(URPGComponent *Component, const UScriptStruct *ExpectedStruct)
-{
-    static FName MetadataTag = RPGInitFunction;
-    static TMap<TObjectPtr<const UScriptStruct>, TMap<TSubclassOf<URPGComponent>, TObjectPtr<UFunction>>> InitFunctions;
-
-    auto &FunctionsMapping = InitFunctions.FindOrAdd(ExpectedStruct);
-    if (const auto *Function = FunctionsMapping.Find(Component->GetClass()); Function != nullptr)
-    {
-        BindComponentFunction(Component, *Function);
-        return;
-    }
-
-    Component->InitDelegate.Unbind();
-
-    for (TFieldIterator<UFunction> FuncIt(Component->GetClass()); FuncIt; ++FuncIt)
-    {
-        auto *Func = *FuncIt;
-        if (Func->HasMetaData(MetadataTag))
-            continue;
-
-        if (Func->GetReturnProperty() != nullptr)
-            continue;
-
-        int32 ParamCount = 0;
-        const FStructProperty *StructParam = nullptr;
-        for (TFieldIterator<FProperty> ParamIt(Func); ParamIt; ++ParamIt)
-        {
-            if (ParamIt->HasAnyPropertyFlags(CPF_Parm))
-            {
-                ++ParamCount;
-                if (const auto *AsStruct = CastField<FStructProperty>(*ParamIt); AsStruct != nullptr)
-                    StructParam = AsStruct;
-            }
-        }
-
-        if (ParamCount != 1 || StructParam == nullptr || StructParam->Struct != ExpectedStruct)
-            continue;
-
-        FunctionsMapping.Emplace(Component->GetClass(), Func);
-        BindComponentFunction(Component, Func);
-        return;
-    }
-}
-
-void URPGEntity::BindComponentFunction(URPGComponent *Component, UFunction *Function)
-{
-    Component->InitDelegate.BindLambda(
-        [Component, Function](const FStructView InitData) { Component->ProcessEvent(Function, InitData.GetMemory()); });
 }

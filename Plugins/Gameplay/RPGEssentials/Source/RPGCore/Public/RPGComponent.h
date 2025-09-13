@@ -7,7 +7,28 @@
 #include "UObject/Object.h"
 #include "RPGComponent.generated.h"
 
+class URPGComponent;
 class URPGEntity;
+
+USTRUCT(DisplayName = "RPG Component Initializer")
+struct RPGCORE_API FRPGComponentInitializer
+{
+    GENERATED_BODY()
+
+    FRPGComponentInitializer() = default;
+    explicit FRPGComponentInitializer(UFunction *InitFunction);
+
+    FRPGComponentInitializer& operator=(UFunction* Function);
+
+    void Execute(URPGComponent* Component, FStructView Data) const;
+    
+private:
+    UPROPERTY()
+    TObjectPtr<UFunction> InitFunction;
+};
+
+// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
+#define BindInitFunctionDynamic(Type, FunctionName) BindInitFunction(FindFieldChecked<UFunction>(Type::StaticClass(), GET_FUNCTION_NAME_CHECKED(Type, FunctionName))
 
 /**
  * @brief Abstract base class for RPG components.
@@ -23,7 +44,14 @@ class RPGCORE_API URPGComponent : public UObject
     GENERATED_BODY()
 
 public:
-    DECLARE_DELEGATE_OneParam(FInitComponent, FStructView);
+    void Initialize(const FStructView Data) {
+        InitFunction.Execute(this, Data);   
+    }
+
+    void BindInitFunction(UFunction *Function)
+    {
+        InitFunction = Function;
+    }
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
     URPGEntity* GetOwningEntity() const
@@ -41,12 +69,10 @@ public:
         return CastChecked<T>(GetSiblingComponent(ComponentClass));
     }
     
-    
 private:
-    FInitComponent InitDelegate;
+    UPROPERTY(EditAnywhere, Category = "RPG Component")
+    FRPGComponentInitializer InitFunction;
 
     UPROPERTY(BlueprintGetter = GetOwningEntity, Category = "RPG Component")
     TObjectPtr<URPGEntity> OwningEntity;
-    
-    friend class URPGEntity;
 };
