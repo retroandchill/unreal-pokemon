@@ -10,7 +10,7 @@ public class UIdentityComponent : URPGComponent
 {
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Identity")]
     public FSpeciesHandle Species { get; set; }
-    
+
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Identity")]
     public FText Nickname { get; set; }
 
@@ -34,6 +34,8 @@ public class UIdentityComponent : URPGComponent
     private void Initialize(FPokemonInitParams initParams)
     {
         Species = initParams.Species;
-        PersonalityValue = (uint) Random.Shared.Next(ushort.MaxValue + 1) | (uint) (Random.Shared.Next(ushort.MaxValue + 1) << 16);
+        PersonalityValue =
+            (uint)Random.Shared.Next(ushort.MaxValue + 1)
+            | (uint)(Random.Shared.Next(ushort.MaxValue + 1) << 16);
     }
 }

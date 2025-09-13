@@ -8,8 +8,8 @@
 #pragma once
 
 #include "Containers/Map.h"
-#include "Traits/IsContiguousContainer.h"
 #include "Iterable.h"
+#include "Traits/IsContiguousContainer.h"
 
 namespace Retro::Ranges
 {

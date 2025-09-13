@@ -7,7 +7,7 @@ FRPGComponentInitializer::FRPGComponentInitializer(UFunction *InitFunction) : In
 {
 }
 
-FRPGComponentInitializer & FRPGComponentInitializer::operator=(UFunction *Function)
+FRPGComponentInitializer &FRPGComponentInitializer::operator=(UFunction *Function)
 {
     InitFunction = Function;
     return *this;
@@ -15,9 +15,10 @@ FRPGComponentInitializer & FRPGComponentInitializer::operator=(UFunction *Functi
 
 void FRPGComponentInitializer::Execute(URPGComponent *Component, const FStructView Data) const
 {
-    if (InitFunction == nullptr) return;
+    if (InitFunction == nullptr)
+        return;
 
-    Component->ProcessEvent(InitFunction, Data.GetMemory());   
+    Component->ProcessEvent(InitFunction, Data.GetMemory());
 }
 
 URPGComponent *URPGComponent::GetSiblingComponent(const TSubclassOf<URPGComponent> ComponentClass) const

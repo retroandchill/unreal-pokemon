@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "RangeV3.h"
 #include "StructUtils/StructView.h"
 #include "UObject/Object.h"
 
@@ -11,9 +12,9 @@
 class URPGComponent;
 
 template <typename T>
-    concept CoreStructType = requires {
+concept CoreStructType = requires {
     { TBaseStructure<std::remove_cvref_t<T>>::Get() } -> std::same_as<UScriptStruct *>;
-    };
+};
 
 /**
  * Concept for any USTRUCT in the editor.
@@ -27,7 +28,7 @@ template <typename T>
 concept UEStruct = CoreStructType<T> || DeclaredStruct<T>;
 
 template <typename T>
-        requires UEStruct<T>
+    requires UEStruct<T>
 constexpr UScriptStruct *GetScriptStruct()
 {
     if constexpr (DeclaredStruct<T>)
@@ -91,13 +92,18 @@ class RPGCORE_API URPGEntity : public UObject
     void InitializeComponents(FStructView Params);
 
     template <UEStruct T>
-    void InitializeComponents(T& Struct)
+    void InitializeComponents(T &Struct)
     {
-        InitializeComponents(FStructView(GetScriptStruct<T>(), &Struct));   
+        InitializeComponents(FStructView(GetScriptStruct<T>(), &Struct));
     }
 
   private:
     void GatherComponentReferences();
+
+    FORCEINLINE auto GetAllComponents() const
+    {
+        return ranges::views::concat(RequiredComponents, AdditionalComponents);
+    }
 
     UPROPERTY()
     TArray<TObjectPtr<URPGComponent>> RequiredComponents;

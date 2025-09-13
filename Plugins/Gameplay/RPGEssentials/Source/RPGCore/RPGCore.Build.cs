@@ -28,6 +28,7 @@ public class RPGCore : ModuleRules
             {
                 "Core",
                 "CoreUObject",
+                "RangeV3",
                 // ... add other public dependencies that you statically link with here ...
             }
         );

@@ -28,7 +28,7 @@ public enum ETrainerGender : byte
     /// <summary>
     /// Represents a double battle trainer with a male and female member
     /// </summary>
-    Mixed = 3
+    Mixed = 3,
 }
 
 [UStruct]
@@ -46,27 +46,39 @@ public readonly partial struct FTrainerType() : IGameDataEntry
         Category = "Identification"
     )]
     public int RowIndex { get; init; }
-    
+
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Display"
     )]
     [GameAccessTools.SourceGenerator.Attributes.DisplayName]
     public FText Name { get; init; } = "Unnamed";
-    
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Profile")]
+
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Profile"
+    )]
     public ETrainerGender Gender { get; init; } = ETrainerGender.Unknown;
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Battle")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Battle"
+    )]
     [field: UIMin("0")]
     [field: ClampMin("0")]
     public int BasePayout { get; init; } = 30;
 
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Battle")]
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Battle"
+    )]
     [field: UIMin("0")]
     [field: ClampMin("0")]
     public int SkillLevel { get; init; } = 30;
-    
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
+
+    [field: UProperty(
+        PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
+        Category = "Metadata"
+    )]
     public FGameplayTagContainer Tags { get; init; }
 }

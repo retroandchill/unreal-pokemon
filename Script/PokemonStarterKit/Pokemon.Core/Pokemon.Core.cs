@@ -4,13 +4,7 @@ namespace Pokemon.Core;
 
 public class FPokemonCoreModule : IModuleInterface
 {
-    public void StartupModule()
-    {
+    public void StartupModule() { }
 
-    }
-
-    public void ShutdownModule()
-    {
-
-    }
+    public void ShutdownModule() { }
 }

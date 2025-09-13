@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "StructUtils/StructView.h"
 #include "UObject/Object.h"
+
 #include "RPGComponent.generated.h"
 
 class URPGComponent;
@@ -18,11 +19,11 @@ struct RPGCORE_API FRPGComponentInitializer
     FRPGComponentInitializer() = default;
     explicit FRPGComponentInitializer(UFunction *InitFunction);
 
-    FRPGComponentInitializer& operator=(UFunction* Function);
+    FRPGComponentInitializer &operator=(UFunction *Function);
 
-    void Execute(URPGComponent* Component, FStructView Data) const;
-    
-private:
+    void Execute(URPGComponent *Component, FStructView Data) const;
+
+  private:
     UPROPERTY()
     TObjectPtr<UFunction> InitFunction;
 };
@@ -43,9 +44,10 @@ class RPGCORE_API URPGComponent : public UObject
 {
     GENERATED_BODY()
 
-public:
-    void Initialize(const FStructView Data) {
-        InitFunction.Execute(this, Data);   
+  public:
+    void Initialize(const FStructView Data)
+    {
+        InitFunction.Execute(this, Data);
     }
 
     void BindInitFunction(UFunction *Function)
@@ -54,22 +56,22 @@ public:
     }
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    URPGEntity* GetOwningEntity() const
+    URPGEntity *GetOwningEntity() const
     {
         return OwningEntity;
     }
 
     UFUNCTION(BlueprintPure, Category = "RPG Component",
-        meta = (DeterminesOutputType = ComponentClass, DynamicOutputParam = ReturnValue))
+              meta = (DeterminesOutputType = ComponentClass, DynamicOutputParam = ReturnValue))
     URPGComponent *GetSiblingComponent(TSubclassOf<URPGComponent> ComponentClass) const;
 
     template <std::derived_from<URPGComponent> T>
-    T* GetSiblingComponent(const TSubclassOf<URPGComponent> ComponentClass = T::StaticClass()) const
+    T *GetSiblingComponent(const TSubclassOf<URPGComponent> ComponentClass = T::StaticClass()) const
     {
         return CastChecked<T>(GetSiblingComponent(ComponentClass));
     }
-    
-private:
+
+  private:
     UPROPERTY(EditAnywhere, Category = "RPG Component")
     FRPGComponentInitializer InitFunction;
 

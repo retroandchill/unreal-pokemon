@@ -4,6 +4,7 @@
 #include "LogRPGCore.h"
 #include "Misc/DataValidation.h"
 #include "RPGComponent.h"
+#include "UnrealIteratorAdapter.h"
 
 const UScriptStruct *URPGEntity::GetEntityStruct() const
 {
@@ -17,7 +18,7 @@ const UScriptStruct *URPGEntity::GetEntityStruct() const
 
 URPGComponent *URPGEntity::GetComponent(const TSubclassOf<URPGComponent> ComponentClass) const
 {
-    for (auto Component : RequiredComponents)
+    for (URPGComponent *Component : GetAllComponents())
     {
         if (Component->IsA(ComponentClass))
         {
@@ -51,18 +52,28 @@ EDataValidationResult URPGEntity::IsDataValid(FDataValidationContext &Context) c
     if (GetClass()->HasAnyClassFlags(CLASS_Abstract))
         return Result;
 
-    for (TFieldIterator<FProperty> PropIt(GetClass()); PropIt; ++PropIt)
+    for (auto *ObjProp : TFieldView<FObjectProperty>(GetClass(), EFieldIteratorFlags::IncludeSuper) |
+                             ranges::views::filter([](const FObjectProperty *Prop) {
+                                 return Prop->PropertyClass->IsChildOf(URPGComponent::StaticClass());
+                             }))
     {
-        const auto *ObjProp = CastField<FObjectProperty>(*PropIt);
-        if (ObjProp == nullptr || !ObjProp->PropertyClass->IsChildOf(URPGComponent::StaticClass()))
-            continue;
-
         if (const auto *Component = Cast<URPGComponent>(ObjProp->GetObjectPropertyValue_InContainer(this));
             Component == nullptr)
         {
             Context.AddError(
                 FText::FormatOrdered(NSLOCTEXT("UnrealSharp", "ComponentNotFound", "Component {0} not found"),
                                      FText::FromString(ObjProp->GetName())));
+            Result = EDataValidationResult::Invalid;
+        }
+    }
+
+    for (auto [Index, Component] : AdditionalComponents | ranges::views::enumerate)
+    {
+        if (Component == nullptr)
+        {
+            Context.AddError(
+                FText::FormatOrdered(NSLOCTEXT("UnrealSharp", "ComponentNotFound", "Additional component at index {0}"),
+                                     FText::FromString(FString::FromInt(Index))));
             Result = EDataValidationResult::Invalid;
         }
     }
@@ -93,6 +104,7 @@ DEFINE_FUNCTION(URPGEntity::execInitializeComponents)
     P_NATIVE_END
 }
 
+// ReSharper disable once CppMemberFunctionMayBeConst
 void URPGEntity::InitializeComponents(const FStructView Params)
 {
     if (Params.GetScriptStruct() != GetEntityStruct())
@@ -101,7 +113,7 @@ void URPGEntity::InitializeComponents(const FStructView Params)
         return;
     }
 
-    for (const auto Component : RequiredComponents)
+    for (URPGComponent *Component : GetAllComponents())
     {
         Component->Initialize(Params);
     }
@@ -110,7 +122,7 @@ void URPGEntity::InitializeComponents(const FStructView Params)
 void URPGEntity::GatherComponentReferences()
 {
     RequiredComponents.Reset();
-    
+
     for (TFieldIterator<FProperty> PropIt(GetClass()); PropIt; ++PropIt)
     {
         const auto *ObjProp = CastField<FObjectProperty>(*PropIt);
