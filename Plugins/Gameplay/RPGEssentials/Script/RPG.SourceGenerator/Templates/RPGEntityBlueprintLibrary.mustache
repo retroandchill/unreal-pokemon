@@ -1,0 +1,87 @@
+﻿using UnrealSharp;
+using UnrealSharp.Attributes;
+using UnrealSharp.Attributes.MetaTags;
+using UnrealSharp.Engine;
+using UnrealSharp.RPGCore;
+using LanguageExt.UnsafeValueAccess;
+
+namespace {{Namespace}};
+
+[UClass]
+public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary 
+{
+    {{#Components}}
+    {{#Properties}}
+    {{#HasGetter}}
+    {{#GetterIsUFunction}}
+    {{#GetterAttributes}}
+    [{{Value}}]    
+    {{/GetterAttributes}}    
+    {{/GetterIsUFunction}}
+    {{^GetterIsUFunction}}
+    [UFunction(FunctionFlags.BlueprintPure{{#HasDisplayName}}, DisplayName = "Get {{DisplayName}}"{{/HasDisplayName}}{{#HasCategory}}, Category = "{{Category}}"{{/HasCategory}})]    
+    {{/GetterIsUFunction}}
+    [UMetaData("DefaultToSelf", "unit")]
+    [ExpandEnumAsExecs("ReturnValue")]
+    {{#IsOptionType}}
+    public static EValueFindResult Get{{Name}}({{../../ClassName}} unit, out {{OptionType}} value)
+    {
+        var optionValue = unit.{{Name}};
+        if (optionValue.IsSome)
+        {
+            value = optionValue.ValueUnsafe();
+            return EValueFindResult.Found;
+        }
+        
+        value = default;
+        return EValueFindResult.NotFound;
+    }
+    {{/IsOptionType}}
+    {{^IsOptionType}}
+    public static {{Type}} Get{{Name}}({{../../ClassName}} unit) => unit.{{Name}};
+    {{/IsOptionType}}
+        
+    {{/HasGetter}}
+    {{#HasSetter}}
+    {{#SetterIsUFunction}}
+    {{#SetterAttributes}}
+    [{{Value}}]    
+    {{/SetterAttributes}}    
+    {{/SetterIsUFunction}}
+    {{^SetterIsUFunction}}
+    [UFunction(FunctionFlags.BlueprintCallable{{#HasDisplayName}}, DisplayName = "Set {{DisplayName}}"{{/HasDisplayName}}{{#HasCategory}}, Category = "{{Category}}"{{/HasCategory}})]
+    {{/SetterIsUFunction}}
+    [UMetaData("DefaultToSelf", "unit")]
+    {{#IsOptionType}}
+    public static void Set{{Name}}({{../../ClassName}} unit, {{OptionType}} value) => unit.{{Name}} = value;
+
+    {{#SetterIsUFunction}}
+    {{#SetterAttributes}}
+    [{{Value}}]    
+    {{/SetterAttributes}}    
+    {{/SetterIsUFunction}}
+    {{^SetterIsUFunction}}
+    [UFunction(FunctionFlags.BlueprintCallable{{#HasDisplayName}}, DisplayName = "Set {{DisplayName}}"{{/HasDisplayName}}{{#HasCategory}}, Category = "{{Category}}"{{/HasCategory}})]
+    {{/SetterIsUFunction}}
+    [UMetaData("DefaultToSelf", "unit")]
+    public static void Reset{{Name}}({{../../ClassName}} unit) => unit.{{Name}} = {{Type}}.None;
+    {{/IsOptionType}}
+    {{^IsOptionType}}
+    public static void Set{{Name}}({{../../ClassName}} unit, {{Type}} value) => unit.{{Name}} = value;
+    {{/IsOptionType}}
+        
+    {{/HasSetter}}   
+    {{/Properties}}
+    {{#Methods}}
+    {{#Attributes}}
+    [{{Value}}]    
+    {{/Attributes}}
+    [UMetaData("DefaultToSelf", "unit")]
+    public {{ReturnType}} {{Name}}({{../../ClassName}} unit{{#HasParameters}}, {{/HasParameters}}{{#Parameters}}{{Type}} {{Name}}{{#HasDefault}} = {{DefaultValue}}{{/HasDefault}}{{^IsLast}}, {{/IsLast}}{{/Parameters}})
+    {
+        {{^ReturnsVoid}}return {{/ReturnsVoid}}unit.{{../ComponentName}}.{{Name}}({{#Parameters}}{{Name}}{{^IsLast}}, {{/IsLast}}{{/Parameters}});
+    }    
+        
+    {{/Methods}}
+    {{/Components}}
+}

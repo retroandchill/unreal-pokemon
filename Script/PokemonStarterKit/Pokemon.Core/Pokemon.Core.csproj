@@ -10,6 +10,11 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
+    <ProjectReference
+      Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPG.SourceGenerator\RPG.SourceGenerator.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false"
+    />
     <ProjectReference Include="..\Pokemon.Data\Pokemon.Data.csproj" />
     <Reference Include="UnrealSharp">
       <HintPath>..\..\..\Plugins\UnrealSharp\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>

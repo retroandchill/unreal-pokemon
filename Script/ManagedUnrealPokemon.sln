@@ -97,6 +97,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonUtilities", "CommonUt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonUtilities.Glue", "..\Plugins\Utilities\CommonUtilities\Script\CommonUtilities.Glue\CommonUtilities.Glue.csproj", "{338F37EE-6EBC-4014-BB12-E0CCC83C25B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPG.SourceGenerator", "..\Plugins\Gameplay\RPGEssentials\Script\RPG.SourceGenerator\RPG.SourceGenerator.csproj", "{98BF0AC1-5F92-4A21-9645-E904170847F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -395,6 +397,18 @@ Global
 		{338F37EE-6EBC-4014-BB12-E0CCC83C25B3}.Release|x64.Build.0 = Release|Any CPU
 		{338F37EE-6EBC-4014-BB12-E0CCC83C25B3}.Release|x86.ActiveCfg = Release|Any CPU
 		{338F37EE-6EBC-4014-BB12-E0CCC83C25B3}.Release|x86.Build.0 = Release|Any CPU
+		{98BF0AC1-5F92-4A21-9645-E904170847F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98BF0AC1-5F92-4A21-9645-E904170847F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98BF0AC1-5F92-4A21-9645-E904170847F5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{98BF0AC1-5F92-4A21-9645-E904170847F5}.Debug|x64.Build.0 = Debug|Any CPU
+		{98BF0AC1-5F92-4A21-9645-E904170847F5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{98BF0AC1-5F92-4A21-9645-E904170847F5}.Debug|x86.Build.0 = Debug|Any CPU
+		{98BF0AC1-5F92-4A21-9645-E904170847F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98BF0AC1-5F92-4A21-9645-E904170847F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98BF0AC1-5F92-4A21-9645-E904170847F5}.Release|x64.ActiveCfg = Release|Any CPU
+		{98BF0AC1-5F92-4A21-9645-E904170847F5}.Release|x64.Build.0 = Release|Any CPU
+		{98BF0AC1-5F92-4A21-9645-E904170847F5}.Release|x86.ActiveCfg = Release|Any CPU
+		{98BF0AC1-5F92-4A21-9645-E904170847F5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -445,5 +459,6 @@ Global
 		{A9D916FE-6BBA-FC79-DFA5-CFE31B2208E1} = {07D57EEB-2F50-60C4-C011-FE4FA775C9A8}
 		{EC251B8E-D3F1-3689-74CE-2178CB5894C1} = {A9D916FE-6BBA-FC79-DFA5-CFE31B2208E1}
 		{338F37EE-6EBC-4014-BB12-E0CCC83C25B3} = {EC251B8E-D3F1-3689-74CE-2178CB5894C1}
+		{98BF0AC1-5F92-4A21-9645-E904170847F5} = {3CAD8700-9379-0A37-8B1B-F48BB7114FD5}
 	EndGlobalSection
 EndGlobal

@@ -26,14 +26,10 @@ class RPGCORE_API URPGEntity : public UObject
     UFUNCTION(BlueprintPure, Category = "RPG Entity")
     const UScriptStruct *GetEntityStruct() const;
 
-    UFUNCTION(BlueprintPure, Category = "RPG Entity",
-              meta = (DeterminesOutputType = ComponentClass, DynamicOutputParam = ReturnValue))
-    URPGComponent *GetComponent(TSubclassOf<URPGComponent> ComponentClass) const;
-
-    template <std::derived_from<URPGComponent> T>
+    template <std::derived_from<URPGComponent> T = URPGComponent>
     T *GetComponent(const TSubclassOf<URPGComponent> ComponentClass = T::StaticClass()) const
     {
-        return CastChecked<T>(GetComponent(ComponentClass));
+        return CastChecked<T>(GetComponentInternal(ComponentClass));
     }
 
   protected:
@@ -43,8 +39,7 @@ class RPGCORE_API URPGEntity : public UObject
     UFUNCTION(BlueprintImplementableEvent, Category = "RPG Entity")
     void CreateRequiredComponents();
 
-    UFUNCTION(BlueprintCallable, Category = "RPG Entity",
-              meta = (DeterminesOutputType = ComponentClass, DynamicOutputParam = ReturnValue))
+    UFUNCTION(meta = (ScriptMethod, DeterminesOutputType = ComponentClass, DynamicOutputParam = ReturnValue))
     URPGComponent *CreateComponent(TSubclassOf<URPGComponent> ComponentClass);
 
     virtual const UScriptStruct *NativeGetEntityStruct() const
@@ -78,6 +73,10 @@ class RPGCORE_API URPGEntity : public UObject
     }
 
   private:
+    UFUNCTION(BlueprintPure, Category = "RPG Entity",
+              meta = (DeterminesOutputType = ComponentClass, DynamicOutputParam = ReturnValue))
+    URPGComponent *GetComponentInternal(TSubclassOf<URPGComponent> ComponentClass) const;
+
     UFUNCTION(meta = (ScriptMethod))
     void DefaultInitializeComponents();
 

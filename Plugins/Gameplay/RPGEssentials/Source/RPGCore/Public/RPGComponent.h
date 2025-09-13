@@ -75,14 +75,10 @@ class RPGCORE_API URPGComponent : public UObject
         return OwningEntity;
     }
 
-    UFUNCTION(BlueprintPure, Category = "RPG Component",
-              meta = (DeterminesOutputType = ComponentClass, DynamicOutputParam = ReturnValue))
-    URPGComponent *GetSiblingComponent(TSubclassOf<URPGComponent> ComponentClass) const;
-
-    template <std::derived_from<URPGComponent> T>
+    template <std::derived_from<URPGComponent> T = URPGComponent>
     T *GetSiblingComponent(const TSubclassOf<URPGComponent> ComponentClass = T::StaticClass()) const
     {
-        return CastChecked<T>(GetSiblingComponent(ComponentClass));
+        return CastChecked<T>(GetSiblingComponentInternal(ComponentClass));
     }
 
   protected:
@@ -95,6 +91,9 @@ class RPGCORE_API URPGComponent : public UObject
     void K2_PreInitialize();
 
   private:
+    UFUNCTION(meta = (ScriptMethod, DeterminesOutputType = ComponentClass, DynamicOutputParam = ReturnValue))
+    URPGComponent *GetSiblingComponentInternal(TSubclassOf<URPGComponent> ComponentClass) const;
+
     UFUNCTION(meta = (ScriptMethod))
     UFunction *BindInitFunctionInternal(const FName FunctionName);
 

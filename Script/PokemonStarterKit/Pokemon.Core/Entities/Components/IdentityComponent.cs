@@ -1,4 +1,5 @@
 ﻿using Pokemon.Data.Model.PBS;
+using RPG.SourceGenerator.Attributes;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.RPGCore;
@@ -31,7 +32,7 @@ public class UIdentityComponent : URPGComponent
     public ETrainerGender OTGender { get; set; }
 
     [UFunction]
-    [UMetaData("RPGInitFunction")]
+    [ExcludeFromExtensions]
     public void Initialize(FPokemonInitParams initParams)
     {
         Species = initParams.Species;

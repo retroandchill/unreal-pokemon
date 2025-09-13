@@ -1,0 +1,37 @@
+﻿using UnrealSharp;
+using UnrealSharp.Attributes;
+using UnrealSharp.Attributes.MetaTags;
+using UnrealSharp.Engine;
+using UnrealSharp.RPGCore;
+using LanguageExt.UnsafeValueAccess;
+
+namespace {{Namespace}};
+
+public static partial class {{EngineName}}Extensions 
+{
+    extension({{ClassName}} unit)
+    {
+        {{#Components}}
+        {{#Properties}}
+        public {{Type}} {{Name}} 
+        {
+            {{#HasGetter}}
+            get => unit.{{../ComponentName}}.{{Name}};
+            {{/HasGetter}}
+            {{#HasSetter}}
+            set => unit.{{../ComponentName}}.{{Name}} = value;
+            {{/HasSetter}}
+        }
+        
+        {{/Properties}}
+        {{#Methods}}
+        public {{ReturnType}} {{Name}}({{#Parameters}}{{Type}} {{Name}}{{#HasDefault}} = {{DefaultValue}}{{/HasDefault}}{{^IsLast}}, {{/IsLast}}{{/Parameters}})
+        {
+            {{^ReturnsVoid}}return {{/ReturnsVoid}}unit.{{../ComponentName}}.{{Name}}({{#Parameters}}{{Name}}{{^IsLast}}, {{/IsLast}}{{/Parameters}});
+        }    
+        
+        {{/Methods}}
+        {{/Components}}
+    }
+}
+

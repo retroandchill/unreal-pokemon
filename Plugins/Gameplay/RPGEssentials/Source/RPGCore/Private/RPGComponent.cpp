@@ -28,7 +28,7 @@ void URPGComponent::PreInitialize(URPGEntity *InOwningEntity)
     K2_PreInitialize();
 }
 
-URPGComponent *URPGComponent::GetSiblingComponent(const TSubclassOf<URPGComponent> ComponentClass) const
+URPGComponent *URPGComponent::GetSiblingComponentInternal(const TSubclassOf<URPGComponent> ComponentClass) const
 {
     return OwningEntity->GetComponent(ComponentClass);
 }

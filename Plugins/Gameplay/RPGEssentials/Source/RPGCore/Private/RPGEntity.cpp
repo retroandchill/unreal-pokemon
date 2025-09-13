@@ -16,19 +16,6 @@ const UScriptStruct *URPGEntity::GetEntityStruct() const
     return NativeGetEntityStruct();
 }
 
-URPGComponent *URPGEntity::GetComponent(const TSubclassOf<URPGComponent> ComponentClass) const
-{
-    for (URPGComponent *Component : GetAllComponents())
-    {
-        if (Component->IsA(ComponentClass))
-        {
-            return Component;
-        }
-    }
-
-    return nullptr;
-}
-
 void URPGEntity::PostInitProperties()
 {
     UObject::PostInitProperties();
@@ -151,6 +138,19 @@ void URPGEntity::InitializeComponents(const FStructView Params)
             Component->Initialize(Params);
         }
     }
+}
+
+URPGComponent *URPGEntity::GetComponentInternal(const TSubclassOf<URPGComponent> ComponentClass) const
+{
+    for (URPGComponent *Component : GetAllComponents())
+    {
+        if (Component->IsA(ComponentClass))
+        {
+            return Component;
+        }
+    }
+
+    return nullptr;
 }
 
 void URPGEntity::DefaultInitializeComponents()

@@ -1,6 +1,8 @@
 ﻿using GameDataAccessTools.Core.Utilities;
 using Pokemon.Core.Entities.Components;
 using Pokemon.Data.Model.PBS;
+using RPG.SourceGenerator.Attributes;
+using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.RPGCore;
@@ -14,7 +16,7 @@ public readonly partial record struct FPokemonInitParams(
 );
 
 [UClass(ClassFlags.Abstract)]
-public class UPokemon : URPGEntity
+public partial class UPokemon : URPGEntity
 {
     protected override UScriptStruct ManagedGetEntityStruct() => FPokemonInitParams.StaticStruct;
 
@@ -22,23 +24,24 @@ public class UPokemon : URPGEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
+    [Initializer(nameof(UIdentityComponent.Initialize))]
     public UIdentityComponent IdentityComponent { get; private set; }
+
+    [UProperty(
+        PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
+        Category = "Components"
+    )]
+    [Initializer(nameof(UStatComponent.Initialize))]
+    public UStatComponent StatComponent { get; private set; }
 
     public static UPokemon Create(UObject outer, FSpeciesHandle species, int level)
     {
         return Create(outer, new FPokemonInitParams(species, level));
     }
 
-    public static UPokemon Create(UObject outer, FPokemonInitParams @params)
-    {
-        var newPokemon = NewObject<UPokemon>(outer);
-        newPokemon.InitializeComponents(@params);
-        return newPokemon;
-    }
+    [Factory]
+    public static partial UPokemon Create(UObject outer, FPokemonInitParams parameters);
 
-    protected override void CreateRequiredComponents()
-    {
-        IdentityComponent = CreateComponent<UIdentityComponent>();
-        IdentityComponent.BindInitFunction<FPokemonInitParams>(IdentityComponent.Initialize);
-    }
+    private static TSubclassOf<UPokemon> PokemonClass =>
+        GetDefault<UPokemonCoreSettings>().PokemonClass;
 }

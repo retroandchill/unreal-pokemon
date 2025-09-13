@@ -1,0 +1,35 @@
+﻿using UnrealSharp;
+using UnrealSharp.Attributes;
+using UnrealSharp.Engine;
+using UnrealSharp.RPGCore;
+
+namespace {{Namespace}};
+
+partial class {{ClassName}} : {{#Components}}IRPGEntity<{{ComponentType}}>{{^IsLast}}, {{/IsLast}}{{/Components}}
+{
+    {{#Components}}
+    {{ComponentType}} IRPGEntity<{{ComponentType}}>.Component => {{ComponentName}};
+    {{/Components}}
+
+    protected override void CreateRequiredComponents()
+    {
+        {{#Components}}
+        {{ComponentName}} = CreateComponent<{{ComponentType}}>();
+        {{#HasInitializer}}
+        {{ComponentName}}.BindInitFunction<{{../InitializerStruct}}>({{ComponentName}}.{{InitializerName}});
+        {{/HasInitializer}}
+        {{^IsLast}}
+            
+        {{/IsLast}}
+        {{/Components}}
+    }
+
+    {{#HasFactory}}
+    public static partial {{ClassName}} Create({{OuterType}} {{OuterParam}}, {{InitializerStruct}} {{InitializerParams}})
+    {
+        var newEntity = NewObject<{{ClassName}}>({{OuterParam}}{{#HasSubclassSource}}, {{SubclassSource}}{{#SubclassSourceIsMethod}}(){{/SubclassSourceIsMethod}}{{/HasSubclassSource}});
+        newEntity.InitializeComponents({{InitializerParams}});
+        return newEntity;
+    }
+    {{/HasFactory}}
+}

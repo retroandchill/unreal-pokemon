@@ -2,6 +2,23 @@
 
 public partial class URPGComponent
 {
+    public T? GetSiblingComponent<T>()
+        where T : URPGComponent
+    {
+        if (OwningEntity is IRPGEntity<T> rpgEntity)
+        {
+            return rpgEntity.Component;
+        }
+
+        return GetSiblingComponentInternal<T>();
+    }
+
+    public T? GetSiblingComponent<T>(TSubclassOf<T> componentClass)
+        where T : URPGComponent
+    {
+        return GetSiblingComponentInternal(componentClass);
+    }
+
     public T GetRequiredSiblingComponent<T>()
         where T : URPGComponent
     {
