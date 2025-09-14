@@ -14,8 +14,14 @@ public class UPartyComponent : URPGComponent
     [UProperty(PropertyFlags.Transient)]
     private UTrainerInfoComponent InfoComponent { get; set; }
 
-    [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Party")]
-    public TArray<UPokemon> Party { get; }
+    [UProperty]
+    private TArray<UPokemon> Party { get; }
+    
+    public IReadOnlyList<UPokemon> PartyPokemon
+    {
+        [UFunction(FunctionFlags.BlueprintPure, Category = "Party")]
+        get => Party;
+    }
 
     public int Payout
     {
