@@ -79,11 +79,11 @@ public class UStatComponent : URPGComponent
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Stats")]
     public int Speed { get; private set; }
 
-    [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Stats")]
-    public TMap<FMainStatHandle, int> IV { get; }
+    [UProperty]
+    private TMap<FMainStatHandle, int> IV { get; }
 
-    [UProperty(PropertyFlags.BlueprintReadOnly, DisplayName = "IV Overrides", Category = "Stats")]
-    public TMap<FMainStatHandle, int> IVOverrides { get; }
+    [UProperty]
+    private TMap<FMainStatHandle, int> IVOverrides { get; }
 
     public IReadOnlyDictionary<FMainStatHandle, int> EffectiveIVs
     {
@@ -103,8 +103,8 @@ public class UStatComponent : URPGComponent
         }
     }
 
-    [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Stats")]
-    public TMap<FMainStatHandle, int> EV { get; }
+    [UProperty]
+    private TMap<FMainStatHandle, int> EV { get; }
 
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Stats")]
     public FNatureHandle Nature { get; set; }
@@ -142,6 +142,79 @@ public class UStatComponent : URPGComponent
         }
 
         RecalculateStats();
+    }
+
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Stats")]
+    public void SetLevel(int level, bool recalculate = true)
+    {
+        Level = Math.Clamp(level, 1, FGrowthRate.MaxLevel);
+        Exp = PokemonStatics
+            .GetExpGrowthFormula(IdentityComponent.Species.Entry.GrowthRate)
+            .GetMinimumExpForLevel(Level);
+        if (recalculate)
+            RecalculateStats();
+    }
+
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Stats")]
+    public void SetExp(int exp, bool recalculate = true)
+    {
+        Exp = Math.Clamp(exp, 0, ExpForNextLevel);
+        var oldLevel = Level;
+        Level = PokemonStatics
+            .GetExpGrowthFormula(IdentityComponent.Species.Entry.GrowthRate)
+            .GetLevelForExp(Exp);
+        if (oldLevel != Level && recalculate)
+            RecalculateStats();
+    }
+
+    [UFunction(FunctionFlags.BlueprintPure, Category = "Stats")]
+    public int GetIV(FMainStatHandle stat) => IV[stat];
+
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Stats")]
+    public void SetIV(FMainStatHandle stat, int value, bool recalculate = true)
+    {
+        IV[stat] = Math.Clamp(value, 0, MaxIV);
+        if (recalculate)
+            RecalculateStats();
+    }
+
+    [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Get IV Override", Category = "Stats")]
+    public Option<int> GetIVOverride(FMainStatHandle stat)
+    {
+        return IVOverrides.TryGetValue(stat, out var value) ? value : Option<int>.None;
+    }
+
+    [UFunction(
+        FunctionFlags.BlueprintPure,
+        DisplayName = "Try Get IV Override",
+        Category = "Stats"
+    )]
+    public bool TryGetIVOverride(FMainStatHandle stat, out int value)
+    {
+        return IVOverrides.TryGetValue(stat, out value);
+    }
+
+    [UFunction(
+        FunctionFlags.BlueprintCallable,
+        DisplayName = "Set IV Override",
+        Category = "Stats"
+    )]
+    public void SetIVOverride(FMainStatHandle stat, int value, bool recalculate = true)
+    {
+        IVOverrides.Add(stat, value);
+        if (recalculate)
+            RecalculateStats();
+    }
+
+    [UFunction(FunctionFlags.BlueprintPure, Category = "Stats")]
+    public int GetEV(FMainStatHandle stat) => EV[stat];
+
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Stats")]
+    public void SetEV(FMainStatHandle stat, int value, bool recalculate = true)
+    {
+        EV[stat] = Math.Clamp(value, 0, MaxEV);
+        if (recalculate)
+            RecalculateStats();
     }
 
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Stats")]
@@ -186,6 +259,10 @@ public class UStatComponent : URPGComponent
         int natureModifer
     )
     {
+        // Special case for Shedinja
+        if (stat.ID == FStat.HP && baseValue == 1)
+            return 1;
+
         if (stat.Entry.StatType == EStatType.Main)
         {
             return (2 * baseValue + iv + ev / 4) * Level / 100 + Level + 10;
