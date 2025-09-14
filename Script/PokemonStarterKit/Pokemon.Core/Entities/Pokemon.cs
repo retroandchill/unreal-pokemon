@@ -37,6 +37,26 @@ public partial class UPokemon : URPGEntity
     [Initializer(nameof(UStatComponent.Initialize))]
     public UStatComponent StatComponent { get; private set; }
 
+    [UProperty(
+        PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
+        Category = "Components"
+    )]
+    [Initializer(nameof(UAbilityComponent.Initialize))]
+    public UAbilityComponent AbilityComponent { get; private set; }
+
+    [UProperty(
+        PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
+        Category = "Components"
+    )]
+    [Initializer(nameof(UMoveComponent.Initialize))]
+    public UMoveComponent MoveComponent { get; private set; }
+
+    [UProperty(
+        PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
+        Category = "Components"
+    )]
+    public UHoldItemComponent HoldItemComponent { get; private set; }
+
     public static UPokemon Create(UTrainer outer, FSpeciesHandle species, int level)
     {
         return Create(outer, new FPokemonInitParams(species, level));

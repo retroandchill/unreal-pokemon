@@ -1,4 +1,5 @@
-﻿using LanguageExt;
+﻿using JetBrains.Annotations;
+using LanguageExt;
 using Pokemon.Core.Entities;
 using Pokemon.Data;
 using Pokemon.Data.Model.HardCoded;
@@ -13,9 +14,13 @@ namespace Pokemon.Core.Components.Pokemon;
 
 [UClass]
 [UMetaData("HideCategories", "Stats")]
+[UsedImplicitly]
 public class UStatComponent : URPGComponent
 {
+    [PublicAPI]
     public const int MaxIV = 31;
+
+    [PublicAPI]
     public const int MaxEV = 252;
 
     [UProperty(PropertyFlags.Transient)]
@@ -80,9 +85,11 @@ public class UStatComponent : URPGComponent
     public int Speed { get; private set; }
 
     [UProperty]
+    [UsedImplicitly]
     private TMap<FMainStatHandle, int> IV { get; }
 
     [UProperty]
+    [UsedImplicitly]
     private TMap<FMainStatHandle, int> IVOverrides { get; }
 
     public IReadOnlyDictionary<FMainStatHandle, int> EffectiveIVs
@@ -104,6 +111,7 @@ public class UStatComponent : URPGComponent
     }
 
     [UProperty]
+    [UsedImplicitly]
     private TMap<FMainStatHandle, int> EV { get; }
 
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Stats")]
@@ -185,16 +193,6 @@ public class UStatComponent : URPGComponent
     }
 
     [UFunction(
-        FunctionFlags.BlueprintPure,
-        DisplayName = "Try Get IV Override",
-        Category = "Stats"
-    )]
-    public bool TryGetIVOverride(FMainStatHandle stat, out int value)
-    {
-        return IVOverrides.TryGetValue(stat, out value);
-    }
-
-    [UFunction(
         FunctionFlags.BlueprintCallable,
         DisplayName = "Set IV Override",
         Category = "Stats"
@@ -202,6 +200,18 @@ public class UStatComponent : URPGComponent
     public void SetIVOverride(FMainStatHandle stat, int value, bool recalculate = true)
     {
         IVOverrides.Add(stat, value);
+        if (recalculate)
+            RecalculateStats();
+    }
+
+    [UFunction(
+        FunctionFlags.BlueprintCallable,
+        DisplayName = "Clear IV Override",
+        Category = "Stats"
+    )]
+    public void ClearIVOverride(FMainStatHandle stat, bool recalculate = true)
+    {
+        IVOverrides.Remove(stat);
         if (recalculate)
             RecalculateStats();
     }

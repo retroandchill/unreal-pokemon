@@ -1,9 +1,11 @@
 using System.Collections.Immutable;
 using Pokemon.Data.Model.HardCoded;
 using Pokemon.Data.Model.PBS;
+using Pokemon.Editor.Serialization.Model.Pbs;
 using Riok.Mapperly.Abstractions;
+using UnrealSharp;
 
-namespace Pokemon.Editor.Serialization.Model.Pbs;
+namespace Pokemon.Editor.Serialization.Mappers;
 
 [Mapper(
     RequiredMappingStrategy = RequiredMappingStrategy.Target,

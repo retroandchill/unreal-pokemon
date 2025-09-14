@@ -5,6 +5,7 @@ using Pokemon.Editor.Serialization.Pbs;
 using Pokemon.Editor.Serialization.Pbs.Serializers;
 using UnrealSharp.Engine.Core.Modules;
 using UnrealSharp.Log;
+using SpeciesMapper = Pokemon.Editor.Serialization.Mappers.SpeciesMapper;
 
 namespace Pokemon.Editor;
 
@@ -41,8 +42,8 @@ public class FPokemonEditorModule : IModuleInterface
             )
             .RegisterSerializer(
                 new MappingPbsSerializer<SpeciesInfo, FSpecies>(
-                    x => x.ToSpecies(),
-                    x => x.ToSpeciesInfo()
+                    x => SpeciesMapper.ToSpecies(x),
+                    x => SpeciesMapper.ToSpeciesInfo(x)
                 )
             )
             .RegisterSerializer(

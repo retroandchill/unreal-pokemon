@@ -18,6 +18,13 @@ public class UPokemonCoreSettings : UDeveloperSettings
 
     [UProperty(
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
+        Category = "Pokémon"
+    )]
+    [UsedImplicitly]
+    public int MaxMoves { get; } = 4;
+
+    [UProperty(
+        PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "DefaultClasses"
     )]
     public TSoftClassPtr<UPokemon> PokemonClass { get; }

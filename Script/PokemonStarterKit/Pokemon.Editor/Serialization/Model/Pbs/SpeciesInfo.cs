@@ -39,6 +39,7 @@ public record SpeciesInfo
     [PbsLocalizedText("PokemonSpecies", "{0}_FormName")]
     public FText FormName { get; init; } = FText.None;
 
+    [PbsLength(Min = 1)]
     public IReadOnlyList<FName> Types { get; init; } = [new("NORMAL")];
 
     [PbsScalar<BaseStatsConverter>]
@@ -68,6 +69,7 @@ public record SpeciesInfo
     [PbsRange<int>(0, 255)]
     public int BaseHappiness { get; init; } = 70;
 
+    [PbsLength(Max = 2)]
     public IReadOnlyList<FName> Abilities { get; init; } = [];
 
     public IReadOnlyList<FName> HiddenAbilities { get; init; } = [];

@@ -17,4 +17,13 @@ public record UFunctionInfo(
 
     [UsedImplicitly]
     public bool HasParameters => Parameters.Length > 0;
+
+    [UsedImplicitly]
+    public string? OptionType =>
+        ReturnType is INamedTypeSymbol { IsGenericType: true, MetadataName: "Option`1" } optionType
+            ? optionType.TypeArguments[0].ToDisplayString()
+            : null;
+
+    [UsedImplicitly]
+    public bool ReturnsOption => OptionType is not null;
 }

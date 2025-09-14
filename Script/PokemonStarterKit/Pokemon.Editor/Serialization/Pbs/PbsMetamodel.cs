@@ -41,6 +41,8 @@ public static class PbsMetamodel
                 .Where(p => p is { CanRead: true, CanWrite: true })
         )
         {
+            var lengthAttribute = property.GetCustomAttribute<PbsLengthAttribute>();
+
             schema.Add(
                 new PbsFieldDescriptor(
                     property.GetKeyName(),
@@ -51,6 +53,8 @@ public static class PbsMetamodel
                     IsIdentifier = property.GetCustomAttribute<PbsKeyAttribute>() is not null,
                     IsRowIndex = property.GetCustomAttribute<PbsIndexAttribute>() is not null,
                     Repeat = property.GetRepeatMode(),
+                    MinLength = lengthAttribute?.Min ?? 0,
+                    MaxLength = lengthAttribute?.Max ?? int.MaxValue,
                 }
             );
         }

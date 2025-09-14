@@ -224,6 +224,7 @@ public readonly partial struct FItem() : IGameDataEntry
     )]
     [field: EditConditionHides]
     [field: UMetaData(Metadata.AllowNone)]
+    [AsValue]
     public FMoveHandle Move { get; init; }
 
     [field: UProperty(

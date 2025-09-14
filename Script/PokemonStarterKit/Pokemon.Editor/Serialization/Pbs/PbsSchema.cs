@@ -46,6 +46,8 @@ public sealed record PbsFieldDescriptor(
     public RepeatMode Repeat { get; init; }
 
     public bool IsScalar => Elements.Length == 1 && Repeat != RepeatMode.CsvRepeat;
+    public int MinLength { get; init; }
+    public int MaxLength { get; init; }
 }
 
 public sealed class PbsSchema

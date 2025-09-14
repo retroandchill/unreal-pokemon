@@ -206,9 +206,20 @@ public static partial class PbsCompiler
                 break;
         }
 
-        return targetType.TryGetCollectionFactory(out var factory)
-            ? factory(result)
-            : Activator.CreateInstance(targetType, result.ToArray());
+        return schema.Repeat switch
+        {
+            RepeatMode.CsvRepeat when result.Count < schema.MinLength =>
+                throw new InvalidOperationException(
+                    $"Expected at least {schema.MinLength} values, got {result.Count}"
+                ),
+            RepeatMode.CsvRepeat when result.Count > schema.MaxLength =>
+                throw new InvalidOperationException(
+                    $"Expected at most {schema.MaxLength} values, got {result.Count}"
+                ),
+            _ => targetType.TryGetCollectionFactory(out var factory)
+                ? factory(result)
+                : Activator.CreateInstance(targetType, result.ToArray()),
+        };
     }
 
     private static object? GetCsvValue(

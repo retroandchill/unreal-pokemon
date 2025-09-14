@@ -10,6 +10,7 @@ using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
+using ZLinq;
 
 namespace Pokemon.Data.Model.PBS;
 
@@ -27,6 +28,39 @@ public enum EDamageType : byte
     NoDamage,
     FixedPower,
     VariablePower,
+}
+
+[UStruct]
+public readonly partial struct FDamageTypeData(EDamageType damageType, int power)
+{
+    public void Match(Action<int> onFixedPower, Action onVariablePower, Action onNoDamage)
+    {
+        switch (damageType)
+        {
+            case EDamageType.NoDamage:
+                onNoDamage();
+                break;
+            case EDamageType.FixedPower:
+                onFixedPower(power);
+                break;
+            case EDamageType.VariablePower:
+                onVariablePower();
+                break;
+            default:
+                throw new InvalidOperationException("Invalid damage type");
+        }
+    }
+
+    public T Match<T>(Func<int, T> onFixedPower, Func<T> onVariablePower, Func<T> onNoDamage)
+    {
+        return damageType switch
+        {
+            EDamageType.NoDamage => onNoDamage(),
+            EDamageType.FixedPower => onFixedPower(power),
+            EDamageType.VariablePower => onVariablePower(),
+            _ => throw new InvalidOperationException("Invalid damage type"),
+        };
+    }
 }
 
 [UStruct]
@@ -127,6 +161,7 @@ public readonly partial struct FMove() : IGameDataEntry
         Category = "Effect"
     )]
     [Categories(IdentifierConstants.FunctionCodeTag)]
+    [AsValue]
     public FGameplayTag FunctionCode { get; init; }
 
     [field: UProperty(
@@ -152,6 +187,9 @@ public readonly partial struct FMove() : IGameDataEntry
         Category = "Metadata"
     )]
     public FGameplayTagContainer Tags { get; init; }
+
+    [AsValue]
+    public FDamageTypeData Damage => new(DamageType, Power);
 
     public bool IsPhysical
     {
@@ -192,6 +230,17 @@ public readonly partial struct FMove() : IGameDataEntry
     public bool IsDamaging => Category != EDamageCategory.Status;
 
     public bool IsStatus => Category == EDamageCategory.Status;
+
+    public bool IsHiddenMove
+    {
+        get
+        {
+            var id = ID;
+            return GameData
+                .Items.Entries.AsValueEnumerable(i => (i.Move, i.IsHM))
+                .Any(x => x.IsHM && x.Move == id);
+        }
+    }
 }
 
 [UClass]

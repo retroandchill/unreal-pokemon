@@ -125,7 +125,7 @@ void URPGEntity::InitializeComponents(const FStructView Params)
     {
         Component->PreInitialize(this);
     }
-    
+
     auto *EntityStruct = GetEntityStruct();
     bool bCallParameterizedInit = EntityStruct != nullptr;
     if (bCallParameterizedInit && EntityStruct != Params.GetScriptStruct())

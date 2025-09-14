@@ -11,6 +11,7 @@ namespace Pokemon.Core;
 public static class PokemonStatics
 {
     public static int MaxPartySize => UObject.GetDefault<UPokemonCoreSettings>().MaxPartySize;
+    public static int MaxMoves => UObject.GetDefault<UPokemonCoreSettings>().MaxMoves;
 
     internal static UObject WorldContextObject
     {
