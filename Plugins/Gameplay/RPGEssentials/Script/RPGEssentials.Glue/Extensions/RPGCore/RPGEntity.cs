@@ -1,4 +1,6 @@
-﻿namespace UnrealSharp.RPGCore;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace UnrealSharp.RPGCore;
 
 public interface IRPGEntity<T>
     where T : URPGComponent
@@ -23,6 +25,23 @@ public partial class URPGEntity
         where T : URPGComponent
     {
         return GetComponentInternal(componentClass);
+    }
+
+    public bool TryGetComponent<T>([NotNullWhen(true)] out T? component)
+        where T : URPGComponent
+    {
+        component = GetComponent<T>();
+        return component is not null;
+    }
+
+    public bool TryGetComponent<T>(
+        TSubclassOf<T> componentClass,
+        [NotNullWhen(true)] out T? component
+    )
+        where T : URPGComponent
+    {
+        component = GetComponent(componentClass);
+        return component is not null;
     }
 
     public T GetRequiredComponent<T>()

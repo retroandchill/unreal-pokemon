@@ -166,12 +166,14 @@ public readonly partial struct FSpecies() : IGameDataEntry
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Basic"
     )]
+    [AsValue]
     public FGenderRatioHandle GenderRatio { get; init; } = FGenderRatio.Female50Percent;
 
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Stats"
     )]
+    [AsValue]
     public FGrowthRateHandle GrowthRate { get; init; } = FGrowthRate.Medium;
 
     [field: UProperty(
@@ -256,6 +258,7 @@ public readonly partial struct FSpecies() : IGameDataEntry
         Category = "Breeding"
     )]
     [field: UMetaData(Metadata.AllowNone)]
+    [AsValue]
     public FItemHandle Incense { get; init; }
 
     [field: UProperty(
@@ -290,18 +293,21 @@ public readonly partial struct FSpecies() : IGameDataEntry
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Pokédex"
     )]
+    [AsValue]
     public FBodyColorHandle BodyColor { get; init; }
 
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Pokédex"
     )]
+    [AsValue]
     public FBodyShapeHandle BodyShape { get; init; }
 
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         Category = "Pokédex"
     )]
+    [AsValue]
     public FHabitatHandle Habitat { get; init; }
 
     [field: UProperty(

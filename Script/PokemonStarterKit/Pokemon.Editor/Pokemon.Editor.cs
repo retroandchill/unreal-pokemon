@@ -44,6 +44,12 @@ public class FPokemonEditorModule : IModuleInterface
                     x => x.ToSpecies(),
                     x => x.ToSpeciesInfo()
                 )
+            )
+            .RegisterSerializer(
+                new MappingPbsSerializer<TrainerTypeInfo, FTrainerType>(
+                    x => x.ToTrainerType(),
+                    x => x.ToTrainerTypeInfo()
+                )
             );
     }
 
@@ -57,6 +63,7 @@ public class FPokemonEditorModule : IModuleInterface
             .RemoveSerializer<FMove>()
             .RemoveSerializer<FItem>()
             .RemoveSerializer<FBerryPlant>()
-            .RemoveSerializer<FSpecies>();
+            .RemoveSerializer<FSpecies>()
+            .RemoveSerializer<FTrainerType>();
     }
 }

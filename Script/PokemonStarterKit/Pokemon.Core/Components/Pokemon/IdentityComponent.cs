@@ -1,10 +1,11 @@
-﻿using Pokemon.Data.Model.PBS;
+﻿using Pokemon.Core.Entities;
+using Pokemon.Data.Model.PBS;
 using RPG.SourceGenerator.Attributes;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.RPGCore;
 
-namespace Pokemon.Core.Entities.Components;
+namespace Pokemon.Core.Components.Pokemon;
 
 [UClass]
 [UMetaData("HideCategories", "Identity")]
@@ -39,5 +40,11 @@ public class UIdentityComponent : URPGComponent
         PersonalityValue =
             (uint)Random.Shared.Next(ushort.MaxValue + 1)
             | (uint)(Random.Shared.Next(ushort.MaxValue + 1) << 16);
+
+        var trainer = ((UPokemon)OwningEntity).Trainer;
+        ID = trainer.ID;
+        SecretID = trainer.SecretID;
+        OTName = trainer.Name;
+        OTGender = trainer.Gender;
     }
 }

@@ -10,6 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
+    <ProjectReference Include="..\..\..\Plugins\Framework\UnrealInject\Script\UnrealInject\UnrealInject.csproj" />
+    <ProjectReference Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPG.Core\RPG.Core.csproj" />
     <ProjectReference
       Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPG.SourceGenerator\RPG.SourceGenerator.csproj"
       OutputItemType="Analyzer"
@@ -25,5 +27,8 @@
     <Analyzer Include="..\..\..\Plugins\UnrealSharp\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
     <ProjectReference Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPGEssentials.Glue\RPGEssentials.Glue.csproj" />
     <ProjectReference Include="..\..\UnrealPokemon.Glue\UnrealPokemon.Glue.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
   </ItemGroup>
 </Project>

@@ -30,4 +30,5 @@ public static partial class GameData
     public static partial UItemRepository Items { get; }
     public static partial UBerryPlantRepository BerryPlants { get; }
     public static partial USpeciesRepository Species { get; }
+    public static partial UTrainerTypeRepository TrainerTypes { get; }
 }

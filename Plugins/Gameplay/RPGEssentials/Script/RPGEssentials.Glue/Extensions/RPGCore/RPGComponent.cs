@@ -1,4 +1,6 @@
-﻿namespace UnrealSharp.RPGCore;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace UnrealSharp.RPGCore;
 
 public partial class URPGComponent
 {
@@ -17,6 +19,23 @@ public partial class URPGComponent
         where T : URPGComponent
     {
         return GetSiblingComponentInternal(componentClass);
+    }
+
+    public bool TryGetSiblingComponent<T>([NotNullWhen(true)] out T? component)
+        where T : URPGComponent
+    {
+        component = GetSiblingComponent<T>();
+        return component is not null;
+    }
+
+    public bool TryGetSiblingComponent<T>(
+        TSubclassOf<T> componentClass,
+        [NotNullWhen(true)] out T? component
+    )
+        where T : URPGComponent
+    {
+        component = GetSiblingComponent(componentClass);
+        return component is not null;
     }
 
     public T GetRequiredSiblingComponent<T>()

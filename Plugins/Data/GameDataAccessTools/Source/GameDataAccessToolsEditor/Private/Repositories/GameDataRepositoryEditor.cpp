@@ -195,6 +195,9 @@ void FGameDataRepositoryEditor::ImportGameDataRepository(const UGameDataEntrySer
             RefreshList();
             FMessageDialog::Open(EAppMsgType::Ok,
                                  NSLOCTEXT("GameDataRepository", "ImportSuccessful", "Import was successful!"));
+
+            // ReSharper disable once CppExpressionWithoutSideEffects
+            GameDataRepository->MarkPackageDirty();
         }
         else
         {

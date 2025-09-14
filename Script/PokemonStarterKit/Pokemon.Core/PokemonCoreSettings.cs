@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using Pokemon.Core.Entities;
-using Pokemon.Core.Entities.Components;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.DeveloperSettings;
@@ -21,5 +20,11 @@ public class UPokemonCoreSettings : UDeveloperSettings
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "DefaultClasses"
     )]
-    public TSubclassOf<UPokemon> PokemonClass { get; }
+    public TSoftClassPtr<UPokemon> PokemonClass { get; }
+
+    [UProperty(
+        PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
+        Category = "DefaultClasses"
+    )]
+    public TSoftClassPtr<UTrainer> TrainerClass { get; }
 }

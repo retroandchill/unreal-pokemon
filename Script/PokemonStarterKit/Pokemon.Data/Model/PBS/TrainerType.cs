@@ -1,8 +1,10 @@
 ﻿using GameAccessTools.SourceGenerator.Attributes;
 using GameDataAccessTools.Core;
+using JetBrains.Annotations;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
+using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
 
 namespace Pokemon.Data.Model.PBS;
@@ -66,7 +68,7 @@ public readonly partial struct FTrainerType() : IGameDataEntry
     )]
     [field: UIMin("0")]
     [field: ClampMin("0")]
-    public int BasePayout { get; init; } = 30;
+    public int BaseMoney { get; init; } = 30;
 
     [field: UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
@@ -82,3 +84,12 @@ public readonly partial struct FTrainerType() : IGameDataEntry
     )]
     public FGameplayTagContainer Tags { get; init; }
 }
+
+[UClass]
+[GameDataRepository<FTrainerType>]
+[UsedImplicitly]
+public partial class UTrainerTypeRepository : UAssetGameDataRepository;
+
+[UStruct]
+[DataHandle(typeof(GameData), nameof(GameData.TrainerTypes))]
+public readonly partial record struct FTrainerTypeHandle;

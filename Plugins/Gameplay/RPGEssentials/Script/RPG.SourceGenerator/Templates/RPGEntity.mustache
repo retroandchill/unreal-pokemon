@@ -1,7 +1,9 @@
 ﻿using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.CoreUObject;
 using UnrealSharp.Engine;
 using UnrealSharp.RPGCore;
+using GameDataAccessTools.Core.Utilities;
 
 namespace {{Namespace}};
 
@@ -25,6 +27,8 @@ partial class {{ClassName}} : {{#Components}}IRPGEntity<{{ComponentType}}>{{^IsL
     }
 
     {{#HasFactory}}
+    protected override UScriptStruct ManagedGetEntityStruct() => {{InitializerStruct}}.StaticStruct;
+
     public static partial {{ClassName}} Create({{OuterType}} {{OuterParam}}, {{InitializerStruct}} {{InitializerParams}})
     {
         var newEntity = NewObject<{{ClassName}}>({{OuterParam}}{{#HasSubclassSource}}, {{SubclassSource}}{{#SubclassSourceIsMethod}}(){{/SubclassSourceIsMethod}}{{/HasSubclassSource}});

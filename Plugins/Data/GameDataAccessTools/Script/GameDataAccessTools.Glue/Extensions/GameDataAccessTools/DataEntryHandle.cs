@@ -14,4 +14,10 @@ public partial record struct FDataHandleEntry
     [SetsRequiredMembers]
     public FDataHandleEntry(FName id)
         : this(id, FText.None) { }
+
+    public void Deconstruct(out FName id, out FText displayName)
+    {
+        id = ID;
+        displayName = DisplayName;
+    }
 }
