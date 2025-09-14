@@ -16,12 +16,6 @@
       <HintPath>..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
     </Reference>
     <Analyzer Include="..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
-    <ProjectReference Include="..\..\Plugins\EnhancedSaveGame\Script\EnhancedSaveGame.Glue\EnhancedSaveGame.Glue.csproj" />
-    <ProjectReference Include="..\..\Plugins\RetroLib\Script\RetroLib.Glue\RetroLib.Glue.csproj" />
-    <ProjectReference Include="..\..\Plugins\External\UE5Coro\Script\UE5Coro.Glue\UE5Coro.Glue.csproj" />
-    <ProjectReference Include="..\..\Plugins\RPGMenus\Script\RPGMenus.Glue\RPGMenus.Glue.csproj" />
-    <ProjectReference Include="..\..\Plugins\Simple2D\Script\Simple2D.Glue\Simple2D.Glue.csproj" />
-    <ProjectReference Include="..\..\Plugins\GridBased2D\Script\GridBased2D.Glue\GridBased2D.Glue.csproj" />
     <ProjectReference Include="..\..\Plugins\Data\EnhancedSaveGame\Script\EnhancedSaveGame.Glue\EnhancedSaveGame.Glue.csproj" />
     <ProjectReference Include="..\..\Plugins\Utilities\RetroLib\Script\RetroLib.Glue\RetroLib.Glue.csproj" />
     <ProjectReference Include="..\..\Plugins\Framework\Simple2D\Script\Simple2D.Glue\Simple2D.Glue.csproj" />

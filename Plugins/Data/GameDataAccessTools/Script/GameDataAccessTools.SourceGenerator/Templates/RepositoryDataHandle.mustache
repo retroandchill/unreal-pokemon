@@ -92,5 +92,7 @@ readonly partial record struct {{StructName}}([field: UProperty(PropertyFlags.Ed
     }
 
     {{/Convertables}}
+
+    public override string ToString() => ID.ToString();
 }
                                                                           

@@ -32,7 +32,7 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
         {
             _expGrowthFormulas.Add(expGrowthFormula.GrowthRateFor, expGrowthFormula);
         }
-        
+
         // TODO: Remove this and create a proper title screen
         StartNewGame();
     }
