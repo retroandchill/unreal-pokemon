@@ -25,6 +25,13 @@ public class UPokemonCoreSettings : UDeveloperSettings
 
     [UProperty(
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
+        Category = "Pokémon"
+    )]
+    [UsedImplicitly]
+    public int ShinyPokemonChance { get; } = 16;
+
+    [UProperty(
+        PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "DefaultClasses"
     )]
     public TSoftClassPtr<UPokemon> PokemonClass { get; }

@@ -3,6 +3,7 @@ using Pokemon.Core.Entities;
 using Pokemon.Core.Services.Exp;
 using Pokemon.Data.Model.HardCoded;
 using UnrealInject.Subsystems;
+using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.GameplayTags;
 using UnrealSharp.UnrealSharpCore;
@@ -16,6 +17,12 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
 
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Player")]
     public UTrainer Player { get; private set; }
+
+    public FText CurrentLocation
+    {
+        [UFunction(FunctionFlags.BlueprintPure, Category = "Location")]
+        get => throw new NotImplementedException();
+    }
 
     protected override void Initialize(FSubsystemCollectionBaseRef collection)
     {

@@ -12,6 +12,8 @@ public static class PokemonStatics
 {
     public static int MaxPartySize => UObject.GetDefault<UPokemonCoreSettings>().MaxPartySize;
     public static int MaxMoves => UObject.GetDefault<UPokemonCoreSettings>().MaxMoves;
+    public static int ShininessChance =>
+        UObject.GetDefault<UPokemonCoreSettings>().ShinyPokemonChance;
 
     internal static UObject WorldContextObject
     {

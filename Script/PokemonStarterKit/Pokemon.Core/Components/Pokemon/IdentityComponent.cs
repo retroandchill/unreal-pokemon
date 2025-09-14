@@ -1,4 +1,5 @@
 ﻿using Pokemon.Core.Entities;
+using Pokemon.Data.Model.HardCoded;
 using Pokemon.Data.Model.PBS;
 using RPG.SourceGenerator.Attributes;
 using UnrealSharp;
@@ -20,18 +21,6 @@ public class UIdentityComponent : URPGComponent
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Identity")]
     public uint PersonalityValue { get; set; }
 
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Identity")]
-    public int ID { get; set; }
-
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Identity")]
-    public int SecretID { get; set; }
-
-    [UProperty(PropertyFlags.BlueprintReadWrite, DisplayName = "OT Name", Category = "Identity")]
-    public FText OTName { get; set; }
-
-    [UProperty(PropertyFlags.BlueprintReadWrite, DisplayName = "OT Gender", Category = "Identity")]
-    public ETrainerGender OTGender { get; set; }
-
     [UFunction]
     [ExcludeFromExtensions]
     public void Initialize(FPokemonInitParams initParams)
@@ -40,11 +29,5 @@ public class UIdentityComponent : URPGComponent
         PersonalityValue =
             (uint)Random.Shared.Next(ushort.MaxValue + 1)
             | (uint)(Random.Shared.Next(ushort.MaxValue + 1) << 16);
-
-        var trainer = ((UPokemon)OwningEntity).Trainer;
-        ID = trainer.ID;
-        SecretID = trainer.SecretID;
-        OTName = trainer.Name;
-        OTGender = trainer.Gender;
     }
 }

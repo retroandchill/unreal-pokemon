@@ -1,4 +1,5 @@
-﻿using Pokemon.Core.Components.Pokemon;
+﻿using JetBrains.Annotations;
+using Pokemon.Core.Components.Pokemon;
 using Pokemon.Data.Model.PBS;
 using RPG.SourceGenerator.Attributes;
 using UnrealSharp;
@@ -15,20 +16,36 @@ public readonly partial record struct FPokemonInitParams(
 );
 
 [UClass(ClassFlags.Abstract)]
+[UsedImplicitly]
 public partial class UPokemon : URPGEntity
 {
-    public UTrainer Trainer
-    {
-        [UFunction(FunctionFlags.BlueprintPure, Category = "Pokémon")]
-        get => (UTrainer)SystemLibrary.GetOuterObject(this);
-    }
-
     [UProperty(
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
     [Initializer(nameof(UIdentityComponent.Initialize))]
     public UIdentityComponent IdentityComponent { get; private set; }
+
+    [UProperty(
+        PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
+        Category = "Components"
+    )]
+    [Initializer(nameof(UOwnershipComponent.Initialize))]
+    public UOwnershipComponent OwnershipComponent { get; private set; }
+
+    [UProperty(
+        PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
+        Category = "Components"
+    )]
+    [Initializer(nameof(UGenderComponent.Initialize))]
+    public UGenderComponent GenderComponent { get; private set; }
+
+    [UProperty(
+        PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
+        Category = "Components"
+    )]
+    [Initializer(nameof(UShininessComponent.Initialize))]
+    public UShininessComponent ShininessComponent { get; private set; }
 
     [UProperty(
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
@@ -57,12 +74,14 @@ public partial class UPokemon : URPGEntity
     )]
     public UHoldItemComponent HoldItemComponent { get; private set; }
 
+    [PublicAPI]
     public static UPokemon Create(UTrainer outer, FSpeciesHandle species, int level)
     {
         return Create(outer, new FPokemonInitParams(species, level));
     }
 
     [Factory]
+    [PublicAPI]
     public static partial UPokemon Create(UTrainer outer, FPokemonInitParams parameters);
 
     private static TSubclassOf<UPokemon> PokemonClass =>

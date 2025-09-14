@@ -57,6 +57,16 @@ class RPGCORE_API URPGEntity : public UObject
     void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
 #endif
 
+    void PreInitializeComponents();
+
+    virtual void NativePreInitializeComponents()
+    {
+    }
+
+    UFUNCTION(BlueprintImplementableEvent, DisplayName = "Pre-Initialize Components", Category = "RPG Entity",
+              meta = (ScriptName = "PreInitializeComponents"))
+    void K2_PreInitializeComponents();
+
     UFUNCTION(CustomThunk, meta = (ScriptMethod, CustomStructureParam = Params))
     void InitializeComponents(const int32 &Params);
 
@@ -71,6 +81,16 @@ class RPGCORE_API URPGEntity : public UObject
     {
         InitializeComponents(FStructView(GetScriptStruct<T>(), &Struct));
     }
+
+    void PostInitializeComponents();
+
+    virtual void NativePostInitializeComponents()
+    {
+    }
+
+    UFUNCTION(BlueprintImplementableEvent, DisplayName = "Post-Initialize Components", Category = "RPG Entity",
+              meta = (ScriptName = "PostInitializeComponents"))
+    void K2_PostInitializeComponents();
 
   private:
     UFUNCTION(BlueprintPure, Category = "RPG Entity",

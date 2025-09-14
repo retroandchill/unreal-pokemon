@@ -98,6 +98,12 @@ void URPGEntity::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEv
 }
 #endif
 
+void URPGEntity::PreInitializeComponents()
+{
+    NativePreInitializeComponents();
+    K2_PreInitializeComponents();
+}
+
 // ReSharper disable once CppMemberFunctionMayBeStatic
 void URPGEntity::InitializeComponents(const int32 &){checkf(false, TEXT("This should never be called"))}
 
@@ -121,6 +127,8 @@ void URPGEntity::InitializeComponents()
 // ReSharper disable once CppMemberFunctionMayBeConst
 void URPGEntity::InitializeComponents(const FStructView Params)
 {
+    PreInitializeComponents();
+
     for (URPGComponent *Component : GetAllComponents())
     {
         Component->PreInitialize(this);
@@ -134,13 +142,22 @@ void URPGEntity::InitializeComponents(const FStructView Params)
         bCallParameterizedInit = false;
     }
 
-    for (URPGComponent *Component : GetAllComponents())
+    if (bCallParameterizedInit)
     {
-        if (bCallParameterizedInit)
+        for (URPGComponent *Component : GetAllComponents())
         {
+
             Component->Initialize(Params);
         }
     }
+
+    PostInitializeComponents();
+}
+
+void URPGEntity::PostInitializeComponents()
+{
+    NativePostInitializeComponents();
+    K2_PostInitializeComponents();
 }
 
 URPGComponent *URPGEntity::GetComponentInternal(const TSubclassOf<URPGComponent> ComponentClass) const
