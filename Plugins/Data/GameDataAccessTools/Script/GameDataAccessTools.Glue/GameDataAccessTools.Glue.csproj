@@ -19,12 +19,12 @@
   <ItemGroup>
     <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
     <Reference Include="UnrealSharp">
-      <HintPath>..\..\..\..\UnrealSharp\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
+      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
     </Reference>
     <Reference Include="UnrealSharp.Core">
-      <HintPath>..\..\..\..\UnrealSharp\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
+      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
     </Reference>
-    <Analyzer Include="..\..\..\..\UnrealSharp\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
+    <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="GameDataAccessToolsEditor\GameDataEntryJsonSerializer.generated.cs" />

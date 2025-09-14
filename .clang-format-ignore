@@ -1,4 +1,3 @@
-﻿Plugins/External/**
-**/Intermediate/**
-Plugins/UnrealSharp/UnrealSharp/**
+﻿**/Intermediate/**
+Plugins/Framework/UnrealSharp/**
 Plugins/Utilities/RangeV3/Source/ThirdParty/**

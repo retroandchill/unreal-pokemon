@@ -19,18 +19,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="UnrealSharp">
-      <HintPath>..\..\..\..\UnrealSharp\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
+      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
     </Reference>
     <Reference Include="UnrealSharp.Core">
-      <HintPath>..\..\..\..\UnrealSharp\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
+      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="UnrealSharp.Binds">
-      <HintPath>..\..\..\..\UnrealSharp\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Binds.dll</HintPath>
+      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Binds.dll</HintPath>
     </Reference>
     <Reference Include="UnrealSharp.Log">
-      <HintPath>..\..\..\..\UnrealSharp\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Log.dll</HintPath>
+      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Log.dll</HintPath>
     </Reference>
-    <Analyzer Include="..\..\..\..\UnrealSharp\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
+    <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RPGEssentials.Glue\RPGEssentials.Glue.csproj" />

@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <RootNamespace>UnrealSharp.Test</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DocumentationFile>bin\Debug\UnrealSharp.Test.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DocumentationFile>bin\Release\UnrealSharp.Test.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2025.2.1" />
+    <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
+    <PackageReference Include="Microsoft.TestPlatform.Build" Version="17.14.1" />
+    <PackageReference Include="NUnit" Version="4.4.0" />
+    <PackageReference Include="Retro.ReadOnlyParams" Version="1.0.0" />
+    <PackageReference Include="Riok.Mapperly" Version="4.2.1" />
+    <Reference Include="UnrealSharp">
+      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="UnrealSharp.Core">
+      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="UnrealSharp.Plugins">
+      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.Plugins.dll</HintPath>
+    </Reference>
+    <Reference Include="UnrealSharp.Binds">
+      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Binds.dll</HintPath>
+    </Reference>
+    <Reference Include="UnrealSharp.Log">
+      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Log.dll</HintPath>
+    </Reference>
+    <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
+    <ProjectReference Include="..\UnrealSharpTest.Glue\UnrealSharpTest.Glue.csproj" />
+  </ItemGroup>
+</Project>

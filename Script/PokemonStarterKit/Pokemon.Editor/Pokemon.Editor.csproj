@@ -15,19 +15,19 @@
     <PackageReference Include="Retro.ReadOnlyParams" Version="1.0.0" />
     <PackageReference Include="Riok.Mapperly" Version="4.2.1" />
     <Reference Include="UnrealSharp">
-      <HintPath>..\..\..\Plugins\UnrealSharp\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
+      <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
     </Reference>
     <Reference Include="UnrealSharp.Core">
-      <HintPath>..\..\..\Plugins\UnrealSharp\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
+      <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
     </Reference>
-    <Analyzer Include="..\..\..\Plugins\UnrealSharp\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
+    <Analyzer Include="..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
     <ProjectReference Include="..\..\..\Plugins\Data\GameDataAccessTools\Script\GameDataAccessTools.Core\GameDataAccessTools.Core.csproj" />
     <ProjectReference Include="..\..\..\Plugins\Data\GameDataAccessTools\Script\GameDataAccessTools.Editor\GameDataAccessTools.Editor.csproj" />
     <ProjectReference Include="..\..\..\Plugins\Data\GameDataAccessTools\Script\GameDataAccessTools.Glue\GameDataAccessTools.Glue.csproj" />
     <ProjectReference Include="..\Pokemon.Data\Pokemon.Data.csproj" />
     <ProjectReference Include="..\..\UnrealPokemon.Glue\UnrealPokemon.Glue.csproj" />
     <Reference Include="UnrealSharp.Log">
-      <HintPath>..\..\..\Plugins\UnrealSharp\UnrealSharp\Binaries\Managed\UnrealSharp.Log.dll</HintPath>
+      <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.Log.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
