@@ -121,6 +121,11 @@ void URPGEntity::InitializeComponents()
 // ReSharper disable once CppMemberFunctionMayBeConst
 void URPGEntity::InitializeComponents(const FStructView Params)
 {
+    for (URPGComponent *Component : GetAllComponents())
+    {
+        Component->PreInitialize(this);
+    }
+    
     auto *EntityStruct = GetEntityStruct();
     bool bCallParameterizedInit = EntityStruct != nullptr;
     if (bCallParameterizedInit && EntityStruct != Params.GetScriptStruct())
@@ -131,8 +136,6 @@ void URPGEntity::InitializeComponents(const FStructView Params)
 
     for (URPGComponent *Component : GetAllComponents())
     {
-        Component->PreInitialize(this);
-
         if (bCallParameterizedInit)
         {
             Component->Initialize(Params);
