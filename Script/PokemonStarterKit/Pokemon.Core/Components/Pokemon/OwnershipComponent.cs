@@ -27,36 +27,45 @@ public readonly partial record struct FHatchInformation(
 );
 
 [UClass]
+[UMetaData("HideCategories", "Ownership,OriginalTrainer,Obtain")]
 public class UOwnershipComponent : URPGComponent
 {
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Ownership")]
     public UTrainer Owner { get; set; }
 
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Identity")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "OriginalTrainer")]
     public int ID { get; set; }
 
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Identity")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "OriginalTrainer")]
     public int SecretID { get; set; }
 
-    [UProperty(PropertyFlags.BlueprintReadWrite, DisplayName = "OT Name", Category = "Identity")]
+    [UProperty(
+        PropertyFlags.BlueprintReadWrite,
+        DisplayName = "OT Name",
+        Category = "OriginalTrainer"
+    )]
     public FText OTName { get; set; }
 
-    [UProperty(PropertyFlags.BlueprintReadWrite, DisplayName = "OT Gender", Category = "Identity")]
+    [UProperty(
+        PropertyFlags.BlueprintReadWrite,
+        DisplayName = "OT Gender",
+        Category = "OriginalTrainer"
+    )]
     public ETrainerGender OTGender { get; set; }
 
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Ownership")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Obtain")]
     public EObtainMethod ObtainMethod { get; set; }
 
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Ownership")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Obtain")]
     public int LevelMet { get; set; }
 
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Ownership")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Obtain")]
     public FDateTime TimeReceived { get; set; }
 
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Ownership")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Obtain")]
     public FText ObtainText { get; set; }
 
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Ownership")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Obtain")]
     public Option<FHatchInformation> HatchInformation { get; set; }
 
     [UFunction]
