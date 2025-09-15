@@ -16,7 +16,7 @@ public class UPartyComponent : URPGComponent
 
     [UProperty]
     private TArray<UPokemon> Party { get; }
-    
+
     public IReadOnlyList<UPokemon> PartyPokemon
     {
         [UFunction(FunctionFlags.BlueprintPure, Category = "Party")]

@@ -1,0 +1,15 @@
+{
+    "Structs": {
+        "CustomTypes": [
+            "FUIActionBindingHandle"
+        ],
+        "BlittableTypes": [
+        ],
+        "NativelyTranslatableTypes": [
+            {
+                "Name": "FCSBindUIActionArgs",
+                "HasDestructor": true
+            }
+        ]
+    }
+}
