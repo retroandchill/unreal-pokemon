@@ -1,107 +1,89 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "PrimaryGameLayout.h"
-#include "GameUIPolicy.h"
-#include "Kismet/GameplayStatics.h"
-#include "Player/RPGLocalPlayer.h"
-#include "RetroLib/Casting/DynamicCast.h"
-#include "RetroLib/Optionals/OptionalOperations.h"
-#include "RetroLib/Optionals/PtrOrNull.h"
-#include "RetroLib/Optionals/Transform.h"
-#include "RPGMenus.h"
 #include "GameUIManagerSubsystem.h"
+#include "GameUIPolicy.h"
+#include "OptionalPtr.h"
+#include "RPGMenus.h"
 
-UPrimaryGameLayout *UPrimaryGameLayout::Get(const UObject *WorldContextObject)
+
+UPrimaryGameLayout* UPrimaryGameLayout::GetInstance(const UObject* WorldContextObject)
 {
-    auto GameInstance = UGameplayStatics::GetGameInstance(WorldContextObject);
-    auto PlayerController = GameInstance->GetPrimaryPlayerController(false);
-    return Get(PlayerController);
+    const auto GameInstance = UGameplayStatics::GetGameInstance(WorldContextObject);
+    const auto PlayerController = GameInstance->GetPrimaryPlayerController(false);
+    return GetInstance(PlayerController);
 }
 
-UPrimaryGameLayout *UPrimaryGameLayout::Get(const APlayerController *PlayerController)
+UPrimaryGameLayout* UPrimaryGameLayout::GetInstance(const APlayerController* PlayerController)
 {
-    return PlayerController ? Get(Cast<URPGLocalPlayer>(PlayerController->Player)) : nullptr;
+    return PlayerController != nullptr ? GetInstance(Cast<ULocalPlayer>(PlayerController->Player)) : nullptr;
 }
 
-UPrimaryGameLayout *UPrimaryGameLayout::Get(ULocalPlayer *LocalPlayer)
+UPrimaryGameLayout* UPrimaryGameLayout::GetInstance(ULocalPlayer* LocalPlayer)
 {
-    // clang-format off
-    auto CommonLocalPlayer = Retro::Optionals::OfNullable(LocalPlayer) |
-                             Retro::Optionals::Transform(Retro::DynamicCastChecked<URPGLocalPlayer>);
-    return CommonLocalPlayer |
-           Retro::Optionals::Transform(&URPGLocalPlayer::GetGameInstance) |
-           Retro::Optionals::Transform([](const UGameInstance &GameInstance) {
-               return GameInstance.GetSubsystem<UGameUIManagerSubsystem>();
-           }) |
-           Retro::Optionals::Transform([](const UGameUIManagerSubsystem &Subsystem) {
-               return Subsystem.GetCurrentUIPolicy();
-           }) |
-           Retro::Optionals::Transform(Retro::BindBack<&UGameUIPolicy::GetRootLayout>(CommonLocalPlayer.GetPtrOrNull()))
-           |
-           Retro::Optionals::PtrOrNull;
-    // clang-format on
+    return TOptionalPtr(LocalPlayer)
+        .Map(&ULocalPlayer::GetGameInstance)
+        .Map([](const UGameInstance* GameInstance) { return GameInstance->GetSubsystem<UGameUIManagerSubsystem>(); })
+        .Map([](const UGameUIManagerSubsystem* Subsystem) { return Subsystem->GetCurrentUIPolicy(); })
+        .Map(&UGameUIPolicy::GetRootLayout, LocalPlayer)
+        .Get();
 }
 
-void UPrimaryGameLayout::SetIsDormant(bool Dormant)
+void UPrimaryGameLayout::SetIsDormant(const bool bNewIsDormant)
 {
-    if (bIsDormant == Dormant)
+    if (bIsDormant != bNewIsDormant)
     {
-        return;
-    }
+        constexpr auto DormantString = TEXT("Dormant");
+        constexpr auto NotDormantString = TEXT("Not-Dormant");
+        constexpr auto PrimaryString = TEXT("[Primary]");
+        constexpr auto NonPrimaryString = TEXT("[Non-Primary]");
+        
+        const auto LocalPlayer = GetOwningLocalPlayer();
+        const int32 PlayerId = LocalPlayer != nullptr ? LocalPlayer->GetControllerId() : INDEX_NONE;
+        const auto OldDormancyStr = bIsDormant ? DormantString : NotDormantString;
+		const auto NewDormancyStr = bNewIsDormant ? DormantString : NotDormantString;
+		const auto PrimaryPlayerStr = LocalPlayer != nullptr && LocalPlayer->IsPrimaryPlayer() ? PrimaryString : NonPrimaryString;
+        UE_LOG(LogRPGMenus, Display, TEXT("%s PrimaryGameLayout Dormancy changed for [%d] from [%s] to [%s]"), PrimaryPlayerStr, PlayerId, OldDormancyStr, NewDormancyStr);
 
-    auto LP = GetOwningLocalPlayer();
-    const int32 PlayerId = LP ? LP->GetControllerId() : -1;
-    auto OldDormancyStr = bIsDormant ? TEXT("Dormant") : TEXT("Not-Dormant");
-    auto NewDormancyStr = Dormant ? TEXT("Dormant") : TEXT("Not-Dormant");
-    auto PrimaryPlayerStr = LP && LP->IsPrimaryPlayer() ? TEXT("[Primary]") : TEXT("[Non-Primary]");
-    UE_LOG(LogRPGMenus, Display, TEXT("%s PrimaryGameLayout Dormancy changed for [%d] from [%s] to [%s]"),
-           PrimaryPlayerStr, PlayerId, OldDormancyStr, NewDormancyStr);
-
-    bIsDormant = Dormant;
-    OnIsDormantChanged();
-}
-
-void UPrimaryGameLayout::FindAndRemoveWidgetFromLayer(UCommonActivatableWidget *ActivatableWidget)
-{
-    // We're not sure what layer the widget is on so go searching.
-    for (const auto &[Key, Value] : Layers)
-    {
-        Value->RemoveWidget(*ActivatableWidget);
+        bIsDormant = bNewIsDormant;
+        OnIsDormantChanged();
     }
 }
 
-UCommonActivatableWidgetContainerBase *UPrimaryGameLayout::GetLayerWidget(FGameplayTag LayerName)
+void UPrimaryGameLayout::FindAndRemoveWidgetFromLayer(UCommonActivatableWidget* WidgetToRemove)
+{
+    for (const auto& [Key, Value] : Layers)
+    {
+        Value->RemoveWidget(*WidgetToRemove);
+    }
+}
+
+UCommonActivatableWidgetContainerBase* UPrimaryGameLayout::GetLayerWidget(const FGameplayTag LayerName) const
 {
     return Layers.FindRef(LayerName);
 }
 
-void UPrimaryGameLayout::RegisterLayer(FGameplayTag LayerTag, UCommonActivatableWidgetContainerBase *LayerWidget)
+void UPrimaryGameLayout::RegisterLayer(const FGameplayTag LayerTag, UCommonActivatableWidgetContainerBase* LayerWidget)
 {
-    if (IsDesignTime())
-    {
-        return;
-    }
+    if (IsDesignTime()) return;
 
     LayerWidget->OnTransitioningChanged.AddUObject(this, &UPrimaryGameLayout::OnWidgetStackTransitioning);
-    // TODO: Consider allowing a transition duration, we currently set it to 0, because if it's not 0, the
-    //       transition effect will cause focus to not transition properly to the new widgets when using
-    //       gamepad always.
-    LayerWidget->SetTransitionDuration(0.0);
+    LayerWidget->SetTransitionDuration(0.0f);
 
     Layers.Add(LayerTag, LayerWidget);
 }
 
-void UPrimaryGameLayout::OnIsDormantChanged()
+void UPrimaryGameLayout::OnIsDormantChanged_Implementation()
 {
-    // Currently no processing
+    // No implementation here
 }
 
-void UPrimaryGameLayout::OnWidgetStackTransitioning(UCommonActivatableWidgetContainerBase *, bool bIsTransitioning)
+void UPrimaryGameLayout::OnWidgetStackTransitioning(UCommonActivatableWidgetContainerBase*,
+                                                    const bool bIsTransitioning)
 {
     if (bIsTransitioning)
     {
-        const FName SuspendToken =
-            UCommonUIExtensions::SuspendInputForPlayer(GetOwningLocalPlayer(), TEXT("GlobalStackTransion"));
+        const FName SuspendToken = UCommonUIExtensions::SuspendInputForPlayer(GetOwningLocalPlayer(), TEXT("GlobalStackTransition"));
         SuspendInputTokens.Add(SuspendToken);
     }
     else
@@ -112,4 +94,4 @@ void UPrimaryGameLayout::OnWidgetStackTransitioning(UCommonActivatableWidgetCont
             UCommonUIExtensions::ResumeInputForPlayer(GetOwningLocalPlayer(), SuspendToken);
         }
     }
-}
+}\
