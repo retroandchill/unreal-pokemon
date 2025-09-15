@@ -3,7 +3,7 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/SelectableWidget.h"
 #include "PrimaryGameLayout.h"
-#include "RPGUIManagerSubsystem.h"
+#include "GameUIManagerSubsystem.h"
 
 class UEnhancedInputLocalPlayerSubsystem;
 const UE_DEFINE_GAMEPLAY_TAG(RPG::Menus::PrimaryMenuLayerTag, "UI.Layer.GameMenu");
@@ -72,8 +72,6 @@ void UScreen::NativeOnActivated()
     {
         SetVisibility(ESlateVisibility::SelfHitTestInvisible);
     }
-
-    GetGameInstance()->GetSubsystem<URPGUIManagerSubsystem>()->OnScreenActivated(this);
 }
 
 void UScreen::NativeOnDeactivated()
@@ -83,6 +81,4 @@ void UScreen::NativeOnDeactivated()
     {
         SetVisibility(ESlateVisibility::HitTestInvisible);
     }
-
-    GetGameInstance()->GetSubsystem<URPGUIManagerSubsystem>()->OnScreenDeactivated(this);
 }

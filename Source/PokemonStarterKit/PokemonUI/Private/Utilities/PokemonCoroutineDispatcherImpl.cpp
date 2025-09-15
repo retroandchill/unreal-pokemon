@@ -10,7 +10,7 @@
 #include "PrimaryGameLayout.h"
 #include "RetroLib/Optionals/IfPresent.h"
 #include "RetroLib/Utils/StringUtilities.h"
-#include "RPGUIManagerSubsystem.h"
+#include "GameUIManagerSubsystem.h"
 #include "Screens/BagScreen.h"
 #include "Screens/MoveForgetScreen.h"
 #include "Screens/PokemonSelectScreen.h"
@@ -110,8 +110,6 @@ UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::GiveItemToPokemon(con
         Pokemon->SetHoldItem(Item);
         Bag->RemoveItem(Item);
         Bag->ObtainItem(HeldItem->ID);
-        Retro::Optionals::OfNullable(URPGUIManagerSubsystem::Get(this).GetTopScreenOfStack()) |
-            Retro::Optionals::IfPresent(&UScreen::RefreshSelf);
 
         auto &NewItem = FDataManager::GetInstance().GetDataChecked(Item);
         co_await DisplayMessage(FText::FormatNamed(Messages.SwappedItemsMessage, TEXT("Pkmn"), Pokemon->GetNickname(),
@@ -122,8 +120,6 @@ UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::GiveItemToPokemon(con
     {
         Pokemon->SetHoldItem(Item);
         UTrainerHelpers::GetBag(this)->RemoveItem(Item);
-        Retro::Optionals::OfNullable(URPGUIManagerSubsystem::Get(this).GetTopScreenOfStack()) |
-            Retro::Optionals::IfPresent(&UScreen::RefreshSelf);
 
         auto &NewItem = FDataManager::GetInstance().GetDataChecked(Item);
         co_await DisplayMessage(FText::FormatNamed(Messages.NowHoldingMessage, TEXT("Pkmn"), Pokemon->GetNickname(),
@@ -149,8 +145,6 @@ UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::TakeItemFromPokemon(
 
     Bag->ObtainItem(HeldItem->ID);
     Pokemon->RemoveHoldItem();
-    Retro::Optionals::OfNullable(URPGUIManagerSubsystem::Get(WorldContext).GetTopScreenOfStack()) |
-        Retro::Optionals::IfPresent(&UScreen::RefreshSelf);
 
     co_await DisplayMessage(FText::FormatNamed(Messages.TookItemMessage, TEXT("Pkmn"), Pokemon->GetNickname(),
                                                TEXT("Item"), HeldItem->GetPortionName()));

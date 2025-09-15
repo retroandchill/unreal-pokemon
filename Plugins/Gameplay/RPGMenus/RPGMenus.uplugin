@@ -18,11 +18,6 @@
 			"Name": "RPGMenus",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "RPGMenusTests",
-			"Type": "Editor",
-			"LoadingPhase": "Default"
 		}
 	],
 	"SupportURL": "",

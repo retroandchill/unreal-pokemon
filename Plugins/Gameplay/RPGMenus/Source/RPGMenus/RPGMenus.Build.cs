@@ -22,7 +22,8 @@ public class RPGMenus : ModuleRules
                 "UnrealInjector",
                 "RetroLib",
                 "UE5Coro",
-                "Simple2D",
+                "Simple2D", 
+                "UnrealSharpCore",
             }
         );
 
@@ -34,7 +35,7 @@ public class RPGMenus : ModuleRules
                 "Slate",
                 "SlateCore",
                 "DeveloperSettings",
-                "CommonInput",
+                "CommonInput", "CommonUtilities",
             }
         );
     }

@@ -1,11 +1,9 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "CommonGameInstance.h"
-#include "CommonUISettings.h"
-#include "ICommonUIModule.h"
 #include "Player/RPGLocalPlayer.h"
 #include "RPGMenus.h"
-#include "RPGUIManagerSubsystem.h"
+#include "GameUIManagerSubsystem.h"
 
 int32 UCommonGameInstance::AddLocalPlayer(ULocalPlayer *NewPlayer, FPlatformUserId UserId)
 {
@@ -18,7 +16,7 @@ int32 UCommonGameInstance::AddLocalPlayer(ULocalPlayer *NewPlayer, FPlatformUser
             PrimaryPlayer = NewPlayer;
         }
 
-        GetSubsystem<URPGUIManagerSubsystem>()->NotifyPlayerAdded(Cast<URPGLocalPlayer>(NewPlayer));
+        GetSubsystem<UGameUIManagerSubsystem>()->NotifyPlayerAdded(Cast<URPGLocalPlayer>(NewPlayer));
     }
 
     return ReturnVal;
@@ -32,7 +30,7 @@ bool UCommonGameInstance::RemoveLocalPlayer(ULocalPlayer *ExistingPlayer)
         UE_LOG(LogRPGMenus, Log, TEXT("RemoveLocalPlayer: Unsetting Primary Player from %s"),
                *ExistingPlayer->GetName());
     }
-    GetSubsystem<URPGUIManagerSubsystem>()->NotifyPlayerDestroyed(Cast<URPGLocalPlayer>(ExistingPlayer));
+    GetSubsystem<UGameUIManagerSubsystem>()->NotifyPlayerDestroyed(Cast<URPGLocalPlayer>(ExistingPlayer));
 
     return Super::RemoveLocalPlayer(ExistingPlayer);
 }

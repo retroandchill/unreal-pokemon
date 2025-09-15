@@ -9,7 +9,7 @@
 #include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/Transform.h"
 #include "RPGMenus.h"
-#include "RPGUIManagerSubsystem.h"
+#include "GameUIManagerSubsystem.h"
 
 UPrimaryGameLayout *UPrimaryGameLayout::Get(const UObject *WorldContextObject)
 {
@@ -31,9 +31,9 @@ UPrimaryGameLayout *UPrimaryGameLayout::Get(ULocalPlayer *LocalPlayer)
     return CommonLocalPlayer |
            Retro::Optionals::Transform(&URPGLocalPlayer::GetGameInstance) |
            Retro::Optionals::Transform([](const UGameInstance &GameInstance) {
-               return GameInstance.GetSubsystem<URPGUIManagerSubsystem>();
+               return GameInstance.GetSubsystem<UGameUIManagerSubsystem>();
            }) |
-           Retro::Optionals::Transform([](const URPGUIManagerSubsystem &Subsystem) {
+           Retro::Optionals::Transform([](const UGameUIManagerSubsystem &Subsystem) {
                return Subsystem.GetCurrentUIPolicy();
            }) |
            Retro::Optionals::Transform(Retro::BindBack<&UGameUIPolicy::GetRootLayout>(CommonLocalPlayer.GetPtrOrNull()))

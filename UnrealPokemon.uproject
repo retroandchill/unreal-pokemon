@@ -50,11 +50,6 @@
             "LoadingPhase": "Default"
         },
         {
-            "Name": "PokemonTests",
-            "Type": "Editor",
-            "LoadingPhase": "Default"
-        },
-        {
             "Name": "PokemonBattle",
             "Type": "Runtime",
             "LoadingPhase": "Default"
