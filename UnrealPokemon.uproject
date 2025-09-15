@@ -117,7 +117,7 @@
 			"Enabled": true
 		},
 		{
-			"Name": "RPGMenus",
+			"Name": "InteractiveUI",
 			"Enabled": true
 		},
 		{

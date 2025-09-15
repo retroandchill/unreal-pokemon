@@ -29,7 +29,7 @@ public class PokemonAssets : ModuleRules
                 "Core",
                 "DeveloperSettings",
                 "Paper2D",
-                "RPGMenus",
+                "InteractiveUI",
                 "PokemonCore",
                 "RetroLib",
                 "UE5Coro",

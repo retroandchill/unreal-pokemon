@@ -15,7 +15,7 @@ public class PokemonUI : ModuleRules
                 "Core",
                 "PokemonData",
                 "PokemonCore",
-                "RPGMenus",
+                "InteractiveUI",
                 "PokemonAssets",
                 "CommonUI",
                 "GameplayTags",

@@ -1,8 +1,10 @@
-﻿using UnrealBuildTool;
+﻿// "Unreal Pokémon" created by Retro & Chill.
 
-public class PokemonBattleUI : ModuleRules
+using UnrealBuildTool;
+
+public class InteractiveUI : ModuleRules
 {
-    public PokemonBattleUI(ReadOnlyTargetRules Target)
+    public InteractiveUI(ReadOnlyTargetRules Target)
         : base(Target)
     {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
@@ -11,17 +13,17 @@ public class PokemonBattleUI : ModuleRules
             new string[]
             {
                 "Core",
-                "InteractiveUI",
-                "PokemonBattle",
-                "PokemonUI",
-                "PokemonData",
-                "PokemonCore",
+                "UMG",
+                "InputCore",
                 "CommonUI",
-                "DynamicAssetLoader",
+                "GameplayTags",
+                "EnhancedInput",
+                "Paper2D",
                 "UnrealInjector",
                 "RetroLib",
                 "UE5Coro",
-                "Simple2D",
+                "Simple2D", 
+                "UnrealSharpCore",
             }
         );
 
@@ -32,11 +34,10 @@ public class PokemonBattleUI : ModuleRules
                 "Engine",
                 "Slate",
                 "SlateCore",
-                "UMG",
-                "PokemonAssets",
-                "GameplayAbilities",
-                "GameplayTags",
-                "Paper2D",
+                "DeveloperSettings",
+                "CommonInput", 
+                "CommonUtilities",
+                "UnrealSharpBinds"
             }
         );
     }

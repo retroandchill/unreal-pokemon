@@ -1,0 +1,60 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1.0",
+	"FriendlyName": "Interactive UI",
+	"Description": "Contains basic menu setup for usage in RPG projects.",
+	"Category": "UI",
+	"CreatedBy": "Retro & Chill",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "InteractiveUI",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"SupportURL": "",
+	"Plugins": [
+		{
+			"Name": "Paper2D",
+			"Enabled": true
+		},
+		{
+			"Name": "CommonUI",
+			"Enabled": true
+		},
+		{
+			"Name": "AutomationTestHelpers",
+			"Enabled": true,
+			"Optional": true,
+			"PluginType": "Provided"
+		},
+		{
+			"Name": "RetroLib",
+			"Enabled": true,
+			"PluginType": "Provided"
+		},
+		{
+			"Name": "UnrealInjector",
+			"Enabled": true,
+			"PluginType": "Provided"
+		},
+		{
+			"Name": "DynamicAssetLoader",
+			"Enabled": true,
+			"PluginType": "Provided"
+		},
+		{
+			"Name": "Simple2D",
+			"Enabled": true,
+			"PluginType": "Provided"
+		}
+	]
+}

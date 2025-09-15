@@ -23,5 +23,6 @@
     <ProjectReference Include="..\..\Plugins\Gameplay\RPGMenus\Script\RPGMenus.Glue\RPGMenus.Glue.csproj" />
     <ProjectReference Include="..\..\Plugins\Gameplay\GridBased2D\Script\GridBased2D.Glue\GridBased2D.Glue.csproj" />
     <ProjectReference Include="..\..\Plugins\UI\UnrealSharpCommonUI\Script\UnrealSharpCommonUI.Glue\UnrealSharpCommonUI.Glue.csproj" />
+    <ProjectReference Include="..\..\Plugins\UI\InteractiveUI\Script\InteractiveUI.Glue\InteractiveUI.Glue.csproj" />
   </ItemGroup>
 </Project>

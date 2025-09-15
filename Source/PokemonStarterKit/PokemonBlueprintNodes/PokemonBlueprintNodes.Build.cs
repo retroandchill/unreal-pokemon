@@ -21,7 +21,7 @@ public class PokemonBlueprintNodes : ModuleRules
                 "KismetCompiler",
                 "GraphEditor",
                 "PokemonUI",
-                "RPGMenus",
+                "InteractiveUI",
                 "UMG",
                 "ToolMenus",
             }
