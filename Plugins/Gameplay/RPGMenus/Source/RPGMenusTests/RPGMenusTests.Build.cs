@@ -17,7 +17,6 @@ public class RPGMenusTests : ModuleRules
                 "Slate",
                 "SlateCore",
                 "RPGMenus",
-                "RPGMenusEditor",
                 "AutomationTestHelpers",
                 "UMG",
                 "InputCore",

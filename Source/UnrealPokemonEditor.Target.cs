@@ -39,7 +39,6 @@ public class UnrealPokemonEditorTarget : TargetRules
                 "GridBased2D",
                 "RPGMenus",
                 "PokemonUI",
-                "RPGMenusEditor",
                 "UnrealPokemon",
                 "TileReplacer",
                 "UnrealPokemonEditor",
