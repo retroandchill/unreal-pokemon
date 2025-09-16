@@ -5,12 +5,12 @@
 #include "PaperSprite.h"
 #include "RetroLib/Optionals/PtrOrNull.h"
 #include "RetroLib/Optionals/Transform.h"
-#include "RPGMenus.h"
+#include "InteractiveUI.h"
 #include "Simple2D/Rendering/MaterialSettings.h"
 #include "Slate/SlateBrushAsset.h"
 #include "UObject/ConstructorHelpers.h"
 
-DECLARE_CYCLE_STAT(TEXT("Tick Enhanced Image"), STAT_TickEnhancedImage, STATGROUP_RPGMenus);
+DECLARE_CYCLE_STAT(TEXT("Tick Enhanced Image"), STAT_TickEnhancedImage, STATGROUP_InteractiveUI);
 
 UEnhancedImage::UEnhancedImage()
 {
@@ -384,6 +384,6 @@ void UEnhancedImage::OnFrameIndexChanged(std::any KeyFrame)
     }
     else
     {
-        UE_LOG(LogRPGMenus, Warning, TEXT("Unknown key frame type!"))
+        UE_LOG(LogInteractiveUI, Warning, TEXT("Unknown key frame type!"))
     }
 }

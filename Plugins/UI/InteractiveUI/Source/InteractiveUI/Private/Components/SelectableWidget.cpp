@@ -55,25 +55,6 @@ UCommonButtonBase *USelectableWidget::GetSelectedOption() const
     return SelectableButtons[Index];
 }
 
-UE5Coro::TCoroutine<TOptional<int32>> USelectableWidget::AwaitSelection()
-{
-    auto Result = co_await Race(
-        [](UE5Coro::TLatentContext<USelectableWidget> This) -> UE5Coro::TCoroutine<int32> {
-            auto [Result] = co_await This->OnConfirm;
-            co_return Result;
-        }(this),
-        [](UE5Coro::TLatentContext<USelectableWidget> This) -> UE5Coro::TCoroutine<> {
-            co_await This->OnCancel;
-        }(this));
-
-    if (Result != 0)
-    {
-        co_return {};
-    }
-
-    co_return Index;
-}
-
 FProcessConfirm &USelectableWidget::GetOnConfirm()
 {
     return OnConfirm;

@@ -4,13 +4,13 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogRPGMenus, Log, All)
-DECLARE_STATS_GROUP(TEXT("RPGMenus"), STATGROUP_RPGMenus, STATCAT_Advanced);
+DECLARE_LOG_CATEGORY_EXTERN(LogInteractiveUI, Log, All)
+DECLARE_STATS_GROUP(TEXT("InteractiveUI"), STATGROUP_InteractiveUI, STATCAT_Advanced);
 
 /**
  * Module for the basic types of Windows used by the UI System
  */
-class FRPGMenusModule : public IModuleInterface
+class FInteractiveUIModule : public IModuleInterface
 {
   public:
     void StartupModule() override;

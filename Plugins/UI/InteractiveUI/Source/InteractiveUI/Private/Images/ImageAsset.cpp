@@ -7,7 +7,7 @@ RETRO_DEFINE_VARIANT_OBJECT_STRUCT(FImageAsset);
 
 static UScriptStruct *StaticGetBaseStructureInternal(FName Name)
 {
-    static const auto *const CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/RPGMenus"));
+    static const auto *const CoreUObjectPkg = FindObjectChecked<UPackage>(nullptr, TEXT("/Script/InteractiveUI"));
     auto Result = static_cast<UScriptStruct *>(StaticFindObjectFastInternal(
         UScriptStruct::StaticClass(), CoreUObjectPkg, Name, false, RF_NoFlags, EInternalObjectFlags::None));
     check(Result != nullptr)

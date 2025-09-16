@@ -4,7 +4,7 @@
 #include "PrimaryGameLayout.h"
 #include "GameUIManagerSubsystem.h"
 #include "OptionalPtr.h"
-#include "RPGMenus.h"
+#include "InteractiveUI.h"
 
 UGameUIPolicy* UGameUIPolicy::GetInstance(const UObject* WorldContextObject)
 {
@@ -51,7 +51,7 @@ void UGameUIPolicy::RequestPrimaryControl(UPrimaryGameLayout* Layout)
 
 void UGameUIPolicy::AddLayoutToViewport(ULocalPlayer* LocalPlayer, UPrimaryGameLayout* Layout)
 {
-    UE_LOG(LogRPGMenus, Log, TEXT("[%s] is adding player [%s]'s root layout [%s] to the viewport"), *GetName(), *GetNameSafe(LocalPlayer), *GetNameSafe(Layout));
+    UE_LOG(LogInteractiveUI, Log, TEXT("[%s] is adding player [%s]'s root layout [%s] to the viewport"), *GetName(), *GetNameSafe(LocalPlayer), *GetNameSafe(Layout));
 
     Layout->SetPlayerContext(FLocalPlayerContext(LocalPlayer));
     Layout->AddToPlayerScreen(1000);
@@ -67,12 +67,12 @@ void UGameUIPolicy::RemoveLayoutFromViewport(ULocalPlayer* LocalPlayer, UPrimary
         return;
     }
     
-    UE_LOG(LogRPGMenus, Log, TEXT("[%s] is removing player [%s]'s root layout [%s] from the viewport"), *GetName(), *GetNameSafe(LocalPlayer), *GetNameSafe(Layout));
+    UE_LOG(LogInteractiveUI, Log, TEXT("[%s] is removing player [%s]'s root layout [%s] from the viewport"), *GetName(), *GetNameSafe(LocalPlayer), *GetNameSafe(Layout));
 
     Layout->RemoveFromParent();
     if (LayoutSlateWidget.IsValid())
     {
-        UE_LOG(LogRPGMenus, Log, TEXT("Player [%s]'s root layout [%s] has been removed from the viewport, but other references to its underlying Slate widget still exist. Noting in case we leak it."), *GetNameSafe(LocalPlayer), *GetNameSafe(Layout));
+        UE_LOG(LogInteractiveUI, Log, TEXT("Player [%s]'s root layout [%s] has been removed from the viewport, but other references to its underlying Slate widget still exist. Noting in case we leak it."), *GetNameSafe(LocalPlayer), *GetNameSafe(Layout));
     }
 
     OnRootLayoutRemovedFromViewport(LocalPlayer, Layout);

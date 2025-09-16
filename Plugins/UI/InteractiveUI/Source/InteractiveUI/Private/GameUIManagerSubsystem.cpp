@@ -2,7 +2,7 @@
 
 #include "GameUIManagerSubsystem.h"
 #include "GameUIPolicy.h"
-#include "RPGMenus.h"
+#include "InteractiveUI.h"
 
 void UGameUIManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -18,7 +18,7 @@ void UGameUIManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
     {
         if (!PrimaryPlayer.IsValid())
         {
-            UE_LOG(LogRPGMenus, Log, TEXT("AddLocalPlayer: Set %s to Primary Player"), *NewPlayer->GetName());
+            UE_LOG(LogInteractiveUI, Log, TEXT("AddLocalPlayer: Set %s to Primary Player"), *NewPlayer->GetName());
             PrimaryPlayer = NewPlayer;
         }
 
@@ -31,7 +31,7 @@ void UGameUIManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
         {
             //TODO: do we want to fall back to another player?
             PrimaryPlayer.Reset();
-            UE_LOG(LogRPGMenus, Log, TEXT("RemoveLocalPlayer: Unsetting Primary Player from %s"), *ExistingPlayer->GetName());
+            UE_LOG(LogInteractiveUI, Log, TEXT("RemoveLocalPlayer: Unsetting Primary Player from %s"), *ExistingPlayer->GetName());
         }
 
         NotifyPlayerRemoved(ExistingPlayer);

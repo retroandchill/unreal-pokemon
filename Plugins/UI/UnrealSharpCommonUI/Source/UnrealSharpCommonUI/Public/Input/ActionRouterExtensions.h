@@ -8,6 +8,7 @@
 
 #include "ActionRouterExtensions.generated.h"
 
+class UCommonActivatableWidget;
 class UCommonUIActionRouterBase;
 struct FCSBindUIActionArgs;
 /**

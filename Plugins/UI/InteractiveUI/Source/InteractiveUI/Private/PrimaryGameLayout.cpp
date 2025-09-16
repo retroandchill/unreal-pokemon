@@ -4,7 +4,7 @@
 #include "GameUIManagerSubsystem.h"
 #include "GameUIPolicy.h"
 #include "OptionalPtr.h"
-#include "RPGMenus.h"
+#include "InteractiveUI.h"
 
 
 UPrimaryGameLayout* UPrimaryGameLayout::GetInstance(const UObject* WorldContextObject)
@@ -43,7 +43,7 @@ void UPrimaryGameLayout::SetIsDormant(const bool bNewIsDormant)
         const auto OldDormancyStr = bIsDormant ? DormantString : NotDormantString;
 		const auto NewDormancyStr = bNewIsDormant ? DormantString : NotDormantString;
 		const auto PrimaryPlayerStr = LocalPlayer != nullptr && LocalPlayer->IsPrimaryPlayer() ? PrimaryString : NonPrimaryString;
-        UE_LOG(LogRPGMenus, Display, TEXT("%s PrimaryGameLayout Dormancy changed for [%d] from [%s] to [%s]"), PrimaryPlayerStr, PlayerId, OldDormancyStr, NewDormancyStr);
+        UE_LOG(LogInteractiveUI, Display, TEXT("%s PrimaryGameLayout Dormancy changed for [%d] from [%s] to [%s]"), PrimaryPlayerStr, PlayerId, OldDormancyStr, NewDormancyStr);
 
         bIsDormant = bNewIsDormant;
         OnIsDormantChanged();
