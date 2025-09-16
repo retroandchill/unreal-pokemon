@@ -1,17 +1,44 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/DialogueBox.h"
-#include "Components/DialogueTextBlock.h"
 #include "Framework/Text/ILayoutBlock.h"
 #include "Framework/Text/RichTextLayoutMarshaller.h"
 #include "Framework/Text/SlateTextLayout.h"
 #include "TimerManager.h"
+#include "Framework/Text/SlateTextLayoutFactory.h"
+#include "Widgets/Text/SRichTextBlock.h"
 
-void UDialogueBox::PlayLine(const FText &InLine)
+TSharedRef<SWidget> UDialogueTextBlock::RebuildWidget()
 {
-    check(GetWorld() != nullptr)
+    // Copied from URichTextBlock::RebuildWidget
+    UpdateStyleData();
 
-    FTimerManager &TimerManager = GetWorld()->GetTimerManager();
+    TArray<TSharedRef<ITextDecorator>> CreatedDecorators;
+    CreateDecorators(CreatedDecorators);
+
+    TextMarshaller = FRichTextLayoutMarshaller::Create(CreateMarkupParser(), CreateMarkupWriter(), CreatedDecorators,
+                                                       StyleInstance.Get());
+
+    MyRichTextBlock =
+        SNew(SRichTextBlock)
+        .TextStyle(bOverrideDefaultStyle ? &GetDefaultTextStyleOverride() : &DefaultTextStyle)
+        .Marshaller(TextMarshaller)
+        .CreateSlateTextLayout(
+            FCreateSlateTextLayout::CreateWeakLambda(
+                this, [this](SWidget* InOwner, const FTextBlockStyle& InDefaultTextStyle) mutable
+                {
+                    TextLayout = FSlateTextLayout::Create(InOwner, InDefaultTextStyle);
+                    return StaticCastSharedPtr<FSlateTextLayout>(TextLayout).ToSharedRef();
+                }));
+
+    return MyRichTextBlock.ToSharedRef();
+}
+
+void UDialogueBox::PlayLine(const FText& InLine)
+{
+    check(GetWorld() != nullptr);
+
+    FTimerManager& TimerManager = GetWorld()->GetTimerManager();
     TimerManager.ClearTimer(LetterTimer);
 
     CurrentLine = InLine;
@@ -30,8 +57,8 @@ void UDialogueBox::PlayLine(const FText &InLine)
         }
 
         bHasFinishedPlaying = true;
-        LineFinishedPlayingDelegate.Broadcast();
         OnLineFinishedPlaying();
+        OnLineFinishedPlayingDelegate.Broadcast();
 
         SetVisibility(ESlateVisibility::Hidden);
     }
@@ -55,7 +82,7 @@ void UDialogueBox::PlayLine(const FText &InLine)
 
 void UDialogueBox::SkipToLineEnd()
 {
-    FTimerManager &TimerManager = GetWorld()->GetTimerManager();
+    FTimerManager& TimerManager = GetWorld()->GetTimerManager();
     TimerManager.ClearTimer(LetterTimer);
 
     CurrentLetterIndex = MaxLetterIndex - 1;
@@ -65,38 +92,8 @@ void UDialogueBox::SkipToLineEnd()
     }
 
     bHasFinishedPlaying = true;
-    LineFinishedPlayingDelegate.Broadcast();
     OnLineFinishedPlaying();
-}
-
-FDelegateHandle UDialogueBox::BindToOnLineFinishedPlaying(FOnLineFinishedPlaying::FDelegate &&Callback)
-{
-    return LineFinishedPlayingDelegate.Add(std::move(Callback));
-}
-
-UDialogueTextBlock *UDialogueBox::GetLineText() const
-{
-    return LineText;
-}
-
-float UDialogueBox::GetLetterPlayTime() const
-{
-    return LetterPlayTime;
-}
-
-void UDialogueBox::SetLetterPlayTime(float NewPlayTime)
-{
-    LetterPlayTime = NewPlayTime;
-}
-
-float UDialogueBox::GetEndHoldTime() const
-{
-    return EndHoldTime;
-}
-
-void UDialogueBox::SetEndHoldTime(float NewHoldTime)
-{
-    EndHoldTime = NewHoldTime;
+    OnLineFinishedPlayingDelegate.Broadcast();
 }
 
 void UDialogueBox::PlayNextLetter()
@@ -106,7 +103,7 @@ void UDialogueBox::PlayNextLetter()
         CalculateWrappedString();
     }
 
-    FString WrappedString = CalculateSegments();
+    const FString WrappedString = CalculateSegments();
 
     // TODO: How do we keep indexing of text i18n-friendly?
     if (CurrentLetterIndex < MaxLetterIndex)
@@ -126,7 +123,7 @@ void UDialogueBox::PlayNextLetter()
             LineText->SetText(FText::FromString(CalculateSegments()));
         }
 
-        FTimerManager &TimerManager = GetWorld()->GetTimerManager();
+        FTimerManager& TimerManager = GetWorld()->GetTimerManager();
         TimerManager.ClearTimer(LetterTimer);
 
         FTimerDelegate Delegate;
@@ -136,65 +133,67 @@ void UDialogueBox::PlayNextLetter()
     }
 }
 
+// TODO: Need to recalculate this + CalculateSegments when the text box gets resized.
 void UDialogueBox::CalculateWrappedString()
 {
-    if (!IsValid(LineText) || !LineText->GetTextLayout().IsValid())
+    if (IsValid(LineText) && LineText->GetTextLayout().IsValid())
+    {
+        TSharedPtr<FSlateTextLayout> Layout = LineText->GetTextLayout();
+        TSharedPtr<FRichTextLayoutMarshaller> Marshaller = LineText->GetTextMarshaller();
+
+        const FGeometry& TextBoxGeometry = LineText->GetCachedGeometry();
+        const FVector2D TextBoxSize = TextBoxGeometry.GetLocalSize();
+
+        Layout->SetWrappingWidth(TextBoxSize.X);
+        Marshaller->SetText(CurrentLine.ToString(), *Layout.Get());
+        Layout->UpdateIfNeeded();
+
+        bool bHasWrittenText = false;
+        for (const auto& View : Layout->GetLineViews())
+        {
+            for (const TSharedRef Block : View.Blocks)
+            {
+                const auto Run = Block->GetRun();
+
+                FDialogueTextSegment Segment;
+                Run->AppendTextTo(Segment.Text, Block->GetTextRange());
+
+                // HACK: For some reason image decorators (and possibly other decorators that don't
+                // have actual text inside them) result in the run containing a zero width space instead of
+                // nothing. This messes up our checks for whether the text is empty or not, which doesn't
+                // have an effect on image decorators but might cause issues for other custom ones.
+                if (Segment.Text.Len() == 1 && Segment.Text[0] == 0x200B)
+                {
+                    Segment.Text.Empty();
+                }
+
+                Segment.RunInfo = Run->GetRunInfo();
+                Segments.Add(Segment);
+
+                // A segment with a named run should still take up time for the typewriter effect.
+                MaxLetterIndex += FMath::Max(Segment.Text.Len(), Segment.RunInfo.Name.IsEmpty() ? 0 : 1);
+
+                if (!Segment.Text.IsEmpty() || !Segment.RunInfo.Name.IsEmpty())
+                {
+                    bHasWrittenText = true;
+                }
+            }
+
+            if (bHasWrittenText)
+            {
+                Segments.Add(FDialogueTextSegment{TEXT("\n")});
+                ++MaxLetterIndex;
+            }
+        }
+
+        Layout->SetWrappingWidth(0);
+        LineText->SetText(LineText->GetText());
+    }
+    else
     {
         Segments.Add(FDialogueTextSegment{CurrentLine.ToString()});
         MaxLetterIndex = Segments[0].Text.Len();
-        return;
     }
-
-    TSharedPtr<FSlateTextLayout> Layout = LineText->GetTextLayout();
-    TSharedPtr<FRichTextLayoutMarshaller> Marshaller = LineText->GetTextMarshaller();
-
-    const FGeometry &TextBoxGeometry = LineText->GetCachedGeometry();
-    const FVector2D TextBoxSize = TextBoxGeometry.GetLocalSize();
-
-    Layout->SetWrappingWidth(static_cast<float>(TextBoxSize.X));
-    Marshaller->SetText(CurrentLine.ToString(), *Layout.Get());
-    Layout->UpdateIfNeeded();
-
-    bool bHasWrittenText = false;
-    for (const FTextLayout::FLineView &View : Layout->GetLineViews())
-    {
-        for (TSharedRef<ILayoutBlock> Block : View.Blocks)
-        {
-            TSharedRef<IRun> Run = Block->GetRun();
-
-            FDialogueTextSegment Segment;
-            Run->AppendTextTo(Segment.Text, Block->GetTextRange());
-
-            // HACK: For some reason image decorators (and possibly other decorators that don't
-            // have actual text inside them) result in the run containing a zero width space instead of
-            // nothing. This messes up our checks for whether the text is empty or not, which doesn't
-            // have an effect on image decorators but might cause issues for other custom ones.
-            if (Segment.Text.Len() == 1 && Segment.Text[0] == 0x200B)
-            {
-                Segment.Text.Empty();
-            }
-
-            Segment.RunInfo = Run->GetRunInfo();
-            Segments.Add(Segment);
-
-            // A segment with a named run should still take up time for the typewriter effect.
-            MaxLetterIndex += FMath::Max(Segment.Text.Len(), Segment.RunInfo.Name.IsEmpty() ? 0 : 1);
-
-            if (!Segment.Text.IsEmpty() || !Segment.RunInfo.Name.IsEmpty())
-            {
-                bHasWrittenText = true;
-            }
-        }
-
-        if (bHasWrittenText)
-        {
-            Segments.Add(FDialogueTextSegment{TEXT("\n")});
-            ++MaxLetterIndex;
-        }
-    }
-
-    Layout->SetWrappingWidth(0);
-    LineText->SetText(LineText->GetText());
 }
 
 FString UDialogueBox::CalculateSegments()
@@ -204,8 +203,29 @@ FString UDialogueBox::CalculateSegments()
     int32 Idx = CachedLetterIndex;
     while (Idx <= CurrentLetterIndex && CurrentSegmentIndex < Segments.Num())
     {
-        const FDialogueTextSegment &Segment = Segments[CurrentSegmentIndex];
-        ProcessSegmentTags(Result, Idx, Segment);
+        const FDialogueTextSegment& Segment = Segments[CurrentSegmentIndex];
+        if (!Segment.RunInfo.Name.IsEmpty())
+        {
+            Result += FString::Printf(TEXT("<%s"), *Segment.RunInfo.Name);
+
+            if (!Segment.RunInfo.MetaData.IsEmpty())
+            {
+                for (const TTuple<FString, FString>& MetaData : Segment.RunInfo.MetaData)
+                {
+                    Result += FString::Printf(TEXT(" %s=\"%s\""), *MetaData.Key, *MetaData.Value);
+                }
+            }
+
+            if (Segment.Text.IsEmpty())
+            {
+                Result += TEXT("/>");
+                ++Idx; // This still takes up an index for the typewriter effect.
+            }
+            else
+            {
+                Result += TEXT(">");
+            }
+        }
 
         bool bIsSegmentComplete = true;
         if (!Segment.Text.IsEmpty())
@@ -223,41 +243,17 @@ FString UDialogueBox::CalculateSegments()
             }
         }
 
-        if (!bIsSegmentComplete)
+        if (bIsSegmentComplete)
         {
-            break;
-        }
-
-        CachedLetterIndex = Idx;
-        CachedSegmentText = Result;
-        ++CurrentSegmentIndex;
-    }
-
-    return Result;
-}
-
-void UDialogueBox::ProcessSegmentTags(FString &Result, int32 &Idx, const FDialogueTextSegment &Segment)
-{
-    if (!Segment.RunInfo.Name.IsEmpty())
-    {
-        Result += FString::Printf(TEXT("<%s"), *Segment.RunInfo.Name);
-
-        if (!Segment.RunInfo.MetaData.IsEmpty())
-        {
-            for (const TTuple<FString, FString> &MetaData : Segment.RunInfo.MetaData)
-            {
-                Result += FString::Printf(TEXT(" %s=\"%s\""), *MetaData.Key, *MetaData.Value);
-            }
-        }
-
-        if (Segment.Text.IsEmpty())
-        {
-            Result += TEXT("/>");
-            ++Idx; // This still takes up an index for the typewriter effect.
+            CachedLetterIndex = Idx;
+            CachedSegmentText = Result;
+            ++CurrentSegmentIndex;
         }
         else
         {
-            Result += TEXT(">");
+            break;
         }
     }
+
+    return Result;
 }

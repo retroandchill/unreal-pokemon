@@ -3,8 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CommonButtonBase.h"
-#include "RPGButtonBase.h"
+#include "InteractiveButtonBase.h"
 
 #include "DisplayTextOption.generated.h"
 
@@ -14,7 +13,7 @@ class UCommonTextBlock;
  * Selectable option that contains a display text that can be updated
  */
 UCLASS(Abstract)
-class INTERACTIVEUI_API UDisplayTextOption : public URPGButtonBase
+class INTERACTIVEUI_API UDisplayTextOption : public UInteractiveButtonBase
 {
     GENERATED_BODY()
 

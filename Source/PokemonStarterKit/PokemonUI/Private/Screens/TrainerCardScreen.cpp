@@ -3,13 +3,13 @@
 #include "Screens/TrainerCardScreen.h"
 #include "Engine/GameInstance.h"
 #include "Managers/PokemonSubsystem.h"
-#include "Utilities/RPGMenuUtilities.h"
+#include "Utilities/InteractiveUIUtilities.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(UTrainerCardScreen)
 
 UTrainerCardScreen *UTrainerCardScreen::AddTrainerCardScreenToStack(const UObject *WorldContextObject)
 {
-    return URPGMenuUtilities::InjectScreenToStack<UTrainerCardScreen>(WorldContextObject).GetPtrOrNull();
+    return UInteractiveUIUtilities::InjectScreenToStack<UTrainerCardScreen>(WorldContextObject).GetPtrOrNull();
 }
 
 void UTrainerCardScreen::NativeConstruct()

@@ -4,7 +4,6 @@
 #include "Components/ScrollBox.h"
 #include "Components/SizeBox.h"
 #include "Input/CommonUIInputTypes.h"
-#include "RetroLib/Utils/BlueprintMathUtils.h"
 #include "RetroLib/Utils/Math.h"
 
 void UMessageWindow::NativeConstruct()
@@ -19,9 +18,8 @@ void UMessageWindow::NativeConstruct()
                                }));
     BindArgs.bDisplayInActionBar = false;
     AdvanceAction = RegisterUIActionBinding(BindArgs);
-
-    using FLineFinishedDelegate = FOnLineFinishedPlaying::FDelegate;
-    DialogueBox->BindToOnLineFinishedPlaying(FLineFinishedDelegate::CreateWeakLambda(this, [this] {
+    
+    DialogueBox->BindToOnLineFinishedPlaying(FSimpleDelegate::CreateWeakLambda(this, [this] {
         if (DialogueBox->GetCurrentLine().IsEmpty())
         {
             return;

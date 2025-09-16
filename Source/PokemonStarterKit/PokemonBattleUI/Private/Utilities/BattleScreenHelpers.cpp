@@ -8,7 +8,7 @@
 
 UPokemonBattleScreen *UBattleScreenHelpers::FindBattleScreen(const UObject *WorldContextObject)
 {
-    auto PrimaryLayout = UPrimaryGameLayout::Get(WorldContextObject);
+    auto PrimaryLayout = UPrimaryGameLayout::GetInstance(WorldContextObject);
     if (PrimaryLayout == nullptr)
     {
         UE_LOG(LogBattleUI, Warning, TEXT("No layout found, can't update battle HUD."))

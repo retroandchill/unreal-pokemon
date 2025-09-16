@@ -1,12 +1,12 @@
 // "Unreal Pokémon" created by Retro & Chill.
 #include "Screens/PauseMenuScreen.h"
-#include "Utilities/RPGMenuUtilities.h"
+#include "Utilities/InteractiveUIUtilities.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(UPauseMenuScreen)
 
 UPauseMenuScreen *UPauseMenuScreen::AddPauseMenuScreenToStack(const UObject *WorldContextObject)
 {
-    return URPGMenuUtilities::InjectScreenToStack<UPauseMenuScreen>(WorldContextObject).GetPtrOrNull();
+    return UInteractiveUIUtilities::InjectScreenToStack<UPauseMenuScreen>(WorldContextObject).GetPtrOrNull();
 }
 
 void UPauseMenuScreen::NativeConstruct()

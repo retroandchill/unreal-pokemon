@@ -19,14 +19,14 @@
 #include "RetroLib/Ranges/Algorithm/NameAliases.h"
 #include "RetroLib/Ranges/Algorithm/To.h"
 #include "RetroLib/Utils/Construct.h"
-#include "Utilities/RPGMenuUtilities.h"
+#include "Utilities/InteractiveUIUtilities.h"
 #include <functional>
 
 DEFINE_INJECTABLE_DEPENDENCY(UPokemonBattleScreen)
 
 UPokemonBattleScreen *UPokemonBattleScreen::AddPokemonBattleScreenToStack(const UObject *WorldContextObject)
 {
-    return URPGMenuUtilities::InjectScreenToStack<UPokemonBattleScreen>(WorldContextObject).GetPtrOrNull();
+    return UInteractiveUIUtilities::InjectScreenToStack<UPokemonBattleScreen>(WorldContextObject).GetPtrOrNull();
 }
 
 void UPokemonBattleScreen::NativeConstruct()

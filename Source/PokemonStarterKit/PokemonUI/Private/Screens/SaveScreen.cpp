@@ -9,13 +9,13 @@
 #include "Saving/PokemonSaveGame.h"
 #include "Saving/Serialization/EnhancedSaveGame.h"
 #include "Settings/PokemonSaveGameSettings.h"
-#include "Utilities/RPGMenuUtilities.h"
+#include "Utilities/InteractiveUIUtilities.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(USaveScreen)
 
 USaveScreen *USaveScreen::AddSaveScreenToStack(const UObject *WorldContextObject)
 {
-    return URPGMenuUtilities::InjectScreenToStack<USaveScreen>(WorldContextObject).GetPtrOrNull();
+    return UInteractiveUIUtilities::InjectScreenToStack<USaveScreen>(WorldContextObject).GetPtrOrNull();
 }
 
 void USaveScreen::NativeOnActivated()

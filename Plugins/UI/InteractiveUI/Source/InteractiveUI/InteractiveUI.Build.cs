@@ -37,7 +37,8 @@ public class InteractiveUI : ModuleRules
                 "DeveloperSettings",
                 "CommonInput", 
                 "CommonUtilities",
-                "UnrealSharpBinds"
+                "UnrealSharpBinds",
+                "UnrealSharpAsync",
             }
         );
     }

@@ -7,7 +7,7 @@
 
 #include "NewScreenCommand.generated.h"
 
-class UScreen;
+class UCommonActivatableWidget;
 
 /**
  * Command class to handle transfering to a new screen
@@ -25,5 +25,5 @@ class INTERACTIVEUI_API UNewScreenCommand : public UCommand
      * The next screen to transfer the player to
      */
     UPROPERTY(EditAnywhere, Category = Effect, meta = (DisplayAfter = Text))
-    TSubclassOf<UScreen> NextScreen;
+    TSubclassOf<UCommonActivatableWidget> NextScreen;
 };

@@ -6,13 +6,13 @@
 #include "Components/Summary/SummaryPages.h"
 #include "Components/Summary/SummaryScreenPage.h"
 #include "Components/Summary/SummaryTabWidget.h"
-#include "Utilities/RPGMenuUtilities.h"
+#include "Utilities/InteractiveUIUtilities.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(UPokemonSummaryScreen)
 
 UPokemonSummaryScreen *UPokemonSummaryScreen::AddPokemonSummaryScreenToStack(const UObject *WorldContextObject)
 {
-    return URPGMenuUtilities::InjectScreenToStack<UPokemonSummaryScreen>(WorldContextObject).GetPtrOrNull();
+    return UInteractiveUIUtilities::InjectScreenToStack<UPokemonSummaryScreen>(WorldContextObject).GetPtrOrNull();
 }
 
 void UPokemonSummaryScreen::NativePreConstruct()

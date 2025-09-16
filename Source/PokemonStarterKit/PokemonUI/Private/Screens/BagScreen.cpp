@@ -10,14 +10,14 @@
 #include "ItemEffectLookup.h"
 #include "Managers/PokemonSubsystem.h"
 #include "Player/Bag.h"
-#include "Utilities/RPGMenuUtilities.h"
+#include "Utilities/InteractiveUIUtilities.h"
 #include "Utilities/TrainerHelpers.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(UBagScreen)
 
 UBagScreen *UBagScreen::AddBagScreenToStack(const UObject *WorldContextObject)
 {
-    return URPGMenuUtilities::InjectScreenToStack<UBagScreen>(WorldContextObject).GetPtrOrNull();
+    return UInteractiveUIUtilities::InjectScreenToStack<UBagScreen>(WorldContextObject).GetPtrOrNull();
 }
 
 void UBagScreen::NativeConstruct()
@@ -60,18 +60,11 @@ void UBagScreen::RemoveFromStack()
 
 void UBagScreen::CloseScreen()
 {
-    Super::CloseScreen();
     (void)OnItemSelected.ExecuteIfBound({});
 }
 
 void UBagScreen::RefreshScene()
 {
-    RefreshSelf();
-}
-
-void UBagScreen::RefreshSelf_Implementation()
-{
-    Super::RefreshSelf_Implementation();
     ItemSelectionWindow->RefreshWindow();
 }
 

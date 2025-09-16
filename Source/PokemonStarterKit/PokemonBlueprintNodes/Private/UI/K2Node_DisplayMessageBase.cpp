@@ -6,7 +6,7 @@
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "KismetCompiler.h"
 #include "Screens/TextDisplayScreen.h"
-#include "Utilities/RPGMenuUtilities.h"
+#include "Utilities/InteractiveUIUtilities.h"
 
 UK2Node_DisplayMessageBase::UK2Node_DisplayMessageBase(const FObjectInitializer &Initializer) : Super(Initializer)
 {
@@ -21,9 +21,9 @@ void UK2Node_DisplayMessageBase::ReconnectOutputPin(FKismetCompilerContext &Comp
         return;
 
     const FName FunctionName =
-        GET_FUNCTION_NAME_CHECKED_OneParam(URPGMenuUtilities, RemoveTopScreenFromOverlay, UObject *);
+        GET_FUNCTION_NAME_CHECKED_OneParam(UInteractiveUIUtilities, RemoveTopScreenFromOverlay, UObject *);
     auto IntermediateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, GetGraph());
-    IntermediateNode->FunctionReference.SetExternalMember(FunctionName, URPGMenuUtilities::StaticClass());
+    IntermediateNode->FunctionReference.SetExternalMember(FunctionName, UInteractiveUIUtilities::StaticClass());
     IntermediateNode->AllocateDefaultPins();
 
     if (auto This_WorldContextPin = FindPin(TEXT("WorldContextObject")); This_WorldContextPin != nullptr)

@@ -1,19 +1,19 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-#include "Components/RPGButtonBase.h"
+#include "Components/InteractiveButtonBase.h"
 
-URPGButtonBase::URPGButtonBase()
+UInteractiveButtonBase::UInteractiveButtonBase()
 {
     SetIsSelectable(true);
 }
 
-void URPGButtonBase::NativePreConstruct()
+void UInteractiveButtonBase::NativePreConstruct()
 {
     Super::NativePreConstruct();
     UpdateVisibility();
 }
 
-void URPGButtonBase::UpdateVisibility()
+void UInteractiveButtonBase::UpdateVisibility()
 {
 #if WITH_EDITOR
     if (IsDesignTime())

@@ -11,7 +11,6 @@
 class URPGLocalPlayer;
 class UGameUIPolicy;
 class UInputMappingContext;
-class UScreen;
 /**
  * Subsystem for managing the UI of the RPG Menus Plugin.
  */

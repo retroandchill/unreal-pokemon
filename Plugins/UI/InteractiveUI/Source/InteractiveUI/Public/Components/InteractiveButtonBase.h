@@ -5,18 +5,18 @@
 #include "CoreMinimal.h"
 #include "CommonButtonBase.h"
 
-#include "RPGButtonBase.generated.h"
+#include "InteractiveButtonBase.generated.h"
 
 /**
  * Specialized button base that has the ability to be disabled/hidden by the game as needed.
  */
 UCLASS(Abstract, DisplayName = "RPG Button Base")
-class INTERACTIVEUI_API URPGButtonBase : public UCommonButtonBase
+class INTERACTIVEUI_API UInteractiveButtonBase : public UCommonButtonBase
 {
     GENERATED_BODY()
 
   public:
-    URPGButtonBase();
+    UInteractiveButtonBase();
 
   protected:
     void NativePreConstruct() override;

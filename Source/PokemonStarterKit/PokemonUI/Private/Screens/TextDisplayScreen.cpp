@@ -3,13 +3,13 @@
 #include "Components/CommandWindow.h"
 #include "Components/MessageWindow.h"
 #include "Data/Command.h"
-#include "Utilities/RPGMenuUtilities.h"
+#include "Utilities/InteractiveUIUtilities.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(UTextDisplayScreen)
 
 UTextDisplayScreen *UTextDisplayScreen::AddTextDisplayScreenToOverlay(const UObject *WorldContextObject)
 {
-    return URPGMenuUtilities::InjectScreenToOverlay<UTextDisplayScreen>(WorldContextObject).GetPtrOrNull();
+    return UInteractiveUIUtilities::InjectScreenToOverlay<UTextDisplayScreen>(WorldContextObject).GetPtrOrNull();
 }
 
 void UTextDisplayScreen::NativeConstruct()

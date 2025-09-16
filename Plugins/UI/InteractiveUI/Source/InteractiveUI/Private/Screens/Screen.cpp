@@ -54,7 +54,7 @@ TOptional<FUIInputConfig> UScreen::GetDesiredInputConfig() const
 void UScreen::CloseScreen()
 {
     DeactivateWidget();
-    auto Layout = UPrimaryGameLayout::Get(GetOwningPlayer());
+    auto Layout = UPrimaryGameLayout::GetInstance(GetOwningPlayer());
     Layout->FindAndRemoveWidgetFromLayer(this);
     OnScreenClosed.Broadcast();
     RemoveFromParent();

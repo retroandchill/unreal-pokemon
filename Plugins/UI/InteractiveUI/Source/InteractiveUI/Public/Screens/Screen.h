@@ -107,7 +107,7 @@ class INTERACTIVEUI_API UScreen : public UCommonActivatableWidget
 namespace RPG::Menus
 {
     template <typename T>
-    concept InjectableScreen = std::derived_from<T, UScreen> && UnrealInjector::Injectable<T>;
+    concept InjectableScreen = std::derived_from<T, UCommonActivatableWidget> && UnrealInjector::Injectable<T>;
 
     template <typename T, typename... A>
     concept CanInjectScreen = InjectableScreen<T> && UnrealInjector::CanInitialize<T, A...>;

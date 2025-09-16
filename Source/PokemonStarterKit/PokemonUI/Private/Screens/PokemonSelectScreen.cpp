@@ -2,13 +2,13 @@
 #include "Screens/PokemonSelectScreen.h"
 #include "Components/Party/PokemonSelectionPane.h"
 #include "Managers/PokemonSubsystem.h"
-#include "Utilities/RPGMenuUtilities.h"
+#include "Utilities/InteractiveUIUtilities.h"
 
 DEFINE_INJECTABLE_DEPENDENCY(UPokemonSelectScreen)
 
 UPokemonSelectScreen *UPokemonSelectScreen::AddPokemonSelectScreenToStack(const UObject *WorldContextObject)
 {
-    return URPGMenuUtilities::InjectScreenToStack<UPokemonSelectScreen>(WorldContextObject).GetPtrOrNull();
+    return UInteractiveUIUtilities::InjectScreenToStack<UPokemonSelectScreen>(WorldContextObject).GetPtrOrNull();
 }
 
 void UPokemonSelectScreen::NativeConstruct()

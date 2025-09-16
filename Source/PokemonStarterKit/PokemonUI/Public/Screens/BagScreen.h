@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CommonActivatableWidget.h"
 #include "Bag/Item.h"
 #include "Field/FieldItemEffect.h"
 #include "ItemEffectLookup.h"
+#include "Lookup/InjectableDependency.h"
 #include "Screens/InventoryScreen.h"
 #include "Screens/Screen.h"
 
@@ -27,7 +29,7 @@ class UItemSelectionWindow;
  * The screen that contains the basic outline of the player's bag
  */
 UCLASS(Abstract, Blueprintable)
-class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen
+class POKEMONUI_API UBagScreen : public UCommonActivatableWidget, public IInventoryScreen
 {
     GENERATED_BODY()
 
@@ -50,14 +52,12 @@ class POKEMONUI_API UBagScreen : public UScreen, public IInventoryScreen
     UFUNCTION(BlueprintCallable, Category = Navigation)
     void RemoveFromStack() override;
 
-    void CloseScreen() override;
+    void CloseScreen();
 
     UFUNCTION(BlueprintCallable, Category = Display)
     void RefreshScene() override;
 
   protected:
-    void RefreshSelf_Implementation() override;
-
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
     UItemSelectionWindow *GetItemSelectionWindow() const;
 

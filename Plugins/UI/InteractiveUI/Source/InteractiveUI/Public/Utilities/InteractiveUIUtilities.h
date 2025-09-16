@@ -8,7 +8,7 @@
 #include "PrimaryGameLayout.h"
 #include "Screens/Screen.h"
 
-#include "RPGMenuUtilities.generated.h"
+#include "InteractiveUIUtilities.generated.h"
 
 struct FGameplayTag;
 class UScreen;
@@ -16,7 +16,7 @@ class UScreen;
  *
  */
 UCLASS()
-class INTERACTIVEUI_API URPGMenuUtilities : public UBlueprintFunctionLibrary
+class INTERACTIVEUI_API UInteractiveUIUtilities : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()
 
@@ -26,7 +26,7 @@ class INTERACTIVEUI_API URPGMenuUtilities : public UBlueprintFunctionLibrary
     static TOptional<T &> InjectScreenToLayer(const UObject *WorldContextObject, const FGameplayTag &LayerTag,
                                               A &&...Args)
     {
-        auto Layout = UPrimaryGameLayout::Get(WorldContextObject);
+        auto Layout = UPrimaryGameLayout::GetInstance(WorldContextObject);
 
         if (auto Layer = Layout->GetLayerWidget(LayerTag); Layer != nullptr)
         {
@@ -55,11 +55,11 @@ class INTERACTIVEUI_API URPGMenuUtilities : public UBlueprintFunctionLibrary
     }
 
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = "WorldContextObject"))
-    static UScreen *RemoveTopScreenFromStackLayer(const UObject *WorldContextObject, FGameplayTag Tag);
+    static UCommonActivatableWidget *RemoveTopScreenFromStackLayer(const UObject *WorldContextObject, FGameplayTag Tag);
 
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = "WorldContextObject"))
-    static UScreen *RemoveTopScreenFromStack(const UObject *WorldContextObject);
+    static UCommonActivatableWidget *RemoveTopScreenFromStack(const UObject *WorldContextObject);
 
     UFUNCTION(BlueprintCallable, Category = Screens, meta = (WorldContext = "WorldContextObject"))
-    static UScreen *RemoveTopScreenFromOverlay(const UObject *WorldContextObject);
+    static UCommonActivatableWidget *RemoveTopScreenFromOverlay(const UObject *WorldContextObject);
 };

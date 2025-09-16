@@ -3,7 +3,7 @@
 #include "Components/NamedSlotSelectableWidget.h"
 #include "CommonButtonBase.h"
 #include "Components/NamedSlot.h"
-#include "Components/RPGButtonBase.h"
+#include "Components/InteractiveButtonBase.h"
 
 void UNamedSlotSelectableWidget::NativePreConstruct()
 {
@@ -31,7 +31,7 @@ void UNamedSlotSelectableWidget::UpdateOptions()
     ClearSelectableOptions(false);
     for (int32 i = 0; i < ContentWidget->GetChildrenCount(); i++)
     {
-        auto Child = Cast<URPGButtonBase>(ContentWidget->GetChildAt(i));
+        auto Child = Cast<UInteractiveButtonBase>(ContentWidget->GetChildAt(i));
         if (Child == nullptr)
         {
             continue;
