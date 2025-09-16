@@ -23,4 +23,9 @@
     <ProjectReference Include="..\..\..\UnrealSharpCommonUI\Script\UnrealSharpCommonUI.Glue\UnrealSharpCommonUI.Glue.csproj" />
     <ProjectReference Include="..\InteractiveUI.Glue\InteractiveUI.Glue.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Selection\SelectionWidget.cs" />
+    <Compile Remove="Selection\SelectableButtonGroup.cs" />
+    <Compile Remove="Selection\OwningSelectionWidgetBase.cs" />
+  </ItemGroup>
 </Project>

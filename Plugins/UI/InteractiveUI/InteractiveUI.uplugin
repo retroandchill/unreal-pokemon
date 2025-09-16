@@ -47,11 +47,6 @@
 			"PluginType": "Provided"
 		},
 		{
-			"Name": "DynamicAssetLoader",
-			"Enabled": true,
-			"PluginType": "Provided"
-		},
-		{
 			"Name": "Simple2D",
 			"Enabled": true,
 			"PluginType": "Provided"

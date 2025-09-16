@@ -17,7 +17,6 @@ public class PokemonBattle : ModuleRules
                 "GameplayTags",
                 "GameplayTasks",
                 "DeveloperSettings",
-                "DynamicAssetLoader",
                 "PokemonAssets",
                 "UE5Coro",
                 "UE5CoroGAS",

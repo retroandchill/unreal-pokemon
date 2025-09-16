@@ -86,7 +86,7 @@ class POKEMONUI_API UBagScreen : public UCommonActivatableWidget, public IInvent
         requires std::is_base_of_v<UFieldItemEffect, T>
     UE5Coro::TCoroutine<bool> TryUseItem(const FItem &Item, int32 Quantity, A &&...Args)
     {
-        auto EffectClass = Pokemon::Items::FieldItemEffects.LoadClass<T>(Item.ID);
+        auto EffectClass = TOptional<TSubclassOf<T>>(); //Pokemon::Items::FieldItemEffects.LoadClass<T>(Item.ID);
         if (!EffectClass.IsSet())
         {
             OnItemEffectConclude(false, Item.ID);

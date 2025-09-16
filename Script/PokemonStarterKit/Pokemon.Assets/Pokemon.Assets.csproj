@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
+    <ProjectReference Include="..\Pokemon.Core\Pokemon.Core.csproj" />
+    <ProjectReference Include="..\Pokemon.Data\Pokemon.Data.csproj" />
+    <Reference Include="UnrealSharp">
+      <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="UnrealSharp.Core">
+      <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
+    </Reference>
+    <Analyzer Include="..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
+    <ProjectReference Include="..\..\..\Plugins\Data\DynamicAssetLoader\Script\DynamicAssetLoader.Glue\DynamicAssetLoader.Glue.csproj" />
+    <ProjectReference Include="..\..\UnrealPokemon.Glue\UnrealPokemon.Glue.csproj" />
+  </ItemGroup>
+</Project>

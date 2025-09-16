@@ -388,7 +388,7 @@ FPrimitiveSceneProxy *USimpleFlipbookComponent::CreateSceneProxy()
     CalculateCurrentFrame();
 
     auto DrawCall =
-        SourceFlipbook != nullptr ? SourceFlipbook->CreateDrawCallRecord(CachedFrameIndex) : FSimpleFlipbookDrawCall();
+        SourceFlipbook != nullptr && SourceFlipbook->IsValidKeyFrameIndex(CachedFrameIndex) ? SourceFlipbook->CreateDrawCallRecord(CachedFrameIndex) : FSimpleFlipbookDrawCall();
     DrawCall.Color = SpriteColor.ToFColor(false);
 
     auto InSceneProxy = NewProxy.Get();
@@ -420,7 +420,10 @@ void USimpleFlipbookComponent::GetUsedTextures(TArray<UTexture *> &OutTextures,
     // Get the texture referenced by each keyframe
     if (SourceFlipbook != nullptr)
     {
-        OutTextures.AddUnique(SourceFlipbook->GetSourceTexture());
+        if (auto *SourceTexture = SourceFlipbook->GetSourceTexture(); SourceTexture != nullptr)
+        {
+            OutTextures.AddUnique(SourceTexture);
+        }
     }
 
     // Get any textures referenced by our materials

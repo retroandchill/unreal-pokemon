@@ -4,6 +4,7 @@
 
 namespace Pokemon::Battle::Classes
 {
+    /*
     UE_DEFINE_BLUEPRINT_CLASS(MoveEffects, UBattleMoveFunctionCode, "/Game/Blueprints/Battle/Moves/FunctionCodes",
                               "Move_");
 
@@ -17,4 +18,5 @@ namespace Pokemon::Battle::Classes
                               "HoldItem_");
 
     UE_DEFINE_BLUEPRINT_CLASS(StatusEffects, UGameplayEffect, "/Game/Blueprints/Battle/StatusEffects", "StatusEffect_");
+    */
 } // namespace Pokemon::Battle::Classes

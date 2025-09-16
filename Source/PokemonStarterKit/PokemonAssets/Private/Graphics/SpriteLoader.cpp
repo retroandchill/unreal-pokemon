@@ -31,7 +31,7 @@ FBattleRender USpriteLoader::GetSpeciesBattleSprite(FName Species, bool bBack,
                                                     const FPokemonAssetParams &AdditionalParams)
 {
     auto SpriteResolutionList = AdditionalParams.CreateResolutionList(Species, bBack ? TEXT("Back") : TEXT("Front"));
-    return Pokemon::Assets::Graphics::PokemonBattleSprites.ResolveAsset(SpriteResolutionList).Get(FBattleRender());
+    return FBattleRender(); //Pokemon::Assets::Graphics::PokemonBattleSprites.ResolveAsset(SpriteResolutionList).Get(FBattleRender());
 }
 
 FSoftBattleRender USpriteLoader::GetLazyPokemonBattleSprite(const TScriptInterface<IPokemon> &Pokemon, bool bBack)
@@ -45,7 +45,7 @@ FSoftBattleRender USpriteLoader::GetLazySpeciesBattleSprite(FName Species, bool 
 {
     auto SpriteResolutionList = AdditionalParams.CreateResolutionList(Species, bBack ? TEXT("Back") : TEXT("Front"));
     // clang-format off
-    return Pokemon::Assets::Graphics::PokemonBattleSprites.ResolveSoftAsset(SpriteResolutionList).Get(FSoftBattleRender());
+    return FSoftBattleRender(); //Pokemon::Assets::Graphics::PokemonBattleSprites.ResolveSoftAsset(SpriteResolutionList).Get(FSoftBattleRender());
     // clang-format on
 }
 
@@ -57,7 +57,7 @@ FImageAsset USpriteLoader::GetPokemonIcon(const TScriptInterface<IPokemon> &Poke
 FImageAsset USpriteLoader::GetSpeciesIcon(FName Species, const FPokemonAssetParams &AdditionalParams)
 {
     auto SpriteResolutionList = AdditionalParams.CreateResolutionList(Species, TEXT("Icons"));
-    return Pokemon::Assets::Graphics::PokemonMenuSprites.ResolveAsset(SpriteResolutionList).Get(FImageAsset());
+    return FImageAsset(); //Pokemon::Assets::Graphics::PokemonMenuSprites.ResolveAsset(SpriteResolutionList).Get(FImageAsset());
 }
 
 FSoftImageAsset USpriteLoader::GetLazyPokemonIcon(const TScriptInterface<IPokemon> &Pokemon)
@@ -68,7 +68,7 @@ FSoftImageAsset USpriteLoader::GetLazyPokemonIcon(const TScriptInterface<IPokemo
 FSoftImageAsset USpriteLoader::GetLazySpeciesIcon(FName Species, const FPokemonAssetParams &AdditionalParams)
 {
     auto SpriteResolutionList = AdditionalParams.CreateResolutionList(Species, TEXT("Icons"));
-    return Pokemon::Assets::Graphics::PokemonMenuSprites.ResolveSoftAsset(SpriteResolutionList).Get(FSoftImageAsset());
+    return FSoftImageAsset(); //Pokemon::Assets::Graphics::PokemonMenuSprites.ResolveSoftAsset(SpriteResolutionList).Get(FSoftImageAsset());
 }
 
 FBattleRender USpriteLoader::GetTrainerSprite(const TScriptInterface<ITrainer> &Trainer, bool bBack)
@@ -76,5 +76,5 @@ FBattleRender USpriteLoader::GetTrainerSprite(const TScriptInterface<ITrainer> &
     TArray<FString, TInlineAllocator<2>> StringParts = {bBack ? TEXT("Back") : TEXT("Front"),
                                                         Trainer->GetTrainerType().ID.ToString()};
     auto JoinedString = FString::Join(StringParts, TEXT("/"));
-    return Pokemon::Assets::Graphics::TrainerSprites.LoadAsset(JoinedString).Get(FBattleRender());
+    return FBattleRender(); //Pokemon::Assets::Graphics::TrainerSprites.LoadAsset(JoinedString).Get(FBattleRender());
 }

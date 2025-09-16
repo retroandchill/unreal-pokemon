@@ -7,6 +7,7 @@
 #include "Components/EnhancedImage.h"
 #include "Components/ProgressBar.h"
 #include "Graphics/GraphicsAssetClasses.h"
+#include "RetroLib/Optionals/AndThen.h"
 #include "Utilities/PokemonUIUtils.h"
 
 void UPokemonBattlePanel::SetBattler(const TScriptInterface<IBattler> &Battler)
@@ -51,7 +52,9 @@ void UPokemonBattlePanel::RefreshStatusEffect()
     // clang-format off
     auto Icon = CurrentBattler->GetStatusEffect() |
                 Retro::Optionals::Transform(&FStatusEffectInfo::StatusEffectID) |
-                Retro::Optionals::AndThen([](FName ID) { return Pokemon::Assets::Graphics::StatusIcons.LoadAsset(ID); });
+                Retro::Optionals::AndThen([](FName ID) {
+                    return TOptional<FImageAsset>(); // Pokemon::Assets::Graphics::StatusIcons.LoadAsset(ID);
+                });
     // clang-format on
     if (!Icon.IsSet())
     {

@@ -17,7 +17,6 @@ public class PokemonBattleUI : ModuleRules
                 "PokemonData",
                 "PokemonCore",
                 "CommonUI",
-                "DynamicAssetLoader",
                 "UnrealInjector",
                 "RetroLib",
                 "UE5Coro",

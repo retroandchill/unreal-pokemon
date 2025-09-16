@@ -3,12 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Assets/AssetClass.h"
 #include "Field/FieldItemEffect.h"
 
 namespace Pokemon::Items
 {
 
-    UE_DECLARE_BLUEPRINT_CLASS_EXPORTED(POKEMONITEMS_API, FieldItemEffects, UFieldItemEffect);
+    //UE_DECLARE_BLUEPRINT_CLASS_EXPORTED(POKEMONITEMS_API, FieldItemEffects, UFieldItemEffect);
 
 } // namespace Pokemon::Items

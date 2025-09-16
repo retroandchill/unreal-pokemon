@@ -40,7 +40,6 @@ public class PokemonUI : ModuleRules
                 "CommonInput",
                 "PokemonItems",
                 "Paper2D",
-                "DynamicAssetLoader",
                 "EnhancedSaveGame",
             }
         );

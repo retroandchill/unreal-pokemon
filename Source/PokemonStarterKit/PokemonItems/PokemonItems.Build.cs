@@ -8,7 +8,7 @@ public class PokemonItems : ModuleRules
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(
-            new string[] { "Core", "PokemonCore", "PokemonAssets", "DynamicAssetLoader", "UE5Coro" }
+            new string[] { "Core", "PokemonCore", "PokemonAssets", "UE5Coro" }
         );
 
         PrivateDependencyModuleNames.AddRange(
