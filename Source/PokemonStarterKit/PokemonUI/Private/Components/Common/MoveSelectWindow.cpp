@@ -12,7 +12,7 @@ void UMoveSelectWindow::DisplayMoves(const TScriptInterface<IPokemon> &Pokemon)
 {
     CurrentPokemon = Pokemon;
 
-    ClearSelectableOptions();
+    GetButtons()->RemoveAll();
     int32 MoveCount = GetDefault<UPokemonDataSettings>()->MaxMoves;
     auto Moves = Pokemon->GetMoveBlock()->GetMoves();
 
@@ -45,7 +45,7 @@ void UMoveSelectWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 N
     Super::OnSelectionChange_Implementation(OldIndex, NewIndex);
     if (NewIndex != INDEX_NONE)
     {
-        OnMoveSelectionChanged.Broadcast(GetSelectableOption<UMovePanel>(NewIndex)->GetMove());
+        OnMoveSelectionChanged.Broadcast(Cast<UMovePanel>(GetButtons()->GetButtonBaseAtIndex(NewIndex))->GetMove());
     }
 }
 

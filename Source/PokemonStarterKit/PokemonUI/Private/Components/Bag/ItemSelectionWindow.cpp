@@ -1,13 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/Bag/ItemSelectionWindow.h"
-#include "Algo/ForEach.h"
 #include "Bag/Item.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Bag/ItemOption.h"
 #include "DataManager.h"
 #include "Engine/GameInstance.h"
-#include "Input/CommonUIInputTypes.h"
 #include "Memory/CursorMemorySubsystem.h"
 #include "Player/Bag.h"
 #include <functional>
@@ -87,7 +85,7 @@ void UItemSelectionWindow::OnSelectionChange_Implementation(int32 OldIndex, int3
 {
     Super::OnSelectionChange_Implementation(OldIndex, NewIndex);
     GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->UpdatePocketMemory(CurrentPocket, NewIndex);
-    if (auto Item = GetCurrentItem(); Item != nullptr)
+    if (auto *Item = GetCurrentItem(); Item != nullptr)
     {
         OnItemChanged.Broadcast(*Item, GetSelectableOption<UItemOption>(NewIndex)->GetQuantity());
     }
@@ -97,7 +95,7 @@ void UItemSelectionWindow::OnSelectionChange_Implementation(int32 OldIndex, int3
     }
 }
 
-void UItemSelectionWindow::ProcessConfirm_Implementation(int32 CurrentIndex)
+void UItemSelectionWindow::ProcessConfirm_Implementation(const int32 CurrentIndex)
 {
     UItemOption *Option = GetSelectableOption<UItemOption>(CurrentIndex);
     check(Option != nullptr)
@@ -108,7 +106,7 @@ void UItemSelectionWindow::UpdatePocket()
 {
     ClearSelectableOptions();
     CurrentBag->ForEachInPocket(CurrentPocket, std::bind_front(&UItemSelectionWindow::AddItemToWindow, this));
-    SetIndex(GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->GetBagPocketMemory()[CurrentPocket]);
+    SetDesiredFocusIndex(GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->GetBagPocketMemory()[CurrentPocket]);
     OnPocketChanged.Broadcast(CurrentPocket);
 }
 
@@ -121,7 +119,7 @@ void UItemSelectionWindow::AddItemToWindow(FName ItemName, int32 Quantity)
         return;
     }
 
-    auto Option = WidgetTree->ConstructWidget(ItemEntryClass);
+    auto *Option = WidgetTree->ConstructWidget(ItemEntryClass);
     Option->SetItem(ItemName, Quantity);
     SlotOption(Option);
 }

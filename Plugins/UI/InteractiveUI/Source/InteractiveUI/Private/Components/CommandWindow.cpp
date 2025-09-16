@@ -49,7 +49,7 @@ void UCommandWindow::AddCommands()
         return;
     }
 
-    ClearSelectableOptions();
+    GetButtons()->RemoveAll();
 
     for (UCommand *const Command : Commands)
     {
@@ -59,7 +59,7 @@ void UCommandWindow::AddCommands()
         auto TextWidget = WidgetTree->ConstructWidget<UDisplayTextOption>(DisplayTextWidgetClass);
         TextWidget->SetText(Command->GetText());
 
-        SlotOption(TextWidget);
+        GetButtons()->AddWidget(TextWidget);
         ActiveCommands.Add(Command);
     }
 }

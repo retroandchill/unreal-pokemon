@@ -29,7 +29,7 @@ class INTERACTIVEUI_API UDisplayTextOption : public UInteractiveButtonBase
      * @param NewText The new display text for the widget
      */
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, Category = Content)
-    void SetText(const FText &NewText);
+    void SetText(FText NewText);
 
   protected:
     void NativeOnCurrentTextStyleChanged() override;

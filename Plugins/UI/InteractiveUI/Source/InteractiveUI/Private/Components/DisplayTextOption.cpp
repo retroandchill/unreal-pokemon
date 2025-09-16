@@ -14,9 +14,9 @@ const FText &UDisplayTextOption::GetText() const
     return Text;
 }
 
-void UDisplayTextOption::SetText(const FText &NewText)
+void UDisplayTextOption::SetText(FText NewText)
 {
-    Text = NewText;
+    Text = MoveTemp(NewText);
     DisplayText->SetText(Text);
 }
 

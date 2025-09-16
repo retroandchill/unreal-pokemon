@@ -23,7 +23,8 @@ public class InteractiveUI : ModuleRules
                 "RetroLib",
                 "UE5Coro",
                 "Simple2D", 
-                "UnrealSharpCore",
+                "UnrealSharpCore", 
+                "RangeV3",
             }
         );
 
