@@ -39,6 +39,12 @@ public class UPartyComponent : URPGComponent
         get => Party.Count >= PokemonStatics.MaxPartySize;
     }
 
+    [UFunction]
+    public void SwapPositionsInParty(int index1, int index2)
+    {
+        Party.Swap(index1, index2);
+    }
+
     protected override void PreInitialize()
     {
         InfoComponent = GetRequiredSiblingComponent<UTrainerInfoComponent>();

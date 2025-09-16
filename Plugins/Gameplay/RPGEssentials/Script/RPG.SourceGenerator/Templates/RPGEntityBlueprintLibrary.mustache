@@ -23,8 +23,8 @@ public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
     [UFunction(FunctionFlags.BlueprintPure{{#HasDisplayName}}, DisplayName = "Get {{DisplayName}}"{{/HasDisplayName}}{{#HasCategory}}, Category = "{{Category}}"{{/HasCategory}})]    
     {{/GetterIsUFunction}}
     [UMetaData("DefaultToSelf", "unit")]
-    [ExpandEnumAsExecs("ReturnValue")]
     {{#IsOptionType}}
+    [ExpandEnumAsExecs("ReturnValue")]
     public static EValueFindResult Get{{Name}}({{../../ClassName}} unit, out {{OptionType}} value)
     {
         var optionValue = unit.{{Name}};

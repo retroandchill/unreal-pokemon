@@ -19,7 +19,6 @@
       <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
     </Reference>
     <Analyzer Include="..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
-    <ProjectReference Include="..\..\..\Plugins\Data\DynamicAssetLoader\Script\DynamicAssetLoader.Glue\DynamicAssetLoader.Glue.csproj" />
     <ProjectReference Include="..\..\UnrealPokemon.Glue\UnrealPokemon.Glue.csproj" />
   </ItemGroup>
 </Project>

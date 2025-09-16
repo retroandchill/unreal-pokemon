@@ -27,7 +27,7 @@ DECLARE_DELEGATE_OneParam(FOnPokemonSelected, TOptional<FSelectedPokemonHandle>)
 /**
  * Screen for when the player needs to select a Pokémon from the menu
  */
-UCLASS(Blueprintable, Abstract)
+UCLASS(Blueprintable, Abstract, DisplayName = "Pokemon Select Screen (Deprecated)")
 class POKEMONUI_API UPokemonSelectScreen : public UScreen, public IPartyScreen, public IPartyDisplayScreen
 {
     GENERATED_BODY()

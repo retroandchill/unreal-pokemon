@@ -1,0 +1,77 @@
+﻿using Pokemon.Core;
+using Pokemon.Core.Entities;
+using Pokemon.UI.Components.Party;
+using UnrealSharp.Attributes;
+using UnrealSharp.Attributes.MetaTags;
+using UnrealSharp.CommonUI;
+using UnrealSharp.CoreUObject;
+using UnrealSharp.InteractiveUI;
+
+namespace Pokemon.UI.Screens;
+
+[UClass(ClassFlags.Abstract)]
+public class UPokemonSelectScreen : UCommonActivatableWidget
+{
+    [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
+    [BindWidget]
+    protected UPokemonSelectionPane SelectionPane { get; }
+    
+    public override void Construct()
+    {
+        SelectionPane.Index = 0;
+        SelectionPane.ActivateWidget();
+    }
+
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Switching")]
+    public void BeginSwitch(int index)
+    {
+        SelectionPane.ToggleCommandVisibility(true);
+        
+        SelectionPane.Index = index;
+        SelectionPane.BeginSwitch(index);
+        SelectionPane.ActivateWidget();
+    }
+
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Switching")]
+    public void Refresh()
+    {
+        SelectionPane.Refresh();
+    }
+
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Selection")]
+    protected void OnPokemonSelected(int index)
+    {
+        var trainer = GetGameInstanceSubsystem<UPokemonSubsystem>().Player;
+        if (SelectionPane.SwitchingIndex.HasValue)
+        {
+            if (SelectionPane.SwitchingIndex.Value != index)
+            {
+                trainer.SwapPositionsInParty(SelectionPane.SwitchingIndex.Value, index);
+            }
+            SelectionPane.CompleteSwitch();
+        }
+        else
+        {
+            DisplayPokemonCommands(trainer, index);
+        }
+    }
+
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Selection")]
+    protected void OnPokemonCancel()
+    {
+        if (SelectionPane.SwitchingIndex.HasValue)
+        {
+            SelectionPane.CancelSwitch();
+        }
+        else
+        {
+            this.PopContentFromLayer();
+        }
+    }
+
+    [UFunction(FunctionFlags.BlueprintEvent, Category = "Selection")]
+    protected virtual void DisplayPokemonCommands(UTrainer trainer, int index)
+    {
+        
+    }
+}

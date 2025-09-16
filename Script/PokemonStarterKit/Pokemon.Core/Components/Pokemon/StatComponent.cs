@@ -126,6 +126,12 @@ public class UStatComponent : URPGComponent
         get { return NatureOverride.Match(x => x, () => Nature); }
     }
 
+    public bool IsFainted
+    {
+        [UFunction(FunctionFlags.BlueprintPure, Category = "Stats")]
+        get => HP <= 0;
+    }
+
     protected override void PreInitialize()
     {
         IdentityComponent = GetRequiredSiblingComponent<UIdentityComponent>();

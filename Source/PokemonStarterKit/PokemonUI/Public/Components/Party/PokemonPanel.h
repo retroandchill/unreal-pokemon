@@ -20,7 +20,7 @@ class IPokemon;
 /**
  * Widget for housing a single panel of a Pokémon
  */
-UCLASS(Abstract, Blueprintable)
+UCLASS(Abstract, Blueprintable, DisplayName = "Pokemon Panel (Deprecated)")
 class POKEMONUI_API UPokemonPanel : public UCommonButtonBase, public ISelectablePanel
 {
     GENERATED_BODY()

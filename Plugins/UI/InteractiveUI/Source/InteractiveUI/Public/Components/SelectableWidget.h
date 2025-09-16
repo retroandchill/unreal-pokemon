@@ -178,6 +178,7 @@ class INTERACTIVEUI_API USelectableWidget : public UCommonActivatableWidget
      * Slot an option into the widget
      * @param Option The option to be slotted
      */
+    UFUNCTION(meta = (ScriptMethod))
     void SlotOption(UCommonButtonBase *Option);
 
     UFUNCTION(BlueprintCallable, Category = "Selection|Options")

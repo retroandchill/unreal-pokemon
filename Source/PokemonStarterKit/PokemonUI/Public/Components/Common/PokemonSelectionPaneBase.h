@@ -20,7 +20,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPokemonPanelSelected, const TScri
 /**
  * Base widget for selecting a Pokémon from a list.
  */
-UCLASS(Abstract)
+UCLASS(Abstract, DisplayName = "Pokemon Selection Pane Base (Deprecated)")
 class POKEMONUI_API UPokemonSelectionPaneBase : public USelectableWidget
 {
     GENERATED_BODY()
