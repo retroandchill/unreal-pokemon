@@ -4,13 +4,12 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "CommonActivatableWidget.h"
-#include "InteractiveButtonGroup.h"
 #include "RetroLib/Casting/DynamicCast.h"
 #include "RetroLib/Ranges/Views/NameAliases.h"
 
 #include "SelectableWidget.generated.h"
 
-class UInteractiveButtonGroup;
+class UCommonButtonGroupBase;
 class UCommonButtonBase;
 class USelectionInputs;
 struct FInputActionInstance;
@@ -37,46 +36,24 @@ class INTERACTIVEUI_API USelectableWidget : public UCommonActivatableWidget
 {
     GENERATED_BODY()
 
+  public:
+    explicit USelectableWidget(const FObjectInitializer &Initializer);
+
   protected:
     void NativePreConstruct() override;
 
-    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UInteractiveButtonGroup* GetButtons() const
-    {
-        return Buttons.Get();   
-    }
-
-public:
-    UWidget* NativeGetDesiredFocusTarget() const override;
-
-    const TOptional<int32>& GetDesiredFocusIndex() const
-    {
-        return DesiredFocusIndex;
-    }
-
-    UFUNCTION(BlueprintPure, Category = "Selection")
-    int32 GetItemCount() const
-    {
-        return Buttons->GetButtonCount();
-    }
-    
-    UFUNCTION(BlueprintCallable, Category = "Selection")
-    bool TryGetDesiredFocusIndex(int32& OutIndex) const;
-
-    UFUNCTION(BlueprintCallable, Category = "Selection")
-    void SetDesiredFocusIndex(int32 Index);
-
-    UFUNCTION(BlueprintCallable, Category = "Selection")
-    void ClearDesiredFocusIndex()
-    {
-        DesiredFocusIndex.Reset();
-    }
+  public:
+    /**
+     * Get the number of items in the menu that can be selected
+     * @return The total number of items
+     */
+    UFUNCTION(BlueprintPure, Category = Selection)
+    int32 GetItemCount() const;
 
     /**
      * Get the current index of the menu
      * @return The current selection index of the menu (-1 = inactive)
      */
-    UE_DEPRECATED(0.2, "This is just here so things can build for now")
     UFUNCTION(BlueprintPure, Category = Selection)
     int32 GetIndex() const;
 
@@ -84,20 +61,18 @@ public:
      * Set the current index of the menu
      * @param NewIndex The current selection index of the menu
      */
-    UE_DEPRECATED(0.2, "This is just here so things can build for now")
     UFUNCTION(BlueprintCallable, Category = Selection)
     void SetIndex(int32 NewIndex);
 
     /**
      * End selection for the current menu
-    */
-    UE_DEPRECATED(0.2, "This is just here so things can build for now")
+     */
     UFUNCTION(BlueprintCallable, Category = Selection)
     void Deselect();
 
     UFUNCTION(BlueprintPure, Category = Selection)
     UCommonButtonBase *GetSelectedOption() const;
-
+    
     /**
      * @brief Retrieves the reference to the delegate for when the user presses confirm.
      *
@@ -107,37 +82,67 @@ public:
      *
      * @return The reference to the FProcessConfirm delegate for when the user presses confirm.
      */
-    UE_DEPRECATED(0.2, "This is just here so things can build for now")
-    FProcessConfirm &GetOnConfirm()
-    {
-        return OnConfirm;   
-    }
+    FProcessConfirm &GetOnConfirm();
 
     /**
      * Retrieves the delegate for when the user cancels.
      *
      * @return The delegate for when the user cancels.
      */
-    UE_DEPRECATED(0.2, "This is just here so things can build for now")
-    FProcessCancel &GetOnCancel()
-    {
-        return OnCancel;  
-    }
+    FProcessCancel &GetOnCancel();
 
-protected:
+  protected:
+    UWidget *NativeGetDesiredFocusTarget() const override;
+    void NativeOnActivated() override;
+    void NativeOnDeactivated() override;
+
+    /**
+     * A convenience method to handle additional functionality when the user confirms a selection based on the specified
+     * index.
+     *
+     * @param CurrentIndex The current index of the menu
+     */
+    void ConfirmOnIndex(int32 CurrentIndex);
+
+    /**
+     * Method used to invoke the cancel operation for this widget
+     */
+    void Cancel();
+
+    bool NativeOnHandleBackAction() override;
+
+    /**
+     * Called when the selection is changed
+     * @param OldIndex The previous index of this widget
+     * @param NewIndex The new index to select to
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = Selection)
+    void OnSelectionChange(int32 OldIndex, int32 NewIndex);
+
+    /**
+     * Additional functionality for when confirm is selected
+     * @param CurrentIndex The current index of the window
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = "Selection|Confirm")
+    void ProcessConfirm(int32 CurrentIndex);
+
+    /**
+     * Additional functionality for when cancel is selected
+     */
+    UFUNCTION(BlueprintNativeEvent, Category = "Selection|Cancel")
+    void ProcessCancel();
+
     /**
      * Get the full list of selectable options for this widget
      * @tparam T The type of option to expect
      * @return A view of the options that will cast to the given type
      */
     template <typename T>
-    UE_DEPRECATED(0.2, "This is just here so things can build for now")
     auto GetSelectableOptions() const
     {
         // clang-format off
-        return Retro::Ranges::Views::Iota(0) |
-                Retro::Ranges::Views::Take(GetButtons()->GetButtonCount()) |
-                Retro::Ranges::Views::Transform([this](const int32 Index) { return CastChecked<T>(GetSelectableOption(Index)); });
+        return SelectableButtons |
+               Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<T>);
         // clang-format on
     }
 
@@ -148,9 +153,13 @@ protected:
      * @return The found widget
      */
     template <typename T>
-    UE_DEPRECATED(0.2, "This is just here so things can build for now")
-    T *GetSelectableOption(const int32 OptionIndex) const
+    T *GetSelectableOption(int32 OptionIndex) const
     {
+        if (!SelectableButtons.IsValidIndex(OptionIndex))
+        {
+            return nullptr;
+        }
+
         return CastChecked<T>(GetSelectableOption(OptionIndex));
     }
 
@@ -160,22 +169,18 @@ protected:
      * @return The found widget
      */
     UFUNCTION(BlueprintPure, Category = "Selection|Options")
-    UE_DEPRECATED(0.2, "This is just here so things can build for now")
     UCommonButtonBase *GetSelectableOption(int32 OptionIndex) const;
 
     UFUNCTION(BlueprintCallable, Category = "Selection|Options")
-    UE_DEPRECATED(0.2, "This is just here so things can build for now")
     void ClearSelectableOptions(bool bRemoveWidgets = true);
 
     /**
      * Slot an option into the widget
      * @param Option The option to be slotted
      */
-    UE_DEPRECATED(0.2, "This is just here so things can build for now")
     void SlotOption(UCommonButtonBase *Option);
 
     UFUNCTION(BlueprintCallable, Category = "Selection|Options")
-    UE_DEPRECATED(0.2, "This is just here so things can build for now")
     int32 AddOptionToWidget(UCommonButtonBase *Option);
 
     /**
@@ -184,37 +189,12 @@ protected:
      * @param OptionIndex The index of the option to slot
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Selection|Options")
-    UE_DEPRECATED(0.2, "This is just here so things can build for now")
     void PlaceOptionIntoWidget(UWidget *Option, int32 OptionIndex);
-    
-    /**
-     * Called when the selection is changed
-     * @param OldIndex The previous index of this widget
-     * @param NewIndex The new index to select to
-     */
-    UFUNCTION(BlueprintNativeEvent, Category = Selection)
-    UE_DEPRECATED(0.2, "This is just here so things can build for now")
-    void OnSelectionChange(int32 OldIndex, int32 NewIndex);
 
+  private:
     /**
-     * Additional functionality for when confirm is selected
-     * @param CurrentIndex The current index of the window
+     * The delegate bound to confirm
      */
-    UFUNCTION(BlueprintNativeEvent, Category = "Selection|Confirm")
-    UE_DEPRECATED(0.2, "This is just here so things can build for now")
-    void ProcessConfirm(int32 CurrentIndex);
-
-    /**
-     * Additional functionality for when cancel is selected
-     */
-    UFUNCTION(BlueprintNativeEvent, Category = "Selection|Cancel")
-    UE_DEPRECATED(0.2, "This is just here so things can build for now")
-    void ProcessCancel();
-
-private:
-    /**
-         * The delegate bound to confirm
-         */
     UPROPERTY(BlueprintAssignable, Category = "Selection|Confirm")
     FProcessConfirm OnConfirm;
 
@@ -223,10 +203,25 @@ private:
      */
     UPROPERTY(BlueprintAssignable, Category = "Selection|Cancel")
     FProcessCancel OnCancel;
-    
-    UPROPERTY(BlueprintGetter = GetButtons, Category = "Selection")
-    TObjectPtr<UInteractiveButtonGroup> Buttons;
 
-    UPROPERTY(EditAnywhere, Getter, Category = "Selection", meta = (ClampMin = 0, UIMin = 0))
-    TOptional<int32> DesiredFocusIndex;
+    /**
+     * The index of the menu in question
+     */
+    UPROPERTY(EditAnywhere, Category = Selection)
+    int32 Index = INDEX_NONE;
+
+    /**
+     * Should options be selection when the mouse hovers over it?
+     */
+    UPROPERTY(EditAnywhere, Category = Selection)
+    bool bSelectOptionOnHover = true;
+
+    /**
+     * The child buttons that are part of this object
+     */
+    UPROPERTY()
+    TArray<TObjectPtr<UCommonButtonBase>> SelectableButtons;
+
+    UPROPERTY()
+    TObjectPtr<UCommonButtonGroupBase> SelectableButtonGroup;
 };

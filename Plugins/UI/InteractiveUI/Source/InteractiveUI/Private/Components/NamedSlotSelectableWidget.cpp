@@ -4,7 +4,6 @@
 #include "CommonButtonBase.h"
 #include "Components/NamedSlot.h"
 #include "Components/InteractiveButtonBase.h"
-#include "Components/InteractiveButtonGroup.h"
 
 void UNamedSlotSelectableWidget::NativePreConstruct()
 {
@@ -21,7 +20,7 @@ void UNamedSlotSelectableWidget::UpdateOptions()
     }
 #endif
 
-    const auto *ContentWidget = Cast<UPanelWidget>(ContentSlot->GetContent());
+    auto ContentWidget = Cast<UPanelWidget>(ContentSlot->GetContent());
 #if WITH_EDITOR
     if (ContentWidget == nullptr)
     {
@@ -29,10 +28,10 @@ void UNamedSlotSelectableWidget::UpdateOptions()
     }
 #endif
 
-    GetButtons()->RemoveAll();
+    ClearSelectableOptions(false);
     for (int32 i = 0; i < ContentWidget->GetChildrenCount(); i++)
     {
-        auto *Child = Cast<UInteractiveButtonBase>(ContentWidget->GetChildAt(i));
+        auto Child = Cast<UInteractiveButtonBase>(ContentWidget->GetChildAt(i));
         if (Child == nullptr)
         {
             continue;
@@ -47,11 +46,11 @@ void UNamedSlotSelectableWidget::UpdateOptions()
             continue;
         }
 
-        GetButtons()->AddWidget(Child);
+        AddOptionToWidget(Child);
     }
 
-    if (int32 Index; TryGetDesiredFocusIndex(Index) && Index >= GetButtons()->GetButtonCount())
+    if (GetIndex() != INDEX_NONE && GetIndex() >= GetItemCount())
     {
-        SetDesiredFocusIndex(GetButtons()->GetButtonCount() - 1);
+        SetIndex(GetItemCount() - 1);
     }
 }

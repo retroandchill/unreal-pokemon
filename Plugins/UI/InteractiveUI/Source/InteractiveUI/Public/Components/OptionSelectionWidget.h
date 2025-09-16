@@ -3,7 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SelectableWidget.h"
+#include "SelectionWidget.h"
+
 #include "OptionSelectionWidget.generated.h"
 
 class UDisplayTextOption;
@@ -35,7 +36,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOptionSelected, int32, Index, FN
  * 
  */
 UCLASS(Abstract)
-class INTERACTIVEUI_API UOptionSelectionWidget : public USelectableWidget
+class INTERACTIVEUI_API UOptionSelectionWidget : public USelectionWidget
 {
     GENERATED_BODY()
 
