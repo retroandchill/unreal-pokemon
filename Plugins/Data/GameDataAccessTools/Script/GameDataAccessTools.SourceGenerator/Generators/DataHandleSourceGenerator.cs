@@ -139,6 +139,26 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
             $"{structSymbol.Name}.g.cs",
             handlebars.Compile(SourceTemplates.RepositoryDataHandleTemplate)(templateParams)
         );
+
+        var entryType = templateParams.EntryType;
+        var hasViewMethods = entryType.HasAttribute<CreateStructViewAttribute>();
+
+        var blueprintLibraryParams = new
+        {
+            Namespace = structSymbol.ContainingNamespace.ToDisplayString(),
+            StructName = structSymbol.Name,
+            EngineName = structSymbol.Name[1..],
+            Properties = hasViewMethods ? entryType.GetMembers()
+                .OfType<IPropertySymbol>()
+                .Where(s => !s.IsStatic && s.GetMethod is not null)
+                .Select(x => new DataHandlePropertyMethod(x))
+                .ToImmutableArray() : []
+        };
+        
+        context.AddSource(
+            $"{structSymbol.Name}BlueprintLibrary.g.cs",
+            handlebars.Compile(SourceTemplates.RepositoryDataHandleBlueprintLibraryTemplate)(blueprintLibraryParams)
+        );
     }
 
     private static ITypeSymbol GetEntryType(DataHandleInfo dataHandleInfo)

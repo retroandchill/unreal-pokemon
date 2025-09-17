@@ -159,20 +159,43 @@ namespace GameAccessTools.SourceGenerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to #nullable enable
-        ///using UnrealSharp;
-        ///using GameDataAccessTools.Core;
+        ///   Looks up a localized string similar to using UnrealSharp;
+        ///using UnrealSharp.Attributes;
+        ///using UnrealSharp.Engine;
         ///
         ///namespace {{Namespace}};
         ///
-        ///readonly partial record struct {{StructName}}(FName ID) : IDataHandle&lt;{{EntryType}}&gt;{{#Convertables}}, IEquatable&lt;{{Type}}&gt;{{/Convertables}}
+        ///[UClass]
+        ///public class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
         ///{
-        ///    {{#WithRepository}}
-        ///    public static UScriptStruct EntryStruct =&gt; {{Provider}}.{{Repository}}.EntryStruct;
+        ///    [UFunction(FunctionFlags.BlueprintPure, DisplayName = &quot;Is Valid&quot;, Category = &quot;{{EngineName}}&quot;)]
+        ///    public static bool IsValidHandle({{StructName}} handle) =&gt; handle.IsValid;
         ///
-        ///    static IEnumerable&lt;FDataHandleEntry&gt; IDataHandle.Entries =&gt; Entries.ToArray();
+        ///    [UFunction(FunctionFlags.BlueprintPure, DisplayName = &quot;Convert to Name&quot;, Category = &quot;{{EngineName}}&quot;)]
+        ///    [UMetaData(&quot;CompactNod [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string RepositoryDataHandleBlueprintLibraryTemplate {
+            get {
+                return ResourceManager.GetString("RepositoryDataHandleBlueprintLibraryTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #nullable enable
+        ///using UnrealSharp;
+        ///using UnrealSharp.Attributes;
+        ///using UnrealSharp.CoreUObject;
+        ///using UnrealSharp.GameDataAccessTools;
+        ///using GameDataAccessTools.Core;
+        ///using GameDataAccessTools.Core.Views;
+        ///using GameDataAccessTools.Core.Utilities;
+        ///using ZLinq;
         ///
-        ///    public static ValueEnumerable&lt;StructArrayValueEnumerator&lt;{{E [rest of string was truncated]&quot;;.
+        ///namespace {{Namespace}};
+        ///
+        ///readonly partial record struct {{StructName}}([field: UProperty(PropertyFlags.EditAnywhere)] FName ID) : IDataHandle&lt;{{EntryType}}&gt;{{#Convertables}}, IEquatable&lt;{{Type}}&gt;{{/Convertables}}
+        ///{
+        ///    {{#WithRepositor [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string RepositoryDataHandleTemplate {
             get {
@@ -186,22 +209,22 @@ namespace GameAccessTools.SourceGenerator.Properties {
         ///
         ///namespace {{Namespace}};
         ///
-        ///static partial class {{ClassName}}
+        ///{{#Extensions}}
+        ///public static partial class {{../ClassName}}_{{EngineName}}
         ///{
-        ///    {{#Extensions}}
         ///    {{#Properties}}
         ///    private static readonly FName {{../EngineName}}_{{Identifier}} = &quot;{{Identifier}}&quot;;
         ///    {{/Properties}}
-        ///    
+        ///        
         ///    extension({{ExtendedClass}})
         ///    {
         ///        {{#Properties}}
         ///        public static FName {{Identifier}} =&gt; {{../EngineName}}_{{Identifier}};
         ///        {{/Properties}}
         ///    }
+        ///}
         ///
-        ///    {{/Extensions}}
-        ///}.
+        ///{{/Extensions}}.
         /// </summary>
         internal static string StaticIdentifiersTemplate {
             get {
@@ -211,14 +234,9 @@ namespace GameAccessTools.SourceGenerator.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to #nullable enable
-        ///using UnrealSharp;
-        ///using UnrealSharp.Core;
-        ///using UnrealSharp.Core.Marshallers;
-        ///using UnrealSharp.CoreUObject;
-        ///using UnrealSharp.Interop;
-        ///using GameDataAccessTools.Core;
-        ///using GameDataAccessTools.Core.Views;
-        ///using GameDataAccessTools.Core.Marshallers;
+        ///{{#Usings}}
+        ///{{Declaration}}
+        ///{{/Usings}}
         ///
         ///namespace {{Namespace}};
         ///
@@ -227,9 +245,12 @@ namespace GameAccessTools.SourceGenerator.Properties {
         ///    extension(StructView&lt;{{StructName}}&gt; structView) 
         ///    {
         ///        {{#Properties}}
-        ///        {{Access}}{{Type}} {{Name}}
+        ///        {{#HasBackingField}}
+        ///        {{#HasGetterBody}}private {{/HasGetterBody}}{{^HasGetterBody}}{{Access}}{{/HasGetterBody}}{{Type}} {{Name}}{{#HasGetterBody}}_BackingField{{/HasGetterBody}}
         ///        {
-        ///          [rest of string was truncated]&quot;;.
+        ///            get
+        ///            {
+        ///                {{#MarshallerInsta [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string StructViewExtensionsTemplate {
             get {
