@@ -20,7 +20,7 @@ public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
     {{/GetterAttributes}}    
     {{/GetterIsUFunction}}
     {{^GetterIsUFunction}}
-    [UFunction(FunctionFlags.BlueprintPure{{#HasDisplayName}}, DisplayName = "Get {{DisplayName}}"{{/HasDisplayName}}{{#HasCategory}}, Category = "{{Category}}"{{/HasCategory}})]    
+    [UFunction(FunctionFlags.Blueprint{{#IsOptionType}}Callable{{/IsOptionType}}{{^IsOptionType}}Pure{{/IsOptionType}}{{#HasDisplayName}}, DisplayName = "Get {{DisplayName}}"{{/HasDisplayName}}{{#HasCategory}}, Category = "{{Category}}"{{/HasCategory}})]    
     {{/GetterIsUFunction}}
     [UMetaData("DefaultToSelf", "unit")]
     {{#IsOptionType}}
