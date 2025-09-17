@@ -11,9 +11,17 @@ using UnrealSharp.CoreUObject;
 
 namespace Pokemon.Editor.Serialization.Pbs.Converters;
 
-public class EvolutionMethodConverter : PbsConverterBase<EvolutionConditionInfo>
+public class EvolutionMethodConverter : IPbsConverter<EvolutionConditionInfo>
 {
-    public override string WriteCsvValue(
+
+    public Type Type => typeof(EvolutionConditionInfo);
+
+    string IPbsConverter.WriteCsvValue(object? value, PbsScalarDescriptor schema, string? sectionName)
+    {
+        return WriteCsvValue((EvolutionConditionInfo)value!, schema, sectionName);
+    }
+    
+    public string WriteCsvValue(
         EvolutionConditionInfo value,
         PbsScalarDescriptor schema,
         string? sectionName
@@ -55,7 +63,12 @@ public class EvolutionMethodConverter : PbsConverterBase<EvolutionConditionInfo>
         return $"{value.Species},{value.Method},{string.Join(",", additionalParameters)}";
     }
 
-    public override EvolutionConditionInfo GetCsvValue(
+    object? IPbsConverter.GetCsvValue(string input, PbsScalarDescriptor scalarDescriptor, string? sectionName)
+    {
+        return GetCsvValue(input, scalarDescriptor, sectionName);
+    }
+
+    public EvolutionConditionInfo GetCsvValue(
         string input,
         PbsScalarDescriptor scalarDescriptor,
         string? sectionName

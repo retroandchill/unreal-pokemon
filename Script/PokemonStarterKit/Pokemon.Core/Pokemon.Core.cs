@@ -4,8 +4,12 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Pokemon.Core.Services.Exp;
 using UnrealInject;
 using UnrealSharp.Engine.Core.Modules;
+using UnrealSharp.Log;
 
 namespace Pokemon.Core;
+
+[CustomLog]
+public static partial class LogPokemonCore;
 
 [UsedImplicitly]
 public class FPokemonCoreModule : IModuleInterface

@@ -17,6 +17,9 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
 
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Player")]
     public UTrainer Player { get; private set; }
+    
+    [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Player")]
+    public UPokemonBag Bag { get; private set; }
 
     public FText CurrentLocation
     {
@@ -54,5 +57,6 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
     {
         // TODO: Swap this instantiation with the actual trainer instantiation
         Player = UTrainer.Create(this, new FName("POKEMONTRAINER_Nate"), "Nate");
+        Bag = UPokemonBag.Create(this);
     }
 }

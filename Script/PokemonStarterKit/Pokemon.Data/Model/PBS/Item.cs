@@ -149,6 +149,7 @@ public readonly partial struct FItem() : IGameDataEntry
         Category = "BagInfo"
     )]
     [field: Categories(IdentifierConstants.PocketTag)]
+    [AsValue]
     public FGameplayTag Pocket { get; init; }
 
     [field: UProperty(

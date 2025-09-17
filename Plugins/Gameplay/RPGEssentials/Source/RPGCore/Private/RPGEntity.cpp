@@ -4,7 +4,7 @@
 #include "LogRPGCore.h"
 #include "Misc/DataValidation.h"
 #include "RPGComponent.h"
-#include "UnrealIteratorAdapter.h"
+#include "RangeV3.h"
 
 const UScriptStruct *URPGEntity::GetEntityStruct() const
 {

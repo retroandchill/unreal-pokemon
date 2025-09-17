@@ -1,15 +1,20 @@
-﻿using Pokemon.Editor.Serialization.Pbs;
-using Pokemon.Editor.Serialization.Pbs.Converters;
-using UnrealSharp.CoreUObject;
+﻿using UnrealSharp.CoreUObject;
 using UnrealSharp.GameplayTags;
 
-namespace Pokemon.Editor.Serializers.Pbs.Converters;
+namespace Pokemon.Editor.Serialization.Pbs.Converters;
 
-public sealed class ItemPocketConverter : PbsConverterBase<FGameplayTag>
+public sealed class ItemPocketConverter : IPbsConverter<FGameplayTag>
 {
     private const string DefaultValue = "1";
 
-    public override string WriteCsvValue(
+    public Type Type => typeof(FGameplayTag);
+
+    string IPbsConverter.WriteCsvValue(object? value, PbsScalarDescriptor schema, string? sectionName)
+    {
+        return WriteCsvValue((FGameplayTag)value!, schema, sectionName);
+    }
+
+    public string WriteCsvValue(
         FGameplayTag value,
         PbsScalarDescriptor schema,
         string? sectionName
@@ -28,7 +33,12 @@ public sealed class ItemPocketConverter : PbsConverterBase<FGameplayTag>
         return targetTag.Match(x => x.ToString(), () => DefaultValue);
     }
 
-    public override FGameplayTag GetCsvValue(
+    object? IPbsConverter.GetCsvValue(string input, PbsScalarDescriptor scalarDescriptor, string? sectionName)
+    {
+        return GetCsvValue(input, scalarDescriptor, sectionName);
+    }
+
+    public FGameplayTag GetCsvValue(
         string input,
         PbsScalarDescriptor scalarDescriptor,
         string? sectionName

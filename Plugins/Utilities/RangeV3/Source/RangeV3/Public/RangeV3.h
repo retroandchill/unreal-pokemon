@@ -12,6 +12,7 @@ THIRD_PARTY_INCLUDES_START
 THIRD_PARTY_INCLUDES_END
 
 #include "UnrealContainers.h"
+#include "UnrealIteratorAdapter.h"
 
 #ifdef PI_WAS_DEFINED
 #define PI (PI_WAS_DEFINED)

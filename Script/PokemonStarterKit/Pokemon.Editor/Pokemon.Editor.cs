@@ -42,8 +42,8 @@ public class FPokemonEditorModule : IModuleInterface
             )
             .RegisterSerializer(
                 new MappingPbsSerializer<SpeciesInfo, FSpecies>(
-                    x => SpeciesMapper.ToSpecies(x),
-                    x => SpeciesMapper.ToSpeciesInfo(x)
+                    x => x.ToSpecies(),
+                    x => x.ToSpeciesInfo()
                 )
             )
             .RegisterSerializer(

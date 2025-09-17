@@ -1,6 +1,4 @@
-﻿using Pokemon.Editor.Serialization.Pbs.Serializers;
-
-namespace Pokemon.Editor.Serialization.Pbs;
+﻿namespace Pokemon.Editor.Serialization.Pbs;
 
 public interface IPbsSerializer;
 

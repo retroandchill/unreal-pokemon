@@ -346,7 +346,7 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
                         true
                     ),
                     propertySymbol.Locations.First(),
-                    propertySymbol.Name
+                    initializerName
                 )
             );
         }

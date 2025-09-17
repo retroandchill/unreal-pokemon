@@ -28,8 +28,12 @@
     <Analyzer Include="..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
     <ProjectReference Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPGEssentials.Glue\RPGEssentials.Glue.csproj" />
     <ProjectReference Include="..\..\UnrealPokemon.Glue\UnrealPokemon.Glue.csproj" />
+    <Reference Include="UnrealSharp.Log">
+      <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.Log.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Bag\" />
     <Folder Include="Services\" />
   </ItemGroup>
 </Project>
