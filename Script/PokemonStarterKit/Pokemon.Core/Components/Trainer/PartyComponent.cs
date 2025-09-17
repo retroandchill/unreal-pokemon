@@ -39,6 +39,12 @@ public class UPartyComponent : URPGComponent
         get => Party.Count >= PokemonStatics.MaxPartySize;
     }
 
+    [UFunction(FunctionFlags.BlueprintPure, Category = "Party")]
+    public UPokemon? GetPokemon(int index)
+    {
+        return index >= 0 && index < Party.Count ? Party[index] : null;
+    }
+
     [UFunction]
     public void SwapPositionsInParty(int index1, int index2)
     {

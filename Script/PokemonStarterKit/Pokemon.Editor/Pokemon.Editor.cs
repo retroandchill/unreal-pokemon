@@ -56,8 +56,6 @@ public class FPokemonEditorModule : IModuleInterface
 
     public void ShutdownModule()
     {
-        PbsSerializer.Shutdown();
-
         PbsSerializer
             .Instance.RemoveSerializer<FType>()
             .RemoveSerializer<FAbility>()
@@ -66,5 +64,7 @@ public class FPokemonEditorModule : IModuleInterface
             .RemoveSerializer<FBerryPlant>()
             .RemoveSerializer<FSpecies>()
             .RemoveSerializer<FTrainerType>();
+        
+        PbsSerializer.Shutdown();
     }
 }

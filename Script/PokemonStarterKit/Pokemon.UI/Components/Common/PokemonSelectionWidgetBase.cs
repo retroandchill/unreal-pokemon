@@ -8,7 +8,7 @@ using UnrealSharp.UMG;
 namespace Pokemon.UI.Components.Common;
 
 [UMultiDelegate]
-public delegate void OnPokemonPanelSelected(UPokemon pokemon);
+public delegate void OnPokemonSelected(UPokemon pokemon);
 
 [UClass(ClassFlags.Abstract)]
 public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
@@ -25,7 +25,7 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
     public int? SwitchingIndex { get; private set; }
     
     [UProperty(PropertyFlags.BlueprintAssignable, Category = "Events")]
-    public TMulticastDelegate<OnPokemonPanelSelected> OnPokemonPanelSelected { get; set; }
+    public TMulticastDelegate<OnPokemonSelected> OnPokemonSelected { get; set; }
 
     protected virtual int? NumPanelsToAdd => null;
 
@@ -122,7 +122,7 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
         Refresh();
         if (newIndex != -1)
         {
-            OnPokemonPanelSelected.Invoke(GetSelectableOption<UPokemonPanel>(newIndex)!.Pokemon!);
+            OnPokemonSelected.Invoke(GetSelectableOption<UPokemonPanel>(newIndex)!.Pokemon!);
         }
     }
 
@@ -139,6 +139,6 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
         panel1.Refresh();
         panel2.Refresh();
         
-        OnPokemonPanelSelected.Invoke(GetSelectableOption<UPokemonPanel>(Index)!.Pokemon!);
+        OnPokemonSelected.Invoke(GetSelectableOption<UPokemonPanel>(Index)!.Pokemon!);
     }
 }
