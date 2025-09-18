@@ -7,7 +7,6 @@ public interface IPbsSerializer
 
 public interface IPbsSerializer<T> : IPbsSerializer
 {
-    
     void Serialize(IEnumerable<T> model, TextWriter writer);
 
     IEnumerable<T> Deserialize(TextReader reader);
@@ -46,7 +45,7 @@ public class PbsSerializer
     public PbsSerializer RemoveSerializer(Type type)
     {
         _serializers.Remove(type);
-        return this;   
+        return this;
     }
 
     public bool HasSerializerFor(Type type)

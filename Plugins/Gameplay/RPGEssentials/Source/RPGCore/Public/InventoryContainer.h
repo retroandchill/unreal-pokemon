@@ -13,19 +13,18 @@ enum class EInventoryValidation : uint8
     Invalid
 };
 
-
 /**
- * 
+ *
  */
 UCLASS(Abstract, EditInlineNew)
 class RPGCORE_API UInventoryContainer : public UObject
 {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintCallable, Category = "Inventory")
     int32 AddItem(FName ItemID, int32 Amount);
-    
+
     UFUNCTION(BlueprintCallable, Category = "Inventory")
     int32 RemoveItem(FName ItemID, int32 Amount);
 
@@ -37,10 +36,10 @@ public:
 
     UFUNCTION(BlueprintPure, Category = "Inventory")
     int32 GetItemQuantity(FName ItemID) const;
-    
+
     bool CanAddItem(FName ItemID, int32 Amount) const;
     bool ValidateItem(FName ItemID) const;
-    
+
     TOptional<int32> GetMaxSlots() const
     {
         return MaxSlots;
@@ -48,21 +47,21 @@ public:
 
     TOptional<int32> GetMaxStackSize() const
     {
-        return MaxStackSize;   
+        return MaxStackSize;
     }
 
     UFUNCTION(BlueprintPure, Category = "Inventory")
     bool HasItem(FName ItemID) const;
-    
+
     UFUNCTION(BlueprintPure, Category = "Inventory")
     bool IsEmpty() const;
-    
+
     const TMap<FName, int32> &GetItems() const
     {
         return ItemSlots;
     }
 
-protected:
+  protected:
     void SetMaxSlots(const TOptional<int32> &InMaxSlots)
     {
         MaxSlots = InMaxSlots;
@@ -83,7 +82,7 @@ protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "Inventory", meta = (ScriptName = "ValidateItem"))
     EInventoryValidation K2_ValidateItem(FName ItemID) const;
 
-private:
+  private:
     UPROPERTY(SaveGame)
     TMap<FName, int32> ItemSlots;
 
@@ -92,5 +91,4 @@ private:
 
     UPROPERTY(EditDefaultsOnly, Category = "Settings")
     TOptional<int32> MaxStackSize;
-
 };

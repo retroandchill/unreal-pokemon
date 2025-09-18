@@ -8,6 +8,6 @@
 namespace Pokemon::Items
 {
 
-    //UE_DECLARE_BLUEPRINT_CLASS_EXPORTED(POKEMONITEMS_API, FieldItemEffects, UFieldItemEffect);
+    // UE_DECLARE_BLUEPRINT_CLASS_EXPORTED(POKEMONITEMS_API, FieldItemEffects, UFieldItemEffect);
 
 } // namespace Pokemon::Items

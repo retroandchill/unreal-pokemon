@@ -22,36 +22,42 @@ class INTERACTIVEUI_API UGameUIManagerSubsystem : public UGameInstanceSubsystem
   public:
     UGameUIManagerSubsystem() = default;
 
-    void Initialize(FSubsystemCollectionBase& Collection) override;
+    void Initialize(FSubsystemCollectionBase &Collection) override;
     void Deinitialize() override;
-    bool ShouldCreateSubsystem(UObject* Outer) const override;
+    bool ShouldCreateSubsystem(UObject *Outer) const override;
 
     UFUNCTION(meta = (ScriptMethod, WorldContext = WorldContextObject))
-    static UGameUIManagerSubsystem* GetInstance(const UObject* WorldContextObject)
+    static UGameUIManagerSubsystem *GetInstance(const UObject *WorldContextObject)
     {
         return UGameplayStatics::GetGameInstance(WorldContextObject)->GetSubsystem<UGameUIManagerSubsystem>();
     }
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UGameUIPolicy* GetCurrentUIPolicy() { return CurrentPolicy; }
-    
-    const UGameUIPolicy* GetCurrentUIPolicy() const { return CurrentPolicy; }
-    
-    UFUNCTION(BlueprintNativeEvent, Category = "UI Manager")
-    void NotifyPlayerAdded(ULocalPlayer* LocalPlayer);
+    UGameUIPolicy *GetCurrentUIPolicy()
+    {
+        return CurrentPolicy;
+    }
+
+    const UGameUIPolicy *GetCurrentUIPolicy() const
+    {
+        return CurrentPolicy;
+    }
 
     UFUNCTION(BlueprintNativeEvent, Category = "UI Manager")
-    void NotifyPlayerRemoved(ULocalPlayer* LocalPlayer);
+    void NotifyPlayerAdded(ULocalPlayer *LocalPlayer);
 
     UFUNCTION(BlueprintNativeEvent, Category = "UI Manager")
-    void NotifyPlayerDestroyed(ULocalPlayer* LocalPlayer);
+    void NotifyPlayerRemoved(ULocalPlayer *LocalPlayer);
 
-protected:
+    UFUNCTION(BlueprintNativeEvent, Category = "UI Manager")
+    void NotifyPlayerDestroyed(ULocalPlayer *LocalPlayer);
+
+  protected:
     UFUNCTION(BlueprintCallable, Category = "UI Manager")
-    void SwitchToPolicy(UGameUIPolicy* NewPolicy);
+    void SwitchToPolicy(UGameUIPolicy *NewPolicy);
 
     UFUNCTION(BlueprintNativeEvent, meta = (ScriptName = "ShouldCreateSubsystem"), Category = "Managed Subsystems")
-    bool K2_ShouldCreateSubsystem(UObject* Outer) const;
+    bool K2_ShouldCreateSubsystem(UObject *Outer) const;
 
     UFUNCTION(BlueprintImplementableEvent, meta = (ScriptName = "Initialize"), Category = "Managed Subsystems")
     void K2_Initialize(FSubsystemCollectionBaseRef Collection);
@@ -59,9 +65,9 @@ protected:
     UFUNCTION(BlueprintImplementableEvent, meta = (ScriptName = "Deinitialize"), Category = "Managed Subsystems")
     void K2_Deinitialize();
 
-private:
+  private:
     TWeakObjectPtr<ULocalPlayer> PrimaryPlayer;
-    
+
     UPROPERTY(Transient, BlueprintGetter = GetCurrentUIPolicy, Category = "UI Manager")
     TObjectPtr<UGameUIPolicy> CurrentPolicy = nullptr;
 

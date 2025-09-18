@@ -17,31 +17,31 @@ class FSlateTextLayout;
 UCLASS()
 class UDialogueTextBlock : public UCommonRichTextBlock
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:
-	FORCEINLINE TSharedPtr<FSlateTextLayout> GetTextLayout() const
-	{
-		return TextLayout;
-	}
+  public:
+    FORCEINLINE TSharedPtr<FSlateTextLayout> GetTextLayout() const
+    {
+        return TextLayout;
+    }
 
-	FORCEINLINE TSharedPtr<FRichTextLayoutMarshaller> GetTextMarshaller() const
-	{
-		return TextMarshaller;
-	}
+    FORCEINLINE TSharedPtr<FRichTextLayoutMarshaller> GetTextMarshaller() const
+    {
+        return TextMarshaller;
+    }
 
-protected:
-	TSharedRef<SWidget> RebuildWidget() override;
+  protected:
+    TSharedRef<SWidget> RebuildWidget() override;
 
-private:
-	TSharedPtr<FSlateTextLayout> TextLayout;
-	TSharedPtr<FRichTextLayoutMarshaller> TextMarshaller;
+  private:
+    TSharedPtr<FSlateTextLayout> TextLayout;
+    TSharedPtr<FRichTextLayoutMarshaller> TextMarshaller;
 };
 
 struct FDialogueTextSegment
 {
-	FString Text;
-	FRunInfo RunInfo;
+    FString Text;
+    FRunInfo RunInfo;
 };
 
 UCLASS()
@@ -49,35 +49,56 @@ class INTERACTIVEUI_API UDialogueBox : public UCommonUserWidget
 {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    UDialogueTextBlock* GetLineText() const { return LineText.Get(); }
+    UDialogueTextBlock *GetLineText() const
+    {
+        return LineText.Get();
+    }
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    float GetLetterPlayTime() const { return LetterPlayTime; }
+    float GetLetterPlayTime() const
+    {
+        return LetterPlayTime;
+    }
 
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly)
-    void SetLetterPlayTime(const float InLetterPlayTime) { LetterPlayTime = InLetterPlayTime; }
+    void SetLetterPlayTime(const float InLetterPlayTime)
+    {
+        LetterPlayTime = InLetterPlayTime;
+    }
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
-    float GetEndHoldTime() const { return EndHoldTime; }
-    
+    float GetEndHoldTime() const
+    {
+        return EndHoldTime;
+    }
+
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly)
-    void SetEndHoldTime(const float InEndHoldTime) { EndHoldTime = InEndHoldTime; }
+    void SetEndHoldTime(const float InEndHoldTime)
+    {
+        EndHoldTime = InEndHoldTime;
+    }
 
     UFUNCTION(BlueprintCallable, Category = "Dialogue Box")
-    void PlayLine(const FText& InLine);
+    void PlayLine(const FText &InLine);
 
     UFUNCTION(BlueprintPure, Category = "Dialogue Box")
-    const FText& GetCurrentLine() const { return CurrentLine; }
+    const FText &GetCurrentLine() const
+    {
+        return CurrentLine;
+    }
 
     UFUNCTION(BlueprintPure, Category = "Dialogue Box", meta = (ScriptName = "GetHasFinishedPlayingLine"))
-    bool HasFinishedPlayingLine() const { return bHasFinishedPlaying; }
+    bool HasFinishedPlayingLine() const
+    {
+        return bHasFinishedPlaying;
+    }
 
     UFUNCTION(BlueprintCallable, Category = "Dialogue Box")
     void SkipToLineEnd();
 
-    FDelegateHandle BindToOnLineFinishedPlaying(FSimpleDelegate&& Delegate)
+    FDelegateHandle BindToOnLineFinishedPlaying(FSimpleDelegate &&Delegate)
     {
         return OnLineFinishedPlayingDelegate.Add(MoveTemp(Delegate));
     }
@@ -87,14 +108,14 @@ public:
         return OnLineFinishedPlayingDelegate.Remove(Handle);
     }
 
-protected:
+  protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "Dialogue Box")
     void OnPlayLetter();
 
     UFUNCTION(BlueprintImplementableEvent, Category = "Dialogue Box")
     void OnLineFinishedPlaying();
 
-private:
+  private:
     void PlayNextLetter();
 
     void CalculateWrappedString();
@@ -104,12 +125,14 @@ private:
     TObjectPtr<UDialogueTextBlock> LineText;
 
     // The amount of time between printing individual letters (for the "typewriter" effect).
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetLetterPlayTime, BlueprintSetter = SetLetterPlayTime, Category = "Dialogue Box")
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetLetterPlayTime, BlueprintSetter = SetLetterPlayTime,
+              Category = "Dialogue Box")
     float LetterPlayTime = 0.025f;
 
     // The amount of time to wait after finishing the line before actually marking it completed.
     // This helps prevent accidentally progressing dialogue on short lines.
-    UPROPERTY(EditAnywhere, BlueprintGetter = GetEndHoldTime, BlueprintSetter = SetEndHoldTime, Category = "Dialogue Box")
+    UPROPERTY(EditAnywhere, BlueprintGetter = GetEndHoldTime, BlueprintSetter = SetEndHoldTime,
+              Category = "Dialogue Box")
     float EndHoldTime = 0.15f;
 
     UPROPERTY()

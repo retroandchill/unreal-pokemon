@@ -4,13 +4,7 @@ namespace Pokemon.UI;
 
 public class FPokemonUIModule : IModuleInterface
 {
-    public void StartupModule()
-    {
+    public void StartupModule() { }
 
-    }
-
-    public void ShutdownModule()
-    {
-
-    }
+    public void ShutdownModule() { }
 }

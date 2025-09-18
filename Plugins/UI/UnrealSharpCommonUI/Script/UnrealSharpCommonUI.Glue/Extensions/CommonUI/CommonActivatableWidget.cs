@@ -6,7 +6,8 @@ namespace UnrealSharp.CommonUI;
 
 public partial class UCommonActivatableWidget
 {
-    public IList<FUIActionBindingHandle> ActionBindings => UCommonActivatableWidgetExtensions.GetActionBindings(this);
+    public IList<FUIActionBindingHandle> ActionBindings =>
+        UCommonActivatableWidgetExtensions.GetActionBindings(this);
 
     public FUIActionBindingHandle RegisterUIActionBinding(FCSBindUIActionArgs args)
     {

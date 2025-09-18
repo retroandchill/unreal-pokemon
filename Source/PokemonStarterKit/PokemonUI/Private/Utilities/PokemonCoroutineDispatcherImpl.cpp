@@ -2,6 +2,7 @@
 
 #include "Utilities/PokemonCoroutineDispatcherImpl.h"
 #include "DataRetrieval/DataUtilities.h"
+#include "GameUIManagerSubsystem.h"
 #include "Player/Bag.h"
 #include "Pokemon/Moves/MoveBlock.h"
 #include "Pokemon/Pokemon.h"
@@ -10,7 +11,6 @@
 #include "PrimaryGameLayout.h"
 #include "RetroLib/Optionals/IfPresent.h"
 #include "RetroLib/Utils/StringUtilities.h"
-#include "GameUIManagerSubsystem.h"
 #include "Screens/BagScreen.h"
 #include "Screens/MoveForgetScreen.h"
 #include "Screens/PokemonSelectScreen.h"

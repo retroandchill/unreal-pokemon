@@ -4,7 +4,7 @@
 #include "GameUIPolicy.h"
 #include "InteractiveUI.h"
 
-void UGameUIManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
+void UGameUIManagerSubsystem::Initialize(FSubsystemCollectionBase &Collection)
 {
     Super::Initialize(Collection);
     if (CurrentPolicy == nullptr && !DefaultUIPolicyClass.IsNull())
@@ -14,8 +14,7 @@ void UGameUIManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
     }
 
     auto *GameInstance = GetGameInstance();
-    GameInstance->OnLocalPlayerAddedEvent.AddWeakLambda(this, [this](ULocalPlayer* NewPlayer)
-    {
+    GameInstance->OnLocalPlayerAddedEvent.AddWeakLambda(this, [this](ULocalPlayer *NewPlayer) {
         if (!PrimaryPlayer.IsValid())
         {
             UE_LOG(LogInteractiveUI, Log, TEXT("AddLocalPlayer: Set %s to Primary Player"), *NewPlayer->GetName());
@@ -25,18 +24,18 @@ void UGameUIManagerSubsystem::Initialize(FSubsystemCollectionBase& Collection)
         NotifyPlayerAdded(NewPlayer);
     });
 
-    GameInstance->OnLocalPlayerRemovedEvent.AddWeakLambda(this, [this](ULocalPlayer* ExistingPlayer)
-    {
+    GameInstance->OnLocalPlayerRemovedEvent.AddWeakLambda(this, [this](ULocalPlayer *ExistingPlayer) {
         if (PrimaryPlayer == ExistingPlayer)
         {
-            //TODO: do we want to fall back to another player?
+            // TODO: do we want to fall back to another player?
             PrimaryPlayer.Reset();
-            UE_LOG(LogInteractiveUI, Log, TEXT("RemoveLocalPlayer: Unsetting Primary Player from %s"), *ExistingPlayer->GetName());
+            UE_LOG(LogInteractiveUI, Log, TEXT("RemoveLocalPlayer: Unsetting Primary Player from %s"),
+                   *ExistingPlayer->GetName());
         }
 
         NotifyPlayerRemoved(ExistingPlayer);
     });
-    
+
     K2_Initialize(Collection);
 }
 
@@ -47,12 +46,12 @@ void UGameUIManagerSubsystem::Deinitialize()
     K2_Deinitialize();
 }
 
-bool UGameUIManagerSubsystem::ShouldCreateSubsystem(UObject* Outer) const
+bool UGameUIManagerSubsystem::ShouldCreateSubsystem(UObject *Outer) const
 {
     return K2_ShouldCreateSubsystem(Outer);
 }
 
-void UGameUIManagerSubsystem::NotifyPlayerAdded_Implementation(ULocalPlayer* LocalPlayer)
+void UGameUIManagerSubsystem::NotifyPlayerAdded_Implementation(ULocalPlayer *LocalPlayer)
 {
     if (ensure(LocalPlayer != nullptr) && CurrentPolicy != nullptr)
     {
@@ -60,7 +59,7 @@ void UGameUIManagerSubsystem::NotifyPlayerAdded_Implementation(ULocalPlayer* Loc
     }
 }
 
-void UGameUIManagerSubsystem::NotifyPlayerRemoved_Implementation(ULocalPlayer* LocalPlayer)
+void UGameUIManagerSubsystem::NotifyPlayerRemoved_Implementation(ULocalPlayer *LocalPlayer)
 {
     if (LocalPlayer != nullptr && CurrentPolicy != nullptr)
     {
@@ -68,7 +67,7 @@ void UGameUIManagerSubsystem::NotifyPlayerRemoved_Implementation(ULocalPlayer* L
     }
 }
 
-void UGameUIManagerSubsystem::NotifyPlayerDestroyed_Implementation(ULocalPlayer* LocalPlayer)
+void UGameUIManagerSubsystem::NotifyPlayerDestroyed_Implementation(ULocalPlayer *LocalPlayer)
 {
     if (LocalPlayer != nullptr && CurrentPolicy != nullptr)
     {
@@ -76,7 +75,7 @@ void UGameUIManagerSubsystem::NotifyPlayerDestroyed_Implementation(ULocalPlayer*
     }
 }
 
-void UGameUIManagerSubsystem::SwitchToPolicy(UGameUIPolicy* NewPolicy)
+void UGameUIManagerSubsystem::SwitchToPolicy(UGameUIPolicy *NewPolicy)
 {
     if (CurrentPolicy != NewPolicy)
     {
@@ -84,11 +83,11 @@ void UGameUIManagerSubsystem::SwitchToPolicy(UGameUIPolicy* NewPolicy)
     }
 }
 
-bool UGameUIManagerSubsystem::K2_ShouldCreateSubsystem_Implementation(UObject* Outer) const
+bool UGameUIManagerSubsystem::K2_ShouldCreateSubsystem_Implementation(UObject *Outer) const
 {
     if (!CastChecked<UGameInstance>(Outer)->IsDedicatedServerInstance())
     {
-        TArray<UClass*> ChildClasses;
+        TArray<UClass *> ChildClasses;
         GetDerivedClasses(GetClass(), ChildClasses, false);
 
         // Only create an instance if there is no override implementation defined elsewhere

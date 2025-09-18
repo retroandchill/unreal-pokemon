@@ -14,6 +14,6 @@ namespace Pokemon::Assets::Audio
     /**
      * Asset class for Pokémon cries.
      */
-    //UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, PokemonCries, USoundBase);
+    // UE_DECLARE_ASSET_CLASS_EXPORTED(POKEMONASSETS_API, PokemonCries, USoundBase);
 
 } // namespace Pokemon::Assets::Audio

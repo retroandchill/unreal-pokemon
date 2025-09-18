@@ -14,7 +14,7 @@ public class UTextDisplayModal : UCommonActivatableWidget
     [BindWidget]
     [UsedImplicitly]
     private UDialogueDisplayWidget MessageBox { get; }
-    
+
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Message")]
     public Task DisplayMessage(FText text, CancellationToken cancellationToken = default)
     {

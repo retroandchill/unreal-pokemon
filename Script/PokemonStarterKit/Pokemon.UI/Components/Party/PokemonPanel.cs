@@ -9,7 +9,7 @@ namespace Pokemon.UI.Components.Party;
 public interface IPokemonPanelOwner
 {
     int? SwitchingIndex { get; }
-    
+
     bool IsSwitching => SwitchingIndex.HasValue;
 }
 
@@ -17,7 +17,7 @@ public interface IPokemonPanelOwner
 public class UPokemonPanel : UCommonButtonBase
 {
     public IPokemonPanelOwner? Owner { get; set; }
-    
+
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Content")]
     public UPokemon? Pokemon { get; private set; }
 
@@ -28,16 +28,24 @@ public class UPokemonPanel : UCommonButtonBase
         [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Is Active", Category = "Display")]
         get => _pokemonIndex == 0;
     }
-    
+
     public bool IsPokemonFainted
     {
-        [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Is Pokémon Fainted", Category = "Display")]
+        [UFunction(
+            FunctionFlags.BlueprintPure,
+            DisplayName = "Is Pokémon Fainted",
+            Category = "Display"
+        )]
         get => Pokemon is not null && Pokemon.IsFainted;
     }
 
     public bool IsPanelSelected
     {
-        [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Is Panel Selected", Category = "Display")]
+        [UFunction(
+            FunctionFlags.BlueprintPure,
+            DisplayName = "Is Panel Selected",
+            Category = "Display"
+        )]
         get => IsHovered();
     }
 
@@ -46,10 +54,14 @@ public class UPokemonPanel : UCommonButtonBase
         [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Is Swapping", Category = "Display")]
         get => Owner?.IsSwitching ?? false;
     }
-    
+
     public bool IsPreselected
     {
-        [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Is Preselected", Category = "Display")]
+        [UFunction(
+            FunctionFlags.BlueprintPure,
+            DisplayName = "Is Preselected",
+            Category = "Display"
+        )]
         get => Owner?.SwitchingIndex == _pokemonIndex;
     }
 
@@ -65,7 +77,10 @@ public class UPokemonPanel : UCommonButtonBase
         Refresh();
     }
 
-    [UFunction(FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent, Category = "Display")]
+    [UFunction(
+        FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent,
+        Category = "Display"
+    )]
     public virtual void Refresh()
     {
         // No native implementation

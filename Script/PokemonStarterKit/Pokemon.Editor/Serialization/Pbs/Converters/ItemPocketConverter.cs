@@ -9,16 +9,16 @@ public sealed class ItemPocketConverter : IPbsConverter<FGameplayTag>
 
     public Type Type => typeof(FGameplayTag);
 
-    string IPbsConverter.WriteCsvValue(object? value, PbsScalarDescriptor schema, string? sectionName)
+    string IPbsConverter.WriteCsvValue(
+        object? value,
+        PbsScalarDescriptor schema,
+        string? sectionName
+    )
     {
         return WriteCsvValue((FGameplayTag)value!, schema, sectionName);
     }
 
-    public string WriteCsvValue(
-        FGameplayTag value,
-        PbsScalarDescriptor schema,
-        string? sectionName
-    )
+    public string WriteCsvValue(FGameplayTag value, PbsScalarDescriptor schema, string? sectionName)
     {
         return ExportGameplayTag(value);
     }
@@ -38,7 +38,11 @@ public sealed class ItemPocketConverter : IPbsConverter<FGameplayTag>
         return targetTag.Match(x => x.ToString(), () => DefaultValue);
     }
 
-    object? IPbsConverter.GetCsvValue(string input, PbsScalarDescriptor scalarDescriptor, string? sectionName)
+    object? IPbsConverter.GetCsvValue(
+        string input,
+        PbsScalarDescriptor scalarDescriptor,
+        string? sectionName
+    )
     {
         return GetCsvValue(input, scalarDescriptor, sectionName);
     }

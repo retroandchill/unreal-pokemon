@@ -29,22 +29,26 @@ struct FSelectableOption
     TObjectPtr<UInputAction> InputAction;
 };
 
-DECLARE_MULTICAST_DELEGATE_ThreeParams(FNativeOptionSelected, int32, FName, UInteractiveButtonBase*);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOptionSelected, int32, Index, FName, SelectedId, UInteractiveButtonBase*, Button);
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FNativeOptionSelected, int32, FName, UInteractiveButtonBase *);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOptionSelected, int32, Index, FName, SelectedId,
+                                               UInteractiveButtonBase *, Button);
 
 /**
- * 
+ *
  */
 UCLASS(Abstract)
 class INTERACTIVEUI_API UOptionSelectionWidget : public USelectionWidget
 {
     GENERATED_BODY()
 
-protected:
+  protected:
     void NativePreConstruct() override;
 
-public:
-    const TArray<FSelectableOption>& GetOptions() const { return Options; }
+  public:
+    const TArray<FSelectableOption> &GetOptions() const
+    {
+        return Options;
+    }
 
     void SetOptions(TArray<FSelectableOption> NewOptions);
 
@@ -56,13 +60,13 @@ public:
 
     void UnbindFromOptionSelected(FDelegateHandle Handle);
 
-protected:
+  protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "Selection")
-    void SlotOption(int32 Index, FName Id, UInteractiveButtonBase* Button);
-    
-private:
+    void SlotOption(int32 Index, FName Id, UInteractiveButtonBase *Button);
+
+  private:
     void CreateOptions();
-    
+
     UPROPERTY(EditAnywhere, Getter, Setter, Category = "Selection")
     TArray<FSelectableOption> Options;
 

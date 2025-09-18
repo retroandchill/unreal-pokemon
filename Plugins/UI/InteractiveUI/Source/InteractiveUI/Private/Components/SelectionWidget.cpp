@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "Components/SelectionWidget.h"
 #include "Components/InteractiveButtonGroup.h"
 
@@ -14,27 +13,25 @@ void USelectionWidget::NativePreConstruct()
         Buttons->RemoveAll();
     }
 #endif
-    
+
     Buttons = NewObject<UInteractiveButtonGroup>(this);
 
-    Buttons->NativeOnButtonBaseClicked.AddWeakLambda(this, [this](UCommonButtonBase*, const int32 Index)
-    {
-        DesiredFocusIndex = Index;
-    });
+    Buttons->NativeOnButtonBaseClicked.AddWeakLambda(
+        this, [this](UCommonButtonBase *, const int32 Index) { DesiredFocusIndex = Index; });
 }
 
-UWidget* USelectionWidget::NativeGetDesiredFocusTarget() const
+UWidget *USelectionWidget::NativeGetDesiredFocusTarget() const
 {
     const int32 FocusIndex = DesiredFocusIndex.Get(INDEX_NONE);
     if (auto *ButtonAtIndex = Buttons->GetButtonBaseAtIndex(FocusIndex); ButtonAtIndex != nullptr)
     {
         return ButtonAtIndex;
     }
-    
+
     return Super::NativeGetDesiredFocusTarget();
 }
 
-bool USelectionWidget::TryGetDesiredFocusIndex(int32& OutIndex) const
+bool USelectionWidget::TryGetDesiredFocusIndex(int32 &OutIndex) const
 {
     if (DesiredFocusIndex.IsSet())
     {

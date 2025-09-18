@@ -4,7 +4,8 @@
 #include "PrimaryGameLayout.h"
 #include "Screens/Screen.h"
 
-UCommonActivatableWidget *UInteractiveUIUtilities::RemoveTopScreenFromStackLayer(const UObject *WorldContextObject, FGameplayTag Tag)
+UCommonActivatableWidget *UInteractiveUIUtilities::RemoveTopScreenFromStackLayer(const UObject *WorldContextObject,
+                                                                                 FGameplayTag Tag)
 {
     const auto *Layout = UPrimaryGameLayout::GetInstance(WorldContextObject);
     if (Layout == nullptr)

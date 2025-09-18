@@ -75,57 +75,59 @@ class INTERACTIVEUI_API UGameUIPolicy : public UObject
     GENERATED_BODY()
 
   public:
-        UGameUIPolicy() = default;
-    
+    UGameUIPolicy() = default;
+
     template <std::derived_from<UGameUIPolicy> PolicyClass = UGameUIPolicy>
-    static PolicyClass* GetInstance(const UObject* WorldContextObject)
+    static PolicyClass *GetInstance(const UObject *WorldContextObject)
     {
         return Cast<PolicyClass>(GetInstance(WorldContextObject));
     }
 
     UFUNCTION(meta = (WorldContext = "WorldContextObject", ScriptMethod))
-    static UGameUIPolicy* GetInstance(const UObject* WorldContextObject);
+    static UGameUIPolicy *GetInstance(const UObject *WorldContextObject);
 
-    UWorld* GetWorld() const override;
+    UWorld *GetWorld() const override;
 
-    UGameUIManagerSubsystem* GetOwner() const;
-    
-    UPrimaryGameLayout *GetRootLayout(const ULocalPlayer* Player) const;
+    UGameUIManagerSubsystem *GetOwner() const;
 
-    ELocalMultiplayerInteractionMode GetLocalMultiplayerInteractionMode() const { return LocalMultiplayerInteractionMode; }
+    UPrimaryGameLayout *GetRootLayout(const ULocalPlayer *Player) const;
 
-    void RequestPrimaryControl(UPrimaryGameLayout* Layout);
+    ELocalMultiplayerInteractionMode GetLocalMultiplayerInteractionMode() const
+    {
+        return LocalMultiplayerInteractionMode;
+    }
 
-protected:
+    void RequestPrimaryControl(UPrimaryGameLayout *Layout);
+
+  protected:
     UFUNCTION(meta = (ScriptMethod))
-    void AddLayoutToViewport(ULocalPlayer* LocalPlayer, UPrimaryGameLayout* Layout);
-    
-    UFUNCTION(meta = (ScriptMethod))
-    void RemoveLayoutFromViewport(ULocalPlayer* LocalPlayer, UPrimaryGameLayout* Layout);
-    
-    UFUNCTION(BlueprintNativeEvent, Category = "UI Policy")
-    void OnRootLayoutAddedToViewport(ULocalPlayer* LocalPlayer, UPrimaryGameLayout* Layout);
-    
-    UFUNCTION(BlueprintNativeEvent, Category = "UI Policy")
-    void OnRootLayoutRemovedFromViewport(ULocalPlayer* LocalPlayer, UPrimaryGameLayout* Layout);
-
-    
-    UFUNCTION(BlueprintNativeEvent, Category = "UI Policy")
-    void OnRootLayoutReleased(ULocalPlayer* LocalPlayer, UPrimaryGameLayout* Layout);
+    void AddLayoutToViewport(ULocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
 
     UFUNCTION(meta = (ScriptMethod))
-    void CreateLayoutWidget(ULocalPlayer* LocalPlayer);
-    
+    void RemoveLayoutFromViewport(ULocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
+
+    UFUNCTION(BlueprintNativeEvent, Category = "UI Policy")
+    void OnRootLayoutAddedToViewport(ULocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
+
+    UFUNCTION(BlueprintNativeEvent, Category = "UI Policy")
+    void OnRootLayoutRemovedFromViewport(ULocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
+
+    UFUNCTION(BlueprintNativeEvent, Category = "UI Policy")
+    void OnRootLayoutReleased(ULocalPlayer *LocalPlayer, UPrimaryGameLayout *Layout);
+
+    UFUNCTION(meta = (ScriptMethod))
+    void CreateLayoutWidget(ULocalPlayer *LocalPlayer);
+
     UFUNCTION(meta = (ScriptMethod))
     TSubclassOf<UPrimaryGameLayout> GetLayoutWidgetClass() const;
 
-private:
-    void NotifyPlayerAdded(ULocalPlayer* LocalPlayer);
-    void NotifyPlayerRemoved(ULocalPlayer* LocalPlayer);
-    void NotifyPlayerDestroyed(ULocalPlayer* LocalPlayer);
+  private:
+    void NotifyPlayerAdded(ULocalPlayer *LocalPlayer);
+    void NotifyPlayerRemoved(ULocalPlayer *LocalPlayer);
+    void NotifyPlayerDestroyed(ULocalPlayer *LocalPlayer);
 
     friend class UGameUIManagerSubsystem;
-    
+
     ELocalMultiplayerInteractionMode LocalMultiplayerInteractionMode = ELocalMultiplayerInteractionMode::PrimaryOnly;
 
     UPROPERTY(EditAnywhere)

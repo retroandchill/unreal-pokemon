@@ -10,7 +10,7 @@ namespace Pokemon.UI.Components.Party;
 public class UPokemonSelectionPane : UPokemonSelectionWidgetBase
 {
     protected override int? NumPanelsToAdd => GetDefault<UPokemonCoreSettings>().MaxPartySize;
-    
+
     public override void Construct()
     {
         SetPokemonToDisplay(GetGameInstanceSubsystem<UPokemonSubsystem>().Player.PartyPokemon);

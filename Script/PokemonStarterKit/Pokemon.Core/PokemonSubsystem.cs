@@ -17,7 +17,7 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
 
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Player")]
     public UTrainer Player { get; private set; }
-    
+
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Player")]
     public UPokemonBag Bag { get; private set; }
 

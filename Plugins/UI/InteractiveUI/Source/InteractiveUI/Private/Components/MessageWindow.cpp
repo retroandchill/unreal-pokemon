@@ -18,7 +18,7 @@ void UMessageWindow::NativeConstruct()
                                }));
     BindArgs.bDisplayInActionBar = false;
     AdvanceAction = RegisterUIActionBinding(BindArgs);
-    
+
     DialogueBox->BindToOnLineFinishedPlaying(FSimpleDelegate::CreateWeakLambda(this, [this] {
         if (DialogueBox->GetCurrentLine().IsEmpty())
         {

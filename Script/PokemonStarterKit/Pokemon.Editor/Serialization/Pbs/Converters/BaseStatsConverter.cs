@@ -25,7 +25,11 @@ public sealed class BaseStatsConverter : IPbsConverter<IReadOnlyDictionary<FName
             .ToImmutableList();
     }
 
-    string IPbsConverter.WriteCsvValue(object? value, PbsScalarDescriptor schema, string? sectionName)
+    string IPbsConverter.WriteCsvValue(
+        object? value,
+        PbsScalarDescriptor schema,
+        string? sectionName
+    )
     {
         return WriteCsvValue((IReadOnlyDictionary<FName, int>)value!, schema, sectionName);
     }
@@ -44,7 +48,11 @@ public sealed class BaseStatsConverter : IPbsConverter<IReadOnlyDictionary<FName
         return string.Join(",", _statOrder.Select(x => value.GetValueOrDefault(x, 1)));
     }
 
-    object? IPbsConverter.GetCsvValue(string input, PbsScalarDescriptor scalarDescriptor, string? sectionName)
+    object? IPbsConverter.GetCsvValue(
+        string input,
+        PbsScalarDescriptor scalarDescriptor,
+        string? sectionName
+    )
     {
         return GetCsvValue(input, scalarDescriptor, sectionName);
     }
@@ -65,7 +73,7 @@ public sealed class BaseStatsConverter : IPbsConverter<IReadOnlyDictionary<FName
         {
             ArgumentOutOfRangeException.ThrowIfLessThan(value, 0, nameof(value));
         }
-        
+
         return _statOrder
             .Zip(values, (x, y) => (Stat: x, Value: y))
             .ToImmutableDictionary(x => x.Stat, x => x.Value);

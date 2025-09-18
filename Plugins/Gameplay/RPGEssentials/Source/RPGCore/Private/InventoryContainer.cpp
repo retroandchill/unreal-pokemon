@@ -1,6 +1,5 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
-
 #include "InventoryContainer.h"
 
 int32 UInventoryContainer::AddItem(const FName ItemID, const int32 Amount)
@@ -31,7 +30,7 @@ int32 UInventoryContainer::RemoveItem(const FName ItemID, const int32 Amount)
         return 0;
     }
 
-    int32* Quantity = ItemSlots.Find(ItemID);
+    int32 *Quantity = ItemSlots.Find(ItemID);
     if (Quantity == nullptr)
     {
         return 0;
@@ -50,19 +49,22 @@ int32 UInventoryContainer::RemoveItem(const FName ItemID, const int32 Amount)
 
 bool UInventoryContainer::ReplaceItem(const FName OldItem, const FName NewItem)
 {
-    if (!ValidateItem(OldItem) || !ValidateItem(NewItem)) return false;
-    if (OldItem == NewItem) return true;
-    if (!HasItem(OldItem) || HasItem(NewItem)) return false;
+    if (!ValidateItem(OldItem) || !ValidateItem(NewItem))
+        return false;
+    if (OldItem == NewItem)
+        return true;
+    if (!HasItem(OldItem) || HasItem(NewItem))
+        return false;
 
     const int32 Amount = GetItemQuantity(OldItem);
     ItemSlots.Remove(OldItem);
     ItemSlots.Add(NewItem, Amount);
-    return true;   
+    return true;
 }
 
 void UInventoryContainer::Clear()
 {
-    ItemSlots.Empty();  
+    ItemSlots.Empty();
 }
 
 int32 UInventoryContainer::GetItemQuantity(const FName ItemID) const

@@ -37,7 +37,7 @@ public class FPokemonEditorModule : IModuleInterface
             .RemoveSerializer(typeof(FBerryPlant))
             .RemoveSerializer(typeof(FSpecies))
             .RemoveSerializer(typeof(FTrainerType));
-        
+
         PbsSerializer.Shutdown();
     }
 }

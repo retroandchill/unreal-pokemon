@@ -12,7 +12,7 @@
 
 TOptional<TNonNullSubclassOf<UGameplayAbility>> Pokemon::Battle::Items::FindHoldItemEffect(FName ID)
 {
-    return {}; //Classes::HoldItemEffects.LoadClass(ID);
+    return {}; // Classes::HoldItemEffects.LoadClass(ID);
 }
 
 TOptional<TNonNullSubclassOf<UGameplayAbility>> Pokemon::Battle::Items::FindHoldItemEffect(const FItem *Item)

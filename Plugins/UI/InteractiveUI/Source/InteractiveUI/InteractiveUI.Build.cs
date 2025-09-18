@@ -22,8 +22,8 @@ public class InteractiveUI : ModuleRules
                 "UnrealInjector",
                 "RetroLib",
                 "UE5Coro",
-                "Simple2D", 
-                "UnrealSharpCore", 
+                "Simple2D",
+                "UnrealSharpCore",
                 "RangeV3",
             }
         );
@@ -36,7 +36,7 @@ public class InteractiveUI : ModuleRules
                 "Slate",
                 "SlateCore",
                 "DeveloperSettings",
-                "CommonInput", 
+                "CommonInput",
                 "CommonUtilities",
                 "UnrealSharpBinds",
                 "UnrealSharpAsync",

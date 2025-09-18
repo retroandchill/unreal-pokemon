@@ -1,16 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Async/PushWidgetToLayerAsyncAction.h"
-
 #include "PrimaryGameLayout.h"
 
-UPushWidgetToLayerAsyncAction *UPushWidgetToLayerAsyncAction::PushWidgetToLayerAsync(APlayerController* OwningPlayer,
-                                                                                     TSoftClassPtr<UCommonActivatableWidget> InWidgetClass, const FGameplayTag InLayerName, const bool bSuspendInputUntilComplete)
+UPushWidgetToLayerAsyncAction *UPushWidgetToLayerAsyncAction::PushWidgetToLayerAsync(
+    APlayerController *OwningPlayer, TSoftClassPtr<UCommonActivatableWidget> InWidgetClass,
+    const FGameplayTag InLayerName, const bool bSuspendInputUntilComplete)
 {
     if (InWidgetClass.IsNull())
     {
-        FFrame::KismetExecutionMessage(TEXT("PushContentToLayerForPlayer was passed a null WidgetClass"), ELogVerbosity::Error);
+        FFrame::KismetExecutionMessage(TEXT("PushContentToLayerForPlayer was passed a null WidgetClass"),
+                                       ELogVerbosity::Error);
         return nullptr;
     }
 
@@ -38,11 +38,11 @@ void UPushWidgetToLayerAsyncAction::Activate()
         SetReadyToDestroy();
         return;
     }
-    
+
     TWeakObjectPtr WeakThis = this;
-    StreamingHandle = RootLayout->PushWidgetToLayerStackAsync<UCommonActivatableWidget>(LayerName, bSuspendInputUntilComplete, MoveTemp(WidgetClass),
-        [this, WeakThis](const EAsyncWidgetLayerState State, UCommonActivatableWidget* Widget)
-        {
+    StreamingHandle = RootLayout->PushWidgetToLayerStackAsync<UCommonActivatableWidget>(
+        LayerName, bSuspendInputUntilComplete, MoveTemp(WidgetClass),
+        [this, WeakThis](const EAsyncWidgetLayerState State, UCommonActivatableWidget *Widget) {
             if (WeakThis.IsValid())
             {
                 switch (State)
@@ -57,10 +57,10 @@ void UPushWidgetToLayerAsyncAction::Activate()
                 case EAsyncWidgetLayerState::Canceled:
                     SetReadyToDestroy();
                     break;
+                }
             }
-        }
-        SetReadyToDestroy();
-    });
+            SetReadyToDestroy();
+        });
 }
 
 void UPushWidgetToLayerAsyncAction::Cancel()

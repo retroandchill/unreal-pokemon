@@ -10,48 +10,97 @@ using UnrealSharp.Simple2D;
 
 namespace Pokemon.Assets;
 
-public readonly record struct FPokemonAssetTypes(FPrimaryAssetType Regular, FPrimaryAssetType Shiny);
+public readonly record struct FPokemonAssetTypes(
+    FPrimaryAssetType Regular,
+    FPrimaryAssetType Shiny
+);
 
 [UClass]
 public class UPokemonAssetLoader : UBlueprintFunctionLibrary
 {
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Graphics|Pokémon")]
-    public static TSoftObjectPtr<USimpleFlipbook> ResolveSpeciesFrontSprite(FSpeciesHandle species,
-                                                                    FName form = default,
-                                                                    EPokemonGender gender = EPokemonGender.Male,
-                                                                    bool isShiny = false, bool isShadow = false)
+    public static TSoftObjectPtr<USimpleFlipbook> ResolveSpeciesFrontSprite(
+        FSpeciesHandle species,
+        FName form = default,
+        EPokemonGender gender = EPokemonGender.Male,
+        bool isShiny = false,
+        bool isShadow = false
+    )
     {
-        return ResolvePokemonGraphic<USimpleFlipbook>(new FPokemonAssetTypes(AssetTypes.PokemonFrontSprites, AssetTypes.PokemonFrontSpritesShiny), species, form, gender, isShiny, isShadow);
+        return ResolvePokemonGraphic<USimpleFlipbook>(
+            new FPokemonAssetTypes(
+                AssetTypes.PokemonFrontSprites,
+                AssetTypes.PokemonFrontSpritesShiny
+            ),
+            species,
+            form,
+            gender,
+            isShiny,
+            isShadow
+        );
     }
-    
+
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Graphics|Pokémon")]
     public static TSoftObjectPtr<USimpleFlipbook> ResolvePokemonFrontSprite(UPokemon pokemon)
     {
-        return ResolveSpeciesFrontSprite(pokemon.Species, FName.None, pokemon.Gender, pokemon.IsShiny);
+        return ResolveSpeciesFrontSprite(
+            pokemon.Species,
+            FName.None,
+            pokemon.Gender,
+            pokemon.IsShiny
+        );
     }
-    
+
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Graphics|Pokémon")]
-    public static TSoftObjectPtr<USimpleFlipbook> ResolveSpeciesBackSprite(FSpeciesHandle species,
-                                                                           FName form = default,
-                                                                           EPokemonGender gender = EPokemonGender.Male,
-                                                                           bool isShiny = false, bool isShadow = false)
+    public static TSoftObjectPtr<USimpleFlipbook> ResolveSpeciesBackSprite(
+        FSpeciesHandle species,
+        FName form = default,
+        EPokemonGender gender = EPokemonGender.Male,
+        bool isShiny = false,
+        bool isShadow = false
+    )
     {
-        return ResolvePokemonGraphic<USimpleFlipbook>(new FPokemonAssetTypes(AssetTypes.PokemonBackSprites, AssetTypes.PokemonBackSpritesShiny), species, form, gender, isShiny, isShadow);
+        return ResolvePokemonGraphic<USimpleFlipbook>(
+            new FPokemonAssetTypes(
+                AssetTypes.PokemonBackSprites,
+                AssetTypes.PokemonBackSpritesShiny
+            ),
+            species,
+            form,
+            gender,
+            isShiny,
+            isShadow
+        );
     }
-    
+
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Graphics|Pokémon")]
     public static TSoftObjectPtr<USimpleFlipbook> ResolvePokemonBackSprite(UPokemon pokemon)
     {
-        return ResolveSpeciesBackSprite(pokemon.Species, FName.None, pokemon.Gender, pokemon.IsShiny);
+        return ResolveSpeciesBackSprite(
+            pokemon.Species,
+            FName.None,
+            pokemon.Gender,
+            pokemon.IsShiny
+        );
     }
-    
+
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Graphics|Pokémon")]
-    public static TSoftObjectPtr<UPaperFlipbook> ResolveSpeciesIcon(FSpeciesHandle species,
-                                                             FName form = default,
-                                                             EPokemonGender gender = EPokemonGender.Male,
-                                                             bool isShiny = false, bool isShadow = false)
+    public static TSoftObjectPtr<UPaperFlipbook> ResolveSpeciesIcon(
+        FSpeciesHandle species,
+        FName form = default,
+        EPokemonGender gender = EPokemonGender.Male,
+        bool isShiny = false,
+        bool isShadow = false
+    )
     {
-        return ResolvePokemonGraphic<UPaperFlipbook>(new FPokemonAssetTypes(AssetTypes.PokemonIcons, AssetTypes.PokemonIconsShiny), species, form, gender, isShiny, isShadow);
+        return ResolvePokemonGraphic<UPaperFlipbook>(
+            new FPokemonAssetTypes(AssetTypes.PokemonIcons, AssetTypes.PokemonIconsShiny),
+            species,
+            form,
+            gender,
+            isShiny,
+            isShadow
+        );
     }
 
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Graphics|Pokémon")]
@@ -59,11 +108,16 @@ public class UPokemonAssetLoader : UBlueprintFunctionLibrary
     {
         return ResolveSpeciesIcon(pokemon.Species, FName.None, pokemon.Gender, pokemon.IsShiny);
     }
-    
-    private static TSoftObjectPtr<T> ResolvePokemonGraphic<T>(FPokemonAssetTypes type, FSpeciesHandle species, 
-                                                                      FName form = default, 
-                                                                      EPokemonGender gender = EPokemonGender.Male, 
-                                                                      bool isShiny = false, bool isShadow = false) where T : UObject
+
+    private static TSoftObjectPtr<T> ResolvePokemonGraphic<T>(
+        FPokemonAssetTypes type,
+        FSpeciesHandle species,
+        FName form = default,
+        EPokemonGender gender = EPokemonGender.Male,
+        bool isShiny = false,
+        bool isShadow = false
+    )
+        where T : UObject
     {
         var assetManager = UAssetManager.Get();
 
@@ -72,30 +126,37 @@ public class UPokemonAssetLoader : UBlueprintFunctionLibrary
             (0, species.ToString(), "000"),
             (1, !form.IsNone ? $"_{form}" : "", ""),
             (2, gender == EPokemonGender.Female ? "_female" : "", ""),
-            (3, isShadow ? "_shadow" : "", "")
+            (3, isShadow ? "_shadow" : "", ""),
         };
-        
+
         var components = factors
             .Where(x => x.value != x.defaultValue || x.priority == 0) // Always include species
-            .ToArray(); 
+            .ToArray();
 
-        var combinations = Enumerable.Range(0, 1 << components.Length)
-            .Select(i => (i, assetName: string.Concat(components.Select((comp, j) =>
-                (i & (1 << j)) == 0 ? comp.value : comp.defaultValue))))
+        var combinations = Enumerable
+            .Range(0, 1 << components.Length)
+            .Select(i =>
+                (
+                    i,
+                    assetName: string.Concat(
+                        components.Select(
+                            (comp, j) => (i & (1 << j)) == 0 ? comp.value : comp.defaultValue
+                        )
+                    )
+                )
+            )
             .Select(t => t.assetName)
             .ToArray();
 
-        var assetTypes = isShiny 
-            ? new[] { type.Shiny, type.Regular }
-            : new[] { type.Regular };
+        var assetTypes = isShiny ? new[] { type.Shiny, type.Regular } : new[] { type.Regular };
 
         foreach (var assetType in assetTypes)
         {
             foreach (var assetName in combinations)
             {
-
                 var asset = assetManager.GetSoftObjectReferenceFromPrimaryAssetId(
-                    new FPrimaryAssetId(assetType, assetName));
+                    new FPrimaryAssetId(assetType, assetName)
+                );
                 if (!asset.IsNull)
                     return asset.Cast<T>();
             }
@@ -103,5 +164,4 @@ public class UPokemonAssetLoader : UBlueprintFunctionLibrary
 
         return new TSoftObjectPtr<T>();
     }
-
 }

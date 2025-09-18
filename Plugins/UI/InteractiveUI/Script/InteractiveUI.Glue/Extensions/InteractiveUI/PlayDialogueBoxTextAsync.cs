@@ -16,11 +16,14 @@ internal partial class UPlayDialogueBoxTextAsync
 
     private void OnAsyncCompleted()
     {
-        _tcs.SetResult();   
+        _tcs.SetResult();
     }
 
-    public static Task PlayDialogueBoxTextAsync(UDialogueBox dialogueBox, FText text, 
-                                                      CancellationToken cancellationToken = default)
+    public static Task PlayDialogueBoxTextAsync(
+        UDialogueBox dialogueBox,
+        FText text,
+        CancellationToken cancellationToken = default
+    )
     {
         var async = NewObject<UPlayDialogueBoxTextAsync>(dialogueBox);
         NativeAsyncUtilities.InitializeAsyncAction(async, async._onAsyncCompleted);

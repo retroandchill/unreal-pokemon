@@ -12,20 +12,21 @@ namespace Pokemon.Core.Entities;
 
 [UStruct]
 public readonly partial record struct FPocketIdentifier(
-    [property: UProperty(PropertyFlags.BlueprintReadOnly)]
-    FGameplayTag Tag, 
-    [property: UProperty(PropertyFlags.BlueprintReadOnly)]
-    FText Name);
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] FGameplayTag Tag,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] FText Name
+);
 
 [UStruct]
 public readonly partial record struct FItemSlot(
-    [property: UProperty(PropertyFlags.BlueprintReadOnly)]
-    FItemHandle Item, 
-    [property: UProperty(PropertyFlags.BlueprintReadOnly)]
-    int Quantity);
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] FItemHandle Item,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] int Quantity
+);
 
 [UStruct]
-public readonly partial record struct FBagInitParams(IReadOnlyList<FPocketSetting> Pockets, int MaxItemsPerSlot);
+public readonly partial record struct FBagInitParams(
+    IReadOnlyList<FPocketSetting> Pockets,
+    int MaxItemsPerSlot
+);
 
 [UClass(ClassFlags.Abstract)]
 public partial class UPokemonBag : URPGEntity
@@ -36,14 +37,14 @@ public partial class UPokemonBag : URPGEntity
     )]
     [Initializer(nameof(UPocketsComponent.Initialize))]
     public UPocketsComponent PocketsComponent { get; private set; }
-    
+
     [UProperty(
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
     [Initializer(nameof(UPocketMemoryComponent.Initialize))]
     public UPocketMemoryComponent PocketMemoryComponent { get; private set; }
-    
+
     [UProperty(
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
@@ -55,10 +56,8 @@ public partial class UPokemonBag : URPGEntity
         var settings = GetDefault<UPokemonCoreSettings>();
         return Create(outer, new FBagInitParams(settings.Pockets, settings.MaxPerSlot));
     }
-    
+
     [Factory]
     [PublicAPI]
     public static partial UPokemonBag Create(UObject outer, FBagInitParams parameters);
-
-    
 }

@@ -10,27 +10,32 @@
 
 #include "PushWidgetToLayerAsyncAction.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPushContentToLayerAsyncDelegate, UCommonActivatableWidget*, UserWidget);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPushContentToLayerAsyncDelegate, UCommonActivatableWidget *, UserWidget);
 
 /**
- * 
+ *
  */
 UCLASS(BlueprintType)
 class INTERACTIVEUI_API UPushWidgetToLayerAsyncAction : public UCancellableAsyncAction
 {
     GENERATED_BODY()
 
-public:
-    UFUNCTION(BlueprintCallable, BlueprintCosmetic, BlueprintInternalUseOnly, meta=(DefaultToSelf = "OwningPlayer", DeterminesOutputType = "InWidgetClass", DynamicOutputParam = "UserWidget"))
-    static UPushWidgetToLayerAsyncAction* PushWidgetToLayerAsync(APlayerController* OwningPlayer, UPARAM(meta = (AllowAbstract=false)) TSoftClassPtr<UCommonActivatableWidget> InWidgetClass, UPARAM(meta = (Categories = "UI.Layer")) FGameplayTag InLayerName, bool bSuspendInputUntilComplete = true);
-    
+  public:
+    UFUNCTION(BlueprintCallable, BlueprintCosmetic, BlueprintInternalUseOnly,
+              meta = (DefaultToSelf = "OwningPlayer", DeterminesOutputType = "InWidgetClass",
+                      DynamicOutputParam = "UserWidget"))
+    static UPushWidgetToLayerAsyncAction *PushWidgetToLayerAsync(
+        APlayerController *OwningPlayer,
+        UPARAM(meta = (AllowAbstract = false)) TSoftClassPtr<UCommonActivatableWidget> InWidgetClass,
+        UPARAM(meta = (Categories = "UI.Layer")) FGameplayTag InLayerName, bool bSuspendInputUntilComplete = true);
+
     void Activate() override;
     void Cancel() override;
 
-private:
+  private:
     UPROPERTY(BlueprintAssignable)
     FPushContentToLayerAsyncDelegate ConfigureWidget;
-    
+
     UPROPERTY(BlueprintAssignable)
     FPushContentToLayerAsyncDelegate OnComplete;
 

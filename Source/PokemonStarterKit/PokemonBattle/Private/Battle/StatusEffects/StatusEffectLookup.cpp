@@ -8,7 +8,7 @@
 
 TOptional<TNonNullSubclassOf<UGameplayEffect>> Pokemon::Battle::StatusEffects::FindStatusEffect(FName ID)
 {
-    return {}; //Classes::StatusEffects.LoadClass(ID);
+    return {}; // Classes::StatusEffects.LoadClass(ID);
 }
 
 TOptional<TNonNullSubclassOf<UGameplayEffect>> Pokemon::Battle::StatusEffects::FindStatusEffect(

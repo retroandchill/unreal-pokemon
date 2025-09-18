@@ -15,15 +15,15 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
 {
     [UProperty(PropertyFlags.EditAnywhere, Category = "Display")]
     private TSubclassOf<UPokemonPanel> PanelClass { get; }
-    
+
     [UProperty(PropertyFlags.EditAnywhere, Category = "Display")]
     private TSubclassOf<UWidget> BlankPanelClass { get; }
-    
+
     [UProperty]
     private TArray<UWidget> BlankPanels { get; }
-    
+
     public int? SwitchingIndex { get; private set; }
-    
+
     [UProperty(PropertyFlags.BlueprintAssignable, Category = "Events")]
     public TMulticastDelegate<OnPokemonSelected> OnPokemonSelected { get; set; }
 
@@ -31,7 +31,8 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
 
     public UPokemonPanel? FindPanelForPokemon(UPokemon pokemon)
     {
-        return GetSelectableOptions<UPokemonPanel>().FirstOrDefault(x => ReferenceEquals(x.Pokemon, pokemon));
+        return GetSelectableOptions<UPokemonPanel>()
+            .FirstOrDefault(x => ReferenceEquals(x.Pokemon, pokemon));
     }
 
     public void SetPokemonToDisplay(IReadOnlyList<UPokemon> pokemonList)
@@ -78,7 +79,7 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
         {
             throw new InvalidOperationException("Already switching");
         }
-        
+
         SwitchingIndex = startIndex;
         GetSelectableOption<UPokemonPanel>(startIndex)?.Refresh();
     }
@@ -90,7 +91,7 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
         {
             throw new InvalidOperationException("Not switching");
         }
-        
+
         var panel1 = GetSelectableOption<UPokemonPanel>(SwitchingIndex.Value)!;
         var panel2 = GetSelectableOption<UPokemonPanel>(Index)!;
         SwitchingIndex = null;
@@ -103,7 +104,7 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
         {
             throw new InvalidOperationException("Not switching");
         }
-        
+
         var panel1 = GetSelectableOption<UPokemonPanel>(SwitchingIndex.Value)!;
         var panel2 = GetSelectableOption<UPokemonPanel>(Index)!;
         SwitchingIndex = null;
@@ -111,11 +112,11 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
         panel2.Refresh();
     }
 
-    [UFunction(FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent, Category = "Display")]
-    public virtual void ToggleCommandVisibility(bool visible)
-    {
-        
-    }
+    [UFunction(
+        FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent,
+        Category = "Display"
+    )]
+    public virtual void ToggleCommandVisibility(bool visible) { }
 
     protected override void OnSelectionChange(int oldIndex, int newIndex)
     {
@@ -138,7 +139,7 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
         panel1.SwapPokemon(panel2);
         panel1.Refresh();
         panel2.Refresh();
-        
+
         OnPokemonSelected.Invoke(GetSelectableOption<UPokemonPanel>(Index)!.Pokemon!);
     }
 }

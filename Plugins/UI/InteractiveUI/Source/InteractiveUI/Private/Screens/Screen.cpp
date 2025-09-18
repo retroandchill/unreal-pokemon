@@ -2,8 +2,8 @@
 #include "Screens/Screen.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/SelectableWidget.h"
-#include "PrimaryGameLayout.h"
 #include "GameUIManagerSubsystem.h"
+#include "PrimaryGameLayout.h"
 
 class UEnhancedInputLocalPlayerSubsystem;
 const UE_DEFINE_GAMEPLAY_TAG(RPG::Menus::PrimaryMenuLayerTag, "UI.Layer.GameMenu");

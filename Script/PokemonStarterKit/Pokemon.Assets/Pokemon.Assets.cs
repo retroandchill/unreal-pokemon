@@ -4,13 +4,7 @@ namespace Pokemon.Assets;
 
 public class FPokemonAssetsModule : IModuleInterface
 {
-    public void StartupModule()
-    {
+    public void StartupModule() { }
 
-    }
-
-    public void ShutdownModule()
-    {
-
-    }
+    public void ShutdownModule() { }
 }

@@ -73,7 +73,7 @@ public partial class UPokemon : URPGEntity
         Category = "Components"
     )]
     public UHoldItemComponent HoldItemComponent { get; private set; }
-    
+
     [UProperty(
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"

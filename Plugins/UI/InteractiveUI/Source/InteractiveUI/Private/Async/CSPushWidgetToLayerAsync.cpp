@@ -1,11 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Async/CSPushWidgetToLayerAsync.h"
-
 #include "PrimaryGameLayout.h"
 
-void UCSPushWidgetToLayerAsync::PushWidgetToLayerStack(const APlayerController* PlayerController,
+void UCSPushWidgetToLayerAsync::PushWidgetToLayerStack(const APlayerController *PlayerController,
                                                        const FGameplayTag InLayerName,
                                                        const bool bSuspendInputUntilComplete,
                                                        TSoftClassPtr<UCommonActivatableWidget> ActivatableWidgetClass)
@@ -20,9 +18,9 @@ void UCSPushWidgetToLayerAsync::PushWidgetToLayerStack(const APlayerController* 
 
     OnAsyncLoadComplete(EAsyncLoadSuccessState::InProgress);
     TWeakObjectPtr WeakThis = this;
-    StreamingHandle = RootLayout->PushWidgetToLayerStackAsync(InLayerName, bSuspendInputUntilComplete, MoveTemp(ActivatableWidgetClass),
-        [this, WeakThis](const EAsyncWidgetLayerState State, UCommonActivatableWidget* Widget)
-        {
+    StreamingHandle = RootLayout->PushWidgetToLayerStackAsync(
+        InLayerName, bSuspendInputUntilComplete, MoveTemp(ActivatableWidgetClass),
+        [this, WeakThis](const EAsyncWidgetLayerState State, UCommonActivatableWidget *Widget) {
             if (!WeakThis.IsValid())
             {
                 return;
@@ -43,7 +41,7 @@ void UCSPushWidgetToLayerAsync::PushWidgetToLayerStack(const APlayerController* 
         });
 }
 
-EAsyncLoadSuccessState UCSPushWidgetToLayerAsync::GetResult(UCommonActivatableWidget*& OutWidget) const
+EAsyncLoadSuccessState UCSPushWidgetToLayerAsync::GetResult(UCommonActivatableWidget *&OutWidget) const
 {
     if (State == EAsyncLoadSuccessState::Success)
     {
@@ -61,7 +59,8 @@ void UCSPushWidgetToLayerAsync::Cancel()
     OnAsyncLoadComplete(EAsyncLoadSuccessState::Cancelled);
 }
 
-void UCSPushWidgetToLayerAsync::OnAsyncLoadComplete(const EAsyncLoadSuccessState InState, UCommonActivatableWidget* InWidget, const bool bDispose)
+void UCSPushWidgetToLayerAsync::OnAsyncLoadComplete(const EAsyncLoadSuccessState InState,
+                                                    UCommonActivatableWidget *InWidget, const bool bDispose)
 {
     State = InState;
     Widget = InWidget;

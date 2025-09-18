@@ -2,8 +2,8 @@
 
 #include "Components/NamedSlotSelectableWidget.h"
 #include "CommonButtonBase.h"
-#include "Components/NamedSlot.h"
 #include "Components/InteractiveButtonBase.h"
+#include "Components/NamedSlot.h"
 
 void UNamedSlotSelectableWidget::NativePreConstruct()
 {

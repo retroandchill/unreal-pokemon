@@ -4,26 +4,27 @@
 
 #include "CoreMinimal.h"
 #include "CSAsyncActionBase.h"
+
 #include "PlayDialogueBoxTextAsync.generated.h"
 
 class UInputAction;
 class UDialogueBox;
 
 /**
- * 
+ *
  */
 UCLASS(meta = (InternalType))
 class INTERACTIVEUI_API UPlayDialogueBoxTextAsync : public UCSAsyncActionBase
 {
     GENERATED_BODY()
 
-public:
+  public:
     UFUNCTION(meta = (ScriptMethod))
-    void PlayDialogueBoxText(UDialogueBox* DialogueBox, const FText& Text);
+    void PlayDialogueBoxText(UDialogueBox *DialogueBox, const FText &Text);
 
-private:
+  private:
     void OnAsyncLoadComplete();
-    
+
     UPROPERTY()
     TObjectPtr<UDialogueBox> Widget;
 

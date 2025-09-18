@@ -387,8 +387,9 @@ FPrimitiveSceneProxy *USimpleFlipbookComponent::CreateSceneProxy()
 
     CalculateCurrentFrame();
 
-    auto DrawCall =
-        SourceFlipbook != nullptr && SourceFlipbook->IsValidKeyFrameIndex(CachedFrameIndex) ? SourceFlipbook->CreateDrawCallRecord(CachedFrameIndex) : FSimpleFlipbookDrawCall();
+    auto DrawCall = SourceFlipbook != nullptr && SourceFlipbook->IsValidKeyFrameIndex(CachedFrameIndex)
+                        ? SourceFlipbook->CreateDrawCallRecord(CachedFrameIndex)
+                        : FSimpleFlipbookDrawCall();
     DrawCall.Color = SpriteColor.ToFColor(false);
 
     auto InSceneProxy = NewProxy.Get();

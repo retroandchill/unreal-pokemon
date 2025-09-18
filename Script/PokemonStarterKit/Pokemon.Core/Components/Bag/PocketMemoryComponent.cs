@@ -15,20 +15,20 @@ public class UPocketMemoryComponent : URPGComponent
 {
     [UProperty(PropertyFlags.Transient)]
     private UPocketsComponent PocketsComponent { get; set; }
-    
+
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Inventory")]
     public FGameplayTag LastViewedPocket { get; set; }
-    
+
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Inventory")]
     public TMap<FGameplayTag, int> LastViewedItems { get; }
-    
+
     [UFunction]
     [ExcludeFromExtensions]
     public virtual void Initialize(FBagInitParams initParams)
     {
         ResetLastSelections();
     }
-    
+
     public void ResetLastSelections()
     {
         foreach (var (tag, i) in PocketsComponent.AllPockets.Select((x, i) => (x.Tag, i)))
@@ -37,23 +37,30 @@ public class UPocketMemoryComponent : URPGComponent
             {
                 LastViewedPocket = tag;
             }
-            
+
             LastViewedItems.Add(tag, 0);
         }
     }
 
-    public int GetLastViewedIndex([Categories(IdentifierConstants.PocketTag)] FGameplayTag pocketTag)
+    public int GetLastViewedIndex(
+        [Categories(IdentifierConstants.PocketTag)] FGameplayTag pocketTag
+    )
     {
-        return LastViewedItems.TryGetValue(pocketTag, out var index) ? index : throw new ArgumentException($"Invalid pocket tag: {pocketTag}");
+        return LastViewedItems.TryGetValue(pocketTag, out var index)
+            ? index
+            : throw new ArgumentException($"Invalid pocket tag: {pocketTag}");
     }
 
-    public void SetLastViewedIndex([Categories(IdentifierConstants.PocketTag)] FGameplayTag pocketTag, int index)
+    public void SetLastViewedIndex(
+        [Categories(IdentifierConstants.PocketTag)] FGameplayTag pocketTag,
+        int index
+    )
     {
         if (!LastViewedItems.ContainsKey(pocketTag))
         {
             throw new ArgumentException($"Invalid pocket tag: {pocketTag}");
         }
-        
+
         LastViewedItems[pocketTag] = index;
     }
 }

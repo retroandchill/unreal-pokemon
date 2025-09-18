@@ -3,8 +3,8 @@
 #include "RPGEntity.h"
 #include "LogRPGCore.h"
 #include "Misc/DataValidation.h"
-#include "RPGComponent.h"
 #include "RangeV3.h"
+#include "RPGComponent.h"
 
 const UScriptStruct *URPGEntity::GetEntityStruct() const
 {

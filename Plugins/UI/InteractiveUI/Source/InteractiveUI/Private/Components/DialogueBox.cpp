@@ -4,8 +4,8 @@
 #include "Framework/Text/ILayoutBlock.h"
 #include "Framework/Text/RichTextLayoutMarshaller.h"
 #include "Framework/Text/SlateTextLayout.h"
-#include "TimerManager.h"
 #include "Framework/Text/SlateTextLayoutFactory.h"
+#include "TimerManager.h"
 #include "Widgets/Text/SRichTextBlock.h"
 
 TSharedRef<SWidget> UDialogueTextBlock::RebuildWidget()
@@ -19,26 +19,23 @@ TSharedRef<SWidget> UDialogueTextBlock::RebuildWidget()
     TextMarshaller = FRichTextLayoutMarshaller::Create(CreateMarkupParser(), CreateMarkupWriter(), CreatedDecorators,
                                                        StyleInstance.Get());
 
-    MyRichTextBlock =
-        SNew(SRichTextBlock)
-        .TextStyle(bOverrideDefaultStyle ? &GetDefaultTextStyleOverride() : &DefaultTextStyle)
-        .Marshaller(TextMarshaller)
-        .CreateSlateTextLayout(
-            FCreateSlateTextLayout::CreateWeakLambda(
-                this, [this](SWidget* InOwner, const FTextBlockStyle& InDefaultTextStyle) mutable
-                {
-                    TextLayout = FSlateTextLayout::Create(InOwner, InDefaultTextStyle);
-                    return StaticCastSharedPtr<FSlateTextLayout>(TextLayout).ToSharedRef();
-                }));
+    MyRichTextBlock = SNew(SRichTextBlock)
+                          .TextStyle(bOverrideDefaultStyle ? &GetDefaultTextStyleOverride() : &DefaultTextStyle)
+                          .Marshaller(TextMarshaller)
+                          .CreateSlateTextLayout(FCreateSlateTextLayout::CreateWeakLambda(
+                              this, [this](SWidget *InOwner, const FTextBlockStyle &InDefaultTextStyle) mutable {
+                                  TextLayout = FSlateTextLayout::Create(InOwner, InDefaultTextStyle);
+                                  return StaticCastSharedPtr<FSlateTextLayout>(TextLayout).ToSharedRef();
+                              }));
 
     return MyRichTextBlock.ToSharedRef();
 }
 
-void UDialogueBox::PlayLine(const FText& InLine)
+void UDialogueBox::PlayLine(const FText &InLine)
 {
     check(GetWorld() != nullptr);
 
-    FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+    FTimerManager &TimerManager = GetWorld()->GetTimerManager();
     TimerManager.ClearTimer(LetterTimer);
 
     CurrentLine = InLine;
@@ -82,7 +79,7 @@ void UDialogueBox::PlayLine(const FText& InLine)
 
 void UDialogueBox::SkipToLineEnd()
 {
-    FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+    FTimerManager &TimerManager = GetWorld()->GetTimerManager();
     TimerManager.ClearTimer(LetterTimer);
 
     CurrentLetterIndex = MaxLetterIndex - 1;
@@ -123,7 +120,7 @@ void UDialogueBox::PlayNextLetter()
             LineText->SetText(FText::FromString(CalculateSegments()));
         }
 
-        FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+        FTimerManager &TimerManager = GetWorld()->GetTimerManager();
         TimerManager.ClearTimer(LetterTimer);
 
         FTimerDelegate Delegate;
@@ -141,7 +138,7 @@ void UDialogueBox::CalculateWrappedString()
         TSharedPtr<FSlateTextLayout> Layout = LineText->GetTextLayout();
         TSharedPtr<FRichTextLayoutMarshaller> Marshaller = LineText->GetTextMarshaller();
 
-        const FGeometry& TextBoxGeometry = LineText->GetCachedGeometry();
+        const FGeometry &TextBoxGeometry = LineText->GetCachedGeometry();
         const FVector2D TextBoxSize = TextBoxGeometry.GetLocalSize();
 
         Layout->SetWrappingWidth(TextBoxSize.X);
@@ -149,7 +146,7 @@ void UDialogueBox::CalculateWrappedString()
         Layout->UpdateIfNeeded();
 
         bool bHasWrittenText = false;
-        for (const auto& View : Layout->GetLineViews())
+        for (const auto &View : Layout->GetLineViews())
         {
             for (const TSharedRef Block : View.Blocks)
             {
@@ -203,14 +200,14 @@ FString UDialogueBox::CalculateSegments()
     int32 Idx = CachedLetterIndex;
     while (Idx <= CurrentLetterIndex && CurrentSegmentIndex < Segments.Num())
     {
-        const FDialogueTextSegment& Segment = Segments[CurrentSegmentIndex];
+        const FDialogueTextSegment &Segment = Segments[CurrentSegmentIndex];
         if (!Segment.RunInfo.Name.IsEmpty())
         {
             Result += FString::Printf(TEXT("<%s"), *Segment.RunInfo.Name);
 
             if (!Segment.RunInfo.MetaData.IsEmpty())
             {
-                for (const TTuple<FString, FString>& MetaData : Segment.RunInfo.MetaData)
+                for (const TTuple<FString, FString> &MetaData : Segment.RunInfo.MetaData)
                 {
                     Result += FString::Printf(TEXT(" %s=\"%s\""), *MetaData.Key, *MetaData.Value);
                 }

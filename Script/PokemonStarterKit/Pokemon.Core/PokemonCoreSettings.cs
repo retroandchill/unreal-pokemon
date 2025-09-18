@@ -14,11 +14,11 @@ namespace Pokemon.Core;
 public readonly partial record struct FPocketSetting(
     [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
     [field: Categories(IdentifierConstants.PocketTag)]
-    FGameplayTag Tag, 
+        FGameplayTag Tag,
+    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)] FText Name,
     [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
-    FText Name,
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
-    Option<int> MaxSize);
+        Option<int> MaxSize
+);
 
 [UClass(ClassFlags.DefaultConfig, DisplayName = "Pokémon Core", ConfigCategory = "Game")]
 public class UPokemonCoreSettings : UDeveloperSettings
@@ -43,7 +43,7 @@ public class UPokemonCoreSettings : UDeveloperSettings
     )]
     [UsedImplicitly]
     public int ShinyPokemonChance { get; } = 16;
-    
+
     [UProperty(
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "Bag"
@@ -69,7 +69,7 @@ public class UPokemonCoreSettings : UDeveloperSettings
         Category = "DefaultClasses"
     )]
     public TSoftClassPtr<UTrainer> TrainerClass { get; }
-    
+
     [UProperty(
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "DefaultClasses"
