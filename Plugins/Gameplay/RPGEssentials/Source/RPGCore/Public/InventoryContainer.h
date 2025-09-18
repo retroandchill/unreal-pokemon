@@ -3,9 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Object.h"
-#include <ranges>
-#include <range/v3/view/transform.hpp>
 
 #include "InventoryContainer.generated.h"
 

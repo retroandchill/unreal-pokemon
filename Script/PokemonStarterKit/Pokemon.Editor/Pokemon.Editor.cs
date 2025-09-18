@@ -5,7 +5,6 @@ using Pokemon.Editor.Serialization.Pbs;
 using Pokemon.Editor.Serialization.Pbs.Serializers;
 using UnrealSharp.Engine.Core.Modules;
 using UnrealSharp.Log;
-using SpeciesMapper = Pokemon.Editor.Serialization.Mappers.SpeciesMapper;
 
 namespace Pokemon.Editor;
 
@@ -19,51 +18,25 @@ public class FPokemonEditorModule : IModuleInterface
         PbsSerializer.Initialize();
 
         PbsSerializer
-            .Instance.RegisterSerializer(
-                new MappingPbsSerializer<TypeInfo, FType>(x => x.ToType(), x => x.ToTypeInfo())
-            )
-            .RegisterSerializer(
-                new MappingPbsSerializer<AbilityInfo, FAbility>(
-                    x => x.ToAbility(),
-                    x => x.ToAbilityInfo()
-                )
-            )
-            .RegisterSerializer(
-                new MappingPbsSerializer<MoveInfo, FMove>(x => x.ToMove(), x => x.ToMoveInfo())
-            )
-            .RegisterSerializer(
-                new MappingPbsSerializer<ItemInfo, FItem>(x => x.ToItem(), x => x.ToItemInfo())
-            )
-            .RegisterSerializer(
-                new MappingPbsSerializer<BerryPlantInfo, FBerryPlant>(
-                    x => x.ToBerryPlant(),
-                    x => x.ToBerryPlantInfo()
-                )
-            )
-            .RegisterSerializer(
-                new MappingPbsSerializer<SpeciesInfo, FSpecies>(
-                    x => x.ToSpecies(),
-                    x => x.ToSpeciesInfo()
-                )
-            )
-            .RegisterSerializer(
-                new MappingPbsSerializer<TrainerTypeInfo, FTrainerType>(
-                    x => x.ToTrainerType(),
-                    x => x.ToTrainerTypeInfo()
-                )
-            );
+            .Instance.RegisterSerializer(new TypePbsSerializer())
+            .RegisterSerializer(new AbilityPbsSerializer())
+            .RegisterSerializer(new MovePbsSerializer())
+            .RegisterSerializer(new ItemPbsSerializer())
+            .RegisterSerializer(new BerryPlantPbsSerializer())
+            .RegisterSerializer(new SpeciesPbsSerializer())
+            .RegisterSerializer(new TrainerTypePbsSerializer());
     }
 
     public void ShutdownModule()
     {
         PbsSerializer
-            .Instance.RemoveSerializer<FType>()
-            .RemoveSerializer<FAbility>()
-            .RemoveSerializer<FMove>()
-            .RemoveSerializer<FItem>()
-            .RemoveSerializer<FBerryPlant>()
-            .RemoveSerializer<FSpecies>()
-            .RemoveSerializer<FTrainerType>();
+            .Instance.RemoveSerializer(typeof(FType))
+            .RemoveSerializer(typeof(FAbility))
+            .RemoveSerializer(typeof(FMove))
+            .RemoveSerializer(typeof(FItem))
+            .RemoveSerializer(typeof(FBerryPlant))
+            .RemoveSerializer(typeof(FSpecies))
+            .RemoveSerializer(typeof(FTrainerType));
         
         PbsSerializer.Shutdown();
     }

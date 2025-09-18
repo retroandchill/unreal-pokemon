@@ -9,7 +9,7 @@ public readonly record struct IntBounds([property: PbsRange<int>(0)] int Min, [p
 public record BerryPlantInfo
 {
     [PbsKey]
-    public required FName ID { get; init; }
+    public FName ID { get; init; }
 
     [PbsIndex]
     public int RowIndex { get; init; }

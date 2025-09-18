@@ -13,7 +13,6 @@ namespace Pokemon.Editor.Serialization.Pbs.Converters;
 
 public class EvolutionMethodConverter : IPbsConverter<EvolutionConditionInfo>
 {
-
     public Type Type => typeof(EvolutionConditionInfo);
 
     string IPbsConverter.WriteCsvValue(object? value, PbsScalarDescriptor schema, string? sectionName)
@@ -26,6 +25,11 @@ public class EvolutionMethodConverter : IPbsConverter<EvolutionConditionInfo>
         PbsScalarDescriptor schema,
         string? sectionName
     )
+    {
+        return ExportEvolutionParameters(value);
+    }
+
+    private static string ExportEvolutionParameters(EvolutionConditionInfo value)
     {
         if (value.Parameters.ScriptStruct is null)
         {
@@ -74,6 +78,11 @@ public class EvolutionMethodConverter : IPbsConverter<EvolutionConditionInfo>
         string? sectionName
     )
     {
+        return ExtractEvolutionConditionInfo(input);
+    }
+
+    private static EvolutionConditionInfo ExtractEvolutionConditionInfo(string input)
+    {
         var data = input.Split(",");
         ArgumentOutOfRangeException.ThrowIfLessThan(data.Length, 2, nameof(data));
 
@@ -114,8 +123,8 @@ public class EvolutionMethodConverter : IPbsConverter<EvolutionConditionInfo>
             }
             else if (
                 key
-                    .FieldType.GetInterfaces()
-                    .Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(INumber<>))
+                .FieldType.GetInterfaces()
+                .Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(INumber<>))
             )
             {
                 var parseMethod = typeof(EvolutionMethodConverter)
@@ -125,10 +134,10 @@ public class EvolutionMethodConverter : IPbsConverter<EvolutionConditionInfo>
             }
             else if (
                 key
-                    .FieldType.GetInterfaces()
-                    .Any(x =>
-                        x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDataHandle<>)
-                    )
+                .FieldType.GetInterfaces()
+                .Any(x =>
+                    x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDataHandle<>)
+                )
             )
             {
                 key.SetValue(

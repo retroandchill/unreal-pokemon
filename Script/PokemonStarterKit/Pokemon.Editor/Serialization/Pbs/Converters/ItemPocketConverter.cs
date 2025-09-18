@@ -20,6 +20,11 @@ public sealed class ItemPocketConverter : IPbsConverter<FGameplayTag>
         string? sectionName
     )
     {
+        return ExportGameplayTag(value);
+    }
+
+    private static string ExportGameplayTag(FGameplayTag value)
+    {
         if (!value.IsValid)
         {
             return DefaultValue;
@@ -43,6 +48,11 @@ public sealed class ItemPocketConverter : IPbsConverter<FGameplayTag>
         PbsScalarDescriptor scalarDescriptor,
         string? sectionName
     )
+    {
+        return ExtractGameplayTag(input);
+    }
+
+    private static FGameplayTag ExtractGameplayTag(string input)
     {
         var index = int.Parse(input);
         ArgumentOutOfRangeException.ThrowIfLessThan(index, 1, nameof(index));

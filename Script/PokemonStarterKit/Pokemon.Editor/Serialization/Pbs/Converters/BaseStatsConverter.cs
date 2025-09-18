@@ -36,6 +36,11 @@ public sealed class BaseStatsConverter : IPbsConverter<IReadOnlyDictionary<FName
         string? sectionName
     )
     {
+        return ExportStatsValues(value);
+    }
+
+    private string ExportStatsValues(IReadOnlyDictionary<FName, int> value)
+    {
         return string.Join(",", _statOrder.Select(x => value.GetValueOrDefault(x, 1)));
     }
 
@@ -60,7 +65,7 @@ public sealed class BaseStatsConverter : IPbsConverter<IReadOnlyDictionary<FName
         {
             ArgumentOutOfRangeException.ThrowIfLessThan(value, 0, nameof(value));
         }
-
+        
         return _statOrder
             .Zip(values, (x, y) => (Stat: x, Value: y))
             .ToImmutableDictionary(x => x.Stat, x => x.Value);

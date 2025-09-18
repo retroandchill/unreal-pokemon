@@ -4,7 +4,7 @@ using UnrealSharp.DeveloperSettings;
 
 namespace Pokemon.Data;
 
-[UClass(ClassFlags.DefaultConfig, DisplayName = "Pokémon UI", ConfigCategory = "Game")]
+[UClass(ClassFlags.DefaultConfig, DisplayName = "Pokémon Data", ConfigCategory = "Game")]
 public class UPokemonDataSettings : UDeveloperSettings
 {
     [UProperty(

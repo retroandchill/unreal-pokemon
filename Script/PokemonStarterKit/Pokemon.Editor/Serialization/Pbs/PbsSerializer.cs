@@ -1,9 +1,13 @@
 ﻿namespace Pokemon.Editor.Serialization.Pbs;
 
-public interface IPbsSerializer;
+public interface IPbsSerializer
+{
+    Type Type { get; }
+}
 
 public interface IPbsSerializer<T> : IPbsSerializer
 {
+    
     void Serialize(IEnumerable<T> model, TextWriter writer);
 
     IEnumerable<T> Deserialize(TextReader reader);
@@ -33,16 +37,16 @@ public class PbsSerializer
         _instance = null;
     }
 
-    public PbsSerializer RegisterSerializer<T>(IPbsSerializer<T> serializer)
+    public PbsSerializer RegisterSerializer(IPbsSerializer serializer)
     {
-        _serializers.Add(typeof(T), serializer);
+        _serializers.Add(serializer.Type, serializer);
         return this;
     }
 
-    public PbsSerializer RemoveSerializer<T>()
+    public PbsSerializer RemoveSerializer(Type type)
     {
-        _serializers.Remove(typeof(T));
-        return this;
+        _serializers.Remove(type);
+        return this;   
     }
 
     public bool HasSerializerFor(Type type)

@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using Pokemon.Data.Model.HardCoded;
 using Pokemon.Data.Model.PBS;
 using Pokemon.Editor.Serialization.Model.Pbs;

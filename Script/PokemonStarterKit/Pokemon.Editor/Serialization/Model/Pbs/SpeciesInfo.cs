@@ -1,4 +1,3 @@
-using System.Text.Json.Nodes;
 using Pokemon.Data;
 using Pokemon.Data.Model.HardCoded;
 using Pokemon.Editor.Serialization.Pbs.Attributes;
@@ -6,11 +5,6 @@ using Pokemon.Editor.Serialization.Pbs.Converters;
 using UnrealSharp;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameplayTags;
-using FBodyColor = Pokemon.Data.Model.HardCoded.FBodyColor;
-using FBodyShape = Pokemon.Data.Model.HardCoded.FBodyShape;
-using FEggGroup = Pokemon.Data.Model.HardCoded.FEggGroup;
-using FGenderRatio = Pokemon.Data.Model.HardCoded.FGenderRatio;
-using FStat = Pokemon.Data.Model.HardCoded.FStat;
 
 namespace Pokemon.Editor.Serialization.Model.Pbs;
 
@@ -28,7 +22,7 @@ public record struct EvolutionConditionInfo(
 public record SpeciesInfo
 {
     [PbsKey]
-    public required FName ID { get; init; }
+    public FName ID { get; init; }
 
     [PbsIndex]
     public int RowIndex { get; init; }
@@ -43,16 +37,7 @@ public record SpeciesInfo
     public IReadOnlyList<FName> Types { get; init; } = [new("NORMAL")];
 
     [PbsScalar<BaseStatsConverter>]
-    public IReadOnlyDictionary<FName, int> BaseStats { get; init; } =
-        new Dictionary<FName, int>
-        {
-            [FStat.HP] = 1,
-            [FStat.ATTACK] = 1,
-            [FStat.DEFENSE] = 1,
-            [FStat.SPECIAL_ATTACK] = 1,
-            [FStat.SPECIAL_DEFENSE] = 1,
-            [FStat.SPEED] = 1,
-        };
+    public IReadOnlyDictionary<FName, int> BaseStats { get; init; }
 
     public FName GenderRatio { get; init; } = FGenderRatio.Female50Percent;
 
@@ -124,4 +109,18 @@ public record SpeciesInfo
     [PbsName("Flags")]
     [PbsGameplayTag("Data.Species", Create = true, Separator = "_")]
     public FGameplayTagContainer Tags { get; init; }
+
+    // ReSharper disable once ConvertConstructorToMemberInitializers
+    public SpeciesInfo()
+    {
+        BaseStats = new Dictionary<FName, int>
+        {
+            [FStat.HP] = 1,
+            [FStat.ATTACK] = 1,
+            [FStat.DEFENSE] = 1,
+            [FStat.SPECIAL_ATTACK] = 1,
+            [FStat.SPECIAL_DEFENSE] = 1,
+            [FStat.SPEED] = 1,
+        };
+    }
 }

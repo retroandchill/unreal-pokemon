@@ -8,7 +8,7 @@ namespace Pokemon.Editor.Serialization.Model.Pbs;
 public record TrainerTypeInfo
 {
     [PbsKey]
-    public required FName ID { get; init; }
+    public FName ID { get; init; }
 
     [PbsIndex]
     public int RowIndex { get; init; }
