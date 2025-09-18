@@ -25,27 +25,26 @@ public sealed class FUnrealInjectModule : IModuleInterface
 {
     private static FUnrealInjectModule? _instance;
 
-    private readonly ServiceCollection _serviceCollection = [];
-    private bool _servicesBuilt;
+    private readonly ServiceCollection _services = [];
+    public IServiceCollection Services => _services;
 #if WITH_EDITOR
-    private IServiceProvider? _gameInstanceServiceProviderOverride;
     internal IServiceProvider? GameInstanceServiceProviderOverride
     {
-        get => _gameInstanceServiceProviderOverride;
+        get;
         set
         {
-            if (_gameInstanceServiceProviderOverride is IDisposable disposable)
+            if (field is IDisposable disposable)
             {
                 disposable.Dispose();
             }
-            _gameInstanceServiceProviderOverride = value;
-            OnGameInstanceServiceProviderChanged?.Invoke(_gameInstanceServiceProviderOverride);
+
+            field = value;
+            OnGameInstanceServiceProviderChanged?.Invoke(field);
         }
     }
+
     internal event Action<IServiceProvider?>? OnGameInstanceServiceProviderChanged;
 #endif
-
-    public event Action<IServiceProvider>? OnServiceProviderRebuilt;
 
     private IServiceProviderFactory<object> _serviceProviderFactory =
         new ServiceProviderFactoryAdapter<IServiceCollection>(new DefaultServiceProviderFactory());
@@ -65,13 +64,11 @@ public sealed class FUnrealInjectModule : IModuleInterface
 
     public void StartupModule()
     {
-        _servicesBuilt = false;
         _instance = this;
     }
 
     public void ShutdownModule()
     {
-        _servicesBuilt = false;
         _instance = null;
     }
 
@@ -84,21 +81,17 @@ public sealed class FUnrealInjectModule : IModuleInterface
         return this;
     }
 
-    public FUnrealInjectModule ConfigureServices(Action<IServiceCollection> configureDelegate)
-    {
-        configureDelegate(_serviceCollection);
-        if (_servicesBuilt)
-        {
-            OnServiceProviderRebuilt?.Invoke(BuildServiceProvider());
-        }
-        return this;
-    }
-
     internal IServiceProvider BuildServiceProvider()
     {
-        var containerBuilder = _serviceProviderFactory.CreateBuilder(_serviceCollection);
+        #if WITH_EDITOR
+        if (GameInstanceServiceProviderOverride is not null)
+        {
+            return GameInstanceServiceProviderOverride;       
+        }
+        #endif
+        
+        var containerBuilder = _serviceProviderFactory.CreateBuilder(_services);
         var provider = _serviceProviderFactory.CreateServiceProvider(containerBuilder);
-        _servicesBuilt = true;
         return provider;
     }
 
