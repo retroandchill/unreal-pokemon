@@ -1,4 +1,5 @@
-﻿using Pokemon.Core;
+﻿using LanguageExt;
+using Pokemon.Core;
 using Pokemon.Core.Entities;
 using Pokemon.UI.Components.Party;
 using UnrealSharp.Attributes;
@@ -8,8 +9,6 @@ using UnrealSharp.InteractiveUI;
 
 namespace Pokemon.UI.Screens;
 
-public readonly record struct SelectedPokemonHandle(UPokemon Pokemon, UTrainer Trainer, int Index);
-
 [UClass(ClassFlags.Abstract)]
 public class UPokemonSelectScreen : UCommonActivatableWidget
 {
@@ -17,7 +16,7 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
     [BindWidget]
     protected UPokemonSelectionPane SelectionPane { get; }
 
-    private Action<SelectedPokemonHandle>? _onPokemonSelected;
+    private Action<UPokemon?>? _onPokemonSelected;
 
     public override void Construct()
     {
@@ -45,6 +44,12 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
     protected void OnPokemonSelected(int index)
     {
         var trainer = GetGameInstanceSubsystem<UPokemonSubsystem>().Player;
+        if (_onPokemonSelected is not null)
+        {
+            _onPokemonSelected(trainer.PartyPokemon[index]);
+            return;
+        }
+
         if (SelectionPane.SwitchingIndex.HasValue)
         {
             if (SelectionPane.SwitchingIndex.Value != index)
@@ -62,6 +67,12 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Selection")]
     protected void OnPokemonCancel()
     {
+        if (_onPokemonSelected is not null)
+        {
+            _onPokemonSelected(null);
+            return;
+        }
+
         if (SelectionPane.SwitchingIndex.HasValue)
         {
             SelectionPane.CancelSwitch();
@@ -75,9 +86,7 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Selection")]
     protected virtual void DisplayPokemonCommands(UTrainer trainer, int index) { }
 
-    public Task<SelectedPokemonHandle> SelectPokemonAsync(
-        CancellationToken cancellationToken = default
-    )
+    public Task<UPokemon?> SelectPokemonAsync(CancellationToken cancellationToken = default)
     {
         if (_onPokemonSelected is not null)
         {
@@ -86,7 +95,7 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
             );
         }
 
-        var tcs = new TaskCompletionSource<SelectedPokemonHandle>(cancellationToken);
+        var tcs = new TaskCompletionSource<UPokemon?>(cancellationToken);
 
         _onPokemonSelected = handle =>
         {

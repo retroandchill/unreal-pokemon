@@ -16,20 +16,20 @@ public class FPokemonCoreModule : IModuleInterface
 {
     public void StartupModule()
     {
-        FUnrealInjectModule.Instance.Services
-                .AddSingleton<IExpGrowthFormula, ErraticExpGrowthFormula>()
-                .AddSingleton<IExpGrowthFormula, FastExpGrowthFormula>()
-                .AddSingleton<IExpGrowthFormula, FluctuatingExpGrowthFormula>()
-                .AddSingleton<IExpGrowthFormula, MediumExpGrowthFormula>()
-                .AddSingleton<IExpGrowthFormula, ParabolicExpGrowthFormula>()
-                .AddSingleton<IExpGrowthFormula, SlowExpGrowthFormula>()
-                .AddSingleton<ExpGrowthFormulaProvider>();
+        FUnrealInjectModule
+            .Instance.Services.AddSingleton<IExpGrowthFormula, ErraticExpGrowthFormula>()
+            .AddSingleton<IExpGrowthFormula, FastExpGrowthFormula>()
+            .AddSingleton<IExpGrowthFormula, FluctuatingExpGrowthFormula>()
+            .AddSingleton<IExpGrowthFormula, MediumExpGrowthFormula>()
+            .AddSingleton<IExpGrowthFormula, ParabolicExpGrowthFormula>()
+            .AddSingleton<IExpGrowthFormula, SlowExpGrowthFormula>()
+            .AddSingleton<ExpGrowthFormulaProvider>();
     }
 
     public void ShutdownModule()
     {
-        FUnrealInjectModule.Instance.Services
-            .RemoveAll<IExpGrowthFormula>()
+        FUnrealInjectModule
+            .Instance.Services.RemoveAll<IExpGrowthFormula>()
             .RemoveAll<ExpGrowthFormulaProvider>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Pokemon.Core.Entities;
+using Pokemon.Core.Services.Async;
 using Pokemon.Core.Services.Exp;
 using Pokemon.Data.Model.HardCoded;
 using UnrealInject.Subsystems;
@@ -27,6 +28,8 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
         get => throw new NotImplementedException();
     }
 
+    public IAsyncActionsService AsyncActionsService { get; private set; } = null!;
+
     protected override void Initialize(FSubsystemCollectionBaseRef collection)
     {
         var subsystem =
@@ -35,6 +38,7 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
         {
             _expGrowthFormulas.Add(expGrowthFormula.GrowthRateFor, expGrowthFormula);
         }
+        AsyncActionsService = subsystem.GetRequiredService<IAsyncActionsService>();
 
         // TODO: Remove this and create a proper title screen
         StartNewGame();

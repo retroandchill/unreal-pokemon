@@ -60,4 +60,7 @@ public partial class UPokemonBag : URPGEntity
     [Factory]
     [PublicAPI]
     public static partial UPokemonBag Create(UObject outer, FBagInitParams parameters);
+
+    private static TSubclassOf<UPokemonBag> BagClass =>
+        GetDefault<UPokemonCoreSettings>().BagClass.LoadSynchronous();
 }

@@ -7,7 +7,7 @@ using UnrealSharp.GameplayTags;
 
 namespace Pokemon.Editor;
 
-[UClass(ClassFlags.DefaultConfig, DisplayName = "Pokémon Editor", ConfigCategory = "Game")]
+[UClass(ClassFlags.DefaultConfig, DisplayName = "Pokémon Editor", ConfigCategory = "Editor")]
 public class UPokemonEditorSettings : UDeveloperSettings
 {
     [UProperty(

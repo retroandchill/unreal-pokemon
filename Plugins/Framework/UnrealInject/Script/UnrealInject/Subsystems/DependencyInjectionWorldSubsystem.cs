@@ -14,12 +14,13 @@ public class UDependencyInjectionWorldSubsystem : UCSWorldSubsystem, IServicePro
 
     protected override void Initialize(FSubsystemCollectionBaseRef collection)
     {
-        #if WITH_EDITOR
+#if WITH_EDITOR
         var levelEditorSubsystem = GetEditorSubsystem<ULevelEditorSubsystem>();
-        if (!levelEditorSubsystem.IsInPlayInEditor()) return;
-        #endif
-        
-        var gameInstanceSubsystem = GetGameInstanceSubsystem<UDependencyInjectionGameInstanceSubsystem>();
+        if (!levelEditorSubsystem.IsInPlayInEditor())
+            return;
+#endif
+        var gameInstanceSubsystem =
+            GetGameInstanceSubsystem<UDependencyInjectionGameInstanceSubsystem>();
         _serviceScope = gameInstanceSubsystem.CreateScope();
     }
 

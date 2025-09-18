@@ -83,13 +83,12 @@ public sealed class FUnrealInjectModule : IModuleInterface
 
     internal IServiceProvider BuildServiceProvider()
     {
-        #if WITH_EDITOR
+#if WITH_EDITOR
         if (GameInstanceServiceProviderOverride is not null)
         {
-            return GameInstanceServiceProviderOverride;       
+            return GameInstanceServiceProviderOverride;
         }
-        #endif
-        
+#endif
         var containerBuilder = _serviceProviderFactory.CreateBuilder(_services);
         var provider = _serviceProviderFactory.CreateServiceProvider(containerBuilder);
         return provider;
