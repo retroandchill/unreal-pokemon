@@ -26,4 +26,6 @@ public record UFunctionInfo(
 
     [UsedImplicitly]
     public bool ReturnsOption => OptionType is not null;
+
+    public required bool IsExposed { get; init; }
 }

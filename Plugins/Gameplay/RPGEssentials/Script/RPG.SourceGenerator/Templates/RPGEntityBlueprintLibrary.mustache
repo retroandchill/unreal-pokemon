@@ -13,6 +13,7 @@ public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
 {
     {{#Components}}
     {{#Properties}}
+    {{#IsExposed}}
     {{#HasGetter}}
     {{#GetterIsUFunction}}
     {{#GetterAttributes}}
@@ -71,9 +72,11 @@ public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
     public static void Set{{Name}}({{../../ClassName}} unit, {{Type}} value) => unit.{{Name}} = value;
     {{/IsOptionType}}
         
-    {{/HasSetter}}   
+    {{/HasSetter}}
+    {{/IsExposed}}    
     {{/Properties}}
     {{#Methods}}
+    {{#IsExposed}}    
     {{#ReturnsOption}}
     {{#Attributes}}
     [{{Value}}]    
@@ -104,6 +107,7 @@ public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
     }
 
     {{/ReturnsOption}}
+    {{/IsExposed}}
     {{/Methods}}
     {{/Components}}
 }

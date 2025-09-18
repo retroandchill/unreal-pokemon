@@ -57,4 +57,6 @@ public record UPropertyInfo(
 
     [UsedImplicitly]
     public bool HasCategory = Category is not null;
+
+    public required bool IsExposed { get; init; }
 }

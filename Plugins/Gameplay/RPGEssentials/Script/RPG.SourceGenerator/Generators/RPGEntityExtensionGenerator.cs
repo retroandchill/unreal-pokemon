@@ -390,6 +390,11 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
         )
             return false;
 
+        return true;
+    }
+
+    private static bool IsExposedProperty(IPropertySymbol propertySymbol)
+    {
         if (
             propertySymbol
                 .GetAttributes()
@@ -451,7 +456,10 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
             GetAccessorInfo(propertySymbol.SetMethod),
             displayName,
             category
-        );
+        )
+        {
+            IsExposed = IsExposedProperty(propertySymbol),
+        };
     }
 
     private static AccessorInfo? GetAccessorInfo(IMethodSymbol? methodSymbol)
@@ -482,19 +490,22 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
         return methodSymbol
                 is {
                     DeclaredAccessibility: Accessibility.Public,
-                    AssociatedSymbol: not IPropertySymbol
+                    AssociatedSymbol: not IPropertySymbol,
+                    MethodKind: MethodKind.Ordinary,
                 }
-            && methodSymbol
-                .GetAttributes()
-                .Any(a =>
-                    a.AttributeClass?.ToDisplayString() == GeneratorStatics.UFunctionAttribute
-                )
             && !methodSymbol
                 .GetAttributes()
                 .Any(a =>
                     a.AttributeClass is not null
                     && a.AttributeClass.IsAssignableTo<ExcludeFromExtensionsAttribute>()
                 );
+    }
+
+    private static bool IsExposedMethod(IMethodSymbol methodSymbol)
+    {
+        return methodSymbol
+            .GetAttributes()
+            .Any(a => a.AttributeClass?.ToDisplayString() == GeneratorStatics.UFunctionAttribute);
     }
 
     private static UFunctionInfo GetFunctionInfo(IMethodSymbol methodSymbol)
@@ -514,7 +525,10 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
                         )
                 ),
             ]
-        );
+        )
+        {
+            IsExposed = IsExposedMethod(methodSymbol),
+        };
     }
 
     private static string? GetDefaultValue(IParameterSymbol parameterSymbol)

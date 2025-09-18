@@ -5,7 +5,7 @@ using UnrealSharp.Attributes;
 using UnrealSharp.GameplayTags;
 using UnrealSharp.RPGCore;
 
-namespace Pokemon.Core.Components.Bag;
+namespace Pokemon.Core.Bag;
 
 [UClass]
 [UsedImplicitly]

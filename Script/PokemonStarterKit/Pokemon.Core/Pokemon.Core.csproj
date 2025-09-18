@@ -33,7 +33,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Bag\" />
     <Folder Include="Services\" />
   </ItemGroup>
 </Project>

@@ -29,6 +29,7 @@ public class UPocketMemoryComponent : URPGComponent
         ResetLastSelections();
     }
 
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Inventory")]
     public void ResetLastSelections()
     {
         foreach (var (tag, i) in PocketsComponent.AllPockets.Select((x, i) => (x.Tag, i)))
@@ -42,6 +43,7 @@ public class UPocketMemoryComponent : URPGComponent
         }
     }
 
+    [UFunction(FunctionFlags.BlueprintPure, Category = "Inventory")]
     public int GetLastViewedIndex(
         [Categories(IdentifierConstants.PocketTag)] FGameplayTag pocketTag
     )
@@ -51,6 +53,7 @@ public class UPocketMemoryComponent : URPGComponent
             : throw new ArgumentException($"Invalid pocket tag: {pocketTag}");
     }
 
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Inventory")]
     public void SetLastViewedIndex(
         [Categories(IdentifierConstants.PocketTag)] FGameplayTag pocketTag,
         int index

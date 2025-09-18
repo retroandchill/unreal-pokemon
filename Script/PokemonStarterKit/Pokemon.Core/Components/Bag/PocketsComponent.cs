@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using Pokemon.Core.Bag;
 using Pokemon.Core.Entities;
 using Pokemon.Data.Model.PBS;
 using RPG.SourceGenerator.Attributes;
