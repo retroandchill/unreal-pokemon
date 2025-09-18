@@ -19,9 +19,9 @@ FOnMoveSelected &UBattleMoveSelect::GetOnMoveSelected()
     return OnMoveSelected;
 }
 
-void UBattleMoveSelect::ProcessConfirm_Implementation(int32 CurrentIndex)
+void UBattleMoveSelect::NativeProcessConfirm(int32 CurrentIndex)
 {
-    Super::ProcessConfirm_Implementation(CurrentIndex);
+    Super::NativeProcessConfirm(CurrentIndex);
     OnMoveSelected.Broadcast(CurrentBattler, GetSelectableOption<UBattleMovePanel>(CurrentIndex)->GetMove());
 }
 

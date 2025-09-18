@@ -18,7 +18,7 @@ void UStorageBoxWindow::SetStorageBox(const TScriptInterface<IStorageBox> &InSto
         Retro::Ranges::ForEach(Retro::BindMethod<&UStorageBoxWindow::CreateStorageBoxIcon>(this));
 }
 
-void UStorageBoxWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex)
+void UStorageBoxWindow::NativeOnSelectionChange(int32 OldIndex, int32 NewIndex)
 {
     if (OldIndex == NewIndex)
     {

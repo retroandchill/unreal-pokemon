@@ -38,7 +38,7 @@ class POKEMONBATTLEUI_API UBattleSwitchPane : public USelectableWidget
     void RefreshContent();
 
   protected:
-    void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
+    void NativeOnSelectionChange(int32 OldIndex, int32 NewIndex) override;
 
   private:
     /**

@@ -32,7 +32,7 @@ FProcessCommand &UCommandWindow::GetOnCommandSelected()
     return OnCommandSelected;
 }
 
-void UCommandWindow::ProcessConfirm_Implementation(int32 CurrentIndex)
+void UCommandWindow::NativeProcessConfirm(int32 CurrentIndex)
 {
     if (CurrentIndex >= ActiveCommands.Num())
         return;

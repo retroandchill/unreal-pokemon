@@ -47,7 +47,7 @@ class POKEMONUI_API UMoveSelectWindow : public USelectableWidget
     void BindToOnMoveSelectionChanged(const FOnMoveSelectionChanged::FDelegate &Callback);
 
   protected:
-    void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
+    void NativeOnSelectionChange(int32 OldIndex, int32 NewIndex) override;
 
   private:
     /**

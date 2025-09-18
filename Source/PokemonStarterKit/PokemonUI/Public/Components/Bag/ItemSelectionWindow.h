@@ -89,8 +89,8 @@ class POKEMONUI_API UItemSelectionWindow : public USelectableWidget
     FOnNoItemSelected &GetOnNoItemSelected();
 
   protected:
-    void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
-    void ProcessConfirm_Implementation(int32 CurrentIndex) override;
+    void NativeOnSelectionChange(int32 OldIndex, int32 NewIndex) override;
+    void NativeProcessConfirm(int32 CurrentIndex) override;
 
   private:
     /**

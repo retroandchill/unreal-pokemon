@@ -53,7 +53,7 @@ class INTERACTIVEUI_API UCommandWindow : public USelectableWidget
     FProcessCommand &GetOnCommandSelected();
 
   protected:
-    void ProcessConfirm_Implementation(int32 CurrentIndex) override;
+    void NativeProcessConfirm(int32 CurrentIndex) override;
 
   private:
     /**

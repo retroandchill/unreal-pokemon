@@ -27,9 +27,9 @@ void UBattleSwitchPane::RefreshContent()
     }
 }
 
-void UBattleSwitchPane::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex)
+void UBattleSwitchPane::NativeOnSelectionChange(int32 OldIndex, int32 NewIndex)
 {
-    Super::OnSelectionChange_Implementation(OldIndex, NewIndex);
+    Super::NativeOnSelectionChange(OldIndex, NewIndex);
     auto Option = GetSelectableOption<UBattlerSwitchPanel>(NewIndex);
     if (NewIndex == INDEX_NONE)
     {

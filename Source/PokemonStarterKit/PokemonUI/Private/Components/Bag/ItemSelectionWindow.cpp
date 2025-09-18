@@ -83,9 +83,9 @@ FOnNoItemSelected &UItemSelectionWindow::GetOnNoItemSelected()
     return OnNoItemSelected;
 }
 
-void UItemSelectionWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex)
+void UItemSelectionWindow::NativeOnSelectionChange(int32 OldIndex, int32 NewIndex)
 {
-    Super::OnSelectionChange_Implementation(OldIndex, NewIndex);
+    Super::NativeOnSelectionChange(OldIndex, NewIndex);
     GetGameInstance()->GetSubsystem<UCursorMemorySubsystem>()->UpdatePocketMemory(CurrentPocket, NewIndex);
     if (auto Item = GetCurrentItem(); Item != nullptr)
     {
@@ -97,7 +97,7 @@ void UItemSelectionWindow::OnSelectionChange_Implementation(int32 OldIndex, int3
     }
 }
 
-void UItemSelectionWindow::ProcessConfirm_Implementation(int32 CurrentIndex)
+void UItemSelectionWindow::NativeProcessConfirm(int32 CurrentIndex)
 {
     UItemOption *Option = GetSelectableOption<UItemOption>(CurrentIndex);
     check(Option != nullptr)

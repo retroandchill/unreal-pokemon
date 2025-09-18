@@ -42,7 +42,7 @@ class POKEMONBATTLEUI_API UBattleMoveSelect : public USelectableWidget
     FOnMoveSelected &GetOnMoveSelected();
 
   protected:
-    void ProcessConfirm_Implementation(int32 CurrentIndex) override;
+    void NativeProcessConfirm(int32 CurrentIndex) override;
 
   private:
     /**

@@ -34,7 +34,7 @@ class POKEMONUI_API UStorageBoxWindow : public USelectableWidget
     RETRO_MULTICAST_DELEGATE_MEMBER(FOnSelectedPokemonChanged, OnSelectedPokemonChanged)
 
   protected:
-    void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
+    void NativeOnSelectionChange(int32 OldIndex, int32 NewIndex) override;
 
   private:
     void CreateStorageBoxIcon(const TScriptInterface<IPokemon> &Pokemon);

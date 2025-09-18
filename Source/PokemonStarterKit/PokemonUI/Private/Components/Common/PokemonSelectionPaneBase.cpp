@@ -90,7 +90,7 @@ TOptional<int32> UPokemonSelectionPaneBase::GetNumPanelsToAdd() const
     return TOptional<int32>();
 }
 
-void UPokemonSelectionPaneBase::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex)
+void UPokemonSelectionPaneBase::NativeOnSelectionChange(int32 OldIndex, int32 NewIndex)
 {
     RefreshWindow();
     if (NewIndex != INDEX_NONE)

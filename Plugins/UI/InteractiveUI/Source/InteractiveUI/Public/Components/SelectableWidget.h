@@ -116,21 +116,42 @@ class INTERACTIVEUI_API USelectableWidget : public UCommonActivatableWidget
      * @param OldIndex The previous index of this widget
      * @param NewIndex The new index to select to
      */
-    UFUNCTION(BlueprintNativeEvent, Category = Selection)
     void OnSelectionChange(int32 OldIndex, int32 NewIndex);
+
+    virtual void NativeOnSelectionChange(int32 OldIndex, int32 NewIndex)
+    {
+    }
+
+    UFUNCTION(BlueprintImplementableEvent, DisplayName = "On Selection Change", Category = Selection,
+              meta = (ScriptName = "OnSelectionChange"))
+    void K2_OnSelectionChange(int32 OldIndex, int32 NewIndex);
 
     /**
      * Additional functionality for when confirm is selected
      * @param CurrentIndex The current index of the window
      */
-    UFUNCTION(BlueprintNativeEvent, Category = "Selection|Confirm")
     void ProcessConfirm(int32 CurrentIndex);
+
+    virtual void NativeProcessConfirm(int32 CurrentIndex)
+    {
+    }
+
+    UFUNCTION(BlueprintImplementableEvent, DisplayName = "Process Confirm", Category = "Selection|Confirm",
+              meta = (ScriptName = "ProcessConfirm"))
+    void K2_ProcessConfirm(int32 CurrentIndex);
 
     /**
      * Additional functionality for when cancel is selected
      */
-    UFUNCTION(BlueprintNativeEvent, Category = "Selection|Cancel")
     void ProcessCancel();
+
+    virtual void NativeProcessCancel()
+    {
+    }
+
+    UFUNCTION(BlueprintImplementableEvent, DisplayName = "Process Cancel", Category = "Selection|Cancel",
+              meta = (ScriptName = "ProcessCancel"))
+    void K2_ProcessCancel();
 
     /**
      * Get the full list of selectable options for this widget

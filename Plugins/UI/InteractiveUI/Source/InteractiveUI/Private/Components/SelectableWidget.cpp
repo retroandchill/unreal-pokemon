@@ -163,17 +163,20 @@ int32 USelectableWidget::AddOptionToWidget(UCommonButtonBase *Option)
     return OptionIndex;
 }
 
-void USelectableWidget::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex)
+void USelectableWidget::OnSelectionChange(const int32 OldIndex, const int32 NewIndex)
 {
-    // No implementation, but we cannot have an abstract method in an Unreal class
+    NativeOnSelectionChange(OldIndex, NewIndex);
+    K2_OnSelectionChange(OldIndex, NewIndex);
 }
 
-void USelectableWidget::ProcessConfirm_Implementation(int32 CurrentIndex)
+void USelectableWidget::ProcessConfirm(const int32 CurrentIndex)
 {
-    // No implementation, but we cannot have an abstract method in an Unreal class
+    NativeProcessConfirm(CurrentIndex);
+    K2_ProcessConfirm(CurrentIndex);
 }
 
-void USelectableWidget::ProcessCancel_Implementation()
+void USelectableWidget::ProcessCancel()
 {
-    // No implementation, but we cannot have an abstract method in an Unreal class
+    NativeProcessCancel();
+    K2_ProcessCancel();
 }

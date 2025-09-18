@@ -70,7 +70,7 @@ class POKEMONUI_API UPokemonSelectionPaneBase : public USelectableWidget
   protected:
     virtual TOptional<int32> GetNumPanelsToAdd() const;
 
-    void OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex) override;
+    void NativeOnSelectionChange(int32 OldIndex, int32 NewIndex) override;
 
     /**
      * Perform a swap with the two panels being the targets

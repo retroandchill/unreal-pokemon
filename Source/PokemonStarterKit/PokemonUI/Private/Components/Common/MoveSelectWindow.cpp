@@ -40,9 +40,9 @@ void UMoveSelectWindow::BindToOnMoveSelectionChanged(const FOnMoveSelectionChang
     OnMoveSelectionChanged.Add(Callback);
 }
 
-void UMoveSelectWindow::OnSelectionChange_Implementation(int32 OldIndex, int32 NewIndex)
+void UMoveSelectWindow::NativeOnSelectionChange(int32 OldIndex, int32 NewIndex)
 {
-    Super::OnSelectionChange_Implementation(OldIndex, NewIndex);
+    Super::NativeOnSelectionChange(OldIndex, NewIndex);
     if (NewIndex != INDEX_NONE)
     {
         OnMoveSelectionChanged.Broadcast(GetSelectableOption<UMovePanel>(NewIndex)->GetMove());
