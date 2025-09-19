@@ -27,7 +27,7 @@ void UEnhancedImage::SetBrush(const FSlateBrush &InBrush)
     SetBrush(InBrush, true);
 }
 
-void UEnhancedImage::SetBrush(const FSlateBrush &InBrush, bool bUpdateAssetImage)
+void UEnhancedImage::SetBrush(const FSlateBrush &InBrush, const bool bUpdateAssetImage)
 {
     Super::SetBrush(InBrush);
     if (bUpdateAssetImage)
@@ -49,44 +49,44 @@ void UEnhancedImage::SetBrushFromAsset(USlateBrushAsset *Asset)
     bManualSize = true;
 }
 
-void UEnhancedImage::SetBrushFromTexture(UTexture2D *Texture, bool bMatchSize)
+void UEnhancedImage::SetBrushFromTexture(UTexture2D *Texture, const bool bMatchSize)
 {
     Super::SetBrushFromTexture(Texture, bMatchSize);
-    SourceImage.Set(Texture);
+    SourceImage = Texture;
     bManualSize = !bMatchSize;
 }
 
-void UEnhancedImage::SetBrushFromTextureDynamic(UTexture2DDynamic *Texture, bool bMatchSize)
+void UEnhancedImage::SetBrushFromTextureDynamic(UTexture2DDynamic *Texture, const bool bMatchSize)
 {
     Super::SetBrushFromTextureDynamic(Texture, bMatchSize);
-    SourceImage.Set(Texture);
+    SourceImage = Texture;
     bManualSize = !bMatchSize;
 }
 
 void UEnhancedImage::SetBrushFromMaterial(UMaterialInterface *Material)
 {
     Super::SetBrushFromMaterial(Material);
-    SourceImage.Set(Material);
+    SourceImage = Material;
     bManualSize = true;
 }
 
-void UEnhancedImage::SetBrushFromAtlasInterface(TScriptInterface<ISlateTextureAtlasInterface> AtlasRegion,
-                                                bool bMatchSize)
+void UEnhancedImage::SetBrushFromAtlasInterface(const TScriptInterface<ISlateTextureAtlasInterface> AtlasRegion,
+                                                const bool bMatchSize)
 {
     Super::SetBrushFromAtlasInterface(AtlasRegion, bMatchSize);
-    SourceImage.Set(AtlasRegion);
+    SourceImage = AtlasRegion.GetObject();
     bManualSize = !bMatchSize;
 }
 
-void UEnhancedImage::SetBrushFromPaperFlipbook(UPaperFlipbook *Flipbook, bool bMatchSize)
+void UEnhancedImage::SetBrushFromPaperFlipbook(UPaperFlipbook *Flipbook, const bool bMatchSize)
 {
     Super::SetBrushFromAtlasInterface(Flipbook != nullptr ? Flipbook->GetSpriteAtFrame(0) : nullptr, bMatchSize);
     FlipbookTicker.SetFlipbook(Flipbook);
-    SourceImage.Set(Flipbook);
+    SourceImage = Flipbook;
     bManualSize = !bMatchSize;
 }
 
-void UEnhancedImage::SetBrushFromSimpleFlipbook(USimpleFlipbook *Flipbook, bool bMatchSize)
+void UEnhancedImage::SetBrushFromSimpleFlipbook(USimpleFlipbook *Flipbook, const bool bMatchSize)
 {
     if (Flipbook != nullptr)
     {
@@ -102,12 +102,12 @@ void UEnhancedImage::SetBrushFromSimpleFlipbook(USimpleFlipbook *Flipbook, bool 
     }
 
     FlipbookTicker.SetFlipbook(Flipbook);
-    SourceImage.Set(Flipbook);
+    SourceImage = Flipbook;
     bManualSize = !bMatchSize;
 
     if (bMatchSize)
     {
-        if (auto Texture = Flipbook->GetSourceTexture(); !bManualSize && Texture != nullptr)
+        if (const auto *Texture = Flipbook->GetSourceTexture(); !bManualSize && Texture != nullptr)
         {
             SetDesiredSizeOverride(
                 FVector2D(Texture->GetSizeX() / Flipbook->GetColumns(), Texture->GetSizeY() / Flipbook->GetRows()));
@@ -115,40 +115,12 @@ void UEnhancedImage::SetBrushFromSimpleFlipbook(USimpleFlipbook *Flipbook, bool 
     }
 }
 
-void UEnhancedImage::SetBrushFromImageAsset(const FImageAsset &ImageAsset, bool bMatchSize)
-{
-    switch (ImageAsset.GetTypeIndex())
-    {
-    case FImageAsset::GetTypeIndex<UTexture2D>():
-        SetBrushFromTexture(&ImageAsset.Get<UTexture2D>(), bMatchSize);
-        break;
-    case FImageAsset::GetTypeIndex<UTexture2DDynamic>():
-        SetBrushFromTextureDynamic(&ImageAsset.Get<UTexture2DDynamic>(), bMatchSize);
-        break;
-    case FImageAsset::GetTypeIndex<UMaterialInterface>():
-        SetBrushFromMaterial(&ImageAsset.Get<UMaterialInterface>());
-        break;
-    case FImageAsset::GetTypeIndex<ISlateTextureAtlasInterface>():
-        SetBrushFromAtlasInterface(ImageAsset.Get<ISlateTextureAtlasInterface>()._getUObject(), bMatchSize);
-        break;
-    case FImageAsset::GetTypeIndex<UPaperFlipbook>():
-        SetBrushFromPaperFlipbook(&ImageAsset.Get<UPaperFlipbook>(), bMatchSize);
-        break;
-    case FImageAsset::GetTypeIndex<USimpleFlipbook>():
-        SetBrushFromSimpleFlipbook(&ImageAsset.Get<USimpleFlipbook>(), bMatchSize);
-        break;
-    default:
-        SetBrushFromAsset(nullptr);
-        break;
-    }
-}
-
 FVoidCoroutine UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook,
-                                                             bool bMatchSize, FForceLatentCoroutine)
+                                                             const bool bMatchSize, FForceLatentCoroutine)
 {
     if (!LazyFlipbook.IsNull())
     {
-        auto LoadedAsset = co_await UE5Coro::Latent::AsyncLoadObject(LazyFlipbook);
+        auto *LoadedAsset = co_await UE5Coro::Latent::AsyncLoadObject(LazyFlipbook);
         ensureMsgf(LoadedAsset != nullptr, TEXT("Failed to load %s"), *LazyFlipbook.ToSoftObjectPath().ToString());
         SetBrushFromPaperFlipbook(LoadedAsset, bMatchSize);
     }
@@ -164,7 +136,7 @@ FVoidCoroutine UEnhancedImage::SetBrushFromLazySimpleFlipbook(const TSoftObjectP
 {
     if (!LazyFlipbook.IsNull())
     {
-        auto LoadedAsset = co_await UE5Coro::Latent::AsyncLoadObject(LazyFlipbook);
+        auto *LoadedAsset = co_await UE5Coro::Latent::AsyncLoadObject(LazyFlipbook);
         ensureMsgf(LoadedAsset != nullptr, TEXT("Failed to load %s"), *LazyFlipbook.ToSoftObjectPath().ToString());
         SetBrushFromSimpleFlipbook(LoadedAsset, bMatchSize);
     }
@@ -175,25 +147,9 @@ FVoidCoroutine UEnhancedImage::SetBrushFromLazySimpleFlipbook(const TSoftObjectP
     }
 }
 
-FVoidCoroutine UEnhancedImage::SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize,
-                                                          FForceLatentCoroutine)
-{
-    if (auto &SoftPointer = LazyImage.ToSoftObjectPtr(); !SoftPointer.IsNull())
-    {
-        auto LoadedAsset = co_await LazyImage.LoadAsync();
-        ensureMsgf(LoadedAsset.IsSet(), TEXT("Failed to load %s"), *LazyImage.ToSoftObjectPath().ToString());
-        SetBrushFromImageAsset(LoadedAsset.GetValue(), bMatchSize);
-    }
-    else
-    {
-        // Hack to get into the private method that is inaccessible
-        SetBrushFromLazyDisplayAsset(SoftPointer, bMatchSize);
-    }
-}
-
 void UEnhancedImage::Tick(float DeltaTime)
 {
-    if (!SourceImage.IsType<UPaperFlipbook>() && !SourceImage.IsType<USimpleFlipbook>())
+    if (!SourceImage.IsA<UPaperFlipbook>() && !SourceImage.IsA<USimpleFlipbook>())
     {
         return;
     }
@@ -211,7 +167,7 @@ TStatId UEnhancedImage::GetStatId() const
 
 bool UEnhancedImage::IsTickable() const
 {
-    return SourceImage.IsType<UPaperFlipbook>() || SourceImage.IsType<USimpleFlipbook>();
+    return SourceImage.IsA<UPaperFlipbook>() || SourceImage.IsA<USimpleFlipbook>();
 }
 
 bool UEnhancedImage::IsTickableInEditor() const
@@ -225,12 +181,13 @@ void UEnhancedImage::SynchronizeProperties()
 
     if (SourceImage != nullptr)
     {
-        SourceImage.Visit([this]<typename T>(T *Flipbook) {
-            if constexpr (Simple2D::Flipbook<T>)
-            {
-                FlipbookTicker.SetFlipbook(Flipbook);
-            }
-        });
+        if (auto* AsPaperFlipbook = Cast<UPaperFlipbook>(SourceImage.Get()); AsPaperFlipbook != nullptr)
+        {
+            FlipbookTicker.SetFlipbook(AsPaperFlipbook);
+        } else if (auto* AsSimpleFlipbook = Cast<USimpleFlipbook>(SourceImage.Get()); AsSimpleFlipbook != nullptr)
+        {
+            FlipbookTicker.SetFlipbook(AsSimpleFlipbook);
+        }
     }
     FlipbookTicker.SetPlayRate(PlayRate);
     FlipbookTicker.SetLooping(bLooping);
@@ -249,10 +206,9 @@ void UEnhancedImage::PostLoad()
 {
     Super::PostLoad();
 
-    if (SourceImage.IsType<USimpleFlipbook>())
+    if (auto *Flipbook = Cast<USimpleFlipbook>(SourceImage); Flipbook != nullptr)
     {
-        const auto &Flipbook = SourceImage.Get<USimpleFlipbook>();
-        CreateSimpleFlipbookMaterialInstance(Flipbook);
+        CreateSimpleFlipbookMaterialInstance(*Flipbook);
         SetBrushResourceObject(SimpleFlipbookMaterialInstance);
     }
 }
@@ -262,52 +218,43 @@ void UEnhancedImage::PostEditChangeProperty(FPropertyChangedEvent &PropertyChang
     Super::PostEditChangeProperty(PropertyChangedEvent);
     if (PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(UEnhancedImage, SourceImage))
     {
-        if (SourceImage.IsType<USimpleFlipbook>())
+        if (const auto* AsSimpleFlipbook = Cast<USimpleFlipbook>(SourceImage); AsSimpleFlipbook != nullptr)
         {
-            const auto &Flipbook = SourceImage.Get<USimpleFlipbook>();
-            CreateSimpleFlipbookMaterialInstance(Flipbook);
+            CreateSimpleFlipbookMaterialInstance(*AsSimpleFlipbook);
             SetBrushResourceObject(SimpleFlipbookMaterialInstance);
+
+            if (!bManualSize)
+            {
+                const auto *Texture = AsSimpleFlipbook->GetSourceTexture();
+                SetDesiredSizeOverride(
+                    FVector2D(Texture->GetSizeX() / AsSimpleFlipbook->GetColumns(), Texture->GetSizeY() / AsSimpleFlipbook->GetRows()));
+            }
         }
-        else if (SourceImage.IsType<UPaperFlipbook>())
+        else if (const auto* AsPaperFlipbook = Cast<UPaperFlipbook>(SourceImage); AsPaperFlipbook != nullptr)
         {
-            const auto &Flipbook = SourceImage.Get<UPaperFlipbook>();
-            SetBrushResourceObject(Flipbook.GetSpriteAtFrame(0));
+            SetBrushResourceObject(AsPaperFlipbook->GetSpriteAtFrame(0));
+
+            if (!bManualSize)
+            {
+                SetDesiredSizeOverride(AsPaperFlipbook->GetSpriteAtFrame(0)->GetSourceSize());
+            }
         }
         else
         {
-            SetBrushResourceObject(SourceImage.TryGet().GetPtrOrNull());
-        }
+            SetBrushResourceObject(SourceImage);
 
-        if (!bManualSize && SourceImage.IsValid() && !SourceImage.IsType<UMaterialInterface>())
-        {
-            switch (SourceImage.GetTypeIndex())
+            if (bManualSize)
             {
-            case FImageAsset::GetTypeIndex<UTexture2D>(): {
-                const auto &Texture = SourceImage.Get<UTexture2D>();
-                SetDesiredSizeOverride(FVector2D(Texture.GetSizeX(), Texture.GetSizeY()));
-                break;
+                return;
             }
-            case FImageAsset::GetTypeIndex<UTexture2DDynamic>(): {
-                const auto &Texture = SourceImage.Get<UTexture2DDynamic>();
-                SetDesiredSizeOverride(FVector2D(Texture.SizeX, Texture.SizeY));
-                break;
-            }
-            case FImageAsset::GetTypeIndex<ISlateTextureAtlasInterface>():
-                SetDesiredSizeOverride(
-                    SourceImage.Get<ISlateTextureAtlasInterface>().GetSlateAtlasData().GetSourceDimensions());
-                break;
-            case FImageAsset::GetTypeIndex<UPaperFlipbook>():
-                SetDesiredSizeOverride(SourceImage.Get<UPaperFlipbook>().GetSpriteAtFrame(0)->GetSourceSize());
-                break;
-            case FImageAsset::GetTypeIndex<USimpleFlipbook>(): {
-                auto &Flipbook = SourceImage.Get<USimpleFlipbook>();
-                auto Texture = Flipbook.GetSourceTexture();
-                SetDesiredSizeOverride(
-                    FVector2D(Texture->GetSizeX() / Flipbook.GetColumns(), Texture->GetSizeY() / Flipbook.GetRows()));
-                break;
-            }
-            default:
-                break;
+            
+            if (auto* AsTexture2D = Cast<UTexture2D>(SourceImage); AsTexture2D != nullptr) {
+                SetDesiredSizeOverride(FVector2D(AsTexture2D->GetSizeX(), AsTexture2D->GetSizeY()));
+            } else if (auto* AsTexture2DDynamic = Cast<UTexture2DDynamic>(SourceImage); AsTexture2DDynamic != nullptr) {
+                SetDesiredSizeOverride(FVector2D(AsTexture2DDynamic->SizeX, AsTexture2DDynamic->SizeY));
+            } else if (auto* AsSlateTextureAtlasInterface = Cast<ISlateTextureAtlasInterface>(SourceImage); AsSlateTextureAtlasInterface != nullptr)
+            {
+                SetDesiredSizeOverride(AsSlateTextureAtlasInterface->GetSlateAtlasData().GetSourceDimensions());
             }
         }
     }
@@ -316,14 +263,7 @@ void UEnhancedImage::PostEditChangeProperty(FPropertyChangedEvent &PropertyChang
 
 void UEnhancedImage::SetSourceImageInternal(UObject *Object)
 {
-    if (Object != nullptr)
-    {
-        SourceImage.Set(Object);
-    }
-    else
-    {
-        SourceImage.Reset();
-    }
+    SourceImage = Object;
 }
 
 void UEnhancedImage::CreateSimpleFlipbookMaterialInstance(const USimpleFlipbook &Flipbook)
@@ -366,12 +306,12 @@ void UEnhancedImage::OnFrameIndexChanged(std::any KeyFrame)
     {
         auto &[Index, FrameRun] = std::any_cast<FSimpleFlipbookKeyFrame &>(KeyFrame);
         check(IsValid(SimpleFlipbookMaterialInstance))
-        if (auto &Flipbook = SourceImage.Get<USimpleFlipbook>(); Flipbook.IsValidKeyFrameIndex(Index))
+        if (const auto &Flipbook = *CastChecked<USimpleFlipbook>(SourceImage); Flipbook.IsValidKeyFrameIndex(Index))
         {
             SimpleFlipbookMaterialInstance->SetScalarParameterValue(Simple2D::Flipbooks::FrameParameterName,
                                                                     static_cast<float>(Index));
             SetBrushResourceObject(SimpleFlipbookMaterialInstance);
-            if (auto Texture = Flipbook.GetSourceTexture(); !bManualSize && Texture != nullptr)
+            if (const auto *Texture = Flipbook.GetSourceTexture(); !bManualSize && Texture != nullptr)
             {
                 SetDesiredSizeOverride(
                     FVector2D(Texture->GetSizeX() / Flipbook.GetColumns(), Texture->GetSizeY() / Flipbook.GetRows()));

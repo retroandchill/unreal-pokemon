@@ -1,8 +1,16 @@
 ﻿using LanguageExt;
+using Pokemon.Assets;
+using Pokemon.Core;
 using Pokemon.Core.Entities;
+using Pokemon.Data.Model.HardCoded;
+using Pokemon.UI.Components.Common;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.CommonUI;
+using UnrealSharp.Engine;
+using UnrealSharp.InteractiveUI;
+using UnrealSharp.UMG;
 
 namespace Pokemon.UI.Components.Party;
 
@@ -14,19 +22,51 @@ public interface IPokemonPanelOwner
 }
 
 [UClass(ClassFlags.Abstract)]
-public class UPokemonPanel : UCommonButtonBase
+public class UPokemonPanel : UPokemonButtonBase
 {
     public IPokemonPanelOwner? Owner { get; set; }
-
-    [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Content")]
-    public UPokemon? Pokemon { get; private set; }
-
-    private int _pokemonIndex;
+    
+    public int ButtonIndex { get; set; }
+    
+    [UProperty]
+    [BindWidget]
+    private UPokemonDisplayBase PokemonIcon { get; }
+    
+    [UProperty]
+    [BindWidget]
+    private UItemDisplayBase ItemIcon { get; }
+    
+    [UProperty]
+    [BindWidget]
+    protected UCommonTextBlock NameText { get; }
+    
+    [UProperty]
+    [BindWidget]
+    protected UCommonNumericTextBlock LevelText { get; }
+    
+    [UProperty]
+    [BindWidget]
+    protected UEnhancedImage GenderIcon { get; }
+    
+    [UProperty(PropertyFlags.EditDefaultsOnly, Category = "Display")]
+    private TMap<EPokemonGender, UTexture2D> GenderIcons { get; }
+    
+    [UProperty]
+    [BindWidget]
+    protected UProgressBar HPBar { get; }
+    
+    [UProperty]
+    [BindWidget]
+    protected UCommonTextBlock HPText { get; }
+    
+    [UProperty]
+    [BindWidget]
+    protected UEnhancedImage StatusEffectIcon { get; }
 
     public bool IsActivate
     {
         [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Is Active", Category = "Display")]
-        get => _pokemonIndex == 0;
+        get => ButtonIndex == 0;
     }
 
     public bool IsPokemonFainted
@@ -62,27 +102,56 @@ public class UPokemonPanel : UCommonButtonBase
             DisplayName = "Is Preselected",
             Category = "Display"
         )]
-        get => Owner?.SwitchingIndex == _pokemonIndex;
+        get => Owner?.SwitchingIndex == ButtonIndex;
     }
 
     public void SwapPokemon(UPokemonPanel other)
     {
         (Pokemon, other.Pokemon) = (other.Pokemon, Pokemon);
     }
-
-    public void SetPokemon(UPokemon pokemon, int index)
+    
+    public override void Refresh()
     {
-        Pokemon = pokemon;
-        _pokemonIndex = index;
-        Refresh();
-    }
+        PokemonIcon.Pokemon = Pokemon;
 
-    [UFunction(
-        FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent,
-        Category = "Display"
-    )]
-    public virtual void Refresh()
-    {
-        // No native implementation
+        if (Pokemon is null) return;
+        
+        ItemIcon.Item = Pokemon.Item.ToNullable() ?? default;
+        NameText.Text = Pokemon.Nickname;
+        LevelText.CurrentValue = Pokemon.Level;
+
+        if (GenderIcons.TryGetValue(Pokemon.Gender, out var icon))
+        {
+            GenderIcon.Visibility = ESlateVisibility.SelfHitTestInvisible;
+            GenderIcon.SetBrushFromTexture(icon, true);
+        }
+        else
+        {
+            GenderIcon.Visibility = ESlateVisibility.Hidden;       
+        }
+
+        HPText.Text = $"{Pokemon.HP}/{Pokemon.MaxHP}";
+        HPBar.Percent = Pokemon.HP / (float) Pokemon.MaxHP;
+
+        if (Pokemon.IsFainted)
+        {
+            StatusEffectIcon.Visibility = ESlateVisibility.SelfHitTestInvisible;
+            var assetManager = UAssetManager.Get();
+            var faintedIcon = assetManager.GetSoftObjectReferenceFromPrimaryAssetId(AssetIds.StatusIcons_icon_faint);
+            StatusEffectIcon.SetBrushFromLazyTexture(faintedIcon.Cast<UTexture2D>(), true);
+        }
+        else
+        {
+            Pokemon.StatusEffect.Match(s =>
+                {
+                    StatusEffectIcon.Visibility = ESlateVisibility.SelfHitTestInvisible;
+                    var statusIcon = UIconAssetLoader.ResolveStatusEffectIcon(s);
+                    StatusEffectIcon.SetBrushFromLazyTexture(statusIcon, true);
+                },
+                () =>
+                {
+                    StatusEffectIcon.Visibility = ESlateVisibility.Hidden;
+                });
+        }
     }
 }

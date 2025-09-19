@@ -129,6 +129,65 @@ public static class WidgetLayerExtensions
             cancellationToken
         );
     }
+    
+    /// <summary>
+    /// Asynchronously pushes a widget of the specified type into a specified layer
+    /// for the given player controller, optionally suspends input until the operation completes, and optionally configures it.
+    /// </summary>
+    /// <param name="playerController">The player controller initiating the content push.</param>
+    /// <param name="layerName">The gameplay tag identifying the layer where the widget should be pushed.</param>
+    /// <param name="widgetClass">The soft class pointer of the widget to be pushed into the layer.</param>
+    /// <param name="suspendInputUntilComplete">Specifies whether to suspend the input until the operation is complete.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the asynchronous operation.</param>
+    /// <typeparam name="TWidget">The type of the activatable widget being pushed into the layer.</typeparam>
+    /// <returns>A task representing the asynchronous operation. When completed, provides the created widget of the specified type.</returns>
+    /// <exception cref="InvalidOperationException">When the specified layer does not exist</exception>
+    /// <exception cref="InvalidCastException">If the specified class is not a valid subclass of the widget</exception>
+    public static ValueTask<TWidget> PushContentToLayerAsync<TWidget>(
+        this APlayerController playerController,
+        FGameplayTag layerName,
+        TSoftClassPtr<TWidget> widgetClass,
+        bool suspendInputUntilComplete = true,
+        CancellationToken cancellationToken = default
+    )
+        where TWidget : UCommonActivatableWidget
+    {
+        return UCSPushWidgetToLayerAsync.PushWidgetToLayerAsync(
+            playerController,
+            layerName,
+            widgetClass,
+            suspendInputUntilComplete,
+            _ => {},
+            cancellationToken
+        );
+    }
+
+    /// <summary>
+    /// Asynchronously pushes a widget of the specified type into a specified layer for the given player controller, with optional configuration and input suspension.
+    /// </summary>
+    /// <param name="playerController">The player controller to initiate the content push.</param>
+    /// <param name="layerName">The gameplay tag identifying the layer where the content should be pushed.</param>
+    /// <param name="widgetClass">A soft reference to the class of the widget to be pushed into the layer.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests, allowing the operation to be cancelled.</param>
+    /// <typeparam name="TWidget">The type of the activatable widget being pushed into the layer.</typeparam>
+    /// <returns>A task that represents the asynchronous operation. The result contains the widget of the specified type when the operation completes.</returns>
+    /// <exception cref="InvalidOperationException">When the specified layer does not exist</exception>
+    /// <exception cref="InvalidCastException">If the specified class is not a valid subclass of the widget</exception>
+    public static ValueTask<TWidget> PushContentToLayerAsync<TWidget>(
+        this APlayerController playerController,
+        FGameplayTag layerName,
+        TSoftClassPtr<TWidget> widgetClass,
+        CancellationToken cancellationToken = default
+    )
+        where TWidget : UCommonActivatableWidget
+    {
+        return playerController.PushContentToLayerAsync(
+            layerName,
+            widgetClass,
+            true,
+            cancellationToken
+        );
+    }
 
     /// <summary>
     /// Asynchronously pushes a widget of the specified type into a specified layer for the given player controller and optionally configures it.

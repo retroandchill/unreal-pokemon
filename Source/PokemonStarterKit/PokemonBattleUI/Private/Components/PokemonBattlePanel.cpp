@@ -63,7 +63,7 @@ void UPokemonBattlePanel::RefreshStatusEffect()
     }
 
     StatusIcon->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
-    StatusIcon->SetBrushFromImageAsset(Icon.GetValue(), true);
+    StatusIcon->SetBrushFromTexture(&Icon.GetValue().Get<UTexture2D>(), true);
 }
 
 void UPokemonBattlePanel::UpdateHPPercent(float NewPercent)

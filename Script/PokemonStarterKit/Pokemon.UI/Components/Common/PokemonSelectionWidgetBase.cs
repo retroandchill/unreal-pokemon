@@ -52,7 +52,8 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
                 var name = $"selectionPanel{i}";
                 var newWidget = WidgetTree.ConstructWidget(PanelClass, name);
                 newWidget.Owner = this;
-                newWidget.SetPokemon(pokemonList[i], i);
+                newWidget.ButtonIndex = i;
+                newWidget.Pokemon = pokemonList[i];
                 SlotOption(newWidget);
             }
             else

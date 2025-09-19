@@ -1,10 +1,11 @@
-﻿using LanguageExt;
+﻿using InteractiveUI.Core;
 using Pokemon.Core;
 using Pokemon.Core.Entities;
 using Pokemon.UI.Components.Party;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.CommonUI;
+using UnrealSharp.Engine;
 using UnrealSharp.InteractiveUI;
 
 namespace Pokemon.UI.Screens;
@@ -17,6 +18,13 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
     protected UPokemonSelectionPane SelectionPane { get; }
 
     private Action<UPokemon?>? _onPokemonSelected;
+
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Screens")]
+    public static async Task<UPokemonSelectScreen> PushPokemonSelectScreenToStackAsync(APlayerController playerController, CancellationToken cancellationToken = default)
+    {
+        var screenClass = GetDefault<UPokemonUISettings>().PokemonSelectScreenClass;
+        return await playerController.PushContentToLayerAsync(GameplayTags.UI_Layer_GameMenu, screenClass, cancellationToken);
+    }
 
     public override void Construct()
     {

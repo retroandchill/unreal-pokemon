@@ -30,4 +30,7 @@
       <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.Log.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Serialization\Pbs\Serializers\GameDataRepositorySerializer.cs" />
+  </ItemGroup>
 </Project>

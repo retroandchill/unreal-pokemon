@@ -44,9 +44,6 @@ class INTERACTIVEUI_API UEnhancedImage : public UCommonLazyImage, public FTickab
     UFUNCTION(BlueprintCallable, Category = Image)
     virtual void SetBrushFromSimpleFlipbook(USimpleFlipbook *Flipbook, bool bMatchSize = false);
 
-    UFUNCTION(BlueprintCallable, Category = Image)
-    virtual void SetBrushFromImageAsset(const FImageAsset &ImageAsset, bool bMatchSize = false);
-
     UFUNCTION(BlueprintCallable, Category = LazyImage)
     FVoidCoroutine SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook,
                                                  bool bMatchSize = false,
@@ -56,10 +53,6 @@ class INTERACTIVEUI_API UEnhancedImage : public UCommonLazyImage, public FTickab
     FVoidCoroutine SetBrushFromLazySimpleFlipbook(const TSoftObjectPtr<USimpleFlipbook> &LazyFlipbook,
                                                   bool bMatchSize = false,
                                                   FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
-
-    UFUNCTION(BlueprintCallable, Category = LazyImage)
-    FVoidCoroutine SetBrushFromLazyImageAsset(const FSoftImageAsset &LazyImage, bool bMatchSize = false,
-                                              FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
 
     void Tick(float DeltaTime) override;
     TStatId GetStatId() const override;
@@ -90,8 +83,8 @@ class INTERACTIVEUI_API UEnhancedImage : public UCommonLazyImage, public FTickab
     UPROPERTY(BlueprintAssignable, Category = "PaperFlipbook|Widget|Event")
     FOnFlipbookFinishedPlaying OnFinishedPlaying;
 
-    UPROPERTY(EditAnywhere, Category = Appearance)
-    FImageAsset SourceImage;
+    UPROPERTY(EditAnywhere, Category = Appearance, meta=(DisplayThumbnail="true", AllowedClasses="/Script/Engine.Texture,/Script/Engine.MaterialInterface,/Script/Engine.SlateTextureAtlasInterface,/Script/Paper2D.PaperFlipbook,/Script/Simple2D.SimpleFlipbook", DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
+    TObjectPtr<UObject> SourceImage;
 
     /** Are we currently playing . */
     UPROPERTY(Category = Appearance, EditAnywhere)
