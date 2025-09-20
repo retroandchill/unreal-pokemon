@@ -26,13 +26,13 @@ public class UItemSelectionWindow : USelectableWidget
     public TMulticastDelegate<OnItemChanged> OnItemSelected { get; set; }
 
     [UProperty(PropertyFlags.BlueprintAssignable, Category = "Events")]
+    public TMulticastDelegate<OnNoItemSelected> OnNoItemSelected { get; set; }
+
+    [UProperty(PropertyFlags.BlueprintAssignable, Category = "Events")]
     public TMulticastDelegate<OnPocketChanged> OnPocketChanged { get; set; }
 
     [UProperty(PropertyFlags.BlueprintAssignable, Category = "Events")]
     public TMulticastDelegate<OnItemChanged> OnItemChanged { get; set; }
-
-    [UProperty(PropertyFlags.BlueprintAssignable, Category = "Events")]
-    public TMulticastDelegate<OnNoItemSelected> OnNoItemSelected { get; set; }
 
     private Func<FItemHandle, bool>? _itemFilter;
 
@@ -76,6 +76,16 @@ public class UItemSelectionWindow : USelectableWidget
     {
         base.OnSelectionChange(oldIndex, newIndex);
         Bag.SetLastViewedIndex(CurrentPocket, newIndex);
+        var option = GetSelectableOption<UItemOption>(newIndex);
+
+        if (option is not null)
+        {
+            OnItemChanged.Invoke(option.Item, option.Quantity);
+        }
+        else
+        {
+            OnItemChanged.Invoke(default, 0);
+        }
     }
 
     protected override void ProcessConfirm(int currentIndex)
@@ -84,6 +94,11 @@ public class UItemSelectionWindow : USelectableWidget
         if (option is null)
             throw new InvalidOperationException("No option at index");
         OnItemSelected.Invoke(option.Item, option.Quantity);
+    }
+
+    protected override void ProcessCancel()
+    {
+        OnNoItemSelected.Invoke();
     }
 
     private void UpdatePocket()

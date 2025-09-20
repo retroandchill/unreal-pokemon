@@ -1,6 +1,7 @@
 ﻿using Pokemon.Core;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.CommonUI;
 using UnrealSharp.GameplayTags;
 
@@ -20,17 +21,17 @@ public class UPocketWindow : UCommonUserWidget
         }
     }
 
-    [UFunction(FunctionFlags.BlueprintEvent, Category = "Display")]
-    protected virtual void SetPocketName(FText pocketName)
-    {
-        // No native implementation
-    }
+    [UProperty]
+    [BindWidgetOptional]
+    private UCommonTextBlock? PocketName { get; }
 
     private void UpdatePocketInfo()
     {
-        SetPocketName(GetDefault<UPokemonCoreSettings>().Pockets
-            .Where(p => p.Tag == CurrentPocket)
-            .Select(p => p.Name)
-            .Single());
+        PocketName?.Text =
+            GetDefault<UPokemonCoreSettings>()
+                .Pockets.Where(p => p.Tag == CurrentPocket)
+                .Select(p => p.Name)
+                .SingleOrDefault()
+            ?? FText.None;
     }
 }

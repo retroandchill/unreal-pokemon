@@ -20,10 +20,17 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
     private Action<UPokemon?>? _onPokemonSelected;
 
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Screens")]
-    public static async Task<UPokemonSelectScreen> PushPokemonSelectScreenToStackAsync(APlayerController playerController, CancellationToken cancellationToken = default)
+    public static async Task<UPokemonSelectScreen> PushPokemonSelectScreenToStackAsync(
+        APlayerController playerController,
+        CancellationToken cancellationToken = default
+    )
     {
         var screenClass = GetDefault<UPokemonUISettings>().PokemonSelectScreenClass;
-        return await playerController.PushContentToLayerAsync(GameplayTags.UI_Layer_GameMenu, screenClass, cancellationToken);
+        return await playerController.PushContentToLayerAsync(
+            GameplayTags.UI_Layer_GameMenu,
+            screenClass,
+            cancellationToken
+        );
     }
 
     public override void Construct()

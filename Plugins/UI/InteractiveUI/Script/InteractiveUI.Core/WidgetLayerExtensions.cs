@@ -129,7 +129,7 @@ public static class WidgetLayerExtensions
             cancellationToken
         );
     }
-    
+
     /// <summary>
     /// Asynchronously pushes a widget of the specified type into a specified layer
     /// for the given player controller, optionally suspends input until the operation completes, and optionally configures it.
@@ -157,7 +157,7 @@ public static class WidgetLayerExtensions
             layerName,
             widgetClass,
             suspendInputUntilComplete,
-            _ => {},
+            _ => { },
             cancellationToken
         );
     }

@@ -12,7 +12,7 @@ public class UPokemonIconDisplay : UPokemonDisplayBase
     [UProperty]
     [BindWidget]
     private UEnhancedImage Image { get; }
-    
+
     public override void Refresh()
     {
         if (Pokemon is null)
@@ -20,7 +20,7 @@ public class UPokemonIconDisplay : UPokemonDisplayBase
             Image.Visibility = ESlateVisibility.Hidden;
             return;
         }
-        
+
         var icon = UPokemonAssetLoader.ResolvePokemonIcon(Pokemon);
         Image.SetBrushFromLazyPaperFlipbook(icon, true);
         Image.Visibility = ESlateVisibility.SelfHitTestInvisible;

@@ -6,13 +6,13 @@ using UnrealSharp.UMG;
 
 namespace Pokemon.UI.Components.Common;
 
-[UClass( ClassFlags.Abstract)]
+[UClass(ClassFlags.Abstract)]
 public class UItemIconDisplay : UItemDisplayBase
 {
     [UProperty]
     [BindWidget]
     private UEnhancedImage Image { get; }
-    
+
     public override void Refresh()
     {
         if (!Item.IsValid)
@@ -20,7 +20,7 @@ public class UItemIconDisplay : UItemDisplayBase
             Image.Visibility = ESlateVisibility.Hidden;
             return;
         }
-        
+
         var icon = UIconAssetLoader.ResolveItemIcon(Item);
         Image.SetBrushFromLazyTexture(icon, true);
         Image.Visibility = ESlateVisibility.SelfHitTestInvisible;

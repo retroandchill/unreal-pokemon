@@ -13,16 +13,17 @@ public class UItemDisplayBase : UCommonUserWidget
         get;
         set
         {
-            if (field == value) return;
-            
+            if (field == value)
+                return;
+
             field = value;
             Refresh();
-        } 
+        }
     }
-    
-    [UFunction(FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent, Category = "Display")]
-    public virtual void Refresh()
-    {
-        
-    }
+
+    [UFunction(
+        FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent,
+        Category = "Display"
+    )]
+    public virtual void Refresh() { }
 }

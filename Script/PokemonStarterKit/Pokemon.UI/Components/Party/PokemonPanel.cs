@@ -25,40 +25,40 @@ public interface IPokemonPanelOwner
 public class UPokemonPanel : UPokemonButtonBase
 {
     public IPokemonPanelOwner? Owner { get; set; }
-    
+
     public int ButtonIndex { get; set; }
-    
+
     [UProperty]
     [BindWidget]
     private UPokemonDisplayBase PokemonIcon { get; }
-    
+
     [UProperty]
     [BindWidget]
     private UItemDisplayBase ItemIcon { get; }
-    
+
     [UProperty]
     [BindWidget]
     protected UCommonTextBlock NameText { get; }
-    
+
     [UProperty]
     [BindWidget]
     protected UCommonNumericTextBlock LevelText { get; }
-    
+
     [UProperty]
     [BindWidget]
     protected UEnhancedImage GenderIcon { get; }
-    
+
     [UProperty(PropertyFlags.EditDefaultsOnly, Category = "Display")]
     private TMap<EPokemonGender, UTexture2D> GenderIcons { get; }
-    
+
     [UProperty]
     [BindWidget]
     protected UProgressBar HPBar { get; }
-    
+
     [UProperty]
     [BindWidget]
     protected UCommonTextBlock HPText { get; }
-    
+
     [UProperty]
     [BindWidget]
     protected UEnhancedImage StatusEffectIcon { get; }
@@ -109,13 +109,14 @@ public class UPokemonPanel : UPokemonButtonBase
     {
         (Pokemon, other.Pokemon) = (other.Pokemon, Pokemon);
     }
-    
+
     public override void Refresh()
     {
         PokemonIcon.Pokemon = Pokemon;
 
-        if (Pokemon is null) return;
-        
+        if (Pokemon is null)
+            return;
+
         ItemIcon.Item = Pokemon.Item.ToNullable() ?? default;
         NameText.Text = Pokemon.Nickname;
         LevelText.CurrentValue = Pokemon.Level;
@@ -127,22 +128,25 @@ public class UPokemonPanel : UPokemonButtonBase
         }
         else
         {
-            GenderIcon.Visibility = ESlateVisibility.Hidden;       
+            GenderIcon.Visibility = ESlateVisibility.Hidden;
         }
 
         HPText.Text = $"{Pokemon.HP}/{Pokemon.MaxHP}";
-        HPBar.Percent = Pokemon.HP / (float) Pokemon.MaxHP;
+        HPBar.Percent = Pokemon.HP / (float)Pokemon.MaxHP;
 
         if (Pokemon.IsFainted)
         {
             StatusEffectIcon.Visibility = ESlateVisibility.SelfHitTestInvisible;
             var assetManager = UAssetManager.Get();
-            var faintedIcon = assetManager.GetSoftObjectReferenceFromPrimaryAssetId(AssetIds.StatusIcons_icon_faint);
+            var faintedIcon = assetManager.GetSoftObjectReferenceFromPrimaryAssetId(
+                AssetIds.StatusIcons_icon_faint
+            );
             StatusEffectIcon.SetBrushFromLazyTexture(faintedIcon.Cast<UTexture2D>(), true);
         }
         else
         {
-            Pokemon.StatusEffect.Match(s =>
+            Pokemon.StatusEffect.Match(
+                s =>
                 {
                     StatusEffectIcon.Visibility = ESlateVisibility.SelfHitTestInvisible;
                     var statusIcon = UIconAssetLoader.ResolveStatusEffectIcon(s);
@@ -151,7 +155,8 @@ public class UPokemonPanel : UPokemonButtonBase
                 () =>
                 {
                     StatusEffectIcon.Visibility = ESlateVisibility.Hidden;
-                });
+                }
+            );
         }
     }
 }

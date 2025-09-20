@@ -1,5 +1,7 @@
-﻿using Pokemon.Core;
+﻿using System.Diagnostics.CodeAnalysis;
+using Pokemon.Core;
 using Pokemon.Core.Entities;
+using Pokemon.Data;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
@@ -27,13 +29,14 @@ public class UPocketTabWidget : UCommonUserWidget
     }
 
     [UProperty]
+    [field: AllowNull, MaybeNull]
     public UItemSelectionWindow ItemSelectionWindow
     {
         get;
         set
         {
             field = value;
-            field.CurrentPocket = CurrentPocket;
+            field?.CurrentPocket = CurrentPocket;
         }
     }
 
@@ -47,6 +50,7 @@ public class UPocketTabWidget : UCommonUserWidget
     private TSubclassOf<UPocketButton> ButtonClass { get; }
 
     [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.EditFixedSize, Category = "Buttons")]
+    [Categories(IdentifierConstants.PocketTag)]
     private TMap<FGameplayTag, TSubclassOf<UCommonButtonStyle>> PocketButtonStyles { get; }
 
     [UProperty(PropertyFlags.EditAnywhere, Category = "Input")]
@@ -57,11 +61,11 @@ public class UPocketTabWidget : UCommonUserWidget
 
     [UProperty]
     [BindWidget]
-    private UCommonActionWidget PocketLeftWidget { get; }
+    private UCommonActionWidget PocketLeftActionWidget { get; }
 
     [UProperty]
     [BindWidget]
-    private UCommonActionWidget PocketRightWidget { get; }
+    private UCommonActionWidget PocketRightActionWidget { get; }
 
     public UPocketTabWidget()
     {
@@ -114,8 +118,8 @@ public class UPocketTabWidget : UCommonUserWidget
             PocketButtonGroup.AddWidget(pocketButton);
         }
 
-        PocketLeftWidget.EnhancedInputAction = PocketLeftAction;
-        PocketRightWidget.EnhancedInputAction = PocketRightAction;
+        PocketLeftActionWidget.EnhancedInputAction = PocketLeftAction;
+        PocketRightActionWidget.EnhancedInputAction = PocketRightAction;
     }
 
     public override void Construct()

@@ -13,14 +13,18 @@ public class UPokemonDisplayBase : UCommonUserWidget
         get;
         set
         {
-            if (ReferenceEquals(field, value)) return;
-            
+            if (ReferenceEquals(field, value))
+                return;
+
             field = value;
             Refresh();
-        } 
+        }
     }
-    
-    [UFunction(FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent, Category = "Display")]
+
+    [UFunction(
+        FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent,
+        Category = "Display"
+    )]
     public virtual void Refresh()
     {
         // No native implementation

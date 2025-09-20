@@ -2,8 +2,8 @@
 
 #include "Components/EnhancedImage.h"
 #include "InteractiveUI.h"
-#include "OptionalPtr.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "OptionalPtr.h"
 #include "PaperSprite.h"
 #include "Simple2D/Rendering/MaterialSettings.h"
 #include "Slate/SlateBrushAsset.h"
@@ -40,9 +40,9 @@ void UEnhancedImage::SetBrushFromAsset(USlateBrushAsset *Asset)
 {
     Super::SetBrushFromAsset(Asset);
     SetSourceImageInternal(TOptionalPtr(Asset)
-        .Map(&USlateBrushAsset::Brush)
-        .Map(&FSlateBrush::GetResourceObject)
-        .Get());
+                               .Map([](const USlateBrushAsset *SlateBrushAsset) { return &SlateBrushAsset->Brush; })
+                               .Map(&FSlateBrush::GetResourceObject)
+                               .Get());
     bManualSize = true;
 }
 
@@ -178,11 +178,17 @@ void UEnhancedImage::SynchronizeProperties()
 
     if (SourceImage != nullptr)
     {
-        if (auto* AsPaperFlipbook = Cast<UPaperFlipbook>(SourceImage.Get()); AsPaperFlipbook != nullptr)
+        if (auto *AsPaperFlipbook = Cast<UPaperFlipbook>(SourceImage.Get()); AsPaperFlipbook != nullptr)
         {
             FlipbookTicker.SetFlipbook(AsPaperFlipbook);
-        } else if (auto* AsSimpleFlipbook = Cast<USimpleFlipbook>(SourceImage.Get()); AsSimpleFlipbook != nullptr)
+        }
+        else if (auto *AsSimpleFlipbook = Cast<USimpleFlipbook>(SourceImage.Get()); AsSimpleFlipbook != nullptr)
         {
+            if (SimpleFlipbookMaterialInstance == nullptr)
+            {
+                CreateSimpleFlipbookMaterialInstance(*AsSimpleFlipbook);
+            }
+
             FlipbookTicker.SetFlipbook(AsSimpleFlipbook);
         }
     }
@@ -212,10 +218,9 @@ void UEnhancedImage::PostLoad()
 
 void UEnhancedImage::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent)
 {
-    Super::PostEditChangeProperty(PropertyChangedEvent);
     if (PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(UEnhancedImage, SourceImage))
     {
-        if (const auto* AsSimpleFlipbook = Cast<USimpleFlipbook>(SourceImage); AsSimpleFlipbook != nullptr)
+        if (const auto *AsSimpleFlipbook = Cast<USimpleFlipbook>(SourceImage); AsSimpleFlipbook != nullptr)
         {
             CreateSimpleFlipbookMaterialInstance(*AsSimpleFlipbook);
             SetBrushResourceObject(SimpleFlipbookMaterialInstance);
@@ -223,11 +228,11 @@ void UEnhancedImage::PostEditChangeProperty(FPropertyChangedEvent &PropertyChang
             if (!bManualSize)
             {
                 const auto *Texture = AsSimpleFlipbook->GetSourceTexture();
-                SetDesiredSizeOverride(
-                    FVector2D(Texture->GetSizeX() / AsSimpleFlipbook->GetColumns(), Texture->GetSizeY() / AsSimpleFlipbook->GetRows()));
+                SetDesiredSizeOverride(FVector2D(Texture->GetSizeX() / AsSimpleFlipbook->GetColumns(),
+                                                 Texture->GetSizeY() / AsSimpleFlipbook->GetRows()));
             }
         }
-        else if (const auto* AsPaperFlipbook = Cast<UPaperFlipbook>(SourceImage); AsPaperFlipbook != nullptr)
+        else if (const auto *AsPaperFlipbook = Cast<UPaperFlipbook>(SourceImage); AsPaperFlipbook != nullptr)
         {
             SetBrushResourceObject(AsPaperFlipbook->GetSpriteAtFrame(0));
 
@@ -244,17 +249,25 @@ void UEnhancedImage::PostEditChangeProperty(FPropertyChangedEvent &PropertyChang
             {
                 return;
             }
-            
-            if (const auto* AsTexture2D = Cast<UTexture2D>(SourceImage); AsTexture2D != nullptr) {
+
+            if (const auto *AsTexture2D = Cast<UTexture2D>(SourceImage); AsTexture2D != nullptr)
+            {
                 SetDesiredSizeOverride(FVector2D(AsTexture2D->GetSizeX(), AsTexture2D->GetSizeY()));
-            } else if (const auto* AsTexture2DDynamic = Cast<UTexture2DDynamic>(SourceImage); AsTexture2DDynamic != nullptr) {
+            }
+            else if (const auto *AsTexture2DDynamic = Cast<UTexture2DDynamic>(SourceImage);
+                     AsTexture2DDynamic != nullptr)
+            {
                 SetDesiredSizeOverride(FVector2D(AsTexture2DDynamic->SizeX, AsTexture2DDynamic->SizeY));
-            } else if (const auto* AsSlateTextureAtlasInterface = Cast<ISlateTextureAtlasInterface>(SourceImage); AsSlateTextureAtlasInterface != nullptr)
+            }
+            else if (const auto *AsSlateTextureAtlasInterface = Cast<ISlateTextureAtlasInterface>(SourceImage);
+                     AsSlateTextureAtlasInterface != nullptr)
             {
                 SetDesiredSizeOverride(AsSlateTextureAtlasInterface->GetSlateAtlasData().GetSourceDimensions());
             }
         }
     }
+
+    Super::PostEditChangeProperty(PropertyChangedEvent);
 }
 #endif
 

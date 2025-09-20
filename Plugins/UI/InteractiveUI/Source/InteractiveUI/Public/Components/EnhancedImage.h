@@ -83,7 +83,13 @@ class INTERACTIVEUI_API UEnhancedImage : public UCommonLazyImage, public FTickab
     UPROPERTY(BlueprintAssignable, Category = "PaperFlipbook|Widget|Event")
     FOnFlipbookFinishedPlaying OnFinishedPlaying;
 
-    UPROPERTY(EditAnywhere, Category = Appearance, meta=(DisplayThumbnail="true", AllowedClasses="/Script/Engine.Texture,/Script/Engine.MaterialInterface,/Script/Engine.SlateTextureAtlasInterface,/Script/Paper2D.PaperFlipbook,/Script/Simple2D.SimpleFlipbook", DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
+    UPROPERTY(
+        EditAnywhere, Category = Appearance,
+        meta = (DisplayThumbnail = "true",
+                AllowedClasses =
+                    "/Script/Engine.Texture,/Script/Engine.MaterialInterface,/Script/"
+                    "Engine.SlateTextureAtlasInterface,/Script/Paper2D.PaperFlipbook,/Script/Simple2D.SimpleFlipbook",
+                DisallowedClasses = "/Script/MediaAssets.MediaTexture"))
     TObjectPtr<UObject> SourceImage;
 
     /** Are we currently playing . */

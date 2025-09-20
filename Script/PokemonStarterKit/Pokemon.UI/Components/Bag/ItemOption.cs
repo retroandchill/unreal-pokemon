@@ -1,6 +1,9 @@
 ﻿using Pokemon.Data.Model.PBS;
+using Pokemon.UI.Components.Common;
 using UnrealSharp.Attributes;
+using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.CommonUI;
+using UnrealSharp.UMG;
 
 namespace Pokemon.UI.Components.Bag;
 
@@ -13,6 +16,22 @@ public class UItemOption : UCommonButtonBase
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Inventory")]
     public int Quantity { get; private set; }
 
+    [UProperty]
+    [BindWidgetOptional]
+    private UItemDisplayBase? ItemIcon { get; }
+
+    [UProperty]
+    [BindWidget]
+    private UCommonTextBlock ItemNameText { get; }
+
+    [UProperty]
+    [BindWidget]
+    private UCommonNumericTextBlock ItemQuantityText { get; }
+
+    [UProperty]
+    [BindWidgetOptional]
+    private UPanelWidget? ItemQuantityPanel { get; }
+
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Inventory")]
     public void SetItem(FItemHandle item, int quantity)
     {
@@ -24,6 +43,26 @@ public class UItemOption : UCommonButtonBase
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Display")]
     protected virtual void OnItemSet(FItemHandle item, int quantity)
     {
-        // No native implementation
+        ItemIcon?.Item = item;
+        ItemNameText.Text = item.Entry.Name;
+
+        if (item.Entry.ShowQuantity)
+        {
+            ItemQuantityPanel?.Visibility = ESlateVisibility.SelfHitTestInvisible;
+            ItemQuantityText.Visibility = ESlateVisibility.SelfHitTestInvisible;
+            ItemQuantityText.CurrentValue = quantity;
+        }
+        else
+        {
+            ItemQuantityPanel?.Visibility = ESlateVisibility.Collapsed;
+            ItemQuantityText.Visibility = ESlateVisibility.Collapsed;
+        }
+    }
+
+    protected override void OnCurrentTextStyleChanged()
+    {
+        var currentStyle = CurrentTextStyleClass;
+        ItemNameText.Style = currentStyle;
+        ItemQuantityText.Style = currentStyle;
     }
 }
