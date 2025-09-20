@@ -1,6 +1,8 @@
 # Unreal Pokémon
 *Created by Retro & Chill*
 
+**Note:** This project is undergoing a massive rewrite, and is currently not in a usable state.
+
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=retroandchill_unreal-pokemon&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=retroandchill_unreal-pokemon) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=retroandchill_unreal-pokemon&metric=coverage)](https://sonarcloud.io/summary/new_code?id=retroandchill_unreal-pokemon)
 
 This project is a starter kit for developing a Pokémon game in Unreal Engine 5. The intent of the project is to make the development of games like this as seamless as possible. 
