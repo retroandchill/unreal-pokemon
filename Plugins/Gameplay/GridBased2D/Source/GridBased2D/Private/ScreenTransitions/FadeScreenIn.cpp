@@ -19,5 +19,5 @@ void UFadeScreenIn::Activate()
         OnScreenTransitionFinished.Broadcast();
         SetReadyToDestroy();
     }));
-    GameMode->ScreenFadeIn();   
+    GameMode->ScreenFadeIn();
 }

@@ -1,11 +1,11 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Handles/DataHandlePinStructPin.h"
-#include "SSearchableComboBox.h"
 #include "Interop/GameDataTypeManagedCallbacks.h"
 #include "Misc/OutputDeviceNull.h"
-#include "TypeGenerator/CSScriptStruct.h"
 #include "RangeV3.h"
+#include "SSearchableComboBox.h"
+#include "TypeGenerator/CSScriptStruct.h"
 
 void SDataHandlePinStructPin::Construct(const FArguments &, UEdGraphPin *InGraphPin)
 {
@@ -20,7 +20,7 @@ void SDataHandlePinStructPin::ParseDefaultValueData()
 
     FOutputDeviceNull NullOut;
     StructType->ImportText(*GraphPinObj->GetDefaultAsString(), Handle.GetMutableMemory(), nullptr,
-        PPF_SerializedAsImportText, &NullOut, StructType->GetFName().ToString(), true);
+                           PPF_SerializedAsImportText, &NullOut, StructType->GetFName().ToString(), true);
 }
 
 TSharedRef<SWidget> SDataHandlePinStructPin::GetDefaultValueWidget()
@@ -28,7 +28,7 @@ TSharedRef<SWidget> SDataHandlePinStructPin::GetDefaultValueWidget()
     ParseDefaultValueData();
     const auto *CSStruct = CastChecked<UCSScriptStruct>(Handle.GetScriptStruct());
     const auto ManagedStructType = CSStruct->GetManagedTypeInfo<>()->GetManagedTypeHandle();
-    
+
     for (auto BaseOptions = FGameDataTypeManagedCallbacks::Get().GetDataHandleOptions(*ManagedStructType);
          const auto &Entry : BaseOptions)
     {
@@ -38,12 +38,13 @@ TSharedRef<SWidget> SDataHandlePinStructPin::GetDefaultValueWidget()
         ComboBoxOptions.Emplace(MakeShared<FString>(DisplayNameString));
     }
 
-    if (!ranges::any_of(Options | ranges::views::transform([](auto& Pair) { return Pair.Value; }) | ranges::views::transform(&FDataHandleEntry::ID), std::bind_front(&SDataHandlePinStructPin::RowMatches, this)) && !Options.IsEmpty())
+    if (!ranges::any_of(Options | ranges::views::transform([](auto &Pair) { return Pair.Value; }) |
+                            ranges::views::transform(&FDataHandleEntry::ID),
+                        std::bind_front(&SDataHandlePinStructPin::RowMatches, this)) &&
+        !Options.IsEmpty())
     {
         IDProperty->SetValue_InContainer(Handle.GetMutableMemory(), Options.begin()->Value.ID);
     }
-
-    
 
     auto &Item = GetItemString();
 
@@ -82,11 +83,10 @@ bool SDataHandlePinStructPin::RowMatches(const FName ID) const
 
 const TSharedPtr<FString> &SDataHandlePinStructPin::GetItemString() const
 {
-    const auto Result = Algo::FindByPredicate(ComboBoxOptions,
-        [this](const TSharedPtr<FString>& Str) {
-            auto &[ID, DisplayName] = Options.FindChecked(*Str);
-            return RowMatches(ID);
-        });
+    const auto Result = Algo::FindByPredicate(ComboBoxOptions, [this](const TSharedPtr<FString> &Str) {
+        auto &[ID, DisplayName] = Options.FindChecked(*Str);
+        return RowMatches(ID);
+    });
     check(Result != nullptr)
     return *Result;
 }

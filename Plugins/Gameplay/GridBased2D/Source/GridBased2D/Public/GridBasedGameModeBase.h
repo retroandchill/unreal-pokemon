@@ -38,15 +38,15 @@ class GRIDBASED2D_API AGridBasedGameModeBase : public AGameMode
 
     FDelegateHandle BindToOnScreenTransitionFinished(FSimpleDelegate Delegate)
     {
-        return OnScreenTransitionFinished.Add(MoveTemp(Delegate));   
+        return OnScreenTransitionFinished.Add(MoveTemp(Delegate));
     }
 
     void UnbindFromOnScreenTransitionFinished(const FDelegateHandle Handle)
     {
-        OnScreenTransitionFinished.Remove(Handle);   
+        OnScreenTransitionFinished.Remove(Handle);
     }
 
-protected:
+  protected:
     AActor *ChoosePlayerStart_Implementation(AController *Player) override;
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Screen Transitions")

@@ -18,7 +18,7 @@ public class PokemonUI : ModuleRules
                 "CommonUI",
                 "GameplayTags",
                 "EnhancedInput",
-                "DeveloperSettings"
+                "DeveloperSettings",
             }
         );
 

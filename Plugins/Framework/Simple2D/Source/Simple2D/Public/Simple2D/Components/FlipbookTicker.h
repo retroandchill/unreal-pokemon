@@ -13,9 +13,9 @@ namespace Simple2D
     class SIMPLE2D_API FFlipbookTicker
     {
 
-    public:
-      DECLARE_MULTICAST_DELEGATE_OneParam(FOnFrameIndexChanged, std::any);
-        
+      public:
+        DECLARE_MULTICAST_DELEGATE_OneParam(FOnFrameIndexChanged, std::any);
+
         FFlipbookTicker() = default;
 
         template <Flipbook T>
@@ -96,19 +96,25 @@ namespace Simple2D
             return OnFrameIndexChanged.Add(MoveTemp(InDelegate));
         }
 
-        void UnbindOnFrameIndexChanged(const FDelegateHandle Handle) { OnFrameIndexChanged.Remove(Handle); }
+        void UnbindOnFrameIndexChanged(const FDelegateHandle Handle)
+        {
+            OnFrameIndexChanged.Remove(Handle);
+        }
 
         FDelegateHandle BindOnFinishedPlaying(FSimpleDelegate InDelegate)
         {
             return OnFinishedPlaying.Add(MoveTemp(InDelegate));
         }
 
-        void UnbindOnFinishedPlaying(const FDelegateHandle Handle) { OnFinishedPlaying.Remove(Handle); }
+        void UnbindOnFinishedPlaying(const FDelegateHandle Handle)
+        {
+            OnFinishedPlaying.Remove(Handle);
+        }
 
       private:
         FOnFrameIndexChanged OnFrameIndexChanged;
         FSimpleMulticastDelegate OnFinishedPlaying;
-        
+
         FFlipbookProxy Proxy;
 
         float PlayRate = 1.0;

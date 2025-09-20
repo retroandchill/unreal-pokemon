@@ -9,9 +9,7 @@ public class GridBased2D : ModuleRules
     {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicDependencyModuleNames.AddRange(
-            new string[] { "Core", "Paper2D" }
-        );
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "Paper2D" });
 
         PrivateDependencyModuleNames.AddRange(
             new string[]
@@ -22,7 +20,9 @@ public class GridBased2D : ModuleRules
                 "SlateCore",
                 "EnhancedInput",
                 "DeveloperSettings",
-                "AudioPlaybackManager", "RangeV3", "CommonUtilities",
+                "AudioPlaybackManager",
+                "RangeV3",
+                "CommonUtilities",
             }
         );
     }

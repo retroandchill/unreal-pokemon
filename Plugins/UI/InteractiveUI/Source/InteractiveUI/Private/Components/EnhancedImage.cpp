@@ -1,16 +1,16 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/EnhancedImage.h"
+#include "Engine/Texture2DDynamic.h"
 #include "InteractiveUI.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "OptionalPtr.h"
+#include "PaperFlipbook.h"
 #include "PaperSprite.h"
+#include "Simple2D/Assets/SimpleFlipbook.h"
 #include "Simple2D/Rendering/MaterialSettings.h"
 #include "Slate/SlateBrushAsset.h"
 #include "UObject/ConstructorHelpers.h"
-#include "Engine/Texture2DDynamic.h"
-#include "PaperFlipbook.h"
-#include "Simple2D/Assets/SimpleFlipbook.h"
 
 DECLARE_CYCLE_STAT(TEXT("Tick Enhanced Image"), STAT_TickEnhancedImage, STATGROUP_InteractiveUI);
 
@@ -21,7 +21,8 @@ UEnhancedImage::UEnhancedImage()
     SimpleFlipbookBaseMaterial = MaskedMaterialRef.Object;
 
     using FOnIndexChanged = Simple2D::FFlipbookTicker::FOnFrameIndexChanged::FDelegate;
-    FlipbookTicker.BindOnFinishedPlaying(FSimpleDelegate::CreateUObject(this, &UEnhancedImage::OnFlipbookFinishedPlaying));
+    FlipbookTicker.BindOnFinishedPlaying(
+        FSimpleDelegate::CreateUObject(this, &UEnhancedImage::OnFlipbookFinishedPlaying));
     FlipbookTicker.BindOnFrameIndexChanged(FOnIndexChanged::CreateUObject(this, &UEnhancedImage::OnFrameIndexChanged));
 }
 
@@ -117,21 +118,20 @@ void UEnhancedImage::SetBrushFromSimpleFlipbook(USimpleFlipbook *Flipbook, const
 }
 
 void UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook,
-                                                             const bool bMatchSize)
+                                                   const bool bMatchSize)
 {
     if (!LazyFlipbook.IsNull())
     {
-        TWeakObjectPtr WeakThis(this); // using weak ptr in case 'this' has gone out of scope by the time this lambda is called
+        TWeakObjectPtr WeakThis(
+            this); // using weak ptr in case 'this' has gone out of scope by the time this lambda is called
 
-        RequestAsyncLoad(LazyFlipbook,
-            [WeakThis, LazyFlipbook, bMatchSize]() {
-                if (auto* StrongThis = WeakThis.Get())
-                {
-                    ensureMsgf(LazyFlipbook.Get(), TEXT("Failed to load %s"), *LazyFlipbook.ToSoftObjectPath().ToString());
-                    StrongThis->SetBrushFromPaperFlipbook(LazyFlipbook.Get(), bMatchSize);
-                }
+        RequestAsyncLoad(LazyFlipbook, [WeakThis, LazyFlipbook, bMatchSize]() {
+            if (auto *StrongThis = WeakThis.Get())
+            {
+                ensureMsgf(LazyFlipbook.Get(), TEXT("Failed to load %s"), *LazyFlipbook.ToSoftObjectPath().ToString());
+                StrongThis->SetBrushFromPaperFlipbook(LazyFlipbook.Get(), bMatchSize);
             }
-        );
+        });
     }
     else
     {
@@ -141,21 +141,20 @@ void UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFl
 }
 
 void UEnhancedImage::SetBrushFromLazySimpleFlipbook(const TSoftObjectPtr<USimpleFlipbook> &LazyFlipbook,
-                                                              bool bMatchSize)
+                                                    bool bMatchSize)
 {
     if (!LazyFlipbook.IsNull())
     {
-        TWeakObjectPtr WeakThis(this); // using weak ptr in case 'this' has gone out of scope by the time this lambda is called
+        TWeakObjectPtr WeakThis(
+            this); // using weak ptr in case 'this' has gone out of scope by the time this lambda is called
 
-        RequestAsyncLoad(LazyFlipbook,
-            [WeakThis, LazyFlipbook, bMatchSize]() {
-                if (auto* StrongThis = WeakThis.Get())
-                {
-                    ensureMsgf(LazyFlipbook.Get(), TEXT("Failed to load %s"), *LazyFlipbook.ToSoftObjectPath().ToString());
-                    StrongThis->SetBrushFromSimpleFlipbook(LazyFlipbook.Get(), bMatchSize);
-                }
+        RequestAsyncLoad(LazyFlipbook, [WeakThis, LazyFlipbook, bMatchSize]() {
+            if (auto *StrongThis = WeakThis.Get())
+            {
+                ensureMsgf(LazyFlipbook.Get(), TEXT("Failed to load %s"), *LazyFlipbook.ToSoftObjectPath().ToString());
+                StrongThis->SetBrushFromSimpleFlipbook(LazyFlipbook.Get(), bMatchSize);
             }
-        );
+        });
     }
     else
     {

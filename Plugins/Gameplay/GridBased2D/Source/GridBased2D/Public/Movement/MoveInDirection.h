@@ -36,7 +36,7 @@ class GRIDBASED2D_API UMoveInDirection : public UBlueprintAsyncActionBase
     static UMoveInDirection *MoveInDirection(const TScriptInterface<IGridMovable> &Character,
                                              EFacingDirection MovementDirection);
 
-  void Activate() override;
+    void Activate() override;
 
   private:
     /**

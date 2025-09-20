@@ -160,8 +160,7 @@ class INTERACTIVEUI_API USelectableWidget : public UCommonActivatableWidget
     template <typename T>
     auto GetSelectableOptions() const
     {
-        return SelectableButtons |
-               ranges::views::transform([](UCommonButtonBase* B) { return CastChecked<T>(B); });
+        return SelectableButtons | ranges::views::transform([](UCommonButtonBase *B) { return CastChecked<T>(B); });
     }
 
     /**

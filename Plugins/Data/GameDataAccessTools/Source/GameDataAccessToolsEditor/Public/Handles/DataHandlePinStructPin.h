@@ -32,10 +32,11 @@ class GAMEDATAACCESSTOOLSEDITOR_API SDataHandlePinStructPin : public SGraphPinSt
       private:
         bool RowMatches(FName ID) const;
         const TSharedPtr<FString> &GetItemString() const;
-        FText GetItemText() const;;
+        FText GetItemText() const;
+        ;
 
         TMap<FString, FDataHandleEntry> Options;
         TArray<TSharedPtr<FString>> ComboBoxOptions;
         FInstancedStruct Handle;
-        FNameProperty* IDProperty = nullptr;
+        FNameProperty *IDProperty = nullptr;
     };

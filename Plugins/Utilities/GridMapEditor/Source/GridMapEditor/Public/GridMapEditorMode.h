@@ -27,8 +27,7 @@ class GRIDMAPEDITOR_API FGridMapEditorMode : public FEdMode
 
     bool StartTracking(FEditorViewportClient *InViewportClient, FViewport *InViewport) override;
     bool EndTracking(FEditorViewportClient *InViewportClient, FViewport *InViewport) override;
-    bool MouseMove(FEditorViewportClient *ViewportClient, FViewport *Viewport, int32 MouseX,
-                   int32 MouseY) override;
+    bool MouseMove(FEditorViewportClient *ViewportClient, FViewport *Viewport, int32 MouseX, int32 MouseY) override;
     bool CapturedMouseMove(FEditorViewportClient *InViewportClient, FViewport *InViewport, int32 InMouseX,
                            int32 InMouseY) override;
     bool InputKey(FEditorViewportClient *InViewportClient, FViewport *InViewport, FKey InKey,

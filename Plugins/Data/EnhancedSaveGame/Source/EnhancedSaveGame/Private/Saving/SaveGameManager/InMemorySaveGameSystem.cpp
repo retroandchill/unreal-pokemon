@@ -18,22 +18,17 @@ bool FInMemorySaveGameSystem::DoesSaveSystemSupportMultipleUsers()
 
 bool FInMemorySaveGameSystem::DoesSaveGameExist(const TCHAR *Name, const int32 UserIndex)
 {
-    return TOptionalPtr(SaveGames.Find(Name))
-        .MapToValue(false, [UserIndex](const TMap<int32, TArray<uint8>> *Map) {
-               return Map->Contains(UserIndex);
-           });
+    return TOptionalPtr(SaveGames.Find(Name)).MapToValue(false, [UserIndex](const TMap<int32, TArray<uint8>> *Map) {
+        return Map->Contains(UserIndex);
+    });
 }
 
 ISaveGameSystem::ESaveExistsResult FInMemorySaveGameSystem::DoesSaveGameExistWithResult(const TCHAR *Name,
                                                                                         const int32 UserIndex)
 {
     return TOptionalPtr(SaveGames.Find(Name))
-        .Map([UserIndex](const TMap<int32, TArray<uint8>> *Map) {
-               return Map->Find(UserIndex);
-           })
-        .MapToValue(ESaveExistsResult::DoesNotExist, [](const TArray<uint8> *) {
-               return ESaveExistsResult::OK;
-           });
+        .Map([UserIndex](const TMap<int32, TArray<uint8>> *Map) { return Map->Find(UserIndex); })
+        .MapToValue(ESaveExistsResult::DoesNotExist, [](const TArray<uint8> *) { return ESaveExistsResult::OK; });
 }
 
 bool FInMemorySaveGameSystem::SaveGame(bool bAttemptToUseUI, const TCHAR *Name, const int32 UserIndex,
@@ -64,6 +59,8 @@ bool FInMemorySaveGameSystem::LoadGame(bool bAttemptToUseUI, const TCHAR *Name, 
 
 bool FInMemorySaveGameSystem::DeleteGame(bool bAttemptToUseUI, const TCHAR *Name, const int32 UserIndex)
 {
-    return TOptionalPtr(SaveGames.Find(Name)).MapToValue(0, [UserIndex](TMap<int32, TArray<uint8>> *Map) { return Map->Remove(UserIndex); }) > 0;
+    return TOptionalPtr(SaveGames.Find(Name)).MapToValue(0, [UserIndex](TMap<int32, TArray<uint8>> *Map) {
+        return Map->Remove(UserIndex);
+    }) > 0;
 }
 #endif

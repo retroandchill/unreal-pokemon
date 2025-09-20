@@ -44,12 +44,10 @@ class INTERACTIVEUI_API UEnhancedImage : public UCommonLazyImage, public FTickab
     virtual void SetBrushFromSimpleFlipbook(USimpleFlipbook *Flipbook, bool bMatchSize = false);
 
     UFUNCTION(BlueprintCallable, Category = LazyImage)
-    void SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook,
-                                                 bool bMatchSize = false);
+    void SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook, bool bMatchSize = false);
 
     UFUNCTION(BlueprintCallable, Category = LazyImage)
-    void SetBrushFromLazySimpleFlipbook(const TSoftObjectPtr<USimpleFlipbook> &LazyFlipbook,
-                                                  bool bMatchSize = false);
+    void SetBrushFromLazySimpleFlipbook(const TSoftObjectPtr<USimpleFlipbook> &LazyFlipbook, bool bMatchSize = false);
 
     void Tick(float DeltaTime) override;
     TStatId GetStatId() const override;

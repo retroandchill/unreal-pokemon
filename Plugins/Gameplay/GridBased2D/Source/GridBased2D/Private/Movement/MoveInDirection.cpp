@@ -29,16 +29,16 @@ void UMoveInDirection::Activate()
     }
 
     auto *MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Character.GetObject());
-    MovementComponent->MoveInDirection(MovementDirection, FSimpleDelegate::CreateWeakLambda(this, [this, PlayerController, bCanInput, Pawn] {
-        if (PlayerController != nullptr && bCanInput)
-        {
-            Pawn->EnableInput(PlayerController);
-        }
+    MovementComponent->MoveInDirection(
+        MovementDirection, FSimpleDelegate::CreateWeakLambda(this, [this, PlayerController, bCanInput, Pawn] {
+            if (PlayerController != nullptr && bCanInput)
+            {
+                Pawn->EnableInput(PlayerController);
+            }
 
-        OnMovementFinished.Broadcast();
-        SetReadyToDestroy();
-    }));
-    
+            OnMovementFinished.Broadcast();
+            SetReadyToDestroy();
+        }));
 }
 
 /*

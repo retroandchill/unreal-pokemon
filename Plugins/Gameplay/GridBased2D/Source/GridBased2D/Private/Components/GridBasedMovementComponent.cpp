@@ -11,12 +11,11 @@
 #include "RangeV3.h"
 
 template <typename A, typename B, typename C, typename D>
-        requires std::is_arithmetic_v<A> && std::is_arithmetic_v<B> && std::is_arithmetic_v<C> &&
-                 std::is_arithmetic_v<D> &&
-                 (std::is_floating_point_v<A> || std::is_floating_point_v<B> || std::is_floating_point_v<C> ||
-                  std::is_floating_point_v<D>)
-    static constexpr auto LinearInterpolation(A StartValue, B EndValue, C Duration, D Delta)
-        -> decltype(StartValue * EndValue * Duration * Delta)
+    requires std::is_arithmetic_v<A> && std::is_arithmetic_v<B> && std::is_arithmetic_v<C> && std::is_arithmetic_v<D> &&
+             (std::is_floating_point_v<A> || std::is_floating_point_v<B> || std::is_floating_point_v<C> ||
+              std::is_floating_point_v<D>)
+static constexpr auto LinearInterpolation(A StartValue, B EndValue, C Duration, D Delta)
+    -> decltype(StartValue * EndValue * Duration * Delta)
 {
     if (Duration <= 0)
         return EndValue;
@@ -258,13 +257,12 @@ TArray<TScriptInterface<IInteractable>> UGridBasedMovementComponent::InteractTes
     auto Results = HitTestOnFacingTile(MovementDirection);
     TArray<TScriptInterface<IInteractable>> Interactables;
     Interactables.Reserve(Results.Num());
-    for (auto Interface : Results |
-           ranges::views::transform(&FOverlapResult::GetActor) |
-           ranges::views::filter(&AActor::Implements<UInteractable>))
+    for (auto Interface : Results | ranges::views::transform(&FOverlapResult::GetActor) |
+                              ranges::views::filter(&AActor::Implements<UInteractable>))
     {
         Interactables.Emplace(Interface);
     }
-    return Interactables;   
+    return Interactables;
 }
 
 void UGridBasedMovementComponent::HitInteraction(const TArray<TScriptInterface<IInteractable>> &Interactables) const
@@ -298,8 +296,8 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime)
     if (CurrentPosition.X != DesiredPosition.X)
     {
         int32 Distance = FMath::Abs(CurrentPosition.X - DesiredPosition.X);
-        Position.X = LinearInterpolation(CurrentPosition.X * GridSize, DesiredPosition.X * GridSize,
-                                                MoveTime * Distance, Timer);
+        Position.X =
+            LinearInterpolation(CurrentPosition.X * GridSize, DesiredPosition.X * GridSize, MoveTime * Distance, Timer);
 
         if (Timer >= MoveTime * Distance)
         {
@@ -310,8 +308,8 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime)
     if (CurrentPosition.Y != DesiredPosition.Y)
     {
         int32 Distance = FMath::Abs(CurrentPosition.Y - DesiredPosition.Y);
-        Position.Y = LinearInterpolation(CurrentPosition.Y * GridSize, DesiredPosition.Y * GridSize,
-                                                MoveTime * Distance, Timer);
+        Position.Y =
+            LinearInterpolation(CurrentPosition.Y * GridSize, DesiredPosition.Y * GridSize, MoveTime * Distance, Timer);
 
         if (Timer >= MoveTime * Distance)
         {

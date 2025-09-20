@@ -38,7 +38,9 @@ public class EnhancedSaveGame : ModuleRules
                 "Engine",
                 "Slate",
                 "SlateCore",
-                "GameplayTags", "CommonUtilities", "RangeV3",
+                "GameplayTags",
+                "CommonUtilities",
+                "RangeV3",
                 // ... add private dependencies that you statically link with here ...
             }
         );

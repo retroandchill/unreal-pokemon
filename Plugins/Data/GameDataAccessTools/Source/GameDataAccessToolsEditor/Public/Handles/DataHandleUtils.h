@@ -6,5 +6,5 @@
 
 namespace GameData
 {
-    bool IsDataHandleStruct(UScriptStruct* Struct);
+    bool IsDataHandleStruct(UScriptStruct *Struct);
 }

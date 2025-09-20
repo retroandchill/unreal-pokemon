@@ -38,7 +38,7 @@ static void SetTileInfos(UGridMapTileSet &TileSet, const TArray<UStaticMesh *> &
     TileSet.Tiles.Reserve(TileBasicInfos.size());
     for (auto &TileBasicInfo : TileBasicInfos)
     {
-        TileSet.Tiles.Add(MakeTileList(TileBasicInfo, Tiles));       
+        TileSet.Tiles.Add(MakeTileList(TileBasicInfo, Tiles));
     }
 }
 

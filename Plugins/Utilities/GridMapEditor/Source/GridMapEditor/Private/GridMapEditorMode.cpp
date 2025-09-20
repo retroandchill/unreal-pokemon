@@ -501,7 +501,9 @@ bool FGridMapEditorMode::TilesAt(UWorld *World, const FVector &Origin, int32 Lay
 
     auto TileSize = GetTileSize();
     auto TileHeight = GetTileHeight();
-    auto Scaled = ActiveTileSet != nullptr ? FUintVector(ActiveTileSet->SizeX, ActiveTileSet->SizeY, ActiveTileSet->SizeZ) : FUintVector(1);
+    auto Scaled = ActiveTileSet != nullptr
+                      ? FUintVector(ActiveTileSet->SizeX, ActiveTileSet->SizeY, ActiveTileSet->SizeZ)
+                      : FUintVector(1);
     auto ScaledGridWidth = static_cast<int32>(TileSize * Scaled.X * .95f / 2.f);
     auto ScaledGridLength = static_cast<int32>(TileSize * Scaled.Y * .95f / 2.f);
     auto ScaledGridHeight = static_cast<int32>(TileHeight * Scaled.Z / 2.f);

@@ -28,7 +28,7 @@ class GRIDBASED2D_API UFadeScreenIn : public UBlueprintAsyncActionBase
 
     void Activate() override;
 
-private:
+  private:
     /**
      * Called when the transition is finished
      */

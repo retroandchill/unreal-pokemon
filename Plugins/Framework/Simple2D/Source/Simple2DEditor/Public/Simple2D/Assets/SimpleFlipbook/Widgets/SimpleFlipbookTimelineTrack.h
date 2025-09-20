@@ -87,7 +87,7 @@ namespace Simple2D
             FOptionalSize GetFrameWidth() const;
 
             // Can return null
-        const FSimpleFlipbookKeyFrame *GetKeyFrameData() const;
+            const FSimpleFlipbookKeyFrame *GetKeyFrameData() const;
 
           private:
             int32 FrameIndex = 0;
