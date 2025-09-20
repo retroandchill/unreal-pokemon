@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Pokemon/Stats/StatBlock.h"
 #include "Widgets/SCompoundWidget.h"
 
 class SConstraintCanvas;
@@ -30,7 +29,7 @@ class POKEMONUI_API SPokemonStatGraph : public SCompoundWidget
         {
         }
 
-        SLATE_ARGUMENT(TArray<FMainStatHandle>, StatNames)
+        SLATE_ARGUMENT(TArray<FName>, StatNames)
         SLATE_ATTRIBUTE(float, DefaultAngleOffset)
         SLATE_ARGUMENT(FLinearColor, GridLinesColor)
         SLATE_ARGUMENT(FLinearColor, NodeLinesColor)
@@ -58,36 +57,6 @@ class POKEMONUI_API SPokemonStatGraph : public SCompoundWidget
                       bool bParentEnabled) const override;
         void Tick(const FGeometry &AllottedGeometry, const double InCurrentTime, const float InDeltaTime) override;
         FVector2D ComputeDesiredSize(float LayoutScaleMultiplier) const override;
-
-        /**
-         * @brief Retrieves a pointer to the Pokémon interface.
-         *
-         * This method returns a constant reference to a TWeakInterfacePtr
-         * object, which is a weak pointer to an IPokemon interface. It is
-         * used to access the Pokémon associated with this stat graph
-         * without taking ownership of the object.
-         *
-         * @return A constant reference to a TWeakInterfacePtr object representing
-         *         a weak pointer to the IPokemon interface.
-         */
-        const TWeakInterfacePtr<IPokemon> &GetPokemon() const
-        {
-            return Pokemon;
-        }
-
-        /**
-         * @brief Sets the current Pokémon.
-         *
-         * This method assigns the provided Pokémon object to the internal
-         * Pokémon reference, allowing the class to manage and manipulate
-         * the specified Pokémon.
-         *
-         * @param InPokemon The Pokémon object to be set.
-         */
-        void SetPokemon(const TScriptInterface<IPokemon> &InPokemon)
-        {
-            Pokemon = InPokemon;
-        }
 
         /**
          * @brief Retrieves the color used for the grid lines in the stat graph.
@@ -180,8 +149,7 @@ class POKEMONUI_API SPokemonStatGraph : public SCompoundWidget
 
         void PaintLines(const FGeometry &AllottedGeometry, FSlateWindowElementList &OutDrawElements,
                         int32 &DrawLayerId) const;
-        TWeakInterfacePtr<IPokemon> Pokemon;
-        TArray<FMainStatHandle> StatNames;
+        TArray<FName> StatNames;
         TArray<FVector2D> CachedNodeLocations;
 
         TAttribute<float> AngleOffsetAttribute;

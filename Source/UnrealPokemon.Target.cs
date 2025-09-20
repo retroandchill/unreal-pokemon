@@ -20,7 +20,6 @@ public class UnrealPokemonTarget : TargetRules
             new string[]
             {
                 "PokemonData",
-                "PokemonCore",
                 "GridBased2D",
                 "InteractiveUI",
                 "PokemonUI",

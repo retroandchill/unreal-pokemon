@@ -3,23 +3,6 @@
 #include "DesktopPlatformModule.h"
 #include "GameplayTagsEditorModule.h"
 #include "GameplayTagsManager.h"
-#include "PokemonDataSettings.h"
-
-TArray<FStat> UImportUtils::GetMainStatsFromTable(const UDataTable *const DataTable)
-{
-    TArray<FStat *> References;
-    DataTable->GetAllRows(TEXT("UImportUtils::GetMainStatsFromTable"), References);
-    TArray<FStat> Ret;
-    for (const auto Ref : References)
-    {
-        if (Ref->Type == EPokemonStatType::Battle)
-            continue;
-
-        Ret.Add(*Ref);
-    }
-
-    return Ret;
-}
 
 FText UImportUtils::SelectFile(const FString &FileTypes)
 {
@@ -39,11 +22,6 @@ FText UImportUtils::SelectFile(const FString &FileTypes)
     }
 
     return FText::FromStringView(SelectedFiles[0]);
-}
-
-const TMap<uint8, FName> &UImportUtils::GetPocketNames()
-{
-    return GetDefault<UPokemonDataSettings>()->PocketNames;
 }
 
 bool UImportUtils::TryAddGameplayTagToIni(FName TagSource, const FString &TagName, FString &Error)

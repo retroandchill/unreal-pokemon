@@ -14,14 +14,11 @@ public class PokemonUI : ModuleRules
             {
                 "Core",
                 "PokemonData",
-                "PokemonCore",
                 "InteractiveUI",
-                "PokemonAssets",
                 "CommonUI",
                 "GameplayTags",
                 "EnhancedInput",
                 "DeveloperSettings",
-                "PokemonItems",
                 "UE5Coro",
                 "RetroLib",
             }
@@ -38,7 +35,6 @@ public class PokemonUI : ModuleRules
                 "RenderCore",
                 "UnrealInjector",
                 "CommonInput",
-                "PokemonItems",
                 "Paper2D",
                 "EnhancedSaveGame",
             }
