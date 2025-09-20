@@ -1,4 +1,6 @@
-﻿using Pokemon.Core.Entities;
+﻿using InteractiveUI.Core.Selection;
+using InteractiveUI.Core.Utilities;
+using Pokemon.Core.Entities;
 using Pokemon.UI.Components.Party;
 using UnrealSharp;
 using UnrealSharp.Attributes;
@@ -11,7 +13,7 @@ namespace Pokemon.UI.Components.Common;
 public delegate void OnPokemonSelected(UPokemon pokemon);
 
 [UClass(ClassFlags.Abstract)]
-public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
+public class UPokemonSelectionWidgetBase : UOwningSelectionWidget, IPokemonPanelOwner
 {
     [UProperty(PropertyFlags.EditAnywhere, Category = "Display")]
     private TSubclassOf<UPokemonPanel> PanelClass { get; }
@@ -31,13 +33,15 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
 
     public UPokemonPanel? FindPanelForPokemon(UPokemon pokemon)
     {
-        return GetSelectableOptions<UPokemonPanel>()
+        return Buttons
+            .GetButtons<UPokemonPanel>()
+            .Select(x => x.Button)
             .FirstOrDefault(x => ReferenceEquals(x.Pokemon, pokemon));
     }
 
     public void SetPokemonToDisplay(IReadOnlyList<UPokemon> pokemonList)
     {
-        ClearSelectableOptions();
+        Buttons.RemoveAll();
         foreach (var blankPanel in BlankPanels)
         {
             blankPanel.RemoveFromParent();
@@ -54,12 +58,12 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
                 newWidget.Owner = this;
                 newWidget.ButtonIndex = i;
                 newWidget.Pokemon = pokemonList[i];
-                SlotOption(newWidget);
+                Buttons.AddWidget(newWidget);
             }
             else
             {
                 var newWidget = WidgetTree.ConstructWidget(BlankPanelClass);
-                PlaceOptionIntoWidget(newWidget, i);
+                SlotButton(i, newWidget);
                 BlankPanels.Add(newWidget);
             }
         }
@@ -67,7 +71,7 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
 
     public void Refresh()
     {
-        foreach (var panel in GetSelectableOptions<UPokemonPanel>())
+        foreach (var (_, panel) in Buttons.GetButtons<UPokemonPanel>())
         {
             panel.Refresh();
         }
@@ -82,7 +86,7 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
         }
 
         SwitchingIndex = startIndex;
-        GetSelectableOption<UPokemonPanel>(startIndex)?.Refresh();
+        Buttons.GetButton<UPokemonPanel>(startIndex)?.Refresh();
     }
 
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Switching")]
@@ -93,8 +97,8 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
             throw new InvalidOperationException("Not switching");
         }
 
-        var panel1 = GetSelectableOption<UPokemonPanel>(SwitchingIndex.Value)!;
-        var panel2 = GetSelectableOption<UPokemonPanel>(Index)!;
+        var panel1 = Buttons.GetRequiredButton<UPokemonPanel>(SwitchingIndex.Value);
+        var panel2 = Buttons.GetRequiredButton<UPokemonPanel>(DesiredFocusIndex);
         SwitchingIndex = null;
         PerformSwap(panel1, panel2);
     }
@@ -106,8 +110,8 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
             throw new InvalidOperationException("Not switching");
         }
 
-        var panel1 = GetSelectableOption<UPokemonPanel>(SwitchingIndex.Value)!;
-        var panel2 = GetSelectableOption<UPokemonPanel>(Index)!;
+        var panel1 = Buttons.GetRequiredButton<UPokemonPanel>(SwitchingIndex.Value);
+        var panel2 = Buttons.GetRequiredButton<UPokemonPanel>(DesiredFocusIndex);
         SwitchingIndex = null;
         panel1.Refresh();
         panel2.Refresh();
@@ -119,13 +123,10 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
     )]
     public virtual void ToggleCommandVisibility(bool visible) { }
 
-    protected override void OnSelectionChange(int oldIndex, int newIndex)
+    private void OnSelectionChange(int index)
     {
         Refresh();
-        if (newIndex != -1)
-        {
-            OnPokemonSelected.Invoke(GetSelectableOption<UPokemonPanel>(newIndex)!.Pokemon!);
-        }
+        OnPokemonSelected.Invoke(Buttons.GetRequiredButton<UPokemonPanel>(index).Pokemon!);
     }
 
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Switching")]
@@ -141,6 +142,8 @@ public class UPokemonSelectionWidgetBase : USelectableWidget, IPokemonPanelOwner
         panel1.Refresh();
         panel2.Refresh();
 
-        OnPokemonSelected.Invoke(GetSelectableOption<UPokemonPanel>(Index)!.Pokemon!);
+        OnPokemonSelected.Invoke(
+            Buttons.GetRequiredButton<UPokemonPanel>(DesiredFocusIndex).Pokemon!
+        );
     }
 }

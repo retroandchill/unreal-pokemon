@@ -33,18 +33,12 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
         );
     }
 
-    public override void Construct()
-    {
-        SelectionPane.Index = 0;
-        SelectionPane.ActivateWidget();
-    }
-
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Switching")]
     public void BeginSwitch(int index)
     {
         SelectionPane.ToggleCommandVisibility(true);
 
-        SelectionPane.Index = index;
+        SelectionPane.DesiredFocusIndex = index;
         SelectionPane.BeginSwitch(index);
         SelectionPane.ActivateWidget();
     }

@@ -1,4 +1,5 @@
-﻿using Pokemon.Core.Entities;
+﻿using InteractiveUI.Core.Selection;
+using Pokemon.Core.Entities;
 using Pokemon.Data.Model.PBS;
 using UnrealSharp;
 using UnrealSharp.Attributes;
@@ -17,7 +18,7 @@ public delegate void OnItemChanged(FItemHandle item, int quantity);
 public delegate void OnNoItemSelected();
 
 [UClass(ClassFlags.Abstract)]
-public class UItemSelectionWindow : USelectableWidget
+public class UItemSelectionWindow : UOwningSelectionWidget
 {
     [UProperty(PropertyFlags.EditAnywhere, Category = "Display")]
     private TSubclassOf<UItemOption> ItemEntryClass { get; }
@@ -51,9 +52,12 @@ public class UItemSelectionWindow : USelectableWidget
         }
     }
 
-    public FItemHandle CurrentItem => GetSelectableOption<UItemOption>(Index)?.Item ?? default;
-
-    public int ItemQuantity => GetSelectableOption<UItemOption>(Index)?.Quantity ?? 0;
+    public override void Construct()
+    {
+        base.Construct();
+        Buttons.OnHoveredButtonBaseChanged += [UFunction] (_, i) => OnSelectionChange(i);
+        Buttons.OnButtonBaseClicked += [UFunction] (_, i) => ProcessConfirm(i);
+    }
 
     public void Refresh()
     {
@@ -72,13 +76,11 @@ public class UItemSelectionWindow : USelectableWidget
         UpdatePocket();
     }
 
-    protected override void OnSelectionChange(int oldIndex, int newIndex)
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Items|Selection")]
+    private void OnSelectionChange(int index)
     {
-        base.OnSelectionChange(oldIndex, newIndex);
-        Bag.SetLastViewedIndex(CurrentPocket, newIndex);
-        var option = GetSelectableOption<UItemOption>(newIndex);
-
-        if (option is not null)
+        Bag.SetLastViewedIndex(CurrentPocket, index);
+        if (Buttons.GetButtonBaseAtIndex(index) is UItemOption option)
         {
             OnItemChanged.Invoke(option.Item, option.Quantity);
         }
@@ -88,37 +90,32 @@ public class UItemSelectionWindow : USelectableWidget
         }
     }
 
-    protected override void ProcessConfirm(int currentIndex)
+    protected void ProcessConfirm(int currentIndex)
     {
-        var option = GetSelectableOption<UItemOption>(currentIndex);
-        if (option is null)
+        if (Buttons.GetButtonBaseAtIndex(currentIndex) is not UItemOption option)
             throw new InvalidOperationException("No option at index");
         OnItemSelected.Invoke(option.Item, option.Quantity);
     }
 
-    protected override void ProcessCancel()
+    protected override bool OnHandleBackAction()
     {
         OnNoItemSelected.Invoke();
+        return true;
     }
 
     private void UpdatePocket()
     {
-        ClearSelectableOptions();
+        Buttons.RemoveAll();
         foreach (var (item, quantity) in Bag.AllItems[CurrentPocket])
         {
-            AddItemToWindow(item, quantity);
+            if (_itemFilter is not null && !_itemFilter(item))
+                return;
+
+            var option = WidgetTree.ConstructWidget(ItemEntryClass);
+            option.SetItem(item, quantity);
+            Buttons.AddWidget(option);
         }
-        Index = Math.Clamp(0, ItemCount - 1, Index);
+        DesiredFocusIndex = Math.Clamp(DesiredFocusIndex, 0, Buttons.ButtonCount - 1);
         OnPocketChanged.Invoke(CurrentPocket);
-    }
-
-    private void AddItemToWindow(FItemHandle item, int quantity)
-    {
-        if (_itemFilter is not null && !_itemFilter(item))
-            return;
-
-        var option = WidgetTree.ConstructWidget(ItemEntryClass);
-        option.SetItem(item, quantity);
-        SlotOption(option);
     }
 }

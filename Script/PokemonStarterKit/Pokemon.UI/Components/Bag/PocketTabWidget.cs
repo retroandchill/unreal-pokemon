@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using InteractiveUI.Core.Selection;
+using InteractiveUI.Core.Utilities;
 using Pokemon.Core;
 using Pokemon.Core.Entities;
 using Pokemon.Data;
@@ -38,11 +40,8 @@ public class UPocketTabWidget : UCommonUserWidget
         }
     }
 
-    [UProperty]
-    private TArray<UPocketButton> PocketButtons { get; set; }
-
-    [UProperty]
-    private UInteractiveButtonGroup PocketButtonGroup { get; set; }
+    [UProperty(PropertyFlags.Transient)]
+    private USelectableButtonGroup PocketButtonGroup { get; set; }
 
     [UProperty(PropertyFlags.EditAnywhere, Category = "Buttons")]
     private TSubclassOf<UPocketButton> ButtonClass { get; }
@@ -85,20 +84,16 @@ public class UPocketTabWidget : UCommonUserWidget
             PocketButtonGroup?.RemoveAll();
         }
 
-        PocketButtonGroup = NewObject<UInteractiveButtonGroup>(this);
+        PocketButtonGroup = NewObject<USelectableButtonGroup>(this);
         PocketButtonGroup.OnButtonAdded += [UFunction]
-        (i, b) =>
+        (_, b) =>
         {
-            var button = (UPocketButton)b;
-            PocketButtons.Add(button);
-            SlotButton(button);
+            SlotButton(b);
         };
         PocketButtonGroup.OnButtonRemoved += [UFunction]
         (b) =>
         {
-            var button = (UPocketButton)b;
             b.RemoveFromParent();
-            PocketButtons.Remove(button);
         };
         PocketButtonGroup.OnSelectedButtonBaseChanged += [UFunction]
         (b, i) =>
@@ -123,15 +118,17 @@ public class UPocketTabWidget : UCommonUserWidget
     public override void Construct()
     {
         RegisterUIActionBinding(new FCSBindUIActionArgs(PocketLeftAction, false, PocketLeft));
-        RegisterUIActionBinding(new FCSBindUIActionArgs(PocketRightAction, false, PocketLeft));
+        RegisterUIActionBinding(new FCSBindUIActionArgs(PocketRightAction, false, PocketRight));
 
         var subsystem = GetGameInstanceSubsystem<UPokemonSubsystem>();
         var lastPocket = subsystem.Bag.LastViewedPocket;
-        CurrentPocket = lastPocket.IsValid ? lastPocket : PocketButtons[0].Pocket;
+        CurrentPocket = lastPocket.IsValid
+            ? lastPocket
+            : PocketButtonGroup.GetRequiredButton<UPocketButton>(0).Pocket;
     }
 
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Buttons")]
-    protected virtual void SlotButton(UPocketButton button)
+    protected virtual void SlotButton(UCommonButtonBase button)
     {
         // No native implementation
     }
