@@ -54,8 +54,10 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
     USummaryPages *GetSummaryPages() const;
 
+    /*
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly, Category = Widgets)
     UPokemonSelectionPaneBase *GetPokemonSelection() const;
+    */
 
   private:
     /**
@@ -67,8 +69,10 @@ class POKEMONUI_API UPokemonSummaryScreen : public UScreen
     UPROPERTY(meta = (BindWidget))
     TObjectPtr<USummaryTabWidget> SummaryTabs;
 
+    /*
     UPROPERTY(BlueprintGetter = GetPokemonSelection, Category = Widgets, meta = (BindWidget))
     TObjectPtr<UPokemonSelectionPaneBase> PokemonSelection;
+    */
 };
 
 DECLARE_INJECTABLE_DEPENDENCY(POKEMONUI_API, UPokemonSummaryScreen)

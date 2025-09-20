@@ -11,9 +11,7 @@
 #include "PrimaryGameLayout.h"
 #include "RetroLib/Optionals/IfPresent.h"
 #include "RetroLib/Utils/StringUtilities.h"
-#include "Screens/BagScreen.h"
 #include "Screens/MoveForgetScreen.h"
-#include "Screens/PokemonSelectScreen.h"
 #include "Screens/Screen.h"
 #include "Screens/TextDisplayScreen.h"
 #include "Settings/PokemonMessageSettings.h"
@@ -67,16 +65,22 @@ UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::DisplayConfirmPrompt(
 UE5Coro::TCoroutine<TOptional<FSelectedPokemonHandle>> UPokemonCoroutineDispatcherImpl::SelectPokemonFromParty(
     FForceLatentCoroutine) const
 {
+    /*
     auto Screen = UPokemonSelectScreen::AddPokemonSelectScreenToStack(this);
     co_return co_await Screen->PromptPokemonSelection();
+    */
+    co_return TOptional<FSelectedPokemonHandle>();
 }
 
 UE5Coro::TCoroutine<TOptional<FSelectedItemHandle>> UPokemonCoroutineDispatcherImpl::SelectItemFromBag(
     const FItemFilter &Filter, FForceLatentCoroutine) const
 {
+    /*
     auto Screen = UBagScreen::AddBagScreenToStack(this);
     Screen->ApplyItemFilter(Filter);
     co_return co_await Screen->PromptItemSelection();
+    */
+    co_return TOptional<FSelectedItemHandle>();
 }
 
 UE5Coro::TCoroutine<bool> UPokemonCoroutineDispatcherImpl::PromptReplaceMove(const TScriptInterface<IPokemon> &Pokemon,
