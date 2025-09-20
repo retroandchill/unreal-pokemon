@@ -24,7 +24,6 @@ public class UnrealPokemonTarget : TargetRules
                 "InteractiveUI",
                 "PokemonUI",
                 "UnrealPokemon",
-                "TileReplacer",
                 "PaperZDHelpers",
             }
         );

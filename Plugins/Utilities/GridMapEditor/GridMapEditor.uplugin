@@ -24,11 +24,6 @@
 			"Name": "GridMapEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "GridMapTests",
-			"Type": "Editor",
-			"LoadingPhase": "Default"
 		}
 	]
 }

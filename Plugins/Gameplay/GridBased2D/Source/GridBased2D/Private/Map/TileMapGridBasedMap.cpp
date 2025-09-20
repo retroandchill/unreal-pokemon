@@ -4,7 +4,6 @@
 #include "GridBased2DSettings.h"
 #include "GridUtils.h"
 #include "PaperTileMap.h"
-#include "Replacement/TileReplacerComponent.h"
 
 // Sets default values
 ATileMapGridBasedMap::ATileMapGridBasedMap()
@@ -18,10 +17,6 @@ ATileMapGridBasedMap::ATileMapGridBasedMap()
     TileMapComponent = CreateDefaultSubobject<UPaperTileMapComponent>(TEXT("Map"));
     TileMapComponent->SetRelativeRotation(FRotator(0, 0, -90));
     TileMapComponent->SetupAttachment(RootComponent);
-
-#if WITH_EDITORONLY_DATA
-    TileReplacer = CreateDefaultSubobject<UTileReplacerComponent>(TEXT("TileReplacer"));
-#endif
 
     auto Settings = GetDefault<UGridBased2DSettings>();
     TerrainTagDataTable = Cast<UDataTable>(Settings->GetTerrainTagDataTable().TryLoad());
@@ -58,22 +53,6 @@ void ATileMapGridBasedMap::PostEditMove(bool bFinished)
     SetUpMapLocation(bFinished);
 }
 #endif
-
-void ATileMapGridBasedMap::RefreshTileData()
-{
-#if WITH_EDITORONLY_DATA
-    TileReplacer->RestoreCachedTiles(TileMapComponent);
-    TileReplacer->ReplaceTiles(TileMapComponent);
-#endif
-}
-
-void ATileMapGridBasedMap::ClearTileReplacements()
-{
-
-#if WITH_EDITORONLY_DATA
-    TileReplacer->RestoreCachedTiles(TileMapComponent);
-#endif
-}
 
 FIntRect ATileMapGridBasedMap::GetBounds() const
 {

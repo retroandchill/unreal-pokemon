@@ -18,20 +18,7 @@
 			"Name": "DayNightCycle",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "DayNightCycleTests",
-			"Type": "Editor",
-			"LoadingPhase": "Default"
 		}
 	],
-	"SupportURL": "",
-	"Plugins": [
-		{
-			"Name": "AutomationTestHelpers",
-			"Enabled": true,
-			"Optional": true,
-			"PluginType": "Provided"
-		}
-	]
+	"SupportURL": ""
 }

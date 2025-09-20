@@ -18,11 +18,6 @@
 			"Name": "GridBased2D",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "GridBased2DTests",
-			"Type": "Editor",
-			"LoadingPhase": "Default"
 		}
 	],
 	"SupportURL": "",
@@ -32,23 +27,12 @@
 			"Enabled": true
 		},
 		{
-			"Name": "TileReplacer",
-			"Enabled": true,
-			"PluginType": "Provided"
-		},
-		{
 			"Name": "EnhancedInput",
 			"Enabled": true
 		},
 		{
 			"Name": "AudioPlaybackManager",
 			"Enabled": true,
-			"PluginType": "Provided"
-		},
-		{
-			"Name": "AutomationTestHelpers",
-			"Enabled": true,
-			"Optional": true,
 			"PluginType": "Provided"
 		}
 	]

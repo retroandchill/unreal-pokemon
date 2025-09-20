@@ -31,12 +31,6 @@
 			"Enabled": true
 		},
 		{
-			"Name": "AutomationTestHelpers",
-			"Enabled": true,
-			"Optional": true,
-			"PluginType": "Provided"
-		},
-		{
 			"Name": "Simple2D",
 			"Enabled": true,
 			"PluginType": "Provided"

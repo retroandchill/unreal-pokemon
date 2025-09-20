@@ -39,7 +39,6 @@ public class UnrealPokemonEditorTarget : TargetRules
                 "InteractiveUI",
                 "PokemonUI",
                 "UnrealPokemon",
-                "TileReplacer",
                 "UnrealPokemonEditor",
                 "PaperZDHelpers",
             }

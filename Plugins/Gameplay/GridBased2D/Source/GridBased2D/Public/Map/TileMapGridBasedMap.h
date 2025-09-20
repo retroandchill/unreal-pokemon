@@ -2,7 +2,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
 #include "GridBasedMapBase.h"
 #include "PaperTileMapComponent.h"
 
@@ -10,7 +9,6 @@
 
 class IGridMovable;
 class AGameCharacter;
-class UTileReplacerComponent;
 class IWithinMap;
 class UDataTable;
 
@@ -38,18 +36,6 @@ class GRIDBASED2D_API ATileMapGridBasedMap : public AGridBasedMapBase
 #endif
 
   public:
-    /**
-     * Refresh the tiles, replacing any tiles that need to be replaced
-     */
-    UFUNCTION(BlueprintCallable, CallInEditor, Category = "Tiles")
-    void RefreshTileData();
-
-    /**
-     * Clear all tile replacements, restoring the original tiles to their rightful place.
-     */
-    UFUNCTION(BlueprintCallable, CallInEditor, Category = "Tiles")
-    void ClearTileReplacements();
-
     FIntRect GetBounds() const override;
 
   private:
@@ -64,14 +50,6 @@ class GRIDBASED2D_API ATileMapGridBasedMap : public AGridBasedMapBase
      */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
     TObjectPtr<UPaperTileMapComponent> TileMapComponent;
-
-#if WITH_EDITORONLY_DATA
-    /**
-     * The component used to replace tiles with animated/autotiles
-     */
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
-    TObjectPtr<UTileReplacerComponent> TileReplacer;
-#endif
 
     /**
      * The layer of the tilemap that is at the same level as the player

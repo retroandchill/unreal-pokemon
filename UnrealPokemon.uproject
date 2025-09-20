@@ -71,14 +71,6 @@
 			"Enabled": true
 		},
 		{
-			"Name": "TileReplacer",
-			"Enabled": true
-		},
-		{
-			"Name": "AutomationTestHelpers",
-			"Enabled": true
-		},
-		{
 			"Name": "GameplayAbilities",
 			"Enabled": true
 		},

@@ -21,7 +21,6 @@ public class GridBased2D : ModuleRules
                 "Slate",
                 "SlateCore",
                 "EnhancedInput",
-                "TileReplacer",
                 "DeveloperSettings",
                 "AudioPlaybackManager", "RangeV3", "CommonUtilities",
             }
