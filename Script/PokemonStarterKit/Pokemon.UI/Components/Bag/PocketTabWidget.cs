@@ -6,11 +6,9 @@ using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.CommonUI;
-using UnrealSharp.CoreUObject;
 using UnrealSharp.EnhancedInput;
 using UnrealSharp.GameplayTags;
 using UnrealSharp.InteractiveUI;
-using UnrealSharp.PokemonUI;
 using UnrealSharp.UnrealSharpCommonUI;
 
 namespace Pokemon.UI.Components.Bag;

@@ -6,7 +6,6 @@
 #include "Engine/CancellableAsyncAction.h"
 #include "GameplayTagContainer.h"
 #include "PrimaryGameLayout.h"
-#include "UE5Coro.h"
 
 #include "PushWidgetToLayerAsyncAction.generated.h"
 

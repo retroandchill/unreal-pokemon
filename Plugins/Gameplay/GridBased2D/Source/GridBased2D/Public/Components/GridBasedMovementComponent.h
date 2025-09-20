@@ -9,7 +9,6 @@
 #include "Engine/OverlapResult.h"
 #include "GridBasedMovement.h"
 #include "Map/WithinMap.h"
-#include "UE5Coro.h"
 
 #include "GridBasedMovementComponent.generated.h"
 
@@ -56,7 +55,7 @@ class GRIDBASED2D_API UGridBasedMovementComponent : public UActorComponent, publ
      * @param MovementDirection The functor to call when movement is completed
      * @param
      */
-    UE5Coro::TCoroutine<> MoveInDirection(EFacingDirection MovementDirection, FForceLatentCoroutine = {});
+    void MoveInDirection(EFacingDirection MovementDirection, FSimpleDelegate OnComplete = FSimpleDelegate());
 
     /**
      * Check to see if the character can move in the specified direction

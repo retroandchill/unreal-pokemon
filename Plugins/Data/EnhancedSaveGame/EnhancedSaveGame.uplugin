@@ -27,17 +27,6 @@
 	],
 	"Plugins": [
 		{
-			"Name": "RetroLib",
-			"Enabled": true,
-			"PluginType": "Provided"
-		},
-		{
-			"Name": "UnrealInjector",
-			"Enabled": true,
-			"Optional": true,
-			"PluginType": "Provided"
-		},
-		{
 			"Name": "FunctionalTestingEditor",
 			"Enabled": true
 		}

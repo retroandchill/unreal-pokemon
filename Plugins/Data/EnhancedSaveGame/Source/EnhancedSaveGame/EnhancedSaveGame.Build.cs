@@ -38,7 +38,7 @@ public class EnhancedSaveGame : ModuleRules
                 "Engine",
                 "Slate",
                 "SlateCore",
-                "GameplayTags",
+                "GameplayTags", "CommonUtilities", "RangeV3",
                 // ... add private dependencies that you statically link with here ...
             }
         );
@@ -49,15 +49,5 @@ public class EnhancedSaveGame : ModuleRules
                 // ... add any modules that your module loads dynamically here ...
             }
         );
-
-        if (!string.IsNullOrEmpty(GetModuleDirectory("UnrealInjector")))
-        {
-            PublicDependencyModuleNames.Add("UnrealInjector");
-            PublicDefinitions.Add("WITH_UNREAL_INJECTOR=1");
-        }
-        else
-        {
-            PublicDefinitions.Add("WITH_UNREAL_INJECTOR=0");
-        }
     }
 }

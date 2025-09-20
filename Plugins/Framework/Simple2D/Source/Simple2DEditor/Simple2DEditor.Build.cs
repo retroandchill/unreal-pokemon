@@ -14,7 +14,6 @@ public class Simple2DEditor : ModuleRules
                 "Simple2D",
                 "UnrealEd",
                 "EditorWidgets",
-                "RetroLib",
                 "KismetWidgets",
                 "DeveloperSettings",
             }

@@ -1,25 +1,24 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Camera/CameraSubsystem.h"
+#include "OptionalPtr.h"
 #include "Camera/PlayerCameraManager.h"
 #include "Engine/GameInstance.h"
 #include "Engine/LocalPlayer.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
-#include "RetroLib/Optionals/IfPresent.h"
-#include "RetroLib/Optionals/Transform.h"
+#include "RangeV3.h"
 
 void UCameraSubsystem::OnWorldBeginPlay(UWorld &InWorld)
 {
     Super::OnWorldBeginPlay(InWorld);
 
     // clang-format off
-    Retro::Optionals::OfNullable(InWorld.GetGameInstance()) |
-        Retro::Optionals::Transform(Retro::BindBack<&UGameInstance::GetPrimaryPlayerController>(false)) |
-        Retro::Optionals::Transform(&APlayerController::GetLocalPlayer) |
-        Retro::Optionals::Transform(&ULocalPlayer::GetLocalPlayerIndex) |
-        Retro::Optionals::IfPresent([this, &InWorld](int32 PlayerIndex) {
-            PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(&InWorld, PlayerIndex);
+    TOptionalPtr(InWorld.GetGameInstance())
+        .Map(ranges::bind_back(&UGameInstance::GetPrimaryPlayerController, false))
+        .Map(&APlayerController::GetLocalPlayer)
+        .IfPresent([this, &InWorld](ULocalPlayer *Player) {
+            PlayerCameraManager = UGameplayStatics::GetPlayerCameraManager(&InWorld, Player->GetLocalPlayerIndex());
         });
     // clang-format on
 }

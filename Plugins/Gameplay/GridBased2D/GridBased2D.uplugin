@@ -41,11 +41,6 @@
 			"Enabled": true
 		},
 		{
-			"Name": "RetroLib",
-			"Enabled": true,
-			"PluginType": "Provided"
-		},
-		{
 			"Name": "AudioPlaybackManager",
 			"Enabled": true,
 			"PluginType": "Provided"

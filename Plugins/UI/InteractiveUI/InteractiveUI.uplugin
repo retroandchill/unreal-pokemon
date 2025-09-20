@@ -37,16 +37,6 @@
 			"PluginType": "Provided"
 		},
 		{
-			"Name": "RetroLib",
-			"Enabled": true,
-			"PluginType": "Provided"
-		},
-		{
-			"Name": "UnrealInjector",
-			"Enabled": true,
-			"PluginType": "Provided"
-		},
-		{
 			"Name": "Simple2D",
 			"Enabled": true,
 			"PluginType": "Provided"

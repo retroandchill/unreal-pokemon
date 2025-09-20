@@ -4,8 +4,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "CommonActivatableWidget.h"
-#include "RetroLib/Casting/DynamicCast.h"
-#include "RetroLib/Ranges/Views/NameAliases.h"
+#include <range/v3/view/transform.hpp>
 
 #include "SelectableWidget.generated.h"
 
@@ -161,10 +160,8 @@ class INTERACTIVEUI_API USelectableWidget : public UCommonActivatableWidget
     template <typename T>
     auto GetSelectableOptions() const
     {
-        // clang-format off
         return SelectableButtons |
-               Retro::Ranges::Views::Transform(Retro::DynamicCastChecked<T>);
-        // clang-format on
+               ranges::views::transform([](UCommonButtonBase* B) { return CastChecked<T>(B); });
     }
 
     /**

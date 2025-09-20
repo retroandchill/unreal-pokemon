@@ -4,22 +4,11 @@
 #include "GameFramework/PlayerStart.h"
 #include "GridBased2DSettings.h"
 #include "Map/MapSubsystem.h"
-#include "RetroLib/Async/AsyncHelpers.h"
 
 double AGridBasedGameModeBase::GetGridSize() const
 {
     static const double DefaultGridSize = GetDefault<UGridBased2DSettings>()->GetGridSize();
     return GridSize.Get(DefaultGridSize);
-}
-
-UE5Coro::TCoroutine<> AGridBasedGameModeBase::FadeIn(FForceLatentCoroutine)
-{
-    co_await Retro::BindToDelegateDispatch(OnScreenTransitionFinished, [this] { ScreenFadeIn(); });
-}
-
-UE5Coro::TCoroutine<> AGridBasedGameModeBase::FadeOut(FForceLatentCoroutine)
-{
-    co_await Retro::BindToDelegateDispatch(OnScreenTransitionFinished, [this] { ScreenFadeOut(); });
 }
 
 AActor *AGridBasedGameModeBase::ChoosePlayerStart_Implementation(AController *Player)

@@ -8,12 +8,27 @@
 #include "Kismet/GameplayStatics.h"
 #include "Map/MapSubsystem.h"
 #include "Map/TileMapGridBasedMap.h"
-#include "RetroLib/Casting/DynamicCast.h"
-#include "RetroLib/Casting/UClassCasts.h"
-#include "RetroLib/Ranges/Algorithm/To.h"
-#include "RetroLib/Ranges/Views/NameAliases.h"
-#include "RetroLib/Utils/BlueprintMathUtils.h"
-#include "RetroLib/Utils/Math.h"
+#include "RangeV3.h"
+
+template <typename A, typename B, typename C, typename D>
+        requires std::is_arithmetic_v<A> && std::is_arithmetic_v<B> && std::is_arithmetic_v<C> &&
+                 std::is_arithmetic_v<D> &&
+                 (std::is_floating_point_v<A> || std::is_floating_point_v<B> || std::is_floating_point_v<C> ||
+                  std::is_floating_point_v<D>)
+    static constexpr auto LinearInterpolation(A StartValue, B EndValue, C Duration, D Delta)
+        -> decltype(StartValue * EndValue * Duration * Delta)
+{
+    if (Duration <= 0)
+        return EndValue;
+
+    if (Delta <= 0)
+        return StartValue;
+
+    if (Delta >= Duration)
+        return EndValue;
+
+    return StartValue + (EndValue - StartValue) * Delta / Duration;
+}
 
 UGridBasedMovementComponent::UGridBasedMovementComponent() : CurrentPosition(0, 0), DesiredPosition(0, 0)
 {
@@ -69,30 +84,28 @@ void UGridBasedMovementComponent::TickComponent(float DeltaTime, ELevelTick Tick
     UpdateAnimation(DeltaTime);
 }
 
-UE5Coro::TCoroutine<> UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirection,
-                                                                   FForceLatentCoroutine)
+void UGridBasedMovementComponent::MoveInDirection(EFacingDirection MovementDirection, FSimpleDelegate OnComplete)
 {
     if (MoveCallback.IsBound())
     {
         UE_LOG(LogBlueprint, Warning, TEXT("The movement timer is already set for character: %s"),
                *GetOwner()->GetName())
-        co_return;
+        return;
     }
 
     FaceDirection(MovementDirection);
     if (auto [bCanMove, FoundActors] = MovementCheck(MovementDirection); !bCanMove)
     {
         HitInteraction(FoundActors);
-        co_return;
     }
 
     UGridUtils::AdjustMovementPosition(MovementDirection, DesiredPosition);
 
+    MoveCallback = MoveTemp(OnComplete);
     MoveTimer.Emplace(0.f);
     StopTimer.Reset();
     bIsMoving = true;
     OnMovementStateChange.Broadcast(true);
-    co_await MoveCallback;
 }
 
 FMoveCheckResult UGridBasedMovementComponent::MovementCheck(EFacingDirection MovementDirection) const
@@ -243,13 +256,15 @@ TArray<TScriptInterface<IInteractable>> UGridBasedMovementComponent::InteractTes
     EFacingDirection MovementDirection) const
 {
     auto Results = HitTestOnFacingTile(MovementDirection);
-    // clang-format off
-    return Results |
-           Retro::Ranges::Views::Transform(&FOverlapResult::GetActor) |
-           Retro::Ranges::Views::Filter(&AActor::Implements<UInteractable>) |
-           Retro::Ranges::Views::Transform(Retro::AsInterface<IInteractable>) |
-           Retro::Ranges::To<TArray>();
-    // clang-format on
+    TArray<TScriptInterface<IInteractable>> Interactables;
+    Interactables.Reserve(Results.Num());
+    for (auto Interface : Results |
+           ranges::views::transform(&FOverlapResult::GetActor) |
+           ranges::views::filter(&AActor::Implements<UInteractable>))
+    {
+        Interactables.Emplace(Interface);
+    }
+    return Interactables;   
 }
 
 void UGridBasedMovementComponent::HitInteraction(const TArray<TScriptInterface<IInteractable>> &Interactables) const
@@ -283,7 +298,7 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime)
     if (CurrentPosition.X != DesiredPosition.X)
     {
         int32 Distance = FMath::Abs(CurrentPosition.X - DesiredPosition.X);
-        Position.X = Retro::LinearInterpolation(CurrentPosition.X * GridSize, DesiredPosition.X * GridSize,
+        Position.X = LinearInterpolation(CurrentPosition.X * GridSize, DesiredPosition.X * GridSize,
                                                 MoveTime * Distance, Timer);
 
         if (Timer >= MoveTime * Distance)
@@ -295,7 +310,7 @@ void UGridBasedMovementComponent::UpdateMovement(float DeltaTime)
     if (CurrentPosition.Y != DesiredPosition.Y)
     {
         int32 Distance = FMath::Abs(CurrentPosition.Y - DesiredPosition.Y);
-        Position.Y = Retro::LinearInterpolation(CurrentPosition.Y * GridSize, DesiredPosition.Y * GridSize,
+        Position.Y = LinearInterpolation(CurrentPosition.Y * GridSize, DesiredPosition.Y * GridSize,
                                                 MoveTime * Distance, Timer);
 
         if (Timer >= MoveTime * Distance)

@@ -2,13 +2,13 @@
 
 #pragma once
 
-#include "RetroLib/Concepts/Structs.h"
+#include "Structs/UnrealStruct.h"
 #include <any>
 
 namespace Simple2D
 {
     template <typename T>
-    concept FlipbookKeyFrame = Retro::UEStruct<T> && requires(T &&KeyFrame) {
+    concept FlipbookKeyFrame = UEStruct<T> && requires(T &&KeyFrame) {
         { std::forward<T>(KeyFrame).FrameRun } -> std::convertible_to<int32>;
     };
 

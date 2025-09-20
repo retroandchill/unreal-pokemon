@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GridBasedGameModeBase.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
-#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #include "FadeScreenOut.generated.h"
 
@@ -13,7 +12,7 @@
  * Async Node for fading the screen out
  */
 UCLASS()
-class GRIDBASED2D_API UFadeScreenOut : public UBlueprintCoroutineActionBase
+class GRIDBASED2D_API UFadeScreenOut : public UBlueprintAsyncActionBase
 {
     GENERATED_BODY()
 
@@ -27,8 +26,7 @@ class GRIDBASED2D_API UFadeScreenOut : public UBlueprintCoroutineActionBase
               meta = (WorldContext = WorldContextObject))
     static UFadeScreenOut *FadeScreenOut(const UObject *WorldContextObject);
 
-  protected:
-    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
+    void Activate() override;
 
   private:
     /**
@@ -36,4 +34,7 @@ class GRIDBASED2D_API UFadeScreenOut : public UBlueprintCoroutineActionBase
      */
     UPROPERTY(BlueprintAssignable)
     FOnScreenTransitionFinished OnScreenTransitionFinished;
+
+    UPROPERTY()
+    TObjectPtr<const UObject> WorldContext;
 };

@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Characters/FacingDirection.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
-#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #include "MoveInDirection.generated.h"
 
@@ -22,7 +21,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMovementFinished);
  * on player control will be taken away if the character being moved is the player.
  */
 UCLASS(meta = (HideThen))
-class GRIDBASED2D_API UMoveInDirection : public UBlueprintCoroutineActionBase
+class GRIDBASED2D_API UMoveInDirection : public UBlueprintAsyncActionBase
 {
     GENERATED_BODY()
 
@@ -37,8 +36,7 @@ class GRIDBASED2D_API UMoveInDirection : public UBlueprintCoroutineActionBase
     static UMoveInDirection *MoveInDirection(const TScriptInterface<IGridMovable> &Character,
                                              EFacingDirection MovementDirection);
 
-  protected:
-    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
+  void Activate() override;
 
   private:
     /**

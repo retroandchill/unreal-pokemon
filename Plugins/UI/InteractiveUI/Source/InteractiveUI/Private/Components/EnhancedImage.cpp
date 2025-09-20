@@ -8,6 +8,9 @@
 #include "Simple2D/Rendering/MaterialSettings.h"
 #include "Slate/SlateBrushAsset.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Engine/Texture2DDynamic.h"
+#include "PaperFlipbook.h"
+#include "Simple2D/Assets/SimpleFlipbook.h"
 
 DECLARE_CYCLE_STAT(TEXT("Tick Enhanced Image"), STAT_TickEnhancedImage, STATGROUP_InteractiveUI);
 
@@ -17,8 +20,9 @@ UEnhancedImage::UEnhancedImage()
         TEXT("/Simple2D/Materials/MaskedWidgetFlipbookMaterial"));
     SimpleFlipbookBaseMaterial = MaskedMaterialRef.Object;
 
-    FlipbookTicker.BindToOnFinishedPlaying(this, &UEnhancedImage::OnFlipbookFinishedPlaying);
-    FlipbookTicker.BindToOnFrameIndexChanged(this, &UEnhancedImage::OnFrameIndexChanged);
+    using FOnIndexChanged = Simple2D::FFlipbookTicker::FOnFrameIndexChanged::FDelegate;
+    FlipbookTicker.BindOnFinishedPlaying(FSimpleDelegate::CreateUObject(this, &UEnhancedImage::OnFlipbookFinishedPlaying));
+    FlipbookTicker.BindOnFrameIndexChanged(FOnIndexChanged::CreateUObject(this, &UEnhancedImage::OnFrameIndexChanged));
 }
 
 void UEnhancedImage::SetBrush(const FSlateBrush &InBrush)
@@ -112,14 +116,22 @@ void UEnhancedImage::SetBrushFromSimpleFlipbook(USimpleFlipbook *Flipbook, const
     }
 }
 
-FVoidCoroutine UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook,
-                                                             const bool bMatchSize, FForceLatentCoroutine)
+void UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook,
+                                                             const bool bMatchSize)
 {
     if (!LazyFlipbook.IsNull())
     {
-        auto *LoadedAsset = co_await UE5Coro::Latent::AsyncLoadObject(LazyFlipbook);
-        ensureMsgf(LoadedAsset != nullptr, TEXT("Failed to load %s"), *LazyFlipbook.ToSoftObjectPath().ToString());
-        SetBrushFromPaperFlipbook(LoadedAsset, bMatchSize);
+        TWeakObjectPtr WeakThis(this); // using weak ptr in case 'this' has gone out of scope by the time this lambda is called
+
+        RequestAsyncLoad(LazyFlipbook,
+            [WeakThis, LazyFlipbook, bMatchSize]() {
+                if (auto* StrongThis = WeakThis.Get())
+                {
+                    ensureMsgf(LazyFlipbook.Get(), TEXT("Failed to load %s"), *LazyFlipbook.ToSoftObjectPath().ToString());
+                    StrongThis->SetBrushFromPaperFlipbook(LazyFlipbook.Get(), bMatchSize);
+                }
+            }
+        );
     }
     else
     {
@@ -128,14 +140,22 @@ FVoidCoroutine UEnhancedImage::SetBrushFromLazyPaperFlipbook(const TSoftObjectPt
     }
 }
 
-FVoidCoroutine UEnhancedImage::SetBrushFromLazySimpleFlipbook(const TSoftObjectPtr<USimpleFlipbook> &LazyFlipbook,
-                                                              bool bMatchSize, FForceLatentCoroutine)
+void UEnhancedImage::SetBrushFromLazySimpleFlipbook(const TSoftObjectPtr<USimpleFlipbook> &LazyFlipbook,
+                                                              bool bMatchSize)
 {
     if (!LazyFlipbook.IsNull())
     {
-        auto *LoadedAsset = co_await UE5Coro::Latent::AsyncLoadObject(LazyFlipbook);
-        ensureMsgf(LoadedAsset != nullptr, TEXT("Failed to load %s"), *LazyFlipbook.ToSoftObjectPath().ToString());
-        SetBrushFromSimpleFlipbook(LoadedAsset, bMatchSize);
+        TWeakObjectPtr WeakThis(this); // using weak ptr in case 'this' has gone out of scope by the time this lambda is called
+
+        RequestAsyncLoad(LazyFlipbook,
+            [WeakThis, LazyFlipbook, bMatchSize]() {
+                if (auto* StrongThis = WeakThis.Get())
+                {
+                    ensureMsgf(LazyFlipbook.Get(), TEXT("Failed to load %s"), *LazyFlipbook.ToSoftObjectPath().ToString());
+                    StrongThis->SetBrushFromSimpleFlipbook(LazyFlipbook.Get(), bMatchSize);
+                }
+            }
+        );
     }
     else
     {

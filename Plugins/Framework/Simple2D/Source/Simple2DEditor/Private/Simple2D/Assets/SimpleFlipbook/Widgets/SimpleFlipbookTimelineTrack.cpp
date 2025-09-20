@@ -186,7 +186,7 @@ namespace Simple2D
 
     FText SSimpleFlipbookKeyframeWidget::GetKeyframeText() const
     {
-        if (auto KeyFrame = GetKeyFrameData(); KeyFrame.IsSet())
+        if (auto *KeyFrame = GetKeyFrameData(); KeyFrame != nullptr)
         {
             return FText::FormatOrdered(NSLOCTEXT("Simple2D", "SpriteIndex", "Index {0}"), KeyFrame->Index);
         }
@@ -196,7 +196,7 @@ namespace Simple2D
 
     FText SSimpleFlipbookKeyframeWidget::GetKeyframeTooltip() const
     {
-        if (auto KeyFrame = GetKeyFrameData(); KeyFrame.IsSet())
+        if (auto *KeyFrame = GetKeyFrameData(); KeyFrame != nullptr)
         {
             const FText SpriteLine =
                 (KeyFrame->Index != INDEX_NONE)
@@ -246,7 +246,7 @@ namespace Simple2D
 
     FOptionalSize SSimpleFlipbookKeyframeWidget::GetFrameWidth() const
     {
-        if (auto KeyFrame = GetKeyFrameData(); KeyFrame.IsSet())
+        if (auto *KeyFrame = GetKeyFrameData(); KeyFrame != nullptr)
         {
             return FMath::Max<float>(0, KeyFrame->FrameRun * SlateUnitsPerFrame.Get());
         }
@@ -254,12 +254,12 @@ namespace Simple2D
         return 1;
     }
 
-    TOptional<const FSimpleFlipbookKeyFrame &> SSimpleFlipbookKeyframeWidget::GetKeyFrameData() const
+    const FSimpleFlipbookKeyFrame *SSimpleFlipbookKeyframeWidget::GetKeyFrameData() const
     {
-        if (auto *Flipbook = FlipbookBeingEdited.Get();
+        if (const auto *Flipbook = FlipbookBeingEdited.Get();
             Flipbook != nullptr && Flipbook->IsValidKeyFrameIndex(FrameIndex))
         {
-            return Flipbook->GetKeyFrameChecked(FrameIndex);
+            return &Flipbook->GetKeyFrameChecked(FrameIndex);
         }
 
         return nullptr;

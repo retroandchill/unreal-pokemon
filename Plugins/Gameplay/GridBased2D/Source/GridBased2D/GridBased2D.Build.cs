@@ -10,7 +10,7 @@ public class GridBased2D : ModuleRules
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(
-            new string[] { "Core", "Paper2D", "UE5Coro", "RetroLib" }
+            new string[] { "Core", "Paper2D" }
         );
 
         PrivateDependencyModuleNames.AddRange(
@@ -23,7 +23,7 @@ public class GridBased2D : ModuleRules
                 "EnhancedInput",
                 "TileReplacer",
                 "DeveloperSettings",
-                "AudioPlaybackManager",
+                "AudioPlaybackManager", "RangeV3", "CommonUtilities",
             }
         );
     }

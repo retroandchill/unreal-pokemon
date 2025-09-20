@@ -79,14 +79,6 @@
 			"Enabled": true
 		},
 		{
-			"Name": "UnrealInjector",
-			"Enabled": true
-		},
-		{
-			"Name": "PokemonStarterKit",
-			"Enabled": true
-		},
-		{
 			"Name": "GameplayAbilities",
 			"Enabled": true
 		},
@@ -101,14 +93,6 @@
 		},
 		{
 			"Name": "GridMapEditor",
-			"Enabled": true
-		},
-		{
-			"Name": "MapMetadata",
-			"Enabled": true
-		},
-		{
-			"Name": "RetroLib",
 			"Enabled": true
 		},
 		{

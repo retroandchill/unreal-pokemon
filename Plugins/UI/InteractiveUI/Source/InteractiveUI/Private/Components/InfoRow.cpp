@@ -1,9 +1,6 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Components/InfoRow.h"
-#include "RetroLib/Optionals/Filter.h"
-#include "RetroLib/Optionals/OrElseValue.h"
-#include "RetroLib/Optionals/Transform.h"
 
 void UInfoRow::NativePreConstruct()
 {
@@ -21,10 +18,11 @@ void UInfoRow::UpdateVisibility()
     }
 #endif
 
-    // clang-format off
-    Retro::Optionals::Of(InitialVisibilityDelegate) |
-        Retro::Optionals::Filter(&FGetSlateVisibility::IsBound) |
-        Retro::Optionals::Transform(&FGetSlateVisibility::Execute) |
-        Retro::Optionals::OrElseValue(InitialVisibility);
-    // clang-format on
+    if (!InitialVisibilityDelegate.IsBound())
+    {
+        SetVisibility(InitialVisibility);
+        return;
+    }
+
+    SetVisibility(InitialVisibilityDelegate.Execute());
 }

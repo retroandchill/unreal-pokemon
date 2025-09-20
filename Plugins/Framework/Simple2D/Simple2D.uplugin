@@ -29,12 +29,6 @@
 		{
 			"Name": "Paper2D",
 			"Enabled": true
-		},
-
-		{
-			"Name": "RetroLib",
-			"Enabled": true,
-			"PluginType": "Provided"
 		}
 	]
 }

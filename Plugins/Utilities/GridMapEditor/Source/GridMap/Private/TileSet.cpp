@@ -1,38 +1,40 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TileSet.h"
-#include "RetroLib/Functional/BindMethod.h"
-#include "RetroLib/Optionals/OrElse.h"
 
 UGridMapTileSet::UGridMapTileSet() : TileSize(100), TileHeight(200)
 {
 }
 
-TSoftObjectPtr<class UStaticMesh> FGridMapTileList::GetRandomTile() const
+TSoftObjectPtr<UStaticMesh> FGridMapTileList::GetRandomTile() const
 {
     if (Tiles.Num() == 0)
         return TSoftObjectPtr<class UStaticMesh>();
 
-    int32 RandomElementIndex = FMath::RandRange(0, Tiles.Num() - 1);
+    const int32 RandomElementIndex = FMath::RandRange(0, Tiles.Num() - 1);
     return Tiles[RandomElementIndex];
 }
 
-TOptional<const FGridMapTileList &> UGridMapTileSet::FindTilesForAdjacency(uint32 Bitmask) const
+const FGridMapTileList *UGridMapTileSet::FindTilesForAdjacency(uint32 Bitmask) const
 {
     // If we're using a tileset with a single tile, then assume it can be placed anywhere
     if (Tiles.Num() == 1)
     {
-        return Tiles[0];
+        return &Tiles[0];
     }
 
     // If we couldn't find a matching tile, we might be relying on 4 way
     // tiles, so let's mask off the upper bits and check again
-    return SearchForTilesWithCompatibleAdjacency(Bitmask) |
-           Retro::Optionals::OrElse(
-               Retro::BindMethod<&UGridMapTileSet::SearchForTilesWithCompatibleAdjacency>(this, Bitmask & 0xF));
+
+    if (const auto *Result = SearchForTilesWithCompatibleAdjacency(Bitmask); Result != nullptr)
+    {
+        return Result;
+    }
+
+    return SearchForTilesWithCompatibleAdjacency(Bitmask & 0xF);
 }
 
-TOptional<const FGridMapTileList &> UGridMapTileSet::SearchForTilesWithCompatibleAdjacency(uint32 Bitmask) const
+const FGridMapTileList *UGridMapTileSet::SearchForTilesWithCompatibleAdjacency(uint32 Bitmask) const
 {
     static const TTuple<uint32, uint32> TopLeft((1 << 0) | (1 << 1), ~(1 << 4));
     static const TTuple<uint32, uint32> TopRight((1 << 0) | (1 << 2), ~(1 << 5));

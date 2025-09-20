@@ -15,9 +15,6 @@
 #include "GridMapStaticMeshActor.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Materials/MaterialInstanceDynamic.h"
-#include "RetroLib/Optionals/Filter.h"
-#include "RetroLib/Optionals/OrElseValue.h"
-#include "RetroLib/Optionals/Transform.h"
 #include "TileSet.h"
 #include "Toolkits/ToolkitManager.h"
 
@@ -130,10 +127,8 @@ void FGridMapEditorMode::Tick(FEditorViewportClient *ViewportClient, float Delta
                            TileSet.TileHeight * (TileSet.SizeZ - 1) / 2);
         };
 
-        auto BrushScale = Retro::Optionals::OfNullable(ActiveTileSet) | Retro::Optionals::Transform(BrushScaleCalc) |
-                          Retro::Optionals::OrElseValue(FVector::OneVector);
-        auto BrushOffset = Retro::Optionals::OfNullable(ActiveTileSet) | Retro::Optionals::Transform(BrushScaleOffset) |
-                           Retro::Optionals::OrElseValue(FVector::ZeroVector);
+        auto BrushScale = ActiveTileSet != nullptr ? BrushScaleCalc(*ActiveTileSet) : FVector::OneVector;
+        auto BrushOffset = ActiveTileSet != nullptr ? BrushScaleOffset(*ActiveTileSet) : FVector::ZeroVector;
         FTransform BrushTransform = FTransform(FQuat::Identity, BrushLocation + BrushOffset, BrushScale);
         TileBrushComponent->SetRelativeTransform(BrushTransform);
 
@@ -275,8 +270,7 @@ void FGridMapEditorMode::PaintTile()
 
         // figure out the bitmask for this tile
         uint32 Adjacency = GetTileAdjacencyBitmask(GetWorld(), BrushLocation, TileSet, UISettings.GetPaintLayer());
-        auto TileList = TileSet->FindTilesForAdjacency(Adjacency);
-        if (TileList.IsSet())
+        if (auto *TileList = TileSet->FindTilesForAdjacency(Adjacency); TileList != nullptr)
         {
             TSoftObjectPtr<UStaticMesh> StaticMeshAsset = TileList->GetRandomTile();
 
@@ -294,10 +288,7 @@ void FGridMapEditorMode::PaintTile()
             MeshActor->GetStaticMeshComponent()->SetStaticMesh(StaticMesh);
             MeshActor->ReregisterAllComponents();
 
-            auto Offset = Retro::Optionals::OfNullable(ActiveTileSet) |
-                          Retro::Optionals::Transform(&UGridMapTileSet::BrushOffset) |
-                          Retro::Optionals::Transform([](const FVector2D &V) { return FVector(V, 0); }) |
-                          Retro::Optionals::OrElseValue(FVector::ZeroVector);
+            auto Offset = ActiveTileSet != nullptr ? FVector(ActiveTileSet->BrushOffset, 0) : FVector::ZeroVector;
             FTransform BrushTransform =
                 FTransform(TileList->Rotation.Quaternion(), BrushLocation + Offset, FVector::OneVector);
             MeshActor->SetActorTransform(BrushTransform);
@@ -510,10 +501,7 @@ bool FGridMapEditorMode::TilesAt(UWorld *World, const FVector &Origin, int32 Lay
 
     auto TileSize = GetTileSize();
     auto TileHeight = GetTileHeight();
-    auto Scaled =
-        Retro::Optionals::OfNullable(ActiveTileSet) |
-        Retro::Optionals::Transform([](const UGridMapTileSet &M) { return FUintVector(M.SizeX, M.SizeY, M.SizeZ); }) |
-        Retro::Optionals::OrElseValue(FUintVector(1));
+    auto Scaled = ActiveTileSet != nullptr ? FUintVector(ActiveTileSet->SizeX, ActiveTileSet->SizeY, ActiveTileSet->SizeZ) : FUintVector(1);
     auto ScaledGridWidth = static_cast<int32>(TileSize * Scaled.X * .95f / 2.f);
     auto ScaledGridLength = static_cast<int32>(TileSize * Scaled.Y * .95f / 2.f);
     auto ScaledGridHeight = static_cast<int32>(TileHeight * Scaled.Z / 2.f);
@@ -572,14 +560,14 @@ void FGridMapEditorMode::UpdateAdjacentTiles(UWorld *World, const TArray<FAdjace
             continue;
 
         UGridMapTileSet *TileSet = CurrentActor->TileSet;
-        uint32 Adjacency =
+        const uint32 Adjacency =
             GetTileAdjacencyBitmask(GetWorld(), CurrentActor->GetActorLocation(), TileSet, UISettings.GetPaintLayer());
-        auto TileList = TileSet->FindTilesForAdjacency(Adjacency);
-        if (!TileList.IsSet())
+        auto *TileList = TileSet->FindTilesForAdjacency(Adjacency);
+        if (TileList == nullptr)
         {
             GEngine->AddOnScreenDebugMessage(INDEX_NONE, 4.0f, FColor::Red, TEXT("Failed to find tile!"), true,
                                              FVector2D::UnitVector);
-            ::DrawDebugPoint(GetWorld(), CurrentActor->GetActorLocation(), 12, FColor::Red, false, 10.f);
+            DrawDebugPoint(GetWorld(), CurrentActor->GetActorLocation(), 12, FColor::Red, false, 10.f);
             continue;
         }
         UStaticMesh *ExpectedStaticMesh = TileList->GetRandomTile().LoadSynchronous();

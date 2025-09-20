@@ -10,7 +10,7 @@ public class Simple2D : ModuleRules
     {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "Paper2D", "RetroLib" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "Paper2D", "CommonUtilities" });
 
         PrivateDependencyModuleNames.AddRange(
             new string[]

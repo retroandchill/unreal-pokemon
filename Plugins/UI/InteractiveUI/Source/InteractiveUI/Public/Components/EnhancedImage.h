@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "CommonLazyImage.h"
-#include "Images/ImageAsset.h"
 #include "Simple2D/Components/FlipbookTicker.h"
 
 #include "EnhancedImage.generated.h"
@@ -45,14 +44,12 @@ class INTERACTIVEUI_API UEnhancedImage : public UCommonLazyImage, public FTickab
     virtual void SetBrushFromSimpleFlipbook(USimpleFlipbook *Flipbook, bool bMatchSize = false);
 
     UFUNCTION(BlueprintCallable, Category = LazyImage)
-    FVoidCoroutine SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook,
-                                                 bool bMatchSize = false,
-                                                 FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
+    void SetBrushFromLazyPaperFlipbook(const TSoftObjectPtr<UPaperFlipbook> &LazyFlipbook,
+                                                 bool bMatchSize = false);
 
     UFUNCTION(BlueprintCallable, Category = LazyImage)
-    FVoidCoroutine SetBrushFromLazySimpleFlipbook(const TSoftObjectPtr<USimpleFlipbook> &LazyFlipbook,
-                                                  bool bMatchSize = false,
-                                                  FForceLatentCoroutine ForceLatent = FForceLatentCoroutine());
+    void SetBrushFromLazySimpleFlipbook(const TSoftObjectPtr<USimpleFlipbook> &LazyFlipbook,
+                                                  bool bMatchSize = false);
 
     void Tick(float DeltaTime) override;
     TStatId GetStatId() const override;

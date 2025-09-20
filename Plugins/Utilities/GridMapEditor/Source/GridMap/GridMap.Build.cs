@@ -26,9 +26,7 @@ public class GridMap : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core",
-                "MapMetadata",
-                "RetroLib",
+                "Core"
                 // ... add other public dependencies that you statically link with here ...
             }
         );

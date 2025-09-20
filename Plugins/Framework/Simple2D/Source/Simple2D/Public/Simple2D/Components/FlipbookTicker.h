@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include "RetroLib/Functional/Delegates.h"
-#include "RetroLib/RetroLibMacros.h"
 #include "Simple2D/Proxies/FlipbookProxy.h"
 
 namespace Simple2D
@@ -14,9 +12,11 @@ namespace Simple2D
      */
     class SIMPLE2D_API FFlipbookTicker
     {
-      DECLARE_MULTICAST_DELEGATE_OneParam(FOnFrameIndexChanged, std::any)
 
-          public : FFlipbookTicker() = default;
+    public:
+      DECLARE_MULTICAST_DELEGATE_OneParam(FOnFrameIndexChanged, std::any);
+        
+        FFlipbookTicker() = default;
 
         template <Flipbook T>
         explicit FFlipbookTicker(T *Object) : Proxy(Object)
@@ -91,10 +91,24 @@ namespace Simple2D
 
         void CalculateCurrentFrame();
 
-        RETRO_MULTICAST_DELEGATE_MEMBER(FOnFrameIndexChanged, OnFrameIndexChanged)
-        RETRO_MULTICAST_DELEGATE_MEMBER(FSimpleMulticastDelegate, OnFinishedPlaying)
+        FDelegateHandle BindOnFrameIndexChanged(FOnFrameIndexChanged::FDelegate InDelegate)
+        {
+            return OnFrameIndexChanged.Add(MoveTemp(InDelegate));
+        }
+
+        void UnbindOnFrameIndexChanged(const FDelegateHandle Handle) { OnFrameIndexChanged.Remove(Handle); }
+
+        FDelegateHandle BindOnFinishedPlaying(FSimpleDelegate InDelegate)
+        {
+            return OnFinishedPlaying.Add(MoveTemp(InDelegate));
+        }
+
+        void UnbindOnFinishedPlaying(const FDelegateHandle Handle) { OnFinishedPlaying.Remove(Handle); }
 
       private:
+        FOnFrameIndexChanged OnFrameIndexChanged;
+        FSimpleMulticastDelegate OnFinishedPlaying;
+        
         FFlipbookProxy Proxy;
 
         float PlayRate = 1.0;

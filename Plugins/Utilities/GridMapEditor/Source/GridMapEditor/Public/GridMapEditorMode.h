@@ -6,7 +6,6 @@
 #include "EdMode.h"
 #include "GridMapEditorTypes.h"
 #include "GridMapEditorUISettings.h"
-#include "RetroLib/Optionals/OptionalOperations.h"
 
 class GRIDMAPEDITOR_API FGridMapEditorMode : public FEdMode
 {
@@ -20,25 +19,25 @@ class GRIDMAPEDITOR_API FGridMapEditorMode : public FEdMode
     FGridMapEditorMode();
 
     // FEdMode interface
-    virtual void Enter() override;
-    virtual void Exit() override;
-    virtual void Tick(FEditorViewportClient *ViewportClient, float DeltaTime) override;
+    void Enter() override;
+    void Exit() override;
+    void Tick(FEditorViewportClient *ViewportClient, float DeltaTime) override;
     bool UsesToolkits() const override;
-    virtual void AddReferencedObjects(FReferenceCollector &Collector) override;
+    void AddReferencedObjects(FReferenceCollector &Collector) override;
 
-    virtual bool StartTracking(FEditorViewportClient *InViewportClient, FViewport *InViewport) override;
-    virtual bool EndTracking(FEditorViewportClient *InViewportClient, FViewport *InViewport) override;
-    virtual bool MouseMove(FEditorViewportClient *ViewportClient, FViewport *Viewport, int32 MouseX,
-                           int32 MouseY) override;
-    virtual bool CapturedMouseMove(FEditorViewportClient *InViewportClient, FViewport *InViewport, int32 InMouseX,
-                                   int32 InMouseY) override;
-    virtual bool InputKey(FEditorViewportClient *InViewportClient, FViewport *InViewport, FKey InKey,
-                          EInputEvent InEvent) override;
-    virtual bool HandleClick(FEditorViewportClient *InViewportClient, HHitProxy *HitProxy,
-                             const FViewportClick &Click) override;
+    bool StartTracking(FEditorViewportClient *InViewportClient, FViewport *InViewport) override;
+    bool EndTracking(FEditorViewportClient *InViewportClient, FViewport *InViewport) override;
+    bool MouseMove(FEditorViewportClient *ViewportClient, FViewport *Viewport, int32 MouseX,
+                   int32 MouseY) override;
+    bool CapturedMouseMove(FEditorViewportClient *InViewportClient, FViewport *InViewport, int32 InMouseX,
+                           int32 InMouseY) override;
+    bool InputKey(FEditorViewportClient *InViewportClient, FViewport *InViewport, FKey InKey,
+                  EInputEvent InEvent) override;
+    bool HandleClick(FEditorViewportClient *InViewportClient, HHitProxy *HitProxy,
+                     const FViewportClick &Click) override;
 
-    virtual bool Select(AActor *InActor, bool bInSelected) override;
-    virtual bool IsSelectionAllowed(AActor *InActor, bool bInSelection) const override;
+    bool Select(AActor *InActor, bool bInSelected) override;
+    bool IsSelectionAllowed(AActor *InActor, bool bInSelection) const override;
     // End of FEdMode interface
 
     /** Return the current grid map editing state */
@@ -50,9 +49,9 @@ class GRIDMAPEDITOR_API FGridMapEditorMode : public FEdMode
         return GetEditingState() == EGridMapEditingState::Enabled;
     }
 
-    void AddActiveTileSet(class UGridMapTileSet *TileSet);
-    const TArray<class UGridMapTileSet *> &GetActiveTileSets() const;
-    void SetActiveTileSet(class UGridMapTileSet *TileSet);
+    void AddActiveTileSet(UGridMapTileSet *TileSet);
+    const TArray<UGridMapTileSet *> &GetActiveTileSets() const;
+    void SetActiveTileSet(UGridMapTileSet *TileSet);
 
     void UpdateAllTiles();
 

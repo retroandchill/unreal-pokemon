@@ -3,8 +3,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
-#include "GameFramework/GameModeBase.h"
-#include "UE5Coro.h"
 
 #include "GridBasedGameModeBase.generated.h"
 
@@ -27,17 +25,6 @@ class GRIDBASED2D_API AGridBasedGameModeBase : public AGameMode
     double GetGridSize() const;
 
     /**
-     * Fade the screen in
-     */
-    UE5Coro::TCoroutine<> FadeIn(FForceLatentCoroutine = {});
-
-    /**
-     * Fade the screen out
-     */
-    UE5Coro::TCoroutine<> FadeOut(FForceLatentCoroutine = {});
-
-  protected:
-    /**
      * Fade the screen in from black
      */
     UFUNCTION(BlueprintImplementableEvent, Category = "Screen Transitions")
@@ -49,6 +36,17 @@ class GRIDBASED2D_API AGridBasedGameModeBase : public AGameMode
     UFUNCTION(BlueprintImplementableEvent, Category = "Screen Transitions")
     void ScreenFadeOut();
 
+    FDelegateHandle BindToOnScreenTransitionFinished(FSimpleDelegate Delegate)
+    {
+        return OnScreenTransitionFinished.Add(MoveTemp(Delegate));   
+    }
+
+    void UnbindFromOnScreenTransitionFinished(const FDelegateHandle Handle)
+    {
+        OnScreenTransitionFinished.Remove(Handle);   
+    }
+
+protected:
     AActor *ChoosePlayerStart_Implementation(AController *Player) override;
 
     UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "Screen Transitions")

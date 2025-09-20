@@ -8,12 +8,40 @@ UMoveInDirection *UMoveInDirection::MoveInDirection(const TScriptInterface<IGrid
                                                     EFacingDirection MovementDirection)
 {
     auto Node = NewObject<UMoveInDirection>();
-    Node->SetWorldContext(Character.GetObject());
     Node->Character = Character;
     Node->MovementDirection = MovementDirection;
     return Node;
 }
 
+void UMoveInDirection::Activate()
+{
+    bool bCanInput = false;
+    APlayerController *PlayerController = nullptr;
+    auto Pawn = Cast<APawn>(Character.GetObject());
+    if (Pawn != nullptr)
+    {
+        PlayerController = Cast<APlayerController>(Pawn->Controller);
+        if (PlayerController != nullptr)
+        {
+            bCanInput = PlayerController->InputEnabled();
+            Pawn->DisableInput(PlayerController);
+        }
+    }
+
+    auto *MovementComponent = IGridMovable::Execute_GetGridBasedMovementComponent(Character.GetObject());
+    MovementComponent->MoveInDirection(MovementDirection, FSimpleDelegate::CreateWeakLambda(this, [this, PlayerController, bCanInput, Pawn] {
+        if (PlayerController != nullptr && bCanInput)
+        {
+            Pawn->EnableInput(PlayerController);
+        }
+
+        OnMovementFinished.Broadcast();
+        SetReadyToDestroy();
+    }));
+    
+}
+
+/*
 UE5Coro::TCoroutine<> UMoveInDirection::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine)
 {
     bool bCanInput = false;
@@ -38,3 +66,4 @@ UE5Coro::TCoroutine<> UMoveInDirection::ExecuteCoroutine(FForceLatentCoroutine F
 
     OnMovementFinished.Broadcast();
 }
+*/

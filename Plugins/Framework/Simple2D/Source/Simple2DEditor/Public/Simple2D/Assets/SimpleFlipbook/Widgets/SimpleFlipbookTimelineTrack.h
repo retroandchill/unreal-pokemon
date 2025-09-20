@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "RetroLib/Optionals/OptionalOperations.h"
 #include "Simple2D/Assets/SimpleFlipbook.h"
 #include "SimpleFlipbookTimeline.h"
 #include "Widgets/SCompoundWidget.h"
@@ -88,7 +87,7 @@ namespace Simple2D
             FOptionalSize GetFrameWidth() const;
 
             // Can return null
-            TOptional<const FSimpleFlipbookKeyFrame &> GetKeyFrameData() const;
+        const FSimpleFlipbookKeyFrame *GetKeyFrameData() const;
 
           private:
             int32 FrameIndex = 0;

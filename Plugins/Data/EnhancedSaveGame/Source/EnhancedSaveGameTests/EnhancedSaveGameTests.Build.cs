@@ -13,8 +13,7 @@ public class EnhancedSaveGameTests : ModuleRules
                 "Core",
                 "FunctionalTesting",
                 "FunctionalTestingEditor",
-                "AutomationTestHelpers",
-                "RetroLibTests",
+                "AutomationTestHelpers"
             }
         );
 

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
-#include "RetroLib/Optionals/OptionalOperations.h"
 #include "TileSetTagRequirements.h"
 #include "UObject/Object.h"
 
@@ -77,10 +76,10 @@ class GRIDMAP_API UGridMapTileSet : public UObject
     UPROPERTY(EditDefaultsOnly, Category = "Tiles")
     TArray<FGridMapTileList> Tiles;
 
-    TOptional<const FGridMapTileList &> FindTilesForAdjacency(uint32 Bitmask) const;
+    const FGridMapTileList *FindTilesForAdjacency(uint32 Bitmask) const;
 
   protected:
-    TOptional<const FGridMapTileList &> SearchForTilesWithCompatibleAdjacency(uint32 Bitmask) const;
+    const FGridMapTileList *SearchForTilesWithCompatibleAdjacency(uint32 Bitmask) const;
 
   public:
     UPROPERTY(Transient)

@@ -3,7 +3,6 @@
 #include "Algo/ForEach.h"
 #include "CommonButtonBase.h"
 #include "Groups/CommonButtonGroupBase.h"
-#include "RetroLib/Optionals/IfPresent.h"
 
 USelectableWidget::USelectableWidget(const FObjectInitializer &Initializer) : UCommonActivatableWidget(Initializer)
 {
@@ -27,21 +26,25 @@ int32 USelectableWidget::GetIndex() const
     return Index;
 }
 
-void USelectableWidget::SetIndex(int32 NewIndex)
+void USelectableWidget::SetIndex(const int32 NewIndex)
 {
-    int32 OldIndex = Index;
+    const int32 OldIndex = Index;
     Index = FMath::Clamp(NewIndex, static_cast<int32>(INDEX_NONE), GetItemCount() - 1);
-    Retro::Optionals::OfNullable(GetSelectableOption(Index)) |
-        Retro::Optionals::IfPresent(Retro::BindBack<&UCommonButtonBase::SetIsSelected>(true, false));
+    if (auto *Option = GetSelectableOption(Index); Option != nullptr)
+    {
+        Option->SetIsSelected(true, false);
+    }
     OnSelectionChange(OldIndex, Index);
 }
 
 void USelectableWidget::Deselect()
 {
-    int32 OldIndex = Index;
+    const int32 OldIndex = Index;
     Index = INDEX_NONE;
-    Retro::Optionals::OfNullable(GetSelectableOption(OldIndex)) |
-        Retro::Optionals::IfPresent(Retro::BindBack<&UCommonButtonBase::SetIsSelected>(false, false));
+    if (auto *Option = GetSelectableOption(OldIndex); Option != nullptr)
+    {
+        Option->SetIsSelected(false, false);
+    }
     OnSelectionChange(OldIndex, Index);
 }
 

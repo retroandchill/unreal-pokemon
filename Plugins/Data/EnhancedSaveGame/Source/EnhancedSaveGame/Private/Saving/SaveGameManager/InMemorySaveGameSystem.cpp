@@ -2,9 +2,7 @@
 #if WITH_EDITOR
 #include "Saving/SaveGameManager/InMemorySaveGameSystem.h"
 #include "EnhancedSaveGameModule.h"
-#include "RetroLib/Optionals/IfPresent.h"
-#include "RetroLib/Optionals/OrElseValue.h"
-#include "RetroLib/Optionals/Transform.h"
+#include "OptionalPtr.h"
 
 using namespace EnhancedSaveGame;
 
@@ -20,28 +18,22 @@ bool FInMemorySaveGameSystem::DoesSaveSystemSupportMultipleUsers()
 
 bool FInMemorySaveGameSystem::DoesSaveGameExist(const TCHAR *Name, const int32 UserIndex)
 {
-    // clang-format off
-    return Retro::Optionals::OfNullable(SaveGames.Find(Name)) |
-           Retro::Optionals::Transform([UserIndex](const TMap<int32, TArray<uint8>> &Map) {
-               return Map.Contains(UserIndex);
-           }) |
-           Retro::Optionals::OrElseValue(false);
-    // clang-format on
+    return TOptionalPtr(SaveGames.Find(Name))
+        .MapToValue(false, [UserIndex](const TMap<int32, TArray<uint8>> *Map) {
+               return Map->Contains(UserIndex);
+           });
 }
 
 ISaveGameSystem::ESaveExistsResult FInMemorySaveGameSystem::DoesSaveGameExistWithResult(const TCHAR *Name,
                                                                                         const int32 UserIndex)
 {
-    // clang-format off
-    return Retro::Optionals::OfNullable(SaveGames.Find(Name)) |
-           Retro::Optionals::Transform([UserIndex](const TMap<int32, TArray<uint8>> &Map) {
-               return Map.Find(UserIndex);
-           }) |
-           Retro::Optionals::Transform([](const TArray<uint8> &) {
+    return TOptionalPtr(SaveGames.Find(Name))
+        .Map([UserIndex](const TMap<int32, TArray<uint8>> *Map) {
+               return Map->Find(UserIndex);
+           })
+        .MapToValue(ESaveExistsResult::DoesNotExist, [](const TArray<uint8> *) {
                return ESaveExistsResult::OK;
-           }) |
-           Retro::Optionals::OrElseValue(ESaveExistsResult::DoesNotExist);
-    // clang-format on
+           });
 }
 
 bool FInMemorySaveGameSystem::SaveGame(bool bAttemptToUseUI, const TCHAR *Name, const int32 UserIndex,
@@ -58,12 +50,12 @@ bool FInMemorySaveGameSystem::LoadGame(bool bAttemptToUseUI, const TCHAR *Name, 
 {
     UE_LOG(LogEnhancedSaveGame, Display, TEXT("Loading save game '%s' slot %d"), Name, UserIndex)
     // clang-format off
-    auto DataSlot = Retro::Optionals::OfNullable(SaveGames.Find(Name)) |
-                    Retro::Optionals::Transform([UserIndex](const TMap<int32, TArray<uint8>> &Map) {
-                        return Map.Find(UserIndex);
+    auto DataSlot = TOptionalPtr(SaveGames.Find(Name))
+        .Map([UserIndex](const TMap<int32, TArray<uint8>> *Map) {
+                        return Map->Find(UserIndex);
                     });
-    DataSlot | Retro::Optionals::IfPresent([&Data](const TArray<uint8> &Loaded) {
-        Data = Loaded;
+    DataSlot.IfPresent([&Data](const TArray<uint8> *Loaded) {
+        Data = *Loaded;
     });
     // clang-format on
 
@@ -72,11 +64,6 @@ bool FInMemorySaveGameSystem::LoadGame(bool bAttemptToUseUI, const TCHAR *Name, 
 
 bool FInMemorySaveGameSystem::DeleteGame(bool bAttemptToUseUI, const TCHAR *Name, const int32 UserIndex)
 {
-    // clang-format off
-    return Retro::Optionals::OfNullable(SaveGames.Find(Name)) |
-        Retro::Optionals::Transform([UserIndex](TMap<int32, TArray<uint8>> &Map) { return Map.Remove(UserIndex); }) |
-        Retro::Optionals::Transform([](int32 Num) { return Num > 0; })|
-        Retro::Optionals::OrElseValue(false);
-    // clang-format on
+    return TOptionalPtr(SaveGames.Find(Name)).MapToValue(0, [UserIndex](TMap<int32, TArray<uint8>> *Map) { return Map->Remove(UserIndex); }) > 0;
 }
 #endif

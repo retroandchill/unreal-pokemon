@@ -18,9 +18,7 @@ public class PokemonUI : ModuleRules
                 "CommonUI",
                 "GameplayTags",
                 "EnhancedInput",
-                "DeveloperSettings",
-                "UE5Coro",
-                "RetroLib",
+                "DeveloperSettings"
             }
         );
 
@@ -33,7 +31,6 @@ public class PokemonUI : ModuleRules
                 "SlateCore",
                 "UMG",
                 "RenderCore",
-                "UnrealInjector",
                 "CommonInput",
                 "Paper2D",
                 "EnhancedSaveGame",

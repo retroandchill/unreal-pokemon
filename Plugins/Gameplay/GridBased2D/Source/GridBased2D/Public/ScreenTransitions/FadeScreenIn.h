@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GridBasedGameModeBase.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
-#include "RetroLib/Async/BlueprintCoroutineActionBase.h"
 
 #include "FadeScreenIn.generated.h"
 
@@ -13,7 +12,7 @@
  * Async Node for fading the screen in
  */
 UCLASS()
-class GRIDBASED2D_API UFadeScreenIn : public UBlueprintCoroutineActionBase
+class GRIDBASED2D_API UFadeScreenIn : public UBlueprintAsyncActionBase
 {
     GENERATED_BODY()
 
@@ -27,13 +26,15 @@ class GRIDBASED2D_API UFadeScreenIn : public UBlueprintCoroutineActionBase
               meta = (WorldContext = WorldContextObject))
     static UFadeScreenIn *FadeScreenIn(const UObject *WorldContextObject);
 
-  protected:
-    UE5Coro::TCoroutine<> ExecuteCoroutine(FForceLatentCoroutine) override;
+    void Activate() override;
 
-  private:
+private:
     /**
      * Called when the transition is finished
      */
     UPROPERTY(BlueprintAssignable)
     FOnScreenTransitionFinished OnScreenTransitionFinished;
+
+    UPROPERTY()
+    TObjectPtr<const UObject> WorldContext;
 };

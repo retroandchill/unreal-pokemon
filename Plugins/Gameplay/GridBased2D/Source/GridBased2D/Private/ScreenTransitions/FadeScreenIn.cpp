@@ -5,16 +5,19 @@
 
 UFadeScreenIn *UFadeScreenIn::FadeScreenIn(const UObject *WorldContextObject)
 {
-    auto Node = NewObject<UFadeScreenIn>();
-    Node->SetWorldContext(WorldContextObject);
+    auto *Node = NewObject<UFadeScreenIn>();
+    Node->WorldContext = WorldContextObject;
     return Node;
 }
 
-UE5Coro::TCoroutine<> UFadeScreenIn::ExecuteCoroutine(FForceLatentCoroutine ForceLatentCoroutine)
+void UFadeScreenIn::Activate()
 {
-    auto GameMode = UGridUtils::GetGridBasedGameMode(GetWorldContext());
-    check(GameMode != nullptr)
+    auto *GameMode = UGridUtils::GetGridBasedGameMode(WorldContext);
+    check(GameMode != nullptr);
 
-    co_await GameMode->FadeIn();
-    OnScreenTransitionFinished.Broadcast();
+    GameMode->BindToOnScreenTransitionFinished(FSimpleDelegate::CreateWeakLambda(this, [this] {
+        OnScreenTransitionFinished.Broadcast();
+        SetReadyToDestroy();
+    }));
+    GameMode->ScreenFadeIn();   
 }

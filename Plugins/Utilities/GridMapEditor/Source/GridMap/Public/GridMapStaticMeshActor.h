@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Engine/StaticMeshActor.h"
-#include "TerrainTags/Terrain.h"
 
 #include "GridMapStaticMeshActor.generated.h"
 
@@ -12,16 +11,12 @@
  *
  */
 UCLASS()
-class GRIDMAP_API AGridMapStaticMeshActor : public AStaticMeshActor, public ITerrain
+class GRIDMAP_API AGridMapStaticMeshActor : public AStaticMeshActor
 {
     GENERATED_BODY()
 
   public:
     explicit AGridMapStaticMeshActor(const FObjectInitializer &ObjectInitializer = FObjectInitializer());
-
-    bool HasTerrainTag_Implementation(const FGameplayTag &Tag) const override;
-    bool HasAnyTerrainTag_Implementation(const FGameplayTagContainer &TagsToCheck) const override;
-    bool HasAllTerrainTags_Implementation(const FGameplayTagContainer &TagsToCheck) const override;
 
     UPROPERTY()
     TObjectPtr<class UGridMapTileSet> TileSet;

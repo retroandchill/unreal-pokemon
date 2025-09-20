@@ -16,7 +16,6 @@ public class PokemonData : ModuleRules
                 "Paper2D",
                 "GameplayTags",
                 "GameplayAbilities",
-                "RetroLib",
                 "UnrealSharpBinds",
                 "CommonUtilities",
             }
