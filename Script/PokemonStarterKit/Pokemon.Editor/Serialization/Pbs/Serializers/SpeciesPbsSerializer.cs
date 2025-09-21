@@ -1,23 +1,54 @@
-﻿using Pokemon.Data.Model.PBS;
+﻿using System.Reflection;
+using GameDataAccessTools.Core.Views;
+using Pokemon.Data.Model.PBS;
 using Pokemon.Editor.Serialization.Mappers;
 using Pokemon.Editor.Serialization.Model.Pbs;
+using UnrealSharp;
+using UnrealSharp.Attributes;
+using UnrealSharp.GameDataAccessTools;
+using ZLinq;
 
 namespace Pokemon.Editor.Serialization.Pbs.Serializers;
 
-public sealed class SpeciesPbsSerializer : IPbsSerializer<FSpecies>
+[UClass]
+public sealed class USpeciesPbsSerializer : UGameDataEntryPbsSerializerBase
 {
-    public Type Type => typeof(FSpecies);
-
-    public void Serialize(IEnumerable<FSpecies> model, TextWriter writer)
+    protected override bool Supports(TSubclassOf<UAssetGameDataRepository> repositoryClass)
     {
-        PbsCompiler.WritePbs(model.Select(x => x.ToSpeciesInfo()), writer);
+        return repositoryClass == typeof(USpeciesRepository);
     }
 
-    public IEnumerable<FSpecies> Deserialize(TextReader reader)
+    protected override void Serialize(StreamWriter streamWriter, UAssetGameDataRepository repository)
     {
-        return PbsCompiler
-            .CompilePbsFile<SpeciesInfo>(reader)
-            .Select(x => x.Value)
-            .Select(x => x.ToSpecies());
+        if (repository is not USpeciesRepository speciesRepository)
+            throw new InvalidOperationException("Repository is not of type USpeciesRepository");
+
+        PbsCompiler.WritePbs(speciesRepository.Entries.AsValueEnumerable()
+                .Select(x => x.ToSpeciesInfo())
+                .ToArray(),
+            streamWriter);
+    }
+
+    protected override void Deserialize(StreamReader streamReader, UAssetGameDataRepository repository)
+    {
+        if (
+            repository
+                .GetType()
+                .GetProperty("DataEntries", BindingFlags.NonPublic | BindingFlags.Instance)!
+                .GetValue(repository)
+            is not IList<FSpecies> dataEntries
+        )
+        {
+            throw new InvalidOperationException("DataEntries was not found");
+        }
+
+        dataEntries.Clear();
+        foreach (var entry in PbsCompiler
+                     .CompilePbsFile<SpeciesInfo>(streamReader)
+                     .Select(x => x.Value)
+                     .Select(x => x.ToSpecies()))
+        {
+            dataEntries.Add(entry);
+        }
     }
 }
