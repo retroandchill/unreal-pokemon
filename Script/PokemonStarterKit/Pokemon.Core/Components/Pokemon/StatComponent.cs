@@ -253,7 +253,7 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
             }
         }
 
-        var stats = FMainBattleStatHandle.Entries.ToDictionary(
+        var stats = FMainStatHandle.Entries.ToDictionary(
             x => x.ID,
             x => CalculateStat(x.ID, baseStats[x.ID], ivs[x.ID], EV[x.ID], natureMod[x.ID])
         );

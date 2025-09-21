@@ -11,7 +11,7 @@ TSharedPtr<SGraphPin> FDataHandlePinFactory::CreatePin(UEdGraphPin *Pin) const
         return FGraphPanelPinFactory::CreatePin(Pin);
     }
 
-    auto PinStructType = Cast<UScriptStruct>(Pin->PinType.PinSubCategoryObject.Get());
+    auto *PinStructType = Cast<UScriptStruct>(Pin->PinType.PinSubCategoryObject.Get());
     if (PinStructType == nullptr)
     {
         return FGraphPanelPinFactory::CreatePin(Pin);

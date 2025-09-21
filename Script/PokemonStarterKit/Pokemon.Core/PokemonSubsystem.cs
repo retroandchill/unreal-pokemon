@@ -38,8 +38,9 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
 
     public FText CurrentLocation
     {
+        // TODO: Implement this
         [UFunction(FunctionFlags.BlueprintPure, Category = "Location")]
-        get => throw new NotImplementedException();
+        get => "Test Location";
     }
 
     public IAsyncActionsService AsyncActionsService { get; private set; } = null!;
