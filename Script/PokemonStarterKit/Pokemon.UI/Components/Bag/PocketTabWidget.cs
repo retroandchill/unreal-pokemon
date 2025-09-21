@@ -76,10 +76,10 @@ public class UPocketTabWidget : UCommonActivatableWidget
         {
             if (!ButtonClass.Valid)
                 return;
-
-            // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
-            PocketButtonGroup?.RemoveAll();
         }
+
+        // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+        PocketButtonGroup?.RemoveAll();
 
         PocketButtonGroup = NewObject<USelectableButtonGroup>(this);
         PocketButtonGroup.OnButtonAdded += [UFunction]

@@ -17,6 +17,13 @@ public class UPokemonCoreBlueprintLibrary : UBlueprintFunctionLibrary
         return worldContextObject.GetGameInstanceSubsystem<UPokemonSubsystem>().Player;
     }
 
+    [UFunction(FunctionFlags.BlueprintPure, Category = "Pokémon|Items")]
+    [WorldContext(nameof(worldContextObject))]
+    public static UPokemonBag GetBag(UObject worldContextObject)
+    {
+        return worldContextObject.GetGameInstanceSubsystem<UPokemonSubsystem>().Bag;
+    }
+
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Pokémon|Party")]
     [WorldContext(nameof(worldContextObject))]
     public static UPokemon AddPokemonToParty(

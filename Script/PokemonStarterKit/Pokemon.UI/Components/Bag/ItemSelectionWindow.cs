@@ -14,8 +14,6 @@ public class UItemSelectionWindow : UOwningSelectionWidget
     [UProperty(PropertyFlags.EditAnywhere, Category = "Display")]
     private TSubclassOf<UItemOption> ItemEntryClass { get; }
 
-    public event Action<FGameplayTag>? OnPocketChanged;
-
     public event Action<FItemHandle, int>? OnItemHovered;
 
     public event Action<FItemHandle, int>? OnItemSelected;
@@ -61,12 +59,11 @@ public class UItemSelectionWindow : UOwningSelectionWidget
 
     private void OnSelectionChange(int index)
     {
-        Bag.SetLastViewedIndex(CurrentPocket, index);
         if (Buttons.GetButtonBaseAtIndex(index) is UItemOption option)
         {
             OnItemHovered?.Invoke(option.Item, option.Quantity);
         }
-        else
+        else if (Buttons.ButtonCount == 0)
         {
             OnItemHovered?.Invoke(default, 0);
         }

@@ -134,7 +134,7 @@ public readonly partial struct FItem() : IGameDataEntry
     )]
     public bool ShowQuantity
     {
-        get => field && IsImportant;
+        get => field && !IsImportant;
         init;
     }
 

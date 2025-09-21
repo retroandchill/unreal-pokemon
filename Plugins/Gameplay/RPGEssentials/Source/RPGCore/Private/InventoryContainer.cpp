@@ -109,12 +109,12 @@ bool UInventoryContainer::NativeCanAddItem(const FName ItemID, const int32 Amoun
         return false;
     }
 
-    if (MaxSlots.IsSet() && HasItem(ItemID) && ItemSlots.Num() >= MaxSlots.GetValue())
+    if (MaxSlots.IsSet() && !HasItem(ItemID) && ItemSlots.Num() >= MaxSlots.GetValue())
     {
         return false;
     }
 
-    return !MaxStackSize.IsSet() || *MaxStackSize < GetItemQuantity(ItemID);
+    return !MaxStackSize.IsSet() || *MaxStackSize > GetItemQuantity(ItemID);
 }
 
 bool UInventoryContainer::NativeValidateItem(const FName ItemID) const

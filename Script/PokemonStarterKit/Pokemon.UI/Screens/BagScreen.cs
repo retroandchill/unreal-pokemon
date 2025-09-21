@@ -79,6 +79,14 @@ public class UBagScreen : UCommonActivatableWidget
         () => PocketTabWidget.DeactivateWidget();
 
         OnPocketTabChanged(PocketTabWidget.CurrentPocket);
+    }
+
+    private void OnPocketTabChanged(FGameplayTag tag)
+    {
+        PocketWindow.CurrentPocket = tag;
+        ItemSelectionWindow.CurrentPocket = tag;
+
+        ItemSelectionWindow.DesiredFocusIndex = Bag.LastViewedItems[tag];
         var currentButton = ItemSelectionWindow.GetButton<UItemOption>(
             ItemSelectionWindow.DesiredFocusIndex
         );
@@ -90,12 +98,14 @@ public class UBagScreen : UCommonActivatableWidget
         {
             SetHoveredItem(default, 0);
         }
-    }
 
-    private void OnPocketTabChanged(FGameplayTag tag)
-    {
-        PocketWindow.CurrentPocket = tag;
-        ItemSelectionWindow.CurrentPocket = tag;
+        // Quickly deactivate and reactivate the widget to force the desired focus index to be updated
+        if (ItemSelectionWindow.IsActive)
+        {
+            ItemSelectionWindow.DeactivateWidget();
+        }
+
+        ItemSelectionWindow.ActivateWidget();
     }
 
     public void ApplyItemFilter(Func<FItemHandle, bool> filter)
