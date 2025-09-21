@@ -15,7 +15,7 @@ namespace Pokemon.Core.Components.Pokemon;
 [UClass]
 [UMetaData("HideCategories", "Stats")]
 [UsedImplicitly]
-public class UStatComponent : URPGComponent
+public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableComponent
 {
     [PublicAPI]
     public const int MaxIV = 31;
@@ -125,6 +125,9 @@ public class UStatComponent : URPGComponent
         [UFunction(FunctionFlags.BlueprintPure, Category = "Stats")]
         get { return NatureOverride.Match(x => x, () => Nature); }
     }
+
+    [ExcludeFromExtensions]
+    public bool IsAbleToBattle => HP > 0;
 
     public bool IsFainted
     {
@@ -285,5 +288,11 @@ public class UStatComponent : URPGComponent
         }
 
         return ((2 * baseValue + iv + ev / 4) * Level / 100 + 5) * natureModifer / 100;
+    }
+
+    [ExcludeFromExtensions]
+    public void Heal()
+    {
+        HP = MaxHP;
     }
 }

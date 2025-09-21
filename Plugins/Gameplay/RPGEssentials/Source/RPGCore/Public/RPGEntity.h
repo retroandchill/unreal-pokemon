@@ -92,6 +92,11 @@ class RPGCORE_API URPGEntity : public UObject
               meta = (ScriptName = "PostInitializeComponents"))
     void K2_PostInitializeComponents();
 
+    FORCEINLINE auto GetAllComponents() const
+    {
+        return ranges::views::concat(RequiredComponents, AdditionalComponents);
+    }
+
   private:
     UFUNCTION(BlueprintPure, Category = "RPG Entity",
               meta = (DeterminesOutputType = ComponentClass, DynamicOutputParam = ReturnValue))
@@ -101,11 +106,6 @@ class RPGCORE_API URPGEntity : public UObject
     void DefaultInitializeComponents();
 
     void GatherComponentReferences();
-
-    FORCEINLINE auto GetAllComponents() const
-    {
-        return ranges::views::concat(RequiredComponents, AdditionalComponents);
-    }
 
     UPROPERTY()
     TArray<TObjectPtr<URPGComponent>> RequiredComponents;

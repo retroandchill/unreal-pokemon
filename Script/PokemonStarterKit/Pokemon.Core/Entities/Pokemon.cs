@@ -4,7 +4,6 @@ using Pokemon.Data.Model.PBS;
 using RPG.SourceGenerator.Attributes;
 using UnrealSharp;
 using UnrealSharp.Attributes;
-using UnrealSharp.Engine;
 using UnrealSharp.RPGCore;
 
 namespace Pokemon.Core.Entities;
@@ -79,6 +78,12 @@ public partial class UPokemon : URPGEntity
         Category = "Components"
     )]
     public UStatusEffectComponent StatusEffectComponent { get; private set; }
+    
+    public bool IsAbleToBattle
+    {
+        [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Is Able to Battle", Category = "Battle")]
+        get { return AllComponents.OfType<IBattleCapableComponent>().All(c => c.IsAbleToBattle); }
+    }
 
     [PublicAPI]
     public static UPokemon Create(UTrainer outer, FSpeciesHandle species, int level)
@@ -92,4 +97,13 @@ public partial class UPokemon : URPGEntity
 
     private static TSubclassOf<UPokemon> PokemonClass =>
         GetDefault<UPokemonCoreSettings>().PokemonClass.LoadSynchronous();
+
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Stats")]
+    public void Heal()
+    {
+        foreach (var component in AllComponents.OfType<IHealableComponent>())
+        {
+            component.Heal();
+        }
+    }
 }

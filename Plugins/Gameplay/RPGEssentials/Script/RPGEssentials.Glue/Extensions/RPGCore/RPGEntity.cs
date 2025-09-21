@@ -2,7 +2,7 @@
 
 namespace UnrealSharp.RPGCore;
 
-public interface IRPGEntity<T>
+public interface IRPGEntity<out T>
     where T : URPGComponent
 {
     T Component { get; }
@@ -10,6 +10,8 @@ public interface IRPGEntity<T>
 
 public partial class URPGEntity
 {
+    protected IEnumerable<URPGComponent> AllComponents => RequiredComponents.Concat(AdditionalComponents);
+    
     public T? GetComponent<T>()
         where T : URPGComponent
     {
