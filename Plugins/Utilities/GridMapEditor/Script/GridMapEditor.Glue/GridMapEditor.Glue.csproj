@@ -16,6 +16,5 @@
       <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
     </Reference>
     <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
-    <ProjectReference Include="..\..\..\..\Gameplay\TerrainTags\Script\MapMetadata.Glue\MapMetadata.Glue.csproj" />
   </ItemGroup>
 </Project>

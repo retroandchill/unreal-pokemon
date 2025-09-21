@@ -11,6 +11,8 @@ public class USelectionWidget : UCommonActivatableWidget
 {
     [UProperty(PropertyFlags.Transient)]
     protected USelectableButtonGroup Buttons { get; private set; }
+    
+    public event Action? OnBackAction;
 
     [UProperty(PropertyFlags.EditAnywhere, Category = "Selection")]
     [UIMin("0")]
@@ -48,5 +50,11 @@ public class USelectionWidget : UCommonActivatableWidget
     protected override UWidget? BP_GetDesiredFocusTarget()
     {
         return Buttons.GetButtonBaseAtIndex(DesiredFocusIndex);
+    }
+
+    protected override bool OnHandleBackAction()
+    {
+        OnBackAction?.Invoke();
+        return true;
     }
 }

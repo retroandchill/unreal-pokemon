@@ -10,7 +10,6 @@ public class UnrealPokemonTarget : TargetRules
         Type = TargetType.Game;
         DefaultBuildSettings = BuildSettingsVersion.V4;
         IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_6;
-        bEnableCppCoroutinesForEvaluation = true;
         RegisterModulesCreatedByRider();
     }
 

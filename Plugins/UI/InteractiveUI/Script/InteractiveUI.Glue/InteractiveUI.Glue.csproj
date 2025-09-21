@@ -18,7 +18,6 @@
     <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
     <ProjectReference Include="..\..\..\UnrealSharpCommonUI\Script\UnrealSharpCommonUI.Glue\UnrealSharpCommonUI.Glue.csproj" />
     <ProjectReference Include="..\..\..\..\Framework\Simple2D\Script\Simple2D.Glue\Simple2D.Glue.csproj" />
-    <ProjectReference Include="..\..\..\..\Utilities\UE5Coro\Script\UE5Coro.Glue\UE5Coro.Glue.csproj" />
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="InteractiveUI.Core" />

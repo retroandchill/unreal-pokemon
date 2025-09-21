@@ -35,13 +35,3 @@ public static class PokemonStatics
             .GetExpGrowthFormula(growthRate);
     }
 }
-
-[UClass]
-public class UPokemonStatic : UBlueprintFunctionLibrary
-{
-    [UFunction(FunctionFlags.BlueprintPure, Category = "Pokémon")]
-    public static UTrainer GetPlayer()
-    {
-        return PokemonStatics.Player;
-    }
-}

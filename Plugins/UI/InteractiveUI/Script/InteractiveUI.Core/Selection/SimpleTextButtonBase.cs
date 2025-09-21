@@ -29,6 +29,16 @@ public class USimpleTextButtonBase : UCommonButtonBase
         }
     }
 
+    public override void PreConstruct(bool isDesignTime)
+    {
+#if WITH_EDITOR
+        if (!SystemLibrary.IsValid(TextBlock))
+            return;
+#endif
+        
+        TextBlock.Text = Text;
+    }
+
     protected override void OnCurrentTextStyleChanged()
     {
 #if WITH_EDITOR

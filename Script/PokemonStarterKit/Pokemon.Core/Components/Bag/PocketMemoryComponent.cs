@@ -22,6 +22,11 @@ public class UPocketMemoryComponent : URPGComponent
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Inventory")]
     public TMap<FGameplayTag, int> LastViewedItems { get; }
 
+    protected override void PreInitialize()
+    {
+        PocketsComponent = GetRequiredSiblingComponent<UPocketsComponent>();
+    }
+
     [UFunction]
     [ExcludeFromExtensions]
     public virtual void Initialize(FBagInitParams initParams)

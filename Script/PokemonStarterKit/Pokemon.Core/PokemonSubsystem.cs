@@ -6,10 +6,14 @@ using Pokemon.Data.Model.HardCoded;
 using UnrealInject.Subsystems;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.CoreUObject;
+using UnrealSharp.Engine;
 using UnrealSharp.GameplayTags;
 using UnrealSharp.UnrealSharpCore;
 
 namespace Pokemon.Core;
+
+public readonly record struct FPlayerResetLocation(string MapName, FTransform PlayerTransform);
 
 [UClass(DisplayName = "Pokémon Subsystem")]
 public class UPokemonSubsystem : UCSGameInstanceSubsystem
@@ -21,6 +25,16 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
 
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Player")]
     public UPokemonBag Bag { get; private set; }
+
+    private FTransform? _playerLoadTransform;
+
+    private FPlayerResetLocation? _playerResetLocation;
+    
+    public bool IsPlayerResetLocationSet
+    {
+        [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Is Player Reset Location Set", Category = "Location")]
+        get => _playerResetLocation.HasValue;
+    }
 
     public FText CurrentLocation
     {
@@ -62,5 +76,26 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
         // TODO: Swap this instantiation with the actual trainer instantiation
         Player = UTrainer.Create(this, new FName("POKEMONTRAINER_Nate"), "Nate");
         Bag = UPokemonBag.Create(this);
+    }
+
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Player")]
+    public void AdjustPlayerTransformOnLoad(ACharacter playerCharacter)
+    {
+        if (!_playerLoadTransform.HasValue) return;
+        
+        playerCharacter.SetActorTransform(_playerLoadTransform.Value);
+        _playerLoadTransform = null;
+    }
+    
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Player")]
+    public void SetPlayerResetLocation(string mapName, FTransform transform) {
+        _playerResetLocation = new FPlayerResetLocation(mapName, transform);
+    }
+
+
+    [UFunction(FunctionFlags.BlueprintCallable, Category = "Player")]
+    public void SetPlayerResetLocationAsCurrentLocation(ACharacter PlayerCharacter)
+    {
+        // TODO: Implement this
     }
 }

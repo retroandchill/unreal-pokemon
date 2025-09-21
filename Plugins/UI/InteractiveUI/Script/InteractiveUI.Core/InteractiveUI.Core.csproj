@@ -27,6 +27,9 @@
       <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
     </Reference>
     <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
+    <Reference Include="UnrealSharp.Log">
+      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.Log.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\UnrealSharpCommonUI\Script\UnrealSharpCommonUI.Glue\UnrealSharpCommonUI.Glue.csproj" />

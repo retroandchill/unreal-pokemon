@@ -5,13 +5,13 @@
 #include "Components/RichTextBlock.h"
 #include "PaperSprite.h"
 
-void UWidgetUtilities::SetBrushFromAsset(UImage *ImageWidget, UObject *Asset, bool MatchSize)
+void UWidgetUtilities::SetBrushFromAsset(UImage *ImageWidget, UObject *Asset, const bool MatchSize)
 {
-    if (auto Texture = Cast<UTexture2D>(Asset); Texture != nullptr)
+    if (auto *Texture = Cast<UTexture2D>(Asset); Texture != nullptr)
     {
         ImageWidget->SetBrushFromTexture(Texture, MatchSize);
     }
-    else if (auto Material = Cast<UMaterialInterface>(Asset); Material != nullptr)
+    else if (auto *Material = Cast<UMaterialInterface>(Asset); Material != nullptr)
     {
         ImageWidget->SetBrushFromMaterial(Material);
     }
@@ -25,7 +25,7 @@ void UWidgetUtilities::SetBrushFromAsset(UImage *ImageWidget, UObject *Asset, bo
     }
 }
 
-void UWidgetUtilities::SetTextStyleOverride(URichTextBlock *TextBlock, TSubclassOf<UCommonTextStyle> Style)
+void UWidgetUtilities::SetTextStyleOverride(URichTextBlock *TextBlock, const TSubclassOf<UCommonTextStyle> Style)
 {
     if (Style == nullptr)
     {
@@ -33,7 +33,7 @@ void UWidgetUtilities::SetTextStyleOverride(URichTextBlock *TextBlock, TSubclass
         return;
     }
 
-    auto DefaultObject = Style.GetDefaultObject();
+    auto *DefaultObject = Style.GetDefaultObject();
     FTextBlockStyle DefaultStyle;
     DefaultObject->ToTextBlockStyle(DefaultStyle);
     TextBlock->SetDefaultTextStyle(DefaultStyle);

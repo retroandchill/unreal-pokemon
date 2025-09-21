@@ -35,8 +35,14 @@ public class UPartyComponent : URPGComponent
 
     public bool IsPartyFull
     {
-        [UFunction(FunctionFlags.BlueprintPure, Category = "Party")]
+        [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Is Party Full", Category = "Party")]
         get => Party.Count >= PokemonStatics.MaxPartySize;
+    }
+
+    public bool IsPartyEmpty
+    {
+        [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Is Party Empty", Category = "Party")]
+        get => Party.Count == 0;
     }
 
     [UFunction(FunctionFlags.BlueprintPure, Category = "Party")]
