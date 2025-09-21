@@ -16,29 +16,26 @@ using UnrealSharp.UnrealSharpCommonUI;
 namespace Pokemon.UI.Components.Bag;
 
 [UClass]
-public class UPocketTabWidget : UCommonUserWidget
+public class UPocketTabWidget : UCommonActivatableWidget
 {
-    private FGameplayTag CurrentPocket
+    public FGameplayTag CurrentPocket
     {
         get;
-        set
+        private set
         {
+            if (field == value)
+                return;
             field = value;
-            ItemSelectionWindow.CurrentPocket = field;
+
+            Bag.LastViewedPocket = value;
+            OnPocketChanged?.Invoke(value);
         }
     }
 
-    [UProperty]
-    [field: AllowNull, MaybeNull]
-    public UItemSelectionWindow ItemSelectionWindow
-    {
-        get;
-        set
-        {
-            field = value;
-            field?.CurrentPocket = CurrentPocket;
-        }
-    }
+    [UProperty(PropertyFlags.Transient)]
+    private UPokemonBag Bag { get; set; }
+
+    public event Action<FGameplayTag>? OnPocketChanged;
 
     [UProperty(PropertyFlags.Transient)]
     private USelectableButtonGroup PocketButtonGroup { get; set; }
@@ -99,7 +96,7 @@ public class UPocketTabWidget : UCommonUserWidget
         (b, i) =>
         {
             var button = (UPocketButton)b;
-            ItemSelectionWindow.CurrentPocket = button.Pocket;
+            CurrentPocket = button.Pocket;
         };
         PocketButtonGroup.OnButtonBaseClicked += PocketClicked;
 
@@ -121,10 +118,23 @@ public class UPocketTabWidget : UCommonUserWidget
         RegisterUIActionBinding(new FCSBindUIActionArgs(PocketRightAction, false, PocketRight));
 
         var subsystem = GetGameInstanceSubsystem<UPokemonSubsystem>();
-        var lastPocket = subsystem.Bag.LastViewedPocket;
-        CurrentPocket = lastPocket.IsValid
-            ? lastPocket
-            : PocketButtonGroup.GetRequiredButton<UPocketButton>(0).Pocket;
+        Bag = subsystem.Bag;
+        var lastPocket = Bag.LastViewedPocket;
+        if (lastPocket.IsValid)
+        {
+            CurrentPocket = lastPocket;
+            var matchingButton = PocketButtonGroup
+                .GetButtons<UPocketButton>()
+                .Where(x => x.Button.Pocket == lastPocket)
+                .Select(x => x.Button)
+                .First();
+            matchingButton.SetIsSelected(true);
+        }
+        else
+        {
+            var firstButton = PocketButtonGroup.GetRequiredButton<UPocketButton>(0);
+            CurrentPocket = firstButton.Pocket;
+        }
     }
 
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Buttons")]
@@ -150,6 +160,6 @@ public class UPocketTabWidget : UCommonUserWidget
     {
         var pocketButton = (UPocketButton)button;
         pocketButton.SetIsSelected(true);
-        ItemSelectionWindow.CurrentPocket = pocketButton.Pocket;
+        CurrentPocket = pocketButton.Pocket;
     }
 }

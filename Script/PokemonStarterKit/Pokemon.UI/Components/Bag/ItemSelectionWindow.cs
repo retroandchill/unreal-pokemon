@@ -8,32 +8,17 @@ using UnrealSharp.InteractiveUI;
 
 namespace Pokemon.UI.Components.Bag;
 
-[UMultiDelegate]
-public delegate void OnPocketChanged(FGameplayTag pocket);
-
-[UMultiDelegate]
-public delegate void OnItemChanged(FItemHandle item, int quantity);
-
-[UMultiDelegate]
-public delegate void OnNoItemSelected();
-
 [UClass(ClassFlags.Abstract)]
 public class UItemSelectionWindow : UOwningSelectionWidget
 {
     [UProperty(PropertyFlags.EditAnywhere, Category = "Display")]
     private TSubclassOf<UItemOption> ItemEntryClass { get; }
 
-    [UProperty(PropertyFlags.BlueprintAssignable, Category = "Events")]
-    public TMulticastDelegate<OnItemChanged> OnItemSelected { get; set; }
+    public event Action<FGameplayTag>? OnPocketChanged;
 
-    [UProperty(PropertyFlags.BlueprintAssignable, Category = "Events")]
-    public TMulticastDelegate<OnNoItemSelected> OnNoItemSelected { get; set; }
+    public event Action<FItemHandle, int>? OnItemHovered;
 
-    [UProperty(PropertyFlags.BlueprintAssignable, Category = "Events")]
-    public TMulticastDelegate<OnPocketChanged> OnPocketChanged { get; set; }
-
-    [UProperty(PropertyFlags.BlueprintAssignable, Category = "Events")]
-    public TMulticastDelegate<OnItemChanged> OnItemChanged { get; set; }
+    public event Action<FItemHandle, int>? OnItemSelected;
 
     private Func<FItemHandle, bool>? _itemFilter;
 
@@ -47,8 +32,6 @@ public class UItemSelectionWindow : UOwningSelectionWidget
         {
             field = value;
             UpdatePocket();
-
-            DesiredFocusTarget?.SetFocus();
         }
     }
 
@@ -76,17 +59,16 @@ public class UItemSelectionWindow : UOwningSelectionWidget
         UpdatePocket();
     }
 
-    [UFunction(FunctionFlags.BlueprintCallable, Category = "Items|Selection")]
     private void OnSelectionChange(int index)
     {
         Bag.SetLastViewedIndex(CurrentPocket, index);
         if (Buttons.GetButtonBaseAtIndex(index) is UItemOption option)
         {
-            OnItemChanged.Invoke(option.Item, option.Quantity);
+            OnItemHovered?.Invoke(option.Item, option.Quantity);
         }
         else
         {
-            OnItemChanged.Invoke(default, 0);
+            OnItemHovered?.Invoke(default, 0);
         }
     }
 
@@ -94,13 +76,8 @@ public class UItemSelectionWindow : UOwningSelectionWidget
     {
         if (Buttons.GetButtonBaseAtIndex(currentIndex) is not UItemOption option)
             throw new InvalidOperationException("No option at index");
-        OnItemSelected.Invoke(option.Item, option.Quantity);
-    }
-
-    protected override bool OnHandleBackAction()
-    {
-        OnNoItemSelected.Invoke();
-        return true;
+        OnItemHovered?.Invoke(option.Item, option.Quantity);
+        OnItemSelected?.Invoke(option.Item, option.Quantity);
     }
 
     private void UpdatePocket()
@@ -115,7 +92,19 @@ public class UItemSelectionWindow : UOwningSelectionWidget
             option.SetItem(item, quantity);
             Buttons.AddWidget(option);
         }
-        DesiredFocusIndex = Math.Clamp(DesiredFocusIndex, 0, Buttons.ButtonCount - 1);
-        OnPocketChanged.Invoke(CurrentPocket);
+
+        DesiredFocusIndex =
+            Buttons.ButtonCount > 0 ? Math.Clamp(DesiredFocusIndex, 0, Buttons.ButtonCount - 1) : 0;
+
+        var desiredFocusTarget = DesiredFocusTarget;
+        if (IsActive)
+        {
+            desiredFocusTarget?.SetFocus();
+        }
+
+        if (desiredFocusTarget is UItemOption itemOption)
+        {
+            OnItemHovered?.Invoke(itemOption.Item, itemOption.Quantity);
+        }
     }
 }

@@ -18,18 +18,24 @@ public sealed class UTypePbsSerializer : UGameDataEntryPbsSerializerBase
         return repositoryClass == typeof(UTypeRepository);
     }
 
-    protected override void Serialize(StreamWriter streamWriter, UAssetGameDataRepository repository)
+    protected override void Serialize(
+        StreamWriter streamWriter,
+        UAssetGameDataRepository repository
+    )
     {
         if (repository is not UTypeRepository typeRepository)
             throw new InvalidOperationException("Repository is not of type UTypeRepository");
 
-        PbsCompiler.WritePbs(typeRepository.Entries.AsValueEnumerable()
-                .Select(x => x.ToTypeInfo())
-                .ToArray(),
-            streamWriter);
+        PbsCompiler.WritePbs(
+            typeRepository.Entries.AsValueEnumerable().Select(x => x.ToTypeInfo()).ToArray(),
+            streamWriter
+        );
     }
 
-    protected override void Deserialize(StreamReader streamReader, UAssetGameDataRepository repository)
+    protected override void Deserialize(
+        StreamReader streamReader,
+        UAssetGameDataRepository repository
+    )
     {
         if (
             repository
@@ -43,10 +49,12 @@ public sealed class UTypePbsSerializer : UGameDataEntryPbsSerializerBase
         }
 
         dataEntries.Clear();
-        foreach (var entry in PbsCompiler
-                     .CompilePbsFile<TypeInfo>(streamReader)
-                     .Select(x => x.Value)
-                     .Select(x => x.ToType()))
+        foreach (
+            var entry in PbsCompiler
+                .CompilePbsFile<TypeInfo>(streamReader)
+                .Select(x => x.Value)
+                .Select(x => x.ToType())
+        )
         {
             dataEntries.Add(entry);
         }

@@ -30,7 +30,7 @@ public class UPartyComponent : URPGComponent
         [UFunction(FunctionFlags.BlueprintPure, Category = "Party")]
         get => Party.Count;
     }
-    
+
     public int AblePokemonCount
     {
         [UFunction(FunctionFlags.BlueprintPure, Category = "Party")]
@@ -66,13 +66,13 @@ public class UPartyComponent : URPGComponent
         [UFunction(FunctionFlags.BlueprintPure, Category = "Party")]
         get => AbleParty.FirstOrDefault();
     }
-    
+
     public UPokemon LastPartyPokemon
     {
         [UFunction(FunctionFlags.BlueprintPure, Category = "Party")]
         get => Party[^1];
     }
-    
+
     public UPokemon? LastAblePartyPokemon
     {
         [UFunction(FunctionFlags.BlueprintPure, Category = "Party")]
@@ -102,7 +102,7 @@ public class UPartyComponent : URPGComponent
         {
             throw new InvalidOperationException("Party is full");
         }
-        
+
         Party.Add(pokemon);
     }
 
@@ -116,7 +116,7 @@ public class UPartyComponent : URPGComponent
         {
             return false;
         }
-        
+
         Party.RemoveAt(index);
         return true;
     }
@@ -126,7 +126,7 @@ public class UPartyComponent : URPGComponent
     {
         return Party.Index().Any(x => x.Index != index && x.Item.IsAbleToBattle);
     }
-    
+
     [UFunction]
     public void SwapPositionsInParty(int index1, int index2)
     {

@@ -78,10 +78,14 @@ public partial class UPokemon : URPGEntity
         Category = "Components"
     )]
     public UStatusEffectComponent StatusEffectComponent { get; private set; }
-    
+
     public bool IsAbleToBattle
     {
-        [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Is Able to Battle", Category = "Battle")]
+        [UFunction(
+            FunctionFlags.BlueprintPure,
+            DisplayName = "Is Able to Battle",
+            Category = "Battle"
+        )]
         get { return AllComponents.OfType<IBattleCapableComponent>().All(c => c.IsAbleToBattle); }
     }
 

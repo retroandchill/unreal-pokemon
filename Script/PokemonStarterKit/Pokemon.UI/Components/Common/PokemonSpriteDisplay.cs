@@ -32,7 +32,9 @@ public class UPokemonSpriteDisplay : UPokemonDisplayBase
             return;
         }
 
-        var sprite = ShowBackSprite? UPokemonAssetLoader.ResolvePokemonBackSprite(Pokemon) : UPokemonAssetLoader.ResolvePokemonFrontSprite(Pokemon);
+        var sprite = ShowBackSprite
+            ? UPokemonAssetLoader.ResolvePokemonBackSprite(Pokemon)
+            : UPokemonAssetLoader.ResolvePokemonFrontSprite(Pokemon);
         Image.SetBrushFromLazySimpleFlipbook(sprite, true);
         Image.Visibility = ESlateVisibility.SelfHitTestInvisible;
     }

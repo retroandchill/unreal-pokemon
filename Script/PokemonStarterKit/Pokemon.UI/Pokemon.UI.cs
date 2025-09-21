@@ -11,7 +11,10 @@ public class FPokemonUIModule : IModuleInterface
 {
     public void StartupModule()
     {
-        FUnrealInjectModule.Instance.Services.AddSingleton<IAsyncActionsService, UIAsyncActionsService>();
+        FUnrealInjectModule.Instance.Services.AddSingleton<
+            IAsyncActionsService,
+            UIAsyncActionsService
+        >();
     }
 
     public void ShutdownModule()

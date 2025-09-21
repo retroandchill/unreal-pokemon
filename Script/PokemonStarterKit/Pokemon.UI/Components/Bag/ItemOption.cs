@@ -26,11 +26,7 @@ public class UItemOption : UCommonButtonBase
 
     [UProperty]
     [BindWidget]
-    private UCommonNumericTextBlock ItemQuantityText { get; }
-
-    [UProperty]
-    [BindWidgetOptional]
-    private UPanelWidget? ItemQuantityPanel { get; }
+    private UItemQuantityDisplayBase ItemQuantityText { get; }
 
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Inventory")]
     public void SetItem(FItemHandle item, int quantity)
@@ -48,13 +44,11 @@ public class UItemOption : UCommonButtonBase
 
         if (item.Entry.ShowQuantity)
         {
-            ItemQuantityPanel?.Visibility = ESlateVisibility.SelfHitTestInvisible;
             ItemQuantityText.Visibility = ESlateVisibility.SelfHitTestInvisible;
-            ItemQuantityText.CurrentValue = quantity;
+            ItemQuantityText.Quantity = quantity;
         }
         else
         {
-            ItemQuantityPanel?.Visibility = ESlateVisibility.Collapsed;
             ItemQuantityText.Visibility = ESlateVisibility.Collapsed;
         }
     }
@@ -63,6 +57,6 @@ public class UItemOption : UCommonButtonBase
     {
         var currentStyle = CurrentTextStyleClass;
         ItemNameText.Style = currentStyle;
-        ItemQuantityText.Style = currentStyle;
+        ItemQuantityText.TextStyle = currentStyle;
     }
 }

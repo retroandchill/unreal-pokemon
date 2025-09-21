@@ -12,10 +12,13 @@ public class USelectionWidget : UCommonActivatableWidget
 {
     [UProperty(PropertyFlags.Transient)]
     protected USelectableButtonGroup Buttons { get; private set; }
-    
+
     public event Action? OnBackAction;
 
-    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite, Category = "Selection")]
+    [UProperty(
+        PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite,
+        Category = "Selection"
+    )]
     [UIMin("0")]
     [ClampMin("0")]
     public int DesiredFocusIndex
@@ -57,22 +60,25 @@ public class USelectionWidget : UCommonActivatableWidget
 
     public UCommonButtonBase? GetButton(int index)
     {
-        return Buttons.GetButtonBaseAtIndex(index);   
+        return Buttons.GetButtonBaseAtIndex(index);
     }
 
-    public T? GetButton<T>(int index) where T : UCommonButtonBase
+    public T? GetButton<T>(int index)
+        where T : UCommonButtonBase
     {
-        return Buttons.GetButton<T>(index);  
+        return Buttons.GetButton<T>(index);
     }
-    
+
     public UCommonButtonBase GetRequiredButton(int index)
     {
-        return Buttons.GetButtonBaseAtIndex(index) ?? throw new InvalidOperationException("No button at index"); 
+        return Buttons.GetButtonBaseAtIndex(index)
+            ?? throw new InvalidOperationException("No button at index");
     }
 
-    public T GetRequiredButton<T>(int index) where T : UCommonButtonBase
+    public T GetRequiredButton<T>(int index)
+        where T : UCommonButtonBase
     {
-        return Buttons.GetRequiredButton<T>(index);  
+        return Buttons.GetRequiredButton<T>(index);
     }
 
     [UFunction]

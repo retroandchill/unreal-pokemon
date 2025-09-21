@@ -22,16 +22,17 @@ public class UNamedSlotSelectionWidget : USelectionWidget, IRefreshable
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Selection")]
     public void UpdateOptions()
     {
-        #if WITH_EDITOR
-        if (!SystemLibrary.IsValid(ContentSlot)) return;
-        #endif
+#if WITH_EDITOR
+        if (!SystemLibrary.IsValid(ContentSlot))
+            return;
+#endif
 
         if (ContentSlot.Content is not UPanelWidget contentWidget)
         {
             LogInteractiveUICore.LogError("ContentSlot contain a UPanelWidget");
             return;
         }
-        
+
         Buttons.RemoveAll();
         for (var i = 0; i < contentWidget.ChildrenCount; i++)
         {
@@ -44,12 +45,13 @@ public class UNamedSlotSelectionWidget : USelectionWidget, IRefreshable
             if (child is IConditionalWidget conditionalWidget)
             {
                 conditionalWidget.UpdateEnabled();
-                if (!conditionalWidget.IsWidgetEnabled) continue;
+                if (!conditionalWidget.IsWidgetEnabled)
+                    continue;
             }
-            
+
             Buttons.AddWidget(button);
         }
-        
+
         DesiredFocusIndex = Math.Clamp(DesiredFocusIndex, 0, Buttons.ButtonCount - 1);
     }
 

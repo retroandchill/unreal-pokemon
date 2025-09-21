@@ -18,18 +18,27 @@ public sealed class UBerryPlantPbsSerializer : UGameDataEntryPbsSerializerBase
         return repositoryClass == typeof(UBerryPlantRepository);
     }
 
-    protected override void Serialize(StreamWriter streamWriter, UAssetGameDataRepository repository)
+    protected override void Serialize(
+        StreamWriter streamWriter,
+        UAssetGameDataRepository repository
+    )
     {
         if (repository is not UBerryPlantRepository abilityRepository)
             throw new InvalidOperationException("Repository is not of type UBerryPlantRepository");
 
-        PbsCompiler.WritePbs(abilityRepository.Entries.AsValueEnumerable()
+        PbsCompiler.WritePbs(
+            abilityRepository
+                .Entries.AsValueEnumerable()
                 .Select(x => x.ToBerryPlantInfo())
                 .ToArray(),
-            streamWriter);
+            streamWriter
+        );
     }
 
-    protected override void Deserialize(StreamReader streamReader, UAssetGameDataRepository repository)
+    protected override void Deserialize(
+        StreamReader streamReader,
+        UAssetGameDataRepository repository
+    )
     {
         if (
             repository
@@ -43,10 +52,12 @@ public sealed class UBerryPlantPbsSerializer : UGameDataEntryPbsSerializerBase
         }
 
         dataEntries.Clear();
-        foreach (var entry in PbsCompiler
-                     .CompilePbsFile<BerryPlantInfo>(streamReader)
-                     .Select(x => x.Value)
-                     .Select(x => x.ToBerryPlant()))
+        foreach (
+            var entry in PbsCompiler
+                .CompilePbsFile<BerryPlantInfo>(streamReader)
+                .Select(x => x.Value)
+                .Select(x => x.ToBerryPlant())
+        )
         {
             dataEntries.Add(entry);
         }

@@ -14,20 +14,9 @@ using UnrealSharp.UMG;
 
 namespace Pokemon.UI.Components.Party;
 
-public interface IPokemonPanelOwner
-{
-    int? SwitchingIndex { get; }
-
-    bool IsSwitching => SwitchingIndex.HasValue;
-}
-
 [UClass(ClassFlags.Abstract)]
 public class UPokemonPanel : UPokemonButtonBase
 {
-    public IPokemonPanelOwner? Owner { get; set; }
-
-    public int ButtonIndex { get; set; }
-
     [UProperty]
     [BindWidget]
     private UPokemonDisplayBase PokemonIcon { get; }
@@ -66,7 +55,11 @@ public class UPokemonPanel : UPokemonButtonBase
     public bool IsActivate
     {
         [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Is Active", Category = "Display")]
-        get => ButtonIndex == 0;
+        get
+        {
+            var subsystem = GetGameInstanceSubsystem<UPokemonSubsystem>();
+            return ReferenceEquals(subsystem.Player.PartyPokemon[0], Pokemon);
+        }
     }
 
     public bool IsPokemonFainted
@@ -92,7 +85,7 @@ public class UPokemonPanel : UPokemonButtonBase
     public bool IsSwapping
     {
         [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Is Swapping", Category = "Display")]
-        get => Owner?.IsSwitching ?? false;
+        get => Outer is UPokemonSelectionPane { IsSwitching: true };
     }
 
     public bool IsPreselected
@@ -102,7 +95,16 @@ public class UPokemonPanel : UPokemonButtonBase
             DisplayName = "Is Preselected",
             Category = "Display"
         )]
-        get => Owner?.SwitchingIndex == ButtonIndex;
+        get
+        {
+            if (Outer is not UPokemonSelectionPane { IsSwitching: true } selectionPane)
+                return false;
+            var subsystem = GetGameInstanceSubsystem<UPokemonSubsystem>();
+            return ReferenceEquals(
+                subsystem.Player.PartyPokemon[selectionPane.SwitchingIndex.Value],
+                Pokemon
+            );
+        }
     }
 
     public void SwapPokemon(UPokemonPanel other)
@@ -117,7 +119,8 @@ public class UPokemonPanel : UPokemonButtonBase
         if (Pokemon is null)
             return;
 
-        Pokemon.Item.Match(i =>
+        Pokemon.Item.Match(
+            i =>
             {
                 ItemIcon.Item = i;
                 ItemIcon.Visibility = ESlateVisibility.SelfHitTestInvisible;
@@ -125,7 +128,8 @@ public class UPokemonPanel : UPokemonButtonBase
             () =>
             {
                 ItemIcon.Visibility = ESlateVisibility.Hidden;
-            });
+            }
+        );
         NameText.Text = Pokemon.Nickname;
         LevelText.CurrentValue = Pokemon.Level;
 

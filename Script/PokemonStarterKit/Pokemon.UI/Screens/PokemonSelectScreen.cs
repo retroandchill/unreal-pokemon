@@ -22,25 +22,21 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidget]
     protected UPokemonSelectionPane SelectionPane { get; }
-    
+
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidgetOptional]
     protected UPokemonDisplayBase? PokemonDisplay { get; }
-    
+
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidget]
     public USelectionWidget CommandWidget { get; }
-    
+
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidgetOptional]
     public UPanelWidget? CommandPanel { get; }
-    
+
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "State")]
-    protected UPokemon CurrentPokemon
-    {
-        get;
-        private set;
-    }
+    protected UPokemon CurrentPokemon { get; private set; }
 
     private Action<UPokemon?>? _onPokemonSelected;
 
@@ -143,7 +139,7 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
         {
             refreshable.Refresh();
         }
-        
+
         SetCommandPanelPosition(index);
         CommandWidget.DesiredFocusIndex = 0;
         CommandWidget.ActivateWidget();
@@ -151,16 +147,20 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
 
     private void SetCommandPanelPosition(int index)
     {
-        if (CommandPanel?.Slot is not UCanvasPanelSlot canvasSlot) return;
+        if (CommandPanel?.Slot is not UCanvasPanelSlot canvasSlot)
+            return;
 
         var button = SelectionPane.GetRequiredButton(index);
         var buttonGeometry = button.CachedGeometry;
         var selectionPaneGeometry = SelectionPane.CachedGeometry;
-        
+
         var effectiveIndex = index / (SelectionPane.ButtonCount / 2);
 
         var buttonLocalSize = buttonGeometry.LocalSize;
-        canvasSlot.Position = buttonGeometry.LocalTopLeft + new FVector2D(buttonLocalSize.X, effectiveIndex == 0 ? 0.0f : buttonLocalSize.Y) + selectionPaneGeometry.LocalTopLeft;
+        canvasSlot.Position =
+            buttonGeometry.LocalTopLeft
+            + new FVector2D(buttonLocalSize.X, effectiveIndex == 0 ? 0.0f : buttonLocalSize.Y)
+            + selectionPaneGeometry.LocalTopLeft;
         canvasSlot.Alignment = new FVector2D(0.0f, effectiveIndex == 0 ? 0.0f : 1.0f);
     }
 

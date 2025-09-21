@@ -17,7 +17,6 @@ namespace Pokemon.Editor.Serialization.Pbs.Serializers;
 [UsedImplicitly]
 public class UGameDataEntryPbsSerializerBase : UCSGameDataEntrySerializer
 {
-
     protected override FText GetFormatName()
     {
         return FText.Localized("Pokemon.Editor", "PbsFormatName", "PBS");
@@ -84,7 +83,10 @@ public class UGameDataEntryPbsSerializerBase : UCSGameDataEntrySerializer
         throw new InvalidOperationException("Not implemented");
     }
 
-    protected virtual void Deserialize(StreamReader streamReader, UAssetGameDataRepository repository)
+    protected virtual void Deserialize(
+        StreamReader streamReader,
+        UAssetGameDataRepository repository
+    )
     {
         throw new InvalidOperationException("Not implemented");
     }

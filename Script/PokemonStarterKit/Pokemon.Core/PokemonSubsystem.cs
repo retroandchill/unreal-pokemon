@@ -29,10 +29,14 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
     private FTransform? _playerLoadTransform;
 
     private FPlayerResetLocation? _playerResetLocation;
-    
+
     public bool IsPlayerResetLocationSet
     {
-        [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Is Player Reset Location Set", Category = "Location")]
+        [UFunction(
+            FunctionFlags.BlueprintPure,
+            DisplayName = "Is Player Reset Location Set",
+            Category = "Location"
+        )]
         get => _playerResetLocation.HasValue;
     }
 
@@ -82,17 +86,18 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Player")]
     public void AdjustPlayerTransformOnLoad(ACharacter playerCharacter)
     {
-        if (!_playerLoadTransform.HasValue) return;
-        
+        if (!_playerLoadTransform.HasValue)
+            return;
+
         playerCharacter.SetActorTransform(_playerLoadTransform.Value);
         _playerLoadTransform = null;
     }
-    
+
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Player")]
-    public void SetPlayerResetLocation(string mapName, FTransform transform) {
+    public void SetPlayerResetLocation(string mapName, FTransform transform)
+    {
         _playerResetLocation = new FPlayerResetLocation(mapName, transform);
     }
-
 
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Player")]
     public void SetPlayerResetLocationAsCurrentLocation(ACharacter PlayerCharacter)

@@ -10,8 +10,9 @@ public interface IRPGEntity<out T>
 
 public partial class URPGEntity
 {
-    protected IEnumerable<URPGComponent> AllComponents => RequiredComponents.Concat(AdditionalComponents);
-    
+    protected IEnumerable<URPGComponent> AllComponents =>
+        RequiredComponents.Concat(AdditionalComponents);
+
     public T? GetComponent<T>()
         where T : URPGComponent
     {

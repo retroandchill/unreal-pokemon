@@ -16,14 +16,18 @@ public class UPokemonCoreBlueprintLibrary : UBlueprintFunctionLibrary
     {
         return worldContextObject.GetGameInstanceSubsystem<UPokemonSubsystem>().Player;
     }
-    
+
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Pokémon|Party")]
     [WorldContext(nameof(worldContextObject))]
-    public static UPokemon AddPokemonToParty(UObject worldContextObject, FSpeciesHandle species, int level = 5)
+    public static UPokemon AddPokemonToParty(
+        UObject worldContextObject,
+        FSpeciesHandle species,
+        int level = 5
+    )
     {
         var player = GetPlayer(worldContextObject);
         var newPokemon = UPokemon.Create(player, species, level);
-        
+
         // TODO: We need to check if the party is full and if that's the case automatically box the Pokémon
         player.AddPokemon(newPokemon);
         return newPokemon;

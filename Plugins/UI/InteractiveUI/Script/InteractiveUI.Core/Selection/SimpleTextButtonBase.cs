@@ -35,7 +35,6 @@ public class USimpleTextButtonBase : UCommonButtonBase
         if (!SystemLibrary.IsValid(TextBlock))
             return;
 #endif
-        
         TextBlock.Text = Text;
     }
 

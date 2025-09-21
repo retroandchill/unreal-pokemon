@@ -2,9 +2,9 @@
 #include "AssetToolsModule.h"
 #include "EdGraphUtilities.h"
 #include "Handles/DataHandleCustomization.h"
+#include "Handles/DataHandlePinFactory.h"
 #include "Handles/DataHandlePropertyIdentifier.h"
 #include "PropertyEditorModule.h"
-#include "Handles/DataHandlePinFactory.h"
 #include "Repositories/GameDataEntryDetailsCustomization.h"
 #include "Repositories/GameDataRepositoryActions.h"
 
@@ -14,7 +14,7 @@ class FGameDataAccessToolsEditorModule final : public IGameDataAccessToolsEditor
     void StartupModule() override
     {
         FEdGraphUtilities::RegisterVisualPinFactory(MakeShared<FDataHandlePinFactory>());
-        
+
         // Register the asset type actions
         auto &AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
 

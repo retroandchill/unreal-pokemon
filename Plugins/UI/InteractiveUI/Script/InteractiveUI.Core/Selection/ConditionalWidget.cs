@@ -8,7 +8,7 @@ namespace InteractiveUI.Core.Selection;
 public interface IConditionalWidget
 {
     bool IsWidgetEnabled { get; }
-    
+
     void UpdateEnabled();
 }
 
@@ -20,14 +20,15 @@ public class UConditionalButtonBase : UCommonButtonBase, IConditionalWidget
 {
     [UProperty(PropertyFlags.EditAnywhere, Category = "Selection")]
     public bool IsWidgetEnabled { get; private set; } = true;
-    
+
     [UProperty]
     private TDelegate<IsWidgetEnabled> IsWidgetEnabledDelegate { get; }
-    
+
     [UProperty(PropertyFlags.EditAnywhere, Category = "Visibility")]
     [UMetaData("InvalidEnumValues", "Collapsed, Hidden")]
-    private ESlateVisibility EnabledVisibility { get; set; } = ESlateVisibility.SelfHitTestInvisible;
-    
+    private ESlateVisibility EnabledVisibility { get; set; } =
+        ESlateVisibility.SelfHitTestInvisible;
+
     [UProperty(PropertyFlags.EditAnywhere, Category = "Visibility")]
     [UMetaData("InvalidEnumValues", "Collapsed, Hidden")]
     private ESlateVisibility DisabledVisibility { get; set; } = ESlateVisibility.Collapsed;
@@ -38,7 +39,7 @@ public class UConditionalButtonBase : UCommonButtonBase, IConditionalWidget
         {
             IsWidgetEnabled = IsWidgetEnabledDelegate.InnerDelegate.Invoke();
         }
-        
+
         Visibility = IsWidgetEnabled ? EnabledVisibility : DisabledVisibility;
     }
 }
@@ -48,14 +49,15 @@ public class UConditionalTextButtonBase : USimpleTextButtonBase, IConditionalWid
 {
     [UProperty(PropertyFlags.EditAnywhere, Category = "Selection")]
     public bool IsWidgetEnabled { get; private set; } = true;
-    
+
     [UProperty]
     private TDelegate<IsWidgetEnabled> IsWidgetEnabledDelegate { get; }
-    
+
     [UProperty(PropertyFlags.EditAnywhere, Category = "Visibility")]
     [UMetaData("InvalidEnumValues", "Collapsed, Hidden")]
-    private ESlateVisibility EnabledVisibility { get; set; } = ESlateVisibility.SelfHitTestInvisible;
-    
+    private ESlateVisibility EnabledVisibility { get; set; } =
+        ESlateVisibility.SelfHitTestInvisible;
+
     [UProperty(PropertyFlags.EditAnywhere, Category = "Visibility")]
     [UMetaData("InvalidEnumValues", "Collapsed, Hidden")]
     private ESlateVisibility DisabledVisibility { get; set; } = ESlateVisibility.Collapsed;
@@ -66,7 +68,7 @@ public class UConditionalTextButtonBase : USimpleTextButtonBase, IConditionalWid
         {
             IsWidgetEnabled = IsWidgetEnabledDelegate.InnerDelegate.Invoke();
         }
-        
+
         Visibility = IsWidgetEnabled ? EnabledVisibility : DisabledVisibility;
     }
 }

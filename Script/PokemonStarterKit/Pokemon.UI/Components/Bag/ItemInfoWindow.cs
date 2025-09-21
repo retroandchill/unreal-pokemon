@@ -1,13 +1,15 @@
 ﻿using Pokemon.Data.Model.PBS;
+using Pokemon.UI.Components.Common;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.CommonUI;
+using UnrealSharp.UMG;
 
 namespace Pokemon.UI.Components.Bag;
 
 [UClass(ClassFlags.Abstract)]
-public class UItemInfoWindow : UCommonUserWidget
+public class UItemInfoWindow : UItemInfoWidgetBase
 {
     [UProperty]
     [BindWidget]
@@ -17,23 +19,12 @@ public class UItemInfoWindow : UCommonUserWidget
     [BindWidget]
     private UCommonTextBlock ItemDescriptionText { get; }
 
-    [UFunction(
-        FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent,
-        Category = "Display"
-    )]
-    public virtual void SetItem(FItemHandle item, int quantity)
+    protected override void OnItemSet(FItemHandle item)
     {
+        ItemNameText.Visibility = ESlateVisibility.SelfHitTestInvisible;
+        ItemDescriptionText.Visibility = ESlateVisibility.SelfHitTestInvisible;
+
         ItemNameText.Text = item.Entry.Name;
         ItemDescriptionText.Text = item.Entry.Description;
-    }
-
-    [UFunction(
-        FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent,
-        Category = "Display"
-    )]
-    public virtual void ClearItem()
-    {
-        ItemNameText.Text = FText.None;
-        ItemDescriptionText.Text = FText.None;
     }
 }

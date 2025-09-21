@@ -1,20 +1,31 @@
 ﻿using InteractiveUI.Core;
+using InteractiveUI.Core.Selection;
+using InteractiveUI.Core.Utilities;
 using Pokemon.Core;
+using Pokemon.Core.Entities;
 using Pokemon.Core.Services.Async;
 using Pokemon.Data.Model.PBS;
 using Pokemon.UI.Components.Bag;
+using Pokemon.UI.Components.Common;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.CommonUI;
-using UnrealSharp.CoreUObject;
 using UnrealSharp.Engine;
+using UnrealSharp.GameplayTags;
 using UnrealSharp.InteractiveUI;
+using UnrealSharp.UMG;
 
 namespace Pokemon.UI.Screens;
 
 [UClass(ClassFlags.Abstract)]
 public class UBagScreen : UCommonActivatableWidget
 {
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.Transient, Category = "State")]
+    public FItemHandle CurrentItem { get; private set; }
+
+    [UProperty(PropertyFlags.Transient)]
+    private UPokemonBag Bag { get; set; }
+
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidget]
     protected UItemSelectionWindow ItemSelectionWindow { get; }
@@ -30,6 +41,14 @@ public class UBagScreen : UCommonActivatableWidget
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidget]
     protected UPocketWindow PocketWindow { get; }
+
+    [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
+    [BindWidget]
+    protected USelectionWidget CommandWidget { get; }
+
+    [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
+    [BindWidgetOptional]
+    protected UPokemonSelectionWidgetBase? PokemonSelectionPane { get; }
 
     private Action<FItemSlotInfo?>? _onItemSelected;
 
@@ -49,9 +68,34 @@ public class UBagScreen : UCommonActivatableWidget
 
     public override void Construct()
     {
-        var bag = GetGameInstanceSubsystem<UPokemonSubsystem>().Bag;
-        ItemSelectionWindow.Bag = bag;
-        PocketTabWidget.ItemSelectionWindow = ItemSelectionWindow;
+        Bag = GetGameInstanceSubsystem<UPokemonSubsystem>().Bag;
+        ItemSelectionWindow.Bag = Bag;
+        PocketTabWidget.OnPocketChanged += OnPocketTabChanged;
+        ItemSelectionWindow.OnItemHovered += SetHoveredItem;
+        ItemSelectionWindow.OnItemSelected += SelectItem;
+        ItemSelectionWindow.OnBackAction += OnItemSelectionCanceled;
+        ItemSelectionWindow.OnWidgetActivated += [UFunction] () => PocketTabWidget.ActivateWidget();
+        ItemSelectionWindow.OnWidgetDeactivated += [UFunction]
+        () => PocketTabWidget.DeactivateWidget();
+
+        OnPocketTabChanged(PocketTabWidget.CurrentPocket);
+        var currentButton = ItemSelectionWindow.GetButton<UItemOption>(
+            ItemSelectionWindow.DesiredFocusIndex
+        );
+        if (currentButton is not null)
+        {
+            SetHoveredItem(currentButton.Item, currentButton.Quantity);
+        }
+        else
+        {
+            SetHoveredItem(default, 0);
+        }
+    }
+
+    private void OnPocketTabChanged(FGameplayTag tag)
+    {
+        PocketWindow.CurrentPocket = tag;
+        ItemSelectionWindow.CurrentPocket = tag;
     }
 
     public void ApplyItemFilter(Func<FItemHandle, bool> filter)
@@ -103,8 +147,26 @@ public class UBagScreen : UCommonActivatableWidget
         ItemSelectionWindow.Refresh();
     }
 
-    [UFunction(FunctionFlags.BlueprintCallable, Category = "Items|Selection")]
-    protected void SelectItem(FItemHandle itemHandle, int quantity)
+    private void SetHoveredItem(FItemHandle item, int quantity)
+    {
+        CurrentItem = item;
+        Bag.SetLastViewedIndex(
+            ItemSelectionWindow.CurrentPocket,
+            ItemSelectionWindow.DesiredFocusIndex
+        );
+
+        if (CurrentItem.IsValid)
+        {
+            ItemInfoWindow.Visibility = ESlateVisibility.SelfHitTestInvisible;
+            ItemInfoWindow.Item = item;
+        }
+        else
+        {
+            ItemInfoWindow.Visibility = ESlateVisibility.Hidden;
+        }
+    }
+
+    private void SelectItem(FItemHandle itemHandle, int quantity)
     {
         if (_onItemSelected is not null)
         {
@@ -112,12 +174,13 @@ public class UBagScreen : UCommonActivatableWidget
             return;
         }
 
+        SetHoveredItem(itemHandle, quantity);
         ToggleItemSelection(false);
         ShowItemCommands();
     }
 
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Items|Selection")]
-    protected void OnItemSelectionCanceled()
+    private void OnItemSelectionCanceled()
     {
         if (_onItemSelected is not null)
         {
@@ -128,10 +191,22 @@ public class UBagScreen : UCommonActivatableWidget
         this.PopContentFromLayer();
     }
 
-    [UFunction(FunctionFlags.BlueprintEvent, Category = "Items|Selection")]
-    protected virtual void ShowItemCommands()
+    private void ShowItemCommands()
     {
-        // No native implementation
+        ItemSelectionWindow.DeactivateWidget();
+
+        if (CommandWidget is IRefreshable refreshable)
+        {
+            refreshable.Refresh();
+        }
+
+        CommandWidget.DesiredFocusIndex = 0;
+        CommandWidget.ActivateWidget();
+    }
+
+    protected override UWidget? BP_GetDesiredFocusTarget()
+    {
+        return FocusUtilities.GetFirstActivatedWidget(CommandWidget, ItemSelectionWindow);
     }
 
     // TODO: Using item events

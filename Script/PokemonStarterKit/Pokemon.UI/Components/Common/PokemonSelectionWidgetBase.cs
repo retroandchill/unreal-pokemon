@@ -10,10 +10,10 @@ using UnrealSharp.UMG;
 namespace Pokemon.UI.Components.Common;
 
 [UClass(ClassFlags.Abstract)]
-public class UPokemonSelectionWidgetBase : UOwningSelectionWidget, IPokemonPanelOwner
+public class UPokemonSelectionWidgetBase : UOwningSelectionWidget
 {
     [UProperty(PropertyFlags.EditAnywhere, Category = "Display")]
-    private TSubclassOf<UPokemonPanel> PanelClass { get; }
+    private TSubclassOf<UPokemonButtonBase> PanelClass { get; }
 
     [UProperty(PropertyFlags.EditAnywhere, Category = "Display")]
     private TSubclassOf<UWidget> BlankPanelClass { get; }
@@ -21,10 +21,8 @@ public class UPokemonSelectionWidgetBase : UOwningSelectionWidget, IPokemonPanel
     [UProperty]
     private TArray<UWidget> BlankPanels { get; }
 
-    public int? SwitchingIndex { get; private set; }
-
     public event Action<UPokemon, int>? OnPokemonHovered;
-    
+
     public event Action<UPokemon, int>? OnPokemonSelected;
 
     protected virtual int? NumPanelsToAdd => null;
@@ -32,28 +30,22 @@ public class UPokemonSelectionWidgetBase : UOwningSelectionWidget, IPokemonPanel
     public override void Construct()
     {
         base.Construct();
-        Buttons.OnHoveredButtonBaseChanged += [UFunction](button, i) =>
+        Buttons.OnHoveredButtonBaseChanged += [UFunction]
+        (button, i) =>
         {
             if (button is UPokemonButtonBase { Pokemon: not null } pokemonButton)
             {
                 OnPokemonHovered?.Invoke(pokemonButton.Pokemon, i);
             }
         };
-        Buttons.OnButtonBaseClicked += [UFunction](button, i) =>
+        Buttons.OnButtonBaseClicked += [UFunction]
+        (button, i) =>
         {
             if (button is UPokemonButtonBase { Pokemon: not null } pokemonButton)
             {
                 OnPokemonSelected?.Invoke(pokemonButton.Pokemon, i);
             }
         };
-    }
-
-    public UPokemonPanel? FindPanelForPokemon(UPokemon pokemon)
-    {
-        return Buttons
-            .GetButtons<UPokemonPanel>()
-            .Select(x => x.Button)
-            .FirstOrDefault(x => ReferenceEquals(x.Pokemon, pokemon));
     }
 
     public void SetPokemonToDisplay(IReadOnlyList<UPokemon> pokemonList)
@@ -72,8 +64,6 @@ public class UPokemonSelectionWidgetBase : UOwningSelectionWidget, IPokemonPanel
             {
                 var name = $"selectionPanel{i}";
                 var newWidget = WidgetTree.ConstructWidget(PanelClass, name);
-                newWidget.Owner = this;
-                newWidget.ButtonIndex = i;
                 newWidget.Pokemon = pokemonList[i];
                 Buttons.AddWidget(newWidget);
             }
@@ -92,46 +82,6 @@ public class UPokemonSelectionWidgetBase : UOwningSelectionWidget, IPokemonPanel
         {
             panel.Refresh();
         }
-    }
-
-    [UFunction(FunctionFlags.BlueprintCallable, Category = "Switching")]
-    public void BeginSwitch(int startIndex)
-    {
-        if (SwitchingIndex.HasValue)
-        {
-            throw new InvalidOperationException("Already switching");
-        }
-
-        SwitchingIndex = startIndex;
-        Buttons.GetButton<UPokemonPanel>(startIndex)?.Refresh();
-    }
-
-    [UFunction(FunctionFlags.BlueprintCallable, Category = "Switching")]
-    public void CompleteSwitch()
-    {
-        if (!SwitchingIndex.HasValue)
-        {
-            throw new InvalidOperationException("Not switching");
-        }
-
-        var panel1 = Buttons.GetRequiredButton<UPokemonPanel>(SwitchingIndex.Value);
-        var panel2 = Buttons.GetRequiredButton<UPokemonPanel>(DesiredFocusIndex);
-        SwitchingIndex = null;
-        PerformSwap(panel1, panel2);
-    }
-
-    public void CancelSwitch()
-    {
-        if (!SwitchingIndex.HasValue)
-        {
-            throw new InvalidOperationException("Not switching");
-        }
-
-        var panel1 = Buttons.GetRequiredButton<UPokemonPanel>(SwitchingIndex.Value);
-        var panel2 = Buttons.GetRequiredButton<UPokemonPanel>(DesiredFocusIndex);
-        SwitchingIndex = null;
-        panel1.Refresh();
-        panel2.Refresh();
     }
 
     [UFunction(

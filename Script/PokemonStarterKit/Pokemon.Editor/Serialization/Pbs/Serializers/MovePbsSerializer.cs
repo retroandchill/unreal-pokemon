@@ -18,18 +18,24 @@ public sealed class UMovePbsSerializer : UGameDataEntryPbsSerializerBase
         return repositoryClass == typeof(UMoveRepository);
     }
 
-    protected override void Serialize(StreamWriter streamWriter, UAssetGameDataRepository repository)
+    protected override void Serialize(
+        StreamWriter streamWriter,
+        UAssetGameDataRepository repository
+    )
     {
         if (repository is not UMoveRepository moveRepository)
             throw new InvalidOperationException("Repository is not of type UMoveRepository");
 
-        PbsCompiler.WritePbs(moveRepository.Entries.AsValueEnumerable()
-                .Select(x => x.ToMoveInfo())
-                .ToArray(),
-            streamWriter);
+        PbsCompiler.WritePbs(
+            moveRepository.Entries.AsValueEnumerable().Select(x => x.ToMoveInfo()).ToArray(),
+            streamWriter
+        );
     }
 
-    protected override void Deserialize(StreamReader streamReader, UAssetGameDataRepository repository)
+    protected override void Deserialize(
+        StreamReader streamReader,
+        UAssetGameDataRepository repository
+    )
     {
         if (
             repository
@@ -43,10 +49,12 @@ public sealed class UMovePbsSerializer : UGameDataEntryPbsSerializerBase
         }
 
         dataEntries.Clear();
-        foreach (var entry in PbsCompiler
-                     .CompilePbsFile<MoveInfo>(streamReader)
-                     .Select(x => x.Value)
-                     .Select(x => x.ToMove()))
+        foreach (
+            var entry in PbsCompiler
+                .CompilePbsFile<MoveInfo>(streamReader)
+                .Select(x => x.Value)
+                .Select(x => x.ToMove())
+        )
         {
             dataEntries.Add(entry);
         }

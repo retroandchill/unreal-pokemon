@@ -11,13 +11,13 @@ public class UInteractiveActionButton : UCommonBoundActionButton
 {
     [UProperty(PropertyFlags.EditAnywhere, Category = "Style")]
     private TSubclassOf<UCommonButtonStyle> KeyboardStyle { get; }
-    
+
     [UProperty(PropertyFlags.EditAnywhere, Category = "Style")]
     private TSubclassOf<UCommonButtonStyle> GamepadStyle { get; }
-    
+
     [UProperty(PropertyFlags.EditAnywhere, Category = "Style")]
     private TSubclassOf<UCommonButtonStyle> TouchStyle { get; }
-    
+
     public override void Construct()
     {
         var inputSubsystem = GetLocalPlayerSubsystem<UCommonInputSubsystem>(OwningPlayerController);
@@ -34,7 +34,7 @@ public class UInteractiveActionButton : UCommonBoundActionButton
             ECommonInputType.MouseAndKeyboard => KeyboardStyle,
             ECommonInputType.Gamepad => GamepadStyle,
             ECommonInputType.Touch => TouchStyle,
-            _ => default
+            _ => default,
         };
 
         if (newStyle.Valid)
