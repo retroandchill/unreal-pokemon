@@ -44,7 +44,14 @@ public class USelectionWidget : UCommonActivatableWidget
 
     public override void Construct()
     {
-        Buttons.OnButtonBaseClicked += [UFunction] (_, i) => DesiredFocusIndex = i;
+        Buttons.OnButtonBaseClicked += ChangeDesiredFocusIndex;
+        Buttons.OnHoveredButtonBaseChanged += ChangeDesiredFocusIndex;
+    }
+
+    [UFunction]
+    private void ChangeDesiredFocusIndex(UCommonButtonBase button, int index)
+    {
+        DesiredFocusIndex = index;
     }
 
     protected override UWidget? BP_GetDesiredFocusTarget()
