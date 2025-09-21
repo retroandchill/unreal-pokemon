@@ -1,4 +1,5 @@
-﻿using UnrealSharp.Attributes;
+﻿using InteractiveUI.Core.Utilities;
+using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.CommonUI;
 using UnrealSharp.Engine;
@@ -14,7 +15,7 @@ public class USelectionWidget : UCommonActivatableWidget
     
     public event Action? OnBackAction;
 
-    [UProperty(PropertyFlags.EditAnywhere, Category = "Selection")]
+    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite, Category = "Selection")]
     [UIMin("0")]
     [ClampMin("0")]
     public int DesiredFocusIndex
@@ -32,6 +33,12 @@ public class USelectionWidget : UCommonActivatableWidget
         }
     }
 
+    public int ButtonCount
+    {
+        [UFunction(FunctionFlags.BlueprintPure, Category = "Selection")]
+        get => Buttons.ButtonCount;
+    }
+
     public override void PreConstruct(bool isDesignTime)
     {
         if (SystemLibrary.IsValid(Buttons))
@@ -46,6 +53,26 @@ public class USelectionWidget : UCommonActivatableWidget
     {
         Buttons.OnButtonBaseClicked += ChangeDesiredFocusIndex;
         Buttons.OnHoveredButtonBaseChanged += ChangeDesiredFocusIndex;
+    }
+
+    public UCommonButtonBase? GetButton(int index)
+    {
+        return Buttons.GetButtonBaseAtIndex(index);   
+    }
+
+    public T? GetButton<T>(int index) where T : UCommonButtonBase
+    {
+        return Buttons.GetButton<T>(index);  
+    }
+    
+    public UCommonButtonBase GetRequiredButton(int index)
+    {
+        return Buttons.GetButtonBaseAtIndex(index) ?? throw new InvalidOperationException("No button at index"); 
+    }
+
+    public T GetRequiredButton<T>(int index) where T : UCommonButtonBase
+    {
+        return Buttons.GetRequiredButton<T>(index);  
     }
 
     [UFunction]

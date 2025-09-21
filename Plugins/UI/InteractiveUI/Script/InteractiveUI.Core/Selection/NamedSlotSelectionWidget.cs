@@ -7,7 +7,7 @@ using UnrealSharp.UMG;
 namespace InteractiveUI.Core.Selection;
 
 [UClass(ClassFlags.Abstract)]
-public class UNamedSlotSelectionWidget : USelectionWidget
+public class UNamedSlotSelectionWidget : USelectionWidget, IRefreshable
 {
     [UProperty]
     [BindWidget]
@@ -20,7 +20,7 @@ public class UNamedSlotSelectionWidget : USelectionWidget
     }
 
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Selection")]
-    public void UpdateOptions(bool isDesignTime = false)
+    public void UpdateOptions()
     {
         #if WITH_EDITOR
         if (!SystemLibrary.IsValid(ContentSlot)) return;
@@ -51,5 +51,10 @@ public class UNamedSlotSelectionWidget : USelectionWidget
         }
         
         DesiredFocusIndex = Math.Clamp(DesiredFocusIndex, 0, Buttons.ButtonCount - 1);
+    }
+
+    public void Refresh()
+    {
+        UpdateOptions();
     }
 }

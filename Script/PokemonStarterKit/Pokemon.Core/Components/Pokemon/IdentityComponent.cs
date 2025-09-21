@@ -26,6 +26,7 @@ public class UIdentityComponent : URPGComponent
     public void Initialize(FPokemonInitParams initParams)
     {
         Species = initParams.Species;
+        Nickname = Species.Entry.Name;
         PersonalityValue =
             (uint)Random.Shared.Next(ushort.MaxValue + 1)
             | (uint)(Random.Shared.Next(ushort.MaxValue + 1) << 16);

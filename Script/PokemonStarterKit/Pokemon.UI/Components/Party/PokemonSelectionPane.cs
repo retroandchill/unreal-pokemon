@@ -13,6 +13,7 @@ public class UPokemonSelectionPane : UPokemonSelectionWidgetBase
 
     public override void Construct()
     {
+        base.Construct();
         SetPokemonToDisplay(GetGameInstanceSubsystem<UPokemonSubsystem>().Player.PartyPokemon);
     }
 }

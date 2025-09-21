@@ -9,9 +9,6 @@ using UnrealSharp.UMG;
 
 namespace Pokemon.UI.Components.Common;
 
-[UMultiDelegate]
-public delegate void OnPokemonSelected(UPokemon pokemon);
-
 [UClass(ClassFlags.Abstract)]
 public class UPokemonSelectionWidgetBase : UOwningSelectionWidget, IPokemonPanelOwner
 {
@@ -26,10 +23,30 @@ public class UPokemonSelectionWidgetBase : UOwningSelectionWidget, IPokemonPanel
 
     public int? SwitchingIndex { get; private set; }
 
-    [UProperty(PropertyFlags.BlueprintAssignable, Category = "Events")]
-    public TMulticastDelegate<OnPokemonSelected> OnPokemonSelected { get; set; }
+    public event Action<UPokemon, int>? OnPokemonHovered;
+    
+    public event Action<UPokemon, int>? OnPokemonSelected;
 
     protected virtual int? NumPanelsToAdd => null;
+
+    public override void Construct()
+    {
+        base.Construct();
+        Buttons.OnHoveredButtonBaseChanged += [UFunction](button, i) =>
+        {
+            if (button is UPokemonButtonBase { Pokemon: not null } pokemonButton)
+            {
+                OnPokemonHovered?.Invoke(pokemonButton.Pokemon, i);
+            }
+        };
+        Buttons.OnButtonBaseClicked += [UFunction](button, i) =>
+        {
+            if (button is UPokemonButtonBase { Pokemon: not null } pokemonButton)
+            {
+                OnPokemonSelected?.Invoke(pokemonButton.Pokemon, i);
+            }
+        };
+    }
 
     public UPokemonPanel? FindPanelForPokemon(UPokemon pokemon)
     {
@@ -123,12 +140,6 @@ public class UPokemonSelectionWidgetBase : UOwningSelectionWidget, IPokemonPanel
     )]
     public virtual void ToggleCommandVisibility(bool visible) { }
 
-    private void OnSelectionChange(int index)
-    {
-        Refresh();
-        OnPokemonSelected.Invoke(Buttons.GetRequiredButton<UPokemonPanel>(index).Pokemon!);
-    }
-
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Switching")]
     protected virtual void PerformSwap(UPokemonPanel panel1, UPokemonPanel panel2)
     {
@@ -142,8 +153,9 @@ public class UPokemonSelectionWidgetBase : UOwningSelectionWidget, IPokemonPanel
         panel1.Refresh();
         panel2.Refresh();
 
-        OnPokemonSelected.Invoke(
-            Buttons.GetRequiredButton<UPokemonPanel>(DesiredFocusIndex).Pokemon!
+        OnPokemonHovered?.Invoke(
+            Buttons.GetRequiredButton<UPokemonPanel>(DesiredFocusIndex).Pokemon!,
+            DesiredFocusIndex
         );
     }
 }

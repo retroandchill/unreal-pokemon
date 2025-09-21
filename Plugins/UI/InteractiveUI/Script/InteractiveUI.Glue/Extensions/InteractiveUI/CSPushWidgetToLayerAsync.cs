@@ -52,7 +52,7 @@ internal partial class UCSPushWidgetToLayerAsync
     )
         where T : UCommonActivatableWidget
     {
-        var loader = NewObject<UCSPushWidgetToLayerAsync>(AsyncLoadUtilities.WorldContextObject);
+        var loader = NewObject<UCSPushWidgetToLayerAsync>(playerController);
         loader._configureWidget =
             configureWidget != null
                 ? widget =>

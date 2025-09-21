@@ -117,7 +117,15 @@ public class UPokemonPanel : UPokemonButtonBase
         if (Pokemon is null)
             return;
 
-        ItemIcon.Item = Pokemon.Item.ToNullable() ?? default;
+        Pokemon.Item.Match(i =>
+            {
+                ItemIcon.Item = i;
+                ItemIcon.Visibility = ESlateVisibility.SelfHitTestInvisible;
+            },
+            () =>
+            {
+                ItemIcon.Visibility = ESlateVisibility.Hidden;
+            });
         NameText.Text = Pokemon.Nickname;
         LevelText.CurrentValue = Pokemon.Level;
 

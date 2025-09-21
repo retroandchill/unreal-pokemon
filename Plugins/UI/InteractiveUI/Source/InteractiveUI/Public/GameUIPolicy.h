@@ -7,6 +7,7 @@
 
 #include "GameUIPolicy.generated.h"
 
+class UInputMappingContext;
 class URPGLocalPlayer;
 class UPrimaryGameLayout;
 class UGameUIManagerSubsystem;
