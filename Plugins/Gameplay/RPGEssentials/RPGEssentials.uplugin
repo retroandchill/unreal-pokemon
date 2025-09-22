@@ -23,6 +23,11 @@
 			"Name": "RPGEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "RPGSaving",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
 		}
 	]
 }

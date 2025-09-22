@@ -1,48 +1,65 @@
 ﻿// "Unreal Pokémon" created by Retro & Chill.
 
 #include "Saving/Serialization/EnhancedSaveGame.h"
+#include "StructUtils/StructView.h"
 
-bool UEnhancedSaveGame::AddObjectToSaveGame(const FGameplayTag &Tag, const TScriptInterface<ISerializable> &Object)
+// ReSharper disable once CppMemberFunctionMayBeStatic
+bool UEnhancedSaveGame::TryGetData(FGameplayTag, int32 &) const
 {
-    if (Data.Contains(Tag))
-    {
-        return false;
-    }
-
-    Data.Emplace(Tag, FObjectData::SerializeObject(Object.GetObject()));
-    return true;
+    checkf(false, TEXT("This should never be called directly"));
+    return false;
 }
 
-UObject *UEnhancedSaveGame::LoadObjectFromSaveGame(const TSubclassOf<UObject> &Class, const FGameplayTag &Tag) const
+DEFINE_FUNCTION(UEnhancedSaveGame::execTryGetData)
 {
-    auto SerializedObject = Data.Find(Tag);
-    if (SerializedObject == nullptr)
+    const auto *Self = CastChecked<UEnhancedSaveGame>(Context);
+    P_GET_STRUCT(FGameplayTag, Tag);
+    Stack.StepCompiledIn<FStructProperty>(nullptr);
+    const auto DataProperty = CastFieldChecked<FStructProperty>(Stack.MostRecentProperty);
+    auto *DataStruct = Stack.MostRecentPropertyAddress;
+
+    P_FINISH;
+
+    P_NATIVE_BEGIN
+
+    auto *ExistingData = Self->Data.Find(Tag);
+    if (ExistingData == nullptr || DataProperty->Struct != ExistingData->GetScriptStruct())
     {
-        return nullptr;
+        *static_cast<bool *>(RESULT_PARAM) = false;
+        return;
     }
 
-    if (!Class->IsChildOf(SerializedObject->ObjectClass))
-    {
-        return nullptr;
-    }
+    auto *StoredData = ExistingData->GetMemory();
+    DataProperty->CopyValuesInternal(DataStruct, StoredData, 1);
+    *static_cast<bool *>(RESULT_PARAM) = true;
 
-    return SerializedObject->DeserializeObject();
+    P_NATIVE_END
 }
 
-bool UEnhancedSaveGame::LoadDataIntoObject(const FGameplayTag &Tag,
-                                           const TScriptInterface<ISerializable> &TargetObject) const
+// ReSharper disable once CppMemberFunctionMayBeStatic
+void UEnhancedSaveGame::AddData(FGameplayTag, const int32 &)
 {
-    auto SerializedObject = Data.Find(Tag);
-    if (!IsValid(TargetObject.GetObject()) || SerializedObject == nullptr)
-    {
-        return false;
-    }
+    checkf(false, TEXT("This should never be called directly"));
+}
 
-    if (!TargetObject.GetObject()->IsA(SerializedObject->ObjectClass))
-    {
-        return false;
-    }
+DEFINE_FUNCTION(UEnhancedSaveGame::execAddData)
+{
+    auto *Self = CastChecked<UEnhancedSaveGame>(Context);
+    P_GET_STRUCT(FGameplayTag, Tag);
+    Stack.StepCompiledIn<FStructProperty>(nullptr);
+    const auto DataProperty = CastFieldChecked<FStructProperty>(Stack.MostRecentProperty);
+    const auto *DataStruct = Stack.MostRecentPropertyAddress;
 
-    SerializedObject->DeserializeObject(TargetObject.GetObject());
-    return true;
+    P_FINISH;
+
+    P_NATIVE_BEGIN
+
+    Self->Data.Emplace(Tag, FInstancedStruct(FConstStructView(DataProperty->Struct, DataStruct)));
+
+    P_NATIVE_END
+}
+
+bool UEnhancedSaveGame::HasData(const FGameplayTag Tag) const
+{
+    return Data.Contains(Tag);
 }

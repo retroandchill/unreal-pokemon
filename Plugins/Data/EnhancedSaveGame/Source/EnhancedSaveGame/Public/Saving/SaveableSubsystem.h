@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
-#include "Serialization/SaveSerializationUtils.h"
 #include "UObject/Interface.h"
 
 #include "SaveableSubsystem.generated.h"

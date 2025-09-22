@@ -1,0 +1,16 @@
+{
+    "Structs": {
+        "CustomTypes": [],
+        "BlittableTypes": [],
+        "NativelyTranslatableTypes": [
+            {
+                "Name": "FRPGComponentSaveDataHandle",
+                "HasDestructor": true
+            },
+            {
+                "Name": "FRPGEntitySaveDataHandle",
+                "HasDestructor": true
+            }
+        ]
+    }
+}

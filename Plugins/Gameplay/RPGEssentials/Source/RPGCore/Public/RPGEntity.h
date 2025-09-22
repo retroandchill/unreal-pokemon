@@ -32,6 +32,21 @@ class RPGCORE_API URPGEntity : public UObject
         return CastChecked<T>(GetComponentInternal(ComponentClass));
     }
 
+    const TArray<TObjectPtr<URPGComponent>> &GetRequiredComponents() const
+    {
+        return RequiredComponents;
+    }
+
+    const TArray<TObjectPtr<URPGComponent>> &GetAdditionalComponents() const
+    {
+        return AdditionalComponents;
+    }
+
+    FORCEINLINE auto GetAllComponents() const
+    {
+        return ranges::views::concat(RequiredComponents, AdditionalComponents);
+    }
+
   protected:
     void PostInitProperties() override;
     void PostLoad() override;
@@ -91,11 +106,6 @@ class RPGCORE_API URPGEntity : public UObject
     UFUNCTION(BlueprintImplementableEvent, DisplayName = "Post-Initialize Components", Category = "RPG Entity",
               meta = (ScriptName = "PostInitializeComponents"))
     void K2_PostInitializeComponents();
-
-    FORCEINLINE auto GetAllComponents() const
-    {
-        return ranges::views::concat(RequiredComponents, AdditionalComponents);
-    }
 
   private:
     UFUNCTION(BlueprintPure, Category = "RPG Entity",
