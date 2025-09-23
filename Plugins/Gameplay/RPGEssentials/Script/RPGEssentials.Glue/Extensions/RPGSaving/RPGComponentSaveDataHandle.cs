@@ -1,22 +1,20 @@
-﻿using UnrealSharp.RPGCore;
+﻿using UnrealSharp.CoreUObject;
+using UnrealSharp.RPGCore;
 
 namespace UnrealSharp.RPGSaving;
 
 public partial struct FRPGComponentSaveDataHandle
 {
-    public static FRPGComponentSaveDataHandle New<T>(
-        TSoftClassPtr<URPGComponent> componentClass,
-        T data,
-        int version = 1
-    )
-        where T : struct, MarshalledStruct<T>
+    public FRPGComponentSaveDataHandle(TSoftClassPtr<URPGComponent> componentClass, int version = 1)
     {
-        return URPGComponentSaveDataHandleExtensions.CreateNew(componentClass, data, version);
+        this = URPGComponentSaveDataHandleExtensions.CreateNew(componentClass, version);
     }
 
     public int Version => this.GetVersion();
 
-    public TSoftClassPtr<URPGComponent> ComponentClass => this.GetComponentClass();
+    public TSubclassOf<URPGComponent> ComponentClass => this.GetComponentClass();
+
+    public UScriptStruct? SaveDataStruct => this.GetSaveDataStruct();
 
     public T GetData<T>()
         where T : struct, MarshalledStruct<T>

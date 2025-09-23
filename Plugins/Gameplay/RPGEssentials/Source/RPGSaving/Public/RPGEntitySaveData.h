@@ -21,15 +21,14 @@ struct FRPGComponentSaveData final
     int32 Version = 1;
 
     UPROPERTY(BlueprintReadWrite, SaveGame)
-    TSoftClassPtr<URPGComponent> ComponentClass;
+    TSubclassOf<URPGComponent> ComponentClass;
 
     UPROPERTY(BlueprintReadWrite, SaveGame)
     FInstancedStruct Data;
 
     FRPGComponentSaveData() = default;
-    explicit FRPGComponentSaveData(TSoftClassPtr<URPGComponent> ComponentClass, FInstancedStruct Data,
-                                   const int32 Version = 0)
-        : Version(Version), ComponentClass(MoveTemp(ComponentClass)), Data(MoveTemp(Data))
+    explicit FRPGComponentSaveData(const TSubclassOf<URPGComponent> ComponentClass, const int32 Version = 0)
+        : Version(Version), ComponentClass(ComponentClass)
     {
     }
 };
@@ -40,9 +39,8 @@ struct FRPGComponentSaveDataHandle
     GENERATED_BODY()
 
     FRPGComponentSaveDataHandle() = default;
-    explicit FRPGComponentSaveDataHandle(TSoftClassPtr<URPGComponent> ComponentClass, FInstancedStruct Data,
-                                         int32 Version = 0)
-        : Data(MakeShared<FRPGComponentSaveData>(MoveTemp(ComponentClass), MoveTemp(Data), Version))
+    explicit FRPGComponentSaveDataHandle(TSubclassOf<URPGComponent> ComponentClass, int32 Version = 0)
+        : Data(MakeShared<FRPGComponentSaveData>(ComponentClass, Version))
     {
     }
 
@@ -51,7 +49,7 @@ struct FRPGComponentSaveDataHandle
         return Data->Version;
     }
 
-    const TSoftClassPtr<URPGComponent> &GetComponentClass() const
+    TSubclassOf<URPGComponent> GetComponentClass() const
     {
         return Data->ComponentClass;
     }
@@ -90,15 +88,15 @@ struct FAdditionalComponentDataKey
     GENERATED_BODY()
 
     UPROPERTY(BlueprintReadWrite, SaveGame)
-    TSoftClassPtr<URPGComponent> ComponentClass;
+    TSubclassOf<URPGComponent> ComponentClass;
 
     UPROPERTY(BlueprintReadWrite, SaveGame)
     int32 Index = 0;
 
     FAdditionalComponentDataKey() = default;
 
-    explicit FAdditionalComponentDataKey(TSoftClassPtr<URPGComponent> ComponentClass, const int32 Index = 0)
-        : ComponentClass(MoveTemp(ComponentClass)), Index(Index)
+    explicit FAdditionalComponentDataKey(const TSubclassOf<URPGComponent> ComponentClass, const int32 Index = 0)
+        : ComponentClass(ComponentClass), Index(Index)
     {
     }
 
@@ -122,7 +120,7 @@ struct FRPGEntitySaveData final
     int32 Version = 1;
 
     UPROPERTY(BlueprintReadWrite, SaveGame)
-    TSoftClassPtr<URPGEntity> EntityClass;
+    TSubclassOf<URPGEntity> EntityClass;
 
     UPROPERTY(BlueprintReadWrite, SaveGame)
     TMap<TFieldPath<FObjectProperty>, FRPGComponentSaveDataHandle> RequiredComponents;
@@ -131,8 +129,8 @@ struct FRPGEntitySaveData final
     TMap<FAdditionalComponentDataKey, FRPGComponentSaveDataHandle> AdditionalComponents;
 
     FRPGEntitySaveData() = default;
-    explicit FRPGEntitySaveData(TSoftClassPtr<URPGEntity> EntityClass, const int32 Version = 0)
-        : Version(Version), EntityClass(MoveTemp(EntityClass))
+    explicit FRPGEntitySaveData(const TSubclassOf<URPGEntity> EntityClass, const int32 Version = 0)
+        : Version(Version), EntityClass(EntityClass)
     {
     }
 };
@@ -143,7 +141,7 @@ struct RPGSAVING_API FRPGEntitySaveDataHandle
     GENERATED_BODY()
 
     FRPGEntitySaveDataHandle() = default;
-    explicit FRPGEntitySaveDataHandle(TSoftClassPtr<URPGEntity> EntityClass, int32 Version = 0)
+    explicit FRPGEntitySaveDataHandle(TSubclassOf<URPGEntity> EntityClass, int32 Version = 0)
         : Data(MakeShared<FRPGEntitySaveData>(EntityClass, Version))
     {
     }
@@ -153,7 +151,7 @@ struct RPGSAVING_API FRPGEntitySaveDataHandle
         return Data->Version;
     }
 
-    const TSoftClassPtr<URPGEntity> &GetEntityClass() const
+    TSubclassOf<URPGEntity> GetEntityClass() const
     {
         return Data->EntityClass;
     }

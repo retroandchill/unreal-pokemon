@@ -6,29 +6,10 @@
 #include "RPGEntitySaveData.h"
 #include "Unreachable.h"
 
-FRPGComponentSaveDataHandle URPGComponentSaveDataHandleExtensions::CreateNew(TSoftClassPtr<URPGComponent>,
-                                                                             const int32 &, int32)
+FRPGComponentSaveDataHandle URPGComponentSaveDataHandleExtensions::CreateNew(
+    const TSubclassOf<URPGComponent> ComponentClass, const int32 Version)
 {
-    checkf(false, TEXT("This should not be called"));
-    UE::Unreachable();
-}
-
-DEFINE_FUNCTION(URPGComponentSaveDataHandleExtensions::execCreateNew)
-{
-    P_GET_SOFTCLASS(TSoftClassPtr<URPGComponent>, ComponentClass);
-    Stack.StepCompiledIn<FStructProperty>(nullptr);
-    const auto DataProperty = CastFieldChecked<FStructProperty>(Stack.MostRecentProperty);
-    auto *DataStruct = Stack.MostRecentPropertyAddress;
-    P_GET_PROPERTY(FIntProperty, Version);
-
-    P_FINISH;
-
-    P_NATIVE_BEGIN
-
-    *static_cast<FRPGComponentSaveDataHandle *>(RESULT_PARAM) = FRPGComponentSaveDataHandle(
-        MoveTemp(ComponentClass), FInstancedStruct(FStructView(DataProperty->Struct, DataStruct)), Version);
-
-    P_NATIVE_END
+    return FRPGComponentSaveDataHandle(ComponentClass, Version);
 }
 
 int32 URPGComponentSaveDataHandleExtensions::GetVersion(const FRPGComponentSaveDataHandle &SaveData)
@@ -36,7 +17,7 @@ int32 URPGComponentSaveDataHandleExtensions::GetVersion(const FRPGComponentSaveD
     return SaveData.GetVersion();
 }
 
-const TSoftClassPtr<URPGComponent> &URPGComponentSaveDataHandleExtensions::GetComponentClass(
+TSubclassOf<URPGComponent> URPGComponentSaveDataHandleExtensions::GetComponentClass(
     const FRPGComponentSaveDataHandle &SaveData)
 {
     return SaveData.GetComponentClass();
@@ -100,4 +81,10 @@ DEFINE_FUNCTION(URPGComponentSaveDataHandleExtensions::execSetData)
     SaveData.GetData().InitializeAs(DataProperty->Struct, DataStruct);
 
     P_NATIVE_END
+}
+
+const UScriptStruct *URPGComponentSaveDataHandleExtensions::GetSaveDataStruct(
+    const FRPGComponentSaveDataHandle &SaveData)
+{
+    return SaveData.GetData().GetScriptStruct();
 }

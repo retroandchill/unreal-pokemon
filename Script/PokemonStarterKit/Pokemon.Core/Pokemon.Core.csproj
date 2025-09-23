@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
+    <PackageReference Include="Riok.Mapperly" Version="4.2.1" />
     <ProjectReference Include="..\..\..\Plugins\Framework\UnrealInject\Script\UnrealInject\UnrealInject.csproj" />
     <ProjectReference Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPG.Core\RPG.Core.csproj" />
     <ProjectReference

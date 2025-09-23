@@ -82,26 +82,55 @@ namespace RPG.SourceGenerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #nullable enable
+        ///
+        ///using UnrealSharp;
+        ///using UnrealSharp.Attributes;
+        ///using UnrealSharp.RPGCore;
+        ///using UnrealSharp.RPGSaving;
+        ///
+        ///namespace {{Namespace}};
+        ///
+        ///partial class {{ClassName}}
+        ///{
+        ///    protected override bool Supports(TSubclassOf&lt;URPGComponent&gt; componentClass)
+        ///    {
+        ///        return componentClass.IsChildOf(typeof({{ComponentType}}));
+        ///    }
+        ///
+        ///    protected override void SaveData(URPGComponent component, FRPGComponentSaveDataHandle saveData)
+        ///    {
+        ///        if (component is not {{ComponentType}}  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ComponentSaverTemplate {
+            get {
+                return ResourceManager.GetString("ComponentSaverTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to using UnrealSharp;
         ///using UnrealSharp.Attributes;
         ///using UnrealSharp.Attributes.MetaTags;
         ///using UnrealSharp.Engine;
         ///using UnrealSharp.RPGCore;
         ///using LanguageExt.UnsafeValueAccess;
+        ///using RPG.Core;
+        ///
+        ///namespace {{Namespace}};
         ///
         ///[UClass]
         ///public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary 
         ///{
         ///    {{#Components}}
         ///    {{#Properties}}
+        ///    {{#IsExposed}}
         ///    {{#HasGetter}}
         ///    {{#GetterIsUFunction}}
         ///    {{#GetterAttributes}}
         ///    [{{Value}}]    
         ///    {{/GetterAttributes}}    
-        ///    {{/GetterIsUFunction}}
-        ///    {{^GetterIsUFunction}}
-        ///    [ [rest of string was truncated]&quot;;.
+        ///    {{/GetterIsUF [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string RPGEntityBlueprintLibraryTemplate {
             get {
@@ -140,8 +169,10 @@ namespace RPG.SourceGenerator.Properties {
         /// <summary>
         ///   Looks up a localized string similar to using UnrealSharp;
         ///using UnrealSharp.Attributes;
+        ///using UnrealSharp.CoreUObject;
         ///using UnrealSharp.Engine;
         ///using UnrealSharp.RPGCore;
+        ///using GameDataAccessTools.Core.Utilities;
         ///
         ///namespace {{Namespace}};
         ///
@@ -151,10 +182,7 @@ namespace RPG.SourceGenerator.Properties {
         ///    {{ComponentType}} IRPGEntity&lt;{{ComponentType}}&gt;.Component =&gt; {{ComponentName}};
         ///    {{/Components}}
         ///
-        ///    protected override void CreateRequiredComponents()
-        ///    {
-        ///        {{#Components}}
-        ///        {{ComponentName}} = CreateCompone [rest of string was truncated]&quot;;.
+        ///    protected override void CreateRequiredComponents() [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string RPGEntityTemplate {
             get {

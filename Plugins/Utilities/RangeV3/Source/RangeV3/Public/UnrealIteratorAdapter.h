@@ -40,7 +40,6 @@ class TUnrealIteratorAdapterStorage
     void operator++()
     {
         ++Iterator;
-        return *this;
     }
 
   private:
@@ -158,6 +157,9 @@ class TUnrealIteratorRange
 template <typename T>
     requires std::derived_from<T, FField> || std::derived_from<T, UField>
 using TFieldView = TUnrealIteratorRange<TFieldIterator<T>>;
+
+template <std::derived_from<UObject> T>
+using TObjectView = TUnrealIteratorRange<TObjectIterator<T>>;
 
 namespace ranges
 {

@@ -25,7 +25,7 @@ class RPGSAVING_API URPGEntitySaveDataExtensions : public UBlueprintFunctionLibr
     static int32 GetVersion(const FRPGEntitySaveDataHandle &SaveData);
 
     UFUNCTION(meta = (ScriptMethod, ExtensionMethod))
-    static const TSoftClassPtr<URPGEntity> &GetEntityClass(const FRPGEntitySaveDataHandle &SaveData);
+    static TSubclassOf<URPGEntity> GetEntityClass(const FRPGEntitySaveDataHandle &SaveData);
 
     UFUNCTION(meta = (ScriptMethod, ExtensionMethod))
     static bool GetRequiredComponent(const FRPGEntitySaveDataHandle &SaveData, FName PropertyName,

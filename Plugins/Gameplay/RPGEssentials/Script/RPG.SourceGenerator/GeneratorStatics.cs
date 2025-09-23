@@ -6,6 +6,7 @@ public static class GeneratorStatics
 {
     public const string RPGEntity = "UnrealSharp.RPGCore.URPGEntity";
     public const string RPGComponent = "UnrealSharp.RPGCore.URPGComponent";
+    public const string ComponentSaver = "UnrealSharp.RPGSaving.UComponentSaver";
 
     public const string UObject = "UnrealSharp.CoreUObject.UObject";
 

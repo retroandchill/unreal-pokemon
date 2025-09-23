@@ -1,0 +1,69 @@
+﻿#nullable enable
+
+using UnrealSharp;
+using UnrealSharp.Attributes;
+using UnrealSharp.RPGCore;
+using UnrealSharp.RPGSaving;
+
+namespace {{Namespace}};
+
+partial class {{ClassName}}
+{
+    protected override bool Supports(TSubclassOf<URPGComponent> componentClass)
+    {
+        return componentClass.IsChildOf(typeof({{ComponentType}}));
+    }
+
+    protected override void SaveData(URPGComponent component, FRPGComponentSaveDataHandle saveData)
+    {
+        if (component is not {{ComponentType}} castComponent)
+        {
+            {{#WithLogging}}
+            {{LoggerClass}}.LogError($"Trying to save {component.GetType()} as {typeof({{ComponentType}})}");
+            {{/WithLogging}}
+            return;
+        }
+
+        try 
+        {
+            saveData.SetData({{SaveMethod}}(castComponent));
+        }
+        catch (Exception e)
+        {
+            {{#WithLogging}}
+            {{LoggerClass}}.LogError($"Unexpected error trying to save {component.ObjectName}: {e}");
+            {{/WithLogging}}
+        }
+    }
+
+    protected override void LoadData(URPGComponent component, FRPGComponentSaveDataHandle saveData)
+    {
+        if (component is not {{ComponentType}} castComponent)
+        {   
+            {{#WithLogging}}
+            {{LoggerClass}}.LogError($"Trying to load {component.GetType()} as {typeof({{ComponentType}})}");
+            {{/WithLogging}}
+            return;
+        }
+
+        if (!saveData.TryGetData(out {{ModelType}} data))
+        {
+            {{#WithLogging}}
+            {{LoggerClass}}.LogError($"Tried to load {saveData.SaveDataStruct?.ObjectName ?? "null"} as {typeof({{ModelType}})}");
+            {{/WithLogging}}
+            return;
+        }
+
+        try
+        {
+            {{LoadMethod}}({{#ModelFirst}}data, castComponent{{/ModelFirst}}{{^ModelFirst}}castComponent, data{{/ModelFirst}});
+        }
+        catch (Exception e)
+        {
+            {{#WithLogging}}
+            {{LoggerClass}}.LogError($"Unexpected error trying to save {component.ObjectName}: {e}");
+            {{/WithLogging}}
+        }
+    }
+}
+    
