@@ -6,6 +6,13 @@
 #include "RangeV3.h"
 #include "RPGComponent.h"
 
+URPGEntity *URPGEntity::CreateUninitialized(UObject *Object, TSubclassOf<URPGEntity> EntityClass)
+{
+    auto *Entity = NewObject<URPGEntity>(Object, EntityClass);
+    Entity->PreInitializeComponents();
+    return Entity;
+}
+
 const UScriptStruct *URPGEntity::GetEntityStruct() const
 {
     if (auto *EntityStruct = K2_GetEntityStruct(); EntityStruct != nullptr)

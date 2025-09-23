@@ -22,12 +22,16 @@ class RPGSAVING_API URPGSavingSubsystem : public UGameInstanceSubsystem
   public:
     void Initialize(FSubsystemCollectionBase &Collection) override;
 
+    UFUNCTION(meta = (ScriptMethod))
     TOptional<FRPGEntitySaveDataHandle> SaveEntity(const URPGEntity *Entity) const;
 
+    UFUNCTION(meta = (ScriptMethod))
     TOptional<FRPGComponentSaveDataHandle> SaveComponent(const URPGComponent *Component) const;
 
+    UFUNCTION(meta = (ScriptMethod))
     bool LoadEntity(URPGEntity *Entity, const FRPGEntitySaveDataHandle &SaveData) const;
 
+    UFUNCTION(meta = (ScriptMethod))
     bool LoadComponent(URPGComponent *Component, const FRPGComponentSaveDataHandle &SaveData) const;
 
   private:

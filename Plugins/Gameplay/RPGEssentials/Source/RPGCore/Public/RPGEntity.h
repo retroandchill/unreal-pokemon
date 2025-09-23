@@ -23,6 +23,9 @@ class RPGCORE_API URPGEntity : public UObject
   public:
     constexpr static auto RPGInitFunction = TEXT("RPGInitFunction");
 
+    UFUNCTION(meta = (ScriptMethod, DynamicOutputParam = ReturnValue, DeterminesOutputType = EntityClass))
+    static URPGEntity *CreateUninitialized(UObject *Object, TSubclassOf<URPGEntity> EntityClass);
+
     UFUNCTION(BlueprintPure, Category = "RPG Entity")
     const UScriptStruct *GetEntityStruct() const;
 

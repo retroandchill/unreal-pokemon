@@ -2,7 +2,7 @@
 using UnrealSharp;
 using UnrealSharp.Attributes;
 
-namespace Pokemon.Core.Model.Components;
+namespace Pokemon.Core.Model.Pokemon;
 
 [UStruct]
 public readonly partial record struct FIdentityComponentInfo

@@ -34,7 +34,7 @@ public class UTrainerInfoComponent : URPGComponent
     }
 
     [UProperty]
-    private uint FullID { get; set; }
+    internal uint FullID { get; set; }
 
     private const uint TrainerIdMask = 1000000;
 

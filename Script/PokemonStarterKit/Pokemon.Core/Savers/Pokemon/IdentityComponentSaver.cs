@@ -1,10 +1,8 @@
 ﻿using Pokemon.Core.Components.Pokemon;
-using Pokemon.Core.Model.Components;
+using Pokemon.Core.Model.Pokemon;
 using Riok.Mapperly.Abstractions;
 using RPG.SourceGenerator.Attributes;
-using UnrealSharp;
 using UnrealSharp.Attributes;
-using UnrealSharp.RPGCore;
 using UnrealSharp.RPGSaving;
 
 namespace Pokemon.Core.Savers.Pokemon;

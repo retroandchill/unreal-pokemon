@@ -67,6 +67,15 @@ public class UMoveComponent : URPGComponent
         return move.IsValid && Moves.Any(x => x.Move == move);
     }
 
+    internal void SetMoves(IEnumerable<UPokemonMove> moves)
+    {
+        Moves.Clear();
+        foreach (var move in moves)
+        {
+            Moves.Add(move);
+        }
+    }
+
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Moves")]
     public void ResetMoves()
     {
