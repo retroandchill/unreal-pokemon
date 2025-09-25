@@ -36,20 +36,6 @@ public partial class UPokemon : URPGEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
-    [Initializer(nameof(UGenderComponent.Initialize))]
-    public UGenderComponent GenderComponent { get; private set; }
-
-    [UProperty(
-        PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
-        Category = "Components"
-    )]
-    [Initializer(nameof(UShininessComponent.Initialize))]
-    public UShininessComponent ShininessComponent { get; private set; }
-
-    [UProperty(
-        PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
-        Category = "Components"
-    )]
     [Initializer(nameof(UStatComponent.Initialize))]
     public UStatComponent StatComponent { get; private set; }
 

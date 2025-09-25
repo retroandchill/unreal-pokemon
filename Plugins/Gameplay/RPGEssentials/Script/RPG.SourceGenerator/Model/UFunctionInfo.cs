@@ -25,7 +25,23 @@ public record UFunctionInfo(
             : null;
 
     [UsedImplicitly]
+    public string? NullableType =>
+        ReturnType
+            is INamedTypeSymbol { IsGenericType: true, MetadataName: "Nullable`1" } optionType
+            ? optionType.TypeArguments[0].ToDisplayString()
+            : null;
+
+    [UsedImplicitly]
     public bool ReturnsOption => OptionType is not null;
+
+    [UsedImplicitly]
+    public bool ReturnsNullable => NullableType is not null;
+
+    [UsedImplicitly]
+    public bool ReturnsOptionOrNullable => ReturnsOption || ReturnsNullable;
+
+    [UsedImplicitly]
+    public string UnderlyingType => OptionType ?? NullableType ?? ReturnType.ToDisplayString();
 
     public required bool IsExposed { get; init; }
 }

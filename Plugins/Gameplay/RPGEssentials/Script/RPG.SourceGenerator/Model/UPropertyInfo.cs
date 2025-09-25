@@ -20,6 +20,9 @@ public record UPropertyInfo(
 )
 {
     [UsedImplicitly]
+    public bool IsOptionOrNullableType => IsOptionType || IsNullableType;
+
+    [UsedImplicitly]
     public bool IsOptionType => OptionType is not null;
 
     [UsedImplicitly]
@@ -33,6 +36,18 @@ public record UPropertyInfo(
             } optionType
             ? optionType.TypeArguments[0]
             : null;
+
+    [UsedImplicitly]
+    public bool IsNullableType => NullableType is not null;
+
+    [UsedImplicitly]
+    public ITypeSymbol? NullableType =>
+        Type is INamedTypeSymbol { IsGenericType: true, MetadataName: "Nullable`1" } optionType
+            ? optionType.TypeArguments[0]
+            : null;
+
+    [UsedImplicitly]
+    public ITypeSymbol UnderlyingType => OptionType ?? NullableType ?? Type;
 
     [UsedImplicitly]
     public bool HasGetter => Getter.HasValue;

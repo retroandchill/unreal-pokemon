@@ -21,27 +21,37 @@ public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
     {{/GetterAttributes}}    
     {{/GetterIsUFunction}}
     {{^GetterIsUFunction}}
-    [UFunction(FunctionFlags.Blueprint{{#IsOptionType}}Callable{{/IsOptionType}}{{^IsOptionType}}Pure{{/IsOptionType}}{{#HasDisplayName}}, DisplayName = "Get {{DisplayName}}"{{/HasDisplayName}}{{#HasCategory}}, Category = "{{Category}}"{{/HasCategory}})]    
+    [UFunction(FunctionFlags.Blueprint{{#IsOptionOrNullableType}}Callable{{/IsOptionOrNullableType}}{{^IsOptionOrNullableType}}Pure{{/IsOptionOrNullableType}}{{#HasDisplayName}}, DisplayName = "Get {{DisplayName}}"{{/HasDisplayName}}{{#HasCategory}}, Category = "{{Category}}"{{/HasCategory}})]    
     {{/GetterIsUFunction}}
     [UMetaData("DefaultToSelf", "unit")]
-    {{#IsOptionType}}
+    {{#IsOptionOrNullableType}}
     [ExpandEnumAsExecs("ReturnValue")]
-    public static EValueFindResult Get{{Name}}({{../../ClassName}} unit, out {{OptionType}} value)
+    public static EValueFindResult Get{{Name}}({{../../ClassName}} unit, out {{UnderlyingType}} value)
     {
         var optionValue = unit.{{Name}};
+        {{#IsOptionType}}
         if (optionValue.IsSome)
         {
             value = optionValue.ValueUnsafe();
             return EValueFindResult.Found;
         }
+        {{/IsOptionType}}
+        {{#IsNullableType}}
+        if (optionValue.HasValue)
+        {
+            value = optionValue.Value;
+            return EValueFindResult.Found;
+        }
+        {{/IsNullableType}}
+        
         
         value = default;
         return EValueFindResult.NotFound;
     }
-    {{/IsOptionType}}
-    {{^IsOptionType}}
+    {{/IsOptionOrNullableType}}
+    {{^IsOptionOrNullableType}}
     public static {{Type}} Get{{Name}}({{../../ClassName}} unit) => unit.{{Name}};
-    {{/IsOptionType}}
+    {{/IsOptionOrNullableType}}
         
     {{/HasGetter}}
     {{#HasSetter}}
@@ -54,8 +64,8 @@ public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
     [UFunction(FunctionFlags.BlueprintCallable{{#HasDisplayName}}, DisplayName = "Set {{DisplayName}}"{{/HasDisplayName}}{{#HasCategory}}, Category = "{{Category}}"{{/HasCategory}})]
     {{/SetterIsUFunction}}
     [UMetaData("DefaultToSelf", "unit")]
-    {{#IsOptionType}}
-    public static void Set{{Name}}({{../../ClassName}} unit, {{OptionType}} value) => unit.{{Name}} = value;
+    {{#IsOptionOrNullableType}}
+    public static void Set{{Name}}({{../../ClassName}} unit, {{UnderlyingType}} value) => unit.{{Name}} = value;
 
     {{#SetterIsUFunction}}
     {{#SetterAttributes}}
@@ -66,37 +76,46 @@ public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
     [UFunction(FunctionFlags.BlueprintCallable{{#HasDisplayName}}, DisplayName = "Set {{DisplayName}}"{{/HasDisplayName}}{{#HasCategory}}, Category = "{{Category}}"{{/HasCategory}})]
     {{/SetterIsUFunction}}
     [UMetaData("DefaultToSelf", "unit")]
-    public static void Reset{{Name}}({{../../ClassName}} unit) => unit.{{Name}} = {{Type}}.None;
-    {{/IsOptionType}}
-    {{^IsOptionType}}
+    public static void Reset{{Name}}({{../../ClassName}} unit) => unit.{{Name}} = {{#IsOptionType}}{{Type}}.None{{/IsOptionType}}{{^IsOptionType}}null{{/IsOptionType}};
+    {{/IsOptionOrNullableType}}
+    {{^IsOptionOrNullableType}}
     public static void Set{{Name}}({{../../ClassName}} unit, {{Type}} value) => unit.{{Name}} = value;
-    {{/IsOptionType}}
+    {{/IsOptionOrNullableType}}
         
     {{/HasSetter}}
     {{/IsExposed}}    
     {{/Properties}}
     {{#Methods}}
     {{#IsExposed}}    
-    {{#ReturnsOption}}
+    {{#ReturnsOptionOrNullable}}
     {{#Attributes}}
     [{{Value}}]    
     {{/Attributes}}
     [UMetaData("DefaultToSelf", "unit")]
-    public static EValueFindResult {{Name}}({{../../ClassName}} unit, out {{OptionType}} result{{#HasParameters}}, {{/HasParameters}}{{#Parameters}}{{Type}} {{Name}}{{#HasDefault}} = {{DefaultValue}}{{/HasDefault}}{{^IsLast}}, {{/IsLast}}{{/Parameters}})
+    public static EValueFindResult {{Name}}({{../../ClassName}} unit, out {{UnderlyingType}} result{{#HasParameters}}, {{/HasParameters}}{{#Parameters}}{{Type}} {{Name}}{{#HasDefault}} = {{DefaultValue}}{{/HasDefault}}{{^IsLast}}, {{/IsLast}}{{/Parameters}})
     {
         var optionValue = unit.{{../ComponentName}}.{{Name}}({{#Parameters}}{{Name}}{{^IsLast}}, {{/IsLast}}{{/Parameters}});
+        {{#ReturnsOptions}}
         if (optionValue.IsSome)
         {
             result = optionValue.ValueUnsafe();
             return EValueFindResult.Found;
         }
+        {{/ReturnsOptions}}
+        {{#ReturnsNullable}}
+        if (optionValue.HasValue)
+        {
+        result = optionValue.Value;
+        return EValueFindResult.Found;
+        }
+        {{/ReturnsNullable}}
 
         result = default;
         return EValueFindResult.NotFound;
     }
 
-    {{/ReturnsOption}}    
-    {{^ReturnsOption}}
+    {{/ReturnsOptionOrNullable}}    
+    {{^ReturnsOptionOrNullable}}
     {{#Attributes}}
     [{{Value}}]    
     {{/Attributes}}
@@ -106,7 +125,7 @@ public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
         {{^ReturnsVoid}}return {{/ReturnsVoid}}unit.{{../ComponentName}}.{{Name}}({{#Parameters}}{{Name}}{{^IsLast}}, {{/IsLast}}{{/Parameters}});
     }
 
-    {{/ReturnsOption}}
+    {{/ReturnsOptionOrNullable}}
     {{/IsExposed}}
     {{/Methods}}
     {{/Components}}

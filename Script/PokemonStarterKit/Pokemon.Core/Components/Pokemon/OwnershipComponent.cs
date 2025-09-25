@@ -72,7 +72,7 @@ public class UOwnershipComponent : URPGComponent
     [ExcludeFromExtensions]
     public void Initialize(FPokemonInitParams initParams)
     {
-        var trainer = (UTrainer)SystemLibrary.GetOuterObject(OwningEntity);
+        var trainer = (UTrainer)OwningEntity.Outer;
         Owner = trainer;
         ID = trainer.ID;
         SecretID = trainer.SecretID;

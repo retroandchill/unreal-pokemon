@@ -13,6 +13,7 @@ public enum CollectionType
     Dictionary,
     Span,
     Optional,
+    Nullable,
 }
 
 public static class PropertyAccessUtilities
@@ -158,6 +159,9 @@ public static class PropertyAccessUtilities
                         case "Option`1":
                             return typeArguments[0]
                                 .GetCollectionMarshallerInfo(CollectionType.Optional, true);
+                        case "Nullable`1":
+                            return typeArguments[0]
+                                .GetCollectionMarshallerInfo(CollectionType.Nullable, true);
                     }
                 }
 
@@ -407,6 +411,14 @@ public static class PropertyAccessUtilities
                     $"Option<{innerType}>",
                     new MarshallerInfo(
                         $"OptionMarshaller<{innerType}>",
+                        innerType.GetMarshallerName(true).MarshallerInfo.Name
+                    )
+                );
+            case CollectionType.Nullable:
+                return new MarshalledPropertyInfo(
+                    $"{innerType}?",
+                    new MarshallerInfo(
+                        $"NullableMarshaller<{innerType}>",
                         innerType.GetMarshallerName(true).MarshallerInfo.Name
                     )
                 );
