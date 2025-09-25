@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RPG.Battle.Model;
 using RPG.Battle.Services;
+using UnrealInject;
 using UnrealInject.Subsystems;
 using UnrealSharp.Engine;
 using UnrealSharp.LevelEditor;
 using UnrealSharp.UnrealSharpCore;
+using ZLinq;
 
 namespace RPG.Battle;
 
@@ -24,13 +26,21 @@ public class UBattleSubsystem : UCSWorldSubsystem
         _battleEventService = serviceProvider.GetRequiredService<IBattleEventService>();
     }
 
-#if WITH_EDITOR
     protected override bool ShouldCreateSubsystem()
     {
+#if WITH_EDITOR
         var levelEditorSubsystem = GetEditorSubsystem<ULevelEditorSubsystem>();
-        return levelEditorSubsystem.IsInPlayInEditor();
-    }
+        if (!levelEditorSubsystem.IsInPlayInEditor()) return false;
 #endif
+        
+        return HasRegisteredServices(typeof(ITurnOrderService), typeof(IBattleOutcomeService), typeof(IBattleEventService));
+    }
+
+    private static bool HasRegisteredServices(params ReadOnlySpan<Type> serviceTypes)
+    {
+        return serviceTypes.AsValueEnumerable()
+            .All(t => FUnrealInjectModule.Instance.Services.Any(s => s.ServiceType == t));
+    }
 
     public async ValueTask<FBattleOutcome> StartBattleAsync(
         AActor battleContextActor,
