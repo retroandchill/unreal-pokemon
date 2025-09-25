@@ -28,6 +28,11 @@
 			"Name": "RPGSaving",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "RPGBattle",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
 		}
 	]
 }
