@@ -1,4 +1,7 @@
-﻿using Pokemon.Core.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using Pokemon.Battle.Entities;
+using Pokemon.Battle.Subsystems;
+using Pokemon.Core.Entities;
 using Pokemon.Data.Model.PBS;
 using UnrealSharp;
 using UnrealSharp.Attributes;
@@ -11,4 +14,17 @@ public class UBattlerAbilityComponent : URPGComponent
 {
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|Ability")]
     public FAbilityHandle? Ability { get; set; }
+
+    [MemberNotNullWhen(true, nameof(Ability))]
+    public bool AbilityActive => IsAbilityActive();
+
+    public bool IsAbilityActive(bool ignoreFainted = false, FAbilityHandle checkAbility = default)
+    {
+        var subsystem = GetWorldSubsystem<UBattlerSubsystem>();
+        return subsystem.BattleAbilityService.HasActiveAbility(
+            (UBattler)OwningEntity,
+            ignoreFainted,
+            checkAbility
+        );
+    }
 }

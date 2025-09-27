@@ -1,7 +1,9 @@
-﻿using Pokemon.Battle.Actions;
+﻿using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
+using Pokemon.Battle.Actions;
 using Pokemon.Battle.Actors;
 using Pokemon.Battle.Entities;
-using Pokemon.Core.Entities;
+using Pokemon.Battle.Services.Events.SpeedCalc;
 using RPG.Battle.Actions;
 using RPG.Battle.Model;
 using RPG.Battle.Services;
@@ -12,7 +14,7 @@ public class PokemonTurnOrderService : ITurnOrderService
 {
     public async IAsyncEnumerable<IAction> GetTurnOrderAsync(
         FTurnContext context,
-        CancellationToken cancellationToken = default
+        [EnumeratorCancellation] CancellationToken cancellationToken = default
     )
     {
         if (context.BattleContextActor is not ABattleContext battleContext)
@@ -28,8 +30,8 @@ public class PokemonTurnOrderService : ITurnOrderService
 
         foreach (
             var action in selectedActions
-                .OrderByDescending(CalculateEffectivePriority)
-                .ThenByDescending(a => CalculateEffectiveSpeed(a.User))
+                .OrderByDescending(a => a.Priority)
+                .ThenByDescending(a => a.User.EffectiveSpeed)
         )
         {
             yield return action;
@@ -42,17 +44,5 @@ public class PokemonTurnOrderService : ITurnOrderService
     )
     {
         throw new NotImplementedException();
-    }
-
-    private int CalculateEffectivePriority(IPokemonAction action)
-    {
-        // TODO: We need to account for the effects of abilities, hold items, etc.
-        return action.Priority;
-    }
-
-    private int CalculateEffectiveSpeed(UPokemon pokemon)
-    {
-        // TODO: We need to account for the effects of abilities, hold items, etc.
-        return pokemon.Speed;
     }
 }

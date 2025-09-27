@@ -2,6 +2,7 @@
 using Pokemon.Core.Entities;
 using Pokemon.Core.Services.Async;
 using Pokemon.Core.Services.Exp;
+using Pokemon.Core.Services.Stats;
 using Pokemon.Data.Model.HardCoded;
 using UnrealInject.Subsystems;
 using UnrealSharp;
@@ -25,6 +26,8 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
 
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Player")]
     public UPokemonBag Bag { get; private set; }
+
+    public IStatCalculationService StatCalculationService { get; private set; }
 
     private FTransform? _playerLoadTransform;
 
@@ -58,6 +61,7 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
             _expGrowthFormulas.Add(expGrowthFormula.GrowthRateFor, expGrowthFormula);
         }
         AsyncActionsService = subsystem.GetRequiredService<IAsyncActionsService>();
+        StatCalculationService = subsystem.GetRequiredService<IStatCalculationService>();
 
         // TODO: Remove this and create a proper title screen
         StartNewGame();

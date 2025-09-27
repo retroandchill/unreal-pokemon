@@ -253,9 +253,18 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
             }
         }
 
+        var subsystem = GetGameInstanceSubsystem<UPokemonSubsystem>();
         var stats = FMainStatHandle.Entries.ToDictionary(
             x => x.ID,
-            x => CalculateStat(x.ID, baseStats[x.ID], ivs[x.ID], EV[x.ID], natureMod[x.ID])
+            x =>
+                subsystem.StatCalculationService.CalculateStat(
+                    x.ID,
+                    baseStats[x.ID],
+                    Level,
+                    ivs[x.ID],
+                    EV[x.ID],
+                    natureMod[x.ID]
+                )
         );
 
         var hpDifference = stats[FStat.HP] - MaxHP;
@@ -267,27 +276,6 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
         SpecialAttack = stats[FStat.SPECIAL_ATTACK];
         SpecialDefense = stats[FStat.SPECIAL_DEFENSE];
         Speed = stats[FStat.SPEED];
-    }
-
-    [UFunction(FunctionFlags.BlueprintEvent, Category = "Stats")]
-    protected virtual int CalculateStat(
-        FMainStatHandle stat,
-        int baseValue,
-        int iv,
-        int ev,
-        int natureModifer
-    )
-    {
-        // Special case for Shedinja
-        if (stat.ID == FStat.HP && baseValue == 1)
-            return 1;
-
-        if (stat.Entry.StatType == EStatType.Main)
-        {
-            return (2 * baseValue + iv + ev / 4) * Level / 100 + Level + 10;
-        }
-
-        return ((2 * baseValue + iv + ev / 4) * Level / 100 + 5) * natureModifer / 100;
     }
 
     [ExcludeFromExtensions]

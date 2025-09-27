@@ -8,6 +8,15 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
+  <PropertyGroup>
+    <DefineConstants>WITH_EDITOR</DefineConstants>
+    <DefineConstants Condition="'$(DisableWithEditor)' == 'true'"
+      >$(DefineConstants.Replace('WITH_EDITOR;', '').Replace('WITH_EDITOR', ''))</DefineConstants
+    >
+    <DefineConstants Condition="'$(DefineAdditionalConstants)' != ''"
+      >$(DefineConstants);$(DefineAdditionalConstants)</DefineConstants
+    >
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
     <ProjectReference Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPG.Battle\RPG.Battle.csproj" />
