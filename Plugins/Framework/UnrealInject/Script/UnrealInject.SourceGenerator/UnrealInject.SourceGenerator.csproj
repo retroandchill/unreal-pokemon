@@ -26,7 +26,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Retro.SourceGeneratorUtilities" Version="0.1.2" />
+    <PackageReference Include="Retro.SourceGeneratorUtilities" Version="0.1.4" />
     <PackageReference Include="RhoMicro.CodeAnalysis.UtilityGenerators" Version="22.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -50,5 +50,18 @@
       PackagePath="analyzers/roslyn$(ROSLYN_VERSION)/dotnet/cs"
       Visible="false"
     />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\SourceTemplates.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SourceTemplates.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\SourceTemplates.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SourceTemplates.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

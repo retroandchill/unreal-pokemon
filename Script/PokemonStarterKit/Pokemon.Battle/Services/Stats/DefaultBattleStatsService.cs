@@ -1,9 +1,11 @@
 ﻿using System.Collections.Immutable;
 using Pokemon.Battle.Entities;
 using Pokemon.Battle.Services.Events.SpeedCalc;
+using UnrealInject.SourceGenerator.Attributes;
 
 namespace Pokemon.Battle.Services.Stats;
 
+[Service]
 public class DefaultBattleStatsService : IBattleStatsService
 {
     private readonly ImmutableArray<ISpeedCalcEvaluator> _speedCalcEvaluators;

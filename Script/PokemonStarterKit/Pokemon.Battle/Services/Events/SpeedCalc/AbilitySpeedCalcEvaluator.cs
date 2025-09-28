@@ -1,9 +1,11 @@
 ﻿using Pokemon.Battle.Entities;
 using Pokemon.Battle.Events;
 using Retro.ReadOnlyParams.Annotations;
+using UnrealInject.SourceGenerator.Attributes;
 
 namespace Pokemon.Battle.Services.Events.SpeedCalc;
 
+[Service]
 public class AbilitySpeedCalcEvaluator([ReadOnly] AbilityEventHandlers handlers)
     : ISpeedCalcEvaluator
 {

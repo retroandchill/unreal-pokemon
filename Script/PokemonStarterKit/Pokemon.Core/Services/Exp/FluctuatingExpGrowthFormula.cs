@@ -1,9 +1,11 @@
 ﻿using Pokemon.Data;
 using Pokemon.Data.Model.HardCoded;
+using UnrealInject.SourceGenerator.Attributes;
 using UnrealSharp.GameplayTags;
 
 namespace Pokemon.Core.Services.Exp;
 
+[Service]
 public class FluctuatingExpGrowthFormula : IExpGrowthFormula
 {
     public FGrowthRateHandle GrowthRateFor => FGrowthRate.Fluctuating;

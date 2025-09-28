@@ -1,8 +1,10 @@
 ﻿using Pokemon.Data;
 using Pokemon.Data.Model.HardCoded;
+using UnrealInject.SourceGenerator.Attributes;
 
 namespace Pokemon.Core.Services.Stats;
 
+[Service]
 public class DefaultStatCalculationService : IStatCalculationService
 {
     public int CalculateStat(

@@ -36,5 +36,10 @@
       OutputItemType="Analyzer"
       ReferenceOutputAssembly="false"
     />
+    <ProjectReference
+      Include="..\..\..\Plugins\Framework\UnrealInject\Script\UnrealInject.SourceGenerator\UnrealInject.SourceGenerator.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false"
+    />
   </ItemGroup>
 </Project>

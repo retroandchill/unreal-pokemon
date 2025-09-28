@@ -2,6 +2,7 @@
 using Pokemon.Core.Entities;
 using Pokemon.Core.Services.Async;
 using Pokemon.Data.Model.PBS;
+using UnrealInject.SourceGenerator.Attributes;
 using UnrealSharp;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.Engine;
@@ -9,6 +10,7 @@ using UnrealSharp.GameplayTags;
 
 namespace Pokemon.UI.Services.Async;
 
+[Service]
 public class UIAsyncActionsService : IAsyncActionsService
 {
     public Task ShowMessageAsync(

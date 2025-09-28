@@ -16,22 +16,11 @@ public class FPokemonCoreModule : IModuleInterface
 {
     public void StartupModule()
     {
-        var services = FUnrealInjectModule.Instance.Services;
-        services.AddSingleton<IExpGrowthFormula, ErraticExpGrowthFormula>();
-        services.AddSingleton<IExpGrowthFormula, FastExpGrowthFormula>();
-        services.AddSingleton<IExpGrowthFormula, FluctuatingExpGrowthFormula>();
-        services.AddSingleton<IExpGrowthFormula, MediumExpGrowthFormula>();
-        services.AddSingleton<IExpGrowthFormula, ParabolicExpGrowthFormula>();
-        services.AddSingleton<IExpGrowthFormula, SlowExpGrowthFormula>();
-        services.AddSingleton<ExpGrowthFormulaProvider>();
-        services.AddSingleton<IStatCalculationService, DefaultStatCalculationService>();
+        FUnrealInjectModule.Instance.Services.RegisterServices();
     }
 
     public void ShutdownModule()
     {
-        FUnrealInjectModule
-            .Instance.Services.RemoveAll<IExpGrowthFormula>()
-            .RemoveAll<ExpGrowthFormulaProvider>()
-            .RemoveAll<IStatCalculationService>();
+        FUnrealInjectModule.Instance.Services.UnregisterServices();
     }
 }

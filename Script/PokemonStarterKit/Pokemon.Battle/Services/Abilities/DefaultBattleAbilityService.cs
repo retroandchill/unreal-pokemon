@@ -1,9 +1,11 @@
 ﻿using System.Collections.Immutable;
 using Pokemon.Battle.Entities;
 using Pokemon.Data.Model.PBS;
+using UnrealInject.SourceGenerator.Attributes;
 
 namespace Pokemon.Battle.Services.Abilities;
 
+[Service]
 public class DefaultBattleAbilityService(
     IEnumerable<IAbilitySuppressionEvaluator> suppressionEvaluators
 ) : IBattleAbilityService

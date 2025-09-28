@@ -1,0 +1,40 @@
+﻿using System.Collections.Immutable;
+using Microsoft.Extensions.DependencyInjection;
+using UnrealInject;
+
+namespace {{Namespace}};
+
+internal static class ServiceRegistrations
+{
+    private static readonly List<Guid> ServiceIds = [];
+
+    public static IServiceCollection RegisterServices(this UnrealServiceCollection services)
+    {
+        if (ServiceIds.Count > 0)
+        {
+            throw new InvalidOperationException("Services have already been registered");
+        }
+
+        {{#Services}}
+        ServiceIds.Add(services.Add{{Scope}}<{{ServiceType}}{{#HasImplementation}}, {{ImplementationType}}{{/HasImplementation}}>());
+        {{/Services}}
+        
+        return services;
+    }
+
+    public static IServiceCollection UnregisterServices(this UnrealServiceCollection services)
+    {
+        if (ServiceIds.Count == 0)
+        {
+            throw new InvalidOperationException("Services have not been registered");
+        }
+
+        foreach (var id in ServiceIds)
+        {
+            services.Remove(id);
+        }
+        ServiceIds.Clear();
+        
+        return services;
+    }
+}

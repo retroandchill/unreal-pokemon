@@ -7,9 +7,11 @@ using Pokemon.Battle.Services.Events.SpeedCalc;
 using RPG.Battle.Actions;
 using RPG.Battle.Model;
 using RPG.Battle.Services;
+using UnrealInject.SourceGenerator.Attributes;
 
 namespace Pokemon.Battle.Services;
 
+[Service]
 public class PokemonTurnOrderService : ITurnOrderService
 {
     public async IAsyncEnumerable<IAction> GetTurnOrderAsync(

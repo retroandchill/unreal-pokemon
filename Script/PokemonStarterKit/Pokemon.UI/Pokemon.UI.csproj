@@ -22,5 +22,10 @@
     <Analyzer Include="..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
     <ProjectReference Include="..\..\..\Plugins\UI\InteractiveUI\Script\InteractiveUI.Core\InteractiveUI.Core.csproj" />
     <ProjectReference Include="..\..\UnrealPokemon.Glue\UnrealPokemon.Glue.csproj" />
+    <ProjectReference
+      Include="..\..\..\Plugins\Framework\UnrealInject\Script\UnrealInject.SourceGenerator\UnrealInject.SourceGenerator.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false"
+    />
   </ItemGroup>
 </Project>

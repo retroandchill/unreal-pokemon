@@ -14,19 +14,11 @@ public class FPokemonBattleModule : IModuleInterface
 {
     public void StartupModule()
     {
-        var services = FUnrealInjectModule.Instance.Services;
-        services.AddSingleton<ITurnOrderService, PokemonTurnOrderService>();
-        services.AddSingleton<IBattleStatsService, DefaultBattleStatsService>();
-        services.AddSingleton<IBattleAbilityService, DefaultBattleAbilityService>();
-        services.AddSingleton<ISpeedCalcEvaluator, AbilitySpeedCalcEvaluator>();
+        FUnrealInjectModule.Instance.Services.RegisterServices();
     }
 
     public void ShutdownModule()
     {
-        FUnrealInjectModule
-            .Instance.Services.RemoveAll<ITurnOrderService>()
-            .RemoveAll<IBattleStatsService>()
-            .RemoveAll<IBattleAbilityService>()
-            .RemoveAll<ISpeedCalcEvaluator>();
+        FUnrealInjectModule.Instance.Services.UnregisterServices();
     }
 }
