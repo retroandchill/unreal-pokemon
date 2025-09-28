@@ -20,7 +20,7 @@ public class UBattlerAbilityComponent : URPGComponent
 
     public bool IsAbilityActive(bool ignoreFainted = false, FAbilityHandle checkAbility = default)
     {
-        var subsystem = GetWorldSubsystem<UBattlerSubsystem>();
+        var subsystem = GetGameInstanceSubsystem<UBattlerSubsystem>();
         return subsystem.BattleAbilityService.HasActiveAbility(
             (UBattler)OwningEntity,
             ignoreFainted,

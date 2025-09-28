@@ -15,10 +15,10 @@ public class FPokemonBattleModule : IModuleInterface
     public void StartupModule()
     {
         FUnrealInjectModule
-            .Instance.Services.AddScoped<ITurnOrderService, PokemonTurnOrderService>()
-            .AddScoped<IBattleStatsService, DefaultBattleStatsService>()
-            .AddScoped<IBattleAbilityService, DefaultBattleAbilityService>()
-            .AddScoped<ISpeedCalcEvaluator, AbilitySpeedCalcEvaluator>();
+            .Instance.Services.AddSingleton<ITurnOrderService, PokemonTurnOrderService>()
+            .AddSingleton<IBattleStatsService, DefaultBattleStatsService>()
+            .AddSingleton<IBattleAbilityService, DefaultBattleAbilityService>()
+            .AddSingleton<ISpeedCalcEvaluator, AbilitySpeedCalcEvaluator>();
     }
 
     public void ShutdownModule()

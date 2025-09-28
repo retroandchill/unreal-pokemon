@@ -6,14 +6,11 @@ using UnrealInject.Subsystems;
 using UnrealSharp.Engine;
 using UnrealSharp.UnrealSharpCore;
 using ZLinq;
-#if WITH_EDITOR
-using UnrealSharp.LevelEditor;
-#endif
 
 
 namespace RPG.Battle;
 
-public class UBattleSubsystem : UCSWorldSubsystem
+public class UBattleSubsystem : UCSGameInstanceSubsystem
 {
     private ITurnOrderService _turnOrderService = null!;
     private IBattleOutcomeService _battleOutcomeService = null!;
@@ -23,7 +20,7 @@ public class UBattleSubsystem : UCSWorldSubsystem
     protected override void Initialize(FSubsystemCollectionBaseRef collection)
     {
         var serviceProvider =
-            collection.InitializeRequiredSubsystem<UDependencyInjectionWorldSubsystem>();
+            collection.InitializeRequiredSubsystem<UDependencyInjectionGameInstanceSubsystem>();
         _turnOrderService = serviceProvider.GetRequiredService<ITurnOrderService>();
         _battleOutcomeService = serviceProvider.GetRequiredService<IBattleOutcomeService>();
         _battleEventService = serviceProvider.GetRequiredService<IBattleEventService>();
@@ -31,11 +28,6 @@ public class UBattleSubsystem : UCSWorldSubsystem
 
     protected override bool ShouldCreateSubsystem()
     {
-#if WITH_EDITOR
-        var levelEditorSubsystem = GetEditorSubsystem<ULevelEditorSubsystem>();
-        if (!levelEditorSubsystem.IsInPlayInEditor())
-            return false;
-#endif
         return HasRegisteredServices(
             typeof(ITurnOrderService),
             typeof(IBattleOutcomeService),

@@ -18,7 +18,7 @@ using UnrealSharp.LevelEditor;
 namespace Pokemon.Battle.Subsystems;
 
 [UClass]
-public class UBattlerSubsystem : UCSWorldSubsystem
+public class UBattlerSubsystem : UCSGameInstanceSubsystem
 {
     public IBattleStatsService BattleStatsService { get; private set; } = null!;
     public IBattleAbilityService BattleAbilityService { get; private set; } = null!;
@@ -26,16 +26,8 @@ public class UBattlerSubsystem : UCSWorldSubsystem
     protected override void Initialize(FSubsystemCollectionBaseRef collection)
     {
         var serviceProvider =
-            collection.InitializeRequiredSubsystem<UDependencyInjectionWorldSubsystem>();
+            collection.InitializeRequiredSubsystem<UDependencyInjectionGameInstanceSubsystem>();
         BattleStatsService = serviceProvider.GetRequiredService<IBattleStatsService>();
         BattleAbilityService = serviceProvider.GetRequiredService<IBattleAbilityService>();
     }
-
-#if WITH_EDITOR
-    protected override bool ShouldCreateSubsystem()
-    {
-        var levelEditorSubsystem = GetEditorSubsystem<ULevelEditorSubsystem>();
-        return levelEditorSubsystem.IsInPlayInEditor();
-    }
-#endif
 }

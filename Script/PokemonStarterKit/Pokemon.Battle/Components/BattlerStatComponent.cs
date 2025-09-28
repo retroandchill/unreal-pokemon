@@ -34,7 +34,7 @@ public class UBattlerStatComponent : URPGComponent
     public int Speed { get; set; }
 
     public int EffectiveSpeed =>
-        GetWorldSubsystem<UBattlerSubsystem>()
+        GetGameInstanceSubsystem<UBattlerSubsystem>()
             .BattleStatsService.GetEffectiveSpeed((UBattler)OwningEntity);
 
     public bool IsFainted => HP == 0;
