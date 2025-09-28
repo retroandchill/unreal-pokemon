@@ -14,7 +14,6 @@ using UnrealSharp.UnrealSharpCore;
 using UnrealSharp.LevelEditor;
 #endif
 
-
 namespace Pokemon.Battle.Subsystems;
 
 [UClass]

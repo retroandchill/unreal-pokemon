@@ -25,8 +25,7 @@ public sealed class FUnrealInjectModule : IModuleInterface
 {
     private static FUnrealInjectModule? _instance;
 
-    private readonly ServiceCollection _services = [];
-    public IServiceCollection Services => _services;
+    public UnrealServiceCollection Services { get; } = [];
 #if WITH_EDITOR
     internal IServiceProvider? GameInstanceServiceProviderOverride
     {
@@ -89,7 +88,7 @@ public sealed class FUnrealInjectModule : IModuleInterface
             return GameInstanceServiceProviderOverride;
         }
 #endif
-        var containerBuilder = _serviceProviderFactory.CreateBuilder(_services);
+        var containerBuilder = _serviceProviderFactory.CreateBuilder(Services);
         var provider = _serviceProviderFactory.CreateServiceProvider(containerBuilder);
         return provider;
     }

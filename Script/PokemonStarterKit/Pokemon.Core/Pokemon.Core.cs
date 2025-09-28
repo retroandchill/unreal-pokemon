@@ -1,5 +1,4 @@
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Pokemon.Core.Services.Exp;
 using Pokemon.Core.Services.Stats;
@@ -17,15 +16,15 @@ public class FPokemonCoreModule : IModuleInterface
 {
     public void StartupModule()
     {
-        FUnrealInjectModule
-            .Instance.Services.AddSingleton<IExpGrowthFormula, ErraticExpGrowthFormula>()
-            .AddSingleton<IExpGrowthFormula, FastExpGrowthFormula>()
-            .AddSingleton<IExpGrowthFormula, FluctuatingExpGrowthFormula>()
-            .AddSingleton<IExpGrowthFormula, MediumExpGrowthFormula>()
-            .AddSingleton<IExpGrowthFormula, ParabolicExpGrowthFormula>()
-            .AddSingleton<IExpGrowthFormula, SlowExpGrowthFormula>()
-            .AddSingleton<ExpGrowthFormulaProvider>()
-            .AddSingleton<IStatCalculationService, DefaultStatCalculationService>();
+        var services = FUnrealInjectModule.Instance.Services;
+        services.AddSingleton<IExpGrowthFormula, ErraticExpGrowthFormula>();
+        services.AddSingleton<IExpGrowthFormula, FastExpGrowthFormula>();
+        services.AddSingleton<IExpGrowthFormula, FluctuatingExpGrowthFormula>();
+        services.AddSingleton<IExpGrowthFormula, MediumExpGrowthFormula>();
+        services.AddSingleton<IExpGrowthFormula, ParabolicExpGrowthFormula>();
+        services.AddSingleton<IExpGrowthFormula, SlowExpGrowthFormula>();
+        services.AddSingleton<ExpGrowthFormulaProvider>();
+        services.AddSingleton<IStatCalculationService, DefaultStatCalculationService>();
     }
 
     public void ShutdownModule()

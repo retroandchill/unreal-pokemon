@@ -7,7 +7,6 @@ using UnrealSharp.Engine;
 using UnrealSharp.UnrealSharpCore;
 using ZLinq;
 
-
 namespace RPG.Battle;
 
 public class UBattleSubsystem : UCSGameInstanceSubsystem

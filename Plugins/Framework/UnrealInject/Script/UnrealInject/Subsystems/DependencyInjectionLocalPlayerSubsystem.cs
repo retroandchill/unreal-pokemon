@@ -5,7 +5,10 @@ using UnrealSharp.UnrealSharpCore;
 namespace UnrealInject.Subsystems;
 
 [UClass]
-public class UDependencyInjectionLocalPlayerSubsystem : UCSLocalPlayerSubsystem, IServiceProvider, IServiceScope
+public class UDependencyInjectionLocalPlayerSubsystem
+    : UCSLocalPlayerSubsystem,
+        IServiceProvider,
+        IServiceScope
 {
     private IServiceScope _serviceScope = null!;
 
