@@ -12,16 +12,23 @@ namespace Pokemon.Battle.Components;
 [UClass]
 public class UBattlerAbilityComponent : URPGComponent
 {
+    [UProperty(PropertyFlags.Transient)]
+    private UBattlerSubsystem BattlerSubsystem { get; set; }
+
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|Ability")]
     public FAbilityHandle? Ability { get; set; }
 
     [MemberNotNullWhen(true, nameof(Ability))]
     public bool AbilityActive => IsAbilityActive();
 
+    protected override void PreInitialize()
+    {
+        BattlerSubsystem = GetGameInstanceSubsystem<UBattlerSubsystem>();
+    }
+
     public bool IsAbilityActive(bool ignoreFainted = false, FAbilityHandle checkAbility = default)
     {
-        var subsystem = GetGameInstanceSubsystem<UBattlerSubsystem>();
-        return subsystem.BattleAbilityService.HasActiveAbility(
+        return BattlerSubsystem.BattleAbilityService.HasActiveAbility(
             (UBattler)OwningEntity,
             ignoreFainted,
             checkAbility

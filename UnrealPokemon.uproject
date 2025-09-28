@@ -19,21 +19,21 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		},
-        {
-            "Name": "PokemonData",
-            "Type": "Runtime",
-            "LoadingPhase": "Default"
-        },
-        {
-            "Name": "PokemonUI",
-            "Type": "Runtime",
-            "LoadingPhase": "Default"
-        },
-        {
-            "Name": "PokemonEditorTools",
-            "Type": "Editor",
-            "LoadingPhase": "Default"
-        }
+		{
+			"Name": "PokemonData",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonUI",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PokemonEditorTools",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		}
 	],
 	"Plugins": [
 		{

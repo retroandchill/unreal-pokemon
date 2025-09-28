@@ -24,6 +24,8 @@ public class UnrealPokemonTarget : TargetRules
                 "PokemonUI",
                 "UnrealPokemon",
                 "PaperZDHelpers",
+                "PokemonBattle",
+                "PokemonBattle",
             }
         );
     }

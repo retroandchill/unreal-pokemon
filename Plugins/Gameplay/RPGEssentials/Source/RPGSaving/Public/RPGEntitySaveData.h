@@ -60,7 +60,7 @@ struct FRPGComponentSaveDataHandle
     }
 
     // ReSharper disable once CppMemberFunctionMayBeConst
-    bool Serialize(FArchive &Ar)
+    bool Serialize(const FStructuredArchive::FSlot Ar)
     {
         static FRPGComponentSaveData Defaults;
         FRPGComponentSaveData::StaticStruct()->SerializeItem(Ar, &Data.Get(), &Defaults);
@@ -76,7 +76,7 @@ struct TStructOpsTypeTraits<FRPGComponentSaveDataHandle> : TStructOpsTypeTraitsB
 {
     enum
     {
-        WithSerializer = true,
+        WithStructuredSerializer = true,
         WithNetSerializer = false,
         WithNetSharedSerialization = false
     };

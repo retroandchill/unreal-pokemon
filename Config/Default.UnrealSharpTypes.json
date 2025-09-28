@@ -1,0 +1,15 @@
+{
+    "Structs": {
+        "CustomTypes": [],
+        "BlittableTypes": [
+            {
+                "Name": "FBattleEffectData"
+            },
+            {
+                "Name": "FSmallStructBuffer"
+            }
+        ],
+        "NativelyTranslatableTypes": [
+        ]
+    }
+}
