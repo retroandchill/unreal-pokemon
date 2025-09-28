@@ -49,6 +49,11 @@ readonly partial record struct {{StructName}}([field: UProperty(PropertyFlags.Ed
         return new {{StructName}}(name);
     }
 
+    public static implicit operator {{StructName}}(string name)
+    {
+        return new {{StructName}}(name);
+    }
+
     public static implicit operator FName({{StructName}} handle) => handle.ID;
 
     {{#Convertables}}

@@ -1,19 +1,9 @@
-﻿#if UNREAL_INJECT_GENERATOR
+﻿using Microsoft.Extensions.DependencyInjection;
+#if UNREAL_INJECT_GENERATOR
 using RhoMicro.CodeAnalysis;
-#else
-using Microsoft.Extensions.DependencyInjection;
 #endif
 
 namespace UnrealInject.SourceGenerator.Attributes;
-
-#if UNREAL_INJECT_GENERATOR
-public enum ServiceLifetime
-{
-    Singleton = 0,
-    Scoped = 1,
-    Transient = 2,
-}
-#endif
 
 [AttributeUsage(AttributeTargets.Class)]
 #if UNREAL_INJECT_GENERATOR

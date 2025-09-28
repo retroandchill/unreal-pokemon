@@ -6,8 +6,7 @@ using UnrealInject.SourceGenerator.Attributes;
 namespace Pokemon.Battle.Services.Events.SpeedCalc;
 
 [Service]
-public class AbilitySpeedCalcEvaluator([ReadOnly] ItemEventHandlers handlers)
-    : ISpeedCalcEvaluator
+public class AbilitySpeedCalcEvaluator([ReadOnly] ItemEventHandlers handlers) : ISpeedCalcEvaluator
 {
     public int Priority => SpeedCalcPriorities.Item;
 

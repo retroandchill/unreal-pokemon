@@ -1,9 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.DependencyInjection;
 using UnrealInject.SourceGenerator.Attributes;
 
 namespace UnrealInject.SourceGenerator.Model;
 
-public record ServiceInjection(ITypeSymbol ServiceType, ServiceLifetime Lifetime)
+internal record ServiceInjection(ITypeSymbol ServiceType, ServiceLifetime Lifetime)
 {
     public string Scope => Lifetime.ToString();
 

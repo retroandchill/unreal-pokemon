@@ -1,0 +1,27 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+using Pokemon.Battle.Events;
+
+namespace {{Namespace}};
+
+internal static class BattleAbilityEventRegistrations
+{
+    public static IServiceCollection RegisterAbilityEvents(this IServiceCollection services)
+    {
+        return services.ConfigureAbilities(config =>
+        {
+            {{#Registrations}}
+            config.{{EventName}}.Add("{{ID}}", {{MethodName}});
+            {{/Registrations}}
+        });
+    }
+
+    public static IServiceCollection UnregisterAbilityEvents(this IServiceCollection services)
+    {
+        return services.ConfigureAbilities(config =>
+        {
+            {{#Registrations}}
+            config.{{EventName}}.Remove("{{ID}}");
+            {{/Registrations}}
+        });
+    }
+}

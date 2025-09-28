@@ -9,6 +9,6 @@ public class UBattlerHoldItemComponent : URPGComponent
 {
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|HoldItem")]
     public FItemHandle? HoldItem { get; set; }
-    
+
     public bool ItemActive => HoldItem != null;
 }

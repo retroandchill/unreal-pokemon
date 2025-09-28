@@ -113,6 +113,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GridMapEditor", "GridMapEdi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GridMapEditor.Glue", "..\Plugins\Utilities\GridMapEditor\Script\GridMapEditor.Glue\GridMapEditor.Glue.csproj", "{DD48A922-4B55-45DE-9E65-1B4D97213499}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pokemon.SourceGenerators", "PokemonStarterKit\Pokemon.SourceGenerators\Pokemon.SourceGenerators.csproj", "{72D8C451-DB37-4402-A81D-98BA8675CE26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -531,6 +533,18 @@ Global
 		{DD48A922-4B55-45DE-9E65-1B4D97213499}.Release|x64.Build.0 = Release|Any CPU
 		{DD48A922-4B55-45DE-9E65-1B4D97213499}.Release|x86.ActiveCfg = Release|Any CPU
 		{DD48A922-4B55-45DE-9E65-1B4D97213499}.Release|x86.Build.0 = Release|Any CPU
+		{72D8C451-DB37-4402-A81D-98BA8675CE26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72D8C451-DB37-4402-A81D-98BA8675CE26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72D8C451-DB37-4402-A81D-98BA8675CE26}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{72D8C451-DB37-4402-A81D-98BA8675CE26}.Debug|x64.Build.0 = Debug|Any CPU
+		{72D8C451-DB37-4402-A81D-98BA8675CE26}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{72D8C451-DB37-4402-A81D-98BA8675CE26}.Debug|x86.Build.0 = Debug|Any CPU
+		{72D8C451-DB37-4402-A81D-98BA8675CE26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72D8C451-DB37-4402-A81D-98BA8675CE26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72D8C451-DB37-4402-A81D-98BA8675CE26}.Release|x64.ActiveCfg = Release|Any CPU
+		{72D8C451-DB37-4402-A81D-98BA8675CE26}.Release|x64.Build.0 = Release|Any CPU
+		{72D8C451-DB37-4402-A81D-98BA8675CE26}.Release|x86.ActiveCfg = Release|Any CPU
+		{72D8C451-DB37-4402-A81D-98BA8675CE26}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -589,5 +603,6 @@ Global
 		{059E24ED-AC7E-4E24-B623-000C5ACD7B74} = {EC251B8E-D3F1-3689-74CE-2178CB5894C1}
 		{977DDDD6-0A40-B175-52EB-6179ACFF1E65} = {A9D916FE-6BBA-FC79-DFA5-CFE31B2208E1}
 		{DD48A922-4B55-45DE-9E65-1B4D97213499} = {977DDDD6-0A40-B175-52EB-6179ACFF1E65}
+		{72D8C451-DB37-4402-A81D-98BA8675CE26} = {0BB39A05-1926-C2B2-7003-8EB281EB5439}
 	EndGlobalSection
 EndGlobal
