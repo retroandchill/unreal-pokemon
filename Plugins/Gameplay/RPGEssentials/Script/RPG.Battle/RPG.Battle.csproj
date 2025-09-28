@@ -18,7 +18,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
-    <PackageReference Include="Retro.ReadOnlyParams" Version="1.0.0" />
+    <PackageReference Include="Retro.ReadOnlyParams" Version="1.0.1" />
     <PackageReference Include="ZLinq" Version="1.5.2" />
     <Reference Include="UnrealSharp">
       <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
