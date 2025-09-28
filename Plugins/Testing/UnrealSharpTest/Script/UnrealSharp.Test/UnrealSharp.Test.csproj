@@ -15,7 +15,7 @@
     <DocumentationFile>bin\Release\UnrealSharp.Test.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2025.2.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
     <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
     <PackageReference Include="Microsoft.TestPlatform.Build" Version="17.14.1" />
     <PackageReference Include="NUnit" Version="4.4.0" />

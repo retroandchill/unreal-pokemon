@@ -9,7 +9,7 @@
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2025.2.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
     <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
     <ProjectReference Include="..\Pokemon.Assets\Pokemon.Assets.csproj" />
     <ProjectReference Include="..\Pokemon.Core\Pokemon.Core.csproj" />
