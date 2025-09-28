@@ -6,7 +6,7 @@
 version: 2
 updates:
   - package-ecosystem: "nuget" # See documentation for possible values
-    directory: "/" # Location of package manifests
+    directory: "/Script" # Location of package manifests
     schedule:
       interval: "daily"
   
