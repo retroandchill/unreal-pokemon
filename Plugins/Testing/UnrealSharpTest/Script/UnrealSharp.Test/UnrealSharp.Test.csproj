@@ -19,7 +19,7 @@
     <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
     <PackageReference Include="Microsoft.TestPlatform.Build" Version="17.14.1" />
     <PackageReference Include="NUnit" Version="4.4.0" />
-    <PackageReference Include="Retro.ReadOnlyParams" Version="1.0.0" />
+    <PackageReference Include="Retro.ReadOnlyParams" Version="1.0.1" />
     <PackageReference Include="Riok.Mapperly" Version="4.2.1" />
     <Reference Include="UnrealSharp">
       <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
