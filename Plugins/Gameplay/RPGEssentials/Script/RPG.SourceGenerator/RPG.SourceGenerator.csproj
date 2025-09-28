@@ -17,7 +17,7 @@
       GeneratePathProperty="true"
       PrivateAssets="all"
     />
-    <PackageReference Include="JetBrains.Annotations" Version="2025.2.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="4.14.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
