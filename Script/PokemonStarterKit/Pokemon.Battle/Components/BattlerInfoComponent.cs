@@ -19,5 +19,5 @@ public class UBattlerInfoComponent : URPGComponent
     public FSpeciesHandle Species { get; set; }
 
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|Info")]
-    public TArray<FTypeHandle> Types { get; set; }
+    public TArray<FTypeHandle> Types { get; }
 }

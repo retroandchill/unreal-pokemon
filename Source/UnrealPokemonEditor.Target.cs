@@ -40,8 +40,6 @@ public class UnrealPokemonEditorTarget : TargetRules
                 "UnrealPokemon",
                 "UnrealPokemonEditor",
                 "PaperZDHelpers",
-                "PokemonBattle",
-                "PokemonBattle",
             }
         );
     }
