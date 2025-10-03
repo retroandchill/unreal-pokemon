@@ -6,6 +6,14 @@ using UnrealSharp.UMG;
 
 namespace Pokemon.UI.Components.Common;
 
+/// <summary>
+/// A class responsible for displaying a Pokémon's representative icon in the UI.
+/// </summary>
+/// <remarks>
+/// UPokemonIconDisplay is a concrete implementation derived from UPokemonDisplayBase.
+/// It specifically handles the logic for showing or hiding a Pokémon's icon and updating
+/// the icon based on the associated Pokémon instance.
+/// </remarks>
 [UClass(ClassFlags.Abstract)]
 public class UPokemonIconDisplay : UPokemonDisplayBase
 {
@@ -13,6 +21,7 @@ public class UPokemonIconDisplay : UPokemonDisplayBase
     [BindWidget]
     private UEnhancedImage Image { get; }
 
+    /// <inheritdoc />
     public override void Refresh()
     {
         if (Pokemon is null)

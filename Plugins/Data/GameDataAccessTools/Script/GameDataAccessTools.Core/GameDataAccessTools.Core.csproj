@@ -1,45 +1,51 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <EnableDynamicLoading>true</EnableDynamicLoading>
-    <LangVersion>preview</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <DefineConstants>WITH_EDITOR</DefineConstants>
-    <DefineConstants Condition="'$(DisableWithEditor)' == 'true'"
-      >$(DefineConstants.Replace('WITH_EDITOR;', '').Replace('WITH_EDITOR', ''))</DefineConstants
-    >
-    <DefineConstants Condition="'$(DefineAdditionalConstants)' != ''"
-      >$(DefineConstants);$(DefineAdditionalConstants)</DefineConstants
-    >
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
-    <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
-    <PackageReference Include="Retro.ReadOnlyParams" Version="1.0.1" />
-    <PackageReference Include="ZLinq" Version="1.5.2" />
-    <Reference Include="UnrealSharp">
-      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="UnrealSharp.Core">
-      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="UnrealSharp.Binds">
-      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Binds.dll</HintPath>
-    </Reference>
-    <Reference Include="UnrealSharp.Log">
-      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Log.dll</HintPath>
-    </Reference>
-    <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
-    <ProjectReference Include="..\GameDataAccessTools.Glue\GameDataAccessTools.Glue.csproj" />
-    <ProjectReference
-      Include="..\GameDataAccessTools.SourceGenerator\GameDataAccessTools.SourceGenerator.csproj"
-      OutputItemType="Analyzer"
-      ReferenceOutputAssembly="false"
-    />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <LangVersion>preview</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup>
+        <DefineConstants>WITH_EDITOR</DefineConstants>
+        <DefineConstants Condition="'$(DisableWithEditor)' == 'true'"
+            >$(DefineConstants.Replace('WITH_EDITOR;', '').Replace('WITH_EDITOR', ''))</DefineConstants
+        >
+        <DefineConstants Condition="'$(DefineAdditionalConstants)' != ''"
+            >$(DefineConstants);$(DefineAdditionalConstants)</DefineConstants
+        >
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <DocumentationFile>bin\Debug\GameDataAccessTools.Core.xml</DocumentationFile>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DocumentationFile>bin\Release\GameDataAccessTools.Core.xml</DocumentationFile>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
+        <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
+        <PackageReference Include="Retro.ReadOnlyParams" Version="1.0.1" />
+        <PackageReference Include="ZLinq" Version="1.5.2" />
+        <Reference Include="UnrealSharp">
+            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="UnrealSharp.Core">
+            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="UnrealSharp.Binds">
+            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Binds.dll</HintPath>
+        </Reference>
+        <Reference Include="UnrealSharp.Log">
+            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Log.dll</HintPath>
+        </Reference>
+        <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
+        <ProjectReference Include="..\GameDataAccessTools.Glue\GameDataAccessTools.Glue.csproj" />
+        <ProjectReference
+            Include="..\GameDataAccessTools.SourceGenerator\GameDataAccessTools.SourceGenerator.csproj"
+            OutputItemType="Analyzer"
+            ReferenceOutputAssembly="false"
+        />
+    </ItemGroup>
 </Project>

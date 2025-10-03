@@ -17,8 +17,7 @@ public static class ArgumentNameFormatter
     /// </returns>
     public static string GetDisplayName(this TestCaseData testCase)
     {
-        return testCase.TestName
-            ?? $"({string.Join(";", testCase.Arguments.Select(GetArgumentDisplayName))})";
+        return testCase.TestName ?? $"({string.Join(";", testCase.Arguments.Select(GetArgumentDisplayName))})";
     }
 
     private static string GetArgumentDisplayName(object? argument)

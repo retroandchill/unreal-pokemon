@@ -11,24 +11,31 @@ using UnrealSharp.CoreUObject;
 
 namespace Pokemon.Editor.Serialization.Pbs.Converters;
 
+/// <summary>
+/// The <c>EvolutionMethodConverter</c> class provides functionality for converting
+/// Pokémon evolution condition data between CSV representation and structured data representation.
+/// Implements the <see cref="IPbsConverter{T}"/> interface where T is <see cref="EvolutionConditionInfo"/>.
+/// </summary>
+/// <remarks>
+/// This class is responsible for serializing and deserializing evolution condition information
+/// using the provided PBS scalar schema. The main operations involve writing an evolution condition
+/// to its CSV string representation and parsing CSV string data to create an evolution condition object.
+/// </remarks>
+/// <seealso cref="IPbsConverter{T}"/>
+/// <seealso cref="EvolutionConditionInfo"/>
+/// <seealso cref="PbsScalarDescriptor"/>
 public class EvolutionMethodConverter : IPbsConverter<EvolutionConditionInfo>
 {
+    /// <inheritdoc />
     public Type Type => typeof(EvolutionConditionInfo);
 
-    string IPbsConverter.WriteCsvValue(
-        object? value,
-        PbsScalarDescriptor schema,
-        string? sectionName
-    )
+    string IPbsConverter.WriteCsvValue(object? value, PbsScalarDescriptor schema, string? sectionName)
     {
         return WriteCsvValue((EvolutionConditionInfo)value!, schema, sectionName);
     }
 
-    public string WriteCsvValue(
-        EvolutionConditionInfo value,
-        PbsScalarDescriptor schema,
-        string? sectionName
-    )
+    /// <inheritdoc />
+    public string WriteCsvValue(EvolutionConditionInfo value, PbsScalarDescriptor schema, string? sectionName)
     {
         return ExportEvolutionParameters(value);
     }
@@ -48,9 +55,7 @@ public class EvolutionMethodConverter : IPbsConverter<EvolutionConditionInfo>
         }
 
         var dataParameters = method
-            .Parameter.ManagedType.GetFields(
-                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance
-            )
+            .Parameter.ManagedType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
             .Where(x => x.GetCustomAttribute<UPropertyAttribute>() is not null)
             .ToImmutableArray();
 
@@ -71,20 +76,13 @@ public class EvolutionMethodConverter : IPbsConverter<EvolutionConditionInfo>
         return $"{value.Species},{value.Method},{string.Join(",", additionalParameters)}";
     }
 
-    object? IPbsConverter.GetCsvValue(
-        string input,
-        PbsScalarDescriptor scalarDescriptor,
-        string? sectionName
-    )
+    object IPbsConverter.GetCsvValue(string input, PbsScalarDescriptor scalarDescriptor, string? sectionName)
     {
         return GetCsvValue(input, scalarDescriptor, sectionName);
     }
 
-    public EvolutionConditionInfo GetCsvValue(
-        string input,
-        PbsScalarDescriptor scalarDescriptor,
-        string? sectionName
-    )
+    /// <inheritdoc />
+    public EvolutionConditionInfo GetCsvValue(string input, PbsScalarDescriptor scalarDescriptor, string? sectionName)
     {
         return ExtractEvolutionConditionInfo(input);
     }
@@ -110,17 +108,11 @@ public class EvolutionMethodConverter : IPbsConverter<EvolutionConditionInfo>
         }
 
         var dataParameters = method
-            .Parameter.ManagedType.GetFields(
-                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance
-            )
+            .Parameter.ManagedType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
             .Where(p => p.GetCustomAttribute<UPropertyAttribute>() is not null)
             .ToImmutableArray();
 
-        ArgumentOutOfRangeException.ThrowIfLessThan(
-            data.Length,
-            dataParameters.Length + 2,
-            nameof(data)
-        );
+        ArgumentOutOfRangeException.ThrowIfLessThan(data.Length, dataParameters.Length + 2, nameof(data));
 
         var evolutionData = Activator.CreateInstance(method.Parameter.ManagedType);
         foreach (var (key, value) in dataParameters.Zip(data.Skip(2), (x, y) => (x, y)))
@@ -143,15 +135,10 @@ public class EvolutionMethodConverter : IPbsConverter<EvolutionConditionInfo>
             else if (
                 key
                     .FieldType.GetInterfaces()
-                    .Any(x =>
-                        x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDataHandle<>)
-                    )
+                    .Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDataHandle<>))
             )
             {
-                key.SetValue(
-                    evolutionData,
-                    Activator.CreateInstance(key.FieldType, new FName(value))
-                );
+                key.SetValue(evolutionData, Activator.CreateInstance(key.FieldType, new FName(value)));
             }
             else
             {
@@ -162,8 +149,7 @@ public class EvolutionMethodConverter : IPbsConverter<EvolutionConditionInfo>
         var makeMethod = typeof(FInstancedStruct)
             .GetMethods()
             .Single(x =>
-                x is { Name: nameof(FInstancedStruct.Make), IsGenericMethod: true }
-                && x.GetParameters().Length == 1
+                x is { Name: nameof(FInstancedStruct.Make), IsGenericMethod: true } && x.GetParameters().Length == 1
             )
             .MakeGenericMethod(method.Parameter.ManagedType);
 

@@ -37,11 +37,7 @@ public class AsyncTests
     }
 
     [TestCaseSource(nameof(ComplexTestCases))]
-    public async Task<Point> AddPointsAsync_ValidPoints_ReturnsExpectedPoint(
-        Point a,
-        Point b,
-        Point expected
-    )
+    public async Task<Point> AddPointsAsync_ValidPoints_ReturnsExpectedPoint(Point a, Point b, Point expected)
     {
         var result = await AddPointsAsync(a, b);
         using (Assert.EnterMultipleScope())
@@ -60,10 +56,7 @@ public class AsyncTests
     }
 
     [TestCaseSource(nameof(NullableTestCases))]
-    public async ValueTask ProcessComplexAsync_HandlesNullables(
-        ComplexValue? value,
-        bool shouldSucceed
-    )
+    public async ValueTask ProcessComplexAsync_HandlesNullables(ComplexValue? value, bool shouldSucceed)
     {
         if (shouldSucceed)
         {
@@ -72,9 +65,7 @@ public class AsyncTests
         }
         else
         {
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await ProcessComplexValueAsync(value!)
-            );
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await ProcessComplexValueAsync(value!));
         }
     }
 

@@ -10,8 +10,7 @@ public interface IRPGEntity<out T>
 
 public partial class URPGEntity
 {
-    protected IEnumerable<URPGComponent> AllComponents =>
-        RequiredComponents.Concat(AdditionalComponents);
+    protected IEnumerable<URPGComponent> AllComponents => RequiredComponents.Concat(AdditionalComponents);
 
     public T? GetComponent<T>()
         where T : URPGComponent
@@ -37,10 +36,7 @@ public partial class URPGEntity
         return component is not null;
     }
 
-    public bool TryGetComponent<T>(
-        TSubclassOf<T> componentClass,
-        [NotNullWhen(true)] out T? component
-    )
+    public bool TryGetComponent<T>(TSubclassOf<T> componentClass, [NotNullWhen(true)] out T? component)
         where T : URPGComponent
     {
         component = GetComponent(componentClass);
@@ -57,9 +53,7 @@ public partial class URPGEntity
         where T : URPGComponent
     {
         return GetComponent(componentClass)
-            ?? throw new InvalidOperationException(
-                $"Entity {this} does not have component {componentClass}"
-            );
+            ?? throw new InvalidOperationException($"Entity {this} does not have component {componentClass}");
     }
 
     protected void InitializeComponents()

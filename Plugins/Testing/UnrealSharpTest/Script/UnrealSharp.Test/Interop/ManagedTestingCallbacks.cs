@@ -39,11 +39,7 @@ public unsafe struct ManagedTestingActions
     /// <param name="assemblyNamesLength">The number of assembly names provided in the array.</param>
     /// <param name="outputArrayPtr">A pointer to an unmanaged array where the collected test cases will be stored.</param>
     [UsedImplicitly]
-    public required delegate* unmanaged<
-        IntPtr,
-        int,
-        UnmanagedArray*,
-        void> CollectTestCases { get; init; }
+    public required delegate* unmanaged<IntPtr, int, UnmanagedArray*, void> CollectTestCases { get; init; }
 
     /// <summary>
     /// Represents an unmanaged function pointer used for retrieving tests and their associated metadata
@@ -59,11 +55,7 @@ public unsafe struct ManagedTestingActions
     /// <param name="beautifiedNames">A pointer to an unmanaged array where beautified test names will be stored.</param>
     /// <param name="testParameters">A pointer to an unmanaged array where the parameters for each test will be stored.</param>
     [UsedImplicitly]
-    public required delegate* unmanaged<
-        IntPtr,
-        UnmanagedArray*,
-        UnmanagedArray*,
-        void> GetTests { get; init; }
+    public required delegate* unmanaged<IntPtr, UnmanagedArray*, UnmanagedArray*, void> GetTests { get; init; }
 
     /// <summary>
     /// Represents an unmanaged function pointer used for executing a specific test case.
@@ -175,11 +167,7 @@ public static unsafe class ManagedTestingCallbacks
             var testCaseHandle = GCHandle.Alloc(testCase);
             var testCaseHandlePtr = GCHandle.ToIntPtr(testCaseHandle);
 
-            ManagedTestingExporter.CallAddTestCase(
-                ref *outputArrayPtr,
-                (IntPtr)nativeStruct,
-                testCaseHandlePtr
-            );
+            ManagedTestingExporter.CallAddTestCase(ref *outputArrayPtr, (IntPtr)nativeStruct, testCaseHandlePtr);
         }
     }
 
@@ -202,9 +190,7 @@ public static unsafe class ManagedTestingCallbacks
         UnmanagedArray* testParameters
     )
     {
-        var managedTestCase = GCHandleUtilities.GetObjectFromHandlePtr<UnrealTestMethod>(
-            managedTestCasePtr
-        );
+        var managedTestCase = GCHandleUtilities.GetObjectFromHandlePtr<UnrealTestMethod>(managedTestCasePtr);
         if (managedTestCase is null)
         {
             LogUnrealSharpTest.LogError("Failed to get tests");
@@ -260,9 +246,7 @@ public static unsafe class ManagedTestingCallbacks
     [UnmanagedCallersOnly]
     public static NativeBool RunTest(IntPtr nativeTest, IntPtr managedTestCasePtr, FName testName)
     {
-        var testCase = GCHandleUtilities.GetObjectFromHandlePtr<UnrealTestMethod>(
-            managedTestCasePtr
-        );
+        var testCase = GCHandleUtilities.GetObjectFromHandlePtr<UnrealTestMethod>(managedTestCasePtr);
         if (testCase is null)
         {
             return NativeBool.False;

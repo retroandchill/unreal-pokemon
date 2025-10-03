@@ -30,9 +30,7 @@ public class MemberAccessRewriter(
     {
         // Visit type arguments first
         var newTypeArgs = node.TypeArgumentList.Arguments.Select(Visit).OfType<TypeSyntax>();
-        var newTypeArgList = node.TypeArgumentList.WithArguments(
-            SyntaxFactory.SeparatedList(newTypeArgs)
-        );
+        var newTypeArgList = node.TypeArgumentList.WithArguments(SyntaxFactory.SeparatedList(newTypeArgs));
 
         return node.WithTypeArgumentList(newTypeArgList);
     }
@@ -44,9 +42,7 @@ public class MemberAccessRewriter(
             a.WithExpression((ExpressionSyntax)Visit(a.Expression))
         );
 
-        var newArgumentList = node.ArgumentList.WithArguments(
-            SyntaxFactory.SeparatedList(arguments)
-        );
+        var newArgumentList = node.ArgumentList.WithArguments(SyntaxFactory.SeparatedList(arguments));
 
         SimpleNameSyntax? simpleName = node.Expression switch
         {
@@ -95,11 +91,7 @@ public class MemberAccessRewriter(
         if (newExpression is MemberAccessExpressionSyntax syntax)
         {
             // Already transformed, just keep going
-            return SyntaxFactory.MemberAccessExpression(
-                SyntaxKind.SimpleMemberAccessExpression,
-                syntax,
-                node.Name
-            );
+            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, syntax, node.Name);
         }
 
         // Need to prefix with structView

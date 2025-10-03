@@ -5,11 +5,16 @@ using UnrealSharp.GameplayTags;
 
 namespace Pokemon.Core.Services.Exp;
 
+/// <summary>
+/// Represents a medium experience growth formula used to calculate the required experience points for leveling up a Pokémon character.
+/// </summary>
 [Service]
 public class MediumExpGrowthFormula : IExpGrowthFormula
 {
+    /// <inheritdoc />
     public FGrowthRateHandle GrowthRateFor => FGrowthRate.Medium;
 
+    /// <inheritdoc />
     public int GetMinimumExpForLevel(int level)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(level, 0);

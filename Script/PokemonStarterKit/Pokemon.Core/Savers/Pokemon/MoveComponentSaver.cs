@@ -11,11 +11,20 @@ using UnrealSharp.RPGSaving;
 
 namespace Pokemon.Core.Savers.Pokemon;
 
+/// <summary>
+/// Represents a component saver specifically designed for the UMoveComponent.
+/// This class is responsible for mapping and persisting the state of a UMoveComponent into the corresponding
+/// FMoveComponentInfo structure during save and load operations.
+/// </summary>
+/// <remarks>
+/// Utilizes the Riok.Mapperly library for object mapping and adheres to the required mapping strategy.
+/// Implements the ComponentSaver attribute with a logger class for handling save-related operations.
+/// </remarks>
+/// <seealso cref="UMoveComponent"/>
+/// <seealso cref="FMoveComponentInfo"/>
+/// <seealso cref="UComponentSaver"/>
 [UClass]
-[Mapper(
-    RequiredMappingStrategy = RequiredMappingStrategy.Target,
-    PreferParameterlessConstructors = false
-)]
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target, PreferParameterlessConstructors = false)]
 [ComponentSaver<UMoveComponent, FMoveComponentInfo>(LoggerClass = typeof(LogPokemonCore))]
 public partial class UMoveComponentSaver : UComponentSaver
 {

@@ -29,9 +29,7 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
                         return null;
                     }
 
-                    return structSymbol.HasAttribute<DataHandleBaseAttribute>()
-                        ? structSymbol
-                        : null;
+                    return structSymbol.HasAttribute<DataHandleBaseAttribute>() ? structSymbol : null;
                 }
             )
             .Where(s => s is not null);
@@ -45,9 +43,7 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
         if (
             !structSymbol
                 .GetAttributes()
-                .Any(a =>
-                    a.AttributeClass?.ToDisplayString() == SourceContextNames.UStructAttribute
-                )
+                .Any(a => a.AttributeClass?.ToDisplayString() == SourceContextNames.UStructAttribute)
         )
         {
             context.ReportDiagnostic(
@@ -160,9 +156,7 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
 
         context.AddSource(
             $"{structSymbol.Name}BlueprintLibrary.g.cs",
-            handlebars.Compile(SourceTemplates.RepositoryDataHandleBlueprintLibraryTemplate)(
-                blueprintLibraryParams
-            )
+            handlebars.Compile(SourceTemplates.RepositoryDataHandleBlueprintLibraryTemplate)(blueprintLibraryParams)
         );
     }
 

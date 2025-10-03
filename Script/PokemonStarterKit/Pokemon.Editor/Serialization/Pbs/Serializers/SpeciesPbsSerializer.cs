@@ -10,18 +10,25 @@ using ZLinq;
 
 namespace Pokemon.Editor.Serialization.Pbs.Serializers;
 
+/// <summary>
+/// A serializer class designed to handle serialization and deserialization of species data
+/// in PBS (Pokémon Battle Simulator) file format. This class extends the
+/// UGameDataEntryPbsSerializerBase and provides specific implementations for working with
+/// species data within a designated repository.
+/// This class is responsible for serializing species data into PBS-compliant text format and
+/// rebuilding species data structures from PBS files back into game data repositories.
+/// </summary>
 [UClass]
 public sealed class USpeciesPbsSerializer : UGameDataEntryPbsSerializerBase
 {
+    /// <inheritdoc />
     protected override bool Supports(TSubclassOf<UAssetGameDataRepository> repositoryClass)
     {
         return repositoryClass == typeof(USpeciesRepository);
     }
 
-    protected override void Serialize(
-        StreamWriter streamWriter,
-        UAssetGameDataRepository repository
-    )
+    /// <inheritdoc />
+    protected override void Serialize(StreamWriter streamWriter, UAssetGameDataRepository repository)
     {
         if (repository is not USpeciesRepository speciesRepository)
             throw new InvalidOperationException("Repository is not of type USpeciesRepository");
@@ -32,10 +39,8 @@ public sealed class USpeciesPbsSerializer : UGameDataEntryPbsSerializerBase
         );
     }
 
-    protected override void Deserialize(
-        StreamReader streamReader,
-        UAssetGameDataRepository repository
-    )
+    /// <inheritdoc />
+    protected override void Deserialize(StreamReader streamReader, UAssetGameDataRepository repository)
     {
         if (
             repository

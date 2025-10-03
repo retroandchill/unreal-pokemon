@@ -28,10 +28,7 @@ public partial class URPGComponent
         return component is not null;
     }
 
-    public bool TryGetSiblingComponent<T>(
-        TSubclassOf<T> componentClass,
-        [NotNullWhen(true)] out T? component
-    )
+    public bool TryGetSiblingComponent<T>(TSubclassOf<T> componentClass, [NotNullWhen(true)] out T? component)
         where T : URPGComponent
     {
         component = GetSiblingComponent(componentClass);
@@ -48,9 +45,7 @@ public partial class URPGComponent
         where T : URPGComponent
     {
         return GetSiblingComponent(componentClass)
-            ?? throw new InvalidOperationException(
-                $"Entity {this} does not have component {componentClass}"
-            );
+            ?? throw new InvalidOperationException($"Entity {this} does not have component {componentClass}");
     }
 
     public void BindInitFunction<TStruct>(Action<TStruct> initFunction)

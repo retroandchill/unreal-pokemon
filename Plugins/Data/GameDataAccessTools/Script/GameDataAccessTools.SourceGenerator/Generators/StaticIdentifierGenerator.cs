@@ -33,9 +33,7 @@ public class StaticIdentifierGenerator : IIncrementalGenerator
                         return null;
                     }
 
-                    return classSymbol.HasAttribute(typeof(StaticIdentifierAttribute<>))
-                        ? syntax
-                        : null;
+                    return classSymbol.HasAttribute(typeof(StaticIdentifierAttribute<>)) ? syntax : null;
                 }
             )
             .Where(x => x is not null);
@@ -43,10 +41,7 @@ public class StaticIdentifierGenerator : IIncrementalGenerator
         context.RegisterSourceOutput(declaredStructs, GenerateIdentifiers!);
     }
 
-    private static void GenerateIdentifiers(
-        SourceProductionContext context,
-        INamedTypeSymbol classSymbol
-    )
+    private static void GenerateIdentifiers(SourceProductionContext context, INamedTypeSymbol classSymbol)
     {
         var isValidType = true;
         if (!classSymbol.IsStatic)
@@ -81,10 +76,7 @@ public class StaticIdentifierGenerator : IIncrementalGenerator
                 .GetAttributes()
                 .Where(x => x.AttributeClass?.Name == "StaticIdentifierAttribute")
                 .Select(info =>
-                    (
-                        Extended: info.AttributeClass!.TypeArguments[0],
-                        Properties: info.ConstructorArguments[0].Values
-                    )
+                    (Extended: info.AttributeClass!.TypeArguments[0], Properties: info.ConstructorArguments[0].Values)
                 )
                 .Select(x => new
                 {

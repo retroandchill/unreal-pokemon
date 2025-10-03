@@ -7,16 +7,25 @@
 class FGameDataEntrySerializerPtr;
 class UAssetGameDataRepository;
 class IGameDataEntrySerializer;
-DECLARE_DELEGATE_OneParam(FOnFileAction, const FString &)
 
-    struct FImportExportAction
-{
-    FSharedGCHandle ActionHandle;
-    FText FormatName;
-    FOnFileAction ImportAction;
-    FOnFileAction ExportAction;
-};
-
+/**
+ * @class FGameDataRepositoryActions
+ * @brief Implements asset type actions for Game Data Repository assets.
+ *
+ * This class provides custom actions and editor integration for Game Data Repository assets.
+ * It overrides functionality to retrieve asset details, categorize, provide context menus with custom actions, and
+ * handle editor opening for such assets.
+ *
+ * This class is responsible for the following:
+ * - Defining the display name of the asset type.
+ * - Specifying the asset type color.
+ * - Indicating the associated supported class type.
+ * - Defining the asset categories.
+ * - Providing a menu with options related to serialization and exporting assets.
+ * - Extending editor support for asset interaction.
+ *
+ * The class implements several static utility functions for handling menu building and exporting operations.
+ */
 class FGameDataRepositoryActions final : public FAssetTypeActions_Base
 {
   public:

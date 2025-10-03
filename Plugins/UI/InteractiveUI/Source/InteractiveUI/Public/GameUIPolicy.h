@@ -13,21 +13,46 @@ class UPrimaryGameLayout;
 class UGameUIManagerSubsystem;
 
 /**
+ * @enum ELocalMultiplayerInteractionMode
+ * @brief Enum representing different interaction modes for local multiplayer gameplay.
  *
+ * This enum defines how the screen/viewports are shared and managed between players during local multiplayer
+ * gameplay. It provides options to determine whether a single player has full control of the viewport or if
+ * multiple players interact concurrently.
+ *
+ * The modes in this enumeration allow for implementing gameplay mechanics and visual arrangements
+ * suited for different multiplayer experiences.
  */
 UENUM()
 enum class ELocalMultiplayerInteractionMode : uint8
 {
-    // Fullscreen viewport for the primary player only, regardless of the other player's existence
+    /**
+     * Fullscreen viewport for the primary player only, regardless of the other player's existence
+     */
     PrimaryOnly,
 
-    // Fullscreen viewport for one player, but players can swap control over who's is displayed and who's is dormant
+    /**
+     * Fullscreen viewport for one player, but players can swap control over who's is displayed and who's is dormant
+     */
     SingleToggle,
 
-    // Viewports displayed simultaneously for both players
+    /**
+     * Viewports displayed simultaneously for both players
+     */
     Simultaneous
 };
 
+/**
+ * @struct FRootViewportLayoutInfo
+ * @brief Represents layout information for a player's root viewport in the game UI.
+ *
+ * This structure encapsulates data related to the viewport and primary game layout associated with a specific local
+ * player. It is utilized to manage and track the relationship between players and their respective UI elements in the
+ * game.
+ *
+ * The structure includes the player reference, the root game layout instance, and a flag indicating whether
+ * the layout has been added to the viewport.
+ */
 USTRUCT()
 struct FRootViewportLayoutInfo
 {

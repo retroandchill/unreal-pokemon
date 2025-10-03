@@ -13,10 +13,7 @@ public readonly unsafe struct GameDataTypeManagedActions
     public required delegate* unmanaged<IntPtr, NativeBool> IsValidGameDataHandle { get; init; }
 
     [UsedImplicitly]
-    public required delegate* unmanaged<
-        IntPtr,
-        UnmanagedArray*,
-        void> GetDataHandleActions { get; init; }
+    public required delegate* unmanaged<IntPtr, UnmanagedArray*, void> GetDataHandleActions { get; init; }
 
     public static GameDataTypeManagedActions Create()
     {
@@ -53,17 +50,12 @@ public static unsafe class GameDataTypeManagedCallbacks
             foreach (var entry in handleType.GetDataHandleEntries())
             {
                 entry.ToNative((IntPtr)structBuffer);
-                GameDataTypeCallbacksExporter.CallAddActionInformation(
-                    ref *outArray,
-                    (IntPtr)structBuffer
-                );
+                GameDataTypeCallbacksExporter.CallAddActionInformation(ref *outArray, (IntPtr)structBuffer);
             }
         }
         catch (Exception e)
         {
-            LogGameDataAccessToolsEditor.LogError(
-                $"Unexpected error when trying to get entries: {e.Message}"
-            );
+            LogGameDataAccessToolsEditor.LogError($"Unexpected error when trying to get entries: {e.Message}");
         }
         finally
         {

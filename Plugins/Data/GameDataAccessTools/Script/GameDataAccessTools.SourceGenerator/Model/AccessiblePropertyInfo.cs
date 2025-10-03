@@ -16,11 +16,7 @@ public readonly record struct MarshallerInfo(
     string? ValueMarshallerType = null
 )
 {
-    public MarshallerInfo(
-        string name,
-        string? ChildMarshallerType,
-        string? ValueMarshallerType = null
-    )
+    public MarshallerInfo(string name, string? ChildMarshallerType, string? ValueMarshallerType = null)
         : this(name, MarshallerType.Instanced, ChildMarshallerType, ValueMarshallerType) { }
 
     public bool IsInstanced => Type != MarshallerType.Regular && ChildMarshallerType is not null;
@@ -30,10 +26,7 @@ public readonly record struct MarshallerInfo(
     public bool HasValue => Type != MarshallerType.Regular && ValueMarshallerType is not null;
 }
 
-public readonly record struct MarshalledPropertyInfo(
-    string MarshalledType,
-    MarshallerInfo MarshallerInfo
-);
+public readonly record struct MarshalledPropertyInfo(string MarshalledType, MarshallerInfo MarshallerInfo);
 
 public record AccessiblePropertyInfo(string Access, string Type, string Name)
 {

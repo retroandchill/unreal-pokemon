@@ -7,9 +7,7 @@ public class PokemonEditorTools : ModuleRules
     {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicDependencyModuleNames.AddRange(
-            new string[] { "Core", "PokemonData", "DeveloperSettings" }
-        );
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "PokemonData", "DeveloperSettings" });
 
         PrivateDependencyModuleNames.AddRange(
             new string[]

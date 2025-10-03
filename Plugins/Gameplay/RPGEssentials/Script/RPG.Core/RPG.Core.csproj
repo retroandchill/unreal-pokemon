@@ -1,38 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <EnableDynamicLoading>true</EnableDynamicLoading>
-    <LangVersion>preview</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <DefineConstants>WITH_EDITOR</DefineConstants>
-    <DefineConstants Condition="'$(DisableWithEditor)' == 'true'"
-      >$(DefineConstants.Replace('WITH_EDITOR;', '').Replace('WITH_EDITOR', ''))</DefineConstants
-    >
-    <DefineConstants Condition="'$(DefineAdditionalConstants)' != ''"
-      >$(DefineConstants);$(DefineAdditionalConstants)</DefineConstants
-    >
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="UnrealSharp">
-      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="UnrealSharp.Core">
-      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="UnrealSharp.Binds">
-      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Binds.dll</HintPath>
-    </Reference>
-    <Reference Include="UnrealSharp.Log">
-      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Log.dll</HintPath>
-    </Reference>
-    <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RPGEssentials.Glue\RPGEssentials.Glue.csproj" />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <LangVersion>preview</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup>
+        <DefineConstants>WITH_EDITOR</DefineConstants>
+        <DefineConstants Condition="'$(DisableWithEditor)' == 'true'"
+            >$(DefineConstants.Replace('WITH_EDITOR;', '').Replace('WITH_EDITOR', ''))</DefineConstants
+        >
+        <DefineConstants Condition="'$(DefineAdditionalConstants)' != ''"
+            >$(DefineConstants);$(DefineAdditionalConstants)</DefineConstants
+        >
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="UnrealSharp">
+            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="UnrealSharp.Core">
+            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="UnrealSharp.Binds">
+            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Binds.dll</HintPath>
+        </Reference>
+        <Reference Include="UnrealSharp.Log">
+            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Log.dll</HintPath>
+        </Reference>
+        <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\RPGEssentials.Glue\RPGEssentials.Glue.csproj" />
+    </ItemGroup>
 </Project>

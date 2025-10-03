@@ -10,18 +10,25 @@ using ZLinq;
 
 namespace Pokemon.Editor.Serialization.Pbs.Serializers;
 
+/// <summary>
+/// A PBS serializer designed specifically for handling move-related game data.
+/// This class serializes and deserializes data to and from the Pokémon PBS text format.
+/// </summary>
+/// <remarks>
+/// This serializer is tailored to work exclusively with instances of UMoveRepository,
+/// ensuring that only move data is serialized and deserialized.
+/// </remarks>
 [UClass]
 public sealed class UMovePbsSerializer : UGameDataEntryPbsSerializerBase
 {
+    /// <inheritdoc />
     protected override bool Supports(TSubclassOf<UAssetGameDataRepository> repositoryClass)
     {
         return repositoryClass == typeof(UMoveRepository);
     }
 
-    protected override void Serialize(
-        StreamWriter streamWriter,
-        UAssetGameDataRepository repository
-    )
+    /// <inheritdoc />
+    protected override void Serialize(StreamWriter streamWriter, UAssetGameDataRepository repository)
     {
         if (repository is not UMoveRepository moveRepository)
             throw new InvalidOperationException("Repository is not of type UMoveRepository");
@@ -32,10 +39,8 @@ public sealed class UMovePbsSerializer : UGameDataEntryPbsSerializerBase
         );
     }
 
-    protected override void Deserialize(
-        StreamReader streamReader,
-        UAssetGameDataRepository repository
-    )
+    /// <inheritdoc />
+    protected override void Deserialize(StreamReader streamReader, UAssetGameDataRepository repository)
     {
         if (
             repository
@@ -50,10 +55,7 @@ public sealed class UMovePbsSerializer : UGameDataEntryPbsSerializerBase
 
         dataEntries.Clear();
         foreach (
-            var entry in PbsCompiler
-                .CompilePbsFile<MoveInfo>(streamReader)
-                .Select(x => x.Value)
-                .Select(x => x.ToMove())
+            var entry in PbsCompiler.CompilePbsFile<MoveInfo>(streamReader).Select(x => x.Value).Select(x => x.ToMove())
         )
         {
             dataEntries.Add(entry);

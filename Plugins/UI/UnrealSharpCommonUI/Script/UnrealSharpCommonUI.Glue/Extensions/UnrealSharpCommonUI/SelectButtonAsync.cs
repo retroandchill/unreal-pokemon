@@ -34,8 +34,17 @@ internal partial class USelectButtonAsync
     }
 }
 
+/// <summary>
+/// Provides extension methods for asynchronous selection functionality in a UCommonButtonGroupBase.
+/// </summary>
 public static class SelectButtonAsyncExtensions
 {
+    /// <summary>
+    /// Asynchronously waits for a button to be selected within the specified button group and returns the selected button along with its index.
+    /// </summary>
+    /// <param name="buttonGroup">The button group containing the buttons to select from.</param>
+    /// <param name="cancellationToken">An optional cancellation token to cancel the selection operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the selected button and its index.</returns>
     public static Task<OptionSelection> SelectButtonAsync(
         this UCommonButtonGroupBase buttonGroup,
         CancellationToken cancellationToken = default

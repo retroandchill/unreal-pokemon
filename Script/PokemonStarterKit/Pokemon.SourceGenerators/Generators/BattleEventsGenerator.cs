@@ -48,9 +48,7 @@ public class BattleEventsGenerator : IIncrementalGenerator
             (compilation, _) =>
                 (
                     compilation.Assembly,
-                    BattleEvents: compilation.GetTypeByMetadataName(
-                        "Pokemon.Battle.Events.AbilityEvents"
-                    )
+                    BattleEvents: compilation.GetTypeByMetadataName("Pokemon.Battle.Events.AbilityEvents")
                 )
         );
 
@@ -60,17 +58,12 @@ public class BattleEventsGenerator : IIncrementalGenerator
                 (ctx, _) =>
                 {
                     var methodSyntax = (MethodDeclarationSyntax)ctx.Node;
-                    if (
-                        ctx.SemanticModel.GetDeclaredSymbol(methodSyntax)
-                        is not IMethodSymbol methodSymbol
-                    )
+                    if (ctx.SemanticModel.GetDeclaredSymbol(methodSyntax) is not IMethodSymbol methodSymbol)
                     {
                         return null;
                     }
 
-                    return methodSymbol.HasAttribute<BattleAbilityEventAttribute>()
-                        ? methodSymbol
-                        : null;
+                    return methodSymbol.HasAttribute<BattleAbilityEventAttribute>() ? methodSymbol : null;
                 }
             )
             .Where(m => m is not null)
@@ -101,9 +94,7 @@ public class BattleEventsGenerator : IIncrementalGenerator
             var abilityEvent in abilityEventsSymbol
                 .GetMembers()
                 .OfType<IPropertySymbol>()
-                .Where(p =>
-                    p.Type is INamedTypeSymbol { IsGenericType: true, TypeParameters.Length: 2 }
-                )
+                .Where(p => p.Type is INamedTypeSymbol { IsGenericType: true, TypeParameters.Length: 2 })
         )
         {
             _abilityEventTypes[abilityEvent.Name] = (
@@ -114,9 +105,7 @@ public class BattleEventsGenerator : IIncrementalGenerator
         var templateParams = new
         {
             Namespace = assemblySymbol.MetadataName,
-            Registrations = methods
-                .Select(m => GetMethodInformation(m, context))
-                .ToImmutableArray(),
+            Registrations = methods.Select(m => GetMethodInformation(m, context)).ToImmutableArray(),
         };
 
         var handlebars = Handlebars.Create();
@@ -128,10 +117,7 @@ public class BattleEventsGenerator : IIncrementalGenerator
         );
     }
 
-    private EventMethodInfo GetMethodInformation(
-        IMethodSymbol methodSymbol,
-        SourceProductionContext context
-    )
+    private EventMethodInfo GetMethodInformation(IMethodSymbol methodSymbol, SourceProductionContext context)
     {
         var (eventName, abilityID) = methodSymbol.GetBattleAbilityEventInfo();
 
@@ -141,9 +127,7 @@ public class BattleEventsGenerator : IIncrementalGenerator
         }
         else
         {
-            context.ReportDiagnostic(
-                Diagnostic.Create(InvalidEventType, methodSymbol.Locations.First(), eventName)
-            );
+            context.ReportDiagnostic(Diagnostic.Create(InvalidEventType, methodSymbol.Locations.First(), eventName));
         }
 
         return new EventMethodInfo(eventName, abilityID, methodSymbol);
@@ -159,11 +143,7 @@ public class BattleEventsGenerator : IIncrementalGenerator
         if (!targetMethod.IsStatic)
         {
             context.ReportDiagnostic(
-                Diagnostic.Create(
-                    HandlerMustBeStatic,
-                    targetMethod.Locations.First(),
-                    targetMethod.Name
-                )
+                Diagnostic.Create(HandlerMustBeStatic, targetMethod.Locations.First(), targetMethod.Name)
             );
         }
 
@@ -172,11 +152,7 @@ public class BattleEventsGenerator : IIncrementalGenerator
             && targetMethod.Parameters.Length == delegateMethod.Parameters.Length
             && Enumerable
                 .Range(0, targetMethod.Parameters.Length)
-                .All(i =>
-                    delegateMethod
-                        .Parameters[i]
-                        .Type.IsAssignableTo(targetMethod.Parameters[i].Type)
-                )
+                .All(i => delegateMethod.Parameters[i].Type.IsAssignableTo(targetMethod.Parameters[i].Type))
         )
         {
             return;
@@ -197,10 +173,7 @@ public class BattleEventsGenerator : IIncrementalGenerator
     private static string GetSignature(IMethodSymbol methodSymbol)
     {
         var returnType = methodSymbol.ReturnsVoid ? "void" : methodSymbol.ReturnType.Name;
-        var parameters = string.Join(
-            ", ",
-            methodSymbol.Parameters.Select(p => $"{p.Type.Name} {p.Name}")
-        );
+        var parameters = string.Join(", ", methodSymbol.Parameters.Select(p => $"{p.Type.Name} {p.Name}"));
         return $"{returnType} {methodSymbol.Name}({parameters})";
     }
 }

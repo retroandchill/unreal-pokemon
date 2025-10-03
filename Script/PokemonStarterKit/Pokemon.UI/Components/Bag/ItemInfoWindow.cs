@@ -8,6 +8,12 @@ using UnrealSharp.UMG;
 
 namespace Pokemon.UI.Components.Bag;
 
+/// <summary>
+/// The UItemInfoWindow class is responsible for displaying item information in the bag UI.
+/// It provides the item name and description text fields, and manages their visibility and content.
+/// This class derives from UItemInfoWidgetBase and extends its functionality to specifically
+/// update UI elements with item data.
+/// </summary>
 [UClass(ClassFlags.Abstract)]
 public class UItemInfoWindow : UItemInfoWidgetBase
 {
@@ -19,6 +25,7 @@ public class UItemInfoWindow : UItemInfoWidgetBase
     [BindWidget]
     private UCommonTextBlock ItemDescriptionText { get; }
 
+    /// <inheritdoc />
     protected override void OnItemSet(FItemHandle item)
     {
         ItemNameText.Visibility = ESlateVisibility.SelfHitTestInvisible;

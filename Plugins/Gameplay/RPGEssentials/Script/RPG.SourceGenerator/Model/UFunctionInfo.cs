@@ -26,8 +26,7 @@ public record UFunctionInfo(
 
     [UsedImplicitly]
     public string? NullableType =>
-        ReturnType
-            is INamedTypeSymbol { IsGenericType: true, MetadataName: "Nullable`1" } optionType
+        ReturnType is INamedTypeSymbol { IsGenericType: true, MetadataName: "Nullable`1" } optionType
             ? optionType.TypeArguments[0].ToDisplayString()
             : null;
 
@@ -44,4 +43,6 @@ public record UFunctionInfo(
     public string UnderlyingType => OptionType ?? NullableType ?? ReturnType.ToDisplayString();
 
     public required bool IsExposed { get; init; }
+
+    public required string? GenericConstraint { get; init; }
 }

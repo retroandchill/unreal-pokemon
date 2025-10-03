@@ -9,8 +9,6 @@ public class UnrealSharpTestUtils : ModuleRules
 
         PublicDependencyModuleNames.AddRange(["Core", "Engine", "UnrealSharpBinds"]);
 
-        PrivateDependencyModuleNames.AddRange(
-            ["CoreUObject", "Engine", "Slate", "SlateCore", "EngineSettings"]
-        );
+        PrivateDependencyModuleNames.AddRange(["CoreUObject", "Engine", "Slate", "SlateCore", "EngineSettings"]);
     }
 }

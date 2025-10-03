@@ -20,17 +20,12 @@ public class ComponentSaverGenerator : IIncrementalGenerator
                 transform: (ctx, _) =>
                 {
                     var classNode = (ClassDeclarationSyntax)ctx.Node;
-                    if (
-                        ctx.SemanticModel.GetDeclaredSymbol(classNode)
-                        is not INamedTypeSymbol classSymbol
-                    )
+                    if (ctx.SemanticModel.GetDeclaredSymbol(classNode) is not INamedTypeSymbol classSymbol)
                     {
                         return null;
                     }
 
-                    return classSymbol.HasAttribute(typeof(ComponentSaverAttribute<,>))
-                        ? classSymbol
-                        : null;
+                    return classSymbol.HasAttribute(typeof(ComponentSaverAttribute<,>)) ? classSymbol : null;
                 }
             )
             .Where(m => m is not null);
@@ -66,14 +61,9 @@ public class ComponentSaverGenerator : IIncrementalGenerator
         foreach (var method in classSymbol.GetMembers().OfType<IMethodSymbol>())
         {
             if (
-                method.ReturnType.Equals(
-                    componentSaverInfo.ModelStruct,
-                    SymbolEqualityComparer.Default
-                )
+                method.ReturnType.Equals(componentSaverInfo.ModelStruct, SymbolEqualityComparer.Default)
                 && method.Parameters.Length == 1
-                && method
-                    .Parameters[0]
-                    .Type.Equals(componentSaverInfo.ComponentClass, SymbolEqualityComparer.Default)
+                && method.Parameters[0].Type.Equals(componentSaverInfo.ComponentClass, SymbolEqualityComparer.Default)
             )
             {
                 saveMethod ??= method;
@@ -86,30 +76,16 @@ public class ComponentSaverGenerator : IIncrementalGenerator
                     (
                         method
                             .Parameters[0]
-                            .Type.Equals(
-                                componentSaverInfo.ComponentClass,
-                                SymbolEqualityComparer.Default
-                            )
+                            .Type.Equals(componentSaverInfo.ComponentClass, SymbolEqualityComparer.Default)
                         && method
                             .Parameters[1]
-                            .Type.Equals(
-                                componentSaverInfo.ModelStruct,
-                                SymbolEqualityComparer.Default
-                            )
+                            .Type.Equals(componentSaverInfo.ModelStruct, SymbolEqualityComparer.Default)
                     )
                     || (
-                        method
-                            .Parameters[0]
-                            .Type.Equals(
-                                componentSaverInfo.ModelStruct,
-                                SymbolEqualityComparer.Default
-                            )
+                        method.Parameters[0].Type.Equals(componentSaverInfo.ModelStruct, SymbolEqualityComparer.Default)
                         && method
                             .Parameters[1]
-                            .Type.Equals(
-                                componentSaverInfo.ComponentClass,
-                                SymbolEqualityComparer.Default
-                            )
+                            .Type.Equals(componentSaverInfo.ComponentClass, SymbolEqualityComparer.Default)
                     )
                 )
             )
@@ -163,15 +139,9 @@ public class ComponentSaverGenerator : IIncrementalGenerator
         {
             Namespace = classSymbol.ContainingNamespace.ToDisplayString(),
             ClassName = classSymbol.Name,
-            ComponentType = componentSaverInfo.ComponentClass.ToDisplayString(
-                SymbolDisplayFormat.FullyQualifiedFormat
-            ),
-            ModelType = componentSaverInfo.ModelStruct.ToDisplayString(
-                SymbolDisplayFormat.FullyQualifiedFormat
-            ),
-            LoggerClass = componentSaverInfo.LoggerClass?.ToDisplayString(
-                SymbolDisplayFormat.FullyQualifiedFormat
-            ),
+            ComponentType = componentSaverInfo.ComponentClass.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat),
+            ModelType = componentSaverInfo.ModelStruct.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat),
+            LoggerClass = componentSaverInfo.LoggerClass?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat),
             WithLogging = componentSaverInfo.LoggerClass is not null,
             SaveMethod = saveMethod.Name,
             LoadMethod = loadMethod.Name,

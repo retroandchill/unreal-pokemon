@@ -20,10 +20,7 @@ public class ServiceRegistrationGenerator : IIncrementalGenerator
                 (ctx, _) =>
                 {
                     var classDeclarationSyntax = (ClassDeclarationSyntax)ctx.Node;
-                    if (
-                        ctx.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax)
-                        is not INamedTypeSymbol classSymbol
-                    )
+                    if (ctx.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax) is not INamedTypeSymbol classSymbol)
                     {
                         return null;
                     }
@@ -34,9 +31,7 @@ public class ServiceRegistrationGenerator : IIncrementalGenerator
             .Where(node => node is not null)
             .Collect();
 
-        var assemblyProvider = context.CompilationProvider.Select(
-            (compilation, _) => compilation.Assembly
-        );
+        var assemblyProvider = context.CompilationProvider.Select((compilation, _) => compilation.Assembly);
 
         var combinedProvider = servicesProvider.Combine(assemblyProvider);
 
@@ -76,19 +71,16 @@ public class ServiceRegistrationGenerator : IIncrementalGenerator
     private static ServiceInjection GetServiceInjection(INamedTypeSymbol serviceType)
     {
         var serviceInfo = serviceType.GetServiceInfo();
-        var interfaceType = serviceType.AllInterfaces.FirstOrDefault(i =>
-            i.SpecialType != SpecialType.System_IDisposable
-            && i.MetadataName != "IAsyncDisposable`1"
+        return new ServiceInjection(
+            serviceType,
+            serviceInfo.ServiceLifetime,
+            [
+                .. serviceType
+                    .AllInterfaces.Where(i =>
+                        i.SpecialType != SpecialType.System_IDisposable && i.MetadataName != "IAsyncDisposable`1"
+                    )
+                    .Select(i => new ServiceInterfaceInfo(i)),
+            ]
         );
-
-        if (interfaceType is not null)
-        {
-            return new ServiceInjection(interfaceType, serviceInfo.ServiceLifetime)
-            {
-                ImplementationType = serviceType,
-            };
-        }
-
-        return new ServiceInjection(serviceType, serviceInfo.ServiceLifetime);
     }
 }

@@ -42,8 +42,7 @@ public sealed class TestWorld : IDisposable
     /// <summary>
     /// Retrieves the game instance managed by the test world.
     /// </summary>
-    public UGameInstance GameInstance =>
-        ObjectMarshaller<UGameInstance>.FromNative(_nativeWorld.GameInstance, 0);
+    public UGameInstance GameInstance => ObjectMarshaller<UGameInstance>.FromNative(_nativeWorld.GameInstance, 0);
 
     /// <summary>
     /// Retrieves the world managed by the test world object.

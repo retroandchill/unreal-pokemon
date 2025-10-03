@@ -13,25 +13,29 @@ using ZLinq;
 
 namespace Pokemon.Editor.Serialization.Pbs.Serializers;
 
+/// <summary>
+/// A base class for serializers implementing the PBS format for game data entries.
+/// This abstract class provides core serialization and deserialization logic while allowing customization
+/// of format-specific details such as file extensions and format names.
+/// </summary>
 [UClass(ClassFlags.Abstract)]
 [UsedImplicitly]
 public class UGameDataEntryPbsSerializerBase : UCSGameDataEntrySerializer
 {
+    /// <inheritdoc />
     protected override FText GetFormatName()
     {
         return FText.Localized("Pokemon.Editor", "PbsFormatName", "PBS");
     }
 
+    /// <inheritdoc />
     protected override string GetFileExtensionText()
     {
         return "PBS file |*.txt|";
     }
 
-    protected override bool Serialize(
-        string filePath,
-        UAssetGameDataRepository repository,
-        out string errorMessage
-    )
+    /// <inheritdoc />
+    protected override bool Serialize(string filePath, UAssetGameDataRepository repository, out string errorMessage)
     {
         try
         {
@@ -53,11 +57,8 @@ public class UGameDataEntryPbsSerializerBase : UCSGameDataEntrySerializer
         }
     }
 
-    protected override bool Deserialize(
-        string filePath,
-        UAssetGameDataRepository repository,
-        out string errorMessage
-    )
+    /// <inheritdoc />
+    protected override bool Deserialize(string filePath, UAssetGameDataRepository repository, out string errorMessage)
     {
         try
         {
@@ -78,15 +79,23 @@ public class UGameDataEntryPbsSerializerBase : UCSGameDataEntrySerializer
         }
     }
 
+    /// <summary>
+    /// Serializes the provided repository data into the specified output stream.
+    /// </summary>
+    /// <param name="streamWriter">The StreamWriter instance to write serialized data to.</param>
+    /// <param name="repository">The data repository containing the information to be serialized.</param>
     protected virtual void Serialize(StreamWriter streamWriter, UAssetGameDataRepository repository)
     {
         throw new InvalidOperationException("Not implemented");
     }
 
-    protected virtual void Deserialize(
-        StreamReader streamReader,
-        UAssetGameDataRepository repository
-    )
+    /// <summary>
+    /// Deserializes the data from a specified file into the provided game data repository.
+    /// </summary>
+    /// <param name="streamReader">The stream to read the data from.</param>
+    /// <param name="repository">The game data repository to populate with deserialized data.</param>
+    /// <returns>True if deserialization is successful; otherwise, false.</returns>
+    protected virtual void Deserialize(StreamReader streamReader, UAssetGameDataRepository repository)
     {
         throw new InvalidOperationException("Not implemented");
     }

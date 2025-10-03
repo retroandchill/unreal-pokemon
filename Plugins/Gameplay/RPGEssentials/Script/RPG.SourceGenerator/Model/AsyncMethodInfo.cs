@@ -14,9 +14,7 @@ public record AsyncMethodInfo(
 )
 {
     public ITypeSymbol? ReturnType =>
-        TaskType is INamedTypeSymbol { IsGenericType: true } genericTaskType
-            ? genericTaskType.TypeArguments[0]
-            : null;
+        TaskType is INamedTypeSymbol { IsGenericType: true } genericTaskType ? genericTaskType.TypeArguments[0] : null;
     public bool HasReturnType => TaskType is INamedTypeSymbol { IsGenericType: true };
     public bool ReturnsValueTask => TaskType.MetadataName is "ValueTask" or "ValueTask`1";
 

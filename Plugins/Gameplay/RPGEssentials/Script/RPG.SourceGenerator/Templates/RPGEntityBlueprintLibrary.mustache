@@ -92,7 +92,7 @@ public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
     [{{Value}}]    
     {{/Attributes}}
     [UMetaData("DefaultToSelf", "unit")]
-    public static EValueFindResult {{Name}}({{../../ClassName}} unit, out {{UnderlyingType}} result{{#HasParameters}}, {{/HasParameters}}{{#Parameters}}{{Type}} {{Name}}{{#HasDefault}} = {{DefaultValue}}{{/HasDefault}}{{^IsLast}}, {{/IsLast}}{{/Parameters}})
+    public static EValueFindResult {{Name}}({{../../ClassName}} unit, out {{UnderlyingType}} result{{#HasParameters}}, {{/HasParameters}}{{#Parameters}}{{Type}} {{Name}}{{#HasDefaultValue}} = {{DefaultValue}}{{/HasDefaultValue}}{{^IsLast}}, {{/IsLast}}{{/Parameters}})
     {
         var optionValue = unit.{{../ComponentName}}.{{Name}}({{#Parameters}}{{Name}}{{^IsLast}}, {{/IsLast}}{{/Parameters}});
         {{#ReturnsOptions}}
@@ -120,9 +120,9 @@ public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
     [{{Value}}]    
     {{/Attributes}}
     [UMetaData("DefaultToSelf", "unit")]
-    public static {{ReturnType}} {{Name}}({{../../ClassName}} unit{{#HasParameters}}, {{/HasParameters}}{{#Parameters}}{{Type}} {{Name}}{{#HasDefault}} = {{DefaultValue}}{{/HasDefault}}{{^IsLast}}, {{/IsLast}}{{/Parameters}})
+    public static {{ReturnType}} {{Name}}({{../../ClassName}} unit{{#HasParameters}}, {{/HasParameters}}{{#Parameters}}{{RefQualifier}}{{Type}} {{Name}}{{#HasDefault}} = {{DefaultValue}}{{/HasDefault}}{{^IsLast}}, {{/IsLast}}{{/Parameters}})
     {
-        {{^ReturnsVoid}}return {{/ReturnsVoid}}unit.{{../ComponentName}}.{{Name}}({{#Parameters}}{{Name}}{{^IsLast}}, {{/IsLast}}{{/Parameters}});
+        {{^ReturnsVoid}}return {{/ReturnsVoid}}unit.{{../ComponentName}}.{{Name}}({{#Parameters}}{{RefQualifier}}{{Name}}{{^IsLast}}, {{/IsLast}}{{/Parameters}});
     }
 
     {{/ReturnsOptionOrNullable}}

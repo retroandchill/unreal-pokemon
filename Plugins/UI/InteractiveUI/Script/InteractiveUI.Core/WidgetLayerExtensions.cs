@@ -30,9 +30,7 @@ public static class WidgetLayerExtensions
     )
         where TWidget : UCommonActivatableWidget
     {
-        var newWidget = playerController
-            .GetLocalPlayerFromController()
-            .PushContentToLayer(layerName, widgetClass);
+        var newWidget = playerController.GetLocalPlayerFromController().PushContentToLayer(layerName, widgetClass);
         configureWidget?.Invoke(newWidget);
         return newWidget;
     }
@@ -53,9 +51,7 @@ public static class WidgetLayerExtensions
     )
         where TWidget : UCommonActivatableWidget
     {
-        var newWidget = playerController
-            .GetLocalPlayerFromController()
-            .PushContentToLayer<TWidget>(layerName);
+        var newWidget = playerController.GetLocalPlayerFromController().PushContentToLayer<TWidget>(layerName);
         if (newWidget is null)
         {
             throw new InvalidOperationException(
@@ -181,12 +177,7 @@ public static class WidgetLayerExtensions
     )
         where TWidget : UCommonActivatableWidget
     {
-        return playerController.PushContentToLayerAsync(
-            layerName,
-            widgetClass,
-            true,
-            cancellationToken
-        );
+        return playerController.PushContentToLayerAsync(layerName, widgetClass, true, cancellationToken);
     }
 
     /// <summary>
@@ -238,11 +229,6 @@ public static class WidgetLayerExtensions
     )
         where TWidget : UCommonActivatableWidget
     {
-        return playerController.PushContentToLayerAsync(
-            layerName,
-            true,
-            configureWidget,
-            cancellationToken
-        );
+        return playerController.PushContentToLayerAsync(layerName, true, configureWidget, cancellationToken);
     }
 }

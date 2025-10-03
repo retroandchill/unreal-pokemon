@@ -8,9 +8,7 @@ public class GameDataAccessToolsEditor : ModuleRules
         PrivateDependencyModuleNames.AddRange(new string[] { "RangeV3" });
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        PublicDependencyModuleNames.AddRange(
-            ["Core", "UnrealSharpCore", "UnrealEd", "GameDataAccessTools"]
-        );
+        PublicDependencyModuleNames.AddRange(["Core", "UnrealSharpCore", "UnrealEd", "GameDataAccessTools"]);
 
         PrivateDependencyModuleNames.AddRange(
             [

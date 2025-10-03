@@ -38,8 +38,7 @@ public readonly record struct ScopedWidget<T>(T Instance) : IScopedInstance<T>
 /// Represents a scoped local player that manages its lifecycle and ensures it
 /// is removed from the appropriate context when disposed.
 /// </summary>
-public readonly record struct ScopedLocalPlayer(ULocalPlayer Instance)
-    : IScopedInstance<ULocalPlayer>
+public readonly record struct ScopedLocalPlayer(ULocalPlayer Instance) : IScopedInstance<ULocalPlayer>
 {
     public void Dispose()
     {

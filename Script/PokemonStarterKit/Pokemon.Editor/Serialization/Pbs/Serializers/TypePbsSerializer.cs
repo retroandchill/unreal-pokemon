@@ -10,18 +10,22 @@ using TypeInfo = Pokemon.Editor.Serialization.Model.Pbs.TypeInfo;
 
 namespace Pokemon.Editor.Serialization.Pbs.Serializers;
 
+/// <summary>
+/// A serializer for handling Pokémon type data in the PBS format.
+/// This class extends the base functionality provided by UGameDataEntryPbsSerializerBase
+/// to support the UTypeRepository and its specific data serialization and deserialization needs.
+/// </summary>
 [UClass]
 public sealed class UTypePbsSerializer : UGameDataEntryPbsSerializerBase
 {
+    /// <inheritdoc />
     protected override bool Supports(TSubclassOf<UAssetGameDataRepository> repositoryClass)
     {
         return repositoryClass == typeof(UTypeRepository);
     }
 
-    protected override void Serialize(
-        StreamWriter streamWriter,
-        UAssetGameDataRepository repository
-    )
+    /// <inheritdoc />
+    protected override void Serialize(StreamWriter streamWriter, UAssetGameDataRepository repository)
     {
         if (repository is not UTypeRepository typeRepository)
             throw new InvalidOperationException("Repository is not of type UTypeRepository");
@@ -32,10 +36,8 @@ public sealed class UTypePbsSerializer : UGameDataEntryPbsSerializerBase
         );
     }
 
-    protected override void Deserialize(
-        StreamReader streamReader,
-        UAssetGameDataRepository repository
-    )
+    /// <inheritdoc />
+    protected override void Deserialize(StreamReader streamReader, UAssetGameDataRepository repository)
     {
         if (
             repository
@@ -50,10 +52,7 @@ public sealed class UTypePbsSerializer : UGameDataEntryPbsSerializerBase
 
         dataEntries.Clear();
         foreach (
-            var entry in PbsCompiler
-                .CompilePbsFile<TypeInfo>(streamReader)
-                .Select(x => x.Value)
-                .Select(x => x.ToType())
+            var entry in PbsCompiler.CompilePbsFile<TypeInfo>(streamReader).Select(x => x.Value).Select(x => x.ToType())
         )
         {
             dataEntries.Add(entry);

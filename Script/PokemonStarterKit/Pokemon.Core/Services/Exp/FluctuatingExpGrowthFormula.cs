@@ -5,11 +5,18 @@ using UnrealSharp.GameplayTags;
 
 namespace Pokemon.Core.Services.Exp;
 
+/// <summary>
+/// Represents the Fluctuating experience growth formula used to calculate the minimum
+/// experience points required for a Pokémon to reach a specific level.
+/// Adheres to the "Fluctuating" growth rate category.
+/// </summary>
 [Service]
 public class FluctuatingExpGrowthFormula : IExpGrowthFormula
 {
+    /// <inheritdoc />
     public FGrowthRateHandle GrowthRateFor => FGrowthRate.Fluctuating;
 
+    /// <inheritdoc />
     public int GetMinimumExpForLevel(int level)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(level, 0);

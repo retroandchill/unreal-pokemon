@@ -1,42 +1,48 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <EnableDynamicLoading>true</EnableDynamicLoading>
-    <LangVersion>preview</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <DefineConstants>WITH_EDITOR</DefineConstants>
-    <DefineConstants Condition="'$(DisableWithEditor)' == 'true'"
-      >$(DefineConstants.Replace('WITH_EDITOR;', '').Replace('WITH_EDITOR', ''))</DefineConstants
-    >
-    <DefineConstants Condition="'$(DefineAdditionalConstants)' != ''"
-      >$(DefineConstants);$(DefineAdditionalConstants)</DefineConstants
-    >
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
-    <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
-    <PackageReference Include="ZLinq" Version="1.5.2" />
-    <Reference Include="UnrealSharp">
-      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="UnrealSharp.Core">
-      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
-    </Reference>
-    <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
-    <Reference Include="UnrealSharp.Log">
-      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.Log.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\UnrealSharpCommonUI\Script\UnrealSharpCommonUI.Glue\UnrealSharpCommonUI.Glue.csproj" />
-    <ProjectReference Include="..\InteractiveUI.Glue\InteractiveUI.Glue.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Selection\OwningSelectionWidgetBase.cs" />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <LangVersion>preview</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup>
+        <DefineConstants>WITH_EDITOR</DefineConstants>
+        <DefineConstants Condition="'$(DisableWithEditor)' == 'true'"
+            >$(DefineConstants.Replace('WITH_EDITOR;', '').Replace('WITH_EDITOR', ''))</DefineConstants
+        >
+        <DefineConstants Condition="'$(DefineAdditionalConstants)' != ''"
+            >$(DefineConstants);$(DefineAdditionalConstants)</DefineConstants
+        >
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <DocumentationFile>bin\Debug\InteractiveUI.Core.xml</DocumentationFile>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DocumentationFile>bin\Release\InteractiveUI.Core.xml</DocumentationFile>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
+        <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
+        <PackageReference Include="ZLinq" Version="1.5.2" />
+        <Reference Include="UnrealSharp">
+            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="UnrealSharp.Core">
+            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
+        </Reference>
+        <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
+        <Reference Include="UnrealSharp.Log">
+            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.Log.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\UnrealSharpCommonUI\Script\UnrealSharpCommonUI.Glue\UnrealSharpCommonUI.Glue.csproj" />
+        <ProjectReference Include="..\InteractiveUI.Glue\InteractiveUI.Glue.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Selection\OwningSelectionWidgetBase.cs" />
+    </ItemGroup>
 </Project>

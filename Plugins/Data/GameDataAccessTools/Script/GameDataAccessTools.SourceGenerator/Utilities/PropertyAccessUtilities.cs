@@ -27,14 +27,8 @@ public static class PropertyAccessUtilities
             _ => throw new InvalidOperationException(),
         };
 
-        var (type, marshaller) = propertyType.GetMarshallerName(
-            symbol.HasAttribute<AsValueAttribute>()
-        );
-        return new AccessiblePropertyInfo(
-            symbol.DeclaredAccessibility.GetAccessModifier(),
-            type,
-            symbol.Name
-        )
+        var (type, marshaller) = propertyType.GetMarshallerName(symbol.HasAttribute<AsValueAttribute>());
+        return new AccessiblePropertyInfo(symbol.DeclaredAccessibility.GetAccessModifier(), type, symbol.Name)
         {
             MarshallerInfo = marshaller,
         };
@@ -63,37 +57,24 @@ public static class PropertyAccessUtilities
             return propertySymbol
                 .ContainingType.GetMembers()
                 .OfType<IFieldSymbol>()
-                .Any(f =>
-                    SymbolEqualityComparer.Default.Equals(f.AssociatedSymbol, propertySymbol)
-                );
+                .Any(f => SymbolEqualityComparer.Default.Equals(f.AssociatedSymbol, propertySymbol));
         }
 
         return propertySymbol
             .DeclaringSyntaxReferences.Select(p => p.GetSyntax())
             .OfType<PropertyDeclarationSyntax>()
-            .Select(p =>
-                p.AccessorList?.Accessors.FirstOrDefault(a => a.Keyword.ValueText == "get")
-            )
+            .Select(p => p.AccessorList?.Accessors.FirstOrDefault(a => a.Keyword.ValueText == "get"))
             .Any(a => a is not null && a.Body is null);
     }
 
-    private static MarshalledPropertyInfo GetMarshallerName(
-        this ITypeSymbol typeSymbol,
-        bool asValue
-    )
+    private static MarshalledPropertyInfo GetMarshallerName(this ITypeSymbol typeSymbol, bool asValue)
     {
         switch (typeSymbol.SpecialType)
         {
             case SpecialType.System_String:
-                return new MarshalledPropertyInfo(
-                    typeSymbol.ToDisplayString(),
-                    new MarshallerInfo("StringMarshaller")
-                );
+                return new MarshalledPropertyInfo(typeSymbol.ToDisplayString(), new MarshallerInfo("StringMarshaller"));
             case SpecialType.System_Boolean:
-                return new MarshalledPropertyInfo(
-                    typeSymbol.ToDisplayString(),
-                    new MarshallerInfo("BoolMarshaller")
-                );
+                return new MarshalledPropertyInfo(typeSymbol.ToDisplayString(), new MarshallerInfo("BoolMarshaller"));
             case SpecialType.System_Byte
             or SpecialType.System_SByte
             or SpecialType.System_Int32
@@ -116,24 +97,16 @@ public static class PropertyAccessUtilities
                         case "IReadOnlyList`1" or "IList`1":
                             return typeArguments[0]
                                 .GetCollectionMarshallerInfo(
-                                    typeArguments[0].IsBlittableType()
-                                        ? CollectionType.Span
-                                        : CollectionType.List,
+                                    typeArguments[0].IsBlittableType() ? CollectionType.Span : CollectionType.List,
                                     asValue
                                 );
                         case "TNativeArray`1" or "ReadOnlySpan`1":
-                            return typeArguments[0]
-                                .GetCollectionMarshallerInfo(CollectionType.Span, asValue);
+                            return typeArguments[0].GetCollectionMarshallerInfo(CollectionType.Span, asValue);
                         case "IReadOnlyDictionary`2" or "IDictionary`2":
                             return typeArguments[0]
-                                .GetCollectionMarshallerInfo(
-                                    CollectionType.Dictionary,
-                                    asValue,
-                                    typeArguments[1]
-                                );
+                                .GetCollectionMarshallerInfo(CollectionType.Dictionary, asValue, typeArguments[1]);
                         case "IReadOnlySet`1" or "ISet`1":
-                            return typeArguments[0]
-                                .GetCollectionMarshallerInfo(CollectionType.Set, asValue);
+                            return typeArguments[0].GetCollectionMarshallerInfo(CollectionType.Set, asValue);
                         case "TSubclassOf`1":
                             return new MarshalledPropertyInfo(
                                 typeSymbol.ToDisplayString(),
@@ -142,9 +115,7 @@ public static class PropertyAccessUtilities
                         case "TWeakObjectPtr`1":
                             return new MarshalledPropertyInfo(
                                 typeSymbol.ToDisplayString(),
-                                new MarshallerInfo(
-                                    $"BlittableMarshaller<{typeSymbol.ToDisplayString()}>"
-                                )
+                                new MarshallerInfo($"BlittableMarshaller<{typeSymbol.ToDisplayString()}>")
                             );
                         case "TSoftObjectPtr`1":
                             return new MarshalledPropertyInfo(
@@ -157,11 +128,9 @@ public static class PropertyAccessUtilities
                                 new MarshallerInfo($"SoftClassMarshaller<{typeArguments[0]}>")
                             );
                         case "Option`1":
-                            return typeArguments[0]
-                                .GetCollectionMarshallerInfo(CollectionType.Optional, true);
+                            return typeArguments[0].GetCollectionMarshallerInfo(CollectionType.Optional, true);
                         case "Nullable`1":
-                            return typeArguments[0]
-                                .GetCollectionMarshallerInfo(CollectionType.Nullable, true);
+                            return typeArguments[0].GetCollectionMarshallerInfo(CollectionType.Nullable, true);
                     }
                 }
 
@@ -215,16 +184,12 @@ public static class PropertyAccessUtilities
                     case "TMulticastDelegate`1":
                         return new MarshalledPropertyInfo(
                             typeSymbol.ToDisplayString(),
-                            new MarshallerInfo(
-                                $"MulticastDelegateMarshaller<{typeSymbol.ToDisplayString()}>"
-                            )
+                            new MarshallerInfo($"MulticastDelegateMarshaller<{typeSymbol.ToDisplayString()}>")
                         );
                     case "TDelegate`1":
                         return new MarshalledPropertyInfo(
                             typeSymbol.ToDisplayString(),
-                            new MarshallerInfo(
-                                $"SingleDelegateMarshaller<{typeSymbol.ToDisplayString()}>"
-                            )
+                            new MarshallerInfo($"SingleDelegateMarshaller<{typeSymbol.ToDisplayString()}>")
                         );
                 }
 
@@ -244,20 +209,15 @@ public static class PropertyAccessUtilities
                 var structAttribute = typeSymbol
                     .GetAttributes()
                     .SingleOrDefault(attr =>
-                        attr.AttributeClass?.ToDisplayString()
-                        == SourceContextNames.UStructAttribute
+                        attr.AttributeClass?.ToDisplayString() == SourceContextNames.UStructAttribute
                     );
                 if (structAttribute is null)
                 {
                     return new MarshalledPropertyInfo(
                         typeSymbol.ToDisplayString(),
                         typeSymbol.IsUnmanagedType
-                            ? new MarshallerInfo(
-                                $"UnmanagedTypeMarshaller<{typeSymbol.ToDisplayString()}>"
-                            )
-                            : new MarshallerInfo(
-                                $"ManagedObjectMarshaller<{typeSymbol.ToDisplayString()}>"
-                            )
+                            ? new MarshallerInfo($"UnmanagedTypeMarshaller<{typeSymbol.ToDisplayString()}>")
+                            : new MarshallerInfo($"ManagedObjectMarshaller<{typeSymbol.ToDisplayString()}>")
                     );
                 }
 
@@ -299,18 +259,14 @@ public static class PropertyAccessUtilities
             return true;
         }
 
-        if (
-            typeSymbol is INamedTypeSymbol { IsGenericType: true, MetadataName: "TWeakObjectPtr`1" }
-        )
+        if (typeSymbol is INamedTypeSymbol { IsGenericType: true, MetadataName: "TWeakObjectPtr`1" })
             return true;
         if (typeSymbol.ToDisplayString() == "UnrealSharp.FName")
             return true;
 
         var structAttribute = typeSymbol
             .GetAttributes()
-            .SingleOrDefault(attr =>
-                attr.AttributeClass?.ToDisplayString() == SourceContextNames.UStructAttribute
-            );
+            .SingleOrDefault(attr => attr.AttributeClass?.ToDisplayString() == SourceContextNames.UStructAttribute);
         if (structAttribute is null)
             return false;
 
@@ -339,10 +295,8 @@ public static class PropertyAccessUtilities
             .GetMembers()
             .OfType<IFieldSymbol>()
             .All(f =>
-                f.GetAttributes()
-                    .Any(a =>
-                        a.AttributeClass?.ToDisplayString() == SourceContextNames.UPropertyAttribute
-                    ) && f.Type.IsBlittableType()
+                f.GetAttributes().Any(a => a.AttributeClass?.ToDisplayString() == SourceContextNames.UPropertyAttribute)
+                && f.Type.IsBlittableType()
             );
     }
 
@@ -434,11 +388,7 @@ public static class PropertyAccessUtilities
 
         var structAttribute = typeSymbol
             .GetAttributes()
-            .SingleOrDefault(attr =>
-                attr.AttributeClass?.ToDisplayString() == SourceContextNames.UStructAttribute
-            );
-        return structAttribute is not null
-            ? $"StructView<{typeSymbol}>"
-            : typeSymbol.ToDisplayString();
+            .SingleOrDefault(attr => attr.AttributeClass?.ToDisplayString() == SourceContextNames.UStructAttribute);
+        return structAttribute is not null ? $"StructView<{typeSymbol}>" : typeSymbol.ToDisplayString();
     }
 }

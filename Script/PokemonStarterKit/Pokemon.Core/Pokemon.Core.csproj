@@ -1,41 +1,47 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <EnableDynamicLoading>true</EnableDynamicLoading>
-    <LangVersion>preview</LangVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
-    <PackageReference Include="Riok.Mapperly" Version="4.2.1" />
-    <ProjectReference
-      Include="..\..\..\Plugins\Framework\UnrealInject\Script\UnrealInject.SourceGenerator\UnrealInject.SourceGenerator.csproj"
-      OutputItemType="Analyzer"
-      ReferenceOutputAssembly="false"
-    />
-    <ProjectReference Include="..\..\..\Plugins\Framework\UnrealInject\Script\UnrealInject\UnrealInject.csproj" />
-    <ProjectReference Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPG.Core\RPG.Core.csproj" />
-    <ProjectReference
-      Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPG.SourceGenerator\RPG.SourceGenerator.csproj"
-      OutputItemType="Analyzer"
-      ReferenceOutputAssembly="false"
-    />
-    <ProjectReference Include="..\..\..\Plugins\Utilities\CommonUtilities\Script\CommonUtilities.Glue\CommonUtilities.Glue.csproj" />
-    <ProjectReference Include="..\Pokemon.Data\Pokemon.Data.csproj" />
-    <Reference Include="UnrealSharp">
-      <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="UnrealSharp.Core">
-      <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
-    </Reference>
-    <Analyzer Include="..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
-    <ProjectReference Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPGEssentials.Glue\RPGEssentials.Glue.csproj" />
-    <ProjectReference Include="..\..\UnrealPokemon.Glue\UnrealPokemon.Glue.csproj" />
-    <Reference Include="UnrealSharp.Log">
-      <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.Log.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <LangVersion>preview</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <DocumentationFile>bin\Debug\Pokemon.Core.xml</DocumentationFile>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DocumentationFile>bin\Release\Pokemon.Core.xml</DocumentationFile>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
+        <PackageReference Include="Riok.Mapperly" Version="4.2.1" />
+        <ProjectReference
+            Include="..\..\..\Plugins\Framework\UnrealInject\Script\UnrealInject.SourceGenerator\UnrealInject.SourceGenerator.csproj"
+            OutputItemType="Analyzer"
+            ReferenceOutputAssembly="false"
+        />
+        <ProjectReference Include="..\..\..\Plugins\Framework\UnrealInject\Script\UnrealInject\UnrealInject.csproj" />
+        <ProjectReference Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPG.Core\RPG.Core.csproj" />
+        <ProjectReference
+            Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPG.SourceGenerator\RPG.SourceGenerator.csproj"
+            OutputItemType="Analyzer"
+            ReferenceOutputAssembly="false"
+        />
+        <ProjectReference Include="..\..\..\Plugins\Utilities\CommonUtilities\Script\CommonUtilities.Glue\CommonUtilities.Glue.csproj" />
+        <ProjectReference Include="..\Pokemon.Data\Pokemon.Data.csproj" />
+        <Reference Include="UnrealSharp">
+            <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="UnrealSharp.Core">
+            <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
+        </Reference>
+        <Analyzer Include="..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
+        <ProjectReference Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPGEssentials.Glue\RPGEssentials.Glue.csproj" />
+        <ProjectReference Include="..\..\UnrealPokemon.Glue\UnrealPokemon.Glue.csproj" />
+        <Reference Include="UnrealSharp.Log">
+            <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.Log.dll</HintPath>
+        </Reference>
+    </ItemGroup>
 </Project>

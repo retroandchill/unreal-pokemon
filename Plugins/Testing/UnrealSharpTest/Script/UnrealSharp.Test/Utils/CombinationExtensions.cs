@@ -16,9 +16,7 @@ public static class CombinationExtensions
     /// A collection of combinations, where each combination is represented as a collection
     /// containing one element from each of the input sequences.
     /// </returns>
-    public static IEnumerable<IEnumerable<T>> CartesianProduct<T>(
-        this IEnumerable<IEnumerable<T>> sequences
-    )
+    public static IEnumerable<IEnumerable<T>> CartesianProduct<T>(this IEnumerable<IEnumerable<T>> sequences)
     {
         return sequences.Aggregate(
             (IEnumerable<IEnumerable<T>>)
@@ -41,9 +39,7 @@ public static class CombinationExtensions
     /// containing elements from the same index position of the input sequences.
     /// If a sequence is shorter, default values will be used to fill the missing elements.
     /// </returns>
-    public static IEnumerable<IEnumerable<T>> SequentialGrouping<T>(
-        this IEnumerable<IEnumerable<T>> sequences
-    )
+    public static IEnumerable<IEnumerable<T>> SequentialGrouping<T>(this IEnumerable<IEnumerable<T>> sequences)
     {
         var enumerators = sequences.Select(x => x.GetEnumerator()).ToList();
         var currentValues = new T[enumerators.Count];
@@ -93,9 +89,7 @@ public static class CombinationExtensions
     /// A collection of combinations, where each combination is represented as a collection containing one value from each input sequence,
     /// ensuring all possible pairs of values are covered across different sequences.
     /// </returns>
-    public static IEnumerable<IEnumerable<T>> PairwiseGrouping<T>(
-        this IEnumerable<IEnumerable<T>> sequences
-    )
+    public static IEnumerable<IEnumerable<T>> PairwiseGrouping<T>(this IEnumerable<IEnumerable<T>> sequences)
     {
         var parameterValues = sequences.Select(seq => seq.ToArray()).ToArray();
         switch (parameterValues.Length)
@@ -142,15 +136,10 @@ public static class CombinationExtensions
             }
         }
 
-        return testCases.Select(testCase =>
-            testCase.Select((value, paramIndex) => parameterValues[paramIndex][value])
-        );
+        return testCases.Select(testCase => testCase.Select((value, paramIndex) => parameterValues[paramIndex][value]));
     }
 
-    private static int[]? GenerateBestTestCase(
-        int[] parameterSizes,
-        HashSet<(int, int, int, int)> coveredPairs
-    )
+    private static int[]? GenerateBestTestCase(int[] parameterSizes, HashSet<(int, int, int, int)> coveredPairs)
     {
         var bestCase = new int[parameterSizes.Length];
         var maxNewPairs = -1;

@@ -15,9 +15,7 @@ namespace RPG.SourceGenerator.Generators;
 [Generator]
 public class RPGEntityExtensionGenerator : IIncrementalGenerator
 {
-    private readonly Dictionary<ITypeSymbol, ComponentInfo> _components = new(
-        SymbolEqualityComparer.Default
-    );
+    private readonly Dictionary<ITypeSymbol, ComponentInfo> _components = new(SymbolEqualityComparer.Default);
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -141,9 +139,7 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
                 !method
                     .Parameters[1]
                     .Type.GetAttributes()
-                    .Any(a =>
-                        a.AttributeClass?.ToDisplayString() == GeneratorStatics.UStructAttribute
-                    )
+                    .Any(a => a.AttributeClass?.ToDisplayString() == GeneratorStatics.UStructAttribute)
             )
             {
                 context.ReportDiagnostic(
@@ -272,13 +268,7 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
 
         var asyncMethods = templateParams
             .Components.SelectMany(c => c.Methods, (c, m) => (Component: c, Method: m))
-            .Where(m =>
-                m.Method.ReturnType.MetadataName
-                    is "Task"
-                        or "Task`1"
-                        or "ValueTask"
-                        or "ValueTask`1"
-            )
+            .Where(m => m.Method.ReturnType.MetadataName is "Task" or "Task`1" or "ValueTask" or "ValueTask`1")
             .Select(m => new AsyncMethodInfo(
                 templateParams.Namespace,
                 $"{templateParams.ClassName}Extensions",
@@ -324,9 +314,7 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
             .Where(m =>
                 !m.IsStatic
                 && m.GetAttributes()
-                    .Any(a =>
-                        a.AttributeClass?.ToDisplayString() == GeneratorStatics.UFunctionAttribute
-                    )
+                    .Any(a => a.AttributeClass?.ToDisplayString() == GeneratorStatics.UFunctionAttribute)
             )
             .FirstOrDefault(m =>
                 m.Parameters.Length == 1
@@ -384,8 +372,7 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
             || propertySymbol
                 .GetAttributes()
                 .Any(a =>
-                    a.AttributeClass is not null
-                    && a.AttributeClass.IsAssignableTo<ExcludeFromExtensionsAttribute>()
+                    a.AttributeClass is not null && a.AttributeClass.IsAssignableTo<ExcludeFromExtensionsAttribute>()
                 )
         )
             return false;
@@ -398,9 +385,7 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
         if (
             propertySymbol
                 .GetAttributes()
-                .Any(a =>
-                    a.AttributeClass?.ToDisplayString() == GeneratorStatics.UPropertyAttribute
-                )
+                .Any(a => a.AttributeClass?.ToDisplayString() == GeneratorStatics.UPropertyAttribute)
         )
         {
             return true;
@@ -410,9 +395,7 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
             .Any(m =>
                 m.DeclaredAccessibility == Accessibility.Public
                 && m.GetAttributes()
-                    .Any(a =>
-                        a.AttributeClass?.ToDisplayString() == GeneratorStatics.UFunctionAttribute
-                    )
+                    .Any(a => a.AttributeClass?.ToDisplayString() == GeneratorStatics.UFunctionAttribute)
             );
     }
 
@@ -428,25 +411,18 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
     {
         var upropertyAttribute = propertySymbol
             .GetAttributes()
-            .SingleOrDefault(a =>
-                a.AttributeClass?.ToDisplayString() == GeneratorStatics.UPropertyAttribute
-            );
+            .SingleOrDefault(a => a.AttributeClass?.ToDisplayString() == GeneratorStatics.UPropertyAttribute);
 
         string? displayName = null;
         string? category = null;
         if (upropertyAttribute is not null)
         {
-            var namedArguments = upropertyAttribute.NamedArguments.ToDictionary(
-                a => a.Key,
-                a => a.Value.Value
-            );
+            var namedArguments = upropertyAttribute.NamedArguments.ToDictionary(a => a.Key, a => a.Value.Value);
 
             displayName = namedArguments.TryGetValue("DisplayName", out var displayNameValue)
                 ? displayNameValue as string
                 : null;
-            category = namedArguments.TryGetValue("Category", out var categoryValue)
-                ? categoryValue as string
-                : null;
+            category = namedArguments.TryGetValue("Category", out var categoryValue) ? categoryValue as string : null;
         }
 
         return new UPropertyInfo(
@@ -496,8 +472,7 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
             && !methodSymbol
                 .GetAttributes()
                 .Any(a =>
-                    a.AttributeClass is not null
-                    && a.AttributeClass.IsAssignableTo<ExcludeFromExtensionsAttribute>()
+                    a.AttributeClass is not null && a.AttributeClass.IsAssignableTo<ExcludeFromExtensionsAttribute>()
                 );
     }
 
@@ -510,8 +485,11 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
 
     private static UFunctionInfo GetFunctionInfo(IMethodSymbol methodSymbol)
     {
+        var methodName = methodSymbol.IsGenericMethod
+            ? $"{methodSymbol.Name}<{string.Join(", ", methodSymbol.TypeParameters)}>"
+            : methodSymbol.Name;
         return new UFunctionInfo(
-            methodSymbol.Name,
+            methodName,
             methodSymbol.ReturnType,
             GetMethodAttributes(methodSymbol),
             [
@@ -520,6 +498,7 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
                         new UParamInfo(
                             p.Type,
                             p.Name,
+                            GetRefQualifier(p),
                             GetDefaultValue(p),
                             i == methodSymbol.Parameters.Length - 1
                         )
@@ -528,6 +507,46 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
         )
         {
             IsExposed = IsExposedMethod(methodSymbol),
+            GenericConstraint = methodSymbol.IsGenericMethod
+                ? string.Join(
+                    "",
+                    methodSymbol.TypeParameters.Select(x => $" where {x.Name}: {GetGenericConstraint(x)}")
+                )
+                : string.Empty,
+        };
+    }
+
+    private static string GetGenericConstraint(ITypeParameterSymbol typeParameterSymbol)
+    {
+        return string.Join(", ", GetGenericConstraints(typeParameterSymbol));
+    }
+
+    private static IEnumerable<string> GetGenericConstraints(ITypeParameterSymbol typeParameterSymbol)
+    {
+        if (typeParameterSymbol.HasReferenceTypeConstraint)
+            yield return "class";
+        if (typeParameterSymbol.HasValueTypeConstraint)
+            yield return "struct";
+        if (typeParameterSymbol.HasConstructorConstraint)
+            yield return "new()";
+        if (typeParameterSymbol.HasNotNullConstraint)
+            yield return "unmanaged";
+        foreach (var constraint in typeParameterSymbol.ConstraintTypes)
+        {
+            yield return constraint.ToDisplayString();
+        }
+    }
+
+    private static string GetRefQualifier(IParameterSymbol typeSymbol)
+    {
+        return typeSymbol.RefKind switch
+        {
+            RefKind.None => "",
+            RefKind.Ref => "ref ",
+            RefKind.Out => "out ",
+            RefKind.In => "in ",
+            RefKind.RefReadOnlyParameter => "ref readonly ",
+            _ => throw new ArgumentOutOfRangeException(),
         };
     }
 

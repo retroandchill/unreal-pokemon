@@ -10,27 +10,11 @@ public class PokemonData : ModuleRules
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(
-            new[]
-            {
-                "Core",
-                "Paper2D",
-                "GameplayTags",
-                "GameplayAbilities",
-                "UnrealSharpBinds",
-                "CommonUtilities",
-            }
+            new[] { "Core", "Paper2D", "GameplayTags", "GameplayAbilities", "UnrealSharpBinds", "CommonUtilities" }
         );
 
         PrivateDependencyModuleNames.AddRange(
-            new[]
-            {
-                "CoreUObject",
-                "Engine",
-                "Slate",
-                "SlateCore",
-                "DeveloperSettings",
-                "UnrealSharpCore",
-            }
+            new[] { "CoreUObject", "Engine", "Slate", "SlateCore", "DeveloperSettings", "UnrealSharpCore" }
         );
     }
 }

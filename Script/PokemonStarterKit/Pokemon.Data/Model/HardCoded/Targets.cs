@@ -8,73 +8,131 @@ using UnrealSharp.GameDataAccessTools;
 
 namespace Pokemon.Data.Model.HardCoded;
 
+/// <summary>
+/// Represents the targeting count for specific actions or effects within a system.
+/// </summary>
 [UEnum]
 public enum ETargetCount : byte
 {
+    /// <summary>
+    /// Move has no target count.
+    /// </summary>
     NoTarget,
+
+    /// <summary>
+    /// Move hits a single target.
+    /// </summary>
     SingleTarget,
+
+    /// <summary>
+    /// Move hits multiple targets.
+    /// </summary>
     MultipleTargets,
 }
 
+/// <summary>
+/// Represents a target configuration within the game data model, defining how and what
+/// entities are targeted during gameplay.
+/// </summary>
 [UStruct]
 [CreateStructView]
 public readonly partial struct FTarget() : IGameDataEntry
 {
+    /// <inheritdoc />
     [UsedImplicitly]
     [field: UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
+    /// <inheritdoc />
     [UsedImplicitly]
     [field: UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
+    /// <summary>
+    /// Represents the display name associated with the target.
+    /// </summary>
     [UsedImplicitly]
     [field: UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
 
+    /// <summary>
+    /// Represents the number of targets, defined as an enumeration of type <see cref="ETargetCount"/>.
+    /// </summary>
+    /// <remarks>
+    /// This property specifies the number of possible targets for a given context, which can be
+    /// <c>NoTarget</c>, <c>SingleTarget</c>, or <c>MultipleTargets</c>.
+    /// </remarks>
     [UsedImplicitly]
     [field: UProperty(PropertyFlags.BlueprintReadOnly)]
     public ETargetCount NumTargets { get; init; } = ETargetCount.NoTarget;
 
+    /// <summary>
+    /// Indicates whether the target is a foe.
+    /// </summary>
     [UsedImplicitly]
     [field: UProperty(PropertyFlags.BlueprintReadOnly)]
     public bool TargetsFoe { get; init; }
 
+    /// <summary>
+    /// Indicates whether the target applies to all possible entities within the applicable context.
+    /// Typically used to determine if the effect or action is broad in scope or affects multiple targets.
+    /// </summary>
     [UsedImplicitly]
     [field: UProperty(PropertyFlags.BlueprintReadOnly)]
     public bool TargetsAll { get; init; }
 
+    /// <summary>
+    /// Indicates whether the target affects the opposing team's side in a battle context.
+    /// This property determines if the associated action, move, or effect applies to all entities on the foe's side,
+    /// rather than a single target or the user's side.
+    /// </summary>
     [UsedImplicitly]
     [field: UProperty(PropertyFlags.BlueprintReadOnly)]
     public bool AffectsFoeSide { get; init; }
 
+    /// <summary>
+    /// Indicates whether the target has a long-range capability.
+    /// This property is read-only and is marked for blueprint accessibility.
+    /// </summary>
     [UsedImplicitly]
     [field: UProperty(PropertyFlags.BlueprintReadOnly)]
     public bool LongRange { get; init; }
 }
 
+/// <summary>
+/// A repository responsible for managing and accessing target data within the game.
+/// Provides functionality to retrieve and handle instances of the target configuration type.
+/// </summary>
 [UClass]
 [GameDataRepository<FTarget>]
 [UsedImplicitly]
 public partial class UTargetRepository : UStaticGameDataRepository;
 
+/// <summary>
+/// Represents a handle to a specific target configuration within the game's data repository,
+/// used to reference target entities and their associated behaviors or attributes.
+/// </summary>
 [UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Targets))]
 public readonly partial record struct FTargetHandle;
 
+/// <summary>
+/// Provides extension methods for managing target configurations within the game data model.
+/// </summary>
 public static class TargetExtensions
 {
     private const string LocalizationNamespace = "GameData.Target";
 
+    /// <summary>
+    /// Adds predefined targets to the given UGameDataManager instance.
+    /// </summary>
+    /// <param name="manager">The UGameDataManager instance to which the targets will be added.</param>
+    /// <returns>Returns the modified UGameDataManager instance with the added targets.</returns>
     public static UGameDataManager AddTargets(this UGameDataManager manager)
     {
         manager.Targets.RegisterEntry(
-            new FTarget
-            {
-                ID = FTarget.User,
-                Name = FText.Localized(LocalizationNamespace, "User", "User"),
-            }
+            new FTarget { ID = FTarget.User, Name = FText.Localized(LocalizationNamespace, "User", "User") }
         );
 
         manager.Targets.RegisterEntry(
@@ -90,11 +148,7 @@ public static class TargetExtensions
             new FTarget
             {
                 ID = FTarget.UserOrNearAlly,
-                Name = FText.Localized(
-                    LocalizationNamespace,
-                    "UserOrNearAlly",
-                    "User or Near Ally"
-                ),
+                Name = FText.Localized(LocalizationNamespace, "UserOrNearAlly", "User or Near Ally"),
                 NumTargets = ETargetCount.SingleTarget,
             }
         );

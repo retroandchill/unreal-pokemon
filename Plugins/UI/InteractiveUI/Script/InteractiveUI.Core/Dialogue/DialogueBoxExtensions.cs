@@ -3,6 +3,9 @@ using UnrealSharp.InteractiveUI;
 
 namespace InteractiveUI.Core.Dialogue;
 
+/// <summary>
+/// Provides extension methods for working with the UDialogueBox class to enhance its functionality.
+/// </summary>
 public static class DialogueBoxExtensions
 {
     /// <summary>
@@ -18,10 +21,6 @@ public static class DialogueBoxExtensions
         CancellationToken cancellationToken = default
     )
     {
-        return UPlayDialogueBoxTextAsync.PlayDialogueBoxTextAsync(
-            dialogueBox,
-            line,
-            cancellationToken
-        );
+        return UPlayDialogueBoxTextAsync.PlayDialogueBoxTextAsync(dialogueBox, line, cancellationToken);
     }
 }

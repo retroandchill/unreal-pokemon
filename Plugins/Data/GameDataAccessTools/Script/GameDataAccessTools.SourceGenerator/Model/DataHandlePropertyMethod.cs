@@ -12,9 +12,7 @@ public record DataHandlePropertyMethod(IPropertySymbol Property)
     public string Name => Property.Name;
 
     public string Prefix =>
-        Property.Type.SpecialType == SpecialType.System_Boolean && Property.Name.StartsWith("Is")
-            ? ""
-            : "Get";
+        Property.Type.SpecialType == SpecialType.System_Boolean && Property.Name.StartsWith("Is") ? "" : "Get";
 
     public string ConversionCall
     {

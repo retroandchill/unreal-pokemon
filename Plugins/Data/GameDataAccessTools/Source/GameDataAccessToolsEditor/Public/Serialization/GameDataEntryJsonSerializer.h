@@ -9,7 +9,12 @@
 #include "GameDataEntryJsonSerializer.generated.h"
 
 /**
+ * @class UGameDataEntryJsonSerializer
+ * @brief Provides functionality to serialize and deserialize game data entries in JSON format.
  *
+ * This class extends the UGameDataEntrySerializer base class and offers methods for
+ * handling the JSON serialization and deserialization of game data repositories. It supports
+ * specific repository classes, retrieves file extension information, and identifies the format name.
  */
 UCLASS()
 class GAMEDATAACCESSTOOLSEDITOR_API UGameDataEntryJsonSerializer : public UGameDataEntrySerializer

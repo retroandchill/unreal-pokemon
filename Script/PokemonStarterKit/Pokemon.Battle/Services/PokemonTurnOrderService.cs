@@ -11,9 +11,13 @@ using UnrealInject.SourceGenerator.Attributes;
 
 namespace Pokemon.Battle.Services;
 
+/// <summary>
+/// Service responsible for calculating and determining the order of actions during a Pokémon battle turn.
+/// </summary>
 [Service]
 public class PokemonTurnOrderService : ITurnOrderService
 {
+    /// <inheritdoc />
     public async IAsyncEnumerable<IAction> GetTurnOrderAsync(
         FTurnContext context,
         [EnumeratorCancellation] CancellationToken cancellationToken = default

@@ -4,18 +4,30 @@ using Riok.Mapperly.Abstractions;
 
 namespace Pokemon.Editor.Serialization.Mappers;
 
-[Mapper(
-    RequiredMappingStrategy = RequiredMappingStrategy.Target,
-    PreferParameterlessConstructors = false
-)]
+/// <summary>
+/// Provides mapping functionality between <see cref="ItemInfo"/> and <see cref="FItem"/>.
+/// This class leverages the Mapperly library for the mapping operations,
+/// enabling conversions between models used in the serialization process and the domain entities.
+/// </summary>
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target, PreferParameterlessConstructors = false)]
 public static partial class ItemMapper
 {
+    /// <summary>
+    /// Maps an <see cref="ItemInfo"/> object to an <see cref="FItem"/> object.
+    /// </summary>
+    /// <param name="itemInfo">The <see cref="ItemInfo"/> instance to map from.</param>
+    /// <returns>Returns the mapped <see cref="FItem"/> object.</returns>
     [MapPropertyFromSource(nameof(FItem.SellPrice), Use = nameof(MapSellPrice))]
     [MapPropertyFromSource(nameof(FItem.CanSell), Use = nameof(GetCanSell))]
     [MapPropertyFromSource(nameof(FItem.ShowQuantity), Use = nameof(GetShowQuality))]
     [MapPropertyFromSource(nameof(FItem.IsConsumable), Use = nameof(GetConsumable))]
     public static partial FItem ToItem(this ItemInfo itemInfo);
 
+    /// <summary>
+    /// Maps an <see cref="FItem"/> object to an <see cref="ItemInfo"/> object.
+    /// </summary>
+    /// <param name="item">The <see cref="FItem"/> instance to map from.</param>
+    /// <returns>Returns the mapped <see cref="ItemInfo"/> object.</returns>
     [MapPropertyFromSource(nameof(ItemInfo.SellPrice), Use = nameof(MapOutputSellPrice))]
     [MapPropertyFromSource(nameof(ItemInfo.Price), Use = nameof(MapPrice))]
     public static partial ItemInfo ToItemInfo(this FItem item);

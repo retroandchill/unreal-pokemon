@@ -126,10 +126,7 @@ public class ExpFormulaTest
         _serviceProvider.Dispose();
     }
 
-    private static readonly ImmutableArray<FGrowthRateHandle> GrowthRateFormulas =
-    [
-        .. ExpGrowthCurve.Keys,
-    ];
+    private static readonly ImmutableArray<FGrowthRateHandle> GrowthRateFormulas = [.. ExpGrowthCurve.Keys];
 
     [Combinatorial]
     public void TestGetMinimumExpForLevel(
@@ -147,9 +144,6 @@ public class ExpFormulaTest
         var growthRateFormula = _formulaProvider.GetGrowthFormula(formula);
 
         Assert.That(growthRateFormula, Is.Not.Null);
-        Assert.That(
-            growthRateFormula.GetMinimumExpForLevel(level),
-            Is.EqualTo(ExpGrowthCurve[formula][level])
-        );
+        Assert.That(growthRateFormula.GetMinimumExpForLevel(level), Is.EqualTo(ExpGrowthCurve[formula][level]));
     }
 }

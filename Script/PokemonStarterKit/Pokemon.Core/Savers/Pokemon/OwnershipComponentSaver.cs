@@ -8,11 +8,17 @@ using UnrealSharp.RPGSaving;
 
 namespace Pokemon.Core.Savers.Pokemon;
 
+/// <summary>
+/// Represents a component saver for the UOwnershipComponent class that facilitates serialization and deserialization processes
+/// associated with ownership-related data of a Pokémon.
+/// </summary>
+/// <remarks>
+/// This class is designed to map data between the runtime <see cref="UOwnershipComponent"/> and its corresponding
+/// data structure <see cref="FOwnershipComponentInfo"/>. It uses Riok.Mapperly for efficient data mapping and
+/// is marked with attributes to specify metadata for Unreal Engine integration.
+/// </remarks>
 [UClass]
-[Mapper(
-    RequiredMappingStrategy = RequiredMappingStrategy.Target,
-    PreferParameterlessConstructors = false
-)]
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target, PreferParameterlessConstructors = false)]
 [ComponentSaver<UOwnershipComponent, FOwnershipComponentInfo>(LoggerClass = typeof(LogPokemonCore))]
 public partial class UOwnershipComponentSaver : UComponentSaver
 {
@@ -24,9 +30,5 @@ public partial class UOwnershipComponentSaver : UComponentSaver
     }
 
     [MapperIgnoreTarget(nameof(UOwnershipComponent.InitFunction))]
-    private partial void LoadComponent(
-        FOwnershipComponentInfo info,
-        UOwnershipComponent component,
-        UTrainer owner
-    );
+    private partial void LoadComponent(FOwnershipComponentInfo info, UOwnershipComponent component, UTrainer owner);
 }

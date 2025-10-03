@@ -22,10 +22,7 @@ public class GameDataProviderGenerator : IIncrementalGenerator
                 (ctx, _) =>
                 {
                     var classNode = (ClassDeclarationSyntax)ctx.Node;
-                    if (
-                        ModelExtensions.GetDeclaredSymbol(ctx.SemanticModel, classNode)
-                        is not INamedTypeSymbol syntax
-                    )
+                    if (ModelExtensions.GetDeclaredSymbol(ctx.SemanticModel, classNode) is not INamedTypeSymbol syntax)
                     {
                         return null;
                     }
@@ -38,10 +35,7 @@ public class GameDataProviderGenerator : IIncrementalGenerator
         context.RegisterSourceOutput(providers, GenerateGameDataProvider!);
     }
 
-    private static void GenerateGameDataProvider(
-        SourceProductionContext context,
-        INamedTypeSymbol classSymbol
-    )
+    private static void GenerateGameDataProvider(SourceProductionContext context, INamedTypeSymbol classSymbol)
     {
         var isValidType = true;
         if (!classSymbol.IsStatic)
@@ -122,10 +116,7 @@ public class GameDataProviderGenerator : IIncrementalGenerator
 
     private static string GetSingularName(IPropertySymbol propertySymbol)
     {
-        if (
-            propertySymbol.TryGetSingularNameInfo(out var nameInfo)
-            && !string.IsNullOrWhiteSpace(nameInfo.Name)
-        )
+        if (propertySymbol.TryGetSingularNameInfo(out var nameInfo) && !string.IsNullOrWhiteSpace(nameInfo.Name))
         {
             return nameInfo.Name;
         }

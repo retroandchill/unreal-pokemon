@@ -63,8 +63,7 @@ public static class UnrealSharpTestDiscoveryClient
             return false;
         }
 
-        return type.GetCustomAttribute<TestFixtureAttribute>() is not null
-            || type.GetMethods().Any(IsTestMethod);
+        return type.GetCustomAttribute<TestFixtureAttribute>() is not null || type.GetMethods().Any(IsTestMethod);
     }
 
     private static bool IsTestMethod(MethodInfo method)
@@ -77,11 +76,7 @@ public static class UnrealSharpTestDiscoveryClient
             || method.GetCustomAttributes<PairwiseAttribute>().Any();
     }
 
-    private static void DiscoverTests(
-        List<UnrealTestMethod> testCases,
-        FName assemblyName,
-        Type testClass
-    )
+    private static void DiscoverTests(List<UnrealTestMethod> testCases, FName assemblyName, Type testClass)
     {
         var category = testClass.GetCustomAttribute<TestFixtureAttribute>()?.Category;
         var prefix = category ?? testClass.FullName ?? testClass.Name;
@@ -121,15 +116,11 @@ public static class UnrealSharpTestDiscoveryClient
     )
     {
         var displayName = method.GetCustomAttribute<TestAttribute>()?.Description;
-        var testName = displayName is not null
-            ? $"{prefix}.{displayName}"
-            : $"{prefix}.{method.Name}";
+        var testName = displayName is not null ? $"{prefix}.{displayName}" : $"{prefix}.{method.Name}";
 
         var sequencePoint = method.GetFirstSequencePoint();
 
-        var testCaseSourceAttributes = method
-            .GetCustomAttributes<TestCaseSourceAttribute>(false)
-            .ToArray();
+        var testCaseSourceAttributes = method.GetCustomAttributes<TestCaseSourceAttribute>(false).ToArray();
         if (testCaseSourceAttributes.Length > 0)
         {
             GenerateTestCasesFromSource(
@@ -163,15 +154,7 @@ public static class UnrealSharpTestDiscoveryClient
             return;
         }
 
-        CreateTestCaseFromMethod(
-            testCases,
-            assemblyName,
-            method,
-            setupMethod,
-            teardownMethod,
-            testName,
-            sequencePoint
-        );
+        CreateTestCaseFromMethod(testCases, assemblyName, method, setupMethod, teardownMethod, testName, sequencePoint);
     }
 
     private static void CreateTestCaseFromMethod(
@@ -237,11 +220,7 @@ public static class UnrealSharpTestDiscoveryClient
             CombinationMode.Combinatorial => parameterSources.CartesianProduct(),
             CombinationMode.Sequential => parameterSources.SequentialGrouping(),
             CombinationMode.Pairwise => parameterSources.PairwiseGrouping(),
-            _ => throw new ArgumentOutOfRangeException(
-                nameof(combinationMode),
-                combinationMode,
-                null
-            ),
+            _ => throw new ArgumentOutOfRangeException(nameof(combinationMode), combinationMode, null),
         };
 
         return result.Select(x => x.ToArray()).Select(x => new TestCaseData(x));
@@ -260,23 +239,16 @@ public static class UnrealSharpTestDiscoveryClient
             return allParameterOptions;
         }
 
-        return parameter.ParameterType.IsValueType
-            ? [Activator.CreateInstance(parameter.ParameterType)]
-            : [null];
+        return parameter.ParameterType.IsValueType ? [Activator.CreateInstance(parameter.ParameterType)] : [null];
     }
 
-    private static IEnumerable<object?> GetPossibleValues(
-        IParameterInfo parameter,
-        NUnitAttribute attribute
-    )
+    private static IEnumerable<object?> GetPossibleValues(IParameterInfo parameter, NUnitAttribute attribute)
     {
         return attribute switch
         {
             ValuesAttribute valuesAttribute => valuesAttribute.GetData(parameter).Cast<object>(),
             RangeAttribute rangeAttribute => rangeAttribute.GetData(parameter).Cast<object>(),
-            ValueSourceAttribute valueSourceAttribute => valueSourceAttribute
-                .GetData(parameter)
-                .Cast<object>(),
+            ValueSourceAttribute valueSourceAttribute => valueSourceAttribute.GetData(parameter).Cast<object>(),
             DynamicRandomAttribute randomAttribute => Enumerable
                 .Range(0, randomAttribute.Count)
                 .Select(i => new RandomPlaceholder(randomAttribute, parameter.ParameterInfo, i)),
@@ -344,9 +316,7 @@ public static class UnrealSharpTestDiscoveryClient
             }
             catch (Exception e)
             {
-                LogUnrealSharpTest.LogError(
-                    $"Failed to create test cases from source for {testName}: {e}"
-                );
+                LogUnrealSharpTest.LogError($"Failed to create test cases from source for {testName}: {e}");
             }
         }
     }
@@ -366,8 +336,7 @@ public static class UnrealSharpTestDiscoveryClient
             TestCases =
                 testCases
                     ?.Select((t, i) => (TestCase: t, Name: new FName($"TestCase{i + 1}")))
-                    .ToOrderedDictionary(x => x.Name, x => x.TestCase)
-                ?? new OrderedDictionary<FName, TestCaseData>(),
+                    .ToOrderedDictionary(x => x.Name, x => x.TestCase) ?? new OrderedDictionary<FName, TestCaseData>(),
             CodeFilePath = sequencePoint?.Document.ToString(),
             LineNumber = sequencePoint?.StartLine ?? 0,
         };
@@ -414,15 +383,10 @@ public static class UnrealSharpTestDiscoveryClient
             }
         }
 
-        throw new InvalidOperationException(
-            $"Could not find TestCaseSource {sourceName} on {sourceType.FullName}"
-        );
+        throw new InvalidOperationException($"Could not find TestCaseSource {sourceName} on {sourceType.FullName}");
     }
 
-    private static bool ConvertTestCaseResult(
-        object? result,
-        out IEnumerable<TestCaseData> objectsEnumerable
-    )
+    private static bool ConvertTestCaseResult(object? result, out IEnumerable<TestCaseData> objectsEnumerable)
     {
         switch (result)
         {

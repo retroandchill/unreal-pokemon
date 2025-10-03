@@ -1,29 +1,29 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <EnableDynamicLoading>true</EnableDynamicLoading>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DocumentationFile>bin\Debug\UnrealSharp.Test.Functional.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <DocumentationFile>bin\Release\UnrealSharp.Test.Functional.xml</DocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
-    <Reference Include="UnrealSharp">
-      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="UnrealSharp.Core">
-      <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
-    </Reference>
-    <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\UnrealSharp.Test\UnrealSharp.Test.csproj" />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <DocumentationFile>bin\Debug\UnrealSharp.Test.Functional.xml</DocumentationFile>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DocumentationFile>bin\Release\UnrealSharp.Test.Functional.xml</DocumentationFile>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
+        <Reference Include="UnrealSharp">
+            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="UnrealSharp.Core">
+            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
+        </Reference>
+        <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\UnrealSharp.Test\UnrealSharp.Test.csproj" />
+    </ItemGroup>
 </Project>

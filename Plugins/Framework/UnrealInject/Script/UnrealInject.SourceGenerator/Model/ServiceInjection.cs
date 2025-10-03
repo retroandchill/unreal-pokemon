@@ -1,14 +1,17 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Immutable;
+using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using UnrealInject.SourceGenerator.Attributes;
 
 namespace UnrealInject.SourceGenerator.Model;
 
-internal record ServiceInjection(ITypeSymbol ServiceType, ServiceLifetime Lifetime)
+internal readonly record struct ServiceInterfaceInfo(ITypeSymbol InterfaceType);
+
+internal record ServiceInjection(
+    ITypeSymbol ServiceType,
+    ServiceLifetime Lifetime,
+    ImmutableArray<ServiceInterfaceInfo> Interfaces
+)
 {
     public string Scope => Lifetime.ToString();
-
-    public ITypeSymbol? ImplementationType { get; init; }
-
-    public bool HasImplementation => ImplementationType is not null;
 }

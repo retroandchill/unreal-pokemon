@@ -6,6 +6,16 @@ using UnrealSharp.UMG;
 
 namespace Pokemon.UI.Components.Common;
 
+/// <summary>
+/// Represents a UI component for displaying an item's icon.
+/// This class extends the functionality of <see cref="UItemDisplayBase"/>
+/// and is specifically designed to visually represent the associated item's icon.
+/// </summary>
+/// <remarks>
+/// If the associated item is invalid, the icon will be hidden.
+/// Otherwise, the item's icon will be loaded and displayed
+/// using a brush texture.
+/// </remarks>
 [UClass(ClassFlags.Abstract)]
 public class UItemIconDisplay : UItemDisplayBase
 {
@@ -13,6 +23,7 @@ public class UItemIconDisplay : UItemDisplayBase
     [BindWidget]
     private UEnhancedImage Image { get; }
 
+    /// <inheritdoc />
     public override void Refresh()
     {
         if (!Item.IsValid)

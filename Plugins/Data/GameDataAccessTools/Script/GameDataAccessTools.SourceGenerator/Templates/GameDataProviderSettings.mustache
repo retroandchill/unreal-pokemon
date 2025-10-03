@@ -4,14 +4,15 @@ using UnrealSharp;
 using UnrealSharp.Engine;
 using UnrealSharp.Attributes;
 using UnrealSharp.CoreUObject;
-using UnrealSharp.DeveloperSettings;
 using UnrealSharp.GameDataAccessTools;
+using UnrealSharp.UnrealSharpCore;
 using GameDataAccessTools.Core;
+using GameDataAccessTools.Core.Utilities;
 
 namespace {{Namespace}};
 
-[UClass(ClassFlags.DefaultConfig, {{#HasDisplayName}}DisplayName = "{{DisplayName}}", {{/HasDisplayName}}ConfigCategory = "{{ConfigCategory}}")]
-public partial class U{{ClassName}}Settings : UDeveloperSettings 
+[UClass(ClassFlags.DefaultConfig, ConfigCategory = "{{ConfigCategory}}")]
+public partial class U{{ClassName}}Settings : UCSDeveloperSettings 
 {
     {{#Repositories}}
     {{#HasAsset}}
@@ -20,4 +21,11 @@ public partial class U{{ClassName}}Settings : UDeveloperSettings
     
     {{/HasAsset}}
     {{/Repositories}}
+
+    {{#HasDisplayName}}
+    protected override FText GetDisplayName()
+    {
+        return FText.Localized("GameDataAccessTools", "{{Namespace}}.{{ClassName}}_DisplayName", "{{DisplayName}}");
+    }    
+    {{/HasDisplayName}}
 }

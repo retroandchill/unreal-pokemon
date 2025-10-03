@@ -41,10 +41,7 @@ public class StructViewGenerator : IIncrementalGenerator
             (compilation, _) =>
             {
                 // Get all assembly attributes
-                return compilation
-                    .Assembly.GetCreateStructViewInfos()
-                    .Select(x => x.Type)
-                    .OfType<INamedTypeSymbol>();
+                return compilation.Assembly.GetCreateStructViewInfos().Select(x => x.Type).OfType<INamedTypeSymbol>();
             }
         );
 
@@ -79,9 +76,7 @@ public class StructViewGenerator : IIncrementalGenerator
         if (
             !structType
                 .GetAttributes()
-                .Any(a =>
-                    a.AttributeClass?.ToDisplayString() == SourceContextNames.UStructAttribute
-                )
+                .Any(a => a.AttributeClass?.ToDisplayString() == SourceContextNames.UStructAttribute)
         )
         {
             context.ReportDiagnostic(
@@ -144,9 +139,7 @@ public class StructViewGenerator : IIncrementalGenerator
                 .GetMembers()
                 .Where(s => !s.IsStatic)
                 .Where(s =>
-                    s
-                        is IFieldSymbol { IsImplicitlyDeclared: false }
-                            or IPropertySymbol { GetMethod: not null }
+                    s is IFieldSymbol { IsImplicitlyDeclared: false } or IPropertySymbol { GetMethod: not null }
                 )
                 .Select(x => CreatePropertyInfo(x, structType, semanticModel))
                 .ToImmutableArray(),
@@ -176,11 +169,7 @@ public class StructViewGenerator : IIncrementalGenerator
     )
     {
         var baseInfo = member.GetPropertyInfo();
-        if (
-            member is not IPropertySymbol propertySymbol
-            || propertySymbol.GetMethod is null
-            || semanticModel is null
-        )
+        if (member is not IPropertySymbol propertySymbol || propertySymbol.GetMethod is null || semanticModel is null)
             return baseInfo;
 
         // Get the property syntax
@@ -202,9 +191,7 @@ public class StructViewGenerator : IIncrementalGenerator
         }
         else if (propertySyntax.AccessorList != null)
         {
-            var getAccessor = propertySyntax.AccessorList.Accessors.FirstOrDefault(a =>
-                a.Keyword.Text == "get"
-            );
+            var getAccessor = propertySyntax.AccessorList.Accessors.FirstOrDefault(a => a.Keyword.Text == "get");
 
             if (getAccessor == null)
                 return baseInfo;
@@ -252,10 +239,7 @@ public class StructViewGenerator : IIncrementalGenerator
         // This is a hack to get around the fact that extension blocks will have one additional level of
         // indentation compared to a top-level struct declaration, so indenting every line after the first
         // by 4 spaces will make the generated code look better.
-        getterBody = string.Join(
-            "\n",
-            rewrittenBlock.ToString().Split('\n').Select((x, i) => i == 0 ? x : $"    {x}")
-        );
+        getterBody = string.Join("\n", rewrittenBlock.ToString().Split('\n').Select((x, i) => i == 0 ? x : $"    {x}"));
         return getterBody;
     }
 

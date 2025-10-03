@@ -56,10 +56,7 @@ public static class UnrealSharpTestExecutor
         return true;
     }
 
-    private static async ValueTask<bool> RunTestInProcessInternal(
-        UnrealTestMethod testMethod,
-        FName testCase
-    )
+    private static async ValueTask<bool> RunTestInProcessInternal(UnrealTestMethod testMethod, FName testCase)
     {
         using var nunitContext = new TestExecutionContext.IsolatedContext();
         var testResult = TestExecutionContext.CurrentContext.CurrentResult;
@@ -116,9 +113,7 @@ public static class UnrealSharpTestExecutor
     {
         return testCaseData
             .Arguments.Select(x =>
-                x is IDataPlaceholder placeholder
-                    ? placeholder.GetArguments()[placeholder.Index]
-                    : x
+                x is IDataPlaceholder placeholder ? placeholder.GetArguments()[placeholder.Index] : x
             )
             .ToArray();
     }
@@ -143,10 +138,7 @@ public static class UnrealSharpTestExecutor
     /// </param>
     public static void LogTestResult(TestResult result)
     {
-        if (
-            !string.IsNullOrWhiteSpace(result.Message)
-            && result.AssertionResults.All(r => r.Message != result.Message)
-        )
+        if (!string.IsNullOrWhiteSpace(result.Message) && result.AssertionResults.All(r => r.Message != result.Message))
         {
             LogTestMessage(result.Message);
         }
@@ -169,10 +161,7 @@ public static class UnrealSharpTestExecutor
         }
     }
 
-    private static void LogTestMessage(
-        string message,
-        EAutomationEventType eventType = EAutomationEventType.Info
-    )
+    private static void LogTestMessage(string message, EAutomationEventType eventType = EAutomationEventType.Info)
     {
         unsafe
         {
@@ -202,10 +191,7 @@ public static class UnrealSharpTestExecutor
                 case Task task:
                 {
                     await task;
-                    if (
-                        !task.GetType().IsGenericType
-                        || task.GetType().GetGenericTypeDefinition() != typeof(Task<>)
-                    )
+                    if (!task.GetType().IsGenericType || task.GetType().GetGenericTypeDefinition() != typeof(Task<>))
                         return null;
 
                     var awaitMethod = typeof(UnrealSharpTestExecutor)
@@ -239,10 +225,7 @@ public static class UnrealSharpTestExecutor
         {
             if (e.InnerException is null)
             {
-                throw new InvalidOperationException(
-                    "Test method threw an exception but no inner exception was set",
-                    e
-                );
+                throw new InvalidOperationException("Test method threw an exception but no inner exception was set", e);
             }
 
             throw e.InnerException;

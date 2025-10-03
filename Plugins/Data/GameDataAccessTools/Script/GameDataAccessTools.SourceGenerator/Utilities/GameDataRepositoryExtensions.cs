@@ -11,8 +11,7 @@ public static class GameDataRepositoryExtensions
     {
         if (
             !type.AllInterfaces.Any(i =>
-                i.IsGenericType
-                && i.ConstructedFrom.ToDisplayString() == SourceContextNames.IGameDataRepository
+                i.IsGenericType && i.ConstructedFrom.ToDisplayString() == SourceContextNames.IGameDataRepository
             ) && !type.HasAttribute(typeof(GameDataRepositoryAttribute<>))
         )
         {
@@ -33,8 +32,7 @@ public static class GameDataRepositoryExtensions
     public static ITypeSymbol GetEntryType(this ITypeSymbol type)
     {
         return type.AllInterfaces.Where(i =>
-                    i.IsGenericType
-                    && i.ConstructedFrom.ToDisplayString() == SourceContextNames.IGameDataRepository
+                    i.IsGenericType && i.ConstructedFrom.ToDisplayString() == SourceContextNames.IGameDataRepository
                 )
                 .Select(i => i.TypeArguments.Single())
                 .SingleOrDefault()

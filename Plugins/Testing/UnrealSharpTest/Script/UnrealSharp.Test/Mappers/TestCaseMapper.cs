@@ -8,10 +8,7 @@ namespace UnrealSharp.Test.Mappers;
 /// <summary>
 /// Provides mappings for converting and adapting test-related models within the UnrealSharp testing framework.
 /// </summary>
-[Mapper(
-    RequiredMappingStrategy = RequiredMappingStrategy.Target,
-    PreferParameterlessConstructors = false
-)]
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target, PreferParameterlessConstructors = false)]
 public static partial class TestCaseMapper
 {
     /// <summary>

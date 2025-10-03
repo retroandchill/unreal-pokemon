@@ -15,20 +15,56 @@ using UnrealSharp.GameplayTags;
 
 namespace Pokemon.Editor.Serialization.Pbs;
 
+/// <summary>
+/// Represents a single section within a PBS file, containing metadata and content.
+/// </summary>
+/// <remarks>
+/// A PBS section is typically identified by a visual header in the PBS file, and
+/// includes a collection of key-value pairs where the keys are strings and
+/// the values are lists of strings. Each section also has a unique index
+/// and a name that typically describes its content.
+/// </remarks>
+/// <param name="Name">
+/// The name of the section, which is parsed from the PBS file's section header.
+/// </param>
+/// <param name="Index">
+/// The sequential index of the section within the PBS file. The index is zero-based,
+/// with the first section having an index of 0.
+/// </param>
+/// <param name="Contents">
+/// A read-only dictionary consisting of key-value pairs for the section. The keys are strings,
+/// and the values are lists of strings, representing the entries for each key in the section.
+/// </param>
 public readonly record struct PbsSectionData(
     string Name,
     int Index,
     IReadOnlyDictionary<string, List<string>> Contents
 );
 
+/// <summary>
+/// Provides static methods for compiling and processing PBS (Pokémon Battle System) file data.
+/// </summary>
+/// <remarks>
+/// The PbsCompiler class includes functionality for parsing, validating, and serializing
+/// PBS file data. It provides utilities for processing PBS sections, splitting CSV lines,
+/// and converting data into specific types using schema definitions and constraints.
+/// This class is used primarily in tools that automate reading and writing PBS files
+/// in the Pokémon game's data structure.
+/// </remarks>
 public static partial class PbsCompiler
 {
     private const string NameNone = "None";
 
-    public static IEnumerable<PbsSectionData> EachFileSection(
-        TextReader reader,
-        PbsSchema? schema = null
-    )
+    /// <summary>
+    /// Processes and parses sections of a PBS (Pokémon Battle System) file provided via a text reader,
+    /// while optionally validating against a given PBS schema. Each section is identified
+    /// by a header and contains key-value data pairs.
+    /// </summary>
+    /// <param name="reader">A TextReader instance from which the PBS file data is read.</param>
+    /// <param name="schema">An optional PBS schema object used to validate the section contents.</param>
+    /// <return>An enumerable collection of parsed PBS section data, each containing the section name,
+    /// index, and key-value contents.</return>
+    public static IEnumerable<PbsSectionData> EachFileSection(TextReader reader, PbsSchema? schema = null)
     {
         var sectionIndex = 0;
         var lineNumber = 1;
@@ -106,10 +142,7 @@ public static partial class PbsCompiler
     [GeneratedRegex(@"\s*\#.*$", RegexOptions.Compiled)]
     private static partial Regex PreCommentRegex();
 
-    private static bool TryGetSectionHeader(
-        string line,
-        [NotNullWhen(true)] out string? sectionName
-    )
+    private static bool TryGetSectionHeader(string line, [NotNullWhen(true)] out string? sectionName)
     {
         var sectionHeaderRegex = SectionHeaderRegex();
         var match = sectionHeaderRegex.Match(line);
@@ -149,7 +182,7 @@ public static partial class PbsCompiler
     [GeneratedRegex(@"^\s*(\w+)\s*=\s*(.*)$")]
     private static partial Regex SectionEntryRegex();
 
-    public static IReadOnlyList<string> SplitCsvLine(string input)
+    private static string[] SplitCsvLine(string input)
     {
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
@@ -164,7 +197,7 @@ public static partial class PbsCompiler
         return csv.Parser.Record ?? [];
     }
 
-    public static object? GetCsvRecord(string input, PbsFieldDescriptor schema, string? sectionName)
+    private static object? GetCsvRecord(string input, PbsFieldDescriptor schema, string? sectionName)
     {
         var targetType = schema.TargetProperty.PropertyType;
         if (schema.IsScalar)
@@ -202,31 +235,25 @@ public static partial class PbsCompiler
                 result.AddRange(record);
             }
 
-            if (schema.Repeat != RepeatMode.CsvRepeat || idx >= values.Count - 1)
+            if (schema.Repeat != RepeatMode.CsvRepeat || idx >= values.Length - 1)
                 break;
         }
 
         return schema.Repeat switch
         {
-            RepeatMode.CsvRepeat when result.Count < schema.MinLength =>
-                throw new InvalidOperationException(
-                    $"Expected at least {schema.MinLength} values, got {result.Count}"
-                ),
-            RepeatMode.CsvRepeat when result.Count > schema.MaxLength =>
-                throw new InvalidOperationException(
-                    $"Expected at most {schema.MaxLength} values, got {result.Count}"
-                ),
+            RepeatMode.CsvRepeat when result.Count < schema.MinLength => throw new InvalidOperationException(
+                $"Expected at least {schema.MinLength} values, got {result.Count}"
+            ),
+            RepeatMode.CsvRepeat when result.Count > schema.MaxLength => throw new InvalidOperationException(
+                $"Expected at most {schema.MaxLength} values, got {result.Count}"
+            ),
             _ => targetType.TryGetCollectionFactory(out var factory)
                 ? factory(result)
                 : Activator.CreateInstance(targetType, result.ToArray()),
         };
     }
 
-    private static object? GetCsvValue(
-        string input,
-        PbsScalarDescriptor schema,
-        string? sectionName
-    )
+    private static object? GetCsvValue(string input, PbsScalarDescriptor schema, string? sectionName)
     {
         if (schema.ScalarConverter is not null)
         {
@@ -263,16 +290,9 @@ public static partial class PbsCompiler
                 return FText.FromLocalizedString(input);
             }
 
-            var localizationKey = string.Format(
-                schema.LocalizedTextNamespace.Value.KeyFormat,
-                sectionName
-            );
+            var localizationKey = string.Format(schema.LocalizedTextNamespace.Value.KeyFormat, sectionName);
 
-            return FText.Localized(
-                schema.LocalizedTextNamespace.Value.Namespace,
-                localizationKey,
-                input
-            );
+            return FText.Localized(schema.LocalizedTextNamespace.Value.Namespace, localizationKey, input);
         }
 
         if (schemaType == typeof(FGameplayTag))
@@ -283,9 +303,7 @@ public static partial class PbsCompiler
             }
 
             var tagName = GetGameplayTagName(input, schema);
-            return schema.CreateNewGameplayTag
-                ? FGameplayTag.GetOrCreate(tagName)
-                : new FGameplayTag(tagName);
+            return schema.CreateNewGameplayTag ? FGameplayTag.GetOrCreate(tagName) : new FGameplayTag(tagName);
         }
 
         if (schemaType.IsEnum)
@@ -293,14 +311,10 @@ public static partial class PbsCompiler
             return Enum.Parse(schemaType, input, true);
         }
 
-        if (
-            schemaType
-                .GetInterfaces()
-                .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(INumber<>))
-        )
+        if (schemaType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(INumber<>)))
         {
             var parseNumber = typeof(PbsCompiler)
-                .GetMethod(nameof(ParseNumber), BindingFlags.Static | BindingFlags.Public)!
+                .GetMethod(nameof(ParseNumber), BindingFlags.Static | BindingFlags.NonPublic)!
                 .MakeGenericMethod(schemaType);
             return parseNumber.Invoke(null, [input, schema.NumericBounds, null])!;
         }
@@ -321,7 +335,7 @@ public static partial class PbsCompiler
         return $"{scalarDescriptor.GameplayTagNamespace}.{tagLeaf}";
     }
 
-    public static bool ParseBool(string input)
+    private static bool ParseBool(string input)
     {
         var trueRegex = TrueRegex();
         var falseRegex = FalseRegex();
@@ -345,11 +359,7 @@ public static partial class PbsCompiler
     [GeneratedRegex("^(?:0|FALSE|NO|N)$", RegexOptions.IgnoreCase, "en-US")]
     private static partial Regex FalseRegex();
 
-    public static T ParseNumber<T>(
-        string input,
-        NumericBounds<T> bounds = default,
-        IFormatProvider? provider = null
-    )
+    private static T ParseNumber<T>(string input, NumericBounds<T> bounds = default, IFormatProvider? provider = null)
         where T : struct, INumber<T>
     {
         if (!T.TryParse(input, provider, out var result))
@@ -370,6 +380,18 @@ public static partial class PbsCompiler
         return result;
     }
 
+    /// <summary>
+    /// Compiles a PBS (Pokémon Battle System) file read from the provided text reader into a dictionary
+    /// where each section is represented as an instance of type <typeparamref name="T"/>.
+    /// The sections are identified by their header names and may contain key-value data pairs
+    /// processed and validated against a corresponding PBS schema.
+    /// </summary>
+    /// <typeparam name="T">The type representing the structure of each parsed PBS section.</typeparam>
+    /// <param name="reader">A TextReader instance used to read the PBS file data.</param>
+    /// <returns>
+    /// A read-only dictionary mapping section names to instances of type <typeparamref name="T"/>,
+    /// where each instance contains data parsed from the respective section in the PBS file.
+    /// </returns>
     public static IReadOnlyDictionary<string, T> CompilePbsFile<T>(TextReader reader)
     {
         var result = new Dictionary<string, T>();
@@ -386,10 +408,7 @@ public static partial class PbsCompiler
             {
                 if (field.IsIdentifier)
                 {
-                    field.TargetProperty.SetValue(
-                        instance,
-                        GetCsvRecord(sectionName, field, sectionName)
-                    );
+                    field.TargetProperty.SetValue(instance, GetCsvRecord(sectionName, field, sectionName));
                     continue;
                 }
 
@@ -416,10 +435,7 @@ public static partial class PbsCompiler
                 }
                 else
                 {
-                    field.TargetProperty.SetValue(
-                        instance,
-                        GetCsvRecord(contentValue.Single(), field, sectionName)
-                    );
+                    field.TargetProperty.SetValue(instance, GetCsvRecord(contentValue.Single(), field, sectionName));
                 }
             }
 
@@ -429,6 +445,13 @@ public static partial class PbsCompiler
         return result;
     }
 
+    /// <summary>
+    /// Writes entries of type T into a PBS (Pokémon Battle System) file format through the provided text writer.
+    /// Each entry is serialized into a distinct section in the file, adhering to the PBS schema for the type.
+    /// </summary>
+    /// <param name="entries">A collection of entries of type T to be serialized into the PBS file.</param>
+    /// <param name="textWriter">A TextWriter used to write the formatted PBS file contents.</param>
+    /// <typeparam name="T">The type of entries being serialized, conforming to a defined PBS schema.</typeparam>
     public static void WritePbs<T>(IEnumerable<T> entries, TextWriter textWriter)
     {
         var schema = PbsMetamodel.GetSchema<T>();
@@ -447,26 +470,19 @@ public static partial class PbsCompiler
                     continue;
 
                 var value = field.TargetProperty.GetValue(entry);
-                if (
-                    value is null
-                    || !ShouldWriteValue(value, field.TargetProperty.GetValue(defaultValue))
-                )
+                if (value is null || !ShouldWriteValue(value, field.TargetProperty.GetValue(defaultValue)))
                     continue;
 
                 if (field.Repeat == RepeatMode.KeyRepeat && value is IEnumerable enumerable)
                 {
                     foreach (var item in enumerable)
                     {
-                        textWriter.WriteLine(
-                            $"{field.KeyName} = {WriteCsvRecord(item, field, sectionName)}"
-                        );
+                        textWriter.WriteLine($"{field.KeyName} = {WriteCsvRecord(item, field, sectionName)}");
                     }
                 }
                 else
                 {
-                    textWriter.WriteLine(
-                        $"{field.KeyName} = {WriteCsvRecord(value, field, sectionName)}"
-                    );
+                    textWriter.WriteLine($"{field.KeyName} = {WriteCsvRecord(value, field, sectionName)}");
                 }
             }
         }
@@ -482,11 +498,7 @@ public static partial class PbsCompiler
         };
     }
 
-    private static string WriteCsvRecord(
-        object? record,
-        PbsFieldDescriptor schema,
-        string? sectionName = null
-    )
+    private static string WriteCsvRecord(object? record, PbsFieldDescriptor schema, string? sectionName = null)
     {
         if (schema.IsScalar)
         {
@@ -495,10 +507,7 @@ public static partial class PbsCompiler
 
         if (schema.Repeat != RepeatMode.CsvRepeat)
         {
-            return string.Join(
-                ",",
-                DeconstructComplexType(record, schema.TargetProperty.PropertyType, schema)
-            );
+            return string.Join(",", DeconstructComplexType(record, schema.TargetProperty.PropertyType, schema));
         }
 
         switch (record)
@@ -508,19 +517,13 @@ public static partial class PbsCompiler
                 var scalar = schema.Elements.Single();
                 return string.Join(
                     ",",
-                    gameplayTagContainer.GameplayTags.Select(x =>
-                        WriteCsvValue(x, scalar, sectionName)
-                    )
+                    gameplayTagContainer.GameplayTags.Select(x => WriteCsvValue(x, scalar, sectionName))
                 );
             }
-            case IEnumerable enumerable
-                when schema.Elements.Length == 1 && schema.Elements[0].Type.IsScalarType():
+            case IEnumerable enumerable when schema.Elements.Length == 1 && schema.Elements[0].Type.IsScalarType():
             {
                 var scalar = schema.Elements[0];
-                return string.Join(
-                    ",",
-                    enumerable.Cast<object>().Select(x => WriteCsvValue(x, scalar, sectionName))
-                );
+                return string.Join(",", enumerable.Cast<object>().Select(x => WriteCsvValue(x, scalar, sectionName)));
             }
             case IEnumerable enumerable:
             {
@@ -531,9 +534,7 @@ public static partial class PbsCompiler
 
                 return string.Join(
                     ",",
-                    enumerable
-                        .Cast<object>()
-                        .SelectMany(x => DeconstructComplexType(x, elementType, schema))
+                    enumerable.Cast<object>().SelectMany(x => DeconstructComplexType(x, elementType, schema))
                 );
             }
             default:
@@ -585,11 +586,7 @@ public static partial class PbsCompiler
         return true;
     }
 
-    private static string WriteCsvValue(
-        object? value,
-        PbsScalarDescriptor schema,
-        string? sectionName
-    )
+    private static string WriteCsvValue(object? value, PbsScalarDescriptor schema, string? sectionName)
     {
         if (schema.ScalarConverter is not null)
         {
@@ -598,10 +595,7 @@ public static partial class PbsCompiler
 
         return value switch
         {
-            FGameplayTag or FName => StripGameplayTagNamespace(
-                value.ToString()!,
-                schema.GameplayTagNamespace
-            ),
+            FGameplayTag or FName => StripGameplayTagNamespace(value.ToString()!, schema.GameplayTagNamespace),
             FText text => WriteLocalizedString(text, schema.LocalizedTextNamespace, sectionName),
             bool b => b ? "true" : "false",
             _ => value?.ToString() ?? throw new ArgumentNullException(nameof(value)),

@@ -8,15 +8,7 @@ public class Simple2DEditor : ModuleRules
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(
-            new string[]
-            {
-                "Core",
-                "Simple2D",
-                "UnrealEd",
-                "EditorWidgets",
-                "KismetWidgets",
-                "DeveloperSettings",
-            }
+            new string[] { "Core", "Simple2D", "UnrealEd", "EditorWidgets", "KismetWidgets", "DeveloperSettings" }
         );
 
         PrivateDependencyModuleNames.AddRange(

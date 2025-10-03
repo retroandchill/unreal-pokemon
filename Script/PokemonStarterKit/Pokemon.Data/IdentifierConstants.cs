@@ -4,6 +4,19 @@ using UnrealSharp.CoreUObject;
 
 namespace Pokemon.Data;
 
+/// <summary>
+/// Represents a collection of predefined identifiers used across various domains
+/// in the Pokémon data structure. This class provides constants for static types
+/// such as growth rates, gender ratios, egg groups, body shapes, body colors,
+/// habitats, evolution methods, stats, natures, statuses, field weather, encounter
+/// types, environments, battle weather, battle terrains, and targeting methods.
+/// </summary>
+/// <remarks>
+/// Each identifier type is represented by a set of string constants that define
+/// specific categories or enumerations used within the Pokémon framework.
+/// These constants serve as a standardized reference for various components or
+/// configurations within the application.
+/// </remarks>
 [StaticIdentifier<FGrowthRate>("Medium", "Erratic", "Fluctuating", "Parabolic", "Fast", "Slow")]
 [StaticIdentifier<FGenderRatio>(
     "AlwaysMale",
@@ -48,18 +61,7 @@ namespace Pokemon.Data;
     "MultiWinged",
     "Insectoid"
 )]
-[StaticIdentifier<FBodyColor>(
-    "Red",
-    "Blue",
-    "Yellow",
-    "Green",
-    "Black",
-    "Brown",
-    "Purple",
-    "Gray",
-    "White",
-    "Pink"
-)]
+[StaticIdentifier<FBodyColor>("Red", "Blue", "Yellow", "Green", "Black", "Brown", "Purple", "Gray", "White", "Pink")]
 [StaticIdentifier<FHabitat>(
     "Grassland",
     "Forest",
@@ -174,16 +176,7 @@ namespace Pokemon.Data;
     "QUIRKY"
 )]
 [StaticIdentifier<FStatus>("SLEEP", "POISON", "BURN", "PARALYSIS", "FROZEN")]
-[StaticIdentifier<FFieldWeather>(
-    "Rain",
-    "Storm",
-    "Snow",
-    "Blizzard",
-    "Sandstorm",
-    "HeavyRain",
-    "Sun",
-    "Fog"
-)]
+[StaticIdentifier<FFieldWeather>("Rain", "Storm", "Snow", "Blizzard", "Sandstorm", "HeavyRain", "Sun", "Fog")]
 [StaticIdentifier<FEncounterType>(
     "Land",
     "LandDay",
@@ -262,9 +255,23 @@ namespace Pokemon.Data;
     "FoeSide",
     "BothSides"
 )]
-public static partial class IdentifierConstants
+public static class IdentifierConstants
 {
+    /// <summary>
+    /// A constant string used to represent the unique identifier for function codes
+    /// in battle move functionalities.
+    /// </summary>
     public const string FunctionCodeTag = "Battle.Move.FunctionCode";
+
+    /// <summary>
+    /// A constant string used to represent the tag associated with item usage
+    /// in battle contexts within the game.
+    /// </summary>
     public const string BattleUseTag = "Battle.Item.Use";
+
+    /// <summary>
+    /// A constant string used to identify and represent the pocket categorization for items
+    /// within the context of inventory management functionality.
+    /// </summary>
     public const string PocketTag = "Item.Pocket";
 }

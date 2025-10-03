@@ -9,8 +9,6 @@ public class RPGSaving : ModuleRules
 
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "RPGCore" });
 
-        PrivateDependencyModuleNames.AddRange(
-            new string[] { "CoreUObject", "Engine", "Slate", "SlateCore" }
-        );
+        PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "Slate", "SlateCore" });
     }
 }

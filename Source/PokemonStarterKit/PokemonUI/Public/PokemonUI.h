@@ -7,7 +7,7 @@
 DECLARE_LOG_CATEGORY_EXTERN(LogPokemonUI, Log, All)
 
 /**
- * Module for handling the actual menu screens
+ * Module for handling the actual menu screens.
  */
 class FPokemonUIModule : public IModuleInterface
 {

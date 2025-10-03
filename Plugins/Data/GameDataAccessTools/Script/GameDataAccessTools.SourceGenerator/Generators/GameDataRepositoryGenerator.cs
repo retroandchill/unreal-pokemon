@@ -20,17 +20,12 @@ internal class GameDataRepositoryGenerator : IIncrementalGenerator
                 (ctx, _) =>
                 {
                     var classNode = (ClassDeclarationSyntax)ctx.Node;
-                    if (
-                        ctx.SemanticModel.GetDeclaredSymbol(classNode)
-                        is not INamedTypeSymbol syntax
-                    )
+                    if (ctx.SemanticModel.GetDeclaredSymbol(classNode) is not INamedTypeSymbol syntax)
                     {
                         return null;
                     }
 
-                    return syntax.HasAttribute(typeof(GameDataRepositoryAttribute<>))
-                        ? syntax
-                        : null;
+                    return syntax.HasAttribute(typeof(GameDataRepositoryAttribute<>)) ? syntax : null;
                 }
             )
             .Where(m => m is not null);
@@ -38,18 +33,13 @@ internal class GameDataRepositoryGenerator : IIncrementalGenerator
         context.RegisterSourceOutput(dataEntries, GenerateGameAssetData!);
     }
 
-    private static void GenerateGameAssetData(
-        SourceProductionContext context,
-        INamedTypeSymbol classSymbol
-    )
+    private static void GenerateGameAssetData(SourceProductionContext context, INamedTypeSymbol classSymbol)
     {
         var isValidType = true;
 
         var uclassAttributeInfo = classSymbol
             .GetAttributes()
-            .SingleOrDefault(x =>
-                x.AttributeClass?.ToDisplayString() == SourceContextNames.UClassAttribute
-            );
+            .SingleOrDefault(x => x.AttributeClass?.ToDisplayString() == SourceContextNames.UClassAttribute);
         if (uclassAttributeInfo is null)
         {
             context.ReportDiagnostic(

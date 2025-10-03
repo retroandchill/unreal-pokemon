@@ -4,17 +4,15 @@ using UnrealInject.SourceGenerator.Attributes;
 
 namespace Pokemon.Core.Services.Stats;
 
+/// <summary>
+/// Provides the default implementation for calculating the statistics of a Pokémon entity
+/// based on various inputs such as base value, level, individual values (IV), effort values (EV), and nature modifier.
+/// </summary>
 [Service]
 public class DefaultStatCalculationService : IStatCalculationService
 {
-    public int CalculateStat(
-        FMainStatHandle stat,
-        int baseValue,
-        int level,
-        int iv,
-        int ev,
-        int natureModifer
-    )
+    /// <inheritdoc />
+    public int CalculateStat(FMainStatHandle stat, int baseValue, int level, int iv, int ev, int natureModifer)
     {
         // Special case for Shedinja
         if (stat.ID == FStat.HP && baseValue == 1)

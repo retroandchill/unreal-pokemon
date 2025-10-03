@@ -16,15 +16,10 @@ public class AdvancedParameterizedTests
     }
 
     [Combinatorial]
-    public void Parameter_Level_Attributes_With_Random(
-        [Values(10, 20)] [DynamicRandom(1, 5, 2)] int value
-    )
+    public void Parameter_Level_Attributes_With_Random([Values(10, 20)] [DynamicRandom(1, 5, 2)] int value)
     {
         // Will run with values: 10, 20, and 2 random numbers between 1 and 5
-        Assert.That(
-            value,
-            Is.EqualTo(10).Or.EqualTo(20).Or.GreaterThanOrEqualTo(1).And.LessThanOrEqualTo(5)
-        );
+        Assert.That(value, Is.EqualTo(10).Or.EqualTo(20).Or.GreaterThanOrEqualTo(1).And.LessThanOrEqualTo(5));
     }
 
     [Combinatorial]
@@ -43,9 +38,7 @@ public class AdvancedParameterizedTests
     }
 
     [Test]
-    public void ValueSource_And_Values_Combination(
-        [ValueSource(nameof(Numbers))] [Values(10, 20)] int value
-    )
+    public void ValueSource_And_Values_Combination([ValueSource(nameof(Numbers))] [Values(10, 20)] int value)
     {
         // Will run with values: 1, 2, 3, 4, 5, 10, 20
         Assert.That(value, Is.GreaterThan(0));

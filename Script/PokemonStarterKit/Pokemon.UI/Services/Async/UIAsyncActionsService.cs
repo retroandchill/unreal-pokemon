@@ -10,9 +10,14 @@ using UnrealSharp.GameplayTags;
 
 namespace Pokemon.UI.Services.Async;
 
+/// <summary>
+/// Provides asynchronous UI services for common actions in the Pokemon UI.
+/// This class implements the <see cref="Pokemon.Core.Services.Async.IAsyncActionsService"/> interface.
+/// </summary>
 [Service]
 public class UIAsyncActionsService : IAsyncActionsService
 {
+    /// <inheritdoc />
     public Task ShowMessageAsync(
         APlayerController playerController,
         FText message,
@@ -22,6 +27,7 @@ public class UIAsyncActionsService : IAsyncActionsService
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc />
     public Task<int> ShowChoicePrompt(
         APlayerController playerController,
         FText message,
@@ -32,6 +38,7 @@ public class UIAsyncActionsService : IAsyncActionsService
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc />
     public Task<bool> ShowYesNoPromptAsync(
         APlayerController playerController,
         FText message,
@@ -43,6 +50,7 @@ public class UIAsyncActionsService : IAsyncActionsService
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc />
     public async Task<UPokemon?> SelectPokemonFromPartyAsync(
         APlayerController playerController,
         CancellationToken cancellationToken = default
@@ -64,6 +72,7 @@ public class UIAsyncActionsService : IAsyncActionsService
         return await pokemonSelectScreen.SelectPokemonAsync(cancellationToken);
     }
 
+    /// <inheritdoc />
     public Task<FItemSlotInfo?> SelectItemFromBagAsync(
         APlayerController playerController,
         FGameplayTag? pocketFilter = null,
@@ -74,6 +83,7 @@ public class UIAsyncActionsService : IAsyncActionsService
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc />
     public Task<bool> PromptReplaceMoveAsync(
         APlayerController playerController,
         UPokemon pokemon,
@@ -84,6 +94,7 @@ public class UIAsyncActionsService : IAsyncActionsService
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc />
     public Task<bool> GivePokemonItemFromBagAsync(
         APlayerController playerController,
         UPokemon pokemon,
@@ -93,6 +104,7 @@ public class UIAsyncActionsService : IAsyncActionsService
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc />
     public Task<bool> GiveItemToPokemonAsync(
         APlayerController playerController,
         UPokemon pokemon,
@@ -103,6 +115,7 @@ public class UIAsyncActionsService : IAsyncActionsService
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc />
     public Task<bool> TakeItemFromPokemonAsync(
         APlayerController playerController,
         UPokemon pokemon,
@@ -112,6 +125,7 @@ public class UIAsyncActionsService : IAsyncActionsService
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc />
     public Task<bool> LearnMoveAsync(
         APlayerController playerController,
         UPokemon pokemon,

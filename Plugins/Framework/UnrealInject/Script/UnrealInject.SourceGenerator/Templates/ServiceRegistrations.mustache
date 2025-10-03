@@ -16,7 +16,10 @@ internal static class ServiceRegistrations
         }
 
         {{#Services}}
-        ServiceIds.Add(services.Add{{Scope}}<{{ServiceType}}{{#HasImplementation}}, {{ImplementationType}}{{/HasImplementation}}>());
+        ServiceIds.Add(services.Add{{Scope}}<{{ServiceType}}>());
+        {{#Interfaces}}
+        ServiceIds.Add(services.Add{{../Scope}}<{{InterfaceType}}, {{../ServiceType}}>());
+        {{/Interfaces}}
         {{/Services}}
         
         return services;

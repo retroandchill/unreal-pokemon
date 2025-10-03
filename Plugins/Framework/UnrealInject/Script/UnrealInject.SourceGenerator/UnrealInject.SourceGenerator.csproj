@@ -1,67 +1,62 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>13</LangVersion>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>true</ImplicitUsings>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-    <IsRoslynComponent>true</IsRoslynComponent>
-    <ExcludeFromWeaver>true</ExcludeFromWeaver>
-    <DefineConstants>$(DefineConstants);UNREAL_INJECT_GENERATOR</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="4.14.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
-    <PackageReference
-      Include="Handlebars.Net"
-      Version="2.1.6"
-      GeneratePathProperty="true"
-      PrivateAssets="all"
-    />
-    <PackageReference Include="PolySharp" Version="1.15.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Retro.SourceGeneratorUtilities" Version="0.1.4" />
-    <PackageReference Include="RhoMicro.CodeAnalysis.UtilityGenerators" Version="22.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-  <PropertyGroup>
-    <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
-  </PropertyGroup>
-  <Target Name="GetDependencyTargetPaths">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>13</LangVersion>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>true</ImplicitUsings>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+        <IsRoslynComponent>true</IsRoslynComponent>
+        <ExcludeFromWeaver>true</ExcludeFromWeaver>
+        <DefineConstants>$(DefineConstants);UNREAL_INJECT_GENERATOR</DefineConstants>
+    </PropertyGroup>
     <ItemGroup>
-      <TargetPathWithTargetPlatformMoniker
-        Include="$(PKGHandlebars_Net)\lib\netstandard2.0\Handlebars.dll"
-        IncludeRuntimeDependency="false"
-      />
+        <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="4.14.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
+        <PackageReference Include="Handlebars.Net" Version="2.1.6" GeneratePathProperty="true" PrivateAssets="all" />
+        <PackageReference Include="PolySharp" Version="1.15.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Retro.SourceGeneratorUtilities" Version="0.1.4" />
+        <PackageReference Include="RhoMicro.CodeAnalysis.UtilityGenerators" Version="22.0.3">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
-  </Target>
-  <ItemGroup>
-    <None
-      Include="$(PKGHandlebars_Net)\lib\netstandard2.0\Handlebars.dll"
-      Pack="true"
-      PackagePath="analyzers/roslyn$(ROSLYN_VERSION)/dotnet/cs"
-      Visible="false"
-    />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\SourceTemplates.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>SourceTemplates.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Properties\SourceTemplates.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SourceTemplates.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
+    <PropertyGroup>
+        <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
+    </PropertyGroup>
+    <Target Name="GetDependencyTargetPaths">
+        <ItemGroup>
+            <TargetPathWithTargetPlatformMoniker
+                Include="$(PKGHandlebars_Net)\lib\netstandard2.0\Handlebars.dll"
+                IncludeRuntimeDependency="false"
+            />
+        </ItemGroup>
+    </Target>
+    <ItemGroup>
+        <None
+            Include="$(PKGHandlebars_Net)\lib\netstandard2.0\Handlebars.dll"
+            Pack="true"
+            PackagePath="analyzers/roslyn$(ROSLYN_VERSION)/dotnet/cs"
+            Visible="false"
+        />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Update="Properties\SourceTemplates.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>SourceTemplates.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Properties\SourceTemplates.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>SourceTemplates.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
 </Project>

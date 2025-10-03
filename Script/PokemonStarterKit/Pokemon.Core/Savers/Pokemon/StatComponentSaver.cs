@@ -10,11 +10,17 @@ using ZLinq;
 
 namespace Pokemon.Core.Savers.Pokemon;
 
+/// <summary>
+/// UStatComponentSaver is responsible for saving and restoring the state
+/// of the UStatComponent. It utilizes a Mapper attribute to map data between
+/// the UStatComponent and the FStatComponentInfo.
+/// </summary>
+/// <remarks>
+/// This class extends UComponentSaver, enabling it to leverage the base saving functionalities.
+/// It is designed specifically to handle UStatComponent and works in conjunction with FStatComponentInfo.
+/// </remarks>
 [UClass]
-[Mapper(
-    RequiredMappingStrategy = RequiredMappingStrategy.Target,
-    PreferParameterlessConstructors = false
-)]
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target, PreferParameterlessConstructors = false)]
 [ComponentSaver<UStatComponent, FStatComponentInfo>(LoggerClass = typeof(LogPokemonCore))]
 public partial class UStatComponentSaver : UComponentSaver
 {
@@ -30,9 +36,7 @@ public partial class UStatComponentSaver : UComponentSaver
             .ToDictionary(x => new FMainStatHandle(x), x => component.GetIV(x));
     }
 
-    private static IReadOnlyDictionary<FMainStatHandle, int> GetIVOverrides(
-        UStatComponent component
-    )
+    private static IReadOnlyDictionary<FMainStatHandle, int> GetIVOverrides(UStatComponent component)
     {
         return FMainStatHandle
             .Entries.Select(x => (x.ID, IV: component.GetIVOverride(x.ID)))

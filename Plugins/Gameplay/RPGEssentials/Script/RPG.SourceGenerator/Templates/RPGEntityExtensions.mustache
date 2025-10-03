@@ -25,9 +25,9 @@ public static partial class {{EngineName}}Extensions
         
         {{/Properties}}
         {{#Methods}}
-        public {{ReturnType}} {{Name}}({{#Parameters}}{{Type}} {{Name}}{{#HasDefault}} = {{DefaultValue}}{{/HasDefault}}{{^IsLast}}, {{/IsLast}}{{/Parameters}})
+        public {{ReturnType}} {{Name}}({{#Parameters}}{{RefQualifier}}{{Type}} {{Name}}{{#HasDefaultValue}} = {{DefaultValue}}{{/HasDefaultValue}}{{^IsLast}}, {{/IsLast}}{{/Parameters}}){{GenericConstraint}}
         {
-            {{^ReturnsVoid}}return {{/ReturnsVoid}}unit.{{../ComponentName}}.{{Name}}({{#Parameters}}{{Name}}{{^IsLast}}, {{/IsLast}}{{/Parameters}});
+            {{^ReturnsVoid}}return {{/ReturnsVoid}}unit.{{../ComponentName}}.{{Name}}({{#Parameters}}{{RefQualifier}}{{Name}}{{^IsLast}}, {{/IsLast}}{{/Parameters}});
         }    
         
         {{/Methods}}

@@ -7,6 +7,7 @@ namespace RPG.SourceGenerator.Model;
 public record UParamInfo(
     ITypeSymbol Type,
     string Name,
+    string RefQualifier = "",
     string? DefaultValue = null,
     bool IsLast = false
 )

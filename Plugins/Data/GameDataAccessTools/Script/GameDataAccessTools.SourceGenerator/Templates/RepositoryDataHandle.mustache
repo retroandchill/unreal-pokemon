@@ -12,6 +12,8 @@ namespace {{Namespace}};
 
 readonly partial record struct {{StructName}}([field: UProperty(PropertyFlags.EditAnywhere)] FName ID) : IDataHandle<{{EntryType}}>{{#Convertables}}, IEquatable<{{Type}}>{{/Convertables}}
 {
+    public static {{StructName}} None => new(FName.None);
+
     {{#WithRepository}}
     public static UScriptStruct EntryStruct => {{Provider}}.{{Repository}}.EntryStruct;
 

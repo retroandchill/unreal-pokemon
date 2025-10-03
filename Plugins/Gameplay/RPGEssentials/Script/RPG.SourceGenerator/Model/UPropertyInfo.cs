@@ -4,10 +4,7 @@ using Microsoft.CodeAnalysis;
 
 namespace RPG.SourceGenerator.Model;
 
-public readonly record struct AccessorInfo(
-    bool IsUFunction,
-    ImmutableArray<AttributeInfo> Attributes
-);
+public readonly record struct AccessorInfo(bool IsUFunction, ImmutableArray<AttributeInfo> Attributes);
 
 [UsedImplicitly]
 public record UPropertyInfo(

@@ -6,7 +6,12 @@
 #include "DataHandle.h"
 
 /**
+ * FDataHandleCustomization is a final class implementing the IPropertyTypeCustomization interface to provide
+ * custom behavior for property customization in the Unreal Editor's Details Panel, particularly for properties
+ * represented as data handles.
  *
+ * This class provides methods to customize the header and child widgets of the property in the editor, as well
+ * as additional utilities related to the functionality of data handles.
  */
 class GAMEDATAACCESSTOOLSEDITOR_API FDataHandleCustomization final : public IPropertyTypeCustomization
 {
