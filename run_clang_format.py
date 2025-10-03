@@ -1,4 +1,3 @@
-﻿
 import os
 import subprocess
 from argparse import ArgumentParser
@@ -16,10 +15,12 @@ class FormatResult:
     filepath: str
     message: str
 
+
 class FormatArgs(NamedTuple):
     dirpath: str
     filename: str
     check_only: bool
+
 
 # Define type aliases for our callbacks
 FormatCallback: TypeAlias = Callable[[FormatArgs], FormatResult]
@@ -43,6 +44,7 @@ def load_ignore_patterns(ignore_file='.clang-format-ignore'):
             pathspec.patterns.GitWildMatchPattern, patterns
         )
 
+
 def find_files(spec: pathspec.PathSpec, check_only: bool) -> list[FormatArgs]:
     """
     Returns list of tuples (dirpath, filename) for files that need formatting
@@ -55,7 +57,7 @@ def find_files(spec: pathspec.PathSpec, check_only: bool) -> list[FormatArgs]:
         rel_path = os.path.relpath(dirpath, '.')
 
         # Skip if directory matches ignore patterns
-        if spec.match_file(rel_path):   # type: ignore[type-arg]
+        if spec.match_file(rel_path):  # type: ignore[type-arg]
             dirnames.clear()  # Skip all subdirectories
             continue
 
@@ -63,11 +65,17 @@ def find_files(spec: pathspec.PathSpec, check_only: bool) -> list[FormatArgs]:
             if not any(filename.endswith(ext) for ext in LINE_ENDINGS):
                 continue
 
-            full_path = os.path.join(rel_path, filename)   # type: ignore[type-arg]
+            full_path = os.path.join(
+                rel_path, filename)  # type: ignore[type-arg]
             if not spec.match_file(full_path):  # type: ignore[type-arg]
-                files_to_format.append(FormatArgs(dirpath, filename, check_only))
+                files_to_format.append(
+                    FormatArgs(
+                        dirpath,
+                        filename,
+                        check_only))
 
     return files_to_format
+
 
 def format_file(args: FormatArgs) -> FormatResult:
     """
@@ -86,7 +94,7 @@ def format_file(args: FormatArgs) -> FormatResult:
             # Compare the output with the current file content
             with open(filepath, 'r') as f:
                 current_content = f.read()
-    
+
             if current_content != result.stdout:
                 print(f"File {filepath} needs formatting")
 
@@ -109,7 +117,6 @@ def format_file(args: FormatArgs) -> FormatResult:
         return FormatResult(success=False, filepath=filepath, message=str(e))
 
 
-
 def main(check: bool):
     # Load ignore patterns
     spec = load_ignore_patterns()
@@ -128,8 +135,9 @@ def main(check: bool):
     max_workers = min(32, os.cpu_count() * 2)  # Limit max threads
 
     print(f"Starting format with {max_workers} workers...")
-    results: list[FormatResult] = pqdm(files_to_format, format_file, n_jobs=max_workers)
-    
+    results: list[FormatResult] = pqdm(
+        files_to_format, format_file, n_jobs=max_workers)
+
     errors = [r.message for r in results if not r.success]
     error_count = len(errors)
 
@@ -138,10 +146,11 @@ def main(check: bool):
         print("\nErrors:")
         for error in errors:
             print(error)
-            
+
         return False
-    
+
     return True
+
 
 if __name__ == '__main__':
     # Add command line argument parsing
