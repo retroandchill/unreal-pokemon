@@ -17,7 +17,7 @@
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
         <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
-        <PackageReference Include="Microsoft.TestPlatform.Build" Version="17.14.1" />
+        <PackageReference Include="Microsoft.TestPlatform.Build" Version="18.0.0" />
         <PackageReference Include="NUnit" Version="4.4.0" />
         <PackageReference Include="Retro.ReadOnlyParams" Version="1.0.1" />
         <PackageReference Include="Riok.Mapperly" Version="4.2.1" />
