@@ -12,7 +12,6 @@ public static class GeometryExtensions
     /// <summary>
     /// Provided extension methods for FGeometry.
     /// </summary>
-    /// <param name="geometry">The source geometry object</param>
     extension(FGeometry geometry)
     {
         /// <summary>

@@ -11,7 +11,6 @@ public static class UnrealServiceCollectionExtensions
     /// <summary>
     /// Extension methods for configuring Unreal-related services in a ServiceCollection.
     /// </summary>
-    /// <param name="services">The service collection to operate on.</param>
     extension(UnrealServiceCollection services)
     {
         /// <summary>

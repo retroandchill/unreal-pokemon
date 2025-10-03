@@ -14,7 +14,6 @@ public static class InstancedStructExtensions
     /// <summary>
     /// Extensions for FInstancedStruct.
     /// </summary>
-    /// <param name="instancedStruct"></param>
     extension(FInstancedStruct instancedStruct)
     {
         /// <summary>
@@ -30,7 +29,6 @@ public static class InstancedStructExtensions
     /// <summary>
     /// Extensions for <see cref="StructView{T}"/>.
     /// </summary>
-    /// <param name="structView"></param>
     extension(StructView<FInstancedStruct> structView)
     {
         /// <summary>

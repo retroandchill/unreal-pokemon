@@ -13,11 +13,8 @@ public interface IDeveloperSettings<out T>
     where T : UDeveloperSettings
 {
     /// <summary>
-    /// Gets the developer settings instance of type <typeparamref name="T"/>.
+    /// Gets the developer settings instance of type T.
     /// </summary>
-    /// <typeparam name="T">
-    /// The specific type of developer settings, constrained to derive from <see cref="UDeveloperSettings"/>.
-    /// </typeparam>
     /// <remarks>
     /// This property provides access to the default settings for developers in the application. The settings are retrieved
     /// using the Unreal Engine mechanism for accessing default object instances.

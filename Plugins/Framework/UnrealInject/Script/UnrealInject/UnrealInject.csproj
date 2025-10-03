@@ -8,6 +8,7 @@
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <RootNamespace>UnrealInject</RootNamespace>
         <LangVersion>preview</LangVersion>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
     <PropertyGroup>
         <DefineConstants>WITH_EDITOR</DefineConstants>

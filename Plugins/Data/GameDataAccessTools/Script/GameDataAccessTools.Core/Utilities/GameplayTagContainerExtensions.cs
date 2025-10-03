@@ -15,7 +15,6 @@ public static class GameplayTagContainerExtensions
     /// <summary>
     /// Extensions for FGameplayTagContainer.
     /// </summary>
-    /// <param name="container">The container type</param>
     extension(StructView<FGameplayTagContainer> container)
     {
         /// <summary>
