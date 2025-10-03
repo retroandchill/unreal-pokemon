@@ -1,19 +1,20 @@
-﻿import json
+import json
 
 FILE = 'Evolution'
 
+
 def main():
     with open('output.txt', 'w') as fout:
-    
+
         with open(f'./PBS/HardCodedJsonFiles/{FILE}s.json', 'r') as file:
             json_string = json.load(file)
-    
+
         for item in json_string:
             if item['ID'] == 'None':
                 continue
-            
+
             print(f'"{item['ID']}",', file=fout)
-        
+
         print(file=fout)
         for item in json_string:
             print(f'manager.{FILE}s.RegisterEntry(', file=fout)
@@ -30,7 +31,9 @@ def main():
                 elif key == 'Name':
                     continue
                 elif key == 'RealName':
-                    print(f'        Name = FText.Localized(LocalizationNamespace, "{my_id}", "{value}"),', file=fout)
+                    print(
+                        f'        Name = FText.Localized(LocalizationNamespace, "{my_id}", "{value}"),',
+                        file=fout)
                 elif isinstance(value, str):
                     print(f'        {key} = "{value}",', file=fout)
                 else:
@@ -38,7 +41,7 @@ def main():
             print('    }', file=fout)
             print(');', file=fout)
             print(file=fout)
-        
+
 
 if __name__ == "__main__":
     main()
