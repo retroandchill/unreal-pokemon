@@ -11,6 +11,7 @@ namespace Pokemon.Battle.Components.Side;
 /// This component manages the contextual relationship between a battle side and the overarching battle context.
 /// It is a transient component, meaning it exists only for the duration of the battle lifecycle.
 /// </remarks>
+[UClass]
 public class UActiveSideContextComponent : URPGComponent
 {
     /// <summary>
