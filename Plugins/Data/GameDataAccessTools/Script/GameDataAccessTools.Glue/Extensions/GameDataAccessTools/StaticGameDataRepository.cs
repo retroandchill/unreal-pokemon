@@ -11,7 +11,7 @@ public partial class UStaticGameDataRepository
     protected void RegisterEntryInternal<T>(T entry)
         where T : MarshalledStruct<T>
     {
-        if (!TryRegisterEntryInternal(entry, out var error))
+        if (!TryRegisterEntryInternal(out var error, entry))
             throw new InvalidOperationException(error);
     }
 

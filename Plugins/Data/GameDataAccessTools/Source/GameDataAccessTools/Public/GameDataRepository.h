@@ -281,9 +281,11 @@ class GAMEDATAACCESSTOOLS_API UGameDataRepository : public UObject
      * It iterates through all data entries and determines uniqueness based on the provided name.
      *
      * @param Name The name to be verified for uniqueness.
+     * @param bVerifyInPlace When true it is assumed that an element has been renamed and we need to find two entries
+     *                       with said name in order to be a failure.
      * @return true if the row name is unique; false otherwise.
      */
-    bool VerifyRowNameUnique(FName Name) const;
+    bool VerifyRowNameUnique(FName Name, bool bVerifyInPlace = true) const;
 
   private:
     TOptional<FName> GenerateUniqueRowName() const;
@@ -358,12 +360,12 @@ class GAMEDATAACCESSTOOLS_API UStaticGameDataRepository : public UGameDataReposi
      * depending on the derived class, but this base implementation should not be
      * called directly.
      *
-     * @param DataStruct A reference to the data structure used for the entry to be registered.
      * @param OutError A reference to a string that will contain any error message if the registration fails.
+     * @param DataStruct A reference to the data structure used for the entry to be registered.
      * @return Returns true if the registration is successful; false otherwise.
      */
     UFUNCTION(CustomThunk, meta = (ScriptMethod, CustomStructureParam = DataStruct))
-    bool TryRegisterEntryInternal(const int32 &DataStruct, FString &OutError);
+    bool TryRegisterEntryInternal(FString &OutError, const int32 &DataStruct);
     DECLARE_FUNCTION(execTryRegisterEntryInternal);
 
   public:

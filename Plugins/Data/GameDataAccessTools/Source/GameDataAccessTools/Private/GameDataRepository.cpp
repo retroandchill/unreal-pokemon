@@ -91,7 +91,7 @@ uint8 *UGameDataRepository::AddNewEntryInternal(const FName ID)
         return nullptr;
     }
 
-    if (!VerifyRowNameUnique(ID))
+    if (!VerifyRowNameUnique(ID, false))
     {
         UE_LOG(LogGameDataAccessTools, Error, TEXT("Cannot use ID '%s', as it is already in use"), *ID.ToString())
         return nullptr;
@@ -156,9 +156,9 @@ TOptional<int32> UGameDataRepository::GetRowIndex(const FName ID) const
     return Index != nullptr ? *Index : TOptional<int32>();
 }
 
-bool UGameDataRepository::VerifyRowNameUnique(const FName Name) const
+bool UGameDataRepository::VerifyRowNameUnique(const FName Name, const bool bVerifyInPlace) const
 {
-    bool bFirstInstance = false;
+    bool bFirstInstance = !bVerifyInPlace;
     for (int32 i = 0; i < GameDataEntries->Num(); i++)
     {
         if (const auto *Entry = GameDataEntries->GetElementPtr(i);
@@ -203,7 +203,7 @@ TOptional<FName> UGameDataRepository::GenerateUniqueRowName() const
 }
 
 // ReSharper disable once CppMemberFunctionMayBeStatic
-bool UStaticGameDataRepository::TryRegisterEntryInternal(const int32 &, FString &)
+bool UStaticGameDataRepository::TryRegisterEntryInternal(FString &, const int32 &)
 {
     checkf(false, TEXT("This should never get called"));
     return false;
@@ -212,10 +212,10 @@ bool UStaticGameDataRepository::TryRegisterEntryInternal(const int32 &, FString 
 DEFINE_FUNCTION(UStaticGameDataRepository::execTryRegisterEntryInternal)
 {
     auto *Self = CastChecked<UStaticGameDataRepository>(Context);
+    P_GET_PROPERTY_REF(FStrProperty, OutError);
     Stack.StepCompiledIn<FStructProperty>(nullptr);
     const auto DataStructProperty = CastFieldChecked<FStructProperty>(Stack.MostRecentProperty);
     const auto *DataStructStruct = Stack.MostRecentPropertyAddress;
-    P_GET_PROPERTY_REF(FStrProperty, OutError);
 
     P_FINISH;
 
@@ -229,16 +229,14 @@ DEFINE_FUNCTION(UStaticGameDataRepository::execTryRegisterEntryInternal)
     }
 
     const auto ID = Self->GetIDProperty()->GetPropertyValue_InContainer(DataStructStruct);
-    auto *NewEntry = Self->AddNewEntry(ID);
-    if (NewEntry == nullptr)
+    if (const auto *NewEntry = Self->AddNewEntry(ID, DataStructStruct); NewEntry != nullptr)
     {
-        OutError = FString::Printf(TEXT("ID '%s' is already in use"), *ID.ToString());
-        *static_cast<bool *>(RESULT_PARAM) = false;
+        *static_cast<bool *>(RESULT_PARAM) = true;
         return;
     }
 
-    Self->GetEntryStruct()->CopyScriptStruct(NewEntry, DataStructStruct);
-    *static_cast<bool *>(RESULT_PARAM) = true;
+    OutError = FString::Printf(TEXT("ID '%s' is already in use"), *ID.ToString());
+    *static_cast<bool *>(RESULT_PARAM) = false;
 
     P_NATIVE_END
 }
