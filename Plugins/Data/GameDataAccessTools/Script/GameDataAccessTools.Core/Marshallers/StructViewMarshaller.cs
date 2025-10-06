@@ -27,6 +27,6 @@ public static class StructViewMarshaller<T>
     /// <returns>A <see cref="StructView{T}"/> instance that represents the structure starting from the given array index in the native memory buffer.</returns>
     public static StructView<T> FromNative(IntPtr buffer, int arrayIndex)
     {
-        return new StructView<T>(buffer + arrayIndex * T.GetNativeDataSize());
+        return StructView<T>.FromNative(buffer + arrayIndex * T.GetNativeDataSize());
     }
 }

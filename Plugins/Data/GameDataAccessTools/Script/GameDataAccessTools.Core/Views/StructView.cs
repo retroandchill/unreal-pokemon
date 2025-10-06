@@ -64,7 +64,7 @@ public readonly ref struct StructView<T>(IntPtr nativePtr)
     /// <returns>
     /// A new instance of <see cref="StructView{T}"/> that wraps the native struct pointer.
     /// </returns>
-    public StructView<T> FromNative(IntPtr nativeStruct) => new(nativeStruct);
+    public static StructView<T> FromNative(IntPtr nativeStruct) => new(nativeStruct);
 
     /// <summary>
     /// Copies the data from the current <see cref="StructView{T}"/> instance to a specified native memory location.
