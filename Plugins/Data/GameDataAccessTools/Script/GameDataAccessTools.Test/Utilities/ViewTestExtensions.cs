@@ -8,7 +8,7 @@ using UnrealSharp.Interop;
 
 namespace GameDataAccessTools.Test.Utilities;
 
-public static class StructViewTestExtensions
+public static class ViewTestExtensions
 {
     public static StructView<TStruct> GetView<TObject, TStruct>(
         this TObject instance,
