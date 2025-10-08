@@ -16,10 +16,10 @@ public readonly partial record struct FCustomStruct
 {
     [field: UProperty]
     public float Value { get; init; }
-    
+
     [field: UProperty]
     public int Count { get; init; }
-    
+
     [field: UProperty]
     [UsedImplicitly]
     public bool IsEnabled { get; init; }
@@ -32,19 +32,19 @@ public readonly partial record struct FCollectionTestStruct
     [field: UProperty]
     [UsedImplicitly]
     public IReadOnlyList<int> IntList { get; init; }
-    
+
     [field: UProperty]
     [UsedImplicitly]
     public IReadOnlyList<FName> NameList { get; init; }
-    
+
     [field: UProperty]
     [UsedImplicitly]
     public IReadOnlyList<FVector> VectorList { get; init; }
-    
+
     [field: UProperty]
     [UsedImplicitly]
     public IReadOnlyList<FCustomStruct> CustomStructList { get; init; }
-    
+
     [field: UProperty]
     [UsedImplicitly]
     public IReadOnlyList<string> StringList { get; init; }
@@ -63,10 +63,26 @@ public class ArrayViewTest
     private static readonly int[] TestInts = [1, 2, 3, 42, 100];
     private static readonly FName[] TestNames = [new("FirstName"), new("SecondName"), new("ThirdName")];
     private static readonly FVector[] TestVectors = [new(1, 0, 0), new(0, 1, 0), new(0, 0, 1), new(1, 1, 1)];
-    private static readonly FCustomStruct[] TestCustomStructs = [
-        new() { Value = 1.5f, Count = 10, IsEnabled = true },
-        new() { Value = 2.5f, Count = 20, IsEnabled = false },
-        new() { Value = 3.5f, Count = 30, IsEnabled = true }
+    private static readonly FCustomStruct[] TestCustomStructs =
+    [
+        new()
+        {
+            Value = 1.5f,
+            Count = 10,
+            IsEnabled = true,
+        },
+        new()
+        {
+            Value = 2.5f,
+            Count = 20,
+            IsEnabled = false,
+        },
+        new()
+        {
+            Value = 3.5f,
+            Count = 30,
+            IsEnabled = true,
+        },
     ];
     private static readonly string[] TestStrings = ["Hello", "World", "Test", "Collection"];
 
@@ -79,7 +95,7 @@ public class ArrayViewTest
             NameList = TestNames,
             VectorList = TestVectors,
             CustomStructList = TestCustomStructs,
-            StringList = TestStrings
+            StringList = TestStrings,
         };
         return wrapper;
     }
@@ -203,7 +219,7 @@ public class ArrayViewTest
             NameList = new List<FName>(),
             VectorList = new List<FVector>(),
             CustomStructList = new List<FCustomStruct>(),
-            StringList = new List<string>()
+            StringList = new List<string>(),
         };
 
         var view = GetStructView(wrapper);
@@ -240,7 +256,7 @@ public class ArrayViewTest
         using (Assert.EnterMultipleScope())
         {
             Assert.That(enumeratedStructs, Has.Count.EqualTo(TestCustomStructs.Length));
-            
+
             for (var i = 0; i < TestCustomStructs.Length; i++)
             {
                 Assert.That(enumeratedStructs[i].Value, Is.EqualTo(TestCustomStructs[i].Value));
@@ -266,7 +282,7 @@ public class ArrayViewTest
         using (Assert.EnterMultipleScope())
         {
             Assert.That(enumeratedStrings.Count, Is.EqualTo(TestStrings.Length));
-            
+
             for (int i = 0; i < TestStrings.Length; i++)
             {
                 Assert.That(enumeratedStrings[i], Is.EqualTo(TestStrings[i]));
@@ -292,7 +308,7 @@ public class ArrayViewTest
         using (Assert.EnterMultipleScope())
         {
             Assert.That(enumeratedStructs.Count, Is.EqualTo(TestCustomStructs.Length));
-            
+
             for (int i = 0; i < TestCustomStructs.Length; i++)
             {
                 Assert.That(enumeratedStructs[i].Value, Is.EqualTo(TestCustomStructs[i].Value));
@@ -319,7 +335,7 @@ public class ArrayViewTest
         using (Assert.EnterMultipleScope())
         {
             Assert.That(enumeratedStrings.Count, Is.EqualTo(TestStrings.Length));
-            
+
             for (int i = 0; i < TestStrings.Length; i++)
             {
                 Assert.That(enumeratedStrings[i], Is.EqualTo(TestStrings[i]));
@@ -365,14 +381,14 @@ public class ArrayViewTest
             {
                 var view = GetStructView(wrapper);
                 var customStructArrayView = view.CustomStructList;
-                
+
                 _ = customStructArrayView[-1];
             });
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var view = GetStructView(wrapper);
                 var stringArrayView = view.StringList;
-                
+
                 _ = stringArrayView[-1];
             });
 
@@ -381,14 +397,14 @@ public class ArrayViewTest
             {
                 var view = GetStructView(wrapper);
                 var customStructArrayView = view.CustomStructList;
-                
+
                 _ = customStructArrayView[TestCustomStructs.Length];
             });
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var view = GetStructView(wrapper);
                 var stringArrayView = view.StringList;
-                
+
                 _ = stringArrayView[TestStrings.Length];
             });
         }
@@ -411,7 +427,7 @@ public class ArrayViewTest
             NameList = new List<FName>([new("NewName")]),
             VectorList = new List<FVector>([new(10, 20, 30)]),
             CustomStructList = new List<FCustomStruct>([new() { Value = 99.9f, Count = 999 }]),
-            StringList = new List<string>(["UpdatedString"])
+            StringList = new List<string>(["UpdatedString"]),
         };
 
         // Verify the view reflects the changes

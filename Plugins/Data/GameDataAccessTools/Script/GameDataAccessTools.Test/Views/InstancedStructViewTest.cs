@@ -12,8 +12,8 @@ public readonly partial record struct FTestStruct
 {
     [field: UProperty]
     public int Value { get; init; }
-    
-    [field: UProperty] 
+
+    [field: UProperty]
     public string? Name { get; init; }
 }
 
@@ -22,7 +22,7 @@ public readonly partial record struct FAlternativeStruct
 {
     [field: UProperty]
     public float FloatValue { get; init; }
-    
+
     [field: UProperty]
     public bool BoolValue { get; init; }
 }
@@ -38,7 +38,7 @@ public class InstancedStructViewTest
 {
     private static readonly FTestStruct TestStructValue = new() { Value = 42, Name = "Test" };
     private static readonly FAlternativeStruct AlternativeStructValue = new() { FloatValue = 3.14f, BoolValue = true };
-    
+
     private static UInstancedStructViewWrapper CreateWrapper(object structValue)
     {
         var wrapper = UObject.NewObject<UInstancedStructViewWrapper>();
@@ -48,7 +48,7 @@ public class InstancedStructViewTest
             // Initialize with the provided struct value
             FTestStruct testStruct => FInstancedStruct.Make(testStruct),
             FAlternativeStruct alternativeStruct => FInstancedStruct.Make(alternativeStruct),
-            _ => wrapper.Value
+            _ => wrapper.Value,
         };
 
         return wrapper;
@@ -69,7 +69,7 @@ public class InstancedStructViewTest
         {
             var structType = view.StructType;
             Assert.That(structType, Is.Not.Null);
-            
+
             // Test the extension method on FInstancedStruct directly
             var directStructType = wrapper.Value.StructType;
             Assert.That(directStructType, Is.EqualTo(structType));
@@ -113,7 +113,7 @@ public class InstancedStructViewTest
         var view = GetInstancedStructView(wrapper);
 
         var retrievedStruct = view.Get<FTestStruct>();
-        
+
         using (Assert.EnterMultipleScope())
         {
             Assert.That(retrievedStruct.Value, Is.EqualTo(TestStructValue.Value));
@@ -131,7 +131,7 @@ public class InstancedStructViewTest
             var view = GetInstancedStructView(wrapper);
             view.Get<FAlternativeStruct>();
         });
-        
+
         Assert.Throws<InvalidOperationException>(() =>
         {
             var view = GetInstancedStructView(wrapper);
@@ -146,7 +146,7 @@ public class InstancedStructViewTest
         var view = GetInstancedStructView(wrapper);
 
         var success = view.TryGet<FTestStruct>(out var retrievedStruct);
-        
+
         using (Assert.EnterMultipleScope())
         {
             Assert.That(success, Is.True);
@@ -256,7 +256,7 @@ public class InstancedStructViewTest
         {
             // Verify that operations on empty instanced struct behave correctly
             var structType = view.StructType;
-            
+
             // Empty instanced structs should have null struct type
             Assert.That(structType, Is.Null);
 
