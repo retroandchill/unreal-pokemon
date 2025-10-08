@@ -1,6 +1,5 @@
 ﻿using GameDataAccessTools.Core.Interop;
 using UnrealSharp;
-using UnrealSharp.Interop;
 
 namespace GameDataAccessTools.Core.Utilities;
 
@@ -46,6 +45,9 @@ public static class LocalizationExtensions
         /// <returns>An <see cref="FText"/> instance created from the provided localized string.</returns>
         public static FText FromLocalizedString(ReadOnlySpan<char> localizedString)
         {
+            if (localizedString.IsEmpty)
+                return FText.None;
+
             unsafe
             {
                 fixed (char* ptr = localizedString)
