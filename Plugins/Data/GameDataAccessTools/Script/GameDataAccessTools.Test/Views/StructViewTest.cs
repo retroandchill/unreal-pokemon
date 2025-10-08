@@ -1,13 +1,11 @@
 ﻿using GameAccessTools.SourceGenerator.Attributes;
-using GameDataAccessTools.Core.Marshallers;
 using GameDataAccessTools.Core.Utilities;
 using GameDataAccessTools.Core.Views;
 using GameDataAccessTools.Test.Utilities;
+using JetBrains.Annotations;
 using NUnit.Framework;
-using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.CoreUObject;
-using UnrealSharp.Interop;
 
 namespace GameDataAccessTools.Test.Views;
 
@@ -16,16 +14,20 @@ namespace GameDataAccessTools.Test.Views;
 public readonly partial record struct FSimpleViewableStruct
 {
     [field: UProperty]
+    [UsedImplicitly]
     public int Value { get; init; }
 
     [field: UProperty]
+    [UsedImplicitly]
     public bool IsActive { get; init; }
 
     [field: UProperty]
+    [UsedImplicitly]
     public string? Name { get; init; }
 }
 
 [UClass]
+[UsedImplicitly]
 public class UTestStructView : UObject
 {
     [UProperty]

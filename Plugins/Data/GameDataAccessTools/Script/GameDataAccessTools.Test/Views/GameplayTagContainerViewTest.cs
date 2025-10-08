@@ -1,6 +1,7 @@
 ﻿using GameDataAccessTools.Core.Utilities;
 using GameDataAccessTools.Core.Views;
 using GameDataAccessTools.Test.Utilities;
+using JetBrains.Annotations;
 using NUnit.Framework;
 using UnrealSharp.Attributes;
 using UnrealSharp.CoreUObject;
@@ -10,6 +11,7 @@ using ZLinq;
 namespace GameDataAccessTools.Test.Views;
 
 [UClass]
+[UsedImplicitly]
 public class UGameplayTagContainerViewWrapper : UObject
 {
     [UProperty]

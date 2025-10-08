@@ -1,6 +1,7 @@
 ﻿using GameDataAccessTools.Core.Utilities;
 using GameDataAccessTools.Core.Views;
 using GameDataAccessTools.Test.Utilities;
+using JetBrains.Annotations;
 using NUnit.Framework;
 using UnrealSharp.Attributes;
 using UnrealSharp.CoreUObject;
@@ -28,6 +29,7 @@ public readonly partial record struct FAlternativeStruct
 }
 
 [UClass]
+[UsedImplicitly]
 public class UInstancedStructViewWrapper : UObject
 {
     [UProperty]
