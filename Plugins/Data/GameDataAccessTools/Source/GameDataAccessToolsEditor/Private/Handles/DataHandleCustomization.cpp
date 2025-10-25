@@ -31,7 +31,7 @@ void FDataHandleCustomization::CustomizeHeader(const TSharedRef<IPropertyHandle>
     const auto StructProperty = CastFieldChecked<FStructProperty>(PropertyHandle->GetProperty());
 
     const auto *CSStruct = CastChecked<UCSScriptStruct>(StructProperty->Struct);
-    const auto ManagedStructType = CSStruct->GetManagedTypeInfo<>()->GetManagedTypeHandle();
+    const auto ManagedStructType = CSStruct->GetManagedTypeInfo()->GetManagedTypeHandle();
 
     if (AllowsNone())
     {

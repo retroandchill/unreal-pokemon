@@ -27,7 +27,7 @@ TSharedRef<SWidget> SDataHandlePinStructPin::GetDefaultValueWidget()
 {
     ParseDefaultValueData();
     const auto *CSStruct = CastChecked<UCSScriptStruct>(Handle.GetScriptStruct());
-    const auto ManagedStructType = CSStruct->GetManagedTypeInfo<>()->GetManagedTypeHandle();
+    const auto ManagedStructType = CSStruct->GetManagedTypeInfo()->GetManagedTypeHandle();
 
     for (auto BaseOptions = FGameDataTypeManagedCallbacks::Get().GetDataHandleOptions(*ManagedStructType);
          const auto &Entry : BaseOptions)

@@ -17,6 +17,6 @@ bool GameData::IsDataHandleStruct(UScriptStruct *Struct)
         return false;
     }
 
-    const auto ManagedType = ManagedStruct->GetManagedTypeInfo<>()->GetManagedTypeHandle();
+    const auto ManagedType = ManagedStruct->GetManagedTypeInfo()->GetManagedTypeHandle();
     return FGameDataTypeManagedCallbacks::Get().IsValidGameDataHandle(*ManagedType);
 }
