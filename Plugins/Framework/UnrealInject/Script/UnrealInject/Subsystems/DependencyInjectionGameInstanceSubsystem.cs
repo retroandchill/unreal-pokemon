@@ -14,7 +14,7 @@ namespace UnrealInject.Subsystems;
 /// service provider for game-related subsystems, ensuring loose coupling and better testability.
 /// </remarks>
 [UClass]
-public sealed class UDependencyInjectionGameInstanceSubsystem
+public sealed partial class UDependencyInjectionGameInstanceSubsystem
     : UCSGameInstanceSubsystem,
         IServiceProvider,
         IServiceScopeFactory
@@ -22,13 +22,13 @@ public sealed class UDependencyInjectionGameInstanceSubsystem
     private IServiceProvider _serviceProvider = null!;
 
     /// <inheritdoc />
-    protected override void Initialize(FSubsystemCollectionBaseRef collection)
+    protected override void Initialize_Implementation(FSubsystemCollectionBaseRef collection)
     {
         _serviceProvider = FUnrealInjectModule.Instance.BuildServiceProvider();
     }
 
     /// <inheritdoc />
-    protected override void Deinitialize()
+    protected override void Deinitialize_Implementation()
     {
         if (_serviceProvider is IDisposable disposable)
         {

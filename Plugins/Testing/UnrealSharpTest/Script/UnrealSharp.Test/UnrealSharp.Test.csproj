@@ -21,5 +21,8 @@
         <PackageReference Include="Retro.ReadOnlyParams" Version="1.0.1" />
         <PackageReference Include="Riok.Mapperly" Version="4.2.1" />
         <ProjectReference Include="..\UnrealSharpTest.Glue\UnrealSharpTest.Glue.csproj" />
+        <Reference Include="UnrealSharp.Binds">
+            <HintPath>$(UnrealSharpDir)\Binaries\Managed\net9.0\UnrealSharp.Binds.dll</HintPath>
+        </Reference>
     </ItemGroup>
 </Project>

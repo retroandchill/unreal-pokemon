@@ -2,6 +2,7 @@
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.CommonUI;
+using UnrealSharp.Core;
 using UnrealSharp.Engine;
 
 namespace InteractiveUI.Core.Selection;
@@ -44,7 +45,7 @@ public class USimpleTextButtonBase : UCommonButtonBase
     }
 
     /// <inheritdoc />
-    public override void PreConstruct(bool isDesignTime)
+    protected override void PreConstruct_Implementation(bool isDesignTime)
     {
 #if WITH_EDITOR
         if (!SystemLibrary.IsValid(TextBlock))
@@ -54,7 +55,7 @@ public class USimpleTextButtonBase : UCommonButtonBase
     }
 
     /// <inheritdoc />
-    protected override void OnCurrentTextStyleChanged()
+    protected override void OnCurrentTextStyleChanged_Implementation()
     {
 #if WITH_EDITOR
         if (!SystemLibrary.IsValid(TextBlock))

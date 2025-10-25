@@ -1,24 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <EnableDynamicLoading>true</EnableDynamicLoading>
-    </PropertyGroup>
-    <ItemGroup>
-        <Reference Include="UnrealSharp">
-            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
-        </Reference>
-        <Reference Include="UnrealSharp.Core">
-            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
-        </Reference>
-        <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
-        <ProjectReference Include="..\..\..\UnrealSharpCommonUI\Script\UnrealSharpCommonUI.Glue\UnrealSharpCommonUI.Glue.csproj" />
-        <ProjectReference Include="..\..\..\..\Framework\Simple2D\Script\Simple2D.Glue\Simple2D.Glue.csproj" />
-    </ItemGroup>
-    <ItemGroup>
-        <InternalsVisibleTo Include="InteractiveUI.Core" />
-    </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <CopyLocalLockFileAssembliesName>true</CopyLocalLockFileAssembliesName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\UnrealSharpCommonUI\Script\UnrealSharpCommonUI.Glue\UnrealSharpCommonUI.Glue.csproj" />
+    <ProjectReference Include="..\..\..\..\Framework\Simple2D\Script\Simple2D.Glue\Simple2D.Glue.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="InteractiveUI.Core" />
+  </ItemGroup>
 </Project>

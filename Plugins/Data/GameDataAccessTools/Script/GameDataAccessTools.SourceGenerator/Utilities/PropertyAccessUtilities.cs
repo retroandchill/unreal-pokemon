@@ -127,7 +127,7 @@ public static class PropertyAccessUtilities
                                 typeSymbol.ToDisplayString(),
                                 new MarshallerInfo($"SoftClassMarshaller<{typeArguments[0]}>")
                             );
-                        case "Option`1":
+                        case "TOptional`1":
                             return typeArguments[0].GetCollectionMarshallerInfo(CollectionType.Optional, true);
                         case "Nullable`1":
                             return typeArguments[0].GetCollectionMarshallerInfo(CollectionType.Nullable, true);
@@ -171,7 +171,7 @@ public static class PropertyAccessUtilities
                     );
                 }
 
-                if (typeSymbol.ToDisplayString() == "UnrealSharp.FName")
+                if (typeSymbol.ToDisplayString() == "UnrealSharp.Core.FName")
                 {
                     return new MarshalledPropertyInfo(
                         typeSymbol.ToDisplayString(),
@@ -261,7 +261,7 @@ public static class PropertyAccessUtilities
 
         if (typeSymbol is INamedTypeSymbol { IsGenericType: true, MetadataName: "TWeakObjectPtr`1" })
             return true;
-        if (typeSymbol.ToDisplayString() == "UnrealSharp.FName")
+        if (typeSymbol.ToDisplayString() == "UnrealSharp.Core.FName")
             return true;
 
         var structAttribute = typeSymbol
@@ -362,9 +362,9 @@ public static class PropertyAccessUtilities
                 );
             case CollectionType.Optional:
                 return new MarshalledPropertyInfo(
-                    $"Option<{innerType}>",
+                    $"TOptional<{innerType}>",
                     new MarshallerInfo(
-                        $"OptionMarshaller<{innerType}>",
+                        $"OptionalMarshaller<{innerType}>",
                         innerType.GetMarshallerName(true).MarshallerInfo.Name
                     )
                 );

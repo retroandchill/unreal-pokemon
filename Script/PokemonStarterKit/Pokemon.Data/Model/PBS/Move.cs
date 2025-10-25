@@ -7,6 +7,7 @@ using Pokemon.Data.Model.HardCoded;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
@@ -66,8 +67,24 @@ public enum EDamageType : byte
 /// Allows differentiation between fixed power, variable power, or no damage moves.
 /// </remarks>
 [UStruct]
-public readonly partial struct FDamageTypeData(EDamageType damageType, int power)
+public readonly partial struct FDamageTypeData
 {
+    private readonly EDamageType _damageType;
+    private readonly int _power;
+
+    /// <summary>
+    /// A structure that represents detailed information about the damage type for a Pokémon move.
+    /// </summary>
+    /// <remarks>
+    /// Used to determine how damage is calculated for a specific move within the game context.
+    /// Allows differentiation between fixed power, variable power, or no damage moves.
+    /// </remarks>
+    public FDamageTypeData(EDamageType damageType, int power)
+    {
+        _damageType = damageType;
+        _power = power;
+    }
+
     /// <summary>
     /// Executes one of the provided actions based on the damage type of the current instance.
     /// </summary>
@@ -77,13 +94,13 @@ public readonly partial struct FDamageTypeData(EDamageType damageType, int power
     /// <exception cref="InvalidOperationException">Thrown when the damage type is invalid or unsupported.</exception>
     public void Match(Action<int> onFixedPower, Action onVariablePower, Action onNoDamage)
     {
-        switch (damageType)
+        switch (_damageType)
         {
             case EDamageType.NoDamage:
                 onNoDamage();
                 break;
             case EDamageType.FixedPower:
-                onFixedPower(power);
+                onFixedPower(_power);
                 break;
             case EDamageType.VariablePower:
                 onVariablePower();
@@ -105,10 +122,10 @@ public readonly partial struct FDamageTypeData(EDamageType damageType, int power
     /// <exception cref="InvalidOperationException">Thrown when the damage type is invalid or unsupported.</exception>
     public T Match<T>(Func<int, T> onFixedPower, Func<T> onVariablePower, Func<T> onNoDamage)
     {
-        return damageType switch
+        return _damageType switch
         {
             EDamageType.NoDamage => onNoDamage(),
-            EDamageType.FixedPower => onFixedPower(power),
+            EDamageType.FixedPower => onFixedPower(_power),
             EDamageType.VariablePower => onVariablePower(),
             _ => throw new InvalidOperationException("Invalid damage type"),
         };
@@ -129,25 +146,25 @@ public readonly partial struct FDamageTypeData(EDamageType damageType, int power
 public readonly partial struct FMove() : IGameDataEntry
 {
     /// <inheritdoc />
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Identification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Identification")]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere, Category = "Identification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere, Category = "Identification")]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Represents the display name of the move.
     /// This property is read-only and is intended for use in display contexts within the game.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
     [GameAccessTools.SourceGenerator.Attributes.DisplayName]
     public FText Name { get; init; } = "Unnamed";
 
     /// <summary>
     /// Represents the description of the move, providing detailed information displayed in the context of the game.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
     public FText Description { get; init; } = "???";
 
     /// <summary>
@@ -155,7 +172,7 @@ public readonly partial struct FMove() : IGameDataEntry
     /// This property determines attributes and interactions specific to the type,
     /// such as whether the move is physical or special.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Classification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Classification")]
     [AsValue]
     public FTypeHandle Type { get; init; }
 
@@ -163,7 +180,7 @@ public readonly partial struct FMove() : IGameDataEntry
     /// Represents the damage category of the move, such as Physical, Special, or Status.
     /// This property determines how damage or effects are calculated during gameplay.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Classification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Classification")]
     public EDamageCategory Category { get; init; } = EDamageCategory.Status;
 
     /// <summary>
@@ -171,7 +188,7 @@ public readonly partial struct FMove() : IGameDataEntry
     /// Determines how the move's power or damage output is calculated.
     /// Possible values include no damage, fixed power, or variable power.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Stats")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Stats")]
     public EDamageType DamageType { get; init; }
 
     /// <summary>
@@ -179,7 +196,7 @@ public readonly partial struct FMove() : IGameDataEntry
     /// The value must be greater than or equal to 5 and is controlled by a clamp to ensure valid input.
     /// This property is conditionally editable based on the DamageType being FixedPower.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Stats")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Stats")]
     [field: ClampMin("5")]
     [field: UIMin("5")]
     [field: EditCondition($"{nameof(DamageType)} == DamageType::{nameof(EDamageType.FixedPower)}")]
@@ -198,7 +215,7 @@ public readonly partial struct FMove() : IGameDataEntry
     /// <remarks>
     /// The value is clamped between 1 and 100. Accuracy is only applicable when <c>AlwaysHits</c> is set to <c>false</c>.
     /// </remarks>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Stats")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Stats")]
     [field: ClampMin("1")]
     [field: ClampMax("100")]
     [field: UIMin("1")]
@@ -211,7 +228,7 @@ public readonly partial struct FMove() : IGameDataEntry
     /// This value determines the maximum number of times the move can be used.
     /// The value is clamped to a minimum of 1 to ensure validity.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Stats")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Stats")]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     public int TotalPP { get; init; } = 5;
@@ -220,7 +237,7 @@ public readonly partial struct FMove() : IGameDataEntry
     /// Gets the priority of the move, which determines the order of execution during a battle.
     /// Positive values indicate a higher priority, while negative values indicate a lower priority.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "BattleUsage")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "BattleUsage")]
     public int Priority { get; init; } = 0;
 
     /// <summary>
@@ -228,14 +245,14 @@ public readonly partial struct FMove() : IGameDataEntry
     /// This property provides information about the target definition of the move,
     /// enabling retrieval of target-related details for gameplay logic.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "BattleUsage")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "BattleUsage")]
     [AsValue]
     public FTargetHandle Target { get; init; }
 
     /// <summary>
     /// Gets the function code associated with the move, defining its core behavior or effect within the game.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Effect")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Effect")]
     [Categories(IdentifierConstants.FunctionCodeTag)]
     [AsValue]
     public FGameplayTag FunctionCode { get; init; }
@@ -244,14 +261,14 @@ public readonly partial struct FMove() : IGameDataEntry
     /// Indicates whether the effect of the move is guaranteed to occur.
     /// If true, the effect always takes place; otherwise, its occurrence is determined by the EffectChance property.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Effect")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Effect")]
     public bool GuaranteedEffect { get; init; } = true;
 
     /// <summary>
     /// Represents the percentage chance for an effect to occur when the move is used.
     /// The value is an integer between 1 and 100 and is only applicable if the move does not have a guaranteed effect.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Effect")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Effect")]
     [field: ClampMin("1")]
     [field: ClampMax("100")]
     [field: UIMin("1")]
@@ -264,7 +281,7 @@ public readonly partial struct FMove() : IGameDataEntry
     /// Represents a container for gameplay tags associated with the move.
     /// These tags can be used in various game systems to identify and categorize the move.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
     public FGameplayTagContainer Tags { get; init; }
 
     /// <summary>

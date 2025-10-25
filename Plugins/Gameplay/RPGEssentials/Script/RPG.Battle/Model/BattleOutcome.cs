@@ -46,7 +46,7 @@ public enum EBattleResult : byte
 /// </remarks>
 [UStruct]
 public readonly partial record struct FBattleOutcome(
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] EBattleResult Result
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] EBattleResult Result
 )
 {
     /// <summary>
@@ -57,6 +57,6 @@ public readonly partial record struct FBattleOutcome(
     /// of the battle result. It is designed to support flexible and customizable scenarios by holding optional
     /// supplemental information.
     /// </remarks>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public FInstancedStruct AdditionalData { get; init; }
 }

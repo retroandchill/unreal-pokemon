@@ -4,6 +4,7 @@ using GameDataAccessTools.Core.Utilities;
 using JetBrains.Annotations;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.GameDataAccessTools;
 
 namespace Pokemon.Data.Model.HardCoded;
@@ -16,8 +17,8 @@ namespace Pokemon.Data.Model.HardCoded;
 /// <param name="PercentChange">The percentage by which the stat is modified.</param>
 [UStruct]
 public readonly partial record struct FNatureStatChange(
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] FMainBattleStatHandle StatHandle,
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] int PercentChange
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] FMainBattleStatHandle StatHandle,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] int PercentChange
 );
 
 /// <summary>
@@ -30,19 +31,19 @@ public readonly partial struct FNature() : IGameDataEntry
 {
     /// <inheritdoc />
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Gets the name of the nature. This property is read-only and intended to provide a localized text representation.
     /// </summary>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
 
@@ -52,7 +53,7 @@ public readonly partial struct FNature() : IGameDataEntry
     /// Typically used to describe how a specific nature affects the battle stats of a Pokemon.
     /// </summary>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public IReadOnlyList<FNatureStatChange> StatChanges { get; init; } = [];
 }
 

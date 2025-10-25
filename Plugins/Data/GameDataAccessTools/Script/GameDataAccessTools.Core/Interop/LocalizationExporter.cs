@@ -1,5 +1,6 @@
 ﻿using UnrealSharp;
 using UnrealSharp.Binds;
+using UnrealSharp.Core;
 
 namespace GameDataAccessTools.Core.Interop;
 

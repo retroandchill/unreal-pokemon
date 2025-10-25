@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
@@ -19,11 +20,11 @@ namespace Pokemon.Data.Model.PBS;
 public readonly partial struct FBerryPlant() : IGameDataEntry
 {
     /// <inheritdoc />
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Identification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Identification")]
     public FName ID { get; init; }
 
     /// <inheritdoc />
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere, Category = "Identification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere, Category = "Identification")]
     public int RowIndex { get; init; }
 
     /// <summary>
@@ -33,7 +34,7 @@ public readonly partial struct FBerryPlant() : IGameDataEntry
     /// This property is used for determining the growth progression rate of the berry plant.
     /// The value must be at least 1 to ensure proper growth mechanics in the game.
     /// </remarks>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Growth")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Growth")]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     public int HoursPerStage { get; init; } = 3;
@@ -43,7 +44,7 @@ public readonly partial struct FBerryPlant() : IGameDataEntry
     /// Measured in an integer value, it indicates the progressive depletion of water
     /// in the soil over time, affecting the plant's growth conditions.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Growth")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Growth")]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     public int DryingPerHour { get; init; } = 15;
@@ -53,7 +54,7 @@ public readonly partial struct FBerryPlant() : IGameDataEntry
     /// Represents the minimum and maximum number of berries that can be harvested
     /// from the plant during its lifecycle.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Growth")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Growth")]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     [AsValue]

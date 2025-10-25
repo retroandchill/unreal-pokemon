@@ -14,7 +14,7 @@ namespace InteractiveUI.Core.Actions;
 /// </remarks>
 [UClass(ClassFlags.Abstract)]
 [UMetaData("DisableNativeTick")]
-public class UInteractiveActionButton : UCommonBoundActionButton
+public partial class UInteractiveActionButton : UCommonBoundActionButton
 {
     /// <summary>
     /// Defines the style to be applied to the button when the input method is a keyboard or mouse.
@@ -66,7 +66,7 @@ public class UInteractiveActionButton : UCommonBoundActionButton
     private TSubclassOf<UCommonButtonStyle> TouchStyle { get; }
 
     /// <inheritdoc />
-    public override void Construct()
+    protected override void Construct_Implementation()
     {
         var inputSubsystem = GetLocalPlayerSubsystem<UCommonInputSubsystem>(OwningPlayerController);
         inputSubsystem.OnInputMethodChanged += HandleInputMethodChanged;

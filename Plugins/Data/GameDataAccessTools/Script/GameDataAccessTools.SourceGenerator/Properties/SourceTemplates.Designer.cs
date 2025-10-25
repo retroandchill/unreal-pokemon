@@ -193,7 +193,7 @@ namespace GameAccessTools.SourceGenerator.Properties {
         ///
         ///namespace {{Namespace}};
         ///
-        ///readonly partial record struct {{StructName}}([field: UProperty(PropertyFlags.EditAnywhere)] FName ID) : IDataHandle&lt;{{EntryType}}&gt;{{#Convertables}}, IEquatable&lt;{{Type}}&gt;{{/Convertables}}
+        ///readonly partial record struct {{StructName}}([UProperty(PropertyFlags.EditAnywhere)] FName ID) : IDataHandle&lt;{{EntryType}}&gt;{{#Convertables}}, IEquatable&lt;{{Type}}&gt;{{/Convertables}}
         ///{
         ///    {{#WithRepositor [rest of string was truncated]&quot;;.
         /// </summary>

@@ -1,5 +1,6 @@
 ﻿using GameDataAccessTools.Core.Interop;
 using UnrealSharp;
+using UnrealSharp.Core;
 
 namespace GameDataAccessTools.Core.Utilities;
 

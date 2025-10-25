@@ -2,6 +2,7 @@
 using LanguageExt;
 using LanguageExt.UnsafeValueAccess;
 using Pokemon.Data.Model.PBS;
+using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.RPGCore;
 
@@ -16,9 +17,9 @@ namespace Pokemon.Core.Components.Pokemon;
 /// </remarks>
 [UStruct]
 public readonly partial record struct FWildHoldItems(
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] IReadOnlyList<FItemHandle> Common,
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] IReadOnlyList<FItemHandle> Uncommon,
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] IReadOnlyList<FItemHandle> Rare
+    [UProperty(PropertyFlags.BlueprintReadOnly)] IReadOnlyList<FItemHandle> Common,
+    [UProperty(PropertyFlags.BlueprintReadOnly)] IReadOnlyList<FItemHandle> Uncommon,
+    [UProperty(PropertyFlags.BlueprintReadOnly)] IReadOnlyList<FItemHandle> Rare
 );
 
 /// <summary>
@@ -46,7 +47,7 @@ public class UHoldItemComponent : URPGComponent
     /// of the held item at all times.
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "HoldItem")]
-    public Option<FItemHandle> Item
+    public TOptional<FItemHandle> Item
     {
         get;
         set

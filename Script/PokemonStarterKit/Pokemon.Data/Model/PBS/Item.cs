@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
+using UnrealSharp.Core;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
 
@@ -92,25 +93,25 @@ public enum EBattleUse : byte
 public readonly partial struct FItem() : IGameDataEntry
 {
     /// <inheritdoc />
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Identification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Identification")]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere, Category = "Identification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere, Category = "Identification")]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Represents the name of the item, initialized to "Unnamed" by default.
     /// Ensures non-whitespace value is returned; otherwise, falls back to default name.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
     [GameAccessTools.SourceGenerator.Attributes.DisplayName]
     public FText Name { get; init; } = "Unnamed";
 
     /// <summary>
     /// Represents the pluralized display name of the item. Used for indicating multiple quantities or instances of the item.
     /// </summary>
-    [field: UProperty(
+    [UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         DisplayName = "Name (Plural)",
         Category = "Display"
@@ -121,7 +122,7 @@ public readonly partial struct FItem() : IGameDataEntry
     /// Gets or sets the portion-specific name of the item.
     /// If not explicitly set or contains only whitespace, defaults to the item's main display <see cref="Name"/>.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
     public FText PortionName
     {
         get => !field.IsNullOrWhitespace() ? field : Name;
@@ -132,7 +133,7 @@ public readonly partial struct FItem() : IGameDataEntry
     /// Gets or initializes the plural name for a portion of the item.
     /// If not explicitly set, defaults to the plural name of the item.
     /// </summary>
-    [field: UProperty(
+    [UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         DisplayName = "Portion Name (Plural)",
         Category = "Display"
@@ -148,7 +149,7 @@ public readonly partial struct FItem() : IGameDataEntry
     /// The value is determined based on additional criteria, such as
     /// the item's importance (e.g., whether it is a key item, HM, or TM).
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
     public bool ShowQuantity
     {
         get => field && !IsImportant;
@@ -158,14 +159,14 @@ public readonly partial struct FItem() : IGameDataEntry
     /// <summary>
     /// Represents the description of the item, providing details or information about it.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
     public FText Description { get; init; } = "???";
 
     /// <summary>
     /// Represents the pocket category associated with the item, identified by a gameplay tag.
     /// This property defines the classification or organizational grouping of the item within the bag inventory.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "BagInfo")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "BagInfo")]
     [field: Categories(IdentifierConstants.PocketTag)]
     [AsValue]
     public FGameplayTag Pocket { get; init; }
@@ -175,7 +176,7 @@ public readonly partial struct FItem() : IGameDataEntry
     /// This property is primarily used to determine if the item can be sold in the game's economy.
     /// If true, the item can be sold, and its price is configured via the Price or BPPrice properties.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Price")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Price")]
     public bool CanSell { get; init; } = true;
 
     /// <summary>
@@ -184,7 +185,7 @@ public readonly partial struct FItem() : IGameDataEntry
     /// must be a positive value, with a minimum of 1, and it is only applicable
     /// if the item can be sold, as indicated by the `CanSell` property.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Price")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Price")]
     [field: EditCondition(nameof(CanSell))]
     [field: ClampMin("1")]
     [field: UIMin("1")]
@@ -195,7 +196,7 @@ public readonly partial struct FItem() : IGameDataEntry
     /// This property defines the monetary value of the item when sold, typically expressed as an integer.
     /// The value must be greater than or equal to 1.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Price")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Price")]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     public int SellPrice { get; init; } = 0;
@@ -204,7 +205,7 @@ public readonly partial struct FItem() : IGameDataEntry
     /// Represents the price of the item in Battle Points (BP). This value is editable in the Unreal Editor and is constrained to have a minimum value of 1.
     /// It is only applicable when the item is marked as sellable.
     /// </summary>
-    [field: UProperty(
+    [UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         DisplayName = "BP Price",
         Category = "Price"
@@ -221,7 +222,7 @@ public readonly partial struct FItem() : IGameDataEntry
     /// The <see cref="FieldUse"/> property defines the context in which an item can be used,
     /// categorized based on different usage types such as on Pokémon, as a TM/HM, or direct use.
     /// </remarks>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Usage")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Usage")]
     public EFieldUse FieldUse { get; init; }
 
     /// <summary>
@@ -229,7 +230,7 @@ public readonly partial struct FItem() : IGameDataEntry
     /// Determines the context in which an item can be applied within battle conditions.
     /// The categorization is based on predefined enumeration values defining possible in-battle use cases.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Usage")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Usage")]
     public EBattleUse BattleUse { get; init; }
 
     /// <summary>
@@ -237,7 +238,7 @@ public readonly partial struct FItem() : IGameDataEntry
     /// These categories are defined as gameplay tags and are typically used to determine how and when the item can function within combat scenarios.
     /// This property is editable under conditions where the item's battle use is not explicitly restricted or set to "No Battle Use."
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Usage")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Usage")]
     [field: Categories(IdentifierConstants.BattleUseTag)]
     [field: EditCondition($"{nameof(BattleUse)} != {nameof(EBattleUse)}::{nameof(EBattleUse.NoBattleUse)}")]
     [field: EditConditionHides]
@@ -246,7 +247,7 @@ public readonly partial struct FItem() : IGameDataEntry
     /// <summary>
     /// Indicates whether the item can be consumed during use. If set to true, the item is considered consumable.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Usage")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Usage")]
     public bool IsConsumable { get; init; }
 
     /// <summary>
@@ -261,7 +262,7 @@ public readonly partial struct FItem() : IGameDataEntry
     /// <see cref="EFieldUse.HM"/>. The property also supports an option to
     /// allow unassigned values as defined by metadata.
     /// </remarks>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Usage")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Usage")]
     [field: EditCondition(
         $"{nameof(FieldUse)} == FieldUse::{nameof(EFieldUse.TM)} || "
             + $"{nameof(FieldUse)} == FieldUse::{nameof(EFieldUse.TR)} || "
@@ -276,7 +277,7 @@ public readonly partial struct FItem() : IGameDataEntry
     /// Represents a collection of gameplay tags associated with the item.
     /// These tags provide metadata that can be used to categorize or filter the item.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
     public FGameplayTagContainer Tags { get; init; }
 
     /// <summary>

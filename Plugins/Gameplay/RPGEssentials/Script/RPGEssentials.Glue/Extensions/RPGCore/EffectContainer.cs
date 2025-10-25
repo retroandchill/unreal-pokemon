@@ -1,4 +1,5 @@
-﻿using UnrealSharp.Core.Marshallers;
+﻿using UnrealSharp.Core;
+using UnrealSharp.Core.Marshallers;
 using UnrealSharp.CoreUObject;
 
 namespace UnrealSharp.RPGCore;

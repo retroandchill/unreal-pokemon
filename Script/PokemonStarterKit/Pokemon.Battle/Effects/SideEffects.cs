@@ -14,8 +14,8 @@ namespace Pokemon.Battle.Effects;
 /// </remarks>
 [UStruct]
 public readonly partial record struct FEchoedVoiceEffectData(
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] int Counter,
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] bool Used
+    [UProperty(PropertyFlags.BlueprintReadOnly)] int Counter,
+    [UProperty(PropertyFlags.BlueprintReadOnly)] bool Used
 );
 
 /// <summary>

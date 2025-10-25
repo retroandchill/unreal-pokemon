@@ -1,4 +1,5 @@
 ﻿using UnrealSharp;
+using UnrealSharp.Core;
 
 namespace GameDataAccessTools.Core;
 

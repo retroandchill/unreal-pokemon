@@ -3,9 +3,9 @@ using GameDataAccessTools.Core;
 using GameDataAccessTools.Core.Utilities;
 using GameDataAccessTools.Core.Views;
 using JetBrains.Annotations;
-using LanguageExt;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
 
@@ -23,11 +23,11 @@ namespace Pokemon.Data.Model.PBS;
 public readonly partial struct FAbility() : IGameDataEntry
 {
     /// <inheritdoc />
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Identification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Identification")]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere, Category = "Identification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere, Category = "Identification")]
     public int RowIndex { get; init; }
 
     /// <summary>
@@ -36,14 +36,14 @@ public readonly partial struct FAbility() : IGameDataEntry
     /// <remarks>
     /// This property represents the localized name of the ability as it appears in the game's UI.
     /// </remarks>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
     [DisplayName]
     public FText Name { get; init; } = "Unnamed";
 
     /// <summary>
     /// Gets the description of the ability, typically providing details about its effects or purpose within the game.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
     public FText Description { get; init; } = "???";
 
     /// <summary>
@@ -52,7 +52,7 @@ public readonly partial struct FAbility() : IGameDataEntry
     /// <remarks>
     /// These tags are used to categorize abilities, represent gameplay mechanics, and facilitate interaction with other game systems.
     /// </remarks>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
     public FGameplayTagContainer Tags { get; init; }
 }
 

@@ -1,6 +1,7 @@
 ﻿using GameDataAccessTools.Core.Utilities;
 using NUnit.Framework;
 using UnrealSharp;
+using UnrealSharp.Core;
 
 namespace GameDataAccessTools.Test.Utilities;
 

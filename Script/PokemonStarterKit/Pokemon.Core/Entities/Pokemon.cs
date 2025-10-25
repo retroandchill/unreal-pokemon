@@ -17,8 +17,8 @@ namespace Pokemon.Core.Entities;
 /// </remarks>
 [UStruct]
 public readonly partial record struct FPokemonInitParams(
-    [field: UProperty] FSpeciesHandle Species,
-    [field: UProperty] int Level
+    [UProperty] FSpeciesHandle Species,
+    [UProperty] int Level
 );
 
 /// <summary>

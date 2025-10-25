@@ -10,7 +10,7 @@ namespace Pokemon.Data;
 /// such as maximum level and move categorization rules.
 /// </summary>
 [UClass(ClassFlags.DefaultConfig, DisplayName = "Pokémon Data", ConfigCategory = "Game")]
-public class UPokemonDataSettings : UDeveloperSettings
+public partial class UPokemonDataSettings : UDeveloperSettings
 {
     /// <summary>
     /// Represents the maximum allowable level for a Pokémon in the game.
@@ -22,7 +22,7 @@ public class UPokemonDataSettings : UDeveloperSettings
         Category = "Gameplay"
     )]
     [ClampMin("1")]
-    public int MaxLevel { get; init; } = 100;
+    public partial int MaxLevel { get; }
 
     /// <summary>
     /// Determines whether each Pokémon move is categorized individually based on specific settings.
@@ -33,5 +33,5 @@ public class UPokemonDataSettings : UDeveloperSettings
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditDefaultsOnly | PropertyFlags.Config,
         Category = "Gameplay"
     )]
-    public bool MoveCategoryPerMove { get; init; } = false;
+    public partial bool MoveCategoryPerMove { get; }
 }

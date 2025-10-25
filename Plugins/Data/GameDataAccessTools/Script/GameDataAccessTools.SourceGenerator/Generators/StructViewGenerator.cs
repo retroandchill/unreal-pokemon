@@ -103,7 +103,6 @@ public class StructViewGenerator : IIncrementalGenerator
 
         HashSet<string> usedNamespaces =
         [
-            "using LanguageExt;",
             "using UnrealSharp;",
             "using UnrealSharp.Core;",
             "using UnrealSharp.Core.Marshallers;",

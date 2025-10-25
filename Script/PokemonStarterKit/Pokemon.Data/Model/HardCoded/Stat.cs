@@ -5,6 +5,7 @@ using GameDataAccessTools.Core.Views;
 using JetBrains.Annotations;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.GameDataAccessTools;
 using ZLinq;
 using ZLinq.Linq;
@@ -59,19 +60,19 @@ public readonly partial struct FStat : IGameDataEntry
 {
     /// <inheritdoc />
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Gets the name of the stat as a localized text.
     /// </summary>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
 
@@ -79,7 +80,7 @@ public readonly partial struct FStat : IGameDataEntry
     /// Represents a brief display name or shorthand identifier for the stat.
     /// </summary>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FText NameBrief { get; init; }
 
     /// <summary>
@@ -89,14 +90,14 @@ public readonly partial struct FStat : IGameDataEntry
     /// The <see cref="StatType"/> can indicate whether a stat is primarily for main gameplay, battle scenarios, or both.
     /// </remarks>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required EStatType StatType { get; init; }
 
     /// <summary>
     /// Gets the order of the stat as defined in the Pokémon Battle System (PBS).
     /// </summary>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly, DisplayName = "PBS Order")]
+    [UProperty(PropertyFlags.BlueprintReadOnly, DisplayName = "PBS Order")]
     public int PBSOrder { get; init; }
 
     /// <summary>

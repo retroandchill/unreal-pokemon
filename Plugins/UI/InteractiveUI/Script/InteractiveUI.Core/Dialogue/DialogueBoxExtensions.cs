@@ -1,4 +1,5 @@
 ﻿using UnrealSharp;
+using UnrealSharp.Core;
 using UnrealSharp.InteractiveUI;
 
 namespace InteractiveUI.Core.Dialogue;

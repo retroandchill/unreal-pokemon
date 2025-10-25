@@ -16,7 +16,7 @@ namespace UnrealInject.Subsystems;
 /// </remarks>
 /// <seealso cref="UDependencyInjectionGameInstanceSubsystem"/>
 [UClass]
-public class UDependencyInjectionLocalPlayerSubsystem : UCSLocalPlayerSubsystem, IServiceProvider, IServiceScope
+public partial class UDependencyInjectionLocalPlayerSubsystem : UCSLocalPlayerSubsystem, IServiceProvider, IServiceScope
 {
     private IServiceScope _serviceScope = null!;
 
@@ -24,14 +24,14 @@ public class UDependencyInjectionLocalPlayerSubsystem : UCSLocalPlayerSubsystem,
     public IServiceProvider ServiceProvider => _serviceScope.ServiceProvider;
 
     /// <inheritdoc />
-    protected override void Initialize(FSubsystemCollectionBaseRef collection)
+    protected override void Initialize_Implementation(FSubsystemCollectionBaseRef collection)
     {
         var gameInstanceSubsystem = GetGameInstanceSubsystem<UDependencyInjectionGameInstanceSubsystem>();
         _serviceScope = gameInstanceSubsystem.CreateScope();
     }
 
     /// <inheritdoc />
-    protected override void Deinitialize()
+    protected override void Deinitialize_Implementation()
     {
         if (_serviceScope is IDisposable disposable)
         {

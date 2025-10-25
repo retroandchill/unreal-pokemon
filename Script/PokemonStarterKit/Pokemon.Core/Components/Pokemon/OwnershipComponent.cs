@@ -45,7 +45,7 @@ public enum EObtainMethod : byte
 /// <param name="HatchText">The text describing the hatch event</param>
 [UStruct]
 public readonly partial record struct FHatchInformation(
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] FDateTime TimeHatched,
+    [UProperty(PropertyFlags.BlueprintReadOnly)] FDateTime TimeHatched,
     FText HatchText
 );
 

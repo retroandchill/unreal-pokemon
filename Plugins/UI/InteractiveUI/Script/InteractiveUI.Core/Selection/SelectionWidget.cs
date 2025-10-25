@@ -12,7 +12,7 @@ namespace InteractiveUI.Core.Selection;
 /// functionality for managing and interacting with a group of selectable buttons in a UI context.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class USelectionWidget : UCommonActivatableWidget
+public partial class USelectionWidget : UCommonActivatableWidget
 {
     /// <summary>
     /// Represents a group of selectable buttons within a selection widget.
@@ -90,7 +90,7 @@ public class USelectionWidget : UCommonActivatableWidget
     }
 
     /// <inheritdoc />
-    public override void PreConstruct(bool isDesignTime)
+    protected override void PreConstruct_Implementation(bool isDesignTime)
     {
         if (SystemLibrary.IsValid(Buttons))
         {
@@ -101,7 +101,7 @@ public class USelectionWidget : UCommonActivatableWidget
     }
 
     /// <inheritdoc />
-    public override void Construct()
+    protected override void Construct_Implementation()
     {
         Buttons.OnButtonBaseClicked += ChangeDesiredFocusIndex;
         Buttons.OnHoveredButtonBaseChanged += ChangeDesiredFocusIndex;
@@ -158,13 +158,13 @@ public class USelectionWidget : UCommonActivatableWidget
     }
 
     /// <inheritdoc />
-    protected override UWidget? BP_GetDesiredFocusTarget()
+    protected override UWidget? BP_GetDesiredFocusTarget_Implementation()
     {
         return Buttons.GetButtonBaseAtIndex(DesiredFocusIndex);
     }
 
     /// <inheritdoc />
-    protected override bool OnHandleBackAction()
+    protected override bool OnHandleBackAction_Implementation()
     {
         OnBackAction?.Invoke();
         return true;

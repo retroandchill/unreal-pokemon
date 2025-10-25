@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.Test.Interop;
 using UnrealSharp.Test.Model;

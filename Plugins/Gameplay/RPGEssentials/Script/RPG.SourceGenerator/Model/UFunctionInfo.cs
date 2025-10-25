@@ -20,7 +20,7 @@ public record UFunctionInfo(
 
     [UsedImplicitly]
     public string? OptionType =>
-        ReturnType is INamedTypeSymbol { IsGenericType: true, MetadataName: "Option`1" } optionType
+        ReturnType is INamedTypeSymbol { IsGenericType: true, MetadataName: "TOptional`1" } optionType
             ? optionType.TypeArguments[0].ToDisplayString()
             : null;
 

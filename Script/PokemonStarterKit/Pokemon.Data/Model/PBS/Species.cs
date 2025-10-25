@@ -2,11 +2,11 @@
 using GameDataAccessTools.Core;
 using GameDataAccessTools.Core.Utilities;
 using JetBrains.Annotations;
-using LanguageExt;
 using Pokemon.Data.Model.HardCoded;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
@@ -36,7 +36,7 @@ public readonly partial struct FLevelUpMove
     /// Represents the move learned by a Pokémon under specific conditions,
     /// such as reaching a specific level or evolving.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
     [AsValue]
     public FMoveHandle Move { get; init; }
 
@@ -116,7 +116,7 @@ public readonly partial struct FEvolutionCondition
     /// Refers to the specific species of the Pokémon, used to identify and manage
     /// species-related data such as evolution chains, base stats, and more.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
     [AsValue]
     public FSpeciesHandle Species { get; init; }
 
@@ -125,7 +125,7 @@ public readonly partial struct FEvolutionCondition
     /// Encapsulates the specific evolution mechanism, detailing how the evolution occurs,
     /// such as through level-up, use of a specific item, trade, or other conditions.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
     [AsValue]
     public FEvolutionHandle Method { get; init; }
 
@@ -134,7 +134,7 @@ public readonly partial struct FEvolutionCondition
     /// These parameters provide specific details necessary for determining
     /// whether the evolution conditions are met, depending on the evolution method.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere | PropertyFlags.Instanced)]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere | PropertyFlags.Instanced)]
     public FInstancedStruct Parameters { get; init; }
 
     /// <summary>
@@ -187,36 +187,36 @@ public readonly partial struct FEvolutionCondition
 public readonly partial struct FSpecies() : IGameDataEntry
 {
     /// <inheritdoc />
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Identification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Identification")]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere, Category = "Identification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere, Category = "Identification")]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Gets the display name of the Pokémon species.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
     [GameAccessTools.SourceGenerator.Attributes.DisplayName]
     public FText Name { get; init; } = "Unnamed";
 
     /// <summary>
     /// Gets the optional form name for variant forms of the Pokémon species.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
-    public Option<FText> FormName { get; init; }
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
+    public TOptional<FText> FormName { get; init; }
 
     /// <summary>
     /// Gets the list of types associated with this Pokémon species.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Basic")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Basic")]
     public IReadOnlyList<FTypeHandle> Types { get; init; }
 
     /// <summary>
     /// Gets the base stats for the Pokémon species, including HP, Attack, Defense, Special Attack, Special Defense, and Speed.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Stats")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Stats")]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     public IReadOnlyDictionary<FMainStatHandle, int> BaseStats { get; init; } =
@@ -233,21 +233,21 @@ public readonly partial struct FSpecies() : IGameDataEntry
     /// <summary>
     /// Gets the gender ratio of the Pokémon species, determining the probability of each gender when encountered.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Basic")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Basic")]
     [AsValue]
     public FGenderRatioHandle GenderRatio { get; init; } = FGenderRatio.Female50Percent;
 
     /// <summary>
     /// Gets the growth rate of the Pokémon species, determining how quickly it gains experience and levels up.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Stats")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Stats")]
     [AsValue]
     public FGrowthRateHandle GrowthRate { get; init; } = FGrowthRate.Medium;
 
     /// <summary>
     /// Gets the base experience points yielded when this Pokémon is defeated.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Drops")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Drops")]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     public int BaseExp { get; init; }
@@ -255,7 +255,7 @@ public readonly partial struct FSpecies() : IGameDataEntry
     /// <summary>
     /// Gets the Effort Value (EV) yield for each stat when this Pokémon is defeated.
     /// </summary>
-    [field: UProperty(
+    [UProperty(
         PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere,
         DisplayName = "EV Yield",
         Category = "Stats"
@@ -267,7 +267,7 @@ public readonly partial struct FSpecies() : IGameDataEntry
     /// <summary>
     /// Gets the catch rate of the Pokémon species, determining how easy it is to catch in the wild.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Capture")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Capture")]
     [field: ClampMin("3")]
     [field: UIMin("3")]
     public int CatchRate { get; init; } = 255;
@@ -275,7 +275,7 @@ public readonly partial struct FSpecies() : IGameDataEntry
     /// <summary>
     /// Gets the base happiness value of the Pokémon species when first obtained.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Basic")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Basic")]
     [field: ClampMin("0")]
     [field: UIMin("0")]
     public int BaseHappiness { get; init; } = 70;
@@ -283,43 +283,43 @@ public readonly partial struct FSpecies() : IGameDataEntry
     /// <summary>
     /// Gets the list of possible regular abilities for this Pokémon species.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Abilities")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Abilities")]
     public IReadOnlyList<FAbilityHandle> Abilities { get; init; }
 
     /// <summary>
     /// Gets the list of possible hidden abilities for this Pokémon species.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Abilities")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Abilities")]
     public IReadOnlyList<FAbilityHandle> HiddenAbilities { get; init; }
 
     /// <summary>
     /// Gets the list of moves this Pokémon species can learn through level-up.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Moves")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Moves")]
     public IReadOnlyList<FLevelUpMove> Moves { get; init; }
 
     /// <summary>
     /// Gets the list of moves this Pokémon species can learn through move tutors.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Moves")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Moves")]
     public IReadOnlyList<FMoveHandle> TutorMoves { get; init; }
 
     /// <summary>
     /// Gets the list of moves this Pokémon species can learn through breeding.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Moves")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Moves")]
     public IReadOnlyList<FMoveHandle> EggMoves { get; init; }
 
     /// <summary>
     /// Gets the list of egg groups this Pokémon species belongs to for breeding compatibility.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Breeding")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Breeding")]
     public IReadOnlyList<FEggGroupHandle> EggGroups { get; init; }
 
     /// <summary>
     /// Gets the number of steps required for this Pokémon species' egg to hatch.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Breeding")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Breeding")]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     public int HatchSteps { get; init; } = 1;
@@ -327,7 +327,7 @@ public readonly partial struct FSpecies() : IGameDataEntry
     /// <summary>
     /// Gets the specific incense item required for breeding certain variant forms of this Pokémon species.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Breeding")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Breeding")]
     [field: UMetaData(Metadata.AllowNone)]
     [AsValue]
     public FItemHandle Incense { get; init; }
@@ -335,19 +335,19 @@ public readonly partial struct FSpecies() : IGameDataEntry
     /// <summary>
     /// Gets the list of Pokémon species that can be produced when breeding this species.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Breeding")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Breeding")]
     public IReadOnlyList<FSpeciesHandle> Offspring { get; init; }
 
     /// <summary>
     /// Gets the list of evolution conditions that determine how this Pokémon species can evolve.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Evolution")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Evolution")]
     public IReadOnlyList<FEvolutionCondition> Evolutions { get; init; }
 
     /// <summary>
     /// Gets the height of this Pokémon species in meters.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
     [field: ClampMin("0")]
     [field: UIMin("0")]
     public float Height { get; init; } = 1;
@@ -355,7 +355,7 @@ public readonly partial struct FSpecies() : IGameDataEntry
     /// <summary>
     /// Gets the weight of this Pokémon species in kilograms.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
     [field: ClampMin("0")]
     [field: UIMin("0")]
     public float Weight { get; init; } = 1;
@@ -363,58 +363,58 @@ public readonly partial struct FSpecies() : IGameDataEntry
     /// <summary>
     /// Gets the body color classification of this Pokémon species.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
     [AsValue]
     public FBodyColorHandle BodyColor { get; init; }
 
     /// <summary>
     /// Gets the body shape classification of this Pokémon species.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
     [AsValue]
     public FBodyShapeHandle BodyShape { get; init; }
 
     /// <summary>
     /// Gets the natural habitat classification of this Pokémon species.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
     [AsValue]
     public FHabitatHandle Habitat { get; init; }
 
     /// <summary>
     /// Gets the category description of this Pokémon species as shown in the Pokédex.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
     public FText Category { get; init; } = "???";
 
     /// <summary>
     /// Gets the Pokédex entry description for this Pokémon species.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Pokédex")]
     public FText Pokedex { get; init; } = "???";
 
     /// <summary>
     /// Gets the list of common items that this Pokémon species may hold when encountered in the wild.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Drops")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Drops")]
     public IReadOnlyList<FItemHandle> WildHoldItemCommon { get; init; }
 
     /// <summary>
     /// Gets the list of uncommon items that this Pokémon species may hold when encountered in the wild.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Drops")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Drops")]
     public IReadOnlyList<FItemHandle> WildHoldItemUncommon { get; init; }
 
     /// <summary>
     /// Gets the list of rare items that this Pokémon species may hold when encountered in the wild.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Drops")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Drops")]
     public IReadOnlyList<FItemHandle> WildHoldItemRare { get; init; }
 
     /// <summary>
     /// Gets the generation number in which this Pokémon species was introduced.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
     [field: ClampMin("1")]
     [field: UIMin("1")]
     public int Generation { get; init; } = 1;
@@ -422,7 +422,7 @@ public readonly partial struct FSpecies() : IGameDataEntry
     /// <summary>
     /// Gets the collection of gameplay tags associated with this Pokémon species.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
     public FGameplayTagContainer Tags { get; init; }
 }
 

@@ -3,6 +3,7 @@ using GameDataAccessTools.Core;
 using NUnit.Framework;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.Test.Runner;
@@ -13,10 +14,10 @@ namespace GameDataAccessTools.Test;
 [CreateStructView]
 public readonly partial struct FTestGameEntry : IGameDataEntry
 {
-    [field: UProperty]
+    [UProperty]
     public required FName ID { get; init; }
 
-    [field: UProperty]
+    [UProperty]
     public int RowIndex { get; init; }
 
     [UProperty]

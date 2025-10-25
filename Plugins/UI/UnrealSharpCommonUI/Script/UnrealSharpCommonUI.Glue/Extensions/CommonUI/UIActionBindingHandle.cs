@@ -120,7 +120,7 @@ public readonly struct FUIActionBindingHandle : MarshalledStruct<FUIActionBindin
         }
     }
 
-    private static readonly IntPtr NativeClassPtr = UCoreUObjectExporter.CallGetNativeStructFromName(
+    private static readonly IntPtr NativeClassPtr = UCoreUObjectExporter.CallGetType(
         typeof(FUIActionBindingHandle).GetAssemblyName(),
         "UnrealSharp.CommonUI",
         "UIActionBindingHandle"

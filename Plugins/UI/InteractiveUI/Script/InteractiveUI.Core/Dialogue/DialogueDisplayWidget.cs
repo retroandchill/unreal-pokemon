@@ -2,6 +2,7 @@
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.CommonUI;
+using UnrealSharp.Core;
 using UnrealSharp.Engine;
 using UnrealSharp.EnhancedInput;
 using UnrealSharp.InteractiveUI;
@@ -120,13 +121,13 @@ public class UDialogueDisplayWidget : UCommonActivatableWidget
     }
 
     /// <inheritdoc />
-    public override void Construct()
+    protected override void Construct_Implementation()
     {
         _advanceActionBinding = RegisterUIActionBinding(new FCSBindUIActionArgs(AdvanceAction, false, OnAdvanceAction));
     }
 
     /// <inheritdoc />
-    public override void Tick(FGeometry myGeometry, float deltaTime)
+    protected override void Tick_Implementation(FGeometry myGeometry, float deltaTime)
     {
         base.Tick(myGeometry, deltaTime);
 
@@ -152,7 +153,7 @@ public class UDialogueDisplayWidget : UCommonActivatableWidget
     }
 
     /// <inheritdoc />
-    public override void Destruct()
+    protected override void Destruct_Implementation()
     {
         RemoveActionBinding(_advanceActionBinding);
     }

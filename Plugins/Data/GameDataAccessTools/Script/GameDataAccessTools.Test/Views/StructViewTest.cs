@@ -13,25 +13,25 @@ namespace GameDataAccessTools.Test.Views;
 [CreateStructView]
 public readonly partial record struct FSimpleViewableStruct
 {
-    [field: UProperty]
+    [UProperty]
     [UsedImplicitly]
     public int Value { get; init; }
 
-    [field: UProperty]
+    [UProperty]
     [UsedImplicitly]
     public bool IsActive { get; init; }
 
-    [field: UProperty]
+    [UProperty]
     [UsedImplicitly]
     public string? Name { get; init; }
 }
 
 [UClass]
 [UsedImplicitly]
-public class UTestStructView : UObject
+public partial class UTestStructView : UObject
 {
     [UProperty]
-    public FSimpleViewableStruct Value { get; set; }
+    public partial FSimpleViewableStruct Value { get; set; }
 }
 
 public class StructViewTest

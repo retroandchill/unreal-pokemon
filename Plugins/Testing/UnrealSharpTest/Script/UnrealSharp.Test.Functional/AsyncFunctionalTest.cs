@@ -16,10 +16,10 @@ namespace UnrealSharp.Test.Functional;
 /// the UnrealSharpTestExecutor.
 /// </remarks>
 [UClass]
-public class AAsyncFunctionalTest : AFunctionalTest
+public partial class AAsyncFunctionalTest : AFunctionalTest
 {
     /// <inheritdoc />
-    protected sealed override void StartTest()
+    protected sealed override void StartTest_Implementation()
     {
         _ = RunTestInternal();
     }

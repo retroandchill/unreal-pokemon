@@ -35,13 +35,13 @@ public class USelectableButtonGroup : UCSCommonButtonGroupBase
     public event Action<UCommonButtonBase>? OnButtonRemoved;
 
     /// <inheritdoc />
-    protected override void OnWidgetAdded(UCommonButtonBase button)
+    protected override void OnWidgetAdded_Implementation(UCommonButtonBase button)
     {
         OnButtonAdded?.Invoke(ButtonCount - 1, button);
     }
 
     /// <inheritdoc />
-    protected override void OnWidgetRemoved(UCommonButtonBase button)
+    protected override void OnWidgetRemoved_Implementation(UCommonButtonBase button)
     {
         OnButtonRemoved?.Invoke(button);
     }

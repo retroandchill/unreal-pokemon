@@ -12,8 +12,8 @@ namespace Pokemon.Battle.Actions;
 /// <param name="TargetIndex">The index of the target within the side.</param>
 [UStruct]
 public readonly partial record struct FActionTarget(
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] int SideIndex,
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] int TargetIndex
+    [UProperty(PropertyFlags.BlueprintReadOnly)] int SideIndex,
+    [UProperty(PropertyFlags.BlueprintReadOnly)] int TargetIndex
 )
 {
     /// <summary>

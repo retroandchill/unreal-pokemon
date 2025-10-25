@@ -2,9 +2,9 @@
 using GameDataAccessTools.Core;
 using GameDataAccessTools.Core.Utilities;
 using JetBrains.Annotations;
-using LanguageExt;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.GameDataAccessTools;
 
 namespace Pokemon.Data.Model.HardCoded;
@@ -19,19 +19,19 @@ public readonly partial struct FFieldWeather : IGameDataEntry
 {
     /// <inheritdoc />
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Represents the name of the field weather. This property is required and provides a localized text value.
     /// </summary>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
 
@@ -40,8 +40,8 @@ public readonly partial struct FFieldWeather : IGameDataEntry
     /// This property correlates field-level weather settings to their corresponding battle weather states.
     /// It is an optional value that may not be set for every field.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
-    public Option<FName> BattleWeather { get; init; }
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
+    public TOptional<FName> BattleWeather { get; init; }
 }
 
 /// <summary>

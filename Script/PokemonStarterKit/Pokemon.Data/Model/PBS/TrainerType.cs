@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
+using UnrealSharp.Core;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
 
@@ -49,17 +50,17 @@ public enum ETrainerGender : byte
 public readonly partial struct FTrainerType() : IGameDataEntry
 {
     /// <inheritdoc />
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Identification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Identification")]
     public FName ID { get; init; }
 
     /// <inheritdoc />
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere, Category = "Identification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere, Category = "Identification")]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Represents the display name associated with the trainer type. The value is localized and can be used for user-facing text.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
     [GameAccessTools.SourceGenerator.Attributes.DisplayName]
     public FText Name { get; init; } = "Unnamed";
 
@@ -67,7 +68,7 @@ public readonly partial struct FTrainerType() : IGameDataEntry
     /// Represents the gender of the trainer. This property uses the ETrainerGender enum
     /// to define possible values such as Male, Female, Unknown, or Mixed.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Profile")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Profile")]
     public ETrainerGender Gender { get; init; } = ETrainerGender.Unknown;
 
     /// <summary>
@@ -76,7 +77,7 @@ public readonly partial struct FTrainerType() : IGameDataEntry
     /// during battles or other relevant gameplay scenarios.
     /// Must be a non-negative integer.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Battle")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Battle")]
     [field: UIMin("0")]
     [field: ClampMin("0")]
     public int BaseMoney { get; init; } = 30;
@@ -88,7 +89,7 @@ public readonly partial struct FTrainerType() : IGameDataEntry
     /// This property is used to configure the relative difficulty or expertise of a trainer
     /// during battle interactions. It must be a non-negative integer value.
     /// </remarks>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Battle")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Battle")]
     [field: UIMin("0")]
     [field: ClampMin("0")]
     public int SkillLevel { get; init; } = 30;
@@ -98,7 +99,7 @@ public readonly partial struct FTrainerType() : IGameDataEntry
     /// Gameplay tags provide additional metadata or classification for a trainer type,
     /// allowing for contextual behaviors and attribute associations within the system.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
     public FGameplayTagContainer Tags { get; init; }
 }
 

@@ -6,6 +6,7 @@ using Pokemon.Data;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
+using UnrealSharp.Core;
 using UnrealSharp.GameplayTags;
 using UnrealSharp.UnrealSharpCore;
 
@@ -20,11 +21,11 @@ namespace Pokemon.Core;
 /// <param name="MaxSize">The maximum number of items that can be stored in the pocket.</param>
 [UStruct]
 public readonly partial record struct FPocketSetting(
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
     [field: Categories(IdentifierConstants.PocketTag)]
         FGameplayTag Tag,
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)] FText Name,
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)] Option<int> MaxSize
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)] FText Name,
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)] TOptional<int> MaxSize
 );
 
 /// <summary>

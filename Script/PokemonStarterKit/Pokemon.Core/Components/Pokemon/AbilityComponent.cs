@@ -1,5 +1,4 @@
 ﻿using JetBrains.Annotations;
-using LanguageExt;
 using Pokemon.Core.Entities;
 using Pokemon.Data;
 using Pokemon.Data.Model.PBS;
@@ -20,8 +19,8 @@ namespace Pokemon.Core.Components.Pokemon;
 /// </remarks>
 [UStruct]
 public readonly partial record struct FAbilityPair(
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] FAbilityHandle Ability,
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] int Index
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] FAbilityHandle Ability,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] int Index
 );
 
 /// <summary>
@@ -35,7 +34,7 @@ public readonly partial record struct FAbilityPair(
 [UClass]
 [UMetaData("HideCategories", "Abilities")]
 [UsedImplicitly]
-public class UAbilityComponent : URPGComponent
+public partial class UAbilityComponent : URPGComponent
 {
     /// <summary>
     /// Represents the maximum number of regular abilities a Pokémon can have.
@@ -70,7 +69,7 @@ public class UAbilityComponent : URPGComponent
     /// Used in scenarios where direct control over a Pokémon's ability is required.
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Abilities")]
-    public Option<FAbilityHandle> ExplicitAbility { get; set; }
+    public TOptional<FAbilityHandle> ExplicitAbility { get; set; }
 
     /// <summary>
     /// Represents the ability currently assigned to the Pokémon.
@@ -168,7 +167,7 @@ public class UAbilityComponent : URPGComponent
     }
 
     /// <inheritdoc />
-    protected override void PreInitialize()
+    protected override void PreInitialize_Implementation()
     {
         IdentityComponent = GetRequiredSiblingComponent<UIdentityComponent>();
     }

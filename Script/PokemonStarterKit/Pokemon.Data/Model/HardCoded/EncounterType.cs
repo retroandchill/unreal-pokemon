@@ -2,10 +2,10 @@
 using GameDataAccessTools.Core;
 using GameDataAccessTools.Core.Utilities;
 using JetBrains.Annotations;
-using LanguageExt;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
+using UnrealSharp.Core;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
 
@@ -62,19 +62,19 @@ public readonly partial struct FEncounterType : IGameDataEntry
 {
     /// <inheritdoc />
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Gets or sets the name associated with the encounter type.
     /// </summary>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     [GameAccessTools.SourceGenerator.Attributes.DisplayName]
     public required FText Name { get; init; }
 
@@ -85,7 +85,7 @@ public readonly partial struct FEncounterType : IGameDataEntry
     /// Possible values are defined in the <see cref="EEncounterTrigger"/> enumeration, such as Land, Cave, Water, etc.
     /// </remarks>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     [Categories("Field.Encounters.Triggers")]
     public required EEncounterTrigger Type { get; init; }
 
@@ -93,8 +93,8 @@ public readonly partial struct FEncounterType : IGameDataEntry
     /// Represents the probability or likelihood of a trigger occurring in the context of an encounter.
     /// </summary>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
-    public Option<int> TriggerChance { get; init; }
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
+    public TOptional<int> TriggerChance { get; init; }
 }
 
 /// <summary>

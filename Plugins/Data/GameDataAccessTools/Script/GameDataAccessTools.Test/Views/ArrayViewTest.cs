@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using NUnit.Framework;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using ZLinq;
 
@@ -14,13 +15,13 @@ namespace GameDataAccessTools.Test.Views;
 [CreateStructView]
 public readonly partial record struct FCustomStruct
 {
-    [field: UProperty]
+    [UProperty]
     public float Value { get; init; }
 
-    [field: UProperty]
+    [UProperty]
     public int Count { get; init; }
 
-    [field: UProperty]
+    [UProperty]
     [UsedImplicitly]
     public bool IsEnabled { get; init; }
 }
@@ -29,33 +30,33 @@ public readonly partial record struct FCustomStruct
 [CreateStructView]
 public readonly partial record struct FCollectionTestStruct
 {
-    [field: UProperty]
+    [UProperty]
     [UsedImplicitly]
     public IReadOnlyList<int> IntList { get; init; }
 
-    [field: UProperty]
+    [UProperty]
     [UsedImplicitly]
     public IReadOnlyList<FName> NameList { get; init; }
 
-    [field: UProperty]
+    [UProperty]
     [UsedImplicitly]
     public IReadOnlyList<FVector> VectorList { get; init; }
 
-    [field: UProperty]
+    [UProperty]
     [UsedImplicitly]
     public IReadOnlyList<FCustomStruct> CustomStructList { get; init; }
 
-    [field: UProperty]
+    [UProperty]
     [UsedImplicitly]
     public IReadOnlyList<string> StringList { get; init; }
 }
 
 [UClass]
 [UsedImplicitly]
-public class UCollectionTestWrapper : UObject
+public partial class UCollectionTestWrapper : UObject
 {
     [UProperty]
-    public FCollectionTestStruct Value { get; set; }
+    public partial FCollectionTestStruct Value { get; set; }
 }
 
 public class ArrayViewTest

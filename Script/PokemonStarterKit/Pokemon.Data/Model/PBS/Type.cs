@@ -3,6 +3,7 @@ using GameDataAccessTools.Core;
 using JetBrains.Annotations;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
 
@@ -22,17 +23,17 @@ namespace Pokemon.Data.Model.PBS;
 public readonly partial struct FType() : IGameDataEntry
 {
     /// <inheritdoc />
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Identification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Identification")]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere, Category = "Identification")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.VisibleAnywhere, Category = "Identification")]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Gets the display name of the Pokémon type.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Display")]
     [DisplayName]
     public FText Name { get; init; } = "Unnamed";
 
@@ -46,7 +47,7 @@ public readonly partial struct FType() : IGameDataEntry
     /// Gets a value indicating whether this type is classified as a Special type.
     /// Special types typically correspond to moves that deal damage from a distance.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Type Info")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Type Info")]
     public bool IsSpecialType { get; init; } = false;
 
     /// <summary>
@@ -54,35 +55,35 @@ public readonly partial struct FType() : IGameDataEntry
     /// Pseudo-types are special classifications that don't function as regular types
     /// but may have special meaning in certain game mechanics.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Type Info")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Type Info")]
     public bool IsPseudoType { get; init; } = false;
 
     /// <summary>
     /// Gets the list of types that this type is weak against.
     /// Attacks of these types will deal double damage to Pokémon of this type.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Type Info")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Type Info")]
     public IReadOnlyList<FTypeHandle> Weaknesses { get; init; } = [];
 
     /// <summary>
     /// Gets the list of types that this type is resistant to.
     /// Attacks of these types will deal half damage to Pokémon of this type.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Type Info")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Type Info")]
     public IReadOnlyList<FTypeHandle> Resistances { get; init; } = [];
 
     /// <summary>
     /// Gets the list of types that this type is immune to.
     /// Attacks of these types will deal no damage to Pokémon of this type.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Type Info")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Type Info")]
     public IReadOnlyList<FTypeHandle> Immunities { get; init; } = [];
 
     /// <summary>
     /// Gets the collection of gameplay tags associated with this type.
     /// These tags can be used for various gameplay mechanics and type-specific effects.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Metadata")]
     public FGameplayTagContainer Tags { get; init; }
 }
 

@@ -1,4 +1,6 @@
-﻿namespace UnrealSharp.GameDataAccessTools;
+﻿using UnrealSharp.Core;
+
+namespace UnrealSharp.GameDataAccessTools;
 
 /// <summary>
 /// Provides extension methods for text-related operations on the FText type.

@@ -35,7 +35,7 @@ public enum ESelectionResult : byte
 /// It primarily contains a reference to the selected Pokémon, or it may be null if no Pokémon is selected.
 /// </remarks>
 [UStruct]
-public readonly partial record struct FSelectedPokemon([field: UProperty] UPokemon? Pokemon);
+public readonly partial record struct FSelectedPokemon([UProperty] UPokemon? Pokemon);
 
 /// <summary>
 /// Represents a selected item entity.
@@ -45,7 +45,7 @@ public readonly partial record struct FSelectedPokemon([field: UProperty] UPokem
 /// It contains an optional reference to the selected item's slot information, such as the item itself and its quantity.
 /// </remarks>
 [UStruct]
-public readonly partial record struct FSelectedItem([field: UProperty] Option<FItemSlotInfo> Item);
+public readonly partial record struct FSelectedItem([UProperty] Option<FItemSlotInfo> Item);
 
 /// <summary>
 /// Represents a filter criteria that determines whether a specific item meets the desired conditions.

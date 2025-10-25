@@ -4,6 +4,7 @@ using GameDataAccessTools.Core.Utilities;
 using JetBrains.Annotations;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.GameDataAccessTools;
 
 namespace Pokemon.Data.Model.HardCoded;
@@ -40,19 +41,19 @@ public readonly partial struct FTarget() : IGameDataEntry
 {
     /// <inheritdoc />
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Represents the display name associated with the target.
     /// </summary>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
 
@@ -64,14 +65,14 @@ public readonly partial struct FTarget() : IGameDataEntry
     /// <c>NoTarget</c>, <c>SingleTarget</c>, or <c>MultipleTargets</c>.
     /// </remarks>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public ETargetCount NumTargets { get; init; } = ETargetCount.NoTarget;
 
     /// <summary>
     /// Indicates whether the target is a foe.
     /// </summary>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public bool TargetsFoe { get; init; }
 
     /// <summary>
@@ -79,7 +80,7 @@ public readonly partial struct FTarget() : IGameDataEntry
     /// Typically used to determine if the effect or action is broad in scope or affects multiple targets.
     /// </summary>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public bool TargetsAll { get; init; }
 
     /// <summary>
@@ -88,7 +89,7 @@ public readonly partial struct FTarget() : IGameDataEntry
     /// rather than a single target or the user's side.
     /// </summary>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public bool AffectsFoeSide { get; init; }
 
     /// <summary>
@@ -96,7 +97,7 @@ public readonly partial struct FTarget() : IGameDataEntry
     /// This property is read-only and is marked for blueprint accessibility.
     /// </summary>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public bool LongRange { get; init; }
 }
 

@@ -13,13 +13,6 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <Reference Include="UnrealSharp">
-            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
-        </Reference>
-        <Reference Include="UnrealSharp.Core">
-            <HintPath>..\..\..\..\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
-        </Reference>
-        <Analyzer Include="..\..\..\..\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
         <ProjectReference Include="..\..\..\..\Testing\UnrealSharpTest\Script\UnrealSharp.Test.Utils\UnrealSharp.Test.Utils.csproj" />
         <ProjectReference Include="..\..\..\..\Testing\UnrealSharpTest\Script\UnrealSharp.Test\UnrealSharp.Test.csproj" />
         <ProjectReference Include="..\GameDataAccessTools.Core\GameDataAccessTools.Core.csproj" />

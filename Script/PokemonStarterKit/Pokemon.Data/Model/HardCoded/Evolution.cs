@@ -6,6 +6,7 @@ using Pokemon.Data.Model.PBS;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.Engine;
 using UnrealSharp.GameDataAccessTools;
@@ -30,7 +31,7 @@ public readonly partial record struct FIntEvolutionConditionData
     /// flexible parameter for defining evolution conditions. The exact structure of the parameter
     /// is determined by its usage context.
     /// </remarks>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
     public int Parameter { get; init; }
 }
 
@@ -50,7 +51,7 @@ public readonly partial record struct FMoveEvolutionConditionData
     /// This property is used to identify a move within the game data system. It is primarily utilized
     /// for evolution conditions or other gameplay mechanics that depend on a particular move.
     /// </remarks>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
     public FMoveHandle MoveID { get; init; }
 }
 
@@ -71,7 +72,7 @@ public readonly partial record struct FTypeEvolutionConditionData
     /// within the Pokémon data model. It is used in conjunction with other properties or systems
     /// that depend on type-related evolution conditions.
     /// </remarks>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
     public FTypeHandle TypeID { get; init; }
 }
 
@@ -91,7 +92,7 @@ public readonly partial record struct FItemEvolutionConditionData
     /// This property references a specific item used to define the conditions for an evolution.
     /// The item is encapsulated by an `FItemHandle`, which links to the relevant item data.
     /// </remarks>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
     public FItemHandle ItemID { get; init; }
 }
 
@@ -112,7 +113,7 @@ public readonly partial record struct FSpeciesEvolutionConditionData
     /// within the game data, linking evolution conditions to the relevant
     /// species entry.
     /// </remarks>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
     public FSpeciesHandle SpeciesID { get; init; }
 }
 
@@ -132,7 +133,7 @@ public readonly partial record struct FLocationEvolutionConditionData
     /// This property holds a reference to a specific game world level, represented as a <see cref="TSoftObjectPtr{UWorld}"/>,
     /// which serves as the basis for determining whether an evolution condition tied to location is met.
     /// </remarks>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
     public TSoftObjectPtr<UWorld> Level { get; init; }
 }
 
@@ -178,12 +179,12 @@ public readonly partial struct FEvolution : IGameDataEntry
 {
     /// <inheritdoc />
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
     /// <summary>
@@ -194,7 +195,7 @@ public readonly partial struct FEvolution : IGameDataEntry
     /// of the associated evolution structure. It is annotated for in-game representation purposes.
     /// </remarks>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     [GameAccessTools.SourceGenerator.Attributes.DisplayName]
     public required FText Name { get; init; }
 
@@ -207,7 +208,7 @@ public readonly partial struct FEvolution : IGameDataEntry
     /// the implementation context and the desired behavior.
     /// </remarks>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public UScriptStruct? Parameter { get; init; }
 }
 

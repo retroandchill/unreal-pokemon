@@ -1,5 +1,6 @@
 using System.Reflection;
 using NUnit.Framework;
+using UnrealSharp.Core;
 
 namespace UnrealSharp.Test.Model;
 

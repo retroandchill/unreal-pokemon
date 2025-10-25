@@ -13,10 +13,10 @@ namespace Pokemon.Battle.Effects;
 /// <param name="Target">The target of the move.</param>
 [UStruct]
 public readonly partial record struct FFutureSightEffectData(
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] int Counter,
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] FMoveHandle Move,
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget User,
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget Target
+    [UProperty(PropertyFlags.BlueprintReadOnly)] int Counter,
+    [UProperty(PropertyFlags.BlueprintReadOnly)] FMoveHandle Move,
+    [UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget User,
+    [UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget Target
 )
 {
     /// <summary>
@@ -37,9 +37,9 @@ public readonly partial record struct FFutureSightEffectData(
 /// <param name="Maker">The action target who initiated the Wish effect.</param>
 [UStruct]
 public readonly partial record struct FWishEffectData(
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] int Counter,
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] int Amount,
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget Maker
+    [UProperty(PropertyFlags.BlueprintReadOnly)] int Counter,
+    [UProperty(PropertyFlags.BlueprintReadOnly)] int Amount,
+    [UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget Maker
 )
 {
     /// <summary>

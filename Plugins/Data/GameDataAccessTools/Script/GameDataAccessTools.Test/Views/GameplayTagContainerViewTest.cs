@@ -12,10 +12,10 @@ namespace GameDataAccessTools.Test.Views;
 
 [UClass]
 [UsedImplicitly]
-public class UGameplayTagContainerViewWrapper : UObject
+public partial class UGameplayTagContainerViewWrapper : UObject
 {
     [UProperty]
-    public FGameplayTagContainer Value { get; set; }
+    public partial FGameplayTagContainer Value { get; set; }
 }
 
 public class GameplayTagContainerViewTest

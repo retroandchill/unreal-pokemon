@@ -14,20 +14,20 @@ public readonly partial record struct FPokemonMoveInfo
     /// Gets the handle that represents a specific Pokemon move.
     /// This handle is used to identify and reference a move within the game's data structure.
     /// </summary>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required FMoveHandle Move { get; init; }
 
     /// <summary>
     /// Represents the current Power Points (PP) of a Pokemon move.
     /// PP determines how many times the move can be used in battle before it is depleted.
     /// </summary>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required int PP { get; init; }
 
     /// <summary>
     /// Represents the number of Power Point (PP) Ups applied to a Pokemon move.
     /// PP Ups increase the maximum Power Points for the move, allowing it to be used more frequently in battles.
     /// </summary>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required int PPUps { get; init; }
 }

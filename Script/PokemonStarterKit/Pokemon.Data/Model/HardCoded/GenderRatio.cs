@@ -4,6 +4,7 @@ using GameDataAccessTools.Core.Utilities;
 using JetBrains.Annotations;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.GameDataAccessTools;
 
 namespace Pokemon.Data.Model.HardCoded;
@@ -188,12 +189,12 @@ public readonly partial struct FGenderRatio : IGameDataEntry
 {
     /// <inheritdoc />
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
     /// <summary>
@@ -202,7 +203,7 @@ public readonly partial struct FGenderRatio : IGameDataEntry
     /// the gender distribution of an entity in a user-readable format.
     /// </summary>
     [UsedImplicitly]
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
 
@@ -211,7 +212,7 @@ public readonly partial struct FGenderRatio : IGameDataEntry
     /// This property provides information regarding the distribution
     /// of genders for the specified entity.
     /// </summary>
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)]
+    [UProperty(PropertyFlags.BlueprintReadOnly)]
     [AsValue]
     [UsedImplicitly]
     public required FGenderRatioData Ratio { get; init; }

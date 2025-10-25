@@ -28,8 +28,8 @@ public record UPropertyInfo(
             is INamedTypeSymbol
             {
                 IsGenericType: true,
-                ContainingNamespace.Name: "LanguageExt",
-                MetadataName: "Option`1"
+                ContainingNamespace.Name: "UnrealSharp",
+                MetadataName: "TOptional`1"
             } optionType
             ? optionType.TypeArguments[0]
             : null;

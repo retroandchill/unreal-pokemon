@@ -1,4 +1,5 @@
-﻿using UnrealSharp.InteractiveUI;
+﻿using UnrealSharp.Core;
+using UnrealSharp.InteractiveUI;
 using UnrealSharp.UnrealSharpAsync;
 
 namespace UnrealSharp.InteractiveUI;

@@ -20,7 +20,7 @@ public readonly partial record struct FStatComponentInfo
     /// that directly impacts a Pokémon's strength, growth, and evolution. This property
     /// is required for saving and loading the state of a Pokémon.
     /// </summary>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required int Level { get; init; }
 
     /// <summary>
@@ -28,7 +28,7 @@ public readonly partial record struct FStatComponentInfo
     /// the accumulated growth measure for the Pokémon, enabling leveling up and progression.
     /// This property is essential for tracking and saving the advancement of a Pokémon.
     /// </summary>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required int Exp { get; init; }
 
     /// <summary>
@@ -36,7 +36,7 @@ public readonly partial record struct FStatComponentInfo
     /// essential for determining its survivability and performance in battles. This property is preserved during
     /// save and load operations.
     /// </summary>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required int HP { get; init; }
 
     /// <summary>
@@ -45,7 +45,7 @@ public readonly partial record struct FStatComponentInfo
     /// This property plays a key role in determining the Pokémon's growth and strength and
     /// is essential for saving and loading the state of a Pokémon.
     /// </summary>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required IReadOnlyDictionary<FMainStatHandle, int> IV { get; init; }
 
     /// <summary>
@@ -53,7 +53,7 @@ public readonly partial record struct FStatComponentInfo
     /// This property allows specific stat IVs to be manually overridden, disregarding the default/generated IV values.
     /// It plays a key role in customizing Pokémon stats while preserving the required structure for saving and loading.
     /// </summary>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required IReadOnlyDictionary<FMainStatHandle, int> IVOverrides { get; init; }
 
     /// <summary>
@@ -61,7 +61,7 @@ public readonly partial record struct FStatComponentInfo
     /// points allocated to enhance the Pokémon's growth and performance in different attributes.
     /// This property is essential for saving and loading the Pokémon's customized training data.
     /// </summary>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required IReadOnlyDictionary<FMainStatHandle, int> EV { get; init; }
 
     /// <summary>
@@ -69,7 +69,7 @@ public readonly partial record struct FStatComponentInfo
     /// statistical tendencies, influencing how certain stats are increased or decreased.
     /// This property is critical for calculating the Pokémon's performance and growth.
     /// </summary>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required FNatureHandle Nature { get; init; }
 
     /// <summary>
@@ -77,6 +77,6 @@ public readonly partial record struct FStatComponentInfo
     /// a temporary or permanent override to the default nature assigned to the Pokémon, potentially
     /// altering its stat growth or behavior. If no override is present, the Pokémon uses its default nature.
     /// </summary>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required Option<FNatureHandle> NatureOverride { get; init; }
 }

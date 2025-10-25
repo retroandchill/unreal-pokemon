@@ -19,7 +19,7 @@ namespace RPG.Battle;
 /// It also provides methods to start and manage a battle instance, handling turn progression and outcome determination.
 /// </remarks>
 /// <seealso cref="UCSGameInstanceSubsystem" />
-public class UBattleSubsystem : UCSGameInstanceSubsystem
+public partial class UBattleSubsystem : UCSGameInstanceSubsystem
 {
     private ITurnOrderService _turnOrderService = null!;
     private IBattleOutcomeService _battleOutcomeService = null!;
@@ -27,7 +27,7 @@ public class UBattleSubsystem : UCSGameInstanceSubsystem
     private CancellationTokenSource? _cancellationTokenSource;
 
     /// <inheritdoc />
-    protected override void Initialize(FSubsystemCollectionBaseRef collection)
+    protected override void Initialize_Implementation(FSubsystemCollectionBaseRef collection)
     {
         var serviceProvider = collection.InitializeRequiredSubsystem<UDependencyInjectionGameInstanceSubsystem>();
         _turnOrderService = serviceProvider.GetRequiredService<ITurnOrderService>();
@@ -36,7 +36,7 @@ public class UBattleSubsystem : UCSGameInstanceSubsystem
     }
 
     /// <inheritdoc />
-    protected override bool ShouldCreateSubsystem()
+    protected override bool ShouldCreateSubsystem_Implementation()
     {
         return HasRegisteredServices(
             typeof(ITurnOrderService),

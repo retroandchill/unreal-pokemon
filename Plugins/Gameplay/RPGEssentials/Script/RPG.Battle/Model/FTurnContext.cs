@@ -11,7 +11,7 @@ namespace RPG.Battle.Model;
 /// <param name="BattleContextActor">The actor that represents the battle context.</param>
 /// <param name="TurnNumber">The current turn number within the battle.</param>
 [UStruct]
-public readonly record struct FTurnContext(
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] AActor BattleContextActor,
-    [field: UProperty(PropertyFlags.BlueprintReadOnly)] int TurnNumber
+public readonly partial record struct FTurnContext(
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] AActor BattleContextActor,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] int TurnNumber
 );

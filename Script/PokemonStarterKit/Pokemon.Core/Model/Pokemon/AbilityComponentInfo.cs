@@ -17,7 +17,7 @@ public readonly partial record struct FAbilityComponentInfo
     /// This property is required and is typically used to identify or reference a specific ability.
     /// It plays a crucial role in determining the behavior or functionality associated with the Pokémon's abilities.
     /// </remarks>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required int AbilityIndex { get; init; }
 
     /// <summary>
@@ -28,6 +28,6 @@ public readonly partial record struct FAbilityComponentInfo
     /// to the Pokémon's ability component. When set, it takes precedence over the default ability behavior
     /// determined by the ability index.
     /// </remarks>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required Option<FAbilityHandle> ExplicitAbility { get; init; }
 }

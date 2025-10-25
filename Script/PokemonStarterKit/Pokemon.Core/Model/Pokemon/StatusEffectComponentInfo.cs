@@ -19,6 +19,6 @@ public readonly partial record struct FStatusEffectComponentInfo
     /// This property is optional and may contain information about specific conditions or effects,
     /// such as "Poisoned" or "Paralyzed", applied to the Pokémon during gameplay.
     /// </summary>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required Option<FStatusHandle> StatusEffect { get; init; }
 }

@@ -1,4 +1,6 @@
-﻿namespace UnrealSharp.GameDataAccessTools;
+﻿using UnrealSharp.Core;
+
+namespace UnrealSharp.GameDataAccessTools;
 
 public partial class UStaticGameDataRepository
 {

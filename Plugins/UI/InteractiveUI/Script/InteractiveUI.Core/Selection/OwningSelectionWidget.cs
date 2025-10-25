@@ -10,10 +10,10 @@ namespace InteractiveUI.Core.Selection;
 /// and a customizable mechanism for handling button addition and removal.
 /// </summary>
 [UClass]
-public class UOwningSelectionWidget : USelectionWidget
+public partial class UOwningSelectionWidget : USelectionWidget
 {
     /// <inheritdoc />
-    public override void Construct()
+    protected override void Construct_Implementation()
     {
         base.Construct();
         Buttons.OnButtonAdded += SlotButton;

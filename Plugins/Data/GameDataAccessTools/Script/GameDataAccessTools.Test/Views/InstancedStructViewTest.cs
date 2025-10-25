@@ -11,29 +11,29 @@ namespace GameDataAccessTools.Test.Views;
 [UStruct]
 public readonly partial record struct FTestStruct
 {
-    [field: UProperty]
+    [UProperty]
     public int Value { get; init; }
 
-    [field: UProperty]
+    [UProperty]
     public string? Name { get; init; }
 }
 
 [UStruct]
 public readonly partial record struct FAlternativeStruct
 {
-    [field: UProperty]
+    [UProperty]
     public float FloatValue { get; init; }
 
-    [field: UProperty]
+    [UProperty]
     public bool BoolValue { get; init; }
 }
 
 [UClass]
 [UsedImplicitly]
-public class UInstancedStructViewWrapper : UObject
+public partial class UInstancedStructViewWrapper : UObject
 {
     [UProperty]
-    public FInstancedStruct Value { get; set; }
+    public partial FInstancedStruct Value { get; set; }
 }
 
 public class InstancedStructViewTest

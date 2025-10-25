@@ -28,6 +28,9 @@
         <PackageReference Include="Retro.ReadOnlyParams" Version="1.0.1" />
         <PackageReference Include="ZLinq" Version="1.5.3" />
         <ProjectReference Include="..\GameDataAccessTools.Glue\GameDataAccessTools.Glue.csproj" />
+        <Reference Include="UnrealSharp.Binds">
+            <HintPath>$(UnrealSharpDir)\Binaries\Managed\net9.0\UnrealSharp.Binds.dll</HintPath>
+        </Reference>
         <ProjectReference
             Include="..\GameDataAccessTools.SourceGenerator\GameDataAccessTools.SourceGenerator.csproj"
             OutputItemType="Analyzer"

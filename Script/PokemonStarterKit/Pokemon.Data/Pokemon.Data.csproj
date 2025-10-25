@@ -22,5 +22,8 @@
             ReferenceOutputAssembly="false"
         />
         <ProjectReference Include="..\..\UnrealPokemon.Glue\UnrealPokemon.Glue.csproj" />
+        <Reference Include="UnrealSharp.Binds">
+            <HintPath>$(UnrealSharpDir)\Binaries\Managed\net9.0\UnrealSharp.Binds.dll</HintPath>
+        </Reference>
     </ItemGroup>
 </Project>

@@ -27,7 +27,7 @@ public enum EValueFindResult : byte
 }
 
 [UClass(DisplayName = "RPG Entity Extensions")]
-public class URPGEntityExtensions : UBlueprintFunctionLibrary
+public partial class URPGEntityExtensions : UBlueprintFunctionLibrary
 {
     /// <summary>
     /// Attempts to find a specific component of the given type on a specified unit.

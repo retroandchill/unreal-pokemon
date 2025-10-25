@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using UnrealSharp.Core;
 
 namespace UnrealSharp.GameDataAccessTools;
 

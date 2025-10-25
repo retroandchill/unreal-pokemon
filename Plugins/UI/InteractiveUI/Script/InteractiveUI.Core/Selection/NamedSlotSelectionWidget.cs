@@ -28,7 +28,7 @@ public class UNamedSlotSelectionWidget : USelectionWidget, IRefreshable
     private UNamedSlot ContentSlot { get; }
 
     /// <inheritdoc />
-    public override void Construct()
+    protected override void Construct_Implementation()
     {
         base.Construct();
         UpdateOptions();

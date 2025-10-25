@@ -23,7 +23,7 @@ public readonly partial record struct FMoveComponentInfo
     /// it should be preserved during game save and load operations. It is required
     /// to initialize this property at the time of the struct creation.
     /// </remarks>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required IReadOnlyList<FPokemonMoveInfo> Moves { get; init; }
 
     /// <summary>
@@ -36,6 +36,6 @@ public readonly partial record struct FMoveComponentInfo
     /// it persists during game save and load operations. It is required to initialize
     /// this property during the creation of the struct.
     /// </remarks>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required IReadOnlyList<FMoveHandle> InitialMoves { get; init; }
 }

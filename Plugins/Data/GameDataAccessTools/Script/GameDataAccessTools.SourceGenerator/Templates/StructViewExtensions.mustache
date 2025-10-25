@@ -67,7 +67,7 @@ public static partial class {{EngineName}}ViewExtensions
 
     static {{EngineName}}ViewExtensions()
     {
-        NativeClassPtr = UCoreUObjectExporter.CallGetNativeStructFromName(typeof({{StructName}}).GetAssemblyName(), "{{Namespace}}", "{{EngineName}}");
+        NativeClassPtr = UCoreUObjectExporter.CallGetType(typeof({{StructName}}).GetAssemblyName(), "{{Namespace}}", "{{EngineName}}");
         {{#Properties}}
         {{#HasBackingField}}
         {{^MarshallerInstanced}}IntPtr {{/MarshallerInstanced}}{{Name}}_NativeProperty = FPropertyExporter.CallGetNativePropertyFromName(NativeClassPtr, "{{Name}}");

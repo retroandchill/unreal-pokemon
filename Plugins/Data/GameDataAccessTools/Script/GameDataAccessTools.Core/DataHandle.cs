@@ -1,6 +1,7 @@
 ﻿using GameDataAccessTools.Core.Views;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameDataAccessTools;
 

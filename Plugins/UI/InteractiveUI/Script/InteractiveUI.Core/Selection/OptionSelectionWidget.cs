@@ -1,5 +1,6 @@
 ﻿using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.UnrealSharpCommonUI;
 
 namespace InteractiveUI.Core.Selection;
@@ -43,7 +44,7 @@ public class UOptionSelectionWidget : UOwningSelectionWidget
     public event Action<int>? OnOptionSelected;
 
     /// <inheritdoc />
-    public override void Construct()
+    protected override void Construct_Implementation()
     {
         base.Construct();
         Buttons.OnButtonBaseClicked += [UFunction] (_, i) => OnOptionSelected?.Invoke(i);

@@ -16,6 +16,6 @@ public readonly partial record struct FHoldItemComponentInfo
     /// This property represents an optional item that is attached to a Pokémon
     /// and may provide additional effects or abilities during gameplay.
     /// </summary>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required Option<FItemHandle> Item { get; init; }
 }

@@ -18,6 +18,6 @@ public readonly partial record struct FPartyComponentInfo
     /// Each member is represented by an instance of <see cref="FRPGEntitySaveDataHandle"/>,
     /// which includes details about the entity's state and class.
     /// </remarks>
-    [field: UProperty(PropertyFlags.SaveGame)]
+    [UProperty(PropertyFlags.SaveGame)]
     public required IReadOnlyList<FRPGEntitySaveDataHandle> Party { get; init; }
 }
