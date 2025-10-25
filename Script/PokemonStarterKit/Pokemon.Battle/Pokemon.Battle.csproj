@@ -24,7 +24,6 @@
         <DocumentationFile>bin\Release\Pokemon.Battle.xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
         <ProjectReference Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPG.Battle\RPG.Battle.csproj" />
         <ProjectReference Include="..\Pokemon.Core\Pokemon.Core.csproj" />
         <ProjectReference Include="..\Pokemon.Data\Pokemon.Data.csproj" />

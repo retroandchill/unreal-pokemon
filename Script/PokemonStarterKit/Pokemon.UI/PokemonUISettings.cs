@@ -2,6 +2,7 @@
 using Pokemon.UI.Screens;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.DeveloperSettings;
 using UnrealSharp.UnrealSharpCore;
 
@@ -38,7 +39,7 @@ public class UPokemonUISettings : UCSDeveloperSettings
     public TSoftClassPtr<UBagScreen> BagScreenClass { get; }
 
     /// <inheritdoc />
-    protected override FText GetSectionText()
+    protected override FText GetSectionText_Implementation()
     {
         return FText.Localized("PokemonUI", "PokemonUI", "Pokémon UI");
     }

@@ -15,16 +15,8 @@
         <DocumentationFile>bin\Release\Pokemon.Assets.xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
         <ProjectReference Include="..\Pokemon.Core\Pokemon.Core.csproj" />
         <ProjectReference Include="..\Pokemon.Data\Pokemon.Data.csproj" />
-        <Reference Include="UnrealSharp">
-            <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
-        </Reference>
-        <Reference Include="UnrealSharp.Core">
-            <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
-        </Reference>
-        <Analyzer Include="..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
         <ProjectReference Include="..\..\UnrealPokemon.Glue\UnrealPokemon.Glue.csproj" />
     </ItemGroup>
 </Project>

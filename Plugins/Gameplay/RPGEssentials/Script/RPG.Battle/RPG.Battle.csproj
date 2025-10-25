@@ -23,7 +23,6 @@
         <DocumentationFile>bin\Release\RPG.Battle.xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
         <PackageReference Include="Retro.ReadOnlyParams" Version="1.0.1" />
         <PackageReference Include="ZLinq" Version="1.5.3" />
         <Reference Include="UnrealSharp">

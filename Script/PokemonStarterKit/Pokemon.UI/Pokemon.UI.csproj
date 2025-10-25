@@ -16,22 +16,10 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
-        <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
         <ProjectReference Include="..\Pokemon.Assets\Pokemon.Assets.csproj" />
         <ProjectReference Include="..\Pokemon.Core\Pokemon.Core.csproj" />
-        <Reference Include="UnrealSharp">
-            <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
-        </Reference>
-        <Reference Include="UnrealSharp.Core">
-            <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
-        </Reference>
         <Analyzer Include="..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
         <ProjectReference Include="..\..\..\Plugins\UI\InteractiveUI\Script\InteractiveUI.Core\InteractiveUI.Core.csproj" />
         <ProjectReference Include="..\..\UnrealPokemon.Glue\UnrealPokemon.Glue.csproj" />
-        <ProjectReference
-            Include="..\..\..\Plugins\Framework\UnrealInject\Script\UnrealInject.SourceGenerator\UnrealInject.SourceGenerator.csproj"
-            OutputItemType="Analyzer"
-            ReferenceOutputAssembly="false"
-        />
     </ItemGroup>
 </Project>
