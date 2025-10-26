@@ -15,7 +15,7 @@
         <DocumentationFile>bin\Release\Pokemon.Core.xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Riok.Mapperly" Version="4.2.1" />
+        <PackageReference Include="Riok.Mapperly" Version="4.3.0" />
         <ProjectReference
             Include="..\..\..\Plugins\Framework\UnrealInject\Script\UnrealInject.SourceGenerator\UnrealInject.SourceGenerator.csproj"
             OutputItemType="Analyzer"

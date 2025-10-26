@@ -19,7 +19,7 @@
         <PackageReference Include="CsvHelper" Version="33.1.0" />
         <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
         <PackageReference Include="Retro.ReadOnlyParams" Version="1.0.1" />
-        <PackageReference Include="Riok.Mapperly" Version="4.2.1" />
+        <PackageReference Include="Riok.Mapperly" Version="4.3.0" />
         <ProjectReference Include="..\..\..\Plugins\Data\GameDataAccessTools\Script\GameDataAccessTools.Core\GameDataAccessTools.Core.csproj" />
         <ProjectReference Include="..\..\..\Plugins\Data\GameDataAccessTools\Script\GameDataAccessTools.Editor\GameDataAccessTools.Editor.csproj" />
         <ProjectReference Include="..\..\..\Plugins\Data\GameDataAccessTools\Script\GameDataAccessTools.Glue\GameDataAccessTools.Glue.csproj" />
