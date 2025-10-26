@@ -19,7 +19,7 @@
         <PackageReference Include="Microsoft.TestPlatform.Build" Version="18.0.0" />
         <PackageReference Include="NUnit" Version="4.4.0" />
         <PackageReference Include="Retro.ReadOnlyParams" Version="1.0.1" />
-        <PackageReference Include="Riok.Mapperly" Version="4.2.1" />
+        <PackageReference Include="Riok.Mapperly" Version="4.3.0" />
         <ProjectReference Include="..\UnrealSharpTest.Glue\UnrealSharpTest.Glue.csproj" />
         <Reference Include="UnrealSharp.Binds">
             <HintPath>$(UnrealSharpDir)\Binaries\Managed\net9.0\UnrealSharp.Binds.dll</HintPath>
