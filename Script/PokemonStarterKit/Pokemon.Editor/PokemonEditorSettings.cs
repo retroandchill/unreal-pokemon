@@ -3,6 +3,7 @@ using Pokemon.Data;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
+using UnrealSharp.Core;
 using UnrealSharp.GameplayTags;
 using UnrealSharp.UnrealSharpCore;
 
@@ -18,7 +19,7 @@ namespace Pokemon.Editor;
 /// exporting gameplay-related data.
 /// </remarks>
 [UClass(ClassFlags.DefaultConfig, ConfigCategory = "Editor")]
-public class UPokemonEditorSettings : UCSDeveloperSettings
+public partial class UPokemonEditorSettings : UCSDeveloperSettings
 {
     /// <summary>
     /// The file path used to store or reference newly created gameplay tags within the Pokémon Editor.
@@ -32,7 +33,7 @@ public class UPokemonEditorSettings : UCSDeveloperSettings
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "Serializers"
     )]
-    public FName NewGameplayTagsPath { get; }
+    public partial FName NewGameplayTagsPath { get; }
 
     /// <summary>
     /// A mapping between pocket numbers and their corresponding gameplay tags used within the Pokémon Editor.
@@ -50,10 +51,10 @@ public class UPokemonEditorSettings : UCSDeveloperSettings
     [ClampMin("1")]
     [UIMax("1")]
     [Categories(IdentifierConstants.PocketTag)]
-    public IReadOnlyDictionary<int, FGameplayTag> PocketNumberToGameplayTag { get; }
+    public partial IReadOnlyDictionary<int, FGameplayTag> PocketNumberToGameplayTag { get; }
 
     /// <inheritdoc />
-    protected override FText GetSectionText()
+    protected override FText GetSectionText_Implementation()
     {
         return FText.Localized("PokemonEditor", "PokemonEditor", "Pokémon Editor");
     }

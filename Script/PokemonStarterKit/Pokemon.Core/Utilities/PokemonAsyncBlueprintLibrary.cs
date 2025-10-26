@@ -1,10 +1,10 @@
-﻿using LanguageExt;
-using Pokemon.Core.Entities;
+﻿using Pokemon.Core.Entities;
 using Pokemon.Core.Services.Async;
 using Pokemon.Data.Model.PBS;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
+using UnrealSharp.Core;
 using UnrealSharp.Engine;
 using UnrealSharp.GameplayTags;
 
@@ -35,7 +35,7 @@ public enum ESelectionResult : byte
 /// It primarily contains a reference to the selected Pokémon, or it may be null if no Pokémon is selected.
 /// </remarks>
 [UStruct]
-public readonly partial record struct FSelectedPokemon([UProperty] UPokemon? Pokemon);
+public readonly partial record struct FSelectedPokemon([property: UProperty] UPokemon? Pokemon);
 
 /// <summary>
 /// Represents a selected item entity.
@@ -45,7 +45,7 @@ public readonly partial record struct FSelectedPokemon([UProperty] UPokemon? Pok
 /// It contains an optional reference to the selected item's slot information, such as the item itself and its quantity.
 /// </remarks>
 [UStruct]
-public readonly partial record struct FSelectedItem([UProperty] Option<FItemSlotInfo> Item);
+public readonly partial record struct FSelectedItem([property: UProperty] TOptional<FItemSlotInfo> Item);
 
 /// <summary>
 /// Represents a filter criteria that determines whether a specific item meets the desired conditions.
@@ -167,12 +167,12 @@ public class UPokemonAsyncBlueprintLibrary : UBlueprintFunctionLibrary
     /// A task that represents the asynchronous operation of Pokémon selection, returning the selected Pokémon as part of the result.
     /// </returns>
     [UFunction(FunctionFlags.BlueprintCallable, Category = "Async")]
-    public static Task<FSelectedPokemon> SelectPokemonFromPartyAsync(
+    public static async Task<FSelectedPokemon> SelectPokemonFromPartyAsync(
         APlayerController playerController,
         CancellationToken cancellationToken = default
     )
     {
-        return playerController.SelectPokemonFromPartyAsync(cancellationToken).Map(p => new FSelectedPokemon(p));
+        return new FSelectedPokemon(await playerController.SelectPokemonFromPartyAsync(cancellationToken));
     }
 
     /// <summary>
@@ -216,20 +216,20 @@ public class UPokemonAsyncBlueprintLibrary : UBlueprintFunctionLibrary
     /// <c>FSelectedItem</c> structure. If no item is selected, the result will encapsulate an empty option.
     /// </returns>
     [UFunction(FunctionFlags.BlueprintCallable, DisplayName = "Match (Selected Pokémon)", Category = "Async")]
-    public static Task<FSelectedItem> SelectItemFromBagAsync(
+    public static async Task<FSelectedItem> SelectItemFromBagAsync(
         APlayerController playerController,
         FGameplayTag pocketFilter,
         TDelegate<ItemFilter> filter,
         CancellationToken cancellationToken = default
     )
     {
-        return playerController
+        var result = await playerController
             .SelectItemFromBagAsync(
                 pocketFilter.IsValid ? pocketFilter : null,
                 i => !filter.IsBound || filter.InnerDelegate.Invoke(i),
                 cancellationToken
-            )
-            .Map(i => new FSelectedItem(i.ToOption()));
+            );
+        return new FSelectedItem(result.ToOptional());   
     }
 
     /// <summary>

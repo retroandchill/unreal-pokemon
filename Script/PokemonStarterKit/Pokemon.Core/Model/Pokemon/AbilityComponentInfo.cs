@@ -1,5 +1,5 @@
-﻿using LanguageExt;
-using Pokemon.Data.Model.PBS;
+﻿using Pokemon.Data.Model.PBS;
+using UnrealSharp;
 using UnrealSharp.Attributes;
 
 namespace Pokemon.Core.Model.Pokemon;
@@ -29,5 +29,5 @@ public readonly partial record struct FAbilityComponentInfo
     /// determined by the ability index.
     /// </remarks>
     [UProperty(PropertyFlags.SaveGame)]
-    public required Option<FAbilityHandle> ExplicitAbility { get; init; }
+    public required TOptional<FAbilityHandle> ExplicitAbility { get; init; }
 }

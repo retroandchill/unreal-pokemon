@@ -2,6 +2,7 @@
 using Pokemon.Data.Model.PBS;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 
 namespace Pokemon.Core.Model.Pokemon;
 

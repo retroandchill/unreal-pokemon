@@ -1,7 +1,6 @@
-﻿using JetBrains.Annotations;
-using Pokemon.Data.Model.PBS;
-using UnrealSharp;
+﻿using Pokemon.Data.Model.PBS;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.GameplayTags;
 using UnrealSharp.RPGCore;
 
@@ -18,8 +17,7 @@ namespace Pokemon.Core.Bag;
 /// ensuring that only valid items can be stored within this pocket.
 /// </remarks>
 [UClass]
-[UsedImplicitly]
-public class UBagPocket : UInventoryContainer
+public partial class UBagPocket : UInventoryContainer
 {
     /// <summary>
     /// Represents the gameplay tag associated with this bag pocket.
@@ -30,7 +28,7 @@ public class UBagPocket : UInventoryContainer
     /// items matching the tag's associated category can be added to the pocket.
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Inventory")]
-    public FGameplayTag Tag { get; internal set; }
+    public partial FGameplayTag Tag { get; internal set; }
 
     /// <summary>
     /// Represents the display name of the bag pocket within the inventory system.
@@ -40,10 +38,10 @@ public class UBagPocket : UInventoryContainer
     /// This property is typically localized to support different languages and enhance accessibility.
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Display")]
-    public FText Name { get; internal set; }
+    public partial FText Name { get; internal set; }
 
     /// <inheritdoc />
-    protected override EInventoryValidation ValidateItem(FName item)
+    protected override EInventoryValidation ValidateItem_Implementation(FName item)
     {
         var handle = new FItemHandle(item);
         return handle.IsValid && Tag == handle.Entry.Pocket ? EInventoryValidation.Valid : EInventoryValidation.Invalid;

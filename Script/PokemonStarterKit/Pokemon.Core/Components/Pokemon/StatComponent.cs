@@ -1,5 +1,5 @@
-﻿using JetBrains.Annotations;
-using LanguageExt;
+﻿using GameDataAccessTools.Core.Views;
+using JetBrains.Annotations;
 using Pokemon.Core.Entities;
 using Pokemon.Data;
 using Pokemon.Data.Model.HardCoded;
@@ -11,6 +11,14 @@ using UnrealSharp.RPGCore;
 using ZLinq;
 
 namespace Pokemon.Core.Components.Pokemon;
+
+public static class TempDeconstructForcer
+{
+    public static void Deconstruct(this StructView<FNatureStatChange> stats, out FMainBattleStatHandle stat, out int value)
+    {
+        (stat, value) = stats.Copy();
+    }
+}
 
 /// <summary>
 /// The <c>UStatComponent</c> class manages the statistical attributes of a Pokemon entity.
@@ -26,8 +34,7 @@ namespace Pokemon.Core.Components.Pokemon;
 /// <see cref="IHealableComponent"/>
 [UClass]
 [UMetaData("HideCategories", "Stats")]
-[UsedImplicitly]
-public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableComponent
+public partial class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableComponent
 {
     /// <summary>
     /// Represents the maximum allowable Individual Value (IV) for a Pokémon's stats.
@@ -47,7 +54,7 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
     public const int MaxEV = 252;
 
     [UProperty(PropertyFlags.Transient)]
-    private UIdentityComponent IdentityComponent { get; set; }
+    private partial UIdentityComponent IdentityComponent { get; set; }
 
     /// <summary>
     /// Represents the current level of a Pokémon.
@@ -55,7 +62,7 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
     /// accessible moves, and experience thresholds required to progress further.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Stats")]
-    public int Level { get; private set; }
+    public partial int Level { get; private set; }
 
     /// <summary>
     /// Represents the experience points a Pokémon has accumulated.
@@ -64,7 +71,7 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
     /// it contributes to leveling up.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Exp")]
-    public int Exp { get; private set; }
+    public partial int Exp { get; private set; }
 
     /// <summary>
     /// Determines the amount of experience points required for the Pokémon to reach the next level.
@@ -112,7 +119,7 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
     /// until it is healed. This value can be adjusted during battles or through actions like healing.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Stats")]
-    public int HP { get; set; }
+    public partial int HP { get; set; }
 
     /// <summary>
     /// Represents the maximum health points (HP) a Pokémon can have.
@@ -121,7 +128,7 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
     /// It is a critical factor in determining a Pokémon's survivability during battles or other scenarios.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Stats")]
-    public int MaxHP { get; private set; }
+    public partial int MaxHP { get; private set; }
 
     /// <summary>
     /// Represents the Attack stat, which determines the physical damage a Pokémon
@@ -130,7 +137,7 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
     /// Effort Values (EVs), and the Pokémon's Nature.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Stats")]
-    public int Attack { get; private set; }
+    public partial int Attack { get; private set; }
 
     /// <summary>
     /// Represents the Defense stat of a Pokémon, which determines its ability to reduce
@@ -139,7 +146,7 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
     /// EV (Effort Values), and nature modifications.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Stats")]
-    public int Defense { get; private set; }
+    public partial int Defense { get; private set; }
 
     /// <summary>
     /// Represents the Special Attack stat of a Pokémon, used to determine the power of special moves during battles.
@@ -148,7 +155,7 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
     /// Effort Values (EVs), Level, and nature modifiers.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Stats")]
-    public int SpecialAttack { get; private set; }
+    public partial int SpecialAttack { get; private set; }
 
     /// <summary>
     /// Represents the Special Defense stat of a Pokémon.
@@ -158,7 +165,7 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
     /// Effort Values (EVs), level, and nature modifiers.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Stats")]
-    public int SpecialDefense { get; private set; }
+    public partial int SpecialDefense { get; private set; }
 
     /// <summary>
     /// Represents the Speed stat of a Pokémon, which determines the order of actions
@@ -167,15 +174,13 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
     /// base stats, level, IVs, EVs, and Nature modifiers.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Stats")]
-    public int Speed { get; private set; }
+    public partial int Speed { get; private set; }
 
     [UProperty]
-    [UsedImplicitly]
-    private TMap<FMainStatHandle, int> IV { get; }
+    private partial TMap<FMainStatHandle, int> IV { get; }
 
     [UProperty]
-    [UsedImplicitly]
-    private TMap<FMainStatHandle, int> IVOverrides { get; }
+    private partial TMap<FMainStatHandle, int> IVOverrides { get; }
 
     /// <summary>
     /// Provides the effective Individual Values (IVs) for each main stat of a Pokémon.
@@ -200,8 +205,7 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
     }
 
     [UProperty]
-    [UsedImplicitly]
-    private TMap<FMainStatHandle, int> EV { get; }
+    private partial TMap<FMainStatHandle, int> EV { get; }
 
     /// <summary>
     /// Represents the Nature of a Pokémon, which influences its stat growth by boosting one stat
@@ -210,7 +214,7 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
     /// within the game.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Stats")]
-    public FNatureHandle Nature { get; set; }
+    public partial FNatureHandle Nature { get; set; }
 
     /// <summary>
     /// Represents an override for the Pokémon's default nature.
@@ -220,7 +224,7 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
     /// The value is optional and must be of type <see cref="FNatureHandle"/>.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Stats")]
-    public Option<FNatureHandle> NatureOverride { get; set; }
+    public partial TOptional<FNatureHandle> NatureOverride { get; set; }
 
     /// <summary>
     /// Represents the effective nature applied to the Pokémon's stats.
@@ -248,7 +252,7 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
     }
 
     /// <inheritdoc />
-    protected override void PreInitialize()
+    protected override void PreInitialize_Implementation()
     {
         IdentityComponent = GetRequiredSiblingComponent<UIdentityComponent>();
     }
@@ -343,9 +347,9 @@ public class UStatComponent : URPGComponent, IBattleCapableComponent, IHealableC
     /// An optional integer representing the IV override value if found; otherwise, an empty option.
     /// </returns>
     [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Get IV Override", Category = "Stats")]
-    public Option<int> GetIVOverride(FMainStatHandle stat)
+    public TOptional<int> GetIVOverride(FMainStatHandle stat)
     {
-        return IVOverrides.TryGetValue(stat, out var value) ? value : Option<int>.None;
+        return IVOverrides.TryGetValue(stat, out var value) ? value : TOptional<int>.None;
     }
 
     /// <summary>

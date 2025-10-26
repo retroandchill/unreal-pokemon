@@ -61,19 +61,16 @@ public enum EEncounterTrigger : byte
 public readonly partial struct FEncounterType : IGameDataEntry
 {
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Gets or sets the name associated with the encounter type.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [GameAccessTools.SourceGenerator.Attributes.DisplayName]
     public required FText Name { get; init; }
@@ -84,7 +81,6 @@ public readonly partial struct FEncounterType : IGameDataEntry
     /// <remarks>
     /// Possible values are defined in the <see cref="EEncounterTrigger"/> enumeration, such as Land, Cave, Water, etc.
     /// </remarks>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [Categories("Field.Encounters.Triggers")]
     public required EEncounterTrigger Type { get; init; }
@@ -92,7 +88,6 @@ public readonly partial struct FEncounterType : IGameDataEntry
     /// <summary>
     /// Represents the probability or likelihood of a trigger occurring in the context of an encounter.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public TOptional<int> TriggerChance { get; init; }
 }
@@ -107,7 +102,6 @@ public readonly partial struct FEncounterType : IGameDataEntry
 /// </remarks>
 [UClass]
 [GameDataRepository<FEncounterType>]
-[UsedImplicitly]
 public partial class UEncounterTypeRepository : UStaticGameDataRepository;
 
 /// <summary>
@@ -117,7 +111,6 @@ public partial class UEncounterTypeRepository : UStaticGameDataRepository;
 /// This struct is used to safely reference and work with encounter type data within the game system.
 /// It acts as a lightweight identifier or pointer to an existing FEncounterType entry in the data repository.
 /// </remarks>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.EncounterTypes))]
 public readonly partial record struct FEncounterTypeHandle;
 

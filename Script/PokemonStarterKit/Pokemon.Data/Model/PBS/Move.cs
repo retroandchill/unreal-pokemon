@@ -378,7 +378,6 @@ public readonly partial struct FMove() : IGameDataEntry
 /// </remarks>
 [UClass]
 [GameDataRepository<FMove>]
-[UsedImplicitly]
 public partial class UMoveRepository : UAssetGameDataRepository;
 
 /// <summary>
@@ -388,6 +387,5 @@ public partial class UMoveRepository : UAssetGameDataRepository;
 /// Used in the game data context to access and manipulate move definitions efficiently and reliably.
 /// This struct acts as an identifier or pointer linking to detailed move metadata contained in the game's data repository.
 /// </remarks>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Moves))]
 public readonly partial record struct FMoveHandle;

@@ -1,7 +1,6 @@
-﻿using LanguageExt;
-using LanguageExt.UnsafeValueAccess;
-using Pokemon.Data.Model.HardCoded;
+﻿using Pokemon.Data.Model.HardCoded;
 using RPG.SourceGenerator.Attributes;
+using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.RPGCore;
 
@@ -13,27 +12,27 @@ namespace Pokemon.Core.Components.Pokemon;
 /// as well as providing functionality to heal and remove status conditions.
 /// </summary>
 [UClass]
-public class UStatusEffectComponent : URPGComponent, IHealableComponent
+public partial class UStatusEffectComponent : URPGComponent, IHealableComponent
 {
     /// <summary>
     /// Represents the current status effect applied to an entity, such as a Pokémon.
     /// This property allows for retrieving and assigning the status effect.
     /// </summary>
     /// <remarks>
-    /// The status effect is represented using an <see cref="Option{T}"/> of type <c>FStatusHandle</c>.
+    /// The status effect is represented using an <see cref="TOptional{T}"/> of type <c>FStatusHandle</c>.
     /// A value may be set when the status effect is active, or cleared by setting it to None.
     /// If the assigned status effect is invalid, the property will not update.
     /// </remarks>
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "StatusEffect")]
-    public Option<FStatusHandle> StatusEffect
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "StatusEffect", BlueprintAccessors = true)]
+    public TOptional<FStatusHandle> StatusEffect
     {
-        get;
+        get => StatusEffect_BackingField;
         set
         {
-            if (value.IsSome && !value.ValueUnsafe().IsValid)
+            if (value.HasValue && !value.Value.IsValid)
                 return;
 
-            field = value;
+            StatusEffect_BackingField = value;
         }
     }
 
@@ -41,6 +40,6 @@ public class UStatusEffectComponent : URPGComponent, IHealableComponent
     [ExcludeFromExtensions]
     public void Heal()
     {
-        StatusEffect = Option<FStatusHandle>.None;
+        StatusEffect = TOptional<FStatusHandle>.None;
     }
 }

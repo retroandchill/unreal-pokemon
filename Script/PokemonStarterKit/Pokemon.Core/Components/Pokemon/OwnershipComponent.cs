@@ -1,10 +1,10 @@
-﻿using LanguageExt;
-using Pokemon.Core.Entities;
+﻿using Pokemon.Core.Entities;
 using Pokemon.Data.Model.PBS;
 using RPG.SourceGenerator.Attributes;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.CommonUtilities;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.Engine;
 using UnrealSharp.RPGCore;
@@ -45,7 +45,7 @@ public enum EObtainMethod : byte
 /// <param name="HatchText">The text describing the hatch event</param>
 [UStruct]
 public readonly partial record struct FHatchInformation(
-    [UProperty(PropertyFlags.BlueprintReadOnly)] FDateTime TimeHatched,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] FDateTime TimeHatched,
     FText HatchText
 );
 
@@ -54,14 +54,14 @@ public readonly partial record struct FHatchInformation(
 /// </summary>
 [UClass]
 [UMetaData("HideCategories", "Ownership,OriginalTrainer,Obtain")]
-public class UOwnershipComponent : URPGComponent
+public partial class UOwnershipComponent : URPGComponent
 {
     /// <summary>
     /// Gets or sets the trainer that owns the Pokémon.
     /// This property links the Pokémon to its respective owner or trainer entity.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Ownership")]
-    public UTrainer Owner { get; set; }
+    public partial UTrainer Owner { get; set; }
 
     /// <summary>
     /// Gets or sets the unique identifier for the Pokémon.
@@ -69,7 +69,7 @@ public class UOwnershipComponent : URPGComponent
     /// within the context of the ownership or trainer system.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "OriginalTrainer")]
-    public int ID { get; set; }
+    public partial int ID { get; set; }
 
     /// <summary>
     /// Gets or sets the secret identification number associated with the trainer.
@@ -77,21 +77,21 @@ public class UOwnershipComponent : URPGComponent
     /// and is commonly used for Pokémon ownership verification purposes.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "OriginalTrainer")]
-    public int SecretID { get; set; }
+    public partial int SecretID { get; set; }
 
     /// <summary>
     /// Gets or sets the original trainer's name associated with the Pokémon.
     /// This property identifies the name of the trainer who originally owned the Pokémon.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, DisplayName = "OT Name", Category = "OriginalTrainer")]
-    public FText OTName { get; set; }
+    public partial FText OTName { get; set; }
 
     /// <summary>
     /// Gets or sets the gender of the original trainer who owned the Pokémon.
     /// This property specifies the trainer's gender using defined enumeration values.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, DisplayName = "OT Gender", Category = "OriginalTrainer")]
-    public ETrainerGender OTGender { get; set; }
+    public partial ETrainerGender OTGender { get; set; }
 
     /// <summary>
     /// Gets or sets the method by which the Pokémon was obtained.
@@ -99,28 +99,28 @@ public class UOwnershipComponent : URPGComponent
     /// hatching from an egg, trading with another trainer, or as a special fateful encounter.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Obtain")]
-    public EObtainMethod ObtainMethod { get; set; }
+    public partial EObtainMethod ObtainMethod { get; set; }
 
     /// <summary>
     /// Gets or sets the level at which this Pokémon was encountered or obtained.
     /// This property represents the level information relevant to the Pokémon's origin.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Obtain")]
-    public int LevelMet { get; set; }
+    public partial int LevelMet { get; set; }
 
     /// <summary>
     /// Gets or sets the date and time when the Pokémon was received.
     /// This property records the moment the Pokémon was obtained by its current owner.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Obtain")]
-    public FDateTime TimeReceived { get; set; }
+    public partial FDateTime TimeReceived { get; set; }
 
     /// <summary>
     /// Gets or sets the text description of how the Pokémon was obtained.
     /// This property provides additional contextual information about the method or location associated with acquiring the Pokémon.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Obtain")]
-    public FText ObtainText { get; set; }
+    public partial FText ObtainText { get; set; }
 
     /// <summary>
     /// Gets or sets information about the hatching of the Pokémon.
@@ -128,7 +128,7 @@ public class UOwnershipComponent : URPGComponent
     /// and any associated text describing the hatching process or circumstances.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Obtain")]
-    public Option<FHatchInformation> HatchInformation { get; set; }
+    public partial TOptional<FHatchInformation> HatchInformation { get; set; }
 
     /// <summary>
     /// Initializes the ownership component of a Pokémon with the specified parameters.

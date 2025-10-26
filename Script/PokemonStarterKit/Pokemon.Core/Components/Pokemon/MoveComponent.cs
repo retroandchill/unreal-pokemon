@@ -18,18 +18,16 @@ namespace Pokemon.Core.Components.Pokemon;
 /// </summary>
 [UClass]
 [UMetaData("HideCategories", "Moves")]
-[UsedImplicitly]
-public class UMoveComponent : URPGComponent
+public partial class UMoveComponent : URPGComponent
 {
     [UProperty(PropertyFlags.Transient)]
-    private UIdentityComponent IdentityComponent { get; set; }
+    private partial UIdentityComponent IdentityComponent { get; set; }
 
     [UProperty(PropertyFlags.Transient)]
-    private UStatComponent StatComponent { get; set; }
+    private partial UStatComponent StatComponent { get; set; }
 
     [UProperty]
-    [UsedImplicitly]
-    private TArray<UPokemonMove> Moves { get; }
+    private partial TArray<UPokemonMove> Moves { get; }
 
     /// <summary>
     /// Provides a read-only list of moves associated with the current component.
@@ -46,8 +44,7 @@ public class UMoveComponent : URPGComponent
     }
 
     [UProperty]
-    [UsedImplicitly]
-    private TArray<FMoveHandle> InitialMoves { get; }
+    private partial TArray<FMoveHandle> InitialMoves { get; }
 
     /// <summary>
     /// Provides a read-only list of the initial moves associated with the component.
@@ -78,7 +75,7 @@ public class UMoveComponent : URPGComponent
     }
 
     /// <inheritdoc />
-    protected override void PreInitialize()
+    protected override void PreInitialize_Implementation()
     {
         IdentityComponent = GetRequiredSiblingComponent<UIdentityComponent>();
         StatComponent = GetRequiredSiblingComponent<UStatComponent>();

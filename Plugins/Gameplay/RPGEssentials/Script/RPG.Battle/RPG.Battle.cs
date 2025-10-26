@@ -7,7 +7,6 @@ namespace RPG.Battle;
 /// Represents the battle module for the RPG game, which is responsible
 /// for initializing and shutting down the battle-related functionalities.
 /// </summary>
-[UsedImplicitly]
 public class FRPGBattleModule : IModuleInterface
 {
     /// <inheritdoc />

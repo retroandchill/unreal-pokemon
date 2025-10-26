@@ -10,6 +10,7 @@ using CsvHelper.Configuration;
 using GameDataAccessTools.Core.Utilities;
 using Pokemon.Editor.Serialization.Pbs.Utilities;
 using UnrealSharp;
+using UnrealSharp.Core;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
 

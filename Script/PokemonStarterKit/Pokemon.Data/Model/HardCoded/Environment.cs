@@ -20,19 +20,16 @@ namespace Pokemon.Data.Model.HardCoded;
 public readonly partial struct FEnvironment : IGameDataEntry
 {
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Gets the name of the environment as a localized text.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
@@ -52,7 +49,6 @@ public readonly partial struct FEnvironment : IGameDataEntry
 /// </summary>
 [UClass]
 [GameDataRepository<FEnvironment>]
-[UsedImplicitly]
 public partial class UEnvironmentRepository : UStaticGameDataRepository;
 
 /// <summary>
@@ -61,7 +57,6 @@ public partial class UEnvironmentRepository : UStaticGameDataRepository;
 /// specific environment entries efficiently. It provides a lightweight and
 /// immutable identifier for accessing environment-related data.
 /// </summary>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Environments))]
 public readonly partial record struct FEnvironmentHandle;
 

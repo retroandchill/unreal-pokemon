@@ -35,8 +35,8 @@ public readonly partial struct FBerryPlant() : IGameDataEntry
     /// The value must be at least 1 to ensure proper growth mechanics in the game.
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Growth")]
-    [field: ClampMin("1")]
-    [field: UIMin("1")]
+    [ClampMin("1")]
+    [UIMin("1")]
     public int HoursPerStage { get; init; } = 3;
 
     /// <summary>
@@ -45,8 +45,8 @@ public readonly partial struct FBerryPlant() : IGameDataEntry
     /// in the soil over time, affecting the plant's growth conditions.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Growth")]
-    [field: ClampMin("1")]
-    [field: UIMin("1")]
+    [ClampMin("1")]
+    [UIMin("1")]
     public int DryingPerHour { get; init; } = 15;
 
     /// <summary>
@@ -55,8 +55,8 @@ public readonly partial struct FBerryPlant() : IGameDataEntry
     /// from the plant during its lifecycle.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere, Category = "Growth")]
-    [field: ClampMin("1")]
-    [field: UIMin("1")]
+    [ClampMin("1")]
+    [UIMin("1")]
     [AsValue]
     public FInt32Range Yield { get; init; }
 
@@ -78,13 +78,11 @@ public readonly partial struct FBerryPlant() : IGameDataEntry
 /// </summary>
 [UClass]
 [GameDataRepository<FBerryPlant>]
-[UsedImplicitly]
 public partial class UBerryPlantRepository : UAssetGameDataRepository;
 
 /// <summary>
 /// Represents a handle that uniquely identifies a berry plant entity within a game data repository.
 /// Used to establish references or perform comparisons with other data entities like items.
 /// </summary>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.BerryPlants), ComparableTypes = [typeof(FItemHandle)])]
 public readonly partial record struct FBerryPlantHandle;

@@ -6,6 +6,7 @@ using GameDataAccessTools.Core.Views;
 using JetBrains.Annotations;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameDataAccessToolsEditor;
@@ -19,23 +20,22 @@ namespace Pokemon.Editor.Serialization.Pbs.Serializers;
 /// of format-specific details such as file extensions and format names.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-[UsedImplicitly]
-public class UGameDataEntryPbsSerializerBase : UCSGameDataEntrySerializer
+public partial class UGameDataEntryPbsSerializerBase : UCSGameDataEntrySerializer
 {
     /// <inheritdoc />
-    protected override FText GetFormatName()
+    protected override FText GetFormatName_Implementation()
     {
         return FText.Localized("Pokemon.Editor", "PbsFormatName", "PBS");
     }
 
     /// <inheritdoc />
-    protected override string GetFileExtensionText()
+    protected override string GetFileExtensionText_Implementation()
     {
         return "PBS file |*.txt|";
     }
 
     /// <inheritdoc />
-    protected override bool Serialize(string filePath, UAssetGameDataRepository repository, out string errorMessage)
+    protected override bool Serialize_Implementation(string filePath, UAssetGameDataRepository repository, out string errorMessage)
     {
         try
         {
@@ -58,7 +58,7 @@ public class UGameDataEntryPbsSerializerBase : UCSGameDataEntrySerializer
     }
 
     /// <inheritdoc />
-    protected override bool Deserialize(string filePath, UAssetGameDataRepository repository, out string errorMessage)
+    protected override bool Deserialize_Implementation(string filePath, UAssetGameDataRepository repository, out string errorMessage)
     {
         try
         {

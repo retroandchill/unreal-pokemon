@@ -20,19 +20,16 @@ namespace Pokemon.Data.Model.HardCoded;
 public readonly partial struct FBodyShape : IGameDataEntry
 {
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Represents the name of the body shape as a localized text.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
@@ -46,7 +43,6 @@ public readonly partial struct FBodyShape : IGameDataEntry
 /// </summary>
 [UClass]
 [GameDataRepository<FBodyShape>]
-[UsedImplicitly]
 public partial class UBodyShapeRepository : UStaticGameDataRepository;
 
 /// <summary>
@@ -56,7 +52,6 @@ public partial class UBodyShapeRepository : UStaticGameDataRepository;
 /// the associated data structure. The handle is designed to integrate with the game
 /// data repository system, specifically targeting <see cref="GameData.BodyShapes"/>.
 /// </summary>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.BodyShapes))]
 public readonly partial record struct FBodyShapeHandle;
 

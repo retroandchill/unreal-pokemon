@@ -18,12 +18,10 @@ namespace Pokemon.Data.Model.HardCoded;
 public readonly partial struct FBattleTerrain : IGameDataEntry
 {
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
@@ -31,7 +29,6 @@ public readonly partial struct FBattleTerrain : IGameDataEntry
     /// Represents the localized name of the battle terrain.
     /// This property is required and provides a human-readable name for the terrain type.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
@@ -43,14 +40,12 @@ public readonly partial struct FBattleTerrain : IGameDataEntry
 /// </summary>
 [UClass]
 [GameDataRepository<FBattleTerrain>]
-[UsedImplicitly]
 public partial class UBattleTerrainRepository : UStaticGameDataRepository;
 
 /// <summary>
 /// A handle representing a reference to a BattleTerrain entry within the game's data repository.
 /// Provides an identifier for terrain-related data, enabling efficient access and retrieval from the associated repository.
 /// </summary>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.BattleTerrains))]
 public readonly partial record struct FBattleTerrainHandle;
 

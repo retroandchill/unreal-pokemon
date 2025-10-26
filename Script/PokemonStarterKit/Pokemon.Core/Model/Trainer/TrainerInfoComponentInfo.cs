@@ -1,6 +1,7 @@
 ﻿using Pokemon.Data.Model.PBS;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.RPGSaving;
 
 namespace Pokemon.Core.Model.Trainer;

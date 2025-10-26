@@ -11,7 +11,6 @@ using ZLinq;
 namespace GameDataAccessTools.Test.Views;
 
 [UClass]
-[UsedImplicitly]
 public partial class UGameplayTagContainerViewWrapper : UObject
 {
     [UProperty]

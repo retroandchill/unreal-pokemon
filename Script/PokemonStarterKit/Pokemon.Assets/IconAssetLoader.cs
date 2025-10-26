@@ -12,7 +12,7 @@ namespace Pokemon.Assets;
 /// Specifically, it resolves soft references to texture assets used for items and status effects.
 /// </summary>
 [UClass]
-public class UIconAssetLoader : UBlueprintFunctionLibrary
+public partial class UIconAssetLoader : UBlueprintFunctionLibrary
 {
     /// <summary>
     /// Resolves the appropriate item icon soft reference for the given item.

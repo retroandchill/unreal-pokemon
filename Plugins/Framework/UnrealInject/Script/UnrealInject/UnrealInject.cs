@@ -49,7 +49,6 @@ public sealed class GameInstanceServiceProviderOverride : IDisposable
 /// both customization and overriding of service providers for specific scenarios like game instances.
 /// The module is implemented as a singleton and should be initialized during game startup.
 /// </remarks>
-[UsedImplicitly]
 public sealed class FUnrealInjectModule : IModuleInterface
 {
     private static FUnrealInjectModule? _instance;

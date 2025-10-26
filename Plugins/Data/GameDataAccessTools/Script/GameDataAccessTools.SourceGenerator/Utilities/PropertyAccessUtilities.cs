@@ -263,7 +263,9 @@ public static class PropertyAccessUtilities
             return true;
         if (typeSymbol.ToDisplayString() == "UnrealSharp.Core.FName")
             return true;
-
+        
+        if (typeSymbol.HasAttribute<DataHandleAttribute>()) return true;
+        
         var structAttribute = typeSymbol
             .GetAttributes()
             .SingleOrDefault(attr => attr.AttributeClass?.ToDisplayString() == SourceContextNames.UStructAttribute);
@@ -294,10 +296,7 @@ public static class PropertyAccessUtilities
         return typeSymbol
             .GetMembers()
             .OfType<IFieldSymbol>()
-            .All(f =>
-                f.GetAttributes().Any(a => a.AttributeClass?.ToDisplayString() == SourceContextNames.UPropertyAttribute)
-                && f.Type.IsBlittableType()
-            );
+            .All(f => f.Type.IsBlittableType());
     }
 
     private static MarshalledPropertyInfo GetCollectionMarshallerInfo(

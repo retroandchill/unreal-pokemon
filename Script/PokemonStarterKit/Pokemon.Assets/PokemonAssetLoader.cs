@@ -3,6 +3,7 @@ using Pokemon.Data.Model.HardCoded;
 using Pokemon.Data.Model.PBS;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.Engine;
 using UnrealSharp.Paper2D;

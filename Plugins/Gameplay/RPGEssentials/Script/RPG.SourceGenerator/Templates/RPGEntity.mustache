@@ -13,7 +13,7 @@ partial class {{ClassName}} : {{#Components}}IRPGEntity<{{ComponentType}}>{{^IsL
     {{ComponentType}} IRPGEntity<{{ComponentType}}>.Component => {{ComponentName}};
     {{/Components}}
 
-    protected override void CreateRequiredComponents()
+    protected override void CreateRequiredComponents_Implementation()
     {
         {{#Components}}
         {{ComponentName}} = CreateComponent<{{ComponentType}}>();
@@ -27,7 +27,7 @@ partial class {{ClassName}} : {{#Components}}IRPGEntity<{{ComponentType}}>{{^IsL
     }
 
     {{#HasFactory}}
-    protected override UScriptStruct ManagedGetEntityStruct() => {{InitializerStruct}}.StaticStruct;
+    protected override UScriptStruct ManagedGetEntityStruct_Implementation() => {{InitializerStruct}}.StaticStruct;
 
     public static partial {{ClassName}} Create({{OuterType}} {{OuterParam}}, {{InitializerStruct}} {{InitializerParams}})
     {

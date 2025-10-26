@@ -12,7 +12,7 @@ namespace Pokemon.Core.Utilities;
 /// These functions enable interaction with trainers, items, and Pokémon in the game world.
 /// </summary>
 [UClass]
-public class UPokemonCoreBlueprintLibrary : UBlueprintFunctionLibrary
+public partial class UPokemonCoreBlueprintLibrary : UBlueprintFunctionLibrary
 {
     /// <summary>
     /// Retrieves the player trainer instance from the game world context.

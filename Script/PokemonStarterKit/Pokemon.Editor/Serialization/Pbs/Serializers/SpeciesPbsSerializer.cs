@@ -19,10 +19,10 @@ namespace Pokemon.Editor.Serialization.Pbs.Serializers;
 /// rebuilding species data structures from PBS files back into game data repositories.
 /// </summary>
 [UClass]
-public sealed class USpeciesPbsSerializer : UGameDataEntryPbsSerializerBase
+public sealed partial class USpeciesPbsSerializer : UGameDataEntryPbsSerializerBase
 {
     /// <inheritdoc />
-    protected override bool Supports(TSubclassOf<UAssetGameDataRepository> repositoryClass)
+    protected override bool Supports_Implementation(TSubclassOf<UAssetGameDataRepository> repositoryClass)
     {
         return repositoryClass == typeof(USpeciesRepository);
     }

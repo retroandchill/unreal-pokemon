@@ -1,8 +1,8 @@
-﻿using LanguageExt;
-using Pokemon.Core.Components.Pokemon;
+﻿using Pokemon.Core.Components.Pokemon;
 using Pokemon.Data.Model.PBS;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 
 namespace Pokemon.Core.Model.Pokemon;
@@ -78,5 +78,5 @@ public readonly partial record struct FOwnershipComponentInfo
     /// Includes details such as the time the Pokémon hatched and any associated descriptive text.
     /// </summary>
     [UProperty(PropertyFlags.SaveGame)]
-    public required Option<FHatchInformation> HatchInformation { get; init; }
+    public required TOptional<FHatchInformation> HatchInformation { get; init; }
 }

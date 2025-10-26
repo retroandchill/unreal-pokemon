@@ -13,13 +13,13 @@ namespace Pokemon.Core.Components.Trainer;
 /// </summary>
 [UClass]
 [UMetaData("HideCategories", "Trainer,Party")]
-public class UPartyComponent : URPGComponent
+public partial class UPartyComponent : URPGComponent
 {
     [UProperty(PropertyFlags.Transient)]
-    private UTrainerInfoComponent InfoComponent { get; set; }
+    private partial UTrainerInfoComponent InfoComponent { get; set; }
 
     [UProperty]
-    private TArray<UPokemon> Party { get; }
+    private partial TArray<UPokemon> Party { get; }
 
     /// <summary>
     /// Provides a read-only list of Pokémon in the trainer's active party.
@@ -236,7 +236,7 @@ public class UPartyComponent : URPGComponent
     }
 
     /// <inheritdoc />
-    protected override void PreInitialize()
+    protected override void PreInitialize_Implementation()
     {
         InfoComponent = GetRequiredSiblingComponent<UTrainerInfoComponent>();
     }

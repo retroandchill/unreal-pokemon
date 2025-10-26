@@ -6,6 +6,7 @@ using System.Reflection;
 using Pokemon.Editor.Serialization.Pbs.Attributes;
 using Pokemon.Editor.Serialization.Pbs.Converters;
 using UnrealSharp;
+using UnrealSharp.Core;
 using UnrealSharp.GameplayTags;
 
 namespace Pokemon.Editor.Serialization.Pbs;

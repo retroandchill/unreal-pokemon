@@ -30,19 +30,16 @@ public readonly partial record struct FNatureStatChange(
 public readonly partial struct FNature() : IGameDataEntry
 {
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Gets the name of the nature. This property is read-only and intended to provide a localized text representation.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
@@ -52,7 +49,6 @@ public readonly partial struct FNature() : IGameDataEntry
     /// Each item in the list defines a stat and a corresponding percentage change.
     /// Typically used to describe how a specific nature affects the battle stats of a Pokemon.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public IReadOnlyList<FNatureStatChange> StatChanges { get; init; } = [];
 }
@@ -64,7 +60,6 @@ public readonly partial struct FNature() : IGameDataEntry
 /// </summary>
 [UClass]
 [GameDataRepository<FNature>]
-[UsedImplicitly]
 public partial class UNatureRepository : UStaticGameDataRepository;
 
 /// <summary>
@@ -72,7 +67,6 @@ public partial class UNatureRepository : UStaticGameDataRepository;
 /// This handle is utilized to identify and retrieve the nature definition from the game data repository.
 /// A Pokémon's nature influences its stat modifications during battles, typically boosting one stat while decreasing another.
 /// </summary>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Natures))]
 public readonly partial record struct FNatureHandle;
 

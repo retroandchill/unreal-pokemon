@@ -113,7 +113,6 @@ public readonly partial struct FTrainerType() : IGameDataEntry
 /// </remarks>
 [UClass]
 [GameDataRepository<FTrainerType>]
-[UsedImplicitly]
 public partial class UTrainerTypeRepository : UAssetGameDataRepository;
 
 /// <summary>
@@ -124,6 +123,5 @@ public partial class UTrainerTypeRepository : UAssetGameDataRepository;
 /// game's data repository. It is used to ensure efficient access and identification of
 /// trainer type entities without needing to duplicate the underlying data.
 /// </remarks>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.TrainerTypes))]
 public readonly partial record struct FTrainerTypeHandle;

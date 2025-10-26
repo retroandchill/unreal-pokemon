@@ -1,5 +1,4 @@
-﻿using LanguageExt.UnsafeValueAccess;
-using Pokemon.Core.Components.Pokemon;
+﻿using Pokemon.Core.Components.Pokemon;
 using Pokemon.Core.Model.Pokemon;
 using Pokemon.Data.Model.HardCoded;
 using Riok.Mapperly.Abstractions;
@@ -40,8 +39,8 @@ public partial class UStatComponentSaver : UComponentSaver
     {
         return FMainStatHandle
             .Entries.Select(x => (x.ID, IV: component.GetIVOverride(x.ID)))
-            .Where(x => x.IV.IsSome)
-            .ToDictionary(x => new FMainStatHandle(x.ID), x => x.IV.ValueUnsafe());
+            .Where(x => x.IV.HasValue)
+            .ToDictionary(x => new FMainStatHandle(x.ID), x => x.IV.Value);
     }
 
     private static IReadOnlyDictionary<FMainStatHandle, int> GetEV(UStatComponent component)

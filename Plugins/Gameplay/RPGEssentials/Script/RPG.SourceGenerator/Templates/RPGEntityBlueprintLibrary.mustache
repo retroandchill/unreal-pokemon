@@ -3,7 +3,6 @@ using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.Engine;
 using UnrealSharp.RPGCore;
-using LanguageExt.UnsafeValueAccess;
 using RPG.Core;
 
 namespace {{Namespace}};
@@ -30,9 +29,8 @@ public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
     {
         var optionValue = unit.{{Name}};
         {{#IsOptionType}}
-        if (optionValue.IsSome)
+        if (optionValue.TryGet(out value))
         {
-            value = optionValue.ValueUnsafe();
             return EValueFindResult.Found;
         }
         {{/IsOptionType}}

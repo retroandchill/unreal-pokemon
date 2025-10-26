@@ -17,8 +17,8 @@ namespace Pokemon.Core.Entities;
 /// </remarks>
 [UStruct]
 public readonly partial record struct FPokemonInitParams(
-    [UProperty] FSpeciesHandle Species,
-    [UProperty] int Level
+    [property: UProperty] FSpeciesHandle Species,
+    [property: UProperty] int Level
 );
 
 /// <summary>
@@ -29,7 +29,6 @@ public readonly partial record struct FPokemonInitParams(
 /// It also defines methods for combat-related logic and interactions, such as healing and determining if the Pokemon is able to battle.
 /// </remarks>
 [UClass(ClassFlags.Abstract)]
-[UsedImplicitly]
 public partial class UPokemon : URPGEntity
 {
     /// <summary>
@@ -47,7 +46,7 @@ public partial class UPokemon : URPGEntity
         Category = "Components"
     )]
     [Initializer(nameof(UIdentityComponent.Initialize))]
-    public UIdentityComponent IdentityComponent { get; private set; }
+    public partial UIdentityComponent IdentityComponent { get; private set; }
 
     /// <summary>
     /// Represents the component responsible for managing ownership attributes and functionality
@@ -65,7 +64,7 @@ public partial class UPokemon : URPGEntity
         Category = "Components"
     )]
     [Initializer(nameof(UOwnershipComponent.Initialize))]
-    public UOwnershipComponent OwnershipComponent { get; private set; }
+    public partial UOwnershipComponent OwnershipComponent { get; private set; }
 
     /// <summary>
     /// Represents the component responsible for managing a Pokémon entity's statistical attributes
@@ -83,7 +82,7 @@ public partial class UPokemon : URPGEntity
         Category = "Components"
     )]
     [Initializer(nameof(UStatComponent.Initialize))]
-    public UStatComponent StatComponent { get; private set; }
+    public partial UStatComponent StatComponent { get; private set; }
 
     /// <summary>
     /// Represents the component responsible for handling and managing the abilities
@@ -99,7 +98,7 @@ public partial class UPokemon : URPGEntity
         Category = "Components"
     )]
     [Initializer(nameof(UAbilityComponent.Initialize))]
-    public UAbilityComponent AbilityComponent { get; private set; }
+    public partial UAbilityComponent AbilityComponent { get; private set; }
 
     /// <summary>
     /// Represents the component responsible for managing and executing
@@ -116,7 +115,7 @@ public partial class UPokemon : URPGEntity
         Category = "Components"
     )]
     [Initializer(nameof(UMoveComponent.Initialize))]
-    public UMoveComponent MoveComponent { get; private set; }
+    public partial UMoveComponent MoveComponent { get; private set; }
 
     /// <summary>
     /// Represents the component responsible for managing and defining the behavior
@@ -131,7 +130,7 @@ public partial class UPokemon : URPGEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
-    public UHoldItemComponent HoldItemComponent { get; private set; }
+    public partial UHoldItemComponent HoldItemComponent { get; private set; }
 
     /// <summary>
     /// Represents the component responsible for managing status effects
@@ -147,7 +146,7 @@ public partial class UPokemon : URPGEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
-    public UStatusEffectComponent StatusEffectComponent { get; private set; }
+    public partial UStatusEffectComponent StatusEffectComponent { get; private set; }
 
     /// <summary>
     /// Indicates whether the Pokémon is currently able to participate in a battle.

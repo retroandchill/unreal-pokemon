@@ -1,9 +1,9 @@
 ﻿using GameDataAccessTools.Core.Views;
-using LanguageExt;
 using Pokemon.Data.Model.HardCoded;
 using Pokemon.Data.Model.PBS;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameplayTags;
 
@@ -13,7 +13,7 @@ namespace Pokemon.Core.Moves;
 /// Represents a Pokémon move, including its properties, effects, and metadata.
 /// </summary>
 [UClass]
-public class UPokemonMove : UObject
+public partial class UPokemonMove : UObject
 {
     /// <summary>
     /// Represents the move associated with a Pokémon.
@@ -23,13 +23,13 @@ public class UPokemonMove : UObject
     /// The move is defined as a handle to the underlying game data representing the move's behavior and metadata.
     /// Modifications to the move may impact related properties like total PP and associated gameplay characteristics.
     /// </remarks>
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Moves")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Moves", BlueprintAccessors = true)]
     public FMoveHandle Move
     {
-        get;
+        get => Move_BackingField;
         set
         {
-            field = value;
+            Move_BackingField = value;
             PP = Math.Clamp(PP, 0, TotalPP);
         }
     }
@@ -43,11 +43,11 @@ public class UPokemonMove : UObject
     /// Adjusting this property will automatically adhere to these constraints. The PP reflects the move's
     /// resourcefulness during battles and affects its availability.
     /// </remarks>
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Moves")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Moves", BlueprintAccessors = true)]
     public int PP
     {
-        get;
-        set => field = Math.Clamp(value, 0, TotalPP);
+        get => PP_BackingField;
+        set => PP_BackingField = Math.Clamp(value, 0, TotalPP);
     }
 
     /// <summary>
@@ -58,11 +58,11 @@ public class UPokemonMove : UObject
     /// The value of PPUps is clamped to a minimum of 0 and directly impacts the calculation of the move's TotalPP.
     /// Applying PP Ups to a move increases its longevity in battles by raising its PP ceiling.
     /// </remarks>
-    [UProperty(PropertyFlags.BlueprintReadWrite, DisplayName = "PP Ups", Category = "Moves")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, DisplayName = "PP Ups", Category = "Moves", BlueprintAccessors = true)]
     public int PPUps
     {
-        get;
-        set => field = Math.Max(value, 0);
+        get => PPUps_BackingField;
+        set => PPUps_BackingField = Math.Max(value, 0);
     }
 
     /// <summary>
@@ -210,12 +210,12 @@ public class UPokemonMove : UObject
     /// The value is optional and may be undefined for moves that always hit their target.
     /// For such moves, the accuracy is not applicable and is represented as <see cref="Option{int}.None"/>.
     /// </remarks>
-    public Option<int> Accuracy
+    public TOptional<int> Accuracy
     {
         get
         {
             var move = Move.Entry;
-            return !move.AlwaysHits ? Accuracy : Option<int>.None;
+            return !move.AlwaysHits ? Accuracy : TOptional<int>.None;
         }
     }
 
@@ -226,12 +226,12 @@ public class UPokemonMove : UObject
     /// EffectChance defines the probability, as a percentage, for non-guaranteed secondary effects of the move to occur.
     /// If the move has a guaranteed effect, this property will not apply and may return no value.
     /// </remarks>
-    public Option<int> EffectChance
+    public TOptional<int> EffectChance
     {
         get
         {
             var move = Move.Entry;
-            return !move.GuaranteedEffect ? EffectChance : Option<int>.None;
+            return !move.GuaranteedEffect ? EffectChance : TOptional<int>.None;
         }
     }
 
@@ -367,7 +367,7 @@ public class UPokemonMove : UObject
     /// The display accuracy reflects the chance of a move to successfully hit the target under normal conditions.
     /// This value may differ from internal calculations if any modifiers or conditions are applied.
     /// </remarks>
-    public Option<int> DisplayAccuracy
+    public TOptional<int> DisplayAccuracy
     {
         [UFunction(FunctionFlags.BlueprintPure, Category = "Display")]
         get => Accuracy;

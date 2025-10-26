@@ -16,7 +16,6 @@ public static partial class LogGameDataAccessToolsCore;
 /// Provides functionalities to manage game data access within the framework.
 /// Implements <see cref="IModuleInterface"/> to handle module-specific startup and shutdown operations.
 /// </summary>
-[UsedImplicitly]
 public class FManagedGameDataAccessTools : IModuleInterface
 {
     /// <inheritdoc />

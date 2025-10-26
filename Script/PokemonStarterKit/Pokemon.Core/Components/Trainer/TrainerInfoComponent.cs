@@ -1,7 +1,7 @@
 ﻿using Pokemon.Core.Entities;
 using Pokemon.Data.Model.PBS;
-using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.RPGCore;
 
 namespace Pokemon.Core.Components.Trainer;
@@ -15,7 +15,7 @@ namespace Pokemon.Core.Components.Trainer;
 /// </summary>
 [UClass]
 [UMetaData("HideCategories", "Trainer")]
-public class UTrainerInfoComponent : URPGComponent
+public partial class UTrainerInfoComponent : URPGComponent
 {
     /// <summary>
     /// Represents a handle to the trainer type associated with the trainer.
@@ -23,7 +23,7 @@ public class UTrainerInfoComponent : URPGComponent
     /// and it provides access to properties and metadata specific to the trainer type.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Trainer")]
-    public FTrainerTypeHandle TrainerType { get; set; }
+    public partial FTrainerTypeHandle TrainerType { get; set; }
 
     /// <summary>
     /// Represents the name of the trainer in the system.
@@ -31,7 +31,7 @@ public class UTrainerInfoComponent : URPGComponent
     /// used in conjunction with other trainer attributes such as type and ID.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Trainer")]
-    public FText Name { get; set; }
+    public partial FText Name { get; set; }
 
     /// <summary>
     /// Gets the full name of the trainer, consisting of the trainer type and the trainer's name.
@@ -62,7 +62,7 @@ public class UTrainerInfoComponent : URPGComponent
     }
 
     [UProperty]
-    internal uint FullID { get; set; }
+    public partial uint FullID { get; set; }
 
     private const uint TrainerIdMask = 1000000;
 

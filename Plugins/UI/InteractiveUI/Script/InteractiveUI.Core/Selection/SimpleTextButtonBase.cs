@@ -13,11 +13,11 @@ namespace InteractiveUI.Core.Selection;
 /// a text property alongside common button features.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class USimpleTextButtonBase : UCommonButtonBase
+public partial class USimpleTextButtonBase : UCommonButtonBase
 {
     [UProperty]
     [BindWidget]
-    private UCommonTextBlock TextBlock { get; }
+    private partial UCommonTextBlock TextBlock { get; }
 
     /// <summary>
     /// Gets or sets the text associated with the button. This property is used for setting
@@ -28,13 +28,13 @@ public class USimpleTextButtonBase : UCommonButtonBase
     /// by the button's text block. When this property is updated, the displayed text on the
     /// button updates accordingly.
     /// </remarks>
-    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite, Category = "Display")]
+    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite, Category = "Display", BlueprintAccessors = true)]
     public FText Text
     {
-        get;
+        get => Text_BackingField;
         set
         {
-            field = value;
+            Text_BackingField = value;
 
 #if WITH_EDITOR
             if (!SystemLibrary.IsValid(TextBlock))

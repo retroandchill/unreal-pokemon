@@ -45,8 +45,15 @@ public delegate bool IsWidgetEnabled();
 /// conditional behavior for enabling or disabling the button based on specified conditions.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UConditionalButtonBase : UCommonButtonBase, IConditionalWidget
+public partial class UConditionalButtonBase : UCommonButtonBase, IConditionalWidget
 {
+    public UConditionalButtonBase()
+    {
+        EnabledVisibility = ESlateVisibility.SelfHitTestInvisible;
+        DisabledVisibility = ESlateVisibility.Collapsed;
+        IsWidgetEnabled = true;
+    }
+
     /// <summary>
     /// Gets a value that determines whether the widget is enabled.
     /// When enabled, the widget can be interacted with in the user interface and may respond to user actions or system updates.
@@ -57,10 +64,10 @@ public class UConditionalButtonBase : UCommonButtonBase, IConditionalWidget
     /// If the widget is disabled, its visual or interactive state may change, depending on the implementation.
     /// </remarks>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Selection")]
-    public bool IsWidgetEnabled { get; private set; } = true;
+    public partial bool IsWidgetEnabled { get; private set; }
 
     [UProperty]
-    private TDelegate<IsWidgetEnabled> IsWidgetEnabledDelegate { get; }
+    private partial TDelegate<IsWidgetEnabled> IsWidgetEnabledDelegate { get; }
 
     /// <summary>
     /// Gets or sets the visibility of the widget when it is in the enabled state.
@@ -75,7 +82,7 @@ public class UConditionalButtonBase : UCommonButtonBase, IConditionalWidget
     /// </remarks>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Visibility")]
     [UMetaData("InvalidEnumValues", "Collapsed, Hidden")]
-    private ESlateVisibility EnabledVisibility { get; set; } = ESlateVisibility.SelfHitTestInvisible;
+    private partial ESlateVisibility EnabledVisibility { get; set; }
 
     /// <summary>
     /// Gets or sets the visibility of the widget when it is in the disabled state.
@@ -91,7 +98,7 @@ public class UConditionalButtonBase : UCommonButtonBase, IConditionalWidget
     /// </remarks>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Visibility")]
     [UMetaData("InvalidEnumValues", "Collapsed, Hidden")]
-    private ESlateVisibility DisabledVisibility { get; set; } = ESlateVisibility.Collapsed;
+    private partial ESlateVisibility DisabledVisibility { get; set; }
 
     /// <inheritdoc />
     public void UpdateEnabled()
@@ -110,8 +117,15 @@ public class UConditionalButtonBase : UCommonButtonBase, IConditionalWidget
 /// its enabled state and visibility based on specified conditions.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UConditionalTextButtonBase : USimpleTextButtonBase, IConditionalWidget
+public partial class UConditionalTextButtonBase : USimpleTextButtonBase, IConditionalWidget
 {
+    public UConditionalTextButtonBase()
+    {
+        EnabledVisibility = ESlateVisibility.SelfHitTestInvisible;
+        DisabledVisibility = ESlateVisibility.Collapsed;
+        IsWidgetEnabled = true;
+    }
+
     /// <summary>
     /// Determines whether the widget is enabled and capable of interacting with user inputs or system behaviors.
     /// </summary>
@@ -122,10 +136,10 @@ public class UConditionalTextButtonBase : USimpleTextButtonBase, IConditionalWid
     /// A disabled widget may also alter its visibility depending on the specific implementation of the widget.
     /// </remarks>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Selection")]
-    public bool IsWidgetEnabled { get; private set; } = true;
+    public partial bool IsWidgetEnabled { get; private set; }
 
     [UProperty]
-    private TDelegate<IsWidgetEnabled> IsWidgetEnabledDelegate { get; }
+    private partial TDelegate<IsWidgetEnabled> IsWidgetEnabledDelegate { get; }
 
     /// <summary>
     /// Gets or sets the visibility state of the widget when it is enabled.
@@ -140,7 +154,7 @@ public class UConditionalTextButtonBase : USimpleTextButtonBase, IConditionalWid
     /// </remarks>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Visibility")]
     [UMetaData("InvalidEnumValues", "Collapsed, Hidden")]
-    private ESlateVisibility EnabledVisibility { get; set; } = ESlateVisibility.SelfHitTestInvisible;
+    private partial ESlateVisibility EnabledVisibility { get; set; }
 
     /// <summary>
     /// Gets or sets the visibility state of the widget when it is disabled.
@@ -153,7 +167,7 @@ public class UConditionalTextButtonBase : USimpleTextButtonBase, IConditionalWid
     /// </remarks>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Visibility")]
     [UMetaData("InvalidEnumValues", "Collapsed, Hidden")]
-    private ESlateVisibility DisabledVisibility { get; set; } = ESlateVisibility.Collapsed;
+    private partial ESlateVisibility DisabledVisibility { get; set; }
 
     /// <inheritdoc />
     public void UpdateEnabled()

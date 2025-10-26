@@ -1,10 +1,6 @@
-﻿using LanguageExt;
-using Pokemon.Core.Components.Pokemon;
-using Pokemon.Data.Model.HardCoded;
-using Pokemon.Data.Model.PBS;
+﻿using Pokemon.Data.Model.HardCoded;
 using UnrealSharp;
 using UnrealSharp.Attributes;
-using UnrealSharp.CoreUObject;
 
 namespace Pokemon.Core.Model.Pokemon;
 
@@ -78,5 +74,5 @@ public readonly partial record struct FStatComponentInfo
     /// altering its stat growth or behavior. If no override is present, the Pokémon uses its default nature.
     /// </summary>
     [UProperty(PropertyFlags.SaveGame)]
-    public required Option<FNatureHandle> NatureOverride { get; init; }
+    public required TOptional<FNatureHandle> NatureOverride { get; init; }
 }

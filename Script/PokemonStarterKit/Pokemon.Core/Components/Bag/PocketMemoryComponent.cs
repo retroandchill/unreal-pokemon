@@ -21,10 +21,10 @@ namespace Pokemon.Core.Components.Bag;
 /// </remarks>
 [UClass]
 [UMetaData("HideCategories", "Inventory")]
-public class UPocketMemoryComponent : URPGComponent
+public partial class UPocketMemoryComponent : URPGComponent
 {
     [UProperty(PropertyFlags.Transient)]
-    private UPocketsComponent PocketsComponent { get; set; }
+    private partial UPocketsComponent PocketsComponent { get; set; }
 
     /// <summary>
     /// Gets or sets the <see cref="FGameplayTag"/> representing the last pocket viewed by the user.
@@ -35,7 +35,7 @@ public class UPocketMemoryComponent : URPGComponent
     /// internally to maintain a seamless navigation flow within the inventory.
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Inventory")]
-    public FGameplayTag LastViewedPocket { get; set; }
+    public partial FGameplayTag LastViewedPocket { get; set; }
 
     /// <summary>
     /// Gets the mapping of <see cref="FGameplayTag"/> representing pockets to their respective indices
@@ -48,10 +48,10 @@ public class UPocketMemoryComponent : URPGComponent
     /// selects items in different pockets.
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Inventory")]
-    public TMap<FGameplayTag, int> LastViewedItems { get; }
+    public partial TMap<FGameplayTag, int> LastViewedItems { get; }
 
     /// <inheritdoc />
-    protected override void PreInitialize()
+    protected override void PreInitialize_Implementation()
     {
         PocketsComponent = GetRequiredSiblingComponent<UPocketsComponent>();
     }

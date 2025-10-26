@@ -188,12 +188,10 @@ public readonly partial struct FGenderRatioData
 public readonly partial struct FGenderRatio : IGameDataEntry
 {
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
@@ -202,7 +200,6 @@ public readonly partial struct FGenderRatio : IGameDataEntry
     /// This property provides a localized text value, typically used to describe
     /// the gender distribution of an entity in a user-readable format.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
@@ -214,7 +211,6 @@ public readonly partial struct FGenderRatio : IGameDataEntry
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [AsValue]
-    [UsedImplicitly]
     public required FGenderRatioData Ratio { get; init; }
 }
 
@@ -224,7 +220,6 @@ public readonly partial struct FGenderRatio : IGameDataEntry
 /// </summary>
 [UClass]
 [GameDataRepository<FGenderRatio>]
-[UsedImplicitly]
 public partial class UGenderRatioRepository : UStaticGameDataRepository;
 
 /// <summary>
@@ -232,7 +227,6 @@ public partial class UGenderRatioRepository : UStaticGameDataRepository;
 /// This handle serves as an intermediary for accessing specific gender-based configurations or distributions
 /// for Pokémon entities, as defined in the game's data repository.
 /// </summary>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.GenderRatios))]
 public readonly partial record struct FGenderRatioHandle;
 

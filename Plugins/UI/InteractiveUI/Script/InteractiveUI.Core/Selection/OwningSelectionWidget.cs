@@ -27,8 +27,10 @@ public partial class UOwningSelectionWidget : USelectionWidget
     /// <param name="index">The index at which the button is added.</param>
     /// <param name="button">The button (widget) that has been added.</param>
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Selection")]
-    protected virtual void SlotButton(int index, UWidget button)
+    protected partial void SlotButton(int index, UWidget button);
+
+    protected partial void SlotButton_Implementation(int index, UWidget button)
     {
-        // No native implementation
+        // Nothing to do here.
     }
 }

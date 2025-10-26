@@ -4,6 +4,7 @@ using Pokemon.Data.Model.PBS;
 using RPG.SourceGenerator.Attributes;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.RPGCore;
 
@@ -34,7 +35,7 @@ public partial class UTrainer : URPGEntity
         Category = "Components"
     )]
     [Initializer(nameof(UTrainerInfoComponent.Initialize))]
-    public UTrainerInfoComponent InfoComponent { get; private set; }
+    public partial UTrainerInfoComponent InfoComponent { get; private set; }
 
     /// <summary>
     /// Gets the party component of the trainer, which manages the trainer's Pokémon party,
@@ -47,7 +48,7 @@ public partial class UTrainer : URPGEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
-    public UPartyComponent PartyComponent { get; private set; }
+    public partial UPartyComponent PartyComponent { get; private set; }
 
     /// <summary>
     /// Creates a new instance of a UTrainer object using the specified outer object, trainer type, and name.

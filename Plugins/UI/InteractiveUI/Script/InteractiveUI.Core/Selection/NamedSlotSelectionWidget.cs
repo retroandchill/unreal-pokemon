@@ -13,7 +13,7 @@ namespace InteractiveUI.Core.Selection;
 /// the IRefreshable interface for updating its state.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UNamedSlotSelectionWidget : USelectionWidget, IRefreshable
+public partial class UNamedSlotSelectionWidget : USelectionWidget, IRefreshable
 {
     /// <summary>
     /// Gets the associated content slot for this widget. The content slot typically holds the panel widget
@@ -25,7 +25,7 @@ public class UNamedSlotSelectionWidget : USelectionWidget, IRefreshable
     /// </remarks>
     [UProperty]
     [BindWidget]
-    private UNamedSlot ContentSlot { get; }
+    private partial UNamedSlot ContentSlot { get; }
 
     /// <inheritdoc />
     protected override void Construct_Implementation()

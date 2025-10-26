@@ -1,7 +1,8 @@
-﻿using LanguageExt;
-using Pokemon.Core.Entities;
+﻿using Pokemon.Core.Entities;
 using Pokemon.Data.Model.PBS;
 using UnrealSharp;
+using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.Engine;
 using UnrealSharp.GameplayTags;
 
@@ -23,7 +24,8 @@ namespace Pokemon.Core.Services.Async;
 /// The quantity of the item in the slot, which indicates how many instances of
 /// the referenced item handle are present.
 /// </param>
-public readonly record struct FItemSlotInfo(FItemHandle Item, int Quantity);
+[UStruct]
+public readonly partial record struct FItemSlotInfo(FItemHandle Item, int Quantity);
 
 /// <summary>
 /// Defines a service contract for handling asynchronous actions within the game framework.

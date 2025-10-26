@@ -1,7 +1,4 @@
-﻿using JetBrains.Annotations;
-using LanguageExt;
-using LanguageExt.UnsafeValueAccess;
-using Pokemon.Data.Model.PBS;
+﻿using Pokemon.Data.Model.PBS;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.RPGCore;
@@ -17,9 +14,9 @@ namespace Pokemon.Core.Components.Pokemon;
 /// </remarks>
 [UStruct]
 public readonly partial record struct FWildHoldItems(
-    [UProperty(PropertyFlags.BlueprintReadOnly)] IReadOnlyList<FItemHandle> Common,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] IReadOnlyList<FItemHandle> Uncommon,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] IReadOnlyList<FItemHandle> Rare
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] IReadOnlyList<FItemHandle> Common,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] IReadOnlyList<FItemHandle> Uncommon,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] IReadOnlyList<FItemHandle> Rare
 );
 
 /// <summary>
@@ -32,11 +29,10 @@ public readonly partial record struct FWildHoldItems(
 /// </remarks>
 [UClass]
 [UMetaData("HideCategories", "HoldItem")]
-[UsedImplicitly]
-public class UHoldItemComponent : URPGComponent
+public partial class UHoldItemComponent : URPGComponent
 {
     [UProperty(PropertyFlags.Transient)]
-    private UIdentityComponent IdentityComponent { get; set; }
+    private partial UIdentityComponent IdentityComponent { get; set; }
 
     /// <summary>
     /// Gets or sets the item held by the Pokémon.
@@ -46,16 +42,16 @@ public class UHoldItemComponent : URPGComponent
     /// If an invalid handle is set, the property silently rejects it. This ensures the validity
     /// of the held item at all times.
     /// </remarks>
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "HoldItem")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "HoldItem", BlueprintAccessors = true)]
     public TOptional<FItemHandle> Item
     {
-        get;
+        get => Item_BackingField;
         set
         {
-            if (value.IsSome && !value.ValueUnsafe().IsValid)
+            if (value.HasValue && !value.Value.IsValid)
                 return;
 
-            field = value;
+            Item_BackingField = value;
         }
     }
 
@@ -70,7 +66,7 @@ public class UHoldItemComponent : URPGComponent
     public bool HasItem
     {
         [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Has Item", Category = "HoldItem")]
-        get => Item.IsSome;
+        get => Item.HasValue;
     }
 
     /// <summary>
@@ -96,7 +92,7 @@ public class UHoldItemComponent : URPGComponent
     }
 
     /// <inheritdoc />
-    protected override void PreInitialize()
+    protected override void PreInitialize_Implementation()
     {
         IdentityComponent = GetRequiredSiblingComponent<UIdentityComponent>();
     }

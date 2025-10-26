@@ -9,10 +9,8 @@ namespace GameDataAccessTools.Editor.Interop;
 [StructLayout(LayoutKind.Sequential)]
 public readonly unsafe struct GameDataTypeManagedActions
 {
-    [UsedImplicitly]
     public required delegate* unmanaged<IntPtr, NativeBool> IsValidGameDataHandle { get; init; }
 
-    [UsedImplicitly]
     public required delegate* unmanaged<IntPtr, UnmanagedArray*, void> GetDataHandleActions { get; init; }
 
     public static GameDataTypeManagedActions Create()

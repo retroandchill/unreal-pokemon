@@ -29,7 +29,6 @@ public readonly partial record struct FAlternativeStruct
 }
 
 [UClass]
-[UsedImplicitly]
 public partial class UInstancedStructViewWrapper : UObject
 {
     [UProperty]

@@ -285,7 +285,7 @@ class RPGCORE_API UInventoryContainer : public UObject
      * This property defines the upper limit of slots that can be configured
      * for use. If not set, no limit is enforced.
      */
-    UPROPERTY(EditDefaultsOnly, Category = "Settings")
+    UPROPERTY(EditAnywhere, Category = "Settings")
     TOptional<int32> MaxSlots;
 
     /**
@@ -295,6 +295,6 @@ class RPGCORE_API UInventoryContainer : public UObject
      * stacked together. If not set, the stack size may default to other settings
      * or behaviors defined elsewhere.
      */
-    UPROPERTY(EditDefaultsOnly, Category = "Settings")
+    UPROPERTY(EditAnywhere, Category = "Settings")
     TOptional<int32> MaxStackSize;
 };

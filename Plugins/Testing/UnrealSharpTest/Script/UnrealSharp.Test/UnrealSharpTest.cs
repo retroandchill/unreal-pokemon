@@ -22,7 +22,6 @@ public static partial class LogUnrealSharpTest;
 /// It registers and deregisters delegated testing operations from the
 /// unmanaged system through the <c>ManagedTestingExporter</c>.
 /// </summary>
-[UsedImplicitly]
 public class FUnrealSharpTestModule : IModuleInterface
 {
     /// <inheritdoc />

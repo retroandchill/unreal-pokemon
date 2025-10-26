@@ -41,7 +41,7 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
     {
         var isValidType = true;
         if (
-            !structSymbol
+            structSymbol
                 .GetAttributes()
                 .Any(a => a.AttributeClass?.ToDisplayString() == SourceContextNames.UStructAttribute)
         )
@@ -50,8 +50,8 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
                 Diagnostic.Create(
                     new DiagnosticDescriptor(
                         "GDA3001",
-                        "Data handle must be a UStruct",
-                        "{0} must be annotated with UStruct",
+                        "Data handle should not be marked UStruct",
+                        "{0} must not be annotated with UStruct",
                         "GameDataAccessTools",
                         DiagnosticSeverity.Error,
                         true

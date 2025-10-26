@@ -283,25 +283,21 @@ public readonly partial struct FItem() : IGameDataEntry
     /// <summary>
     /// Indicates whether the item is classified as a Technical Machine (TM).
     /// </summary>
-    [UsedImplicitly]
     public bool IsTM => FieldUse == EFieldUse.TM;
 
     /// <summary>
     /// Indicates whether the item is classified as a Technical Record (TR) based on its field use.
     /// </summary>
-    [UsedImplicitly]
     public bool IsTR => FieldUse == EFieldUse.TR;
 
     /// <summary>
     /// Determines if the item is categorized as an HM (Hidden Machine).
     /// </summary>
-    [UsedImplicitly]
     public bool IsHM => FieldUse == EFieldUse.HM;
 
     /// <summary>
     /// Indicates whether the item is a machine, such as a TM, TR, or HM.
     /// </summary>
-    [UsedImplicitly]
     public bool IsMachine => IsTM || IsTR || IsHM;
 
     /// <summary>
@@ -309,28 +305,24 @@ public readonly partial struct FItem() : IGameDataEntry
     /// The property determines this status based on specific tags in the item's
     /// `Tags` field, such as `Data_Item_Mail`, or if it is designated as `IsIconMail`.
     /// </summary>
-    [UsedImplicitly]
     public bool IsMail => Tags.HasTag(GameplayTags.Data_Item_Mail) || IsIconMail;
 
     /// <summary>
     /// Indicates whether the item is categorized as an "Icon Mail."
     /// Evaluates to true if the item's tags contain the `Data_Item_IconMail` gameplay tag.
     /// </summary>
-    [UsedImplicitly]
     public bool IsIconMail => Tags.HasTag(GameplayTags.Data_Item_IconMail);
 
     /// <summary>
     /// Determines whether the item is categorized as a Poké Ball.
     /// This property checks if the item's tags contain the "Data.Item.PokeBall" gameplay tag.
     /// </summary>
-    [UsedImplicitly]
     public bool IsPokeBall => Tags.HasTag(GameplayTags.Data_Item_PokeBall);
 
     /// <summary>
     /// Indicates whether the item is classified as a berry.
     /// This determination is based on the presence of the `Data_Item_Berry` tag in the item's tag container.
     /// </summary>
-    [UsedImplicitly]
     public bool IsBerry => Tags.HasTag(GameplayTags.Data_Item_Berry);
 
     /// <summary>
@@ -339,69 +331,59 @@ public readonly partial struct FItem() : IGameDataEntry
     /// This property is determined by checking for the presence of the specific key item tag
     /// in the item's associated tags.
     /// </summary>
-    [UsedImplicitly]
     public bool IsKeyItem => Tags.HasTag(GameplayTags.Data_Item_KeyItem);
 
     /// <summary>
     /// Indicates whether the item is classified as an evolution stone.
     /// This property is determined by checking if the item's tags include the `Data_Item_EvolutionStone` tag.
     /// </summary>
-    [UsedImplicitly]
     public bool IsEvolutionStone => Tags.HasTag(GameplayTags.Data_Item_EvolutionStone);
 
     /// <summary>
     /// Indicates whether the item is categorized as a fossil.
     /// This property evaluates to true if the item's tags contain the `Data.Item.Fossil` tag.
     /// </summary>
-    [UsedImplicitly]
     public bool IsFossil => Tags.HasTag(GameplayTags.Data_Item_Fossil);
 
     /// <summary>
     /// Indicates whether the item is classified as an Apricorn.
     /// This determination is based on whether the associated `Tags` contain the `Data_Item_Apricorn` gameplay tag.
     /// </summary>
-    [UsedImplicitly]
     public bool IsApricorn => Tags.HasTag(GameplayTags.Data_Item_Apricorn);
 
     /// <summary>
     /// Indicates whether the item is classified as a gem.
     /// This property checks if the item's tags include the tag "Data.Item.TypeGem".
     /// </summary>
-    [UsedImplicitly]
     public bool IsGem => Tags.HasTag(GameplayTags.Data_Item_TypeGem);
 
     /// <summary>
     /// Gets a value indicating whether the item is categorized as mulch.
     /// This is determined by checking if the item's tags contain the `Data_Item_Mulch` gameplay tag.
     /// </summary>
-    [UsedImplicitly]
     public bool IsMulch => Tags.HasTag(GameplayTags.Data_Item_Mulch);
 
     /// <summary>
     /// Indicates whether the item is classified as a Mega Stone.
     /// This property evaluates to true if the item's tags include the `Data_Item_MegaStone` tag.
     /// </summary>
-    [UsedImplicitly]
     public bool IsMegaStone => Tags.HasTag(GameplayTags.Data_Item_MegaStone);
 
     /// <summary>
     /// Indicates whether the item is classified as a "scent" by checking if it has the associated gameplay tag `Data.Item.Scent`.
     /// </summary>
-    [UsedImplicitly]
     public bool IsScent => Tags.HasTag(GameplayTags.Data_Item_Scent);
 
     /// <summary>
     /// Indicates whether the item is considered important.
     /// An item is deemed important if it is classified as a Key Item, HM, or TM.
     /// </summary>
-    [UsedImplicitly]
     public bool IsImportant => IsKeyItem || IsHM || IsTM;
 
     /// <summary>
     /// Indicates whether the item can be held by a Pokémon.
     /// Returns true if the item is not important (e.g., not a key item, HM, or TM); otherwise, false.
     /// </summary>
-    [UsedImplicitly]
     public bool CanHold => !IsImportant;
 
     /// <summary>
@@ -409,7 +391,6 @@ public readonly partial struct FItem() : IGameDataEntry
     /// This property returns true if the item is consumable and not considered important.
     /// Important items, such as key items, HMs, or TMs, are not consumed after use.
     /// </summary>
-    [UsedImplicitly]
     public bool ConsumedAfterUse => !IsImportant && IsConsumable;
 }
 
@@ -420,13 +401,11 @@ public readonly partial struct FItem() : IGameDataEntry
 /// </summary>
 [UClass]
 [GameDataRepository<FItem>]
-[UsedImplicitly]
 public partial class UItemRepository : UAssetGameDataRepository;
 
 /// <summary>
 /// Represents a handle for an item in the Pokémon game data. Includes functionality for referencing items
 /// stored within the game's item repository and is utilized in various game systems to identify specific items.
 /// </summary>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Items))]
 public readonly partial record struct FItemHandle;

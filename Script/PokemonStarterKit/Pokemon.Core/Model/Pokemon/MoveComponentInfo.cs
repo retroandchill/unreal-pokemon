@@ -1,5 +1,4 @@
-﻿using LanguageExt;
-using Pokemon.Core.Model.Moves;
+﻿using Pokemon.Core.Model.Moves;
 using Pokemon.Data.Model.HardCoded;
 using Pokemon.Data.Model.PBS;
 using UnrealSharp.Attributes;

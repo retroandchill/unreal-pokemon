@@ -1,6 +1,8 @@
 ﻿#nullable enable
 using UnrealSharp;
 using UnrealSharp.Core;
+using UnrealSharp.Core.Marshallers;
+using UnrealSharp.Interop;
 using UnrealSharp.Attributes;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameDataAccessTools;
@@ -8,11 +10,28 @@ using GameDataAccessTools.Core;
 using GameDataAccessTools.Core.Views;
 using GameDataAccessTools.Core.Utilities;
 using ZLinq;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace {{Namespace}};
 
-readonly partial record struct {{StructName}}([field: UProperty(PropertyFlags.EditAnywhere)] FName ID) : IDataHandle<{{EntryType}}>{{#Convertables}}, IEquatable<{{Type}}>{{/Convertables}}
+readonly partial record struct {{StructName}}(FName ID) : MarshalledStruct<{{StructName}}>, IDataHandle<{{EntryType}}>{{#Convertables}}, IEquatable<{{Type}}>{{/Convertables}}
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    private static IntPtr NativeTypePtr = UCoreUObjectExporter.CallGetType("{{AssemblyName}}", "{{Namespace}}", "{{EngineName}}");
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    private static int {{StructName}}_ID_Offset = FPropertyExporter.CallGetPropertyOffsetFromName(NativeTypePtr, "ID");
+
+    private static int NativeDataSize = UScriptStructExporter.CallGetNativeStructSize(NativeTypePtr);
+    public static int GetNativeDataSize() => NativeDataSize;
+    public static IntPtr GetNativeClassPtr() => NativeTypePtr;
+    public static {{StructName}} FromNative(IntPtr buffer) => new {{StructName}}(buffer);
+
+    public void ToNative(IntPtr buffer) => BlittableMarshaller<{{StructName}}>.ToNative(buffer, 0, this);
+
+    public {{StructName}}(IntPtr buffer) : this(BlittableMarshaller<FName>.FromNative(IntPtr.Add(buffer, {{StructName}}_ID_Offset), 0)) { }
+
     public static {{StructName}} None => new(FName.None);
 
     {{#WithRepository}}
@@ -103,4 +122,25 @@ readonly partial record struct {{StructName}}([field: UProperty(PropertyFlags.Ed
 
     public override string ToString() => ID.ToString();
 }
-                                                                          
+   
+
+public static class {{StructName}}Marshaller
+{
+    public static void ToNative(IntPtr buffer, int index, {{StructName}} obj) => obj.ToNative(buffer + (index * {{StructName}}.GetNativeDataSize()));
+    public static {{StructName}} FromNative(IntPtr buffer, int index) => new {{StructName}}(buffer + (index * {{StructName}}.GetNativeDataSize()));
+}                                                                       
+
+internal static class {{StructName}}_Initializer
+{
+    #pragma warning disable CA2255
+    [ModuleInitializer]
+    #pragma warning restore CA2255
+    public static void Register() => StartUpJobManager.RegisterStartUpJob("{{AssemblyName}}", Initialize);
+    public static void Initialize()
+    {
+        IntPtr {{StructName}}Ptr = FTypeBuilderExporter.NewType("{{EngineName}}", {{TypeVersion}}, 1, typeof({{StructName}}), out var needsRebuild);
+        if (!needsRebuild) return;
+        IntPtr {{StructName}}Properties = FTypeBuilderExporter.InitStructProps({{StructName}}Ptr, 1);
+        FTypeBuilderExporter.NewProperty({{StructName}}Properties, 32, "ID", 1, "", 1, 0, "", "");
+    }
+}

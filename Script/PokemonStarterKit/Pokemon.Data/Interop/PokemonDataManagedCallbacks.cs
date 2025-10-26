@@ -30,7 +30,6 @@ public readonly unsafe struct PokemonDataManagedActions
     /// </remarks>
     /// <seealso cref="PokemonDataManagedCallbacks.StartDataManager"/>
     /// <seealso cref="FPokemonDataModule.CreateGameDataManager"/>
-    [UsedImplicitly]
     public required delegate* unmanaged<void> StartDataManager { get; init; }
 
     /// <summary>
@@ -46,7 +45,6 @@ public readonly unsafe struct PokemonDataManagedActions
     /// </remarks>
     /// <seealso cref="PokemonDataManagedCallbacks.GetEvolutionConditionClass"/>
     /// <seealso cref="FEvolutionHandle"/>
-    [UsedImplicitly]
     public required delegate* unmanaged<IntPtr, IntPtr, IntPtr, NativeBool> GetEvolutionConditionClass { get; init; }
 
     /// <summary>

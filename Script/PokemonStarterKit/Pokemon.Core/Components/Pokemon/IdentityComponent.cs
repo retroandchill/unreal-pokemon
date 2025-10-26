@@ -4,6 +4,7 @@ using Pokemon.Data.Model.PBS;
 using RPG.SourceGenerator.Attributes;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.RPGCore;
 
 namespace Pokemon.Core.Components.Pokemon;
@@ -15,7 +16,7 @@ namespace Pokemon.Core.Components.Pokemon;
 /// </summary>
 [UClass]
 [UMetaData("HideCategories", "Identity")]
-public class UIdentityComponent : URPGComponent
+public partial class UIdentityComponent : URPGComponent
 {
     /// <summary>
     /// Represents the species associated with a Pokémon.
@@ -30,7 +31,7 @@ public class UIdentityComponent : URPGComponent
     /// A handle to the species data representing the Pokémon's species identity.
     /// </value>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Identity")]
-    public FSpeciesHandle Species { get; set; }
+    public partial FSpeciesHandle Species { get; set; }
 
     /// <summary>
     /// Represents the custom name assigned to a Pokémon.
@@ -44,7 +45,7 @@ public class UIdentityComponent : URPGComponent
     /// A localized text object containing the assigned nickname of the Pokémon.
     /// </value>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Identity")]
-    public FText Nickname { get; set; }
+    public partial FText Nickname { get; set; }
 
     /// <summary>
     /// Represents the personality value of a Pokémon.
@@ -59,7 +60,7 @@ public class UIdentityComponent : URPGComponent
     /// A 32-bit unsigned integer representing the personality value of the Pokémon.
     /// </value>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Identity")]
-    public uint PersonalityValue { get; set; }
+    public partial uint PersonalityValue { get; set; }
 
     /// <summary>
     /// Represents the gender of a Pokémon.
@@ -78,16 +79,16 @@ public class UIdentityComponent : URPGComponent
     /// A value from the <see cref="EPokemonGender"/> enumeration indicating the Pokémon's gender:
     /// Male, Female, or Genderless.
     /// </value>
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Gender")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Gender", BlueprintAccessors = true)]
     public EPokemonGender Gender
     {
-        get;
+        get => Gender_BackingField;
         set
         {
             if (IsSingleGendered)
                 return;
 
-            field = value;
+            Gender_BackingField = value;
         }
     }
 
@@ -189,7 +190,7 @@ public class UIdentityComponent : URPGComponent
     /// A boolean value where <c>true</c> signifies that the Pokémon is shiny and <c>false</c> indicates otherwise.
     /// </value>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Shininess")]
-    public bool IsShiny { get; set; }
+    public partial bool IsShiny { get; set; }
 
     /// <summary>
     /// Indicates whether the Pokémon is considered "Super Shiny."
@@ -205,13 +206,13 @@ public class UIdentityComponent : URPGComponent
     /// A boolean value where true signifies the Pokémon is "Super Shiny,"
     /// and false signifies it is not.
     /// </value>
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Shininess")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Shininess", BlueprintAccessors = true)]
     public bool IsSuperShiny
     {
-        get;
+        get => IsSuperShiny_BackingField;
         set
         {
-            field = value;
+            IsSuperShiny_BackingField = value;
             if (value)
                 IsShiny = true;
         }

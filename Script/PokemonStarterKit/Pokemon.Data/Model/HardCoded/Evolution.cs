@@ -178,12 +178,10 @@ public readonly partial record struct FLocationFlagEvolutionConditionData
 public readonly partial struct FEvolution : IGameDataEntry
 {
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
@@ -194,7 +192,6 @@ public readonly partial struct FEvolution : IGameDataEntry
     /// This property holds a localized text (`FText`) that is intended to display the name or label
     /// of the associated evolution structure. It is annotated for in-game representation purposes.
     /// </remarks>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [GameAccessTools.SourceGenerator.Attributes.DisplayName]
     public required FText Name { get; init; }
@@ -207,7 +204,6 @@ public readonly partial struct FEvolution : IGameDataEntry
     /// way to parameterize specific aspects of evolution logic. The structure varies based on
     /// the implementation context and the desired behavior.
     /// </remarks>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public UScriptStruct? Parameter { get; init; }
 }
@@ -222,7 +218,6 @@ public readonly partial struct FEvolution : IGameDataEntry
 /// </remarks>
 [UClass]
 [GameDataRepository<FEvolution>]
-[UsedImplicitly]
 public partial class UEvolutionRepository : UStaticGameDataRepository;
 
 /// <summary>
@@ -232,7 +227,6 @@ public partial class UEvolutionRepository : UStaticGameDataRepository;
 /// This structure is used in the context of accessing and managing evolution data within the game framework.
 /// It acts as a data handle tied to the evolution repository.
 /// </remarks>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Evolutions))]
 public readonly partial record struct FEvolutionHandle;
 

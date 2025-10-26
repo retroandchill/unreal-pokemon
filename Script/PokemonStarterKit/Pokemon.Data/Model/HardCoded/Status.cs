@@ -19,12 +19,10 @@ namespace Pokemon.Data.Model.HardCoded;
 public readonly partial struct FStatus : IGameDataEntry
 {
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
@@ -32,7 +30,6 @@ public readonly partial struct FStatus : IGameDataEntry
     /// Specifies the display name of the status within the game's data system.
     /// This property is primarily used for user-facing text and localization.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
@@ -45,14 +42,12 @@ public readonly partial struct FStatus : IGameDataEntry
 /// </summary>
 [UClass]
 [GameDataRepository<FStatus>]
-[UsedImplicitly]
 public partial class UStatusRepository : UStaticGameDataRepository;
 
 /// <summary>
 /// Represents a unique handle for identifying and referencing a specific status entity
 /// within the game's data model.
 /// </summary>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Statuses))]
 public readonly partial record struct FStatusHandle;
 

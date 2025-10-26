@@ -97,7 +97,6 @@ public readonly partial struct FType() : IGameDataEntry
 /// </remarks>
 [UClass]
 [GameDataRepository<FType>]
-[UsedImplicitly]
 public partial class UTypeRepository : UAssetGameDataRepository;
 
 /// <summary>
@@ -109,6 +108,5 @@ public partial class UTypeRepository : UAssetGameDataRepository;
 /// game components and repositories, where it acts as a key to retrieve or operate on
 /// specific type information.
 /// </remarks>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Types))]
 public readonly partial record struct FTypeHandle;

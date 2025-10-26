@@ -11,7 +11,7 @@ namespace InteractiveUI.Core.Selection;
 /// additional features for handling option-based selection UI widgets.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UOptionSelectionWidget : UOwningSelectionWidget
+public partial class UOptionSelectionWidget : UOwningSelectionWidget
 {
     /// <summary>
     /// Specifies the class type of button widgets used within the selection widget.
@@ -19,14 +19,14 @@ public class UOptionSelectionWidget : UOwningSelectionWidget
     /// and functional attributes of buttons created for each selectable option.
     /// </summary>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Options")]
-    public TSubclassOf<USimpleTextButtonBase> ButtonClass { get; }
+    public partial TSubclassOf<USimpleTextButtonBase> ButtonClass { get; }
 
     /// <summary>
     /// Contains the list of displayable text options available for selection in the widget.
     /// These options are used to populate the interactive UI elements displayed to the user.
     /// </summary>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Options")]
-    public TArray<FText> Options { get; }
+    public partial TArray<FText> Options { get; }
 
     /// <summary>
     /// Determines the index of the cancel option within the list of selectable options.
@@ -35,7 +35,7 @@ public class UOptionSelectionWidget : UOwningSelectionWidget
     /// this property will be null.
     /// </summary>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Options")]
-    public int? CancelOptionIndex { get; private set; }
+    public partial int? CancelOptionIndex { get; private set; }
 
     /// <summary>
     /// Occurs when an option is selected from the available choices in the `UOptionSelectionWidget`.
@@ -46,7 +46,7 @@ public class UOptionSelectionWidget : UOwningSelectionWidget
     /// <inheritdoc />
     protected override void Construct_Implementation()
     {
-        base.Construct();
+        base.Construct_Implementation();
         Buttons.OnButtonBaseClicked += [UFunction] (_, i) => OnOptionSelected?.Invoke(i);
     }
 

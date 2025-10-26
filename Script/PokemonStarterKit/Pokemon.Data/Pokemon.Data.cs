@@ -13,7 +13,6 @@ namespace Pokemon.Data;
 /// This class serves as the central module responsible for initializing, managing, and disposing of Pokémon game-related data.
 /// It interacts with various data components, including growth rates, habitats, evolution chains, and other gameplay systems.
 /// </remarks>
-[UsedImplicitly]
 public class FPokemonDataModule : IModuleInterface
 {
     private static readonly Lock Lock = new();

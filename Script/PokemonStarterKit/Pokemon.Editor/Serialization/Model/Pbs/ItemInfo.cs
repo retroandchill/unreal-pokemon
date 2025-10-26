@@ -3,6 +3,7 @@ using Pokemon.Data.Model.PBS;
 using Pokemon.Editor.Serialization.Pbs.Attributes;
 using Pokemon.Editor.Serialization.Pbs.Converters;
 using UnrealSharp;
+using UnrealSharp.Core;
 using UnrealSharp.GameplayTags;
 
 namespace Pokemon.Editor.Serialization.Model.Pbs;

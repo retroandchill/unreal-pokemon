@@ -17,16 +17,13 @@ internal struct TestWorldWidget
 [StructLayout(LayoutKind.Sequential)]
 public struct NativeTestWorld
 {
-    [UsedImplicitly]
     internal IntPtr GameInstance { get; }
 
-    [UsedImplicitly]
     internal IntPtr World { get; }
 
     private readonly TestWorldWidget _overlay;
     private readonly TestWorldWidget _gameLayerManager;
 
-    [UsedImplicitly]
     internal NativeBool IsInPlay { get; }
 }
 

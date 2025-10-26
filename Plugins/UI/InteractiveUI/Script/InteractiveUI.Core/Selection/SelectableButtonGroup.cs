@@ -7,7 +7,7 @@ namespace InteractiveUI.Core.Selection;
 /// A custom implementation of a button group used for managing a collection of selectable buttons.
 /// This class extends UCSCommonButtonGroupBase to provide specific behavior for handling button addition and removal events.
 [UClass]
-public class USelectableButtonGroup : UCSCommonButtonGroupBase
+public partial class USelectableButtonGroup : UCSCommonButtonGroupBase
 {
     /// <summary>
     /// An event that is triggered whenever a new button is added to the button group.

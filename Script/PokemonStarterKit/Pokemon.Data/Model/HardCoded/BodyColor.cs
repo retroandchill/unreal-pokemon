@@ -23,12 +23,10 @@ namespace Pokemon.Data.Model.HardCoded;
 public readonly partial struct FBodyColor : IGameDataEntry
 {
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
@@ -39,7 +37,6 @@ public readonly partial struct FBodyColor : IGameDataEntry
     /// This property is used to represent the display name of the body color in a format
     /// that supports localization, allowing for user-friendly and language-specific naming within the game.
     /// </remarks>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
@@ -56,7 +53,6 @@ public readonly partial struct FBodyColor : IGameDataEntry
 /// </remarks>
 [UClass]
 [GameDataRepository<FBodyColor>]
-[UsedImplicitly]
 public partial class UBodyColorRepository : UStaticGameDataRepository;
 
 /// <summary>
@@ -66,7 +62,6 @@ public partial class UBodyColorRepository : UStaticGameDataRepository;
 /// This record struct is used for referencing specific entries in the body color dataset.
 /// It facilitates lookup and manipulation of body color data through the associated static repository.
 /// </remarks>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.BodyColors))]
 public readonly partial record struct FBodyColorHandle;
 

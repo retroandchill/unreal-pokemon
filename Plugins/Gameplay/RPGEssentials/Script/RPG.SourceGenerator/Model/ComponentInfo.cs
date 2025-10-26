@@ -4,7 +4,6 @@ using Microsoft.CodeAnalysis;
 
 namespace RPG.SourceGenerator.Model;
 
-[UsedImplicitly]
 public record ComponentInfo(
     ITypeSymbol ComponentType,
     string ComponentName,

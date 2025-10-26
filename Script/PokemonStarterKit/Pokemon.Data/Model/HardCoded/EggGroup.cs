@@ -44,19 +44,16 @@ public enum EEggGroupType : byte
 public readonly partial struct FEggGroup : IGameDataEntry
 {
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Represents the name of the egg group.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
@@ -64,7 +61,6 @@ public readonly partial struct FEggGroup : IGameDataEntry
     /// <summary>
     /// Represents the breeding compatibility group type of a Pokémon.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public EEggGroupType BreedingType { get; init; }
 }
@@ -79,7 +75,6 @@ public readonly partial struct FEggGroup : IGameDataEntry
 /// </remarks>
 [UClass]
 [GameDataRepository<FEggGroup>]
-[UsedImplicitly]
 public partial class UEggGroupRepository : UStaticGameDataRepository;
 
 /// <summary>
@@ -90,7 +85,6 @@ public partial class UEggGroupRepository : UStaticGameDataRepository;
 /// managed by the game's dataset. It enables efficient access, lookup, and
 /// usage of Egg Group records without directly handling the raw data.
 /// </remarks>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.EggGroups))]
 public readonly partial record struct FEggGroupHandle;
 

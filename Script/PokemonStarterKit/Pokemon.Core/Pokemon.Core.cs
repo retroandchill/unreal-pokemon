@@ -21,7 +21,6 @@ public static partial class LogPokemonCore;
 /// FPokemonCoreModule is responsible for managing the lifecycle of the Pokemon Core module in an Unreal Engine project.
 /// It implements the <see cref="IModuleInterface"/> interface, providing module setup and teardown behaviors.
 /// </summary>
-[UsedImplicitly]
 public class FPokemonCoreModule : IModuleInterface
 {
     /// <inheritdoc />

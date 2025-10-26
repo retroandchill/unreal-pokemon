@@ -19,10 +19,10 @@ namespace Pokemon.Editor.Serialization.Pbs.Serializers;
 /// ensuring that only move data is serialized and deserialized.
 /// </remarks>
 [UClass]
-public sealed class UMovePbsSerializer : UGameDataEntryPbsSerializerBase
+public sealed partial class UMovePbsSerializer : UGameDataEntryPbsSerializerBase
 {
     /// <inheritdoc />
-    protected override bool Supports(TSubclassOf<UAssetGameDataRepository> repositoryClass)
+    protected override bool Supports_Implementation(TSubclassOf<UAssetGameDataRepository> repositoryClass)
     {
         return repositoryClass == typeof(UMoveRepository);
     }

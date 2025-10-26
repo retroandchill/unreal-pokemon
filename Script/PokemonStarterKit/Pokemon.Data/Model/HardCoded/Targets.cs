@@ -40,19 +40,16 @@ public enum ETargetCount : byte
 public readonly partial struct FTarget() : IGameDataEntry
 {
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Represents the display name associated with the target.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
@@ -64,14 +61,12 @@ public readonly partial struct FTarget() : IGameDataEntry
     /// This property specifies the number of possible targets for a given context, which can be
     /// <c>NoTarget</c>, <c>SingleTarget</c>, or <c>MultipleTargets</c>.
     /// </remarks>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public ETargetCount NumTargets { get; init; } = ETargetCount.NoTarget;
 
     /// <summary>
     /// Indicates whether the target is a foe.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public bool TargetsFoe { get; init; }
 
@@ -79,7 +74,6 @@ public readonly partial struct FTarget() : IGameDataEntry
     /// Indicates whether the target applies to all possible entities within the applicable context.
     /// Typically used to determine if the effect or action is broad in scope or affects multiple targets.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public bool TargetsAll { get; init; }
 
@@ -88,7 +82,6 @@ public readonly partial struct FTarget() : IGameDataEntry
     /// This property determines if the associated action, move, or effect applies to all entities on the foe's side,
     /// rather than a single target or the user's side.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public bool AffectsFoeSide { get; init; }
 
@@ -96,7 +89,6 @@ public readonly partial struct FTarget() : IGameDataEntry
     /// Indicates whether the target has a long-range capability.
     /// This property is read-only and is marked for blueprint accessibility.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public bool LongRange { get; init; }
 }
@@ -107,14 +99,12 @@ public readonly partial struct FTarget() : IGameDataEntry
 /// </summary>
 [UClass]
 [GameDataRepository<FTarget>]
-[UsedImplicitly]
 public partial class UTargetRepository : UStaticGameDataRepository;
 
 /// <summary>
 /// Represents a handle to a specific target configuration within the game's data repository,
 /// used to reference target entities and their associated behaviors or attributes.
 /// </summary>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Targets))]
 public readonly partial record struct FTargetHandle;
 

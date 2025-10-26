@@ -3,7 +3,6 @@ using Microsoft.CodeAnalysis;
 
 namespace RPG.SourceGenerator.Model;
 
-[UsedImplicitly]
 public record UParamInfo(
     ITypeSymbol Type,
     string Name,
@@ -12,6 +11,5 @@ public record UParamInfo(
     bool IsLast = false
 )
 {
-    [UsedImplicitly]
     public bool HasDefaultValue => DefaultValue is not null;
 }

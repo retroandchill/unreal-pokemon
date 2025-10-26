@@ -7,6 +7,7 @@ using Pokemon.Data.Model.HardCoded;
 using Pokemon.Editor.Serialization.Model.Pbs;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 
 namespace Pokemon.Editor.Serialization.Pbs.Converters;

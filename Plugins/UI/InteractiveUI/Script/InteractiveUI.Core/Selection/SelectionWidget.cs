@@ -27,7 +27,7 @@ public partial class USelectionWidget : UCommonActivatableWidget
     /// <see cref="USelectionWidget"/>.
     /// </remarks>
     [UProperty(PropertyFlags.Transient)]
-    protected USelectableButtonGroup Buttons { get; private set; }
+    protected partial USelectableButtonGroup Buttons { get; private set; }
 
     /// <summary>
     /// Represents an event triggered when a "back" action is invoked within the widget.
@@ -55,21 +55,21 @@ public partial class USelectionWidget : UCommonActivatableWidget
     /// Any attempts to set an invalid value will result in the property being adjusted to
     /// fall within the allowed range.
     /// </remarks>
-    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite, Category = "Selection")]
+    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite, Category = "Selection", BlueprintAccessors = true)]
     [UIMin("0")]
     [ClampMin("0")]
     public int DesiredFocusIndex
     {
-        get;
+        get => DesiredFocusIndex_BackingField;
         set
         {
             if (Buttons.ButtonCount == 0)
             {
-                field = 0;
+                DesiredFocusIndex_BackingField = 0;
                 return;
             }
 
-            field = Math.Clamp(value, 0, Buttons.ButtonCount - 1);
+            DesiredFocusIndex_BackingField = Math.Clamp(value, 0, Buttons.ButtonCount - 1);
         }
     }
 

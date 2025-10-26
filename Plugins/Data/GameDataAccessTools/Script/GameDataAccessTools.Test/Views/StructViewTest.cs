@@ -14,20 +14,16 @@ namespace GameDataAccessTools.Test.Views;
 public readonly partial record struct FSimpleViewableStruct
 {
     [UProperty]
-    [UsedImplicitly]
     public int Value { get; init; }
 
     [UProperty]
-    [UsedImplicitly]
     public bool IsActive { get; init; }
 
     [UProperty]
-    [UsedImplicitly]
     public string? Name { get; init; }
 }
 
 [UClass]
-[UsedImplicitly]
 public partial class UTestStructView : UObject
 {
     [UProperty]

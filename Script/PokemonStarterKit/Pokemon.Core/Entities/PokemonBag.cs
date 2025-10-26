@@ -4,6 +4,7 @@ using Pokemon.Data.Model.PBS;
 using RPG.SourceGenerator.Attributes;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameplayTags;
 using UnrealSharp.RPGCore;
@@ -72,7 +73,7 @@ public partial class UPokemonBag : URPGEntity
         Category = "Components"
     )]
     [Initializer(nameof(UPocketsComponent.Initialize))]
-    public UPocketsComponent PocketsComponent { get; private set; }
+    public partial UPocketsComponent PocketsComponent { get; private set; }
 
     /// <summary>
     /// Represents a component of a Pokémon bag responsible for managing memory related to pockets.
@@ -86,7 +87,7 @@ public partial class UPokemonBag : URPGEntity
         Category = "Components"
     )]
     [Initializer(nameof(UPocketMemoryComponent.Initialize))]
-    public UPocketMemoryComponent PocketMemoryComponent { get; private set; }
+    public partial UPocketMemoryComponent PocketMemoryComponent { get; private set; }
 
     /// <summary>
     /// Represents a component responsible for handling the registration and management of items within the Pokémon bag system.
@@ -99,7 +100,7 @@ public partial class UPokemonBag : URPGEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
-    public UItemRegistrationComponent ItemRegistrationComponent { get; private set; }
+    public partial UItemRegistrationComponent ItemRegistrationComponent { get; private set; }
 
     /// <summary>
     /// Creates a new instance of <see cref="UPokemonBag"/> for the specified outer object, using default bag initialization parameters.

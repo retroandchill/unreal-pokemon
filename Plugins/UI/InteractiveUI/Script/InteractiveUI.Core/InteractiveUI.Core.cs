@@ -23,7 +23,6 @@ public static partial class LogInteractiveUICore;
 /// initialization and shutdown operations for the Interactive UI Core module.
 /// It serves as the base module class to ensure proper lifecycle management within the system.
 /// </remarks>
-[UsedImplicitly]
 public class FInteractiveUICoreModule : IModuleInterface
 {
     /// <inheritdoc />

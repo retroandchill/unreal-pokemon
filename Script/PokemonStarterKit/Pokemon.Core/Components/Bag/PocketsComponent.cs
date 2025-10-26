@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using Pokemon.Core.Bag;
+﻿using Pokemon.Core.Bag;
 using Pokemon.Core.Entities;
 using Pokemon.Data.Model.PBS;
 using RPG.SourceGenerator.Attributes;
@@ -15,11 +14,10 @@ namespace Pokemon.Core.Components.Bag;
 /// Extends the base functionality of URPGComponent to handle inventory systems with various pockets and items.
 /// </summary>
 [UClass]
-public class UPocketsComponent : URPGComponent
+public partial class UPocketsComponent : URPGComponent
 {
     [UProperty]
-    [UsedImplicitly]
-    private TMap<FGameplayTag, UBagPocket> Pockets { get; }
+    private partial TMap<FGameplayTag, UBagPocket> Pockets { get; }
 
     /// <summary>
     /// Gets an enumerable collection of all pockets within the bag. Each pocket is represented

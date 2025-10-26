@@ -38,7 +38,6 @@ public unsafe struct ManagedTestingActions
     /// <param name="assemblyNamesPtr">A pointer to the memory location containing an array of assembly names.</param>
     /// <param name="assemblyNamesLength">The number of assembly names provided in the array.</param>
     /// <param name="outputArrayPtr">A pointer to an unmanaged array where the collected test cases will be stored.</param>
-    [UsedImplicitly]
     public required delegate* unmanaged<IntPtr, int, UnmanagedArray*, void> CollectTestCases { get; init; }
 
     /// <summary>
@@ -54,7 +53,6 @@ public unsafe struct ManagedTestingActions
     /// <param name="managedTestCasePtr">A pointer to the managed test case from which tests are retrieved.</param>
     /// <param name="beautifiedNames">A pointer to an unmanaged array where beautified test names will be stored.</param>
     /// <param name="testParameters">A pointer to an unmanaged array where the parameters for each test will be stored.</param>
-    [UsedImplicitly]
     public required delegate* unmanaged<IntPtr, UnmanagedArray*, UnmanagedArray*, void> GetTests { get; init; }
 
     /// <summary>
@@ -73,7 +71,6 @@ public unsafe struct ManagedTestingActions
     /// <returns>
     /// A <c>NativeBool</c> indicating the success or failure of the test execution.
     /// </returns>
-    [UsedImplicitly]
     public required delegate* unmanaged<IntPtr, IntPtr, FName, NativeBool> RunTest { get; init; }
 
     /// <summary>
@@ -88,7 +85,6 @@ public unsafe struct ManagedTestingActions
     /// </remarks>
     /// <param name="taskStatePtr">A pointer to the memory location representing the state or context of the task.</param>
     /// <returns>A boolean value indicating whether the task has been completed.</returns>
-    [UsedImplicitly]
     public required delegate* unmanaged<IntPtr, NativeBool> CheckTaskComplete { get; init; }
 
     /// <summary>
@@ -101,7 +97,6 @@ public unsafe struct ManagedTestingActions
     /// need to be disposed or reset to ensure a clean testing environment. It is often used
     /// in testing workflows to prevent residual state or memory issues between test runs.
     /// </remarks>
-    [UsedImplicitly]
     public required delegate* unmanaged<void> ClearTestClassInstances { get; init; }
 #pragma warning restore CS1572 // XML comment has a param tag, but there is no parameter by that name
 

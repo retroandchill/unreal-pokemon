@@ -16,7 +16,6 @@ public class UTextDisplayModal : UCommonActivatableWidget
 {
     [UProperty]
     [BindWidget]
-    [UsedImplicitly]
     private UDialogueDisplayWidget MessageBox { get; }
 
     /// <summary>

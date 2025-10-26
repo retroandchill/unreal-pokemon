@@ -17,10 +17,10 @@ namespace Pokemon.Editor.Serialization.Pbs.Serializers;
 /// to the UTrainerTypeRepository.
 /// </summary>
 [UClass]
-public sealed class UTrainerTypePbsSerializer : UGameDataEntryPbsSerializerBase
+public sealed partial class UTrainerTypePbsSerializer : UGameDataEntryPbsSerializerBase
 {
     /// <inheritdoc />
-    protected override bool Supports(TSubclassOf<UAssetGameDataRepository> repositoryClass)
+    protected override bool Supports_Implementation(TSubclassOf<UAssetGameDataRepository> repositoryClass)
     {
         return repositoryClass == typeof(UTrainerTypeRepository);
     }

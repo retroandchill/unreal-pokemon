@@ -1,6 +1,5 @@
-﻿using LanguageExt;
-using Pokemon.Data.Model.HardCoded;
-using Pokemon.Data.Model.PBS;
+﻿using Pokemon.Data.Model.PBS;
+using UnrealSharp;
 using UnrealSharp.Attributes;
 
 namespace Pokemon.Core.Model.Pokemon;
@@ -17,5 +16,5 @@ public readonly partial record struct FHoldItemComponentInfo
     /// and may provide additional effects or abilities during gameplay.
     /// </summary>
     [UProperty(PropertyFlags.SaveGame)]
-    public required Option<FItemHandle> Item { get; init; }
+    public required TOptional<FItemHandle> Item { get; init; }
 }

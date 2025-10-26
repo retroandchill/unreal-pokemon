@@ -67,7 +67,6 @@ public readonly partial struct FAbility() : IGameDataEntry
 /// </remarks>
 [UClass]
 [GameDataRepository<FAbility>]
-[UsedImplicitly]
 public partial class UAbilityRepository : UAssetGameDataRepository;
 
 /// <summary>
@@ -77,6 +76,5 @@ public partial class UAbilityRepository : UAssetGameDataRepository;
 /// This struct provides an abstraction for accessing specific abilities registered in the game's data, serving as a lightweight reference.
 /// It is primarily used in components, data models, and gameplay systems to interact with abilities without duplicating the full ability details.
 /// </remarks>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Abilities))]
 public readonly partial record struct FAbilityHandle;

@@ -16,10 +16,10 @@ namespace Pokemon.Editor.Serialization.Pbs.Serializers;
 /// <see cref="UGameDataEntryPbsSerializerBase"/> to provide specific support for the Berry Plant type.
 /// </summary>
 [UClass]
-public sealed class UBerryPlantPbsSerializer : UGameDataEntryPbsSerializerBase
+public sealed partial class UBerryPlantPbsSerializer : UGameDataEntryPbsSerializerBase
 {
     /// <inheritdoc />
-    protected override bool Supports(TSubclassOf<UAssetGameDataRepository> repositoryClass)
+    protected override bool Supports_Implementation(TSubclassOf<UAssetGameDataRepository> repositoryClass)
     {
         return repositoryClass == typeof(UBerryPlantRepository);
     }

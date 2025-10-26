@@ -20,12 +20,10 @@ namespace Pokemon.Data.Model.HardCoded;
 public readonly partial struct FHabitat : IGameDataEntry
 {
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
@@ -33,7 +31,6 @@ public readonly partial struct FHabitat : IGameDataEntry
     /// Gets the display name of the habitat. This property is localized to support
     /// multiple languages and is used for rendering or displaying the name in the game.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
@@ -46,7 +43,6 @@ public readonly partial struct FHabitat : IGameDataEntry
 /// </summary>
 [UClass]
 [GameDataRepository<FHabitat>]
-[UsedImplicitly]
 public partial class UHabitatRepository : UStaticGameDataRepository;
 
 /// <summary>
@@ -54,7 +50,6 @@ public partial class UHabitatRepository : UStaticGameDataRepository;
 /// identifier or reference for a specific habitat, enabling efficient access and management
 /// of habitat-related data.
 /// </summary>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Habitats))]
 public readonly partial record struct FHabitatHandle;
 

@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using GameDataAccessTools.Core.Views;
+using JetBrains.Annotations;
 using Pokemon.Core.Entities;
 using Pokemon.Data;
 using Pokemon.Data.Model.PBS;
@@ -33,7 +34,6 @@ public readonly partial record struct FAbilityPair(
 /// </remarks>
 [UClass]
 [UMetaData("HideCategories", "Abilities")]
-[UsedImplicitly]
 public partial class UAbilityComponent : URPGComponent
 {
     /// <summary>
@@ -46,7 +46,7 @@ public partial class UAbilityComponent : URPGComponent
     public const int MaxRegularAbility = 2;
 
     [UProperty(PropertyFlags.Transient)]
-    private UIdentityComponent IdentityComponent { get; set; }
+    private partial UIdentityComponent IdentityComponent { get; set; }
 
     /// <summary>
     /// Represents the index of the current active ability for a Pokémon.
@@ -57,7 +57,7 @@ public partial class UAbilityComponent : URPGComponent
     /// It supports differentiation between regular abilities (indexed from 0) and hidden abilities (indexed starting from the maximum regular ability limit).
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Abilities")]
-    public int AbilityIndex { get; set; }
+    public partial int AbilityIndex { get; set; }
 
     /// <summary>
     /// Represents an explicitly assigned ability for a Pokémon, overriding default or random abilities.
@@ -69,7 +69,7 @@ public partial class UAbilityComponent : URPGComponent
     /// Used in scenarios where direct control over a Pokémon's ability is required.
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Abilities")]
-    public TOptional<FAbilityHandle> ExplicitAbility { get; set; }
+    public partial TOptional<FAbilityHandle> ExplicitAbility { get; set; }
 
     /// <summary>
     /// Represents the ability currently assigned to the Pokémon.

@@ -1,8 +1,8 @@
-﻿using LanguageExt;
-using Pokemon.Core.Entities;
+﻿using Pokemon.Core.Entities;
 using Pokemon.Core.Services.Async;
 using Pokemon.Data.Model.PBS;
 using UnrealSharp;
+using UnrealSharp.Core;
 using UnrealSharp.Engine;
 using UnrealSharp.GameplayTags;
 

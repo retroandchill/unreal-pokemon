@@ -5,11 +5,10 @@ using Pokemon.Core.Services.Exp;
 using Pokemon.Core.Services.Stats;
 using Pokemon.Data.Model.HardCoded;
 using UnrealInject.Subsystems;
-using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.Engine;
-using UnrealSharp.GameplayTags;
 using UnrealSharp.UnrealSharpCore;
 
 namespace Pokemon.Core;
@@ -35,7 +34,7 @@ public readonly record struct FPlayerResetLocation(string MapName, FTransform Pl
 /// It integrates with other services to ensure smooth functionality, including asynchronous actions and stat calculations.
 /// </remarks>
 [UClass(DisplayName = "Pokémon Subsystem")]
-public class UPokemonSubsystem : UCSGameInstanceSubsystem
+public partial class UPokemonSubsystem : UCSGameInstanceSubsystem
 {
     private readonly Dictionary<FGrowthRateHandle, IExpGrowthFormula> _expGrowthFormulas = new();
 
@@ -46,7 +45,7 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
     /// The Player is initialized during the start of a new game, and its instance is associated with the current game session.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Player")]
-    public UTrainer Player { get; private set; }
+    public partial UTrainer Player { get; private set; }
 
     /// <summary>
     /// Represents the bag holding items for the player in the Pokémon subsystem.
@@ -55,7 +54,7 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
     /// The Bag is initialized at the start of a new game session and is tied to the current instance of the Pokémon subsystem.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Player")]
-    public UPokemonBag Bag { get; private set; }
+    public partial UPokemonBag Bag { get; private set; }
 
     /// <summary>
     /// Provides access to the service responsible for calculating Pokémon stats dynamically within the game.
@@ -101,7 +100,7 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
     public IAsyncActionsService AsyncActionsService { get; private set; } = null!;
 
     /// <inheritdoc />
-    protected override void Initialize(FSubsystemCollectionBaseRef collection)
+    protected override void Initialize_Implementation(FSubsystemCollectionBaseRef collection)
     {
         var subsystem = collection.InitializeRequiredSubsystem<UDependencyInjectionGameInstanceSubsystem>();
         foreach (var expGrowthFormula in subsystem.GetServices<IExpGrowthFormula>())
@@ -116,7 +115,7 @@ public class UPokemonSubsystem : UCSGameInstanceSubsystem
     }
 
     /// <inheritdoc />
-    protected override void Deinitialize()
+    protected override void Deinitialize_Implementation()
     {
         _expGrowthFormulas.Clear();
     }

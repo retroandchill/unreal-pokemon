@@ -22,7 +22,6 @@ public readonly partial record struct FCustomStruct
     public int Count { get; init; }
 
     [UProperty]
-    [UsedImplicitly]
     public bool IsEnabled { get; init; }
 }
 
@@ -31,28 +30,22 @@ public readonly partial record struct FCustomStruct
 public readonly partial record struct FCollectionTestStruct
 {
     [UProperty]
-    [UsedImplicitly]
     public IReadOnlyList<int> IntList { get; init; }
 
     [UProperty]
-    [UsedImplicitly]
     public IReadOnlyList<FName> NameList { get; init; }
 
     [UProperty]
-    [UsedImplicitly]
     public IReadOnlyList<FVector> VectorList { get; init; }
 
     [UProperty]
-    [UsedImplicitly]
     public IReadOnlyList<FCustomStruct> CustomStructList { get; init; }
 
     [UProperty]
-    [UsedImplicitly]
     public IReadOnlyList<string> StringList { get; init; }
 }
 
 [UClass]
-[UsedImplicitly]
 public partial class UCollectionTestWrapper : UObject
 {
     [UProperty]

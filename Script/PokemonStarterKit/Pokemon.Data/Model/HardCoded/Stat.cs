@@ -59,19 +59,16 @@ public enum EStatType : byte
 public readonly partial struct FStat : IGameDataEntry
 {
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Gets the name of the stat as a localized text.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
@@ -79,7 +76,6 @@ public readonly partial struct FStat : IGameDataEntry
     /// <summary>
     /// Represents a brief display name or shorthand identifier for the stat.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FText NameBrief { get; init; }
 
@@ -89,14 +85,12 @@ public readonly partial struct FStat : IGameDataEntry
     /// <remarks>
     /// The <see cref="StatType"/> can indicate whether a stat is primarily for main gameplay, battle scenarios, or both.
     /// </remarks>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required EStatType StatType { get; init; }
 
     /// <summary>
     /// Gets the order of the stat as defined in the Pokémon Battle System (PBS).
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly, DisplayName = "PBS Order")]
     public int PBSOrder { get; init; }
 
@@ -131,7 +125,6 @@ public readonly partial struct FStat : IGameDataEntry
 /// </remarks>
 [UClass]
 [GameDataRepository<FStat>]
-[UsedImplicitly]
 public partial class UStatRepository : UStaticGameDataRepository;
 
 /// <summary>
@@ -142,7 +135,6 @@ public partial class UStatRepository : UStaticGameDataRepository;
 /// Typically used in operations where only referencing of data is needed without requiring the full data footprint or direct modification.
 /// It is compatible with various comparable types such as FMainStatHandle, FBattleStatHandle, and FMainBattleStatHandle for flexible data handling.
 /// </remarks>
-[UStruct]
 [DataHandle(
     typeof(GameData),
     nameof(GameData.Stats),
@@ -157,7 +149,6 @@ public readonly partial record struct FStatHandle;
 /// The structure is primarily used for identifying and working with main statistics in the game's data set. It ensures that only valid main or main battle statistics are accessed or manipulated.
 /// The handle facilitates efficient querying, validation, and retrieval of associated main statistic entries.
 /// </remarks>
-[UStruct]
 [DataHandle<FStat>(ComparableTypes = [typeof(FStatHandle), typeof(FBattleStatHandle), typeof(FMainBattleStatHandle)])]
 public readonly partial record struct FMainStatHandle
 {
@@ -217,7 +208,6 @@ public readonly partial record struct FMainStatHandle
 /// The <see cref="FBattleStatHandle"/> provides an interface for accessing and validating game statistics associated with battle-related operations. It helps streamline the process of querying and retrieving structured data for relevant stats.
 /// It is primarily suited to work with game data entries tied to the `FStat` struct, focusing on those with stat types classified under `EStatType.Battle` or `EStatType.MainBattle`.
 /// </remarks>
-[UStruct]
 [DataHandle<FStat>(ComparableTypes = [typeof(FStatHandle), typeof(FMainStatHandle), typeof(FMainBattleStatHandle)])]
 public readonly partial record struct FBattleStatHandle
 {
@@ -284,7 +274,6 @@ public readonly partial record struct FBattleStatHandle
 /// This structure allows for efficient filtering and validation of specific stat types through its properties
 /// and associated methods, promoting structured access and data integrity.
 /// </remarks>
-[UStruct]
 [DataHandle<FStat>(ComparableTypes = [typeof(FStatHandle), typeof(FBattleStatHandle), typeof(FMainStatHandle)])]
 public readonly partial record struct FMainBattleStatHandle
 {

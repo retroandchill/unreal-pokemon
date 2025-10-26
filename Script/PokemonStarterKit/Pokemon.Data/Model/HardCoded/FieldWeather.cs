@@ -18,19 +18,16 @@ namespace Pokemon.Data.Model.HardCoded;
 public readonly partial struct FFieldWeather : IGameDataEntry
 {
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
     /// <summary>
     /// Represents the name of the field weather. This property is required and provides a localized text value.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
@@ -50,14 +47,12 @@ public readonly partial struct FFieldWeather : IGameDataEntry
 /// </summary>
 [UClass]
 [GameDataRepository<FFieldWeather>]
-[UsedImplicitly]
 public partial class UFieldWeatherRepository : UStaticGameDataRepository;
 
 /// <summary>
 /// A handle representing a link to a specific instance of field weather data within the game's repository.
 /// This struct is used to uniquely reference and interact with an entry from the FieldWeathers dataset.
 /// </summary>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.FieldWeathers))]
 public readonly partial record struct FFieldWeatherHandle;
 

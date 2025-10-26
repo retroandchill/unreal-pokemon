@@ -1,6 +1,4 @@
 ﻿using GameDataAccessTools.Core.Utilities;
-using JetBrains.Annotations;
-using LanguageExt;
 using Pokemon.Core.Entities;
 using Pokemon.Data;
 using UnrealSharp;
@@ -21,11 +19,11 @@ namespace Pokemon.Core;
 /// <param name="MaxSize">The maximum number of items that can be stored in the pocket.</param>
 [UStruct]
 public readonly partial record struct FPocketSetting(
-    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
-    [field: Categories(IdentifierConstants.PocketTag)]
+    [property: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)]
+    [property: Categories(IdentifierConstants.PocketTag)]
         FGameplayTag Tag,
-    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)] FText Name,
-    [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)] TOptional<int> MaxSize
+    [property: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)] FText Name,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.EditAnywhere)] TOptional<int> MaxSize
 );
 
 /// <summary>
@@ -34,7 +32,7 @@ public readonly partial record struct FPocketSetting(
 /// It is intended to centralize the settings used throughout the Pokémon game framework.
 /// </summary>
 [UClass(ClassFlags.DefaultConfig, DisplayName = "Pokémon Core", ConfigCategory = "Game")]
-public class UPokemonCoreSettings : UCSDeveloperSettings
+public partial class UPokemonCoreSettings : UCSDeveloperSettings
 {
     /// <summary>
     /// Represents the maximum number of Pokémon allowed in a trainer's party.
@@ -44,8 +42,7 @@ public class UPokemonCoreSettings : UCSDeveloperSettings
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "Trainers"
     )]
-    [UsedImplicitly]
-    public int MaxPartySize { get; } = 6;
+    public partial int MaxPartySize { get; }
 
     /// <summary>
     /// Defines the maximum number of moves a Pokémon can learn or have at any given time.
@@ -55,8 +52,7 @@ public class UPokemonCoreSettings : UCSDeveloperSettings
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "Pokémon"
     )]
-    [UsedImplicitly]
-    public int MaxMoves { get; } = 4;
+    public partial int MaxMoves { get; }
 
     /// <summary>
     /// Represents the base chance of a Pokémon being shiny, expressed as a specific value.
@@ -67,8 +63,7 @@ public class UPokemonCoreSettings : UCSDeveloperSettings
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "Pokémon"
     )]
-    [UsedImplicitly]
-    public int ShinyPokemonChance { get; } = 16;
+    public partial int ShinyPokemonChance { get; }
 
     /// <summary>
     /// Contains the list of all pocket settings available in the game.
@@ -79,8 +74,7 @@ public class UPokemonCoreSettings : UCSDeveloperSettings
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "Bag"
     )]
-    [UsedImplicitly]
-    public TArray<FPocketSetting> Pockets { get; }
+    public partial TArray<FPocketSetting> Pockets { get; }
 
     /// <summary>
     /// Represents the maximum quantity of a single item type that can be stored in one inventory slot.
@@ -90,8 +84,7 @@ public class UPokemonCoreSettings : UCSDeveloperSettings
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "Bag"
     )]
-    [UsedImplicitly]
-    public int MaxPerSlot { get; } = 999;
+    public partial int MaxPerSlot { get; }
 
     /// <summary>
     /// Represents the default class for Pokémon in the game.
@@ -101,7 +94,7 @@ public class UPokemonCoreSettings : UCSDeveloperSettings
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "DefaultClasses"
     )]
-    public TSoftClassPtr<UPokemon> PokemonClass { get; }
+    public partial TSoftClassPtr<UPokemon> PokemonClass { get; }
 
     /// <summary>
     /// Specifies the default class type for trainers in the Pokémon game framework.
@@ -112,7 +105,7 @@ public class UPokemonCoreSettings : UCSDeveloperSettings
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "DefaultClasses"
     )]
-    public TSoftClassPtr<UTrainer> TrainerClass { get; }
+    public partial TSoftClassPtr<UTrainer> TrainerClass { get; }
 
     /// <summary>
     /// Represents the default class type for the Pokémon Bag within the game settings.
@@ -123,10 +116,10 @@ public class UPokemonCoreSettings : UCSDeveloperSettings
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "DefaultClasses"
     )]
-    public TSoftClassPtr<UPokemonBag> BagClass { get; }
+    public partial TSoftClassPtr<UPokemonBag> BagClass { get; }
 
     /// <inheritdoc />
-    protected override FText GetSectionText()
+    protected override FText GetSectionText_Implementation()
     {
         return FText.Localized("PokemonCore", "PokemonCore", "Pokémon Core");
     }

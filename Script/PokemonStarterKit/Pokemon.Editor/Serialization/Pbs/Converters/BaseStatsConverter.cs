@@ -3,6 +3,7 @@ using GameDataAccessTools.Core.Views;
 using Pokemon.Data;
 using Pokemon.Data.Model.HardCoded;
 using UnrealSharp;
+using UnrealSharp.Core;
 using ZLinq;
 
 namespace Pokemon.Editor.Serialization.Pbs.Converters;

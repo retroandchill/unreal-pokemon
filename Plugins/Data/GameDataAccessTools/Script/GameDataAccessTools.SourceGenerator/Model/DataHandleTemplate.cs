@@ -13,8 +13,12 @@ public abstract record DataHandleTemplateBase(
     ImmutableArray<ConvertibleType> Convertibles
 )
 {
+    public long TypeVersion { get; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+    
+    public string AssemblyName => StructType.ContainingAssembly.Name;
     public string Namespace => StructType.ContainingNamespace.ToDisplayString();
     public string StructName => StructType.Name;
+    public string EngineName => StructName[1..];
 
     public abstract bool WithRepository { get; }
 

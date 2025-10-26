@@ -31,7 +31,7 @@ public partial class UInteractiveActionButton : UCommonBoundActionButton
     /// </remarks>
     /// <type>UCommonButtonStyle</type>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Style")]
-    private TSubclassOf<UCommonButtonStyle> KeyboardStyle { get; }
+    private partial TSubclassOf<UCommonButtonStyle> KeyboardStyle { get; }
 
     /// <summary>
     /// Defines the style to be applied to the button when the input method is a gamepad.
@@ -47,7 +47,7 @@ public partial class UInteractiveActionButton : UCommonBoundActionButton
     /// </remarks>
     /// <type>UCommonButtonStyle</type>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Style")]
-    private TSubclassOf<UCommonButtonStyle> GamepadStyle { get; }
+    private partial TSubclassOf<UCommonButtonStyle> GamepadStyle { get; }
 
     /// <summary>
     /// Defines the style to be applied to the button when the input method is touch.
@@ -63,7 +63,7 @@ public partial class UInteractiveActionButton : UCommonBoundActionButton
     /// </remarks>
     /// <type>UCommonButtonStyle</type>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Style")]
-    private TSubclassOf<UCommonButtonStyle> TouchStyle { get; }
+    private partial TSubclassOf<UCommonButtonStyle> TouchStyle { get; }
 
     /// <inheritdoc />
     protected override void Construct_Implementation()

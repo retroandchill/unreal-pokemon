@@ -29,12 +29,10 @@ public readonly partial struct FGrowthRate : IGameDataEntry
     public static int MaxLevel => UObject.GetDefault<UPokemonDataSettings>().MaxLevel;
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
@@ -47,7 +45,6 @@ public readonly partial struct FGrowthRate : IGameDataEntry
     /// descriptively. Localization ensures that the name is properly translated
     /// and presented in various supported languages.
     /// </remarks>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
@@ -58,14 +55,12 @@ public readonly partial struct FGrowthRate : IGameDataEntry
 /// </summary>
 [UClass]
 [GameDataRepository<FGrowthRate>]
-[UsedImplicitly]
 public partial class UGrowthRateRepository : UStaticGameDataRepository;
 
 /// <summary>
 /// Represents a handle that provides a reference to a specific growth rate within the game data system.
 /// This type is primarily used to reference entries in the GrowthRates repository.
 /// </summary>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.GrowthRates))]
 public readonly partial record struct FGrowthRateHandle;
 

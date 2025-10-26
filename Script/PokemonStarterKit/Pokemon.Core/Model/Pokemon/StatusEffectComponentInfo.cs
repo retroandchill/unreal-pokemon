@@ -1,6 +1,6 @@
-﻿using LanguageExt;
-using Pokemon.Data.Model.HardCoded;
+﻿using Pokemon.Data.Model.HardCoded;
 using Pokemon.Data.Model.PBS;
+using UnrealSharp;
 using UnrealSharp.Attributes;
 
 namespace Pokemon.Core.Model.Pokemon;
@@ -20,5 +20,5 @@ public readonly partial record struct FStatusEffectComponentInfo
     /// such as "Poisoned" or "Paralyzed", applied to the Pokémon during gameplay.
     /// </summary>
     [UProperty(PropertyFlags.SaveGame)]
-    public required Option<FStatusHandle> StatusEffect { get; init; }
+    public required TOptional<FStatusHandle> StatusEffect { get; init; }
 }

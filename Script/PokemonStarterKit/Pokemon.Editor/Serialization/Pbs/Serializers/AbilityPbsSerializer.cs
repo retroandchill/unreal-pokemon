@@ -19,10 +19,10 @@ namespace Pokemon.Editor.Serialization.Pbs.Serializers;
 /// to serialize and deserialize data specific to abilities stored in a UAbilityRepository.
 /// </remarks>
 [UClass]
-public sealed class UAbilityPbsSerializer : UGameDataEntryPbsSerializerBase
+public sealed partial class UAbilityPbsSerializer : UGameDataEntryPbsSerializerBase
 {
     /// <inheritdoc />
-    protected override bool Supports(TSubclassOf<UAssetGameDataRepository> repositoryClass)
+    protected override bool Supports_Implementation(TSubclassOf<UAssetGameDataRepository> repositoryClass)
     {
         return repositoryClass == typeof(UAbilityRepository);
     }

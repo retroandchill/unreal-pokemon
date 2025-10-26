@@ -20,12 +20,10 @@ namespace Pokemon.Data.Model.HardCoded;
 public readonly partial struct FBattleWeather : IGameDataEntry
 {
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public required FName ID { get; init; }
 
     /// <inheritdoc />
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     public int RowIndex { get; init; }
 
@@ -34,7 +32,6 @@ public readonly partial struct FBattleWeather : IGameDataEntry
     /// This property represents the localized display name of a specific type of weather
     /// encountered during battles, allowing for meaningful and user-friendly representations.
     /// </summary>
-    [UsedImplicitly]
     [UProperty(PropertyFlags.BlueprintReadOnly)]
     [DisplayName]
     public required FText Name { get; init; }
@@ -48,7 +45,6 @@ public readonly partial struct FBattleWeather : IGameDataEntry
 /// </summary>
 [UClass]
 [GameDataRepository<FBattleWeather>]
-[UsedImplicitly]
 public partial class UBattleWeatherRepository : UStaticGameDataRepository;
 
 /// <summary>
@@ -56,7 +52,6 @@ public partial class UBattleWeatherRepository : UStaticGameDataRepository;
 /// This structure serves as a reference to specific battle weather configurations,
 /// enabling efficient retrieval and manipulation of related game data.
 /// </summary>
-[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.BattleWeathers))]
 public readonly partial record struct FBattleWeatherHandle;
 

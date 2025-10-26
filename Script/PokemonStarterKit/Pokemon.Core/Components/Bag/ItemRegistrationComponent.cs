@@ -13,7 +13,7 @@ namespace Pokemon.Core.Components.Bag;
 /// items to be registered or unregistered and verifies if a specific item is currently registered.
 /// </remarks>
 [UClass]
-public class UItemRegistrationComponent : URPGComponent
+public partial class UItemRegistrationComponent : URPGComponent
 {
     /// <summary>
     /// Represents the collection of items that are currently registered within the component.
@@ -23,7 +23,7 @@ public class UItemRegistrationComponent : URPGComponent
     /// are registered and allows for efficient lookup operations.
     /// </remarks>
     [UProperty]
-    public TSet<FItemHandle> RegisteredItems { get; }
+    public partial TSet<FItemHandle> RegisteredItems { get; }
 
     /// <summary>
     /// Determines whether a specific item is registered within the component.

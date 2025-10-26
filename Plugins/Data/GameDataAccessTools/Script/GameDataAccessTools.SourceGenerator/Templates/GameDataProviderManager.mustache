@@ -61,7 +61,7 @@ public partial class U{{ClassName}}Manager : UGameDataManagerBase
         _instance = null;
     }
     
-    protected override void Initialize()
+    protected override void Initialize_Implementation()
     {
         var settings = UObject.GetDefault<U{{ClassName}}Settings>();
         {{#Repositories}}
