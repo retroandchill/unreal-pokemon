@@ -1,15 +1,29 @@
-﻿using UnrealSharp;
+﻿using static UnrealSharp.Interop.FTypeBuilderExporter;
+using static UnrealSharp.Interop.FPropertyExporter;
+using static UnrealSharp.Interop.UClassExporter;
+using static UnrealSharp.Interop.UFunctionExporter;
+using static System.ComponentModel.EditorBrowsableState;
+
+using UnrealSharp;
 using UnrealSharp.Core;
+using UnrealSharp.Core.Attributes;
+using UnrealSharp.Core.Marshallers;
+using UnrealSharp.Interop;
 using UnrealSharp.Attributes;
 using UnrealSharp.Engine;
 using GameDataAccessTools.Core.Views;
 using ZLinq;
+using UnrealSharp.Core.Attributes;
+using System.ComponentModel;
 
 namespace {{Namespace}};
 
-[UClass]
+[GeneratedType("{{EngineName}}BlueprintLibrary", "{{Namespace}}")]
 public class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    private static IntPtr NativeTypePtr = UCoreUObjectExporter.CallGetType("{{Assembly}}", "{{Namespace}}", "{{EngineName}}BlueprintLibrary");
+
     [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Is Valid", Category = "{{EngineName}}")]
     public static bool IsValidHandle({{StructName}} handle) => handle.IsValid;
 
@@ -21,11 +35,15 @@ public class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
     [UFunction(FunctionFlags.BlueprintPure, DisplayName = "Convert To {{EngineName}}", Category = "{{EngineName}}")]
     [UMetaData("CompactNodeTitle", "->")]
     [UMetaData("BlueprintAutoCast")]
-    public static {{StructName}} ConvertNameTo{{EngineName}}(FName handle) => handle;
+    public static {{StructName}} ConvertNameTo{{EngineName}}(FName name) => name;
 
     {{#Properties}}
     [UFunction(FunctionFlags.BlueprintPure, Category = "{{../EngineName}}")]
     public static {{Type}} {{Prefix}}{{Name}}({{../StructName}} handle) => handle.Entry.{{Name}}{{ConversionCall}};
 
     {{/Properties}}
+
+{{FunctionGlue}}
 }
+
+{{ModuleInitializer}}

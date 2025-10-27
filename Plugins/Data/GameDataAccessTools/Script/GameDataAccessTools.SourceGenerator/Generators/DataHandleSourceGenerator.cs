@@ -183,19 +183,114 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
         var entryType = templateParams.EntryType;
         var hasViewMethods = entryType.HasAttribute<CreateStructViewAttribute>();
 
+        var namespaceName = structSymbol.ContainingNamespace.ToDisplayString();
+        var assemblyName = structSymbol.ContainingAssembly.Name;
+        var engineName = structSymbol.Name[1..];
+        
+        var blueprintLibraryClass = new UnrealClass(EClassFlags.None, "UBlueprintFunctionLibrary", "UnrealSharp.Engine", $"U{engineName}BlueprintLibrary", namespaceName, Accessibility.Public, assemblyName);
+        var functions = new EquatableList<UnrealFunction>([]);
+        
+        var isValidHandleFunction = new UnrealFunction(EFunctionFlags.BlueprintPure | EFunctionFlags.Static,
+            "IsValidHandle", namespaceName, Accessibility.Public, assemblyName, blueprintLibraryClass);
+        isValidHandleFunction.AddMetaData("DisplayName", "Is Valid");
+        isValidHandleFunction.AddMetaData("Category", engineName);
+        isValidHandleFunction.ReturnType = new BoolProperty("ReturnValue", Accessibility.Public, isValidHandleFunction)
+        {
+            PropertyFlags = EPropertyFlags.ReturnParm | EPropertyFlags.OutParm
+        };
+        isValidHandleFunction.Properties.List.Add(
+            new StructProperty(structSymbol.ToDisplayString(), "handle", Accessibility.NotApplicable,
+                isValidHandleFunction)
+            {
+                PropertyFlags = EPropertyFlags.Parm
+            });
+        blueprintLibraryClass.AddFunction(isValidHandleFunction);
+        functions.List.Add(isValidHandleFunction);
+        
+        var convertToNameFunction = new UnrealFunction(EFunctionFlags.BlueprintPure | EFunctionFlags.Static,
+            $"Convert{engineName}ToName", namespaceName, Accessibility.Public, assemblyName, blueprintLibraryClass);
+        convertToNameFunction.AddMetaData("DisplayName", "Convert to Name");
+        convertToNameFunction.AddMetaData("Category", engineName);
+        convertToNameFunction.AddMetaData("CompactNodeTitle", "->");
+        convertToNameFunction.AddMetaData("BlueprintAutoCast", "");
+        convertToNameFunction.ReturnType = new NameProperty("ReturnValue", Accessibility.Public, convertToNameFunction)
+        {
+            PropertyFlags = EPropertyFlags.ReturnParm | EPropertyFlags.OutParm
+        };
+        convertToNameFunction.Properties.List.Add(
+            new StructProperty(structSymbol.ToDisplayString(), "handle", Accessibility.NotApplicable,
+                convertToNameFunction)
+            {
+                PropertyFlags = EPropertyFlags.Parm
+            });
+        blueprintLibraryClass.AddFunction(convertToNameFunction);
+        functions.List.Add(convertToNameFunction);
+        
+        var convertFromNameFunction = new UnrealFunction(EFunctionFlags.BlueprintPure | EFunctionFlags.Static,
+            $"ConvertNameTo{engineName}", namespaceName, Accessibility.Public, assemblyName, blueprintLibraryClass);
+        convertFromNameFunction.AddMetaData("DisplayName", $"Convert to {engineName}");
+        convertFromNameFunction.AddMetaData("Category", engineName);
+        convertFromNameFunction.AddMetaData("CompactNodeTitle", "->");
+        convertFromNameFunction.AddMetaData("BlueprintAutoCast", "");
+        convertFromNameFunction.ReturnType = new StructProperty(structSymbol.ToDisplayString(), "ReturnValue", Accessibility.NotApplicable,
+            convertFromNameFunction)
+        {
+            PropertyFlags = EPropertyFlags.ReturnParm | EPropertyFlags.OutParm
+        };
+        convertFromNameFunction.Properties.List.Add(
+            new NameProperty("name", Accessibility.NotApplicable, convertFromNameFunction)
+            {
+                PropertyFlags = EPropertyFlags.Parm
+            });
+        blueprintLibraryClass.AddFunction(convertFromNameFunction);
+        functions.List.Add(convertFromNameFunction);
+        
+        var properties = hasViewMethods
+            ? entryType
+                .GetMembers()
+                .OfType<IPropertySymbol>()
+                .Where(s => !s.IsStatic && s.GetMethod is not null)
+                .Select(x => new DataHandlePropertyMethod(x))
+                .ToImmutableArray()
+            : [];
+
+        foreach (var property in properties)
+        {
+            var propertyGetter = new UnrealFunction(EFunctionFlags.BlueprintPure | EFunctionFlags.Static,
+                $"{property.Prefix}{property.Name}", namespaceName, Accessibility.Public, assemblyName, blueprintLibraryClass);
+            propertyGetter.AddMetaData("Category", engineName);
+
+            var propertySyntax = property.Property.DeclaringSyntaxReferences
+                .Select(x => x.GetSyntax()).FirstOrDefault();
+            propertyGetter.ReturnType = PropertyFactory.CreateProperty(property.Property.Type, propertySyntax!, property.Property, propertyGetter);
+            propertyGetter.ReturnType.PropertyFlags |= EPropertyFlags.ReturnParm | EPropertyFlags.OutParm;
+            
+            propertyGetter.Properties.List.Add(
+                new StructProperty(structSymbol.ToDisplayString(), "handle", Accessibility.NotApplicable,
+                    propertyGetter)
+                {
+                    PropertyFlags = EPropertyFlags.Parm
+                });
+            blueprintLibraryClass.AddFunction(propertyGetter);
+            functions.List.Add(propertyGetter);
+        }
+        
+        var functionGlueBuilder = new GeneratorStringBuilder();
+        functionGlueBuilder.Indent();
+        blueprintLibraryClass.TryExportList(functionGlueBuilder, context, functions);
+        
+        var moduleInitializerBuilder = new GeneratorStringBuilder();
+        moduleInitializerBuilder.BeginModuleInitializer(blueprintLibraryClass);
+
         var blueprintLibraryParams = new
         {
             Namespace = structSymbol.ContainingNamespace.ToDisplayString(),
             StructName = structSymbol.Name,
-            EngineName = structSymbol.Name[1..],
-            Properties = hasViewMethods
-                ? entryType
-                    .GetMembers()
-                    .OfType<IPropertySymbol>()
-                    .Where(s => !s.IsStatic && s.GetMethod is not null)
-                    .Select(x => new DataHandlePropertyMethod(x))
-                    .ToImmutableArray()
-                : [],
+            Assembly = assemblyName,
+            EngineName = engineName,
+            Properties = properties,
+            FunctionGlue = functionGlueBuilder.ToString(),
+            ModuleInitializer = moduleInitializerBuilder.ToString(),
         };
 
         context.AddSource(
