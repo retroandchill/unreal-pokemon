@@ -97,6 +97,7 @@ public readonly partial struct FTarget() : IGameDataEntry
 /// A repository responsible for managing and accessing target data within the game.
 /// Provides functionality to retrieve and handle instances of the target configuration type.
 /// </summary>
+[UClass]
 [GameDataRepository<FTarget>]
 public partial class UTargetRepository : UStaticGameDataRepository;
 
@@ -104,8 +105,9 @@ public partial class UTargetRepository : UStaticGameDataRepository;
 /// Represents a handle to a specific target configuration within the game's data repository,
 /// used to reference target entities and their associated behaviors or attributes.
 /// </summary>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Targets))]
-public readonly partial record struct FTargetHandle;
+public readonly partial record struct FTargetHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);
 
 /// <summary>
 /// Provides extension methods for managing target configurations within the game data model.

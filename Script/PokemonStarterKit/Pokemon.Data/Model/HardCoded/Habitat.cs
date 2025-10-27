@@ -41,6 +41,7 @@ public readonly partial struct FHabitat : IGameDataEntry
 /// This class serves as a highly specific implementation of a static game data repository,
 /// tailored to handle entries of type <see cref="FHabitat"/>.
 /// </summary>
+[UClass]
 [GameDataRepository<FHabitat>]
 public partial class UHabitatRepository : UStaticGameDataRepository;
 
@@ -49,8 +50,9 @@ public partial class UHabitatRepository : UStaticGameDataRepository;
 /// identifier or reference for a specific habitat, enabling efficient access and management
 /// of habitat-related data.
 /// </summary>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Habitats))]
-public readonly partial record struct FHabitatHandle;
+public readonly partial record struct FHabitatHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);
 
 /// <summary>
 /// Provides extension methods for managing and registering habitat-related data

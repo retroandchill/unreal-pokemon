@@ -95,6 +95,7 @@ public readonly partial struct FType() : IGameDataEntry
 /// derived from the UAssetGameDataRepository base class. It facilitates operations
 /// on type-related game data, including structure definition and weak type handling.
 /// </remarks>
+[UClass]
 [GameDataRepository<FType>]
 public partial class UTypeRepository : UAssetGameDataRepository;
 
@@ -107,5 +108,6 @@ public partial class UTypeRepository : UAssetGameDataRepository;
 /// game components and repositories, where it acts as a key to retrieve or operate on
 /// specific type information.
 /// </remarks>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Types))]
-public readonly partial record struct FTypeHandle;
+public readonly partial record struct FTypeHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);

@@ -100,6 +100,7 @@ public readonly partial struct FEncounterType : IGameDataEntry
 /// an interface for retrieving and handling data related to encounter types defined in the game data structure.
 /// It operates on the <see cref="FEncounterType"/> type for categorization and data manipulation purposes.
 /// </remarks>
+[UClass]
 [GameDataRepository<FEncounterType>]
 public partial class UEncounterTypeRepository : UStaticGameDataRepository;
 
@@ -110,8 +111,9 @@ public partial class UEncounterTypeRepository : UStaticGameDataRepository;
 /// This struct is used to safely reference and work with encounter type data within the game system.
 /// It acts as a lightweight identifier or pointer to an existing FEncounterType entry in the data repository.
 /// </remarks>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.EncounterTypes))]
-public readonly partial record struct FEncounterTypeHandle;
+public readonly partial record struct FEncounterTypeHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);
 
 /// <summary>
 /// Provides extension methods for encounter type-related operations within the game data manager.

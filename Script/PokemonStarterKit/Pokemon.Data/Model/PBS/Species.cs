@@ -431,6 +431,7 @@ public readonly partial struct FSpecies() : IGameDataEntry
 /// This class extends functionality from the UAssetGameDataRepository, enabling structured
 /// handling and queries of species-related game data.
 /// </summary>
+[UClass]
 [GameDataRepository<FSpecies>]
 public partial class USpeciesRepository : UAssetGameDataRepository;
 
@@ -440,5 +441,6 @@ public partial class USpeciesRepository : UAssetGameDataRepository;
 /// an identifier for species data and is utilized throughout various game systems
 /// for operations or lookups involving Pokémon species.
 /// </summary>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Species))]
-public readonly partial record struct FSpeciesHandle;
+public readonly partial record struct FSpeciesHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);

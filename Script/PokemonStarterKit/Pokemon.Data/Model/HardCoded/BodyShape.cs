@@ -41,6 +41,7 @@ public readonly partial struct FBodyShape : IGameDataEntry
 /// for handling body shape entries defined by <see cref="FBodyShape" />.
 /// Intended for use in scenarios requiring organized, static access to body shape game data.
 /// </summary>
+[UClass]
 [GameDataRepository<FBodyShape>]
 public partial class UBodyShapeRepository : UStaticGameDataRepository;
 
@@ -51,8 +52,9 @@ public partial class UBodyShapeRepository : UStaticGameDataRepository;
 /// the associated data structure. The handle is designed to integrate with the game
 /// data repository system, specifically targeting <see cref="GameData.BodyShapes"/>.
 /// </summary>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.BodyShapes))]
-public readonly partial record struct FBodyShapeHandle;
+public readonly partial record struct FBodyShapeHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);
 
 /// <summary>
 /// Provides extension methods for integrating body shape data into the game data model.

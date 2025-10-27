@@ -47,6 +47,7 @@ public readonly partial struct FEnvironment : IGameDataEntry
 /// This class serves as a specialized implementation of the static game data repository
 /// for the <c>FEnvironment</c> struct, providing access and management mechanisms for predefined data entries.
 /// </summary>
+[UClass]
 [GameDataRepository<FEnvironment>]
 public partial class UEnvironmentRepository : UStaticGameDataRepository;
 
@@ -56,8 +57,9 @@ public partial class UEnvironmentRepository : UStaticGameDataRepository;
 /// specific environment entries efficiently. It provides a lightweight and
 /// immutable identifier for accessing environment-related data.
 /// </summary>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Environments))]
-public readonly partial record struct FEnvironmentHandle;
+public readonly partial record struct FEnvironmentHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);
 
 /// <summary>
 /// Defines a set of predefined environmental battle contexts,

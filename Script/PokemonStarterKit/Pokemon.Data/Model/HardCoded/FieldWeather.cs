@@ -45,6 +45,7 @@ public readonly partial struct FFieldWeather : IGameDataEntry
 /// Provides a repository for managing and accessing weather-related data specific to fields in the game.
 /// This class serves as a static data repository for instances of <see cref="FFieldWeather"/>.
 /// </summary>
+[UClass]
 [GameDataRepository<FFieldWeather>]
 public partial class UFieldWeatherRepository : UStaticGameDataRepository;
 
@@ -52,8 +53,9 @@ public partial class UFieldWeatherRepository : UStaticGameDataRepository;
 /// A handle representing a link to a specific instance of field weather data within the game's repository.
 /// This struct is used to uniquely reference and interact with an entry from the FieldWeathers dataset.
 /// </summary>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.FieldWeathers))]
-public readonly partial record struct FFieldWeatherHandle;
+public readonly partial record struct FFieldWeatherHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);
 
 /// <summary>
 /// Provides extension methods for managing and registering field weather types within the game data manager.

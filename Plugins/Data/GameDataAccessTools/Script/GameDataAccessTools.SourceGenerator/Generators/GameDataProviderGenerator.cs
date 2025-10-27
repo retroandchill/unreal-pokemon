@@ -90,6 +90,10 @@ public class GameDataProviderGenerator : IIncrementalGenerator
             })
             .ToImmutableArray();
         
+        
+        var managerType = new UnrealClass(EClassFlags.None, "UGameDataManagerBase", "UnrealSharp.GameDataAccessTools", $"U{classSymbol.Name}Manager", classSymbol.ContainingNamespace.ToDisplayString(), Accessibility.Public, classSymbol.ContainingAssembly.Name);
+        managerType.Overrides.List.Add("Initialize");
+        
         var settingsType = new UnrealClass(EClassFlags.DefaultConfig, "UCSDeveloperSettings", "UnrealSharp.UnrealSharpCore", 
             $"U{classSymbol.Name}Settings", classSymbol.ContainingNamespace.ToDisplayString(), Accessibility.Public, classSymbol.ContainingAssembly.Name);
         settingsType.AddMetaData("ConfigCategory", dataProviderInfo.Category);
@@ -106,6 +110,22 @@ public class GameDataProviderGenerator : IIncrementalGenerator
             property.AddMetaData("Category", "RepositoryAssets");
             objectProperty.Outer = property;
             settingsType.AddProperty(property);
+
+            ObjectProperty assetProperty;
+            if (repository.HasAsset)
+            {
+                assetProperty = new ObjectProperty(repository.RepositoryClassName, $"{repository.Name}Asset", Accessibility.Private, managerType);
+            }
+            else
+            {
+                assetProperty = new ObjectProperty(repository.RepositoryClassName, repository.Name,
+                    Accessibility.Public, managerType)
+                {
+                    SetterAccessibility = Accessibility.Private,
+                };
+            }
+                
+            managerType.AddProperty(assetProperty);
         }
         
         var hasDisplayName = !string.IsNullOrWhiteSpace(dataProviderInfo.DisplayName);
@@ -116,18 +136,21 @@ public class GameDataProviderGenerator : IIncrementalGenerator
 
         var settingsModuleInitializerBuilder = new GeneratorStringBuilder();
         settingsModuleInitializerBuilder.BeginModuleInitializer(settingsType);
+        
+        var managerModuleInitializerBuilder = new GeneratorStringBuilder();
+        managerModuleInitializerBuilder.BeginModuleInitializer(managerType);
 
         var templateParams = new
         {
             Assembly = classSymbol.ContainingAssembly.Name,
             Namespace = classSymbol.ContainingNamespace.ToDisplayString(),
             ClassName = classSymbol.Name,
-            EngineName = classSymbol.Name[1..],
             dataProviderInfo.DisplayName,
             ConfigCategory = dataProviderInfo.Category,
             HasDisplayName = hasDisplayName,
             Repositories = repositories,
             SettingsModuleInitializer = settingsModuleInitializerBuilder.ToString(),
+            ManagerModuleInitializer = managerModuleInitializerBuilder.ToString()
         };
 
         var handlebars = Handlebars.Create();

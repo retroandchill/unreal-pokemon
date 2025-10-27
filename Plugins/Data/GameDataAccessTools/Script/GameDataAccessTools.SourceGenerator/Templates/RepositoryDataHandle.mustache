@@ -1,10 +1,4 @@
 ﻿#nullable enable
-using static UnrealSharp.Interop.FTypeBuilderExporter;
-using static UnrealSharp.Interop.FPropertyExporter;
-using static UnrealSharp.Interop.UClassExporter;
-using static UnrealSharp.Interop.UFunctionExporter;
-using static System.ComponentModel.EditorBrowsableState;
-
 using UnrealSharp;
 using UnrealSharp.Core;
 using UnrealSharp.Core.Marshallers;
@@ -17,33 +11,15 @@ using GameDataAccessTools.Core;
 using GameDataAccessTools.Core.Views;
 using GameDataAccessTools.Core.Utilities;
 using ZLinq;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
 
 namespace {{Namespace}};
 
-[GeneratedType("{{EngineName}}", "{{Namespace}}")]
-readonly partial record struct {{StructName}}(FName ID) : MarshalledStruct<{{StructName}}>, IDataHandle<{{EntryType}}>{{#Convertables}}, IEquatable<{{Type}}>{{/Convertables}}
+readonly partial record struct {{StructName}} : MarshalledStruct<{{StructName}}>, IDataHandle<{{EntryType}}>{{#Convertables}}, IEquatable<{{Type}}>{{/Convertables}}
 {
-    [EditorBrowsable(Never)]
-    private static IntPtr NativeTypePtr = UCoreUObjectExporter.CallGetType("{{AssemblyName}}", "{{Namespace}}", "{{EngineName}}");
-
-    [EditorBrowsable(Never)]
-    private static int {{StructName}}_ID_Offset = FPropertyExporter.CallGetPropertyOffsetFromName(NativeTypePtr, "ID");
-
-    private static int NativeDataSize = UScriptStructExporter.CallGetNativeStructSize(NativeTypePtr);
-    public static int GetNativeDataSize() => NativeDataSize;
-    public static IntPtr GetNativeClassPtr() => NativeTypePtr;
-    public static {{StructName}} FromNative(IntPtr buffer) => new {{StructName}}(buffer);
-
-    public void ToNative(IntPtr buffer) => BlittableMarshaller<{{StructName}}>.ToNative(buffer, 0, this);
-
-    public {{StructName}}(IntPtr buffer) : this(BlittableMarshaller<FName>.FromNative(IntPtr.Add(buffer, {{StructName}}_ID_Offset), 0)) { }
-
     public static {{StructName}} None => new(FName.None);
 
     {{#WithRepository}}
+    /// <inheritdoc/>
     public static UScriptStruct EntryStruct => {{Provider}}.{{Repository}}.EntryStruct;
 
     static IEnumerable<FDataHandleEntry> IDataHandle.Entries => Entries.ToArray();
@@ -57,11 +33,14 @@ readonly partial record struct {{StructName}}(FName ID) : MarshalledStruct<{{Str
         }
     }
 
+    /// <inheritdoc/>
     public bool IsValid => {{Provider}}.{{Repository}}.IsValidEntry(ID);
 
+    /// <inheritdoc/>
     public StructView<{{EntryType}}> Entry => {{Provider}}.{{Repository}}.GetEntry(ID);
     {{/WithRepository}}
     {{^WithRepository}}
+    /// <inheritdoc/>
     public static UScriptStruct EntryStruct => {{EntryType}}.StaticStruct;
     {{/WithRepository}}
     
@@ -94,12 +73,14 @@ readonly partial record struct {{StructName}}(FName ID) : MarshalledStruct<{{Str
     }
 
     {{/Convertables}}
+    /// <inheritdoc/>
     public bool Equals(FName other)
     {
         return ID.Equals(other);
     }
 
     {{#Convertables}}
+    /// <inheritdoc/>
     public bool Equals({{Type}} other)
     {
         return ID.Equals(other.ID);
@@ -129,14 +110,6 @@ readonly partial record struct {{StructName}}(FName ID) : MarshalledStruct<{{Str
 
     {{/Convertables}}
 
+    /// <inheritdoc/>
     public override string ToString() => ID.ToString();
 }
-   
-
-public static class {{StructName}}Marshaller
-{
-    public static void ToNative(IntPtr buffer, int index, {{StructName}} obj) => obj.ToNative(buffer + (index * {{StructName}}.GetNativeDataSize()));
-    public static {{StructName}} FromNative(IntPtr buffer, int index) => new {{StructName}}(buffer + (index * {{StructName}}.GetNativeDataSize()));
-}                                                                       
-
-{{ModuleInitializer}}

@@ -53,6 +53,7 @@ public readonly partial struct FGrowthRate : IGameDataEntry
 /// <summary>
 /// Provides data repository functionality for accessing and managing FGrowthRate game data entries.
 /// </summary>
+[UClass]
 [GameDataRepository<FGrowthRate>]
 public partial class UGrowthRateRepository : UStaticGameDataRepository;
 
@@ -60,8 +61,9 @@ public partial class UGrowthRateRepository : UStaticGameDataRepository;
 /// Represents a handle that provides a reference to a specific growth rate within the game data system.
 /// This type is primarily used to reference entries in the GrowthRates repository.
 /// </summary>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.GrowthRates))]
-public readonly partial record struct FGrowthRateHandle;
+public readonly partial record struct FGrowthRateHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);
 
 /// <summary>
 /// Provides extension methods for managing and interacting with growth rate entries within the game data manager.

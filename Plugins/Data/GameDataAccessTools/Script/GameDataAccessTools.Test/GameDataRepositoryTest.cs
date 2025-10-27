@@ -27,6 +27,7 @@ public readonly partial struct FTestGameEntry : IGameDataEntry
     public required bool IsActive { get; init; }
 }
 
+[UClass]
 [GameDataRepository<FTestGameEntry>]
 public partial class UTestGameDataRepository : UStaticGameDataRepository;
 

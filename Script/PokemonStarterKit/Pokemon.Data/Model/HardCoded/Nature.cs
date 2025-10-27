@@ -58,6 +58,7 @@ public readonly partial struct FNature() : IGameDataEntry
 /// This repository provides functionality to query and retrieve hard-coded nature data
 /// utilized within the Pokémon application.
 /// </summary>
+[UClass]
 [GameDataRepository<FNature>]
 public partial class UNatureRepository : UStaticGameDataRepository;
 
@@ -66,8 +67,9 @@ public partial class UNatureRepository : UStaticGameDataRepository;
 /// This handle is utilized to identify and retrieve the nature definition from the game data repository.
 /// A Pokémon's nature influences its stat modifications during battles, typically boosting one stat while decreasing another.
 /// </summary>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Natures))]
-public readonly partial record struct FNatureHandle;
+public readonly partial record struct FNatureHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);
 
 /// <summary>
 /// Provides extension methods for adding nature-related data and behaviors to the game's data manager.

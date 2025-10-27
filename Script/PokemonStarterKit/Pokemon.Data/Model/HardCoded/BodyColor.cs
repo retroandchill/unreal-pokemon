@@ -51,6 +51,7 @@ public readonly partial struct FBodyColor : IGameDataEntry
 /// <see cref="UStaticGameDataRepository"/> to ensure compatibility with the static game
 /// data infrastructure, offering efficient management of hard-coded body color entries.
 /// </remarks>
+[UClass]
 [GameDataRepository<FBodyColor>]
 public partial class UBodyColorRepository : UStaticGameDataRepository;
 
@@ -61,8 +62,9 @@ public partial class UBodyColorRepository : UStaticGameDataRepository;
 /// This record struct is used for referencing specific entries in the body color dataset.
 /// It facilitates lookup and manipulation of body color data through the associated static repository.
 /// </remarks>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.BodyColors))]
-public readonly partial record struct FBodyColorHandle;
+public readonly partial record struct FBodyColorHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);
 
 /// <summary>
 /// Provides extension methods for managing body color entries within the game data manager.

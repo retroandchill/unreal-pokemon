@@ -1,9 +1,16 @@
-﻿using UnrealSharp;
+﻿using static UnrealSharp.Interop.FTypeBuilderExporter;
+using static UnrealSharp.Interop.FPropertyExporter;
+using static UnrealSharp.Interop.UClassExporter;
+using static UnrealSharp.Interop.UFunctionExporter;
+
+using UnrealSharp;
+using UnrealSharp.Core;
 using UnrealSharp.Attributes;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.Engine;
 using UnrealSharp.RPGCore;
 using GameDataAccessTools.Core.Utilities;
+using System.Runtime.CompilerServices;
 
 namespace {{Namespace}};
 
@@ -36,4 +43,21 @@ partial class {{ClassName}} : {{#Components}}IRPGEntity<{{ComponentType}}>{{^IsL
         return newEntity;
     }
     {{/HasFactory}}
+}
+
+internal static class {{ClassName}}_AdditionalOverrides_Initializer
+{
+    #pragma warning disable CA2255
+    [ModuleInitializer]
+    #pragma warning restore CA2255
+    public static void Register() => StartUpJobManager.RegisterTypeAdditionalBuildJob("{{EngineName}}", Initialize);
+
+    private static void Initialize(IntPtr nativeType)
+    {
+        NewOverride(nativeType, "CreateRequiredComponents");
+        {{#HasFactory}}
+        NewOverride(nativeType, "K2_GetEntityStruct");
+        {{/HasFactory}}
+    }
+
 }

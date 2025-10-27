@@ -19,15 +19,13 @@ using System.Runtime.CompilerServices;
 
 namespace {{Namespace}};
 
-[GeneratedType("{{EngineName}}", "{{Namespace}}")]
 partial class {{AssetClassName}} : {{#IsStatic}}IStaticGameDataRepository{{/IsStatic}}{{^IsStatic}}IGameDataRepository{{/IsStatic}}<{{EntryName}}> 
 {
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    private static IntPtr NativeTypePtr = UCoreUObjectExporter.CallGetType("{{Assembly}}", "{{Namespace}}", "{{EngineName}}");
-
 {{DataEntriesProperty}}
 
     private static ArrayViewMarshaller<StructView<{{EntryName}}>>? _entriesMarshaller;
+
+    /// <inheritdoc/>
     public ArrayView<StructView<{{EntryName}}>> Entries
     {
         get
@@ -38,22 +36,26 @@ partial class {{AssetClassName}} : {{#IsStatic}}IStaticGameDataRepository{{/IsSt
         }
     }
 
+    /// <inheritdoc/>
     public bool IsValidEntry(FName id)
     {
         var nativeEntry = GameDataRepositoryExporter.CallGetEntryByID(NativeObject, id);
         return nativeEntry != IntPtr.Zero;
     }
 
+    /// <inheritdoc/>
     public StructView<{{EntryName}}> GetEntry(FName id)
     {
         return TryGetEntry(id, out var entry) ? entry : throw new KeyNotFoundException();
     }
 
+    /// <inheritdoc/>
     public StructView<{{EntryName}}> GetEntry(int index)
     {
         return TryGetEntry(index, out var entry) ? entry : throw new KeyNotFoundException();
     }
 
+    /// <inheritdoc/>
     public bool TryGetEntry(FName id, out StructView<{{EntryName}}> entry)
     {
         var nativeEntry = GameDataRepositoryExporter.CallGetEntryByID(NativeObject, id);
@@ -67,6 +69,7 @@ partial class {{AssetClassName}} : {{#IsStatic}}IStaticGameDataRepository{{/IsSt
         return true;
     }
 
+    /// <inheritdoc/>
     public bool TryGetEntry(int index, out StructView<{{EntryName}}> entry)
     {
         var nativeEntry = GameDataRepositoryExporter.CallGetEntryByIndex(NativeObject, index);
@@ -81,11 +84,13 @@ partial class {{AssetClassName}} : {{#IsStatic}}IStaticGameDataRepository{{/IsSt
     }   
 
     {{#IsStatic}}
+    /// <inheritdoc/>
     public void RegisterEntry({{EntryName}} entry)
     {
         RegisterEntryInternal(entry);
     }
 
+    /// <inheritdoc/>
     public bool TryRegisterEntry({{EntryName}} entry)
     {
         if (!TryRegisterEntryInternal(out var error, entry))
@@ -99,4 +104,17 @@ partial class {{AssetClassName}} : {{#IsStatic}}IStaticGameDataRepository{{/IsSt
     {{/IsStatic}} 
 }
 
+internal static class {{AssetClassName}}_DataEntries_Initializer 
+{
+    #pragma warning disable CA2255
+    [ModuleInitializer]
+    #pragma warning restore CA2255
+    public static void Register() => StartUpJobManager.RegisterTypeAdditionalBuildJob("{{EngineName}}", Initialize);
+
+    private static void Initialize(IntPtr nativeType)
+    {
+        var nativeProperties = InitStructProps(nativeType, {{PropertiesCount}});
 {{ModuleInitializer}}
+    }
+    
+}

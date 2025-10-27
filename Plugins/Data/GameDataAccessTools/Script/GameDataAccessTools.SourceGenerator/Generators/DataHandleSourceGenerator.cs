@@ -44,7 +44,7 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
     {
         var isValidType = true;
         if (
-            structSymbol
+            !structSymbol
                 .GetAttributes()
                 .Any(a => a.AttributeClass?.ToDisplayString() == SourceContextNames.UStructAttribute)
         )
@@ -53,8 +53,8 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
                 Diagnostic.Create(
                     new DiagnosticDescriptor(
                         "GDA3001",
-                        "Data handle should not be marked UStruct",
-                        "{0} must not be annotated with UStruct",
+                        "Data handle should be marked UStruct",
+                        "{0} must be annotated with UStruct",
                         "GameDataAccessTools",
                         DiagnosticSeverity.Error,
                         true
@@ -85,24 +85,51 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
             isValidType = false;
         }
 
+        if (!structSymbol.GetMembers().OfType<IPropertySymbol>()
+                .Any(p => !p.IsStatic && p.DeclaredAccessibility == Accessibility.Public && p.Type.ToDisplayString() == "UnrealSharp.Core.FName" && p.Name == "ID"))
+        {
+            context.ReportDiagnostic(
+                Diagnostic.Create(
+                    new DiagnosticDescriptor(
+                        "GDA3003",
+                        "Data handle type must have ID property",
+                        "{0} needs a public, non-static property 'ID' of type FName",
+                        "GameDataAccessTools",
+                        DiagnosticSeverity.Error,
+                        true
+                    ),
+                    structSymbol.Locations.First(),
+                    structSymbol.Name
+                )
+            );
+            isValidType = false;
+        }
+
+        if (!structSymbol.GetMembers().OfType<IMethodSymbol>()
+                .Any(c => c is { MethodKind: MethodKind.Constructor, DeclaredAccessibility: Accessibility.Public, Parameters.Length: 1 } &&
+                          c.Parameters[0].Type.ToDisplayString() == "UnrealSharp.Core.FName"))
+        {
+            context.ReportDiagnostic(
+                Diagnostic.Create(
+                    new DiagnosticDescriptor(
+                        "GDA3004",
+                        "Data handle type must have a public constructor with FName parameter",
+                        "{0} needs a public constructor with a single parameter of type FName",
+                        "GameDataAccessTools",
+                        DiagnosticSeverity.Error,
+                        true
+                    ),
+                    structSymbol.Locations.First(),
+                    structSymbol.Name
+                )
+            );
+            isValidType = false;
+        }
+
         if (!isValidType)
         {
             return;
         }
-
-        var unrealStruct = new UnrealScriptStruct(structSymbol.Name, structSymbol.ContainingNamespace.ToDisplayString(),
-            structSymbol.DeclaredAccessibility, structSymbol.ContainingAssembly.Name)
-        {
-            IsRecord = true,
-            HasPrimaryConstructor = true,
-            PrimaryConstructorParameterCount = 1
-        };
-
-        var idProperty = new NameProperty("ID", Accessibility.Public, unrealStruct)
-        {
-            PropertyFlags = EPropertyFlags.EditAnywhere
-        };
-        unrealStruct.AddProperty(idProperty);
 
         DataHandleTemplateBase templateParams;
         try
@@ -112,7 +139,6 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
                 DataHandleInfo providerRepository => new ProviderTemplateHandle(
                     structSymbol,
                     GetEntryType(providerRepository),
-                    unrealStruct,
                     providerRepository.Type,
                     providerRepository.RepositoryName,
                     GetConvertibleTypes(dataHandleInfo)
@@ -120,7 +146,6 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
                 DataHandleInfoOneParam specificType => new ExplicitDataHandleTemplate(
                     structSymbol,
                     specificType.EntryType,
-                    unrealStruct,
                     GetConvertibleTypes(dataHandleInfo)
                 ),
                 _ => throw new InvalidOperationException(

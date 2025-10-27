@@ -111,6 +111,7 @@ public readonly partial struct FTrainerType() : IGameDataEntry
 /// FTrainerType as the data model for trainers and enabling efficient retrieval and handling of
 /// trainer-related information.
 /// </remarks>
+[UClass]
 [GameDataRepository<FTrainerType>]
 public partial class UTrainerTypeRepository : UAssetGameDataRepository;
 
@@ -122,5 +123,6 @@ public partial class UTrainerTypeRepository : UAssetGameDataRepository;
 /// game's data repository. It is used to ensure efficient access and identification of
 /// trainer type entities without needing to duplicate the underlying data.
 /// </remarks>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.TrainerTypes))]
-public readonly partial record struct FTrainerTypeHandle;
+public readonly partial record struct FTrainerTypeHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);

@@ -216,6 +216,7 @@ public readonly partial struct FEvolution : IGameDataEntry
 /// within the context of the game. It utilizes the FEvolution data structure and adheres to the framework's
 /// repository model for handling game data efficiently.
 /// </remarks>
+[UClass]
 [GameDataRepository<FEvolution>]
 public partial class UEvolutionRepository : UStaticGameDataRepository;
 
@@ -226,8 +227,9 @@ public partial class UEvolutionRepository : UStaticGameDataRepository;
 /// This structure is used in the context of accessing and managing evolution data within the game framework.
 /// It acts as a data handle tied to the evolution repository.
 /// </remarks>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Evolutions))]
-public readonly partial record struct FEvolutionHandle;
+public readonly partial record struct FEvolutionHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);
 
 /// <summary>
 /// Provides extension methods for handling evolution-related functionality in the context of game data management.

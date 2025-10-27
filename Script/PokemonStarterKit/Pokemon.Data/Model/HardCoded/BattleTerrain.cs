@@ -38,6 +38,7 @@ public readonly partial struct FBattleTerrain : IGameDataEntry
 /// Serves as a repository for managing and accessing instances of FBattleTerrain.
 /// Extends the UStaticGameDataRepository to facilitate terrain-specific game data operations.
 /// </summary>
+[UClass]
 [GameDataRepository<FBattleTerrain>]
 public partial class UBattleTerrainRepository : UStaticGameDataRepository;
 
@@ -45,8 +46,9 @@ public partial class UBattleTerrainRepository : UStaticGameDataRepository;
 /// A handle representing a reference to a BattleTerrain entry within the game's data repository.
 /// Provides an identifier for terrain-related data, enabling efficient access and retrieval from the associated repository.
 /// </summary>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.BattleTerrains))]
-public readonly partial record struct FBattleTerrainHandle;
+public readonly partial record struct FBattleTerrainHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);
 
 /// <summary>
 /// Provides extension methods for managing and registering battle terrain data

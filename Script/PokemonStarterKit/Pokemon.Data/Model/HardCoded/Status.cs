@@ -40,6 +40,7 @@ public readonly partial struct FStatus : IGameDataEntry
 /// in the game's hardcoded data model. It serves as a concrete implementation
 /// to handle status entities derived from the <see cref="FStatus"/> struct.
 /// </summary>
+[UClass]
 [GameDataRepository<FStatus>]
 public partial class UStatusRepository : UStaticGameDataRepository;
 
@@ -47,8 +48,9 @@ public partial class UStatusRepository : UStaticGameDataRepository;
 /// Represents a unique handle for identifying and referencing a specific status entity
 /// within the game's data model.
 /// </summary>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Statuses))]
-public readonly partial record struct FStatusHandle;
+public readonly partial record struct FStatusHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);
 
 /// <summary>
 /// Provides extension methods for managing and registering status entities within the game's

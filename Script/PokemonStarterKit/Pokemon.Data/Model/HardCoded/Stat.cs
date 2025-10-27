@@ -123,6 +123,7 @@ public readonly partial struct FStat : IGameDataEntry
 /// The repository leverages the capabilities of its base class to enable efficient
 /// retrieval and management of static statistical data.
 /// </remarks>
+[UClass]
 [GameDataRepository<FStat>]
 public partial class UStatRepository : UStaticGameDataRepository;
 
@@ -134,12 +135,13 @@ public partial class UStatRepository : UStaticGameDataRepository;
 /// Typically used in operations where only referencing of data is needed without requiring the full data footprint or direct modification.
 /// It is compatible with various comparable types such as FMainStatHandle, FBattleStatHandle, and FMainBattleStatHandle for flexible data handling.
 /// </remarks>
+[UStruct]
 [DataHandle(
     typeof(GameData),
     nameof(GameData.Stats),
     ComparableTypes = [typeof(FMainStatHandle), typeof(FBattleStatHandle), typeof(FMainBattleStatHandle)]
 )]
-public readonly partial record struct FStatHandle;
+public readonly partial record struct FStatHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);
 
 /// <summary>
 /// Represents a handle to a primary game statistic. This handle references a statistical entry that falls under the main or main battle categories within the game logic.
@@ -148,8 +150,9 @@ public readonly partial record struct FStatHandle;
 /// The structure is primarily used for identifying and working with main statistics in the game's data set. It ensures that only valid main or main battle statistics are accessed or manipulated.
 /// The handle facilitates efficient querying, validation, and retrieval of associated main statistic entries.
 /// </remarks>
+[UStruct]
 [DataHandle<FStat>(ComparableTypes = [typeof(FStatHandle), typeof(FBattleStatHandle), typeof(FMainBattleStatHandle)])]
-public readonly partial record struct FMainStatHandle
+public readonly partial record struct FMainStatHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID)
 {
     /// <summary>
     /// Provides filtered access to a collection of main and main battle stat entries from game data,
@@ -207,8 +210,9 @@ public readonly partial record struct FMainStatHandle
 /// The <see cref="FBattleStatHandle"/> provides an interface for accessing and validating game statistics associated with battle-related operations. It helps streamline the process of querying and retrieving structured data for relevant stats.
 /// It is primarily suited to work with game data entries tied to the `FStat` struct, focusing on those with stat types classified under `EStatType.Battle` or `EStatType.MainBattle`.
 /// </remarks>
+[UStruct]
 [DataHandle<FStat>(ComparableTypes = [typeof(FStatHandle), typeof(FMainStatHandle), typeof(FMainBattleStatHandle)])]
-public readonly partial record struct FBattleStatHandle
+public readonly partial record struct FBattleStatHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID)
 {
     /// <summary>
     /// Gets a filtered enumeration of battle-related stat entries.
@@ -273,8 +277,9 @@ public readonly partial record struct FBattleStatHandle
 /// This structure allows for efficient filtering and validation of specific stat types through its properties
 /// and associated methods, promoting structured access and data integrity.
 /// </remarks>
+[UStruct]
 [DataHandle<FStat>(ComparableTypes = [typeof(FStatHandle), typeof(FBattleStatHandle), typeof(FMainStatHandle)])]
-public readonly partial record struct FMainBattleStatHandle
+public readonly partial record struct FMainBattleStatHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID)
 {
     /// <summary>
     /// Represents a filtered collection of entries containing main battle statistics.

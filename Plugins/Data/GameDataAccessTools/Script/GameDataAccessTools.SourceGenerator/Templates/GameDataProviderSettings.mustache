@@ -21,11 +21,11 @@ using System.ComponentModel;
 
 namespace {{Namespace}};
 
-[GeneratedType("{{EngineName}}", "{{Namespace}}")]
+[GeneratedType("{{ClassName}}Settings", "{{Namespace}}")]
 public partial class U{{ClassName}}Settings : UCSDeveloperSettings 
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    private static IntPtr NativeTypePtr = UCoreUObjectExporter.CallGetType("{{Assembly}}", "{{Namespace}}", "{{EngineName}}");
+    private static IntPtr NativeTypePtr = UCoreUObjectExporter.CallGetType("{{Assembly}}", "{{Namespace}}", "{{ClassName}}Settings");
     {{#Repositories}}
     {{#HasAsset}}
         

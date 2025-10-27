@@ -399,6 +399,7 @@ public readonly partial struct FItem() : IGameDataEntry
 /// This class acts as an intermediary for retrieving, updating, and storing data
 /// related to items defined in the game world.
 /// </summary>
+[UClass]
 [GameDataRepository<FItem>]
 public partial class UItemRepository : UAssetGameDataRepository;
 
@@ -406,5 +407,6 @@ public partial class UItemRepository : UAssetGameDataRepository;
 /// Represents a handle for an item in the Pokémon game data. Includes functionality for referencing items
 /// stored within the game's item repository and is utilized in various game systems to identify specific items.
 /// </summary>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Items))]
-public readonly partial record struct FItemHandle;
+public readonly partial record struct FItemHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);

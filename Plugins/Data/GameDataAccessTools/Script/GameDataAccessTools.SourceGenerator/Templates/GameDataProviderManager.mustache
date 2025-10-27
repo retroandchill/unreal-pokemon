@@ -1,27 +1,46 @@
 #nullable enable
+using static UnrealSharp.Interop.FTypeBuilderExporter;
+using static UnrealSharp.Interop.FPropertyExporter;
+using static UnrealSharp.Interop.UClassExporter;
+using static UnrealSharp.Interop.UFunctionExporter;
+using static System.ComponentModel.EditorBrowsableState;
+
+
 using System.Diagnostics.CodeAnalysis;
 using UnrealSharp;
 using UnrealSharp.Core;
+using UnrealSharp.Core.Attributes;
+using UnrealSharp.Core.Marshallers;
+using UnrealSharp.Interop;
 using UnrealSharp.Engine;
 using UnrealSharp.Attributes;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.DeveloperSettings;
 using UnrealSharp.GameDataAccessTools;
 using GameDataAccessTools.Core;
+using System.ComponentModel;
 
 namespace {{Namespace}};
 
-[UClass]
+[GeneratedType("{{ClassName}}Manager", "{{Namespace}}")]
 public partial class U{{ClassName}}Manager : UGameDataManagerBase 
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    private static IntPtr NativeTypePtr = UCoreUObjectExporter.CallGetType("{{Assembly}}", "{{Namespace}}", "{{ClassName}}Settings");
+
     private static U{{ClassName}}Manager? _instance = null;
     
     public static U{{ClassName}}Manager Instance => _instance ?? throw new InvalidOperationException("U{{ClassName}}Manager is not active");
 
     {{#Repositories}}
     {{#HasAsset}}
-    [UProperty]
-    private {{RepositoryClassName}}? {{Name}}Asset { get; set; }
+    [EditorBrowsable(Never)]
+    private static int U{{../ClassName}}Manager_{{Name}}Asset_Offset = CallGetPropertyOffsetFromName(NativeTypePtr, "{{Name}}Asset");
+    private {{RepositoryClassName}} {{Name}}Asset 
+    {
+        get => ObjectMarshaller<{{RepositoryClassName}}>.FromNative(IntPtr.Add(NativeObject, U{{../ClassName}}Manager_{{Name}}Asset_Offset), 0);
+        set => ObjectMarshaller<{{RepositoryClassName}}>.ToNative(IntPtr.Add(NativeObject, U{{../ClassName}}Manager_{{Name}}Asset_Offset), 0, value);
+    }
 
     public {{RepositoryClassName}} {{Name}}
     {
@@ -34,8 +53,13 @@ public partial class U{{ClassName}}Manager : UGameDataManagerBase
 
     {{/HasAsset}}
     {{^HasAsset}}
-    [UProperty]
-    public {{RepositoryClassName}} {{Name}} { get; private set; } = null!;
+    [EditorBrowsable(Never)]
+    private static int U{{../ClassName}}Manager_{{Name}}_Offset = CallGetPropertyOffsetFromName(NativeTypePtr, "{{Name}}");
+    public {{RepositoryClassName}} {{Name}}
+    {
+        get => ObjectMarshaller<{{RepositoryClassName}}>.FromNative(IntPtr.Add(NativeObject, U{{../ClassName}}Manager_{{Name}}_Offset), 0);
+        private set => ObjectMarshaller<{{RepositoryClassName}}>.ToNative(IntPtr.Add(NativeObject, U{{../ClassName}}Manager_{{Name}}_Offset), 0, value);
+    }
 
     {{/HasAsset}}
     {{/Repositories}}    
@@ -85,3 +109,5 @@ public partial class U{{ClassName}}Manager : UGameDataManagerBase
         return TryLoadRepository(ptr) ?? throw new InvalidOperationException("Could not load repository");
     }
 }
+
+{{ManagerModuleInitializer}}

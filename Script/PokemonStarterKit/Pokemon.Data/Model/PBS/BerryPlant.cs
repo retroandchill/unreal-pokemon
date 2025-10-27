@@ -77,6 +77,7 @@ public readonly partial struct FBerryPlant() : IGameDataEntry
 /// Responsible for providing access to instances of <see cref="FBerryPlant"/>
 /// and interacting with associated game data mechanisms.
 /// </summary>
+[UClass]
 [GameDataRepository<FBerryPlant>]
 public partial class UBerryPlantRepository : UAssetGameDataRepository;
 
@@ -84,5 +85,6 @@ public partial class UBerryPlantRepository : UAssetGameDataRepository;
 /// Represents a handle that uniquely identifies a berry plant entity within a game data repository.
 /// Used to establish references or perform comparisons with other data entities like items.
 /// </summary>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.BerryPlants), ComparableTypes = [typeof(FItemHandle)])]
-public readonly partial record struct FBerryPlantHandle;
+public readonly partial record struct FBerryPlantHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);

@@ -376,6 +376,7 @@ public readonly partial struct FMove() : IGameDataEntry
 /// enabling operations such as retrieval and management within the game's data infrastructure.
 /// Utilized by the <c>GameData</c> system to dynamically fetch and access Pokémon moves.
 /// </remarks>
+[UClass]
 [GameDataRepository<FMove>]
 public partial class UMoveRepository : UAssetGameDataRepository;
 
@@ -386,5 +387,6 @@ public partial class UMoveRepository : UAssetGameDataRepository;
 /// Used in the game data context to access and manipulate move definitions efficiently and reliably.
 /// This struct acts as an identifier or pointer linking to detailed move metadata contained in the game's data repository.
 /// </remarks>
+[UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.Moves))]
-public readonly partial record struct FMoveHandle;
+public readonly partial record struct FMoveHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);

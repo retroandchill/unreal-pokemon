@@ -43,14 +43,14 @@ internal class GameDataRepositoryGenerator : IIncrementalGenerator
         var uclassAttributeInfo = classSymbol
             .GetAttributes()
             .SingleOrDefault(x => x.AttributeClass?.ToDisplayString() == SourceContextNames.UClassAttribute);
-        if (uclassAttributeInfo is not null)
+        if (uclassAttributeInfo is null)
         {
             context.ReportDiagnostic(
                 Diagnostic.Create(
                     new DiagnosticDescriptor(
                         "GDA0001",
-                        "GameDataRepository must not be annotated with UClass",
-                        "{0} must not be annotated with UClass",
+                        "GameDataRepository must be annotated with UClass",
+                        "{0} must be annotated with UClass",
                         "GameDataAccessTools",
                         DiagnosticSeverity.Error,
                         true
@@ -141,8 +141,10 @@ internal class GameDataRepositoryGenerator : IIncrementalGenerator
         
         unrealClass.AddProperty(dataEntriesProperty);
 
-        var moduleInitializerBuilder = new GeneratorStringBuilder();
-        moduleInitializerBuilder.BeginModuleInitializer(unrealClass);
+        var dataEntriesInitializerBuilder = new GeneratorStringBuilder();
+        dataEntriesInitializerBuilder.Indent();
+        dataEntriesInitializerBuilder.Indent();
+        dataEntriesProperty.MakeProperty(dataEntriesInitializerBuilder, "nativeProperties");
         
         var dataEntriesBuilder = new GeneratorStringBuilder();
         dataEntriesBuilder.Indent();
@@ -157,8 +159,12 @@ internal class GameDataRepositoryGenerator : IIncrementalGenerator
             EngineName = classSymbol.Name[1..],
             EntryName = repositoryInfo.EntryType.ToDisplayString(),
             IsStatic = isStatic,
-            ModuleInitializer = moduleInitializerBuilder.ToString(),
+            ModuleInitializer = dataEntriesInitializerBuilder.ToString(),
             DataEntriesProperty = dataEntriesBuilder.ToString(),
+            unrealClass.BuilderNativePtr,
+            PropertiesCount = classSymbol.GetMembers()
+                .OfType<IPropertySymbol>()
+                .Count(p => !p.IsStatic && p.HasAttribute(SourceContextNames.UPropertyAttribute)) + 1
         };
 
         var handlebars = Handlebars.Create();
