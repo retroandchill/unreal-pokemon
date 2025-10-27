@@ -97,8 +97,11 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
             HasPrimaryConstructor = true,
             PrimaryConstructorParameterCount = 1
         };
-        
-        var idProperty = new NameProperty("ID", Accessibility.Public, unrealStruct);
+
+        var idProperty = new NameProperty("ID", Accessibility.Public, unrealStruct)
+        {
+            PropertyFlags = EPropertyFlags.EditAnywhere
+        };
         unrealStruct.AddProperty(idProperty);
 
         DataHandleTemplateBase templateParams;

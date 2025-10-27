@@ -14,7 +14,7 @@ namespace Pokemon.UI.Components.Bag;
 /// filtered sets of items, allowing for selection and hover operations.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UItemSelectionWindow : UOwningSelectionWidget
+public partial class UItemSelectionWindow : UOwningSelectionWidget
 {
     /// <summary>
     /// Represents the class type to be used for constructing individual item entries
@@ -27,7 +27,7 @@ public class UItemSelectionWindow : UOwningSelectionWidget
     /// <c>UItemOption</c> and define item-related behaviors and display logic.
     /// </remarks>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Display")]
-    private TSubclassOf<UItemOption> ItemEntryClass { get; }
+    private partial TSubclassOf<UItemOption> ItemEntryClass { get; }
 
     /// <summary>
     /// Event triggered when an item is hovered over in the item selection window.
@@ -63,7 +63,7 @@ public class UItemSelectionWindow : UOwningSelectionWidget
     /// the dynamic UI component that displays and processes the selected items.
     /// </remarks>
     [UProperty]
-    public UPokemonBag Bag { get; set; }
+    public partial UPokemonBag Bag { get; set; }
 
     /// <summary>
     /// Represents the currently selected pocket within the item selection window.
@@ -87,9 +87,9 @@ public class UItemSelectionWindow : UOwningSelectionWidget
     }
 
     /// <inheritdoc />
-    public override void Construct()
+    protected override void Construct_Implementation()
     {
-        base.Construct();
+        base.Construct_Implementation();
         Buttons.OnHoveredButtonBaseChanged += [UFunction] (_, i) => OnSelectionChange(i);
         Buttons.OnButtonBaseClicked += [UFunction] (_, i) => ProcessConfirm(i);
     }

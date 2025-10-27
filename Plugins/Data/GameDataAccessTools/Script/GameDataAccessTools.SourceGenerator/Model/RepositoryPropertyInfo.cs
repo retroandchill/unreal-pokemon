@@ -12,5 +12,6 @@ public record RepositoryPropertyInfo
     public required bool HasAsset { get; init; }
 
     public string EntryTypeEngineName => EntryType.Name[1..];
-    public required string RepositoryClassName { get; init; }
+    public required ITypeSymbol RepositoryType { get; init; }
+    public string RepositoryClassName => RepositoryType.ToDisplayString();
 }

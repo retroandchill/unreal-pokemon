@@ -14,7 +14,7 @@ namespace Pokemon.UI.Components.Party;
 /// Used primarily for handling Pokémon selection and management within the party.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UPokemonSelectionPane : UPokemonSelectionWidgetBase
+public partial class UPokemonSelectionPane : UPokemonSelectionWidgetBase
 {
     /// <summary>
     /// Represents the index of the currently selected Pokémon in the switching process.
@@ -40,9 +40,9 @@ public class UPokemonSelectionPane : UPokemonSelectionWidgetBase
     protected override int? NumPanelsToAdd => GetDefault<UPokemonCoreSettings>().MaxPartySize;
 
     /// <inheritdoc />
-    public override void Construct()
+    protected override void Construct_Implementation()
     {
-        base.Construct();
+        base.Construct_Implementation();
         SetPokemonToDisplay(GetGameInstanceSubsystem<UPokemonSubsystem>().Player.PartyPokemon);
     }
 

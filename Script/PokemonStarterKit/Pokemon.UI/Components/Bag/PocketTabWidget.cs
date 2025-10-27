@@ -22,7 +22,7 @@ namespace Pokemon.UI.Components.Bag;
 /// This class inherits from <see cref="UCommonActivatableWidget"/> and provides functionality for handling pocket tabs in the user interface. It includes support for UI action binding, pocket selection, and event notifications when the selected pocket changes.
 /// </remarks>
 [UClass]
-public class UPocketTabWidget : UCommonActivatableWidget
+public partial class UPocketTabWidget : UCommonActivatableWidget
 {
     /// <summary>
     /// Gets or sets the currently selected pocket within the pocket tab widget.
@@ -49,7 +49,7 @@ public class UPocketTabWidget : UCommonActivatableWidget
     }
 
     [UProperty(PropertyFlags.Transient)]
-    private UPokemonBag Bag { get; set; }
+    private partial UPokemonBag Bag { get; set; }
 
     /// <summary>
     /// Event that is triggered whenever the currently selected pocket changes in the pocket tab widget.
@@ -62,7 +62,7 @@ public class UPocketTabWidget : UCommonActivatableWidget
     public event Action<FGameplayTag>? OnPocketChanged;
 
     [UProperty(PropertyFlags.Transient)]
-    private USelectableButtonGroup PocketButtonGroup { get; set; }
+    private partial USelectableButtonGroup PocketButtonGroup { get; set; }
 
     /// <summary>
     /// Specifies the class type for the button widget associated with pockets in the pocket tab system.
@@ -76,7 +76,7 @@ public class UPocketTabWidget : UCommonActivatableWidget
     /// must be assigned with a valid button class during design or initialization to enable functionality.
     /// </remarks>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Buttons")]
-    private TSubclassOf<UPocketButton> ButtonClass { get; }
+    private partial TSubclassOf<UPocketButton> ButtonClass { get; }
 
     /// <summary>
     /// Maps pocket types represented as gameplay tags to their corresponding button styles.
@@ -93,7 +93,7 @@ public class UPocketTabWidget : UCommonActivatableWidget
     /// </remarks>
     [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.EditFixedSize, Category = "Buttons")]
     [Categories(IdentifierConstants.PocketTag)]
-    private TMap<FGameplayTag, TSubclassOf<UCommonButtonStyle>> PocketButtonStyles { get; }
+    private partial TMap<FGameplayTag, TSubclassOf<UCommonButtonStyle>> PocketButtonStyles { get; }
 
     /// <summary>
     /// Gets or sets the input action used to navigate to the left pocket within the pocket tab widget.
@@ -105,7 +105,7 @@ public class UPocketTabWidget : UCommonActivatableWidget
     /// It is leveraged to ensure consistent and responsive UI interactions for pocket navigation.
     /// </remarks>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Input")]
-    private UInputAction PocketLeftAction { get; set; }
+    private partial UInputAction PocketLeftAction { get; set; }
 
     /// <summary>
     /// Gets or sets the input action associated with navigating to the next pocket in the pocket tab widget.
@@ -118,15 +118,15 @@ public class UPocketTabWidget : UCommonActivatableWidget
     /// between pockets.
     /// </remarks>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Input")]
-    private UInputAction PocketRightAction { get; set; }
+    private partial UInputAction PocketRightAction { get; set; }
 
     [UProperty]
     [BindWidget]
-    private UCommonActionWidget PocketLeftActionWidget { get; }
+    private partial UCommonActionWidget PocketLeftActionWidget { get; }
 
     [UProperty]
     [BindWidget]
-    private UCommonActionWidget PocketRightActionWidget { get; }
+    private partial UCommonActionWidget PocketRightActionWidget { get; }
 
     /// <summary>
     /// Represents a tab widget for managing and interacting with pockets within the bag system in the UI.
@@ -145,7 +145,7 @@ public class UPocketTabWidget : UCommonActivatableWidget
     }
 
     /// <inheritdoc />
-    public override void PreConstruct(bool isDesignTime)
+    protected override void PreConstruct_Implementation(bool isDesignTime)
     {
         if (isDesignTime)
         {
@@ -188,7 +188,7 @@ public class UPocketTabWidget : UCommonActivatableWidget
     }
 
     /// <inheritdoc />
-    public override void Construct()
+    protected override void Construct_Implementation()
     {
         RegisterUIActionBinding(new FCSBindUIActionArgs(PocketLeftAction, false, PocketLeft));
         RegisterUIActionBinding(new FCSBindUIActionArgs(PocketRightAction, false, PocketRight));
@@ -221,7 +221,9 @@ public class UPocketTabWidget : UCommonActivatableWidget
     /// This method is a virtual placeholder, intended for Blueprint or derived class implementation. It serves to link a slot button to its corresponding functionality or visual behavior within the context of the pocket tab widget interface.
     /// </remarks>
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Buttons")]
-    protected virtual void SlotButton(UCommonButtonBase button)
+    protected partial void SlotButton(UCommonButtonBase button);
+    
+    protected virtual partial void SlotButton_Implementation(UCommonButtonBase button)
     {
         // No native implementation
     }

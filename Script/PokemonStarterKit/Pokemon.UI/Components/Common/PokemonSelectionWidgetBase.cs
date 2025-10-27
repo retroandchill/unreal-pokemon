@@ -18,7 +18,7 @@ namespace Pokemon.UI.Components.Common;
 /// designed to be extended by other widgets for specific use cases.
 /// </remarks>
 [UClass(ClassFlags.Abstract)]
-public class UPokemonSelectionWidgetBase : UOwningSelectionWidget
+public partial class UPokemonSelectionWidgetBase : UOwningSelectionWidget
 {
     /// <summary>
     /// Gets the class type used to create panel widgets within the Pokémon selection widget.
@@ -29,7 +29,7 @@ public class UPokemonSelectionWidgetBase : UOwningSelectionWidget
     /// The property enables customization and dynamic creation of Pokémon panels at runtime.
     /// </remarks>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Display")]
-    private TSubclassOf<UPokemonButtonBase> PanelClass { get; }
+    private partial TSubclassOf<UPokemonButtonBase> PanelClass { get; }
 
     /// <summary>
     /// Gets the class type used to create blank panel widgets within the Pokémon selection widget.
@@ -40,10 +40,10 @@ public class UPokemonSelectionWidgetBase : UOwningSelectionWidget
     /// It allows for flexible customization and dynamic instantiation of empty panel slots at runtime.
     /// </remarks>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Display")]
-    private TSubclassOf<UWidget> BlankPanelClass { get; }
+    private partial TSubclassOf<UWidget> BlankPanelClass { get; }
 
     [UProperty]
-    private TArray<UWidget> BlankPanels { get; }
+    private partial TArray<UWidget> BlankPanels { get; }
 
     /// <summary>
     /// Event triggered when a Pokémon is hovered over in the selection widget.
@@ -77,9 +77,9 @@ public class UPokemonSelectionWidgetBase : UOwningSelectionWidget
     protected virtual int? NumPanelsToAdd => null;
 
     /// <inheritdoc />
-    public override void Construct()
+    protected override void Construct_Implementation()
     {
-        base.Construct();
+        base.Construct_Implementation();
         Buttons.OnHoveredButtonBaseChanged += [UFunction]
         (button, i) =>
         {
@@ -153,7 +153,12 @@ public class UPokemonSelectionWidgetBase : UOwningSelectionWidget
     /// </summary>
     /// <param name="visible">A boolean value indicating whether the command elements should be visible (true) or hidden (false).</param>
     [UFunction(FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent, Category = "Display")]
-    public virtual void ToggleCommandVisibility(bool visible) { }
+    public partial void ToggleCommandVisibility(bool visible);
+
+    public virtual partial void ToggleCommandVisibility_Implementation(bool visible)
+    {
+        
+    }
 
     /// <summary>
     /// Performs a swap action between two Pokémon panels.
@@ -161,7 +166,9 @@ public class UPokemonSelectionWidgetBase : UOwningSelectionWidget
     /// <param name="panel1">The first Pokémon panel involved in the swap.</param>
     /// <param name="panel2">The second Pokémon panel involved in the swap.</param>
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Switching")]
-    protected virtual void PerformSwap(UPokemonPanel panel1, UPokemonPanel panel2)
+    protected partial void PerformSwap(UPokemonPanel panel1, UPokemonPanel panel2);
+    
+    protected virtual partial void PerformSwap_Implementation(UPokemonPanel panel1, UPokemonPanel panel2)
     {
         SwitchPokemon(panel1, panel2);
     }

@@ -11,10 +11,10 @@ namespace Pokemon.Battle.Components;
 /// and resetting effects tied to gameplay tags.
 /// </summary>
 [UClass]
-public class UBattleEffectComponent : URPGComponent
+public partial class UBattleEffectComponent : URPGComponent
 {
     [UProperty]
-    private UEffectContainer EffectContainer { get; set; }
+    private partial UEffectContainer EffectContainer { get; set; }
 
     /// <summary>
     /// Gets the number of active effects currently stored in the effect container.
@@ -30,7 +30,7 @@ public class UBattleEffectComponent : URPGComponent
     }
 
     /// <inheritdoc />
-    protected override void PreInitialize()
+    protected override void PreInitialize_Implementation()
     {
         EffectContainer = NewObject<UEffectContainer>(this);
     }

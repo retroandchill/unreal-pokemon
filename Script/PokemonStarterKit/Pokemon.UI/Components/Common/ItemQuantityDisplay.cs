@@ -14,7 +14,7 @@ namespace Pokemon.UI.Components.Common;
 /// reflect changes in item quantity and adjusts the text style dynamically.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UItemQuantityDisplay : UItemQuantityDisplayBase
+public partial class UItemQuantityDisplay : UItemQuantityDisplayBase
 {
     /// <summary>
     /// Gets or sets the numeric text block responsible for displaying
@@ -25,7 +25,7 @@ public class UItemQuantityDisplay : UItemQuantityDisplayBase
     /// </summary>
     [UProperty]
     [BindWidget]
-    public UCommonNumericTextBlock QuantityText { get; }
+    public partial UCommonNumericTextBlock QuantityText { get; }
 
     /// <inheritdoc />
     public override void Refresh()
@@ -34,7 +34,7 @@ public class UItemQuantityDisplay : UItemQuantityDisplayBase
     }
 
     /// <inheritdoc />
-    protected override void OnTextStyleChanged()
+    protected override void OnTextStyleChanged_Implementation()
     {
         QuantityText.Style = TextStyle;
     }

@@ -15,10 +15,10 @@ namespace Pokemon.Battle.Components.Battler;
 /// properties and methods for stat-based calculations.
 /// </summary>
 [UClass]
-public class UBattlerStatComponent : URPGComponent
+public partial class UBattlerStatComponent : URPGComponent
 {
     [UProperty(PropertyFlags.Transient)]
-    private UBattlerSubsystem BattlerSubsystem { get; set; }
+    private partial UBattlerSubsystem BattlerSubsystem { get; set; }
 
     /// <summary>
     /// Gets or sets the level of the battler. This property represents the current level
@@ -26,7 +26,7 @@ public class UBattlerStatComponent : URPGComponent
     /// and progression mechanics.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|Stats")]
-    public int Level { get; set; }
+    public partial int Level { get; set; }
 
     /// <summary>
     /// Gets or sets the current HP (Hit Points) of the battler. This property represents the
@@ -35,7 +35,7 @@ public class UBattlerStatComponent : URPGComponent
     /// the battler is active or has fainted.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|Stats")]
-    public int HP { get; set; }
+    public partial int HP { get; set; }
 
     /// <summary>
     /// Gets or sets the maximum hit points (HP) of the battler. This property determines the
@@ -44,7 +44,7 @@ public class UBattlerStatComponent : URPGComponent
     /// or abilities.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|Stats")]
-    public int MaxHP { get; set; }
+    public partial int MaxHP { get; set; }
 
     /// <summary>
     /// Gets or sets the attack stat of the battler. This property represents the battler's
@@ -52,7 +52,7 @@ public class UBattlerStatComponent : URPGComponent
     /// physical attacks in combat scenarios.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Battler|Stats")]
-    public int Attack { get; set; }
+    public partial int Attack { get; set; }
 
     /// <summary>
     /// Gets or sets the defense stat of the battler. This property represents the battler's
@@ -60,7 +60,7 @@ public class UBattlerStatComponent : URPGComponent
     /// better resistance to physical attacks.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Battler|Stats")]
-    public int Defense { get; set; }
+    public partial int Defense { get; set; }
 
     /// <summary>
     /// Gets or sets the Special Attack stat of the battler. This property represents the battler's
@@ -68,7 +68,7 @@ public class UBattlerStatComponent : URPGComponent
     /// their effectiveness in combat.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|Stats")]
-    public int SpecialAttack { get; set; }
+    public partial int SpecialAttack { get; set; }
 
     /// <summary>
     /// Gets or sets the Special Defense stat of the battler. This property determines the
@@ -76,7 +76,7 @@ public class UBattlerStatComponent : URPGComponent
     /// of incoming special moves in the game's combat mechanics.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|Stats")]
-    public int SpecialDefense { get; set; }
+    public partial int SpecialDefense { get; set; }
 
     /// <summary>
     /// Gets or sets the speed of the battler. This property represents the base speed
@@ -84,10 +84,10 @@ public class UBattlerStatComponent : URPGComponent
     /// during a battle.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|Stats")]
-    public int Speed { get; set; }
+    public partial int Speed { get; set; }
 
     [UProperty]
-    private TMap<FBattleStatHandle, int> StatStages { get; }
+    private partial TMap<FBattleStatHandle, int> StatStages { get; }
 
     /// <summary>
     /// Gets the effective speed of the battler. This property represents the calculated speed
@@ -104,7 +104,7 @@ public class UBattlerStatComponent : URPGComponent
     public bool IsFainted => HP == 0;
 
     /// <inheritdoc />
-    protected override void PreInitialize()
+    protected override void PreInitialize_Implementation()
     {
         BattlerSubsystem = GetGameInstanceSubsystem<UBattlerSubsystem>();
     }

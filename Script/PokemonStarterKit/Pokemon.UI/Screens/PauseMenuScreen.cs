@@ -15,20 +15,20 @@ namespace Pokemon.UI.Screens;
 /// to manage user interactions effectively.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UPauseMenuScreen : UCommonActivatableWidget
+public partial class UPauseMenuScreen : UCommonActivatableWidget
 {
     [UProperty]
     [BindWidget]
-    private USelectionWidget PauseMenuOptions { get; }
+    private partial USelectionWidget PauseMenuOptions { get; }
 
     /// <inheritdoc />
-    public override void Construct()
+    protected override void Construct_Implementation()
     {
         PauseMenuOptions.OnBackAction += this.PopContentFromLayer;
     }
 
     /// <inheritdoc />
-    protected override UWidget BP_GetDesiredFocusTarget()
+    protected override UWidget BP_GetDesiredFocusTarget_Implementation()
     {
         return PauseMenuOptions;
     }

@@ -14,7 +14,7 @@ namespace Pokemon.Battle.Entities;
 /// functionality and context through its associated components.
 /// </remarks>
 [UClass]
-public class UActiveSide : URPGEntity, IEffectEntity
+public partial class UActiveSide : URPGEntity, IEffectEntity
 {
     /// <summary>
     /// Represents the battle effect component associated with an active side or other battle entities.
@@ -33,7 +33,7 @@ public class UActiveSide : URPGEntity, IEffectEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
-    public UBattleEffectComponent EffectComponent { get; private set; }
+    public partial UBattleEffectComponent EffectComponent { get; private set; }
 
     /// <summary>
     /// Represents the context component associated with an active side in a Pokémon battle.
@@ -52,5 +52,5 @@ public class UActiveSide : URPGEntity, IEffectEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
-    public UActiveSideContextComponent ContextComponent { get; private set; }
+    public partial UActiveSideContextComponent ContextComponent { get; private set; }
 }

@@ -15,11 +15,11 @@ namespace Pokemon.UI.Components.Bag;
 /// a Pokémon's HP status, including a progress bar and a text block to show current and maximum HP.
 /// </remarks>
 [UClass]
-public class UPokemonBagPanel : UPokemonButtonBase
+public partial class UPokemonBagPanel : UPokemonButtonBase
 {
     [UProperty]
     [BindWidget]
-    private UPokemonDisplayBase PokemonIcon { get; }
+    private partial UPokemonDisplayBase PokemonIcon { get; }
 
     /// <summary>
     /// Represents the health progress bar displaying the current percentage of a Pokémon's HP.
@@ -31,7 +31,7 @@ public class UPokemonBagPanel : UPokemonButtonBase
     /// </remarks>
     [UProperty]
     [BindWidget]
-    protected UProgressBar HPBar { get; }
+    protected partial UProgressBar HPBar { get; }
 
     /// <summary>
     /// Represents a text block displaying the current and maximum HP of a Pokémon in the player's bag.
@@ -42,10 +42,10 @@ public class UPokemonBagPanel : UPokemonButtonBase
     /// </remarks>
     [UProperty]
     [BindWidget]
-    protected UCommonTextBlock HPText { get; }
+    protected partial UCommonTextBlock HPText { get; }
 
     /// <inheritdoc />
-    public override void Refresh()
+    public override void Refresh_Implementation()
     {
         PokemonIcon.Pokemon = Pokemon;
 

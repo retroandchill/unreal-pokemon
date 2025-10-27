@@ -12,7 +12,7 @@ namespace Pokemon.Battle.Components.Battler;
 /// It provides the necessary framework to retrieve or set the status effect associated with the owning entity.
 /// </remarks>
 [UClass]
-public class UBattlerStatusEffectComponent : URPGComponent
+public partial class UBattlerStatusEffectComponent : URPGComponent
 {
     /// <summary>
     /// Gets or sets the status effect associated with the battler entity.
@@ -22,5 +22,5 @@ public class UBattlerStatusEffectComponent : URPGComponent
     /// This property is a part of the UBattlerStatusEffectComponent and is used to manage the effects that influence the battler's state.
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|StatusEffect")]
-    public FStatusHandle? StatusEffect { get; set; }
+    public partial FStatusHandle? StatusEffect { get; set; }
 }

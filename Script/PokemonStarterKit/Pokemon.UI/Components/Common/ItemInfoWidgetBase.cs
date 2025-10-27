@@ -12,23 +12,23 @@ namespace Pokemon.UI.Components.Common;
 /// and for performing any necessary visual or logical updates when the item changes.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UItemInfoWidgetBase : UCommonUserWidget, IRefreshable
+public partial class UItemInfoWidgetBase : UCommonUserWidget, IRefreshable
 {
     /// <summary>
     /// Represents the item associated with the widget, encapsulated as an FItemHandle.
     /// When this property is set, the widget updates its display or logic based on the new item value.
     /// Assigning a new value to this property triggers the Refresh() method to apply necessary changes.
     /// </summary>
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Content")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Content", BlueprintAccessors = true)]
     public FItemHandle Item
     {
-        get;
+        get => Item_BackingField;
         set
         {
-            if (field == value)
+            if (Item_BackingField == value)
                 return;
 
-            field = value;
+            Item_BackingField = value;
             Refresh();
         }
     }
@@ -49,5 +49,10 @@ public class UItemInfoWidgetBase : UCommonUserWidget, IRefreshable
     /// </summary>
     /// <param name="item">The handle representing the item that was set.</param>
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Display")]
-    protected virtual void OnItemSet(FItemHandle item) { }
+    protected partial void OnItemSet(FItemHandle item);
+
+    protected virtual partial void OnItemSet_Implementation(FItemHandle item)
+    {
+        
+    }
 }

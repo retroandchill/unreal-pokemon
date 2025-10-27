@@ -1,5 +1,4 @@
-﻿using LanguageExt;
-using Pokemon.Assets;
+﻿using Pokemon.Assets;
 using Pokemon.Core;
 using Pokemon.Core.Entities;
 using Pokemon.Data.Model.HardCoded;
@@ -20,27 +19,27 @@ namespace Pokemon.UI.Components.Party;
 /// gender, health, and status effects, and includes behavior for swapping and selection functionality.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UPokemonPanel : UPokemonButtonBase
+public partial class UPokemonPanel : UPokemonButtonBase
 {
     [UProperty]
     [BindWidget]
-    private UPokemonDisplayBase PokemonIcon { get; }
+    private partial UPokemonDisplayBase PokemonIcon { get; }
 
     [UProperty]
     [BindWidget]
-    private UItemDisplayBase ItemIcon { get; }
+    private partial UItemDisplayBase ItemIcon { get; }
 
     [UProperty]
     [BindWidget]
-    protected UCommonTextBlock NameText { get; }
+    protected partial UCommonTextBlock NameText { get; }
 
     [UProperty]
     [BindWidget]
-    protected UCommonNumericTextBlock LevelText { get; }
+    protected partial UCommonNumericTextBlock LevelText { get; }
 
     [UProperty]
     [BindWidget]
-    protected UEnhancedImage GenderIcon { get; }
+    protected partial UEnhancedImage GenderIcon { get; }
 
     /// <summary>
     /// Represents a mapping of Pokémon genders to their respective visual icon representations.
@@ -53,19 +52,19 @@ public class UPokemonPanel : UPokemonButtonBase
     /// for a Pokémon based on its gender during UI rendering within a Pokémon panel.
     /// </remarks>
     [UProperty(PropertyFlags.EditDefaultsOnly, Category = "Display")]
-    private TMap<EPokemonGender, UTexture2D> GenderIcons { get; }
+    private partial TMap<EPokemonGender, UTexture2D> GenderIcons { get; }
 
     [UProperty]
     [BindWidget]
-    protected UProgressBar HPBar { get; }
+    protected partial UProgressBar HPBar { get; }
 
     [UProperty]
     [BindWidget]
-    protected UCommonTextBlock HPText { get; }
+    protected partial UCommonTextBlock HPText { get; }
 
     [UProperty]
     [BindWidget]
-    protected UEnhancedImage StatusEffectIcon { get; }
+    protected partial UEnhancedImage StatusEffectIcon { get; }
 
     /// <summary>
     /// Indicates whether this Pokémon panel is currently active, corresponding to the Pokémon
@@ -162,7 +161,7 @@ public class UPokemonPanel : UPokemonButtonBase
     }
 
     /// <inheritdoc />
-    public override void Refresh()
+    public override void Refresh_Implementation()
     {
         PokemonIcon.Pokemon = Pokemon;
 

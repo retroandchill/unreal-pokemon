@@ -30,7 +30,7 @@ namespace Pokemon.Battle.Subsystems;
 /// as a core dependency provider for components relying on these battle-specific services.
 /// </remarks>
 [UClass]
-public class UBattlerSubsystem : UCSGameInstanceSubsystem
+public partial class UBattlerSubsystem : UCSGameInstanceSubsystem
 {
     /// <summary>
     /// Provides access to battle statistics within the subsystem. Responsible for managing
@@ -46,7 +46,7 @@ public class UBattlerSubsystem : UCSGameInstanceSubsystem
     public IBattleAbilityService BattleAbilityService { get; private set; } = null!;
 
     /// <inheritdoc />
-    protected override void Initialize(FSubsystemCollectionBaseRef collection)
+    protected override void Initialize_Implementation(FSubsystemCollectionBaseRef collection)
     {
         var serviceProvider = collection.InitializeRequiredSubsystem<UDependencyInjectionGameInstanceSubsystem>();
         BattleStatsService = serviceProvider.GetRequiredService<IBattleStatsService>();

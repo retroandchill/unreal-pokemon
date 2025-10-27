@@ -13,7 +13,7 @@ namespace Pokemon.Battle.Actors;
 /// to all entities involved in the battle.
 /// </remarks>
 [UClass]
-public class ABattleContext : AInfo
+public partial class ABattleContext : AInfo
 {
     /// <summary>
     /// Provides an enumerable collection of all battlers participating in the battle.

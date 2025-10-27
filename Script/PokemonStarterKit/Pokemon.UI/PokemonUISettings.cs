@@ -14,7 +14,7 @@ namespace Pokemon.UI;
 /// and the bag screen, allowing their class references to be defined and managed.
 /// </summary>
 [UClass(ClassFlags.DefaultConfig, ConfigCategory = "Game")]
-public class UPokemonUISettings : UCSDeveloperSettings
+public partial class UPokemonUISettings : UCSDeveloperSettings
 {
     /// <summary>
     /// Represents the class reference for the Pokémon selection screen widget.
@@ -25,7 +25,7 @@ public class UPokemonUISettings : UCSDeveloperSettings
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "Classes"
     )]
-    public TSoftClassPtr<UPokemonSelectScreen> PokemonSelectScreenClass { get; }
+    public partial TSoftClassPtr<UPokemonSelectScreen> PokemonSelectScreenClass { get; }
 
     /// <summary>
     /// Represents the class reference for the Bag screen widget.
@@ -36,7 +36,7 @@ public class UPokemonUISettings : UCSDeveloperSettings
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "Classes"
     )]
-    public TSoftClassPtr<UBagScreen> BagScreenClass { get; }
+    public partial TSoftClassPtr<UBagScreen> BagScreenClass { get; }
 
     /// <inheritdoc />
     protected override FText GetSectionText_Implementation()

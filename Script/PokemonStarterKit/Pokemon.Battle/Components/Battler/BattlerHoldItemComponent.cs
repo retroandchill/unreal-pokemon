@@ -9,7 +9,7 @@ namespace Pokemon.Battle.Components.Battler;
 /// This component allows querying and manipulating the held item of a battler entity.
 /// </summary>
 [UClass]
-public class UBattlerHoldItemComponent : URPGComponent
+public partial class UBattlerHoldItemComponent : URPGComponent
 {
     /// <summary>
     /// Represents the held item of a battler in a Pokemon battle.
@@ -22,7 +22,7 @@ public class UBattlerHoldItemComponent : URPGComponent
     /// An FItemHandle representing the held item, or null if no item is currently held.
     /// </value>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|HoldItem")]
-    public FItemHandle? HoldItem { get; set; }
+    public partial FItemHandle? HoldItem { get; set; }
 
     /// <summary>
     /// Indicates whether the battler currently holds an active item.

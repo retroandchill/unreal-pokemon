@@ -3,6 +3,7 @@ using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.CommonUI;
+using UnrealSharp.Core;
 using UnrealSharp.GameplayTags;
 
 namespace Pokemon.UI.Components.Bag;
@@ -12,7 +13,7 @@ namespace Pokemon.UI.Components.Bag;
 /// Inherits from the UCommonUserWidget, providing common user interface widget functionality.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UPocketWindow : UCommonUserWidget
+public partial class UPocketWindow : UCommonUserWidget
 {
     /// <summary>
     /// Gets or sets the currently selected pocket in the bag window.
@@ -20,20 +21,20 @@ public class UPocketWindow : UCommonUserWidget
     /// using a gameplay tag. Setting this property updates the associated
     /// pocket's UI details.
     /// </summary>
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Inventory")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Inventory", BlueprintAccessors = true)]
     public FGameplayTag CurrentPocket
     {
-        get;
+        get => CurrentPocket_BackingField;
         set
         {
-            field = value;
+            CurrentPocket_BackingField = value;
             UpdatePocketInfo();
         }
     }
 
     [UProperty]
     [BindWidgetOptional]
-    private UCommonTextBlock? PocketName { get; }
+    private partial UCommonTextBlock? PocketName { get; }
 
     private void UpdatePocketInfo()
     {

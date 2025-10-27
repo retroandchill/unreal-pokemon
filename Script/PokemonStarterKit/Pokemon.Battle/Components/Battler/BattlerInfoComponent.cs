@@ -2,6 +2,7 @@
 using Pokemon.Data.Model.PBS;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.RPGCore;
 
 namespace Pokemon.Battle.Components.Battler;
@@ -14,7 +15,7 @@ namespace Pokemon.Battle.Components.Battler;
 /// It is used within the battle system to handle and retrieve combat-related details of a specific battler.
 /// </remarks>
 [UClass]
-public class UBattlerInfoComponent : URPGComponent
+public partial class UBattlerInfoComponent : URPGComponent
 {
     /// <summary>
     /// Represents the core entity for a Pokémon in the system.
@@ -25,7 +26,7 @@ public class UBattlerInfoComponent : URPGComponent
     /// This class is designed to be extended or instantiated in game logic to represent individual Pokémon entities.
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|Info")]
-    public UPokemon Pokemon { get; private set; }
+    public partial UPokemon Pokemon { get; private set; }
 
     /// <summary>
     /// Represents the name of the battler as a localized text property.
@@ -35,7 +36,7 @@ public class UBattlerInfoComponent : URPGComponent
     /// It is used within the Pokémon battle system to reference or display the battler's name in various contexts, such as UI elements or combat logs.
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|Info")]
-    public FText Name { get; set; }
+    public partial FText Name { get; set; }
 
     /// <summary>
     /// Represents the species information associated with a battler in the Pokémon battle system.
@@ -47,7 +48,7 @@ public class UBattlerInfoComponent : URPGComponent
     /// This property's data is integral for enabling species-specific logic in battle mechanics and interactions.
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|Info")]
-    public FSpeciesHandle Species { get; set; }
+    public partial FSpeciesHandle Species { get; set; }
 
     /// <summary>
     /// Represents the types associated with a Pokémon in the battle system.
@@ -57,5 +58,5 @@ public class UBattlerInfoComponent : URPGComponent
     /// The types are used in battle mechanics to determine advantages, disadvantages, and other interactions based on the Pokémon's type combinations.
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|Info")]
-    public TArray<FTypeHandle> Types { get; }
+    public partial TArray<FTypeHandle> Types { get; }
 }

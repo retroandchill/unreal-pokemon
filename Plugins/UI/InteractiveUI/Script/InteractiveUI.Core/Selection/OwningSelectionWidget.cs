@@ -29,7 +29,7 @@ public partial class UOwningSelectionWidget : USelectionWidget
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Selection")]
     protected partial void SlotButton(int index, UWidget button);
 
-    protected partial void SlotButton_Implementation(int index, UWidget button)
+    protected virtual partial void SlotButton_Implementation(int index, UWidget button)
     {
         // Nothing to do here.
     }

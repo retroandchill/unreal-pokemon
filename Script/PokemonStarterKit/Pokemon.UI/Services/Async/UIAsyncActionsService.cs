@@ -4,6 +4,7 @@ using Pokemon.Core.Services.Async;
 using Pokemon.Data.Model.PBS;
 using UnrealInject.SourceGenerator.Attributes;
 using UnrealSharp;
+using UnrealSharp.Core;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.Engine;
 using UnrealSharp.GameplayTags;

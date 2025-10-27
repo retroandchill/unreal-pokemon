@@ -9,7 +9,7 @@ namespace Pokemon.Battle.Components.Battler;
 /// Represents a component responsible for managing the battler's context within a battle system.
 /// </summary>
 [UClass]
-public class UBattlerContextComponent : URPGComponent
+public partial class UBattlerContextComponent : URPGComponent
 {
     /// <summary>
     /// Gets the owning active side associated with this battler context.
@@ -23,7 +23,7 @@ public class UBattlerContextComponent : URPGComponent
     /// A readonly instance of <see cref="UActiveSide"/> representing the active side that owns this component.
     /// </value>
     [UProperty(PropertyFlags.Transient)]
-    public UActiveSide OwningSide { get; private set; }
+    public partial UActiveSide OwningSide { get; private set; }
 
     /// <summary>
     /// Gets the battle context associated with the owning active side of this battler context component.

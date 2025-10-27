@@ -13,10 +13,10 @@ namespace Pokemon.Battle.Components.Battler;
 /// with the game's battle subsystem and associated systems.
 /// </summary>
 [UClass]
-public class UBattlerAbilityComponent : URPGComponent
+public partial class UBattlerAbilityComponent : URPGComponent
 {
     [UProperty(PropertyFlags.Transient)]
-    private UBattlerSubsystem BattlerSubsystem { get; set; }
+    private partial UBattlerSubsystem BattlerSubsystem { get; set; }
 
     /// <summary>
     /// Represents the ability associated with the battler entity.
@@ -31,7 +31,7 @@ public class UBattlerAbilityComponent : URPGComponent
     /// The handle to the ability resource, or <c>null</c> if no ability is assigned.
     /// </value>
     [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Battler|Ability")]
-    public FAbilityHandle? Ability { get; set; }
+    public partial FAbilityHandle? Ability { get; set; }
 
     /// <summary>
     /// Indicates whether the battler's ability is currently active.
@@ -50,7 +50,7 @@ public class UBattlerAbilityComponent : URPGComponent
     public bool AbilityActive => IsAbilityActive();
 
     /// <inheritdoc />
-    protected override void PreInitialize()
+    protected override void PreInitialize_Implementation()
     {
         BattlerSubsystem = GetGameInstanceSubsystem<UBattlerSubsystem>();
     }

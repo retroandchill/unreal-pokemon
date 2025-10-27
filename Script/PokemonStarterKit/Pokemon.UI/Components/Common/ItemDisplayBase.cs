@@ -9,7 +9,7 @@ namespace Pokemon.UI.Components.Common;
 /// This class is designed to be inherited by more specific item display components.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UItemDisplayBase : UCommonUserWidget
+public partial class UItemDisplayBase : UCommonUserWidget
 {
     /// <summary>
     /// Represents a handle to an item in the Pokémon game's data model. This property is utilized for managing and displaying
@@ -20,16 +20,16 @@ public class UItemDisplayBase : UCommonUserWidget
     /// within the game's data repository. This property serves as the core linkage among several components
     /// that manage item data, visual representation, and interactions in the UI.
     /// </remarks>
-    [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Content")]
+    [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Content", BlueprintAccessors = true)]
     public FItemHandle Item
     {
-        get;
+        get => Item_BackingField;
         set
         {
-            if (field == value)
+            if (Item_BackingField == value)
                 return;
 
-            field = value;
+            Item_BackingField = value;
             Refresh();
         }
     }
@@ -45,5 +45,10 @@ public class UItemDisplayBase : UCommonUserWidget
     /// to define specific behavior for refreshing the display.
     /// </remarks>
     [UFunction(FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent, Category = "Display")]
-    public virtual void Refresh() { }
+    public partial void Refresh();
+
+    public virtual partial void Refresh_Implementation()
+    {
+        
+    }
 }

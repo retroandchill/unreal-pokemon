@@ -13,7 +13,7 @@ namespace Pokemon.UI.Components.Common;
 /// to the button and provides a method to refresh its displayed content.
 /// </remarks>
 [UClass(ClassFlags.Abstract)]
-public class UPokemonButtonBase : UCommonButtonBase
+public partial class UPokemonButtonBase : UCommonButtonBase
 {
     /// <summary>
     /// Represents a Pokémon entity within the system.
@@ -22,16 +22,16 @@ public class UPokemonButtonBase : UCommonButtonBase
     /// This class serves as a base class for defining a Pokémon and its associated properties.
     /// It is used as part of the core entities in the Pokémon system.
     /// </remarks>
-    [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Content")]
+    [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Content", BlueprintAccessors = true)]
     public UPokemon? Pokemon
     {
-        get;
+        get => Pokemon_BackingField;
         set
         {
-            if (ReferenceEquals(field, value))
+            if (ReferenceEquals(Pokemon_BackingField, value))
                 return;
 
-            field = value;
+            Pokemon_BackingField = value;
             Refresh();
         }
     }
@@ -45,5 +45,10 @@ public class UPokemonButtonBase : UCommonButtonBase
     /// of the associated Pokémon.
     /// </remarks>
     [UFunction(FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent, Category = "Display")]
-    public virtual void Refresh() { }
+    public partial void Refresh();
+
+    public virtual partial void Refresh_Implementation()
+    {
+        
+    }
 }

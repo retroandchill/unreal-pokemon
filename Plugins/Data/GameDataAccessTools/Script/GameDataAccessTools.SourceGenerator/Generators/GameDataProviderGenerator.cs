@@ -8,6 +8,9 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Retro.SourceGeneratorUtilities.Utilities.Attributes;
+using UnrealSharp.GlueGenerator;
+using UnrealSharp.GlueGenerator.NativeTypes;
+using UnrealSharp.GlueGenerator.NativeTypes.Properties;
 
 namespace GameAccessTools.SourceGenerator.Generators;
 
@@ -81,20 +84,50 @@ public class GameDataProviderGenerator : IIncrementalGenerator
                 Type = x.Type.ToDisplayString(),
                 Name = x.Name,
                 SingularName = GetSingularName(x),
-                RepositoryClassName = x.Type.ToDisplayString(),
+                RepositoryType = x.Type,
                 EntryType = x.Type.GetEntryType(),
                 HasAsset = HasAsset(x.Type),
             })
             .ToImmutableArray();
+        
+        var settingsType = new UnrealClass(EClassFlags.DefaultConfig, "UCSDeveloperSettings", "UnrealSharp.UnrealSharpCore", 
+            $"U{classSymbol.Name}Settings", classSymbol.ContainingNamespace.ToDisplayString(), Accessibility.Public, classSymbol.ContainingAssembly.Name);
+        settingsType.AddMetaData("ConfigCategory", dataProviderInfo.Category);
+
+        foreach (var repository in repositories.Where(x => x.HasAsset))
+        {
+            var objectProperty = new ObjectProperty(repository.RepositoryClassName, $"{repository.Name}_Inner", Accessibility.Public, settingsType);
+            var property = new SoftObjectProperty(objectProperty, repository.Name, Accessibility.Public,
+                "public", settingsType)
+            {
+                HasSetter = false,
+                PropertyFlags = EPropertyFlags.EditDefaultsOnly | EPropertyFlags.BlueprintReadOnly | EPropertyFlags.Config,
+            };
+            property.AddMetaData("Category", "RepositoryAssets");
+            objectProperty.Outer = property;
+            settingsType.AddProperty(property);
+        }
+        
+        var hasDisplayName = !string.IsNullOrWhiteSpace(dataProviderInfo.DisplayName);
+        if (hasDisplayName)
+        {
+            settingsType.Overrides.List.Add("GetDisplayName");
+        }
+
+        var settingsModuleInitializerBuilder = new GeneratorStringBuilder();
+        settingsModuleInitializerBuilder.BeginModuleInitializer(settingsType);
 
         var templateParams = new
         {
+            Assembly = classSymbol.ContainingAssembly.Name,
             Namespace = classSymbol.ContainingNamespace.ToDisplayString(),
             ClassName = classSymbol.Name,
+            EngineName = classSymbol.Name[1..],
             dataProviderInfo.DisplayName,
             ConfigCategory = dataProviderInfo.Category,
-            HasDisplayName = !string.IsNullOrWhiteSpace(dataProviderInfo.DisplayName),
+            HasDisplayName = hasDisplayName,
             Repositories = repositories,
+            SettingsModuleInitializer = settingsModuleInitializerBuilder.ToString(),
         };
 
         var handlebars = Handlebars.Create();

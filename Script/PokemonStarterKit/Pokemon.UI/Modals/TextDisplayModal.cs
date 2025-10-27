@@ -4,6 +4,7 @@ using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.CommonUI;
+using UnrealSharp.Core;
 
 namespace Pokemon.UI.Modals;
 
@@ -12,11 +13,11 @@ namespace Pokemon.UI.Modals;
 /// This widget is designed to display a text-based message to the user.
 /// </summary>
 [UClass]
-public class UTextDisplayModal : UCommonActivatableWidget
+public partial class UTextDisplayModal : UCommonActivatableWidget
 {
     [UProperty]
     [BindWidget]
-    private UDialogueDisplayWidget MessageBox { get; }
+    private partial UDialogueDisplayWidget MessageBox { get; }
 
     /// <summary>
     /// Asynchronously displays a text message in the modal.

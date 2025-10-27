@@ -13,7 +13,7 @@ namespace Pokemon.UI.Components.Bag;
 /// inventory items, including their associated details such as quantity and properties.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UItemOption : UCommonButtonBase
+public partial class UItemOption : UCommonButtonBase
 {
     /// <summary>
     /// Gets the unique item handle associated with a specific inventory item.
@@ -22,7 +22,7 @@ public class UItemOption : UCommonButtonBase
     /// within the context of the inventory and UI system.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Inventory")]
-    public FItemHandle Item { get; private set; }
+    public partial FItemHandle Item { get; private set; }
 
     /// <summary>
     /// Gets the quantity associated with the current inventory item.
@@ -31,19 +31,19 @@ public class UItemOption : UCommonButtonBase
     /// This property is read-only.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Inventory")]
-    public int Quantity { get; private set; }
+    public partial int Quantity { get; private set; }
 
     [UProperty]
     [BindWidgetOptional]
-    private UItemDisplayBase? ItemIcon { get; }
+    private partial UItemDisplayBase? ItemIcon { get; }
 
     [UProperty]
     [BindWidget]
-    private UCommonTextBlock ItemNameText { get; }
+    private partial UCommonTextBlock ItemNameText { get; }
 
     [UProperty]
     [BindWidget]
-    private UItemQuantityDisplayBase ItemQuantityText { get; }
+    private partial UItemQuantityDisplayBase ItemQuantityText { get; }
 
     /// <summary>
     /// Sets the item and its quantity for this option.
@@ -67,7 +67,9 @@ public class UItemOption : UCommonButtonBase
     /// <param name="item">The handle to the item that is being set or updated, representing specific item data.</param>
     /// <param name="quantity">The quantity of the specified item being set for display and usage purposes.</param>
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Display")]
-    protected virtual void OnItemSet(FItemHandle item, int quantity)
+    protected partial void OnItemSet(FItemHandle item, int quantity);
+    
+    protected virtual partial void OnItemSet_Implementation(FItemHandle item, int quantity)
     {
         ItemIcon?.Item = item;
         ItemNameText.Text = item.Entry.Name;
@@ -84,7 +86,7 @@ public class UItemOption : UCommonButtonBase
     }
 
     /// <inheritdoc />
-    protected override void OnCurrentTextStyleChanged()
+    protected override void OnCurrentTextStyleChanged_Implementation()
     {
         var currentStyle = CurrentTextStyleClass;
         ItemNameText.Style = currentStyle;

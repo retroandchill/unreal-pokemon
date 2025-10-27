@@ -15,18 +15,18 @@ namespace Pokemon.UI.Components.Bag;
 /// update UI elements with item data.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UItemInfoWindow : UItemInfoWidgetBase
+public partial class UItemInfoWindow : UItemInfoWidgetBase
 {
     [UProperty]
     [BindWidget]
-    private UCommonTextBlock ItemNameText { get; }
+    private partial UCommonTextBlock ItemNameText { get; }
 
     [UProperty]
     [BindWidget]
-    private UCommonTextBlock ItemDescriptionText { get; }
+    private partial UCommonTextBlock ItemDescriptionText { get; }
 
     /// <inheritdoc />
-    protected override void OnItemSet(FItemHandle item)
+    protected override void OnItemSet_Implementation(FItemHandle item)
     {
         ItemNameText.Visibility = ESlateVisibility.SelfHitTestInvisible;
         ItemDescriptionText.Visibility = ESlateVisibility.SelfHitTestInvisible;

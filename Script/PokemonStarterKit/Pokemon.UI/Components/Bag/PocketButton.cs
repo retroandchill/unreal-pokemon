@@ -12,7 +12,7 @@ namespace Pokemon.UI.Components.Bag;
 /// while adding additional behavior specific to its use case.
 /// </remarks>
 [UClass]
-public class UPocketButton : UCommonButtonBase
+public partial class UPocketButton : UCommonButtonBase
 {
     /// <summary>
     /// Represents the pocket tag associated with this UPocketButton.

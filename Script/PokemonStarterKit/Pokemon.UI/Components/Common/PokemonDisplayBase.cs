@@ -10,7 +10,7 @@ namespace Pokemon.UI.Components.Common;
 /// Inherits from UCommonUserWidget.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UPokemonDisplayBase : UCommonUserWidget
+public partial class UPokemonDisplayBase : UCommonUserWidget
 {
     /// <summary>
     /// Represents a property of type <see cref="UPokemon"/> used within the Pokémon display components.
@@ -24,16 +24,16 @@ public class UPokemonDisplayBase : UCommonUserWidget
     /// <value>
     /// The <see cref="UPokemon"/> entity associated with this component.
     /// </value>
-    [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Content")]
+    [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Content", BlueprintAccessors = true)]
     public UPokemon? Pokemon
     {
-        get;
+        get => Pokemon_BackingField;
         set
         {
-            if (ReferenceEquals(field, value))
+            if (ReferenceEquals(Pokemon_BackingField, value))
                 return;
 
-            field = value;
+            Pokemon_BackingField = value;
             Refresh();
         }
     }
@@ -43,8 +43,10 @@ public class UPokemonDisplayBase : UCommonUserWidget
     /// This method should be overridden in derived classes to implement specific refresh functionality based on the display type.
     /// </summary>
     [UFunction(FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent, Category = "Display")]
-    public virtual void Refresh()
+    public partial void Refresh();
+
+    public virtual partial void Refresh_Implementation()
     {
-        // No native implementation
+        
     }
 }

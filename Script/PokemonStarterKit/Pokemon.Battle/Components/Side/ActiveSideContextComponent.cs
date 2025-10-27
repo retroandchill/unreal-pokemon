@@ -12,7 +12,7 @@ namespace Pokemon.Battle.Components.Side;
 /// It is a transient component, meaning it exists only for the duration of the battle lifecycle.
 /// </remarks>
 [UClass]
-public class UActiveSideContextComponent : URPGComponent
+public partial class UActiveSideContextComponent : URPGComponent
 {
     /// <summary>
     /// Represents the context of an active Pokemon battle within the gameplay framework.
@@ -24,5 +24,5 @@ public class UActiveSideContextComponent : URPGComponent
     /// The property is transient, meaning it only persists for the duration of the battle.
     /// </remarks>
     [UProperty(PropertyFlags.Transient)]
-    public ABattleContext BattleContext { get; private set; }
+    public partial ABattleContext BattleContext { get; private set; }
 }

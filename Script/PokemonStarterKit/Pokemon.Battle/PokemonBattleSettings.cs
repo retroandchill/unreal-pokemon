@@ -2,6 +2,7 @@
 using Pokemon.Data.Model.PBS;
 using UnrealSharp;
 using UnrealSharp.Attributes;
+using UnrealSharp.Core;
 using UnrealSharp.UnrealSharpCore;
 
 namespace Pokemon.Battle;
@@ -18,7 +19,7 @@ namespace Pokemon.Battle;
 /// <seealso cref="Pokemon.Battle.StatusEffects.ParalysisStatus"/>
 /// <seealso cref="Pokemon.Data.Model.PBS.FAbilityHandle"/>
 [UClass(ClassFlags.DefaultConfig, ConfigCategory = "Game")]
-public class UPokemonBattleSettings : UCSDeveloperSettings
+public partial class UPokemonBattleSettings : UCSDeveloperSettings
 {
     /// <summary>
     /// A list of abilities that prevent the Speed drop caused by the paralysis status effect.
@@ -34,10 +35,10 @@ public class UPokemonBattleSettings : UCSDeveloperSettings
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config,
         Category = "StatusEffects|Paralysis"
     )]
-    public TArrayReadOnly<FAbilityHandle> IgnoresParalysisSpeedDrop { get; }
+    public partial IReadOnlyList<FAbilityHandle> IgnoresParalysisSpeedDrop { get; }
 
     /// <inheritdoc />
-    protected override FText GetSectionText()
+    protected override FText GetSectionText_Implementation()
     {
         return FText.Localized("PokemonBattle", "PokemonBattle", "Pokémon Battle");
     }

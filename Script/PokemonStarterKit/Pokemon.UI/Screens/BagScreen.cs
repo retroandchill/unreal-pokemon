@@ -25,7 +25,7 @@ namespace Pokemon.UI.Screens;
 /// for activatable widgets within the UI system.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UBagScreen : UCommonActivatableWidget
+public partial class UBagScreen : UCommonActivatableWidget
 {
     /// <summary>
     /// Gets the currently selected or hovered item in the BagScreen UI.
@@ -39,10 +39,10 @@ public class UBagScreen : UCommonActivatableWidget
     /// animations, tooltips, or functionality.
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadOnly | PropertyFlags.Transient, Category = "State")]
-    public FItemHandle CurrentItem { get; private set; }
+    public partial FItemHandle CurrentItem { get; private set; }
 
     [UProperty(PropertyFlags.Transient)]
-    private UPokemonBag Bag { get; set; }
+    private partial UPokemonBag Bag { get; set; }
 
     /// <summary>
     /// Provides the UI component responsible for displaying and interacting with selectable items within the BagScreen.
@@ -57,7 +57,7 @@ public class UBagScreen : UCommonActivatableWidget
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidget]
-    protected UItemSelectionWindow ItemSelectionWindow { get; }
+    protected partial UItemSelectionWindow ItemSelectionWindow { get; }
 
     /// <summary>
     /// Represents the UI widget responsible for displaying detailed information
@@ -71,7 +71,7 @@ public class UBagScreen : UCommonActivatableWidget
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidget]
-    protected UItemInfoWindow ItemInfoWindow { get; }
+    protected partial UItemInfoWindow ItemInfoWindow { get; }
 
     /// <summary>
     /// Represents the widget responsible for managing and displaying the tab interface
@@ -85,7 +85,7 @@ public class UBagScreen : UCommonActivatableWidget
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidget]
-    protected UPocketTabWidget PocketTabWidget { get; }
+    protected partial UPocketTabWidget PocketTabWidget { get; }
 
     /// <summary>
     /// Represents the widget dedicated to displaying the contents of a specific pocket within the BagScreen UI.
@@ -100,7 +100,7 @@ public class UBagScreen : UCommonActivatableWidget
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidget]
-    protected UPocketWindow PocketWindow { get; }
+    protected partial UPocketWindow PocketWindow { get; }
 
     /// <summary>
     /// Represents the widget responsible for displaying and managing commands or actions
@@ -117,7 +117,7 @@ public class UBagScreen : UCommonActivatableWidget
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidget]
-    protected USelectionWidget CommandWidget { get; }
+    protected partial USelectionWidget CommandWidget { get; }
 
     /// <summary>
     /// Represents the Pokemon selection UI pane within the BagScreen interface.
@@ -135,7 +135,7 @@ public class UBagScreen : UCommonActivatableWidget
     /// </remarks>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidgetOptional]
-    protected UPokemonSelectionWidgetBase? PokemonSelectionPane { get; }
+    protected partial UPokemonSelectionWidgetBase? PokemonSelectionPane { get; }
 
     private Action<FItemSlotInfo?>? _onItemSelected;
 
@@ -164,7 +164,7 @@ public class UBagScreen : UCommonActivatableWidget
     }
 
     /// <inheritdoc />
-    public override void Construct()
+    protected override void Construct_Implementation()
     {
         Bag = GetGameInstanceSubsystem<UPokemonSubsystem>().Bag;
         ItemSelectionWindow.Bag = Bag;
@@ -340,7 +340,7 @@ public class UBagScreen : UCommonActivatableWidget
     }
 
     /// <inheritdoc />
-    protected override UWidget? BP_GetDesiredFocusTarget()
+    protected override UWidget? BP_GetDesiredFocusTarget_Implementation()
     {
         return FocusUtilities.GetFirstActivatedWidget(CommandWidget, ItemSelectionWindow);
     }

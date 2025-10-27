@@ -17,14 +17,14 @@ namespace Pokemon.UI.Components.Common;
 /// using a brush texture.
 /// </remarks>
 [UClass(ClassFlags.Abstract)]
-public class UItemIconDisplay : UItemDisplayBase
+public partial class UItemIconDisplay : UItemDisplayBase
 {
     [UProperty]
     [BindWidget]
-    private UEnhancedImage Image { get; }
+    private partial UEnhancedImage Image { get; }
 
     /// <inheritdoc />
-    public override void Refresh()
+    public override void Refresh_Implementation()
     {
         if (!Item.IsValid)
         {

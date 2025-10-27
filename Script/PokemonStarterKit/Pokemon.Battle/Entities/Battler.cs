@@ -28,7 +28,7 @@ public partial class UBattler : URPGEntity, IEffectEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
-    public UBattlerInfoComponent InfoComponent { get; private set; }
+    public partial UBattlerInfoComponent InfoComponent { get; private set; }
 
     /// <summary>
     /// Represents the statistics component of a battler entity.
@@ -42,7 +42,7 @@ public partial class UBattler : URPGEntity, IEffectEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
-    public UBattlerStatComponent StatComponent { get; private set; }
+    public partial UBattlerStatComponent StatComponent { get; private set; }
 
     /// <summary>
     /// Represents the ability component of a battler entity.
@@ -56,7 +56,7 @@ public partial class UBattler : URPGEntity, IEffectEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
-    public UBattlerAbilityComponent AbilityComponent { get; private set; }
+    public partial UBattlerAbilityComponent AbilityComponent { get; private set; }
 
     /// <summary>
     /// Represents the hold item component associated with a battler entity.
@@ -70,7 +70,7 @@ public partial class UBattler : URPGEntity, IEffectEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
-    public UBattlerHoldItemComponent HoldItemComponent { get; private set; }
+    public partial UBattlerHoldItemComponent HoldItemComponent { get; private set; }
 
     /// <summary>
     /// Represents the status effect component of a battler entity.
@@ -84,7 +84,7 @@ public partial class UBattler : URPGEntity, IEffectEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
-    public UBattlerStatusEffectComponent StatusEffectComponent { get; private set; }
+    public partial UBattlerStatusEffectComponent StatusEffectComponent { get; private set; }
 
     /// <summary>
     /// Represents the effect component of a battler entity.
@@ -98,7 +98,7 @@ public partial class UBattler : URPGEntity, IEffectEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
-    public UBattleEffectComponent EffectComponent { get; private set; }
+    public partial UBattleEffectComponent EffectComponent { get; private set; }
 
     /// <summary>
     /// Represents the contextual component of a battler entity.
@@ -112,5 +112,5 @@ public partial class UBattler : URPGEntity, IEffectEntity
         PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Instanced,
         Category = "Components"
     )]
-    public UBattlerContextComponent ContextComponent { get; private set; }
+    public partial UBattlerContextComponent ContextComponent { get; private set; }
 }

@@ -15,14 +15,14 @@ namespace Pokemon.UI.Components.Common;
 /// the icon based on the associated Pokémon instance.
 /// </remarks>
 [UClass(ClassFlags.Abstract)]
-public class UPokemonIconDisplay : UPokemonDisplayBase
+public partial class UPokemonIconDisplay : UPokemonDisplayBase
 {
     [UProperty]
     [BindWidget]
-    private UEnhancedImage Image { get; }
+    private partial UEnhancedImage Image { get; }
 
     /// <inheritdoc />
-    public override void Refresh()
+    public override void Refresh_Implementation()
     {
         if (Pokemon is null)
         {

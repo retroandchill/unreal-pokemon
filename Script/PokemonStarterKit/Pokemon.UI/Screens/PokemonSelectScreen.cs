@@ -22,7 +22,7 @@ namespace Pokemon.UI.Screens;
 /// to selection or hover events.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UPokemonSelectScreen : UCommonActivatableWidget
+public partial class UPokemonSelectScreen : UCommonActivatableWidget
 {
     /// <summary>
     /// Represents the selection pane used within the Pokémon Select Screen.
@@ -31,7 +31,7 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidget]
-    protected UPokemonSelectionPane SelectionPane { get; }
+    protected partial UPokemonSelectionPane SelectionPane { get; }
 
     /// <summary>
     /// Represents the display widget for presenting details or visuals of a Pokémon
@@ -40,7 +40,7 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidgetOptional]
-    protected UPokemonDisplayBase? PokemonDisplay { get; }
+    protected partial UPokemonDisplayBase? PokemonDisplay { get; }
 
     /// <summary>
     /// Represents the command widget used to display and manage user-interactable commands
@@ -49,7 +49,7 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidget]
-    public USelectionWidget CommandWidget { get; }
+    public partial USelectionWidget CommandWidget { get; }
 
     /// <summary>
     /// Represents the command panel within the Pokémon Select Screen.
@@ -58,7 +58,7 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "Widgets")]
     [BindWidgetOptional]
-    public UPanelWidget? CommandPanel { get; }
+    public partial UPanelWidget? CommandPanel { get; }
 
     /// <summary>
     /// Represents the currently selected or hovered Pokémon in the Pokémon Select Screen.
@@ -66,7 +66,7 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
     /// such as selecting from the available choices or highlighting during navigation.
     /// </summary>
     [UProperty(PropertyFlags.BlueprintReadOnly, Category = "State")]
-    protected UPokemon CurrentPokemon { get; private set; }
+    protected partial UPokemon CurrentPokemon { get; private set; }
 
     private Action<UPokemon?>? _onPokemonSelected;
 
@@ -91,7 +91,7 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
     }
 
     /// <inheritdoc />
-    public override void Construct()
+    protected override void Construct_Implementation()
     {
         CurrentPokemon = PokemonStatics.Player.FirstPartyPokemon;
         SelectionPane.OnPokemonHovered += OnPokemonHovered;
@@ -125,7 +125,7 @@ public class UPokemonSelectScreen : UCommonActivatableWidget
     }
 
     /// <inheritdoc />
-    protected override UWidget? BP_GetDesiredFocusTarget()
+    protected override UWidget? BP_GetDesiredFocusTarget_Implementation()
     {
         return FocusUtilities.GetFirstActivatedWidget(CommandWidget, SelectionPane);
     }

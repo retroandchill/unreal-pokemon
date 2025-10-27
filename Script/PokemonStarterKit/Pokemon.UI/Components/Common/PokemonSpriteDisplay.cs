@@ -1,4 +1,5 @@
 ﻿using Pokemon.Assets;
+using Pokemon.Core.Entities;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.InteractiveUI;
@@ -11,11 +12,11 @@ namespace Pokemon.UI.Components.Common;
 /// Inherits from <see cref="UPokemonDisplayBase"/>.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UPokemonSpriteDisplay : UPokemonDisplayBase
+public partial class UPokemonSpriteDisplay : UPokemonDisplayBase
 {
     [UProperty]
     [BindWidget]
-    private UEnhancedImage Image { get; }
+    private partial UEnhancedImage Image { get; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the back sprite of the Pokémon should be displayed.
@@ -27,13 +28,13 @@ public class UPokemonSpriteDisplay : UPokemonDisplayBase
     /// <see cref="UPokemonAssetLoader.ResolvePokemonFrontSprite(UPokemon)"/>.
     /// Changing this property will automatically refresh the display to show the appropriate sprite.
     /// </remarks>
-    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite, Category = "Display")]
+    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite, Category = "Display", BlueprintAccessors = true)]
     public bool ShowBackSprite
     {
-        get;
+        get => ShowBackSprite_BackingField;
         set
         {
-            field = value;
+            ShowBackSprite_BackingField = value;
             Refresh();
         }
     }
@@ -41,7 +42,7 @@ public class UPokemonSpriteDisplay : UPokemonDisplayBase
     /// <summary>
     ///
     /// </summary>
-    public override void Refresh()
+    public override void Refresh_Implementation()
     {
         if (Pokemon is null)
         {

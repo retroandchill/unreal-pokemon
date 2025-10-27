@@ -11,7 +11,7 @@ namespace Pokemon.UI.Components.Common;
 /// It inherits from UCommonUserWidget and implements the IRefreshable interface.
 /// </summary>
 [UClass(ClassFlags.Abstract)]
-public class UItemQuantityDisplayBase : UCommonUserWidget, IRefreshable
+public partial class UItemQuantityDisplayBase : UCommonUserWidget, IRefreshable
 {
     /// <summary>
     /// Gets or sets the quantity of items to be displayed.
@@ -26,14 +26,14 @@ public class UItemQuantityDisplayBase : UCommonUserWidget, IRefreshable
     /// <exception cref="System.ArgumentOutOfRangeException">
     /// Thrown when the set value is less than 0.
     /// </exception>
-    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Content")]
+    [UProperty(PropertyFlags.BlueprintReadWrite, Category = "Content", BlueprintAccessors = true)]
     public int Quantity
     {
-        get;
+        get => Quantity_BackingField;
         set
         {
             ArgumentOutOfRangeException.ThrowIfLessThan(value, 0);
-            field = value;
+            Quantity_BackingField = value;
             Refresh();
         }
     }
@@ -48,16 +48,16 @@ public class UItemQuantityDisplayBase : UCommonUserWidget, IRefreshable
     /// to update the associated UI elements. The value must be a valid class
     /// derived from <see cref="UCommonTextStyle" />.
     /// </remarks>
-    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite, Category = "Content")]
+    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite, Category = "Content", BlueprintAccessors = true)]
     public TSubclassOf<UCommonTextStyle> TextStyle
     {
-        get;
+        get => TextStyle_BackingField;
         set
         {
-            if (field == value)
+            if (TextStyle_BackingField == value)
                 return;
 
-            field = value;
+            TextStyle_BackingField = value;
             OnTextStyleChanged();
         }
     }
@@ -74,8 +74,10 @@ public class UItemQuantityDisplayBase : UCommonUserWidget, IRefreshable
     /// in accordance with the newly applied text style.
     /// </summary>
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Content")]
-    protected virtual void OnTextStyleChanged()
+    protected partial void OnTextStyleChanged();
+
+    protected virtual partial void OnTextStyleChanged_Implementation()
     {
-        // No implementation here
+        
     }
 }

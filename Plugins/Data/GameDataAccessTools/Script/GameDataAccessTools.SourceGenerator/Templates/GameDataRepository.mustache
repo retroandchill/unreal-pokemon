@@ -8,6 +8,7 @@ using static System.ComponentModel.EditorBrowsableState;
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Core;
+using UnrealSharp.Core.Attributes;
 using GameDataAccessTools.Core;
 using UnrealSharp.Interop;
 using GameDataAccessTools.Core.Interop;
@@ -18,6 +19,7 @@ using System.Runtime.CompilerServices;
 
 namespace {{Namespace}};
 
+[GeneratedType("{{EngineName}}", "{{Namespace}}")]
 partial class {{AssetClassName}} : {{#IsStatic}}IStaticGameDataRepository{{/IsStatic}}{{^IsStatic}}IGameDataRepository{{/IsStatic}}<{{EntryName}}> 
 {
     [EditorBrowsable(EditorBrowsableState.Never)]

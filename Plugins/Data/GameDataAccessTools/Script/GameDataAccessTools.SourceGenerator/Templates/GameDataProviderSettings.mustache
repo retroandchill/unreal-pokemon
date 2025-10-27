@@ -8,6 +8,7 @@ using static System.ComponentModel.EditorBrowsableState;
 using System.Diagnostics.CodeAnalysis;
 using UnrealSharp;
 using UnrealSharp.Core;
+using UnrealSharp.Interop;
 using UnrealSharp.Engine;
 using UnrealSharp.Attributes;
 using UnrealSharp.CoreUObject;
@@ -15,24 +16,32 @@ using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.UnrealSharpCore;
 using GameDataAccessTools.Core;
 using GameDataAccessTools.Core.Utilities;
+using UnrealSharp.Core.Attributes;
+using System.ComponentModel;
 
 namespace {{Namespace}};
 
-[UClass(ClassFlags.DefaultConfig, ConfigCategory = "{{ConfigCategory}}")]
+[GeneratedType("{{EngineName}}", "{{Namespace}}")]
 public partial class U{{ClassName}}Settings : UCSDeveloperSettings 
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    private static IntPtr NativeTypePtr = UCoreUObjectExporter.CallGetType("{{Assembly}}", "{{Namespace}}", "{{EngineName}}");
     {{#Repositories}}
     {{#HasAsset}}
-    [UProperty(PropertyFlags.EditDefaultsOnly | PropertyFlags.BlueprintReadOnly | PropertyFlags.Config, Category = "RepositoryAssets")]
-    public TSoftObjectPtr<{{RepositoryClassName}}> {{Name}} { get; }
-    
+        
+    [EditorBrowsable(Never)]
+    private static int U{{ClassName}}Settings_{{Name}}_Offset = CallGetPropertyOffsetFromName(NativeTypePtr, "{{Name}}");
+    public TSoftObjectPtr<{{RepositoryClassName}}> {{Name}} => SoftObjectMarshaller<{{RepositoryClassName}}>.FromNative(IntPtr.Add(NativeObject, U{{ClassName}}Settings_{{Name}}_Offset), 0);
     {{/HasAsset}}
     {{/Repositories}}
 
     {{#HasDisplayName}}
-    protected override FText GetDisplayName()
+    protected override FText GetDisplayName_Implementation()
     {
         return FText.Localized("GameDataAccessTools", "{{Namespace}}.{{ClassName}}_DisplayName", "{{DisplayName}}");
-    }    
+    }
+    
     {{/HasDisplayName}}
 }
+
+{{SettingsModuleInitializer}}

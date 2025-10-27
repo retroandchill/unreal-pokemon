@@ -26,9 +26,9 @@ namespace Pokemon.Battle.Effects;
 /// </param>
 [UStruct]
 public readonly partial record struct FBideEffectData(
-    [UProperty(PropertyFlags.BlueprintReadOnly)] int Turns,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] int Damage,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget Target
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] int Turns,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] int Damage,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget Target
 )
 {
     /// <summary>
@@ -58,8 +58,8 @@ public readonly partial record struct FBideEffectData(
 /// </param>
 [UStruct]
 public readonly partial record struct FCounterEffectData(
-    [UProperty(PropertyFlags.BlueprintReadOnly)] int Damage,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget Target
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] int Damage,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget Target
 )
 {
     /// <summary>
@@ -94,9 +94,9 @@ public readonly partial record struct FCounterEffectData(
 /// </param>
 [UStruct]
 public readonly partial record struct FDestinyBondEffectData(
-    [UProperty(PropertyFlags.BlueprintReadOnly)] bool Active,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] bool Previous,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget Target
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] bool Active,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] bool Previous,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget Target
 )
 {
     /// <summary>
@@ -127,8 +127,8 @@ public readonly partial record struct FDestinyBondEffectData(
 /// </param>
 [UStruct]
 public readonly partial record struct FMoveTurnEffectData(
-    [UProperty(PropertyFlags.BlueprintReadOnly)] int Turns,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] FMoveHandle Move
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] int Turns,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] FMoveHandle Move
 );
 
 /// <summary>
@@ -146,8 +146,8 @@ public readonly partial record struct FMoveTurnEffectData(
 /// </param>
 [UStruct]
 public readonly partial record struct FTargetTurnEffectData(
-    [UProperty(PropertyFlags.BlueprintReadOnly)] int Turns,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget Target
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] int Turns,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget Target
 )
 {
     /// <summary>
@@ -174,7 +174,7 @@ public readonly partial record struct FTargetTurnEffectData(
 /// </param>
 [UStruct]
 public readonly partial record struct FIllusionEffectData(
-    [UProperty(PropertyFlags.BlueprintReadOnly)] UPokemon? Pokemon
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] UPokemon? Pokemon
 )
 {
     /// <summary>
@@ -206,8 +206,8 @@ public readonly partial record struct FIllusionEffectData(
 /// </param>
 [UStruct]
 public readonly partial record struct FPickupEffectData(
-    [UProperty(PropertyFlags.BlueprintReadOnly)] FItemHandle Item,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] int Use
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] FItemHandle Item,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] int Use
 );
 
 /// <summary>
@@ -225,8 +225,8 @@ public readonly partial record struct FPickupEffectData(
 /// </param>
 [UStruct]
 public readonly partial record struct FProtectData(
-    [UProperty(PropertyFlags.BlueprintReadOnly)] bool Active,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] float Rate
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] bool Active,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] float Rate
 );
 
 /// <summary>
@@ -251,9 +251,9 @@ public readonly partial record struct FProtectData(
 /// </param>
 [UStruct]
 public readonly partial record struct FStockpileData(
-    [UProperty(PropertyFlags.BlueprintReadOnly)] int Stockpile,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] int Def,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] int SpDef
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] int Stockpile,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] int Def,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] int SpDef
 );
 
 /// <summary>
@@ -271,8 +271,8 @@ public readonly partial record struct FStockpileData(
 /// </param>
 [UStruct]
 public readonly partial record struct FTransformEffectData(
-    [UProperty(PropertyFlags.BlueprintReadOnly)] bool Transformed,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] FSpeciesHandle Pokemon
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] bool Transformed,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] FSpeciesHandle Pokemon
 );
 
 /// <summary>
@@ -293,9 +293,9 @@ public readonly partial record struct FTransformEffectData(
 /// </param>
 [UStruct]
 public readonly partial record struct FTrappingEffectData(
-    [UProperty(PropertyFlags.BlueprintReadOnly)] int Turns,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] FMoveHandle Move,
-    [UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget User
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] int Turns,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] FMoveHandle Move,
+    [property: UProperty(PropertyFlags.BlueprintReadOnly)] FActionTarget User
 )
 {
     /// <summary>
