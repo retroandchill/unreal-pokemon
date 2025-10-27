@@ -218,7 +218,6 @@ public readonly partial struct FGenderRatio : IGameDataEntry
 /// Represents a repository class for managing and accessing gender ratio data in the Pokémon game.
 /// This repository specializes in handling data operations associated with the <see cref="FGenderRatio"/> structure.
 /// </summary>
-[UClass]
 [GameDataRepository<FGenderRatio>]
 public partial class UGenderRatioRepository : UStaticGameDataRepository;
 

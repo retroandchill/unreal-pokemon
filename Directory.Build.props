@@ -10,6 +10,7 @@
     <DefineConstants>WITH_EDITOR</DefineConstants>
     <DefineConstants Condition="'$(DisableWithEditor)' == 'true'">$(DefineConstants.Replace('WITH_EDITOR;', '').Replace('WITH_EDITOR', ''))</DefineConstants>
     <DefineConstants Condition="'$(DefineAdditionalConstants)' != ''">$(DefineConstants);$(DefineAdditionalConstants)</DefineConstants>
+      <RoslynAnalyzerAdditionalPaths>$(TargetDir)</RoslynAnalyzerAdditionalPaths>
   </PropertyGroup>
   <ItemGroup Label="UnrealSharpRefs_Generated" Condition="'$(ExcludeFromWeaver)' != 'true'">
     <!--Don't edit this group, it is managed by UnrealSharpBuildTool and will be overwritten. Free to add other items outside of this group.-->

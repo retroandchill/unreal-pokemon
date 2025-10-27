@@ -43,7 +43,6 @@ public readonly partial struct FBattleWeather : IGameDataEntry
 /// a static game data repository and provides functionality to handle
 /// structured weather details for battles.
 /// </summary>
-[UClass]
 [GameDataRepository<FBattleWeather>]
 public partial class UBattleWeatherRepository : UStaticGameDataRepository;
 

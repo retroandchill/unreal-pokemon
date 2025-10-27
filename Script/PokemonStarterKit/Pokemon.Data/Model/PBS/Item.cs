@@ -399,7 +399,6 @@ public readonly partial struct FItem() : IGameDataEntry
 /// This class acts as an intermediary for retrieving, updating, and storing data
 /// related to items defined in the game world.
 /// </summary>
-[UClass]
 [GameDataRepository<FItem>]
 public partial class UItemRepository : UAssetGameDataRepository;
 

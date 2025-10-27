@@ -65,7 +65,6 @@ public readonly partial struct FAbility() : IGameDataEntry
 /// This class extends the functionality of <c>UAssetGameDataRepository</c>, enabling interaction with
 /// structured ability data through an associated data model.
 /// </remarks>
-[UClass]
 [GameDataRepository<FAbility>]
 public partial class UAbilityRepository : UAssetGameDataRepository;
 

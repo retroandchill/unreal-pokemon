@@ -100,7 +100,6 @@ public readonly partial struct FEncounterType : IGameDataEntry
 /// an interface for retrieving and handling data related to encounter types defined in the game data structure.
 /// It operates on the <see cref="FEncounterType"/> type for categorization and data manipulation purposes.
 /// </remarks>
-[UClass]
 [GameDataRepository<FEncounterType>]
 public partial class UEncounterTypeRepository : UStaticGameDataRepository;
 

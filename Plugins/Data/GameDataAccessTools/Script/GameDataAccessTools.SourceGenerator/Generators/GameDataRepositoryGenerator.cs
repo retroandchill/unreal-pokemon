@@ -6,6 +6,9 @@ using HandlebarsDotNet;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Retro.SourceGeneratorUtilities.Utilities.Attributes;
+using UnrealSharp.GlueGenerator;
+using UnrealSharp.GlueGenerator.NativeTypes;
+using UnrealSharp.GlueGenerator.NativeTypes.Properties;
 
 namespace GameAccessTools.SourceGenerator.Generators;
 
@@ -40,14 +43,14 @@ internal class GameDataRepositoryGenerator : IIncrementalGenerator
         var uclassAttributeInfo = classSymbol
             .GetAttributes()
             .SingleOrDefault(x => x.AttributeClass?.ToDisplayString() == SourceContextNames.UClassAttribute);
-        if (uclassAttributeInfo is null)
+        if (uclassAttributeInfo is not null)
         {
             context.ReportDiagnostic(
                 Diagnostic.Create(
                     new DiagnosticDescriptor(
                         "GDA0001",
-                        "GameDataRepository must be annotated with UClass",
-                        "{0} must be annotated with UClass",
+                        "GameDataRepository must not be annotated with UClass",
+                        "{0} must not be annotated with UClass",
                         "GameDataAccessTools",
                         DiagnosticSeverity.Error,
                         true
@@ -123,19 +126,46 @@ internal class GameDataRepositoryGenerator : IIncrementalGenerator
 
         var repositoryInfo = classSymbol.GetGameDataRepositoryInfo();
 
+        var unrealClass = new UnrealClass(EClassFlags.None, classSymbol.BaseType!.Name,
+            classSymbol.BaseType.ContainingNamespace.ToDisplayString(), classSymbol.Name, 
+            classSymbol.ContainingNamespace.ToDisplayString(), classSymbol.DeclaredAccessibility,
+            classSymbol.ContainingAssembly.Name);
+        
+        var innerProperty = new StructProperty(repositoryInfo.EntryType.ToDisplayString(), "Inner", Accessibility.NotApplicable, unrealClass);
+        var dataEntriesProperty = new ArrayProperty(innerProperty, "DataEntries",
+            $"TArray<{innerProperty.ManagedType}>", Accessibility.Private, "private", unrealClass)
+        {
+            HasSetter = false,
+        };
+        innerProperty.Outer = dataEntriesProperty;
+        
+        unrealClass.AddProperty(dataEntriesProperty);
+
+        var moduleInitializerBuilder = new GeneratorStringBuilder();
+        moduleInitializerBuilder.BeginModuleInitializer(unrealClass);
+        
+        var dataEntriesBuilder = new GeneratorStringBuilder();
+        dataEntriesBuilder.Indent();
+        dataEntriesProperty.ExportBackingVariables(dataEntriesBuilder, SourceGenUtilities.NativeTypePtr);
+        dataEntriesProperty.ExportType(dataEntriesBuilder, context);
+
         var templateParams = new
         {
+            Assembly = classSymbol.ContainingAssembly.Name,
             Namespace = classSymbol.ContainingNamespace.ToDisplayString(),
             AssetClassName = classSymbol.Name,
+            EngineName = classSymbol.Name[1..],
             EntryName = repositoryInfo.EntryType.ToDisplayString(),
             IsStatic = isStatic,
+            ModuleInitializer = moduleInitializerBuilder.ToString(),
+            DataEntriesProperty = dataEntriesBuilder.ToString(),
         };
 
         var handlebars = Handlebars.Create();
         handlebars.Configuration.TextEncoder = null;
 
         context.AddSource(
-            $"{classSymbol.Name[1..]}.g.cs",
+            $"{templateParams.EngineName}.g.cs",
             handlebars.Compile(SourceTemplates.GameDataRepositoryTemplate)(templateParams)
         );
     }

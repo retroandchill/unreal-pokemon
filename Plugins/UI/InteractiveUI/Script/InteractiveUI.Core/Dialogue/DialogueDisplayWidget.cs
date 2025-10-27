@@ -21,7 +21,7 @@ namespace InteractiveUI.Core.Dialogue;
 /// non-blocking tasks when displaying or interacting with dialogue.
 /// </remarks>
 [UClass(ClassFlags.Abstract)]
-public class UDialogueDisplayWidget : UCommonActivatableWidget
+public partial class UDialogueDisplayWidget : UCommonActivatableWidget
 {
     /// <summary>
     /// Represents the `UDialogueBox` property of the `UDialogueDisplayWidget` class, which serves as the primary interface
@@ -33,7 +33,7 @@ public class UDialogueDisplayWidget : UCommonActivatableWidget
     /// </remarks>
     [UProperty]
     [BindWidget]
-    private UDialogueBox DialogueBox { get; }
+    private partial UDialogueBox DialogueBox { get; }
 
     /// <summary>
     /// Represents the `PauseIndicator` property of the `UDialogueDisplayWidget` class, used to indicate when dialogue
@@ -46,7 +46,7 @@ public class UDialogueDisplayWidget : UCommonActivatableWidget
     /// </remarks>
     [UProperty]
     [BindWidgetOptional]
-    private UWidget? PauseIndicator { get; }
+    private partial UWidget? PauseIndicator { get; }
 
     /// <summary>
     /// Represents the `ScrollBox` property of the `UDialogueDisplayWidget` class, which serves as a container for displaying dialogue content with scrollable functionality.
@@ -57,7 +57,7 @@ public class UDialogueDisplayWidget : UCommonActivatableWidget
     /// </remarks>
     [UProperty]
     [BindWidget]
-    private UScrollBox ScrollBox { get; }
+    private partial UScrollBox ScrollBox { get; }
 
     /// <summary>
     /// Represents the `AdvanceAction` property of the `UDialogueDisplayWidget` class, which specifies the primary input action
@@ -68,7 +68,7 @@ public class UDialogueDisplayWidget : UCommonActivatableWidget
     /// It is utilized internally to bind input to the widget's advance functionality and supports customizable action mappings.
     /// </remarks>
     [UProperty(PropertyFlags.EditAnywhere, Category = "Actions")]
-    private UInputAction AdvanceAction { get; }
+    private partial UInputAction AdvanceAction { get; }
 
     private FUIActionBindingHandle _advanceActionBinding;
 
@@ -83,11 +83,16 @@ public class UDialogueDisplayWidget : UCommonActivatableWidget
     [UProperty(PropertyFlags.EditAnywhere, Category = "Display")]
     [UIMin("0.001f")]
     [ClampMin("0.001f")]
-    private float ScrollSpeed { get; } = 0.1f;
+    private partial float ScrollSpeed { get; init; }
 
     private readonly record struct ScrollStatus(float OriginalScroll, float Timer);
 
     private ScrollStatus? _scroll;
+
+    public UDialogueDisplayWidget()
+    {
+        ScrollSpeed = 0.1f;
+    }
 
     /// <summary>
     /// Represents an event triggered to advance the dialogue flow within the `UDialogueDisplayWidget` class.

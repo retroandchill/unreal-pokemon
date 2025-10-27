@@ -51,7 +51,6 @@ public readonly partial struct FBodyColor : IGameDataEntry
 /// <see cref="UStaticGameDataRepository"/> to ensure compatibility with the static game
 /// data infrastructure, offering efficient management of hard-coded body color entries.
 /// </remarks>
-[UClass]
 [GameDataRepository<FBodyColor>]
 public partial class UBodyColorRepository : UStaticGameDataRepository;
 

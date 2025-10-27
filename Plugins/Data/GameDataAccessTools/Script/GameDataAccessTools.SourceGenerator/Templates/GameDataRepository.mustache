@@ -1,18 +1,29 @@
 #nullable enable
+using static UnrealSharp.Interop.FTypeBuilderExporter;
+using static UnrealSharp.Interop.FPropertyExporter;
+using static UnrealSharp.Interop.UClassExporter;
+using static UnrealSharp.Interop.UFunctionExporter;
+using static System.ComponentModel.EditorBrowsableState;
+
 using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Core;
 using GameDataAccessTools.Core;
+using UnrealSharp.Interop;
 using GameDataAccessTools.Core.Interop;
 using GameDataAccessTools.Core.Marshallers;
 using GameDataAccessTools.Core.Views;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace {{Namespace}};
 
 partial class {{AssetClassName}} : {{#IsStatic}}IStaticGameDataRepository{{/IsStatic}}{{^IsStatic}}IGameDataRepository{{/IsStatic}}<{{EntryName}}> 
 {
-    [UProperty]
-    private TArray<{{EntryName}}> DataEntries { get; }
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    private static IntPtr NativeTypePtr = UCoreUObjectExporter.CallGetType("{{Assembly}}", "{{Namespace}}", "{{EngineName}}");
+
+{{DataEntriesProperty}}
 
     private static ArrayViewMarshaller<StructView<{{EntryName}}>>? _entriesMarshaller;
     public ArrayView<StructView<{{EntryName}}>> Entries
@@ -85,3 +96,5 @@ partial class {{AssetClassName}} : {{#IsStatic}}IStaticGameDataRepository{{/IsSt
     }
     {{/IsStatic}} 
 }
+
+{{ModuleInitializer}}

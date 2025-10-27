@@ -53,7 +53,6 @@ public readonly partial struct FGrowthRate : IGameDataEntry
 /// <summary>
 /// Provides data repository functionality for accessing and managing FGrowthRate game data entries.
 /// </summary>
-[UClass]
 [GameDataRepository<FGrowthRate>]
 public partial class UGrowthRateRepository : UStaticGameDataRepository;
 

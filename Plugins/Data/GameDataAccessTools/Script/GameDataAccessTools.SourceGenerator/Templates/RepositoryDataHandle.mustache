@@ -1,7 +1,14 @@
 ﻿#nullable enable
+using static UnrealSharp.Interop.FTypeBuilderExporter;
+using static UnrealSharp.Interop.FPropertyExporter;
+using static UnrealSharp.Interop.UClassExporter;
+using static UnrealSharp.Interop.UFunctionExporter;
+using static System.ComponentModel.EditorBrowsableState;
+
 using UnrealSharp;
 using UnrealSharp.Core;
 using UnrealSharp.Core.Marshallers;
+using UnrealSharp.Core.Attributes;
 using UnrealSharp.Interop;
 using UnrealSharp.Attributes;
 using UnrealSharp.CoreUObject;
@@ -13,14 +20,16 @@ using ZLinq;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
+
 namespace {{Namespace}};
 
+[GeneratedType("{{EngineName}}", "{{Namespace}}")]
 readonly partial record struct {{StructName}}(FName ID) : MarshalledStruct<{{StructName}}>, IDataHandle<{{EntryType}}>{{#Convertables}}, IEquatable<{{Type}}>{{/Convertables}}
 {
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [EditorBrowsable(Never)]
     private static IntPtr NativeTypePtr = UCoreUObjectExporter.CallGetType("{{AssemblyName}}", "{{Namespace}}", "{{EngineName}}");
 
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [EditorBrowsable(Never)]
     private static int {{StructName}}_ID_Offset = FPropertyExporter.CallGetPropertyOffsetFromName(NativeTypePtr, "ID");
 
     private static int NativeDataSize = UScriptStructExporter.CallGetNativeStructSize(NativeTypePtr);
@@ -130,17 +139,4 @@ public static class {{StructName}}Marshaller
     public static {{StructName}} FromNative(IntPtr buffer, int index) => new {{StructName}}(buffer + (index * {{StructName}}.GetNativeDataSize()));
 }                                                                       
 
-internal static class {{StructName}}_Initializer
-{
-    #pragma warning disable CA2255
-    [ModuleInitializer]
-    #pragma warning restore CA2255
-    public static void Register() => StartUpJobManager.RegisterStartUpJob("{{AssemblyName}}", Initialize);
-    public static void Initialize()
-    {
-        IntPtr {{StructName}}Ptr = FTypeBuilderExporter.NewType("{{EngineName}}", {{TypeVersion}}, 1, typeof({{StructName}}), out var needsRebuild);
-        if (!needsRebuild) return;
-        IntPtr {{StructName}}Properties = FTypeBuilderExporter.InitStructProps({{StructName}}Ptr, 1);
-        FTypeBuilderExporter.NewProperty({{StructName}}Properties, 32, "ID", 1, "", 1, 0, "", "");
-    }
-}
+{{ModuleInitializer}}

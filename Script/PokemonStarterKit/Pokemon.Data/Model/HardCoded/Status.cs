@@ -40,7 +40,6 @@ public readonly partial struct FStatus : IGameDataEntry
 /// in the game's hardcoded data model. It serves as a concrete implementation
 /// to handle status entities derived from the <see cref="FStatus"/> struct.
 /// </summary>
-[UClass]
 [GameDataRepository<FStatus>]
 public partial class UStatusRepository : UStaticGameDataRepository;
 

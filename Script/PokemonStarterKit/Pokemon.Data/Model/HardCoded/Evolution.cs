@@ -216,7 +216,6 @@ public readonly partial struct FEvolution : IGameDataEntry
 /// within the context of the game. It utilizes the FEvolution data structure and adheres to the framework's
 /// repository model for handling game data efficiently.
 /// </remarks>
-[UClass]
 [GameDataRepository<FEvolution>]
 public partial class UEvolutionRepository : UStaticGameDataRepository;
 

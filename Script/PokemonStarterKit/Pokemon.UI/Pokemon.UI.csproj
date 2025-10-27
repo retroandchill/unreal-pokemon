@@ -18,7 +18,6 @@
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.2" />
         <ProjectReference Include="..\Pokemon.Assets\Pokemon.Assets.csproj" />
         <ProjectReference Include="..\Pokemon.Core\Pokemon.Core.csproj" />
-        <Analyzer Include="..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
         <ProjectReference Include="..\..\..\Plugins\UI\InteractiveUI\Script\InteractiveUI.Core\InteractiveUI.Core.csproj" />
         <ProjectReference Include="..\..\UnrealPokemon.Glue\UnrealPokemon.Glue.csproj" />
     </ItemGroup>

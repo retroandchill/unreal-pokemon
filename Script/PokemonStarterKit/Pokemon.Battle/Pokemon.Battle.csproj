@@ -27,13 +27,6 @@
         <ProjectReference Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPG.Battle\RPG.Battle.csproj" />
         <ProjectReference Include="..\Pokemon.Core\Pokemon.Core.csproj" />
         <ProjectReference Include="..\Pokemon.Data\Pokemon.Data.csproj" />
-        <Reference Include="UnrealSharp">
-            <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.dll</HintPath>
-        </Reference>
-        <Reference Include="UnrealSharp.Core">
-            <HintPath>..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\net9.0\UnrealSharp.Core.dll</HintPath>
-        </Reference>
-        <Analyzer Include="..\..\..\Plugins\Framework\UnrealSharp\Binaries\Managed\UnrealSharp.SourceGenerators.dll" />
         <ProjectReference Include="..\..\..\Plugins\Gameplay\RPGEssentials\Script\RPGEssentials.Glue\RPGEssentials.Glue.csproj" />
         <ProjectReference Include="..\..\UnrealPokemon.Glue\UnrealPokemon.Glue.csproj" />
         <ProjectReference

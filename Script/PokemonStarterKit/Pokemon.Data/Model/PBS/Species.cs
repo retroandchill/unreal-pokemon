@@ -431,7 +431,6 @@ public readonly partial struct FSpecies() : IGameDataEntry
 /// This class extends functionality from the UAssetGameDataRepository, enabling structured
 /// handling and queries of species-related game data.
 /// </summary>
-[UClass]
 [GameDataRepository<FSpecies>]
 public partial class USpeciesRepository : UAssetGameDataRepository;
 

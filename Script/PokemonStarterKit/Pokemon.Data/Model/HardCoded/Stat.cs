@@ -123,7 +123,6 @@ public readonly partial struct FStat : IGameDataEntry
 /// The repository leverages the capabilities of its base class to enable efficient
 /// retrieval and management of static statistical data.
 /// </remarks>
-[UClass]
 [GameDataRepository<FStat>]
 public partial class UStatRepository : UStaticGameDataRepository;
 

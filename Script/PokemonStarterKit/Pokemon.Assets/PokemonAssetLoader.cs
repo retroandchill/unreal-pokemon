@@ -36,7 +36,7 @@ public readonly record struct FPokemonAssetTypes(FPrimaryAssetType Regular, FPri
 /// Blueprint systems as well as C# runtime logic.
 /// </remarks>
 [UClass]
-public class UPokemonAssetLoader : UBlueprintFunctionLibrary
+public partial class UPokemonAssetLoader : UBlueprintFunctionLibrary
 {
     /// <summary>
     /// Resolves the front sprite asset for a given Pokémon species based on the specified parameters.

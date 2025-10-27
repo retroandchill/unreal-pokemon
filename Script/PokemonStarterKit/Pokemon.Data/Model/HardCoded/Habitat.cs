@@ -41,7 +41,6 @@ public readonly partial struct FHabitat : IGameDataEntry
 /// This class serves as a highly specific implementation of a static game data repository,
 /// tailored to handle entries of type <see cref="FHabitat"/>.
 /// </summary>
-[UClass]
 [GameDataRepository<FHabitat>]
 public partial class UHabitatRepository : UStaticGameDataRepository;
 

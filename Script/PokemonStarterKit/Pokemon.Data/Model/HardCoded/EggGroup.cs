@@ -73,7 +73,6 @@ public readonly partial struct FEggGroup : IGameDataEntry
 /// of structured Egg Group metadata in the game. It extends the functionality of the base static game data
 /// repository, offering specific support for handling the domain of Egg Groups.
 /// </remarks>
-[UClass]
 [GameDataRepository<FEggGroup>]
 public partial class UEggGroupRepository : UStaticGameDataRepository;
 

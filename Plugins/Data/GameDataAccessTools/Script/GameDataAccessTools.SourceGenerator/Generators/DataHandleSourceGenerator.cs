@@ -7,6 +7,9 @@ using HandlebarsDotNet;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Retro.SourceGeneratorUtilities.Utilities.Attributes;
+using UnrealSharp.GlueGenerator;
+using UnrealSharp.GlueGenerator.NativeTypes;
+using UnrealSharp.GlueGenerator.NativeTypes.Properties;
 
 namespace GameAccessTools.SourceGenerator.Generators;
 
@@ -87,6 +90,17 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
             return;
         }
 
+        var unrealStruct = new UnrealScriptStruct(structSymbol.Name, structSymbol.ContainingNamespace.ToDisplayString(),
+            structSymbol.DeclaredAccessibility, structSymbol.ContainingAssembly.Name)
+        {
+            IsRecord = true,
+            HasPrimaryConstructor = true,
+            PrimaryConstructorParameterCount = 1
+        };
+        
+        var idProperty = new NameProperty("ID", Accessibility.Public, unrealStruct);
+        unrealStruct.AddProperty(idProperty);
+
         DataHandleTemplateBase templateParams;
         try
         {
@@ -95,6 +109,7 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
                 DataHandleInfo providerRepository => new ProviderTemplateHandle(
                     structSymbol,
                     GetEntryType(providerRepository),
+                    unrealStruct,
                     providerRepository.Type,
                     providerRepository.RepositoryName,
                     GetConvertibleTypes(dataHandleInfo)
@@ -102,10 +117,11 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
                 DataHandleInfoOneParam specificType => new ExplicitDataHandleTemplate(
                     structSymbol,
                     specificType.EntryType,
+                    unrealStruct,
                     GetConvertibleTypes(dataHandleInfo)
                 ),
                 _ => throw new InvalidOperationException(
-                    $"Unknown DataHandleInfo type: {dataHandleInfo.GetType().Name}"
+                    $"Unknown DataHandleInfo type: {dataHandleInfo!.GetType().Name}"
                 ),
             };
         }

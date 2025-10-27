@@ -38,7 +38,6 @@ public readonly partial struct FBattleTerrain : IGameDataEntry
 /// Serves as a repository for managing and accessing instances of FBattleTerrain.
 /// Extends the UStaticGameDataRepository to facilitate terrain-specific game data operations.
 /// </summary>
-[UClass]
 [GameDataRepository<FBattleTerrain>]
 public partial class UBattleTerrainRepository : UStaticGameDataRepository;
 

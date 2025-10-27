@@ -58,7 +58,6 @@ public readonly partial struct FNature() : IGameDataEntry
 /// This repository provides functionality to query and retrieve hard-coded nature data
 /// utilized within the Pokémon application.
 /// </summary>
-[UClass]
 [GameDataRepository<FNature>]
 public partial class UNatureRepository : UStaticGameDataRepository;
 

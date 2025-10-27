@@ -64,7 +64,7 @@ public delegate bool ItemFilter(FItemHandle item);
 /// This library is designed for use in Unreal Engine projects with Blueprint functionality.
 /// </remarks>
 [UClass]
-public class UPokemonAsyncBlueprintLibrary : UBlueprintFunctionLibrary
+public partial class UPokemonAsyncBlueprintLibrary : UBlueprintFunctionLibrary
 {
     /// <summary>
     /// Displays a message asynchronously to the player controlled by the specified player controller.

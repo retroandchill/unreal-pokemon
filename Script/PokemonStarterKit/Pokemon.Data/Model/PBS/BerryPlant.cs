@@ -5,6 +5,7 @@ using UnrealSharp;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.Core;
+using UnrealSharp.Core.Attributes;
 using UnrealSharp.CoreUObject;
 using UnrealSharp.GameDataAccessTools;
 using UnrealSharp.GameplayTags;
@@ -76,7 +77,6 @@ public readonly partial struct FBerryPlant() : IGameDataEntry
 /// Responsible for providing access to instances of <see cref="FBerryPlant"/>
 /// and interacting with associated game data mechanisms.
 /// </summary>
-[UClass]
 [GameDataRepository<FBerryPlant>]
 public partial class UBerryPlantRepository : UAssetGameDataRepository;
 

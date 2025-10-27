@@ -41,7 +41,6 @@ public readonly partial struct FBodyShape : IGameDataEntry
 /// for handling body shape entries defined by <see cref="FBodyShape" />.
 /// Intended for use in scenarios requiring organized, static access to body shape game data.
 /// </summary>
-[UClass]
 [GameDataRepository<FBodyShape>]
 public partial class UBodyShapeRepository : UStaticGameDataRepository;
 

@@ -97,7 +97,6 @@ public readonly partial struct FTarget() : IGameDataEntry
 /// A repository responsible for managing and accessing target data within the game.
 /// Provides functionality to retrieve and handle instances of the target configuration type.
 /// </summary>
-[UClass]
 [GameDataRepository<FTarget>]
 public partial class UTargetRepository : UStaticGameDataRepository;
 

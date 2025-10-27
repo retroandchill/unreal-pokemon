@@ -45,7 +45,6 @@ public readonly partial struct FFieldWeather : IGameDataEntry
 /// Provides a repository for managing and accessing weather-related data specific to fields in the game.
 /// This class serves as a static data repository for instances of <see cref="FFieldWeather"/>.
 /// </summary>
-[UClass]
 [GameDataRepository<FFieldWeather>]
 public partial class UFieldWeatherRepository : UStaticGameDataRepository;
 

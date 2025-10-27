@@ -47,7 +47,6 @@ public readonly partial struct FEnvironment : IGameDataEntry
 /// This class serves as a specialized implementation of the static game data repository
 /// for the <c>FEnvironment</c> struct, providing access and management mechanisms for predefined data entries.
 /// </summary>
-[UClass]
 [GameDataRepository<FEnvironment>]
 public partial class UEnvironmentRepository : UStaticGameDataRepository;
 

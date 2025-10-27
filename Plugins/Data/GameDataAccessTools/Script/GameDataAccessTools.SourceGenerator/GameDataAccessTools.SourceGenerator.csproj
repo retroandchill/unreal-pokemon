@@ -27,6 +27,11 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <Reference Include="UnrealSharp.GlueGenerator">
+            <HintPath>$(UnrealSharpDir)\Binaries\Managed\netstandard2.0\UnrealSharp.GlueGenerator.dll</HintPath>
+            <Private>true</Private>
+            <CopyLocal>false</CopyLocal>
+        </Reference>
     </ItemGroup>
     <PropertyGroup>
         <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
@@ -37,6 +42,7 @@
                 Include="$(PKGHandlebars_Net)\lib\netstandard2.0\Handlebars.dll"
                 IncludeRuntimeDependency="false"
             />
+            <ReferenceCopyLocalPaths Include="$(PKGHandlebars_Net)\lib\netstandard2.0\Handlebars.dll" />
         </ItemGroup>
     </Target>
     <ItemGroup>
