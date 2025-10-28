@@ -26,7 +26,7 @@ namespace {{Namespace}};
 public partial class U{{ClassName}}Manager : UGameDataManagerBase 
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    private static IntPtr NativeTypePtr = UCoreUObjectExporter.CallGetType("{{Assembly}}", "{{Namespace}}", "{{ClassName}}Settings");
+    private static IntPtr NativeTypePtr = UCoreUObjectExporter.CallGetType("{{Assembly}}", "{{Namespace}}", "{{ClassName}}Manager");
 
     private static U{{ClassName}}Manager? _instance = null;
     

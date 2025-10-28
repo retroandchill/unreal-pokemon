@@ -112,33 +112,33 @@ public class GameDataProviderGenerator : IIncrementalGenerator
         );
         settingsType.AddMetaData("ConfigCategory", dataProviderInfo.Category);
 
-        foreach (var repository in repositories.Where(x => x.HasAsset))
+        foreach (var repository in repositories)
         {
-            var objectProperty = new ObjectProperty(
-                repository.RepositoryClassName,
-                $"{repository.Name}_Inner",
-                Accessibility.Public,
-                settingsType
-            );
-            var property = new SoftObjectProperty(
-                objectProperty,
-                repository.Name,
-                Accessibility.Public,
-                "public",
-                settingsType
-            )
-            {
-                HasSetter = false,
-                PropertyFlags =
-                    EPropertyFlags.EditDefaultsOnly | EPropertyFlags.BlueprintReadOnly | EPropertyFlags.Config,
-            };
-            property.AddMetaData("Category", "RepositoryAssets");
-            objectProperty.Outer = property;
-            settingsType.AddProperty(property);
-
             ObjectProperty assetProperty;
             if (repository.HasAsset)
             {
+                var objectProperty = new ObjectProperty(
+                    repository.RepositoryClassName,
+                    $"{repository.Name}_Inner",
+                    Accessibility.Public,
+                    settingsType
+                );
+                var property = new SoftObjectProperty(
+                    objectProperty,
+                    repository.Name,
+                    Accessibility.Public,
+                    "public",
+                    settingsType
+                )
+                {
+                    HasSetter = false,
+                    PropertyFlags =
+                        EPropertyFlags.EditDefaultsOnly | EPropertyFlags.BlueprintReadOnly | EPropertyFlags.Config,
+                };
+                property.AddMetaData("Category", "RepositoryAssets");
+                objectProperty.Outer = property;
+                settingsType.AddProperty(property);
+
                 assetProperty = new ObjectProperty(
                     repository.RepositoryClassName,
                     $"{repository.Name}Asset",
