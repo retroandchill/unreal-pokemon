@@ -5,6 +5,7 @@ namespace RPG.SourceGenerator.Model;
 
 public record RPGEntityInfo(INamedTypeSymbol ClassSymbol)
 {
+    public string Assembly = ClassSymbol.ContainingAssembly.Name;
     public string Namespace => ClassSymbol.ContainingNamespace.ToDisplayString();
     public string ClassName => ClassSymbol.Name;
     public string EngineName => ClassName[1..];
@@ -29,4 +30,8 @@ public record RPGEntityInfo(INamedTypeSymbol ClassSymbol)
     public bool SubclassSourceIsMethod => SubclassSourceSymbol is IMethodSymbol;
 
     public bool HasSubclassSource => SubclassSource is not null;
+    
+    public required string FunctionGlue { get; init; }
+    
+    public required string ModuleInitializer { get; init; }
 }

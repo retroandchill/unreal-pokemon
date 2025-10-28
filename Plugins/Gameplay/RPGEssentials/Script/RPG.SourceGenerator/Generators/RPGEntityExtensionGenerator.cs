@@ -5,10 +5,14 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Retro.SourceGeneratorUtilities.Utilities.Attributes;
 using Retro.SourceGeneratorUtilities.Utilities.Types;
+using RhoMicro.CodeAnalysis.Library.Extensions;
 using RPG.SourceGenerator.Attributes;
 using RPG.SourceGenerator.Model;
 using RPG.SourceGenerator.Properties;
 using TurnBased.SourceGenerator;
+using UnrealSharp.GlueGenerator;
+using UnrealSharp.GlueGenerator.NativeTypes;
+using UnrealSharp.GlueGenerator.NativeTypes.Properties;
 
 namespace RPG.SourceGenerator.Generators;
 
@@ -218,23 +222,275 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
                 )
             );
         }
+        
+        var components = componentProperties.Select(
+            (p, i) =>
+                GetComponentInfo(
+                    p,
+                    i == componentProperties.Length - 1,
+                    factoryMethod?.Parameters[1].Type,
+                    context
+                )).ToImmutableArray();
+
+        var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
+        var assemblyName = classSymbol.ContainingAssembly.Name;
+        
+        var blueprintLibraryClass = new UnrealClass(EClassFlags.None, "UBlueprintFunctionLibrary", "UnrealSharp.Engine", $"{classSymbol.Name}BlueprintLibrary", classSymbol.ContainingNamespace.ToDisplayString(), Accessibility.Public, classSymbol.ContainingAssembly.Name);
+        var functions = new EquatableList<UnrealFunctionBase>([]);
+        
+        foreach (var component in components)
+        {
+            foreach (var property in component.Properties.Where(p => p.IsExposed))
+            {
+                var propertySyntax = property.Property.DeclaringSyntaxReferences.Select(r => r.GetSyntax()).FirstOrDefault();
+                
+                if (property.HasGetter)
+                {
+                    var propertyGetter = new UnrealFunction(EFunctionFlags.Static,
+                        $"Get{property.Name}", namespaceName, Accessibility.Public, assemblyName,
+                        blueprintLibraryClass);
+                    if (property.GetterIsUFunction)
+                    {
+                        ApplyUFunctionAttribute(property.Property.GetMethod!, propertyGetter);
+                    }
+                    else
+                    {
+                        propertyGetter.FunctionFlags |= EFunctionFlags.BlueprintCallable;
+                        if (property.HasDisplayName)
+                        {
+                            propertyGetter.AddMetaData("DisplayName", $"Get {property.DisplayName}");
+                        }
+
+                        if (property.HasCategory)
+                        {
+                            propertyGetter.AddMetaData("Category", property.Category);
+                        }
+                    }
+
+                    propertyGetter.AddMetaData("DefaultToSelf", "unit");
+                    
+                    propertyGetter.Properties.List.Add(new ObjectProperty(classSymbol.ToDisplayString(), "unit", Accessibility.Public, propertyGetter)
+                    {
+                        PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly
+                    });
+                    if (property.IsOptionOrNullableType)
+                    {
+                        propertyGetter.AddMetaData("ExpandEnumAsExecs", "ReturnValue");
+                        propertyGetter.ReturnType = new EnumProperty("EValueFindResult", "ReturnValue",
+                            Accessibility.NotApplicable, propertyGetter)
+                        {
+                            PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.ReturnParm | EPropertyFlags.OutParm |
+                                            EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly
+                        };
+
+                        var outProperty = PropertyFactory.CreateProperty(property.UnderlyingType, propertySyntax!,
+                            property.Property, propertyGetter);
+                        outProperty.PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.OutParm | 
+                                                    EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly;
+                        outProperty.RefKind = RefKind.Out;
+                        propertyGetter.FunctionFlags |= EFunctionFlags.HasOutParms;
+                        propertyGetter.Properties.List.Add(outProperty);
+                    }
+                    else
+                    {
+                        propertyGetter.FunctionFlags |= EFunctionFlags.BlueprintPure;
+                        
+                        propertyGetter.ReturnType = PropertyFactory.CreateProperty(property.Type, propertySyntax!, property.Property, propertyGetter);
+                        propertyGetter.ReturnType.PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.ReturnParm | EPropertyFlags.OutParm |
+                                                                  EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly;
+                    }
+                    
+                    blueprintLibraryClass.AddFunction(propertyGetter);
+                    functions.List.Add(propertyGetter);
+                }
+
+                if (!property.HasSetter) continue;
+                
+                var propertySetter = new UnrealFunction(EFunctionFlags.Static,
+                    $"Set{property.Name}", namespaceName, Accessibility.Public, assemblyName,
+                    blueprintLibraryClass);
+                if (property.SetterIsUFunction)
+                {
+                    ApplyUFunctionAttribute(property.Property.SetMethod!, propertySetter);
+                }
+                else
+                {
+                    propertySetter.FunctionFlags |= EFunctionFlags.BlueprintCallable;
+                    if (property.HasDisplayName)
+                    {
+                        propertySetter.AddMetaData("DisplayName", $"Set {property.DisplayName}");
+                    }
+
+                    if (property.HasCategory)
+                    {
+                        propertySetter.AddMetaData("Category", property.Category);
+                    }
+                }
+
+                propertySetter.AddMetaData("DefaultToSelf", "unit");
+                propertySetter.ReturnType = new VoidProperty(propertySetter);
+                
+                propertySetter.Properties.List.Add(new ObjectProperty(classSymbol.ToDisplayString(), "unit", Accessibility.Public, propertySetter)
+                {
+                    PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly
+                });
+                
+                var propertyValueType = PropertyFactory.CreateProperty(property.UnderlyingType, propertySyntax!, property.Property, propertySetter);
+                propertyValueType.PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.BlueprintVisible |
+                                                  EPropertyFlags.BlueprintReadOnly;
+                propertySetter.Properties.List.Add(propertyValueType);
+                
+                blueprintLibraryClass.AddFunction(propertySetter);
+                functions.List.Add(propertySetter);
+
+                if (!property.IsOptionOrNullableType) continue;
+
+                var propertyReset = new UnrealFunction(EFunctionFlags.BlueprintCallable | EFunctionFlags.Static,
+                    $"Reset{property.Name}", namespaceName, Accessibility.Public, assemblyName,
+                    blueprintLibraryClass);
+                if (property.HasDisplayName)
+                {
+                    propertyReset.AddMetaData("DisplayName", $"Set {property.DisplayName}");
+                }
+
+                if (property.HasCategory)
+                {
+                    propertyReset.AddMetaData("Category", property.Category);
+                }
+                propertyReset.AddMetaData("DefaultToSelf", "unit");
+                propertyReset.ReturnType = new VoidProperty(propertyReset);
+
+                propertyReset.Properties.List.Add(new ObjectProperty(classSymbol.ToDisplayString(), "unit", Accessibility.Public, propertyReset)
+                {
+                    PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly
+                });
+
+                blueprintLibraryClass.AddFunction(propertyReset);
+                functions.List.Add(propertyReset);
+            }
+
+            foreach (var method in component.Methods.Where(m => m.IsExposed))
+            {
+                UnrealFunctionBase methodWrapper;
+                if (method.Method.ReturnType.MetadataName is "Task" or "Task`1" or "ValueTask" or "ValueTask`1")
+                {
+                    methodWrapper = new UnrealAsyncFunction(EFunctionFlags.Static, method.Name, namespaceName,
+                        Accessibility.Public, assemblyName, blueprintLibraryClass);
+                }
+                else
+                {
+                    methodWrapper = new UnrealFunction(EFunctionFlags.Static, method.Name, namespaceName,
+                        Accessibility.Public, assemblyName, blueprintLibraryClass);
+                }
+
+                ApplyUFunctionAttribute(method.Method, methodWrapper);
+                methodWrapper.AddMetaData("DefaultToSelf", "unit");
+                
+                methodWrapper.Properties.List.Add(new ObjectProperty(classSymbol.ToDisplayString(), "unit", Accessibility.Public, methodWrapper)
+                {
+                    PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly
+                });
+
+                if (method.ReturnsOptionOrNullable)
+                {
+                    methodWrapper.ReturnType = new EnumProperty("EValueFindResult", "ReturnValue", Accessibility.NotApplicable, methodWrapper)
+                    {
+                        PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.ReturnParm | EPropertyFlags.OutParm |
+                                        EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly
+                    };
+                    
+                    var outParameter = PropertyFactory.CreateProperty(method.UnderlyingType, null!, method.ReturnType, methodWrapper);
+                    outParameter.PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.OutParm | EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly;
+                    outParameter.RefKind = RefKind.Out;
+                    
+                    methodWrapper.FunctionFlags |= EFunctionFlags.HasOutParms;
+                    
+                    methodWrapper.Properties.List.Add(outParameter);
+                }
+                else if (method.Method.ReturnsVoid)
+                {
+                    methodWrapper.ReturnType = new VoidProperty(methodWrapper);
+                }
+                else
+                {
+                    methodWrapper.ReturnType = PropertyFactory.CreateProperty(method.ReturnType, null!, method.Method, methodWrapper);
+                    methodWrapper.ReturnType.PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.ReturnParm | EPropertyFlags.OutParm |
+                                                              EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly;
+                }
+
+                var hasOutParams = false;
+                var paramHasDefaults = false;
+                foreach (var parameter in method.Parameters)
+                {
+                    var param = PropertyFactory.CreateProperty(parameter.Type, null!, parameter.Parameter, methodWrapper);
+                    param.PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly;
+
+                    switch (parameter.Parameter.RefKind)
+                    {
+                        case RefKind.Out:
+                            param.PropertyFlags |= EPropertyFlags.OutParm;
+                            hasOutParams = true;
+                            break;
+                        case RefKind.Ref:
+                            param.PropertyFlags |= EPropertyFlags.OutParm | EPropertyFlags.ReferenceParm;
+                            hasOutParams = true;
+                            break;
+                        case RefKind.None:
+                        case RefKind.In:
+                        case RefKind.RefReadOnlyParameter:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+                    if (parameter.Parameter is { HasExplicitDefaultValue: true, ExplicitDefaultValue: not null })
+                    {
+                        string defaultValue;
+                        if (parameter.Parameter.Type.TypeKind == TypeKind.Enum)
+                        {
+                            defaultValue = SourceGenUtilities.GetEnumNameFromValue(parameter.Parameter.Type, (byte) parameter.Parameter.ExplicitDefaultValue);
+                        }
+                        else
+                        {
+                            defaultValue = parameter.Parameter.ExplicitDefaultValue.ToString();
+                        }
+                
+                        methodWrapper.AddMetaData($"CPP_Default_{parameter.Parameter.Name}", defaultValue);
+                        paramHasDefaults = true;
+                    }
+                    
+                    methodWrapper.Properties.List.Add(param);
+                }
+
+                if (hasOutParams)
+                {
+                    methodWrapper.FunctionFlags |= EFunctionFlags.HasOutParms;
+                }
+                
+                if (paramHasDefaults)
+                {
+                    methodWrapper.FunctionFlags |= EFunctionFlags.HasDefaults;
+                }
+                
+                blueprintLibraryClass.AddFunction(methodWrapper);
+                functions.List.Add(methodWrapper);
+            }
+        }
+
+        var functionGlueBuilder = new GeneratorStringBuilder();
+        functionGlueBuilder.Indent();
+        blueprintLibraryClass.TryExportList(functionGlueBuilder, context, functions);
+        
+        var moduleInitializerBuilder = new GeneratorStringBuilder();
+        moduleInitializerBuilder.BeginModuleInitializer(blueprintLibraryClass);
 
         var templateParams = new RPGEntityInfo(classSymbol)
         {
-            Components =
-            [
-                .. componentProperties.Select(
-                    (p, i) =>
-                        GetComponentInfo(
-                            p,
-                            i == componentProperties.Length - 1,
-                            factoryMethod?.Parameters[1].Type,
-                            context
-                        )
-                ),
-            ],
+            Components = components,
             FactoryMethod = factoryMethod,
             SubclassSourceSymbol = subclassSourceSymbol,
+            FunctionGlue = functionGlueBuilder.ToString(),
+            ModuleInitializer = moduleInitializerBuilder.ToString()
         };
 
         var handlebars = Handlebars.Create();
@@ -265,28 +521,6 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
             $"{templateParams.EngineName}.g.cs",
             handlebars.Compile(SourceTemplates.RPGEntityTemplate)(templateParams)
         );
-
-        var asyncMethods = templateParams
-            .Components.SelectMany(c => c.Methods, (c, m) => (Component: c, Method: m))
-            .Where(m => m.Method.ReturnType.MetadataName is "Task" or "Task`1" or "ValueTask" or "ValueTask`1")
-            .Select(m => new AsyncMethodInfo(
-                templateParams.Namespace,
-                $"{templateParams.ClassName}Extensions",
-                m.Method.Name,
-                m.Method.ReturnType,
-                m.Component.ComponentType,
-                m.Method.Parameters,
-                m.Method.Attributes
-            ))
-            .ToImmutableArray();
-
-        foreach (var asyncMethod in asyncMethods)
-        {
-            context.AddSource(
-                $"{asyncMethod.ClassName}.{asyncMethod.MethodName}.g.cs",
-                handlebars.Compile(SourceTemplates.AsyncMethodCallTemplate)(asyncMethod)
-            );
-        }
     }
 
     private ComponentInfo GetComponentInfo(
@@ -426,8 +660,7 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
         }
 
         return new UPropertyInfo(
-            propertySymbol.Type,
-            propertySymbol.Name,
+            propertySymbol,
             GetAccessorInfo(propertySymbol.GetMethod),
             GetAccessorInfo(propertySymbol.SetMethod),
             displayName,
@@ -490,14 +723,13 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
             : methodSymbol.Name;
         return new UFunctionInfo(
             methodName,
-            methodSymbol.ReturnType,
+            methodSymbol,
             GetMethodAttributes(methodSymbol),
             [
                 .. methodSymbol.Parameters.Select(
                     (p, i) =>
                         new UParamInfo(
-                            p.Type,
-                            p.Name,
+                            p,
                             GetRefQualifier(p),
                             GetDefaultValue(p),
                             i == methodSymbol.Parameters.Length - 1
@@ -514,6 +746,29 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
                 )
                 : string.Empty,
         };
+    }
+
+    private static void ApplyUFunctionAttribute(IMethodSymbol methodSymbol, UnrealFunctionBase unrealFunction)
+    {
+        const string ufunctionAttribute = "UFunctionAttribute";
+        var attributes = methodSymbol.GetAttributesByName(ufunctionAttribute);
+        InspectorManager.InspectSpecifiers(ufunctionAttribute, unrealFunction, attributes);
+        foreach (var attribute in attributes)
+        {
+            if (attribute.AttributeClass is null) continue;
+
+            if (attribute.AttributeClass.ToDisplayString() == GeneratorStatics.UMetaDataAttribute)
+            {
+                unrealFunction.AddMetaData((attribute.ConstructorArguments[0].Value as string)!, (attribute.ConstructorArguments[1].Value as string)!);
+            }
+            else if (attribute.AttributeClass.ContainingNamespace.ToDisplayString() ==
+                     "UnrealSharp.Attributes.Metadata")
+            {
+                var argument = attribute.ConstructorArguments.FirstOrDefault().Value as string ?? string.Empty;
+                unrealFunction.AddMetaData(attribute.AttributeClass.Name, argument);
+            }
+        }
+        
     }
 
     private static string GetGenericConstraint(ITypeParameterSymbol typeParameterSymbol)

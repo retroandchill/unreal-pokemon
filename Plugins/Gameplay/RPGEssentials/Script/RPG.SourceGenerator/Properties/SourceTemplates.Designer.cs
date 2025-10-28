@@ -61,46 +61,23 @@ namespace RPG.SourceGenerator.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to #nullable enable
+        ///using static UnrealSharp.Interop.FTypeBuilderExporter;
+        ///using static UnrealSharp.Interop.FPropertyExporter;
+        ///using static UnrealSharp.Interop.UClassExporter;
+        ///using static UnrealSharp.Interop.UFunctionExporter;
         ///
         ///using UnrealSharp;
-        ///using UnrealSharp.Attributes;
-        ///using UnrealSharp.UnrealSharpCore;
-        ///using System;
-        ///
-        ///namespace {{Namespace}};
-        ///
-        ///public delegate void {{ClassName}}{{MethodName}}ActionDelegate({{#HasReturnType}}{{ReturnType}} Result, {{/HasReturnType}}string? Exception);
-        ///
-        ///public class U{{ClassName}}{{MethodName}}ActionDelegate : MulticastDelegate&lt;{{ClassName}}{{MethodName}}ActionDelegate&gt;
-        ///{
-        ///    protected void Invoker({{#HasReturnType}}{{ReturnType}} Result, {{/HasReturnType}}string [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string AsyncMethodCallTemplate {
-            get {
-                return ResourceManager.GetString("AsyncMethodCallTemplate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to #nullable enable
-        ///
-        ///using UnrealSharp;
+        ///using UnrealSharp.Core;
         ///using UnrealSharp.Attributes;
         ///using UnrealSharp.RPGCore;
         ///using UnrealSharp.RPGSaving;
+        ///using System.Runtime.CompilerServices;
         ///
         ///namespace {{Namespace}};
         ///
         ///partial class {{ClassName}}
         ///{
-        ///    protected override bool Supports(TSubclassOf&lt;URPGComponent&gt; componentClass)
-        ///    {
-        ///        return componentClass.IsChildOf(typeof({{ComponentType}}));
-        ///    }
-        ///
-        ///    protected override void SaveData(URPGComponent component, FRPGComponentSaveDataHandle saveData)
-        ///    {
-        ///        if (component is not {{ComponentType}}  [rest of string was truncated]&quot;;.
+        ///    protected override bool Supports_Impleme [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ComponentSaverTemplate {
             get {
@@ -109,28 +86,21 @@ namespace RPG.SourceGenerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using UnrealSharp;
+        ///   Looks up a localized string similar to using static UnrealSharp.Interop.FTypeBuilderExporter;
+        ///using static UnrealSharp.Interop.FPropertyExporter;
+        ///using static UnrealSharp.Interop.UClassExporter;
+        ///using static UnrealSharp.Interop.UFunctionExporter;
+        ///using static System.ComponentModel.EditorBrowsableState;
+        ///
+        ///using UnrealSharp;
+        ///using UnrealSharp.Core;
+        ///using UnrealSharp.Core.Attributes;
+        ///using UnrealSharp.Core.Marshallers;
+        ///using UnrealSharp.Interop;
         ///using UnrealSharp.Attributes;
         ///using UnrealSharp.Attributes.MetaTags;
         ///using UnrealSharp.Engine;
-        ///using UnrealSharp.RPGCore;
-        ///using LanguageExt.UnsafeValueAccess;
-        ///using RPG.Core;
-        ///
-        ///namespace {{Namespace}};
-        ///
-        ///[UClass]
-        ///public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary 
-        ///{
-        ///    {{#Components}}
-        ///    {{#Properties}}
-        ///    {{#IsExposed}}
-        ///    {{#HasGetter}}
-        ///    {{#GetterIsUFunction}}
-        ///    {{#GetterAttributes}}
-        ///    [{{Value}}]    
-        ///    {{/GetterAttributes}}    
-        ///    {{/GetterIsUF [rest of string was truncated]&quot;;.
+        ///using Unre [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string RPGEntityBlueprintLibraryTemplate {
             get {
@@ -144,7 +114,6 @@ namespace RPG.SourceGenerator.Properties {
         ///using UnrealSharp.Attributes.MetaTags;
         ///using UnrealSharp.Engine;
         ///using UnrealSharp.RPGCore;
-        ///using LanguageExt.UnsafeValueAccess;
         ///
         ///namespace {{Namespace}};
         ///
@@ -158,7 +127,9 @@ namespace RPG.SourceGenerator.Properties {
         ///        {
         ///            {{#HasGetter}}
         ///            get =&gt; unit.{{../ComponentName}}.{{Name}};
-        ///            {{/Has [rest of string was truncated]&quot;;.
+        ///            {{/HasGetter}}
+        ///            {{#HasSetter}}
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string RPGEntityExtensionsTemplate {
             get {
@@ -167,22 +138,23 @@ namespace RPG.SourceGenerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using UnrealSharp;
+        ///   Looks up a localized string similar to using static UnrealSharp.Interop.FTypeBuilderExporter;
+        ///using static UnrealSharp.Interop.FPropertyExporter;
+        ///using static UnrealSharp.Interop.UClassExporter;
+        ///using static UnrealSharp.Interop.UFunctionExporter;
+        ///
+        ///using UnrealSharp;
+        ///using UnrealSharp.Core;
         ///using UnrealSharp.Attributes;
         ///using UnrealSharp.CoreUObject;
         ///using UnrealSharp.Engine;
         ///using UnrealSharp.RPGCore;
         ///using GameDataAccessTools.Core.Utilities;
+        ///using System.Runtime.CompilerServices;
         ///
         ///namespace {{Namespace}};
         ///
-        ///partial class {{ClassName}} : {{#Components}}IRPGEntity&lt;{{ComponentType}}&gt;{{^IsLast}}, {{/IsLast}}{{/Components}}
-        ///{
-        ///    {{#Components}}
-        ///    {{ComponentType}} IRPGEntity&lt;{{ComponentType}}&gt;.Component =&gt; {{ComponentName}};
-        ///    {{/Components}}
-        ///
-        ///    protected override void CreateRequiredComponents() [rest of string was truncated]&quot;;.
+        ///partial class {{ClassN [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string RPGEntityTemplate {
             get {

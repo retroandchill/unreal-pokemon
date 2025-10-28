@@ -6,23 +6,25 @@ namespace RPG.SourceGenerator.Model;
 
 public record UFunctionInfo(
     string Name,
-    ITypeSymbol ReturnType,
+    IMethodSymbol Method,
     ImmutableArray<AttributeInfo> Attributes,
     ImmutableArray<UParamInfo> Parameters
 )
 {
+    public ITypeSymbol ReturnType => Method.ReturnType;
+    
     public bool ReturnsVoid => ReturnType.SpecialType == SpecialType.System_Void;
 
     public bool HasParameters => Parameters.Length > 0;
 
-    public string? OptionType =>
+    public ITypeSymbol? OptionType =>
         ReturnType is INamedTypeSymbol { IsGenericType: true, MetadataName: "TOptional`1" } optionType
-            ? optionType.TypeArguments[0].ToDisplayString()
+            ? optionType.TypeArguments[0]
             : null;
 
-    public string? NullableType =>
+    public ITypeSymbol? NullableType =>
         ReturnType is INamedTypeSymbol { IsGenericType: true, MetadataName: "Nullable`1" } optionType
-            ? optionType.TypeArguments[0].ToDisplayString()
+            ? optionType.TypeArguments[0]
             : null;
 
     public bool ReturnsOption => OptionType is not null;
@@ -31,7 +33,7 @@ public record UFunctionInfo(
 
     public bool ReturnsOptionOrNullable => ReturnsOption || ReturnsNullable;
 
-    public string UnderlyingType => OptionType ?? NullableType ?? ReturnType.ToDisplayString();
+    public ITypeSymbol UnderlyingType => OptionType ?? NullableType ?? ReturnType;
 
     public required bool IsExposed { get; init; }
 

@@ -190,24 +190,25 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
         var blueprintLibraryClass = new UnrealClass(EClassFlags.None, "UBlueprintFunctionLibrary", "UnrealSharp.Engine", $"U{engineName}BlueprintLibrary", namespaceName, Accessibility.Public, assemblyName);
         var functions = new EquatableList<UnrealFunction>([]);
         
-        var isValidHandleFunction = new UnrealFunction(EFunctionFlags.BlueprintPure | EFunctionFlags.Static,
+        var isValidHandleFunction = new UnrealFunction(EFunctionFlags.BlueprintCallable | EFunctionFlags.BlueprintPure | EFunctionFlags.Static,
             "IsValidHandle", namespaceName, Accessibility.Public, assemblyName, blueprintLibraryClass);
         isValidHandleFunction.AddMetaData("DisplayName", "Is Valid");
         isValidHandleFunction.AddMetaData("Category", engineName);
         isValidHandleFunction.ReturnType = new BoolProperty("ReturnValue", Accessibility.Public, isValidHandleFunction)
         {
-            PropertyFlags = EPropertyFlags.ReturnParm | EPropertyFlags.OutParm
+            PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.ReturnParm | EPropertyFlags.OutParm |
+                            EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly
         };
         isValidHandleFunction.Properties.List.Add(
             new StructProperty(structSymbol.ToDisplayString(), "handle", Accessibility.NotApplicable,
                 isValidHandleFunction)
             {
-                PropertyFlags = EPropertyFlags.Parm
+                PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly
             });
         blueprintLibraryClass.AddFunction(isValidHandleFunction);
         functions.List.Add(isValidHandleFunction);
         
-        var convertToNameFunction = new UnrealFunction(EFunctionFlags.BlueprintPure | EFunctionFlags.Static,
+        var convertToNameFunction = new UnrealFunction(EFunctionFlags.BlueprintCallable | EFunctionFlags.BlueprintPure | EFunctionFlags.Static,
             $"Convert{engineName}ToName", namespaceName, Accessibility.Public, assemblyName, blueprintLibraryClass);
         convertToNameFunction.AddMetaData("DisplayName", "Convert to Name");
         convertToNameFunction.AddMetaData("Category", engineName);
@@ -215,18 +216,19 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
         convertToNameFunction.AddMetaData("BlueprintAutoCast", "");
         convertToNameFunction.ReturnType = new NameProperty("ReturnValue", Accessibility.Public, convertToNameFunction)
         {
-            PropertyFlags = EPropertyFlags.ReturnParm | EPropertyFlags.OutParm
+            PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.ReturnParm | EPropertyFlags.OutParm |
+                            EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly
         };
         convertToNameFunction.Properties.List.Add(
             new StructProperty(structSymbol.ToDisplayString(), "handle", Accessibility.NotApplicable,
                 convertToNameFunction)
             {
-                PropertyFlags = EPropertyFlags.Parm
+                PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly
             });
         blueprintLibraryClass.AddFunction(convertToNameFunction);
         functions.List.Add(convertToNameFunction);
         
-        var convertFromNameFunction = new UnrealFunction(EFunctionFlags.BlueprintPure | EFunctionFlags.Static,
+        var convertFromNameFunction = new UnrealFunction(EFunctionFlags.BlueprintCallable | EFunctionFlags.BlueprintPure | EFunctionFlags.Static,
             $"ConvertNameTo{engineName}", namespaceName, Accessibility.Public, assemblyName, blueprintLibraryClass);
         convertFromNameFunction.AddMetaData("DisplayName", $"Convert to {engineName}");
         convertFromNameFunction.AddMetaData("Category", engineName);
@@ -235,12 +237,13 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
         convertFromNameFunction.ReturnType = new StructProperty(structSymbol.ToDisplayString(), "ReturnValue", Accessibility.NotApplicable,
             convertFromNameFunction)
         {
-            PropertyFlags = EPropertyFlags.ReturnParm | EPropertyFlags.OutParm
+            PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.ReturnParm | EPropertyFlags.OutParm |
+                            EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly
         };
         convertFromNameFunction.Properties.List.Add(
             new NameProperty("name", Accessibility.NotApplicable, convertFromNameFunction)
             {
-                PropertyFlags = EPropertyFlags.Parm
+                PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly
             });
         blueprintLibraryClass.AddFunction(convertFromNameFunction);
         functions.List.Add(convertFromNameFunction);
@@ -256,14 +259,15 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
 
         foreach (var property in properties)
         {
-            var propertyGetter = new UnrealFunction(EFunctionFlags.BlueprintPure | EFunctionFlags.Static,
+            var propertyGetter = new UnrealFunction(EFunctionFlags.BlueprintCallable | EFunctionFlags.BlueprintPure | EFunctionFlags.Static,
                 $"{property.Prefix}{property.Name}", namespaceName, Accessibility.Public, assemblyName, blueprintLibraryClass);
             propertyGetter.AddMetaData("Category", engineName);
 
             var propertySyntax = property.Property.DeclaringSyntaxReferences
                 .Select(x => x.GetSyntax()).FirstOrDefault();
             propertyGetter.ReturnType = PropertyFactory.CreateProperty(property.Property.Type, propertySyntax!, property.Property, propertyGetter);
-            propertyGetter.ReturnType.PropertyFlags |= EPropertyFlags.ReturnParm | EPropertyFlags.OutParm;
+            propertyGetter.ReturnType.PropertyFlags = EPropertyFlags.Parm | EPropertyFlags.ReturnParm | EPropertyFlags.OutParm |
+                                                      EPropertyFlags.BlueprintVisible | EPropertyFlags.BlueprintReadOnly;
             
             propertyGetter.Properties.List.Add(
                 new StructProperty(structSymbol.ToDisplayString(), "handle", Accessibility.NotApplicable,

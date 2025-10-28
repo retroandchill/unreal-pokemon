@@ -13,6 +13,7 @@ public static class GeneratorStatics
     public const string UStructAttribute = "UnrealSharp.Attributes.UStructAttribute";
     public const string UPropertyAttribute = "UnrealSharp.Attributes.UPropertyAttribute";
     public const string UFunctionAttribute = "UnrealSharp.Attributes.UFunctionAttribute";
+    public const string UMetaDataAttribute = "UnrealSharp.Attributes.UMetaDataAttribute";
 
     public static bool IsTurnBaseUnitOrComponent(this ITypeSymbol symbol)
     {

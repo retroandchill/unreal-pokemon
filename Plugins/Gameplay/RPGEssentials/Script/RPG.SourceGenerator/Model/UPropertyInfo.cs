@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using JetBrains.Annotations;
 using Microsoft.CodeAnalysis;
 
@@ -7,14 +8,16 @@ namespace RPG.SourceGenerator.Model;
 public readonly record struct AccessorInfo(bool IsUFunction, ImmutableArray<AttributeInfo> Attributes);
 
 public record UPropertyInfo(
-    ITypeSymbol Type,
-    string Name,
+    IPropertySymbol Property,
     AccessorInfo? Getter,
     AccessorInfo? Setter,
     string? DisplayName,
     string? Category
 )
 {
+    public ITypeSymbol Type => Property.Type;
+    public string Name => Property.Name;
+    
     public bool IsOptionOrNullableType => IsOptionType || IsNullableType;
 
     public bool IsOptionType => OptionType is not null;
@@ -51,9 +54,11 @@ public record UPropertyInfo(
 
     public ImmutableArray<AttributeInfo> SetterAttributes => Setter?.Attributes ?? [];
 
-    public bool HasDisplayName = DisplayName is not null;
+    [MemberNotNullWhen(true, nameof(DisplayName))]
+    public bool HasDisplayName => DisplayName is not null;
 
-    public bool HasCategory = Category is not null;
+    [MemberNotNullWhen(true, nameof(Category))]
+    public bool HasCategory => Category is not null;
 
     public required bool IsExposed { get; init; }
 }

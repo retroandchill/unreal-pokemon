@@ -1,15 +1,29 @@
-﻿using UnrealSharp;
+﻿using static UnrealSharp.Interop.FTypeBuilderExporter;
+using static UnrealSharp.Interop.FPropertyExporter;
+using static UnrealSharp.Interop.UClassExporter;
+using static UnrealSharp.Interop.UFunctionExporter;
+using static System.ComponentModel.EditorBrowsableState;
+
+using UnrealSharp;
+using UnrealSharp.Core;
+using UnrealSharp.Core.Attributes;
+using UnrealSharp.Core.Marshallers;
+using UnrealSharp.Interop;
 using UnrealSharp.Attributes;
 using UnrealSharp.Attributes.MetaTags;
 using UnrealSharp.Engine;
 using UnrealSharp.RPGCore;
 using RPG.Core;
+using System.ComponentModel;
 
 namespace {{Namespace}};
 
-[UClass]
+[GeneratedType("{{EngineName}}BlueprintLibrary", "{{Namespace}}")]
 public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary 
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    private static IntPtr NativeTypePtr = UCoreUObjectExporter.CallGetType("{{Assembly}}", "{{Namespace}}", "{{EngineName}}BlueprintLibrary");
+
     {{#Components}}
     {{#Properties}}
     {{#IsExposed}}
@@ -127,4 +141,8 @@ public partial class U{{EngineName}}BlueprintLibrary : UBlueprintFunctionLibrary
     {{/IsExposed}}
     {{/Methods}}
     {{/Components}}
+
+{{FunctionGlue}}
 }
+
+{{ModuleInitializer}}
