@@ -222,7 +222,7 @@ public partial class UPocketTabWidget : UCommonActivatableWidget
     /// </remarks>
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Buttons")]
     protected partial void SlotButton(UCommonButtonBase button);
-    
+
     protected virtual partial void SlotButton_Implementation(UCommonButtonBase button)
     {
         // No native implementation

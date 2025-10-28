@@ -126,26 +126,42 @@ internal class GameDataRepositoryGenerator : IIncrementalGenerator
 
         var repositoryInfo = classSymbol.GetGameDataRepositoryInfo();
 
-        var unrealClass = new UnrealClass(EClassFlags.None, classSymbol.BaseType!.Name,
-            classSymbol.BaseType.ContainingNamespace.ToDisplayString(), classSymbol.Name, 
-            classSymbol.ContainingNamespace.ToDisplayString(), classSymbol.DeclaredAccessibility,
-            classSymbol.ContainingAssembly.Name);
-        
-        var innerProperty = new StructProperty(repositoryInfo.EntryType.ToDisplayString(), "Inner", Accessibility.NotApplicable, unrealClass);
-        var dataEntriesProperty = new ArrayProperty(innerProperty, "DataEntries",
-            $"TArray<{innerProperty.ManagedType}>", Accessibility.Private, "private", unrealClass)
+        var unrealClass = new UnrealClass(
+            EClassFlags.None,
+            classSymbol.BaseType!.Name,
+            classSymbol.BaseType.ContainingNamespace.ToDisplayString(),
+            classSymbol.Name,
+            classSymbol.ContainingNamespace.ToDisplayString(),
+            classSymbol.DeclaredAccessibility,
+            classSymbol.ContainingAssembly.Name
+        );
+
+        var innerProperty = new StructProperty(
+            repositoryInfo.EntryType.ToDisplayString(),
+            "Inner",
+            Accessibility.NotApplicable,
+            unrealClass
+        );
+        var dataEntriesProperty = new ArrayProperty(
+            innerProperty,
+            "DataEntries",
+            $"TArray<{innerProperty.ManagedType}>",
+            Accessibility.Private,
+            "private",
+            unrealClass
+        )
         {
             HasSetter = false,
         };
         innerProperty.Outer = dataEntriesProperty;
-        
+
         unrealClass.AddProperty(dataEntriesProperty);
 
         var dataEntriesInitializerBuilder = new GeneratorStringBuilder();
         dataEntriesInitializerBuilder.Indent();
         dataEntriesInitializerBuilder.Indent();
         dataEntriesProperty.MakeProperty(dataEntriesInitializerBuilder, "nativeProperties");
-        
+
         var dataEntriesBuilder = new GeneratorStringBuilder();
         dataEntriesBuilder.Indent();
         dataEntriesProperty.ExportBackingVariables(dataEntriesBuilder, SourceGenUtilities.NativeTypePtr);
@@ -162,9 +178,10 @@ internal class GameDataRepositoryGenerator : IIncrementalGenerator
             ModuleInitializer = dataEntriesInitializerBuilder.ToString(),
             DataEntriesProperty = dataEntriesBuilder.ToString(),
             unrealClass.BuilderNativePtr,
-            PropertiesCount = classSymbol.GetMembers()
+            PropertiesCount = classSymbol
+                .GetMembers()
                 .OfType<IPropertySymbol>()
-                .Count(p => !p.IsStatic && p.HasAttribute(SourceContextNames.UPropertyAttribute)) + 1
+                .Count(p => !p.IsStatic && p.HasAttribute(SourceContextNames.UPropertyAttribute)) + 1,
         };
 
         var handlebars = Handlebars.Create();

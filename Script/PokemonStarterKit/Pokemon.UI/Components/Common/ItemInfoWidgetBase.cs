@@ -51,8 +51,5 @@ public partial class UItemInfoWidgetBase : UCommonUserWidget, IRefreshable
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Display")]
     protected partial void OnItemSet(FItemHandle item);
 
-    protected virtual partial void OnItemSet_Implementation(FItemHandle item)
-    {
-        
-    }
+    protected virtual partial void OnItemSet_Implementation(FItemHandle item) { }
 }

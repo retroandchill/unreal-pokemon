@@ -155,10 +155,7 @@ public partial class UPokemonSelectionWidgetBase : UOwningSelectionWidget
     [UFunction(FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent, Category = "Display")]
     public partial void ToggleCommandVisibility(bool visible);
 
-    public virtual partial void ToggleCommandVisibility_Implementation(bool visible)
-    {
-        
-    }
+    public virtual partial void ToggleCommandVisibility_Implementation(bool visible) { }
 
     /// <summary>
     /// Performs a swap action between two Pokémon panels.
@@ -167,7 +164,7 @@ public partial class UPokemonSelectionWidgetBase : UOwningSelectionWidget
     /// <param name="panel2">The second Pokémon panel involved in the swap.</param>
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Switching")]
     protected partial void PerformSwap(UPokemonPanel panel1, UPokemonPanel panel2);
-    
+
     protected virtual partial void PerformSwap_Implementation(UPokemonPanel panel1, UPokemonPanel panel2)
     {
         SwitchPokemon(panel1, panel2);

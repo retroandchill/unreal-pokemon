@@ -55,7 +55,11 @@ public partial class USelectionWidget : UCommonActivatableWidget
     /// Any attempts to set an invalid value will result in the property being adjusted to
     /// fall within the allowed range.
     /// </remarks>
-    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite, Category = "Selection", BlueprintAccessors = true)]
+    [UProperty(
+        PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite,
+        Category = "Selection",
+        BlueprintAccessors = true
+    )]
     [UIMin("0")]
     [ClampMin("0")]
     public int DesiredFocusIndex

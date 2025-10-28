@@ -54,7 +54,7 @@ public partial class UBattleWeatherRepository : UStaticGameDataRepository;
 /// </summary>
 [UStruct]
 [DataHandle(typeof(GameData), nameof(GameData.BattleWeathers))]
-public readonly partial record struct FBattleWeatherHandle ([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);
+public readonly partial record struct FBattleWeatherHandle([property: UProperty(PropertyFlags.EditAnywhere)] FName ID);
 
 /// <summary>
 /// Provides extension methods for managing battle weather configurations

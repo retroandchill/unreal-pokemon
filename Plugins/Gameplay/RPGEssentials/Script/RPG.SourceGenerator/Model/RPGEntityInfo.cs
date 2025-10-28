@@ -30,8 +30,8 @@ public record RPGEntityInfo(INamedTypeSymbol ClassSymbol)
     public bool SubclassSourceIsMethod => SubclassSourceSymbol is IMethodSymbol;
 
     public bool HasSubclassSource => SubclassSource is not null;
-    
+
     public required string FunctionGlue { get; init; }
-    
+
     public required string ModuleInitializer { get; init; }
 }

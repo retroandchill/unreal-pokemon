@@ -48,7 +48,11 @@ public partial class UItemQuantityDisplayBase : UCommonUserWidget, IRefreshable
     /// to update the associated UI elements. The value must be a valid class
     /// derived from <see cref="UCommonTextStyle" />.
     /// </remarks>
-    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite, Category = "Content", BlueprintAccessors = true)]
+    [UProperty(
+        PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite,
+        Category = "Content",
+        BlueprintAccessors = true
+    )]
     public TSubclassOf<UCommonTextStyle> TextStyle
     {
         get => TextStyle_BackingField;
@@ -76,8 +80,5 @@ public partial class UItemQuantityDisplayBase : UCommonUserWidget, IRefreshable
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Content")]
     protected partial void OnTextStyleChanged();
 
-    protected virtual partial void OnTextStyleChanged_Implementation()
-    {
-        
-    }
+    protected virtual partial void OnTextStyleChanged_Implementation() { }
 }

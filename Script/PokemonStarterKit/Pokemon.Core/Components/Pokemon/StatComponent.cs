@@ -12,14 +12,6 @@ using ZLinq;
 
 namespace Pokemon.Core.Components.Pokemon;
 
-public static class TempDeconstructForcer
-{
-    public static void Deconstruct(this StructView<FNatureStatChange> stats, out FMainBattleStatHandle stat, out int value)
-    {
-        (stat, value) = stats.Copy();
-    }
-}
-
 /// <summary>
 /// The <c>UStatComponent</c> class manages the statistical attributes of a Pokemon entity.
 /// This includes base stats, intermediate calculations (such as IVs, EVs, and nature),

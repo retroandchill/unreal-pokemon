@@ -17,7 +17,7 @@ public record UPropertyInfo(
 {
     public ITypeSymbol Type => Property.Type;
     public string Name => Property.Name;
-    
+
     public bool IsOptionOrNullableType => IsOptionType || IsNullableType;
 
     public bool IsOptionType => OptionType is not null;

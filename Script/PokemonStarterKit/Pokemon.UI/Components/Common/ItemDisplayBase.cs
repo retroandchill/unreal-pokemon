@@ -47,8 +47,5 @@ public partial class UItemDisplayBase : UCommonUserWidget
     [UFunction(FunctionFlags.BlueprintCallable | FunctionFlags.BlueprintEvent, Category = "Display")]
     public partial void Refresh();
 
-    public virtual partial void Refresh_Implementation()
-    {
-        
-    }
+    public virtual partial void Refresh_Implementation() { }
 }

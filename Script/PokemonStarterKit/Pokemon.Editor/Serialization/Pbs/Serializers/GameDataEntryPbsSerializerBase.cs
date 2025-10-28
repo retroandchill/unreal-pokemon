@@ -35,7 +35,11 @@ public partial class UGameDataEntryPbsSerializerBase : UCSGameDataEntrySerialize
     }
 
     /// <inheritdoc />
-    protected override bool Serialize_Implementation(string filePath, UAssetGameDataRepository repository, out string errorMessage)
+    protected override bool Serialize_Implementation(
+        string filePath,
+        UAssetGameDataRepository repository,
+        out string errorMessage
+    )
     {
         try
         {
@@ -58,7 +62,11 @@ public partial class UGameDataEntryPbsSerializerBase : UCSGameDataEntrySerialize
     }
 
     /// <inheritdoc />
-    protected override bool Deserialize_Implementation(string filePath, UAssetGameDataRepository repository, out string errorMessage)
+    protected override bool Deserialize_Implementation(
+        string filePath,
+        UAssetGameDataRepository repository,
+        out string errorMessage
+    )
     {
         try
         {

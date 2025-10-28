@@ -223,13 +223,12 @@ public partial class UPokemonAsyncBlueprintLibrary : UBlueprintFunctionLibrary
         CancellationToken cancellationToken = default
     )
     {
-        var result = await playerController
-            .SelectItemFromBagAsync(
-                pocketFilter.IsValid ? pocketFilter : null,
-                i => !filter.IsBound || filter.InnerDelegate.Invoke(i),
-                cancellationToken
-            );
-        return new FSelectedItem(result.ToOptional());   
+        var result = await playerController.SelectItemFromBagAsync(
+            pocketFilter.IsValid ? pocketFilter : null,
+            i => !filter.IsBound || filter.InnerDelegate.Invoke(i),
+            cancellationToken
+        );
+        return new FSelectedItem(result.ToOptional());
     }
 
     /// <summary>

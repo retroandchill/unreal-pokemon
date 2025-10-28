@@ -89,23 +89,48 @@ public class GameDataProviderGenerator : IIncrementalGenerator
                 HasAsset = HasAsset(x.Type),
             })
             .ToImmutableArray();
-        
-        
-        var managerType = new UnrealClass(EClassFlags.None, "UGameDataManagerBase", "UnrealSharp.GameDataAccessTools", $"U{classSymbol.Name}Manager", classSymbol.ContainingNamespace.ToDisplayString(), Accessibility.Public, classSymbol.ContainingAssembly.Name);
+
+        var managerType = new UnrealClass(
+            EClassFlags.None,
+            "UGameDataManagerBase",
+            "UnrealSharp.GameDataAccessTools",
+            $"U{classSymbol.Name}Manager",
+            classSymbol.ContainingNamespace.ToDisplayString(),
+            Accessibility.Public,
+            classSymbol.ContainingAssembly.Name
+        );
         managerType.Overrides.List.Add("Initialize");
-        
-        var settingsType = new UnrealClass(EClassFlags.DefaultConfig, "UCSDeveloperSettings", "UnrealSharp.UnrealSharpCore", 
-            $"U{classSymbol.Name}Settings", classSymbol.ContainingNamespace.ToDisplayString(), Accessibility.Public, classSymbol.ContainingAssembly.Name);
+
+        var settingsType = new UnrealClass(
+            EClassFlags.DefaultConfig,
+            "UCSDeveloperSettings",
+            "UnrealSharp.UnrealSharpCore",
+            $"U{classSymbol.Name}Settings",
+            classSymbol.ContainingNamespace.ToDisplayString(),
+            Accessibility.Public,
+            classSymbol.ContainingAssembly.Name
+        );
         settingsType.AddMetaData("ConfigCategory", dataProviderInfo.Category);
 
         foreach (var repository in repositories.Where(x => x.HasAsset))
         {
-            var objectProperty = new ObjectProperty(repository.RepositoryClassName, $"{repository.Name}_Inner", Accessibility.Public, settingsType);
-            var property = new SoftObjectProperty(objectProperty, repository.Name, Accessibility.Public,
-                "public", settingsType)
+            var objectProperty = new ObjectProperty(
+                repository.RepositoryClassName,
+                $"{repository.Name}_Inner",
+                Accessibility.Public,
+                settingsType
+            );
+            var property = new SoftObjectProperty(
+                objectProperty,
+                repository.Name,
+                Accessibility.Public,
+                "public",
+                settingsType
+            )
             {
                 HasSetter = false,
-                PropertyFlags = EPropertyFlags.EditDefaultsOnly | EPropertyFlags.BlueprintReadOnly | EPropertyFlags.Config,
+                PropertyFlags =
+                    EPropertyFlags.EditDefaultsOnly | EPropertyFlags.BlueprintReadOnly | EPropertyFlags.Config,
             };
             property.AddMetaData("Category", "RepositoryAssets");
             objectProperty.Outer = property;
@@ -114,20 +139,29 @@ public class GameDataProviderGenerator : IIncrementalGenerator
             ObjectProperty assetProperty;
             if (repository.HasAsset)
             {
-                assetProperty = new ObjectProperty(repository.RepositoryClassName, $"{repository.Name}Asset", Accessibility.Private, managerType);
+                assetProperty = new ObjectProperty(
+                    repository.RepositoryClassName,
+                    $"{repository.Name}Asset",
+                    Accessibility.Private,
+                    managerType
+                );
             }
             else
             {
-                assetProperty = new ObjectProperty(repository.RepositoryClassName, repository.Name,
-                    Accessibility.Public, managerType)
+                assetProperty = new ObjectProperty(
+                    repository.RepositoryClassName,
+                    repository.Name,
+                    Accessibility.Public,
+                    managerType
+                )
                 {
                     SetterAccessibility = Accessibility.Private,
                 };
             }
-                
+
             managerType.AddProperty(assetProperty);
         }
-        
+
         var hasDisplayName = !string.IsNullOrWhiteSpace(dataProviderInfo.DisplayName);
         if (hasDisplayName)
         {
@@ -136,7 +170,7 @@ public class GameDataProviderGenerator : IIncrementalGenerator
 
         var settingsModuleInitializerBuilder = new GeneratorStringBuilder();
         settingsModuleInitializerBuilder.BeginModuleInitializer(settingsType);
-        
+
         var managerModuleInitializerBuilder = new GeneratorStringBuilder();
         managerModuleInitializerBuilder.BeginModuleInitializer(managerType);
 
@@ -150,7 +184,7 @@ public class GameDataProviderGenerator : IIncrementalGenerator
             HasDisplayName = hasDisplayName,
             Repositories = repositories,
             SettingsModuleInitializer = settingsModuleInitializerBuilder.ToString(),
-            ManagerModuleInitializer = managerModuleInitializerBuilder.ToString()
+            ManagerModuleInitializer = managerModuleInitializerBuilder.ToString(),
         };
 
         var handlebars = Handlebars.Create();

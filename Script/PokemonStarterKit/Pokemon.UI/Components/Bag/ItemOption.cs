@@ -68,7 +68,7 @@ public partial class UItemOption : UCommonButtonBase
     /// <param name="quantity">The quantity of the specified item being set for display and usage purposes.</param>
     [UFunction(FunctionFlags.BlueprintEvent, Category = "Display")]
     protected partial void OnItemSet(FItemHandle item, int quantity);
-    
+
     protected virtual partial void OnItemSet_Implementation(FItemHandle item, int quantity)
     {
         ItemIcon?.Item = item;

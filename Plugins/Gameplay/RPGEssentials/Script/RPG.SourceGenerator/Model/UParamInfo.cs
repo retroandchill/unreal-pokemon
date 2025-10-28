@@ -12,6 +12,6 @@ public record UParamInfo(
 {
     public ITypeSymbol Type => Parameter.Type;
     public string Name => Parameter.Name;
-    
+
     public bool HasDefaultValue => DefaultValue is not null;
 }

@@ -28,7 +28,11 @@ public partial class UPokemonSpriteDisplay : UPokemonDisplayBase
     /// <see cref="UPokemonAssetLoader.ResolvePokemonFrontSprite(UPokemon)"/>.
     /// Changing this property will automatically refresh the display to show the appropriate sprite.
     /// </remarks>
-    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite, Category = "Display", BlueprintAccessors = true)]
+    [UProperty(
+        PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite,
+        Category = "Display",
+        BlueprintAccessors = true
+    )]
     public bool ShowBackSprite
     {
         get => ShowBackSprite_BackingField;

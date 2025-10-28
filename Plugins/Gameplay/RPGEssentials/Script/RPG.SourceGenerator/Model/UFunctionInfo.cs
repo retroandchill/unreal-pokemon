@@ -12,7 +12,7 @@ public record UFunctionInfo(
 )
 {
     public ITypeSymbol ReturnType => Method.ReturnType;
-    
+
     public bool ReturnsVoid => ReturnType.SpecialType == SpecialType.System_Void;
 
     public bool HasParameters => Parameters.Length > 0;

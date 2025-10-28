@@ -28,7 +28,11 @@ public partial class USimpleTextButtonBase : UCommonButtonBase
     /// by the button's text block. When this property is updated, the displayed text on the
     /// button updates accordingly.
     /// </remarks>
-    [UProperty(PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite, Category = "Display", BlueprintAccessors = true)]
+    [UProperty(
+        PropertyFlags.EditAnywhere | PropertyFlags.BlueprintReadWrite,
+        Category = "Display",
+        BlueprintAccessors = true
+    )]
     public FText Text
     {
         get => Text_BackingField;
