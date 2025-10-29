@@ -334,6 +334,7 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
                             property.Property,
                             propertyGetter
                         );
+                        propertyGetter.ReturnType.SourceName = "ReturnValue";
                         propertyGetter.ReturnType.PropertyFlags =
                             EPropertyFlags.Parm
                             | EPropertyFlags.ReturnParm
@@ -517,6 +518,7 @@ public class RPGEntityExtensionGenerator : IIncrementalGenerator
                         method.Method,
                         methodWrapper
                     );
+                    methodWrapper.ReturnType.SourceName = "ReturnValue";
                     methodWrapper.ReturnType.PropertyFlags =
                         EPropertyFlags.Parm
                         | EPropertyFlags.ReturnParm

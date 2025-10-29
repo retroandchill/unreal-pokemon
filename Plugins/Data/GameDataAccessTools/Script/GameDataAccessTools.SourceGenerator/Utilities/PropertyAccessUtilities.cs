@@ -163,7 +163,7 @@ public static class PropertyAccessUtilities
                         break;
                 }
 
-                if (typeSymbol.ToDisplayString() == "UnrealSharp.FText")
+                if (typeSymbol.ToDisplayString() == "UnrealSharp.Core.FText")
                 {
                     return new MarshalledPropertyInfo(
                         typeSymbol.ToDisplayString(),

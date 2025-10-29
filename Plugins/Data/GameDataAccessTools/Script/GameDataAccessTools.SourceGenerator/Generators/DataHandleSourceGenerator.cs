@@ -354,6 +354,7 @@ public class DataHandleSourceGenerator : IIncrementalGenerator
                 property.Property,
                 propertyGetter
             );
+            propertyGetter.ReturnType.SourceName = "ReturnValue";
             propertyGetter.ReturnType.PropertyFlags =
                 EPropertyFlags.Parm
                 | EPropertyFlags.ReturnParm

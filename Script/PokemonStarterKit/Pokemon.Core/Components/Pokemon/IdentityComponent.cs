@@ -85,7 +85,7 @@ public partial class UIdentityComponent : URPGComponent
         get => Gender_BackingField;
         set
         {
-            if (IsSingleGendered)
+            if (Species.IsValid && IsSingleGendered)
                 return;
 
             Gender_BackingField = value;
