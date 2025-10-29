@@ -13,7 +13,7 @@ namespace Pokemon.Battle.Entities;
 /// It is designed to encapsulate the behavior and state of an active side during a battle, providing
 /// functionality and context through its associated components.
 /// </remarks>
-[UClass]
+[UClass(ClassFlags.Abstract)]
 public partial class UActiveSide : URPGEntity, IEffectEntity
 {
     /// <summary>
