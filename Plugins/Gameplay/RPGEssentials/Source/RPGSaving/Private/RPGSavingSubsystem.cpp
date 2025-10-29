@@ -15,7 +15,7 @@ static bool CompareSavers(const USaverBase *A, const USaverBase *B)
 void URPGSavingSubsystem::Initialize(FSubsystemCollectionBase &Collection)
 {
     for (const auto *Class : TObjectView<UClass>() | ranges::views::filter([](const UClass *C) {
-                                 return !C->HasAnyClassFlags(CLASS_Abstract);
+                                 return !C->HasAnyClassFlags(CLASS_Abstract) && !C->GetName().StartsWith("SKEL_");
                              }))
     {
         if (Class->IsChildOf<UEntitySaver>())

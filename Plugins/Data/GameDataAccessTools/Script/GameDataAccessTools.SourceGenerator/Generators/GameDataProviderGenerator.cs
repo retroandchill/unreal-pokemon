@@ -109,8 +109,10 @@ public class GameDataProviderGenerator : IIncrementalGenerator
             classSymbol.ContainingNamespace.ToDisplayString(),
             Accessibility.Public,
             classSymbol.ContainingAssembly.Name
-        );
-        settingsType.AddMetaData("ConfigCategory", dataProviderInfo.Category);
+        )
+        {
+            ConfigCategory = dataProviderInfo.Category
+        };
 
         foreach (var repository in repositories)
         {
