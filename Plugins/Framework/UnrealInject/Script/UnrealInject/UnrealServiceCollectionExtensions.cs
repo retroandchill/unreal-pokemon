@@ -219,7 +219,7 @@ public static class UnrealServiceCollectionExtensions
 
         private Guid Add(Type serviceType, ServiceLifetime lifetime)
         {
-            var descriptor = new ServiceDescriptor(serviceType, lifetime);
+            var descriptor = new ServiceDescriptor(serviceType, serviceType, lifetime);
             return services.Add(descriptor);
         }
 
