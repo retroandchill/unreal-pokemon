@@ -9,10 +9,10 @@ using UnrealSharp.RPGCore;
 namespace Pokemon.Core.Entities;
 
 /// <summary>
-/// Represents the initialization parameters for creating a new Pokemon entity.
+/// Represents the initialization parameters for creating a new Pokémon entity.
 /// </summary>
 /// <remarks>
-/// This structure is used to encapsulate the necessary data required to initialize a Pokemon,
+/// This structure is used to encapsulate the necessary data required to initialize a Pokémon,
 /// including its species and level.
 /// </remarks>
 [UStruct]
@@ -22,11 +22,11 @@ public readonly partial record struct FPokemonInitParams(
 );
 
 /// <summary>
-/// Represents a Pokemon entity within the game world.
+/// Represents a Pokémon entity within the game world.
 /// </summary>
 /// <remarks>
-/// This class is responsible for managing the core components and functionality of a Pokemon, such as its identity, ownership, stats, abilities, moves, held items, and status effects.
-/// It also defines methods for combat-related logic and interactions, such as healing and determining if the Pokemon is able to battle.
+/// This class is responsible for managing the core components and functionality of a Pokémon, such as its identity, ownership, stats, abilities, moves, held items, and status effects.
+/// It also defines methods for combat-related logic and interactions, such as healing and determining if the Pokémon is able to battle.
 /// </remarks>
 [UClass(ClassFlags.Abstract)]
 public partial class UPokemon : URPGEntity
